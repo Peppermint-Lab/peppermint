@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+}
+
+.navbar-brand {
+    padding: 18px 20px;
+    display: inline-block;
+}
+
+.login-container {
+    width: 50%;
+    position: fixed;
+    top: 25%;
+    left: 30%;
+    margin-top: -50px;
+    margin-left: -100px;
+    
+}
