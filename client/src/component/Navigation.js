@@ -1,25 +1,34 @@
 import React from 'react'
-import { Navbar, Nav, Icon} from 'rsuite'
+import { Navbar, Nav, Icon, Tooltip, Whisper} from 'rsuite'
 import {useHistory} from 'react-router-dom'
 
 const Navigation = () => {
 
     const history = useHistory()
 
+    const tooltip = (
+        <Tooltip>
+            Create a new Ticket here
+        </Tooltip>
+    )
+
     return (
         <div>
             <Navbar>
                 <Navbar.Header>
-                <a href="#" className="navbar-brand logo">Project White</a>
+                <p href="#" className="navbar-brand logo">Project Winter</p>
                 </Navbar.Header>
             <Navbar.Body>
             <Nav>
-                <Nav.Item icon={<Icon icon="home" />} >Home</Nav.Item>
+                <Nav.Item icon={<Icon icon="home" />} onClick={() => history.push('/')}>Home</Nav.Item>
                 <Nav.Item onClick={() => history.push('/tickets')}>Tickets</Nav.Item>
-                <Nav.Item>Wiki</Nav.Item>
-                <Nav.Item>Monitoring</Nav.Item>
+                <Nav.Item onClick={() => history.push('/monitor')}>Monitoring</Nav.Item>
             </Nav>
             <Nav pullRight>
+                <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
+                    <Nav.Item icon={<Icon icon="plus" />} />
+                </Whisper>
+
                 <Nav.Item icon={<Icon icon="cog" />} >Settings</Nav.Item>
             </Nav>
             </Navbar.Body>

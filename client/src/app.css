@@ -16,3 +16,9 @@
     margin-left: -100px;
     
 }
+
+.monitor-create {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}

@@ -2,7 +2,6 @@ import React from "react";
 import {
   Container,
   Content,
-  Footer,
   FlexboxGrid,
   Panel,
   Form,

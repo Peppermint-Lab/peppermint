@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
+import Monitor from "./pages/Monitor";
 
 const Routing = () => {
   return (
@@ -23,6 +24,7 @@ const Routing = () => {
         <Route>
           <Navigation />
           <Route path="/tickets" component={Ticket} />
+          <Route path="/monitor" component={Monitor} />
         </Route>
       </Switch>
     </Router>
