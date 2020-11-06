@@ -17,8 +17,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "size": "npm run build && size-limit"
   },
+  "size-limit": [
+       {
+         "path": "dist/app-*.js"
+       }
+    ],
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -38,6 +44,8 @@
     ]
   },
   "devDependencies": {
-    "prettier": "2.1.2"
+    "@size-limit/preset-app": "^4.7.0",
+    "prettier": "2.1.2",
+    "size-limit": "^4.7.0"
   }
 }
