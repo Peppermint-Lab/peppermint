@@ -1,9 +1,8 @@
-import React from 'react'
-import { Navbar, Nav, Icon, Tooltip, Whisper} from 'rsuite'
+import React, { useState } from 'react'
+import { Navbar, Nav, Icon, Tooltip, Whisper, Button, Modal} from 'rsuite'
 import {useHistory} from 'react-router-dom'
-import Popup from "reactjs-popup";
 
-import Settings from "./Setings"
+// import Settings from "./Setings"
 
 const Navigation = () => {
 
@@ -13,7 +12,20 @@ const Navigation = () => {
         <Tooltip>
             Create a new Ticket here
         </Tooltip>
-    )
+    )  
+
+    const [modalIsOpen, setIsOpen] = useState(false);
+
+    console.log(modalIsOpen)
+
+    function openModal() {
+        setIsOpen(true);
+    }
+ 
+    function closeModal(){
+        setIsOpen(false);
+    }
+
 
     return (
         <div>
@@ -32,10 +44,23 @@ const Navigation = () => {
                     <Nav.Item icon={<Icon icon="plus" />} />
                 </Whisper>
 
-                <Nav.Item>
-                <Popup trigger={<Icon icon="cog" />} modal closeOnDocumentClick>
-                    <Settings />
-                </Popup>
+                <Nav.Item icon={<Icon icon="cog" /> } onClick={openModal}>
+                <Modal show={modalIsOpen} onHide={closeModal}>       
+                    <h2>Settings</h2>
+                    <Modal.Header>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Test</p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={closeModal} appearance="primary">
+                            Ok
+                            </Button>
+                            <Button onClick={closeModal} appearance="subtle">
+                            Cancel
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </Nav.Item>
             </Nav>
             </Navbar.Body>
