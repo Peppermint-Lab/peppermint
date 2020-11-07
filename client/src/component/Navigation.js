@@ -1,6 +1,9 @@
 import React from 'react'
 import { Navbar, Nav, Icon, Tooltip, Whisper} from 'rsuite'
 import {useHistory} from 'react-router-dom'
+import Popup from "reactjs-popup";
+
+import Settings from "./Setings"
 
 const Navigation = () => {
 
@@ -29,7 +32,11 @@ const Navigation = () => {
                     <Nav.Item icon={<Icon icon="plus" />} />
                 </Whisper>
 
-                <Nav.Item icon={<Icon icon="cog" />} >Settings</Nav.Item>
+                <Nav.Item>
+                <Popup trigger={<Icon icon="cog" />} modal closeOnDocumentClick>
+                    <Settings />
+                </Popup>
+                </Nav.Item>
             </Nav>
             </Navbar.Body>
             </Navbar>

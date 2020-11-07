@@ -10,6 +10,7 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "reactjs-popup": "^2.0.4",
     "rsuite": "^4.8.4",
     "web-vitals": "^0.2.4"
   },
@@ -21,10 +22,10 @@
     "size": "npm run build && size-limit"
   },
   "size-limit": [
-       {
-         "path": "dist/app-*.js"
-       }
-    ],
+    {
+      "path": "dist/app-*.js"
+    }
+  ],
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
+import 'reactjs-popup/dist/index.css';
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
