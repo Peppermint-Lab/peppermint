@@ -19,8 +19,10 @@ require('./models/Ticket')
 
 // Routes
 const auth = require('./routes/auth')
+const tickets = require('./routes/tickets');
 
 // Static Files
+
 
 // Express server libraries
 app.use(cors())
@@ -30,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express API Routes
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/tickets', tickets);
 
 // Morgan API Logger
 if(process.env.NODE_ENV === "development") {
