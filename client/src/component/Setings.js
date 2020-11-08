@@ -1,12 +1,12 @@
-import React from 'react'
-
+import React from "react";
 
 const Setings = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
 
-export default Setings
+  return (
+    <div>
+      <h1>TEST</h1>
+    </div>
+  );
+};
+
+export default Setings;
