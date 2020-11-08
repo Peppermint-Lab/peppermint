@@ -52,40 +52,28 @@ const Navigation = () => {
               Monitoring
             </Nav.Item>
 
-            <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
+            
+          </Nav>
+          
+          <Nav pullRight>
+
+          <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
               <Nav.Item icon={<Icon icon="plus" />} onClick={openTicketModal}>
                 <Modal show={ticketmodalIsOpen} onHide={closeTicketModal} keyboard={true}>
-                  <h2>New ticket</h2>
+                  <h2 style={{ textAlign:"center"}}>New ticket</h2>
                   <Modal.Body>
                     <NewTicket />
                   </Modal.Body>
-                  <Modal.Footer>
-                    <Button onClick={closeTicketModal} appearance="primary">
-                      Ok
-                    </Button>
-                    <Button onClick={closeTicketModal} appearance="subtle">
-                      Cancel
-                    </Button>
-                  </Modal.Footer>
                 </Modal>
               </Nav.Item>
             </Whisper>
-          </Nav>
-          <Nav pullRight>
+            
             <Nav.Item icon={<Icon icon="cog" />} onClick={openModal}>
               <Modal show={modalIsOpen} onHide={closeModal}>
                 <h2>Settings</h2>
                 <Modal.Body>
                   <Settings />
                 </Modal.Body>
-                <Modal.Footer>
-                  <Button onClick={closeModal} appearance="primary">
-                    Ok
-                  </Button>
-                  <Button onClick={closeModal} appearance="subtle">
-                    Cancel
-                  </Button>
-                </Modal.Footer>
               </Modal>
             </Nav.Item>
           </Nav>
