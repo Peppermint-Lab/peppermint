@@ -1,6 +1,6 @@
 // Dependencies
 const express = require('express'); 
-const path = require('path');
+//const path = require('path');
 const app = express();
 const morgan = require('morgan');
 const dotenv = require('dotenv');
@@ -13,6 +13,9 @@ dotenv.config({ path: './config/config.env'});
 connectDB()
 
 // DB models
+require('./models/InternalUser')
+require('./models/Ticket')
+
 
 // Routes
 
