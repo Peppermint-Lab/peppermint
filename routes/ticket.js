@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/authCheck');
 
-const { createTicket, unissuedTickets, openTickets, completedTickets} = require('../controllers/tickets')
+const { createTicket, unissuedTickets, openTickets, completedTickets} = require('../controller/ticket')
 
 router  
     .route('/createTicket')
@@ -10,15 +10,15 @@ router
 
 router
     .route('/unissuedTickets')
-    .get(reqLogin, unissuedTickets)
+    .get(unissuedTickets)
 
 router
     .route('/openedTickets')
-    .get(reqLogin, openTickets)
+    .get(openTickets)
 
 router
     .route('/completedTickets')
-    .get(reqLogin, completedTickets)
+    .get(completedTickets)
 
 module.exports = router;
 

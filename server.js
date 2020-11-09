@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const colors = require('colors');
+const bodyParser = require('body-parser')
 
 const connectDB = require('./config/DB');
 dotenv.config({ path: './config/config.env'});
@@ -19,7 +20,7 @@ require('./models/Ticket')
 
 // Routes
 const auth = require('./routes/auth')
-const tickets = require('./routes/tickets');
+const tickets = require('./routes/ticket');
 
 // Static Files
 
