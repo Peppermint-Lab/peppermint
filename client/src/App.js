@@ -2,12 +2,13 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
-import 'reactjs-popup/dist/index.css';
+import "reactjs-popup/dist/index.css";
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
+import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
 
 const Routing = () => {
@@ -19,6 +20,12 @@ const Routing = () => {
         <Route path="/login">
           <div className="login-container">
             <Login />
+          </div>
+        </Route>
+
+        <Route path="/signup">
+          <div className="login-container">
+            <Reg />
           </div>
         </Route>
 

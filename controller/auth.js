@@ -23,7 +23,7 @@ exports.Signup = async (req, res) => {
                     name
                 })
 
-                User.save()
+                user.save()
                 .then(user => {
                     res.json({message: 'User saved successfully'})
                 }).catch( err => {
