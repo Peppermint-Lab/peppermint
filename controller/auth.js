@@ -39,7 +39,7 @@ exports.Signup = async (req, res) => {
 
 exports.Login = async (req, res) => {
     try {
-        const {email, passowrd} = req.body
+        const {email, password} = req.body
         if(!email || !password){
             return res.status(422).json({error:"please add email or password"})
          }
