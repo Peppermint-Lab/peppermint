@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Container,
   Content,
@@ -11,8 +11,40 @@ import {
   ButtonToolbar,
   Button,
 } from "rsuite";
+import { useHistory } from 'react-router-dom'
 
-const login = () => {
+import { baseUrl } from "../utils";
+
+const Login = () => {
+
+  const history = useHistory()
+
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+
+    const PostData = async () => {
+    await fetch(`${baseUrl}/api/v1/auth/login`, {
+          method: "post",
+          headers: {
+              "Content-Type":"application/json"
+          },
+          body: JSON.stringify({
+              email,
+              password
+          })
+      }).then( res => res.json())
+      .then(data => {
+          if(!data.error) {
+              localStorage.setItem("jwt", data.token)
+              localStorage.setItem("user", JSON.stringify(data.user))
+              history.push('/')
+          }
+          else {
+              console.log(data.error)
+          }
+      })
+  }
+
   return (
     <div>
       <div>
@@ -23,16 +55,16 @@ const login = () => {
                 <Panel header={<h3>Login</h3>} bordered>
                   <Form fluid>
                     <FormGroup>
-                      <ControlLabel>Username or email address</ControlLabel>
-                      <FormControl name="name" />
+                      <ControlLabel>Email</ControlLabel>
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
                     </FormGroup>
                     <FormGroup>
                       <ControlLabel>Password</ControlLabel>
-                      <FormControl name="password" type="password" />
+                      <input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary">Sign in</Button>
+                        <Button appearance="primary" onClick={()=>PostData()}>Sign in</Button>
                         <Button appearance="link">Forgot password?</Button>
                       </ButtonToolbar>
                     </FormGroup>
@@ -47,4 +79,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

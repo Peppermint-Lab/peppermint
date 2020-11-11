@@ -48,10 +48,10 @@ exports.Login = async (req, res) => {
             if(!savedUser){
                 return res.status(422).json({error:"Invalid Email or password"})
              }
-            bcrypt.compare(password, savedUser.passowrd)
+            bcrypt.compare(password, savedUser.password)
             .then(doMatch => {
                 if(doMatch) {
-                    res.json({message: "Sign in Sucessful"})
+                    // res.json({message: "Sign in Sucessful"})
                     const token = jwt.sign({_id:savedUser._id}, JWT_SECRET)
                     const {_id, name, email} = savedUser
                     res.json({token, user:{_id, name, email}})

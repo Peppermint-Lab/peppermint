@@ -29,6 +29,10 @@ const Navigation = () => {
     setTicketIsOpen(false);
   }
 
+  const isAdmin = () => {
+
+  }
+
   return (
     <div>
       <Navbar>
@@ -39,19 +43,25 @@ const Navigation = () => {
         </Navbar.Header>
         <Navbar.Body>
           <Nav>
+
             <Nav.Item
               icon={<Icon icon="home" />}
               onClick={() => history.push("/")}
             >
               Home
             </Nav.Item>
+
             <Nav.Item onClick={() => history.push("/tickets")}>
               Tickets
             </Nav.Item>
+
             <Nav.Item onClick={() => history.push("/monitor")}>
               Monitoring
             </Nav.Item>
 
+            <Nav.Item onClick={() => history.push("/admin")} disabled={true}>
+              Admin
+            </Nav.Item>
             
           </Nav>
           
@@ -76,6 +86,8 @@ const Navigation = () => {
                 </Modal.Body>
               </Modal>
             </Nav.Item>
+
+
           </Nav>
         </Navbar.Body>
       </Navbar>
