@@ -68,3 +68,15 @@ exports.createTicket = async (req, res) => {
         console.log(error)
     }
 }
+
+// Convert a ticket 
+exports.convertTicket = async (req, res) => {
+    console.log('conversion made')
+    try {
+        TicketSchema.findByIdAndUpdate(req.user._id), {
+            $push: {assignedto : req.user._id}
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}

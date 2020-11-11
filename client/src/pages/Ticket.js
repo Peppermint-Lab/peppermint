@@ -80,6 +80,28 @@ const UnissuedTicket = () => {
 
          console.log(data)
 
+    const convert = () => {
+  
+        fetch(`${baseUrl}/api/v1/tickets/convertTicket`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization":"Bearer " + localStorage.getItem("jwt")
+            },
+            body: JSON.stringify({
+                data
+            })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.error) {
+                    console.log(data.error)
+                } else {
+                    console.log("Congrats it worked")
+                }
+            })
+    }
+
     return (
         <div>
             <h3 style={{ textAlign:"center"}}>Unissued Tickets - (3)</h3>
@@ -117,6 +139,19 @@ const UnissuedTicket = () => {
                 <Column width={200} align="center" resizable>
                     <HeaderCell>Issue</HeaderCell>
                     <Cell dataKey="issue" />
+                </Column>
+
+                <Column width={200} align="center" resizable>
+                    <HeaderCell></HeaderCell>
+                    <Cell>{
+                        row => {
+                            return (
+                                <div>
+                                    <a onClick={convert}>Convert</a>
+                                </div>
+                            )
+                        }
+                        }</Cell>
                 </Column>
             </Table>
         </div>
