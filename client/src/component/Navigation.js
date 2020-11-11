@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navbar, Nav, Icon, Tooltip, Whisper, Button, Modal } from "rsuite";
+import { Navbar, Nav, Icon, Tooltip, Whisper, Modal } from "rsuite";
 import { useHistory } from "react-router-dom";
 
 import Settings from "./Setings";
@@ -66,27 +66,25 @@ const Navigation = () => {
           </Nav>
           
           <Nav pullRight>
-
-          <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
-              <Nav.Item icon={<Icon icon="plus" />} onClick={openTicketModal}>
-                <Modal show={ticketmodalIsOpen} onHide={closeTicketModal} keyboard={true} >
-                  <h2 style={{ textAlign:"center"}}>New ticket</h2>
+            <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
+                <Nav.Item icon={<Icon icon="plus" />} onClick={openTicketModal}>
+                  <Modal show={ticketmodalIsOpen} onHide={closeTicketModal} keyboard={true} >
+                    <h2 style={{ textAlign:"center"}}>New ticket</h2>
+                    <Modal.Body>
+                      <NewTicket />
+                    </Modal.Body>
+                  </Modal>
+                </Nav.Item>
+              </Whisper>
+              
+              <Nav.Item icon={<Icon icon="cog" />} onClick={openModal}>
+                <Modal show={modalIsOpen} onHide={closeModal}>
+                  <h2>Settings</h2>
                   <Modal.Body>
-                    <NewTicket />
+                    <Settings />
                   </Modal.Body>
                 </Modal>
               </Nav.Item>
-            </Whisper>
-            
-            <Nav.Item icon={<Icon icon="cog" />} onClick={openModal}>
-              <Modal show={modalIsOpen} onHide={closeModal}>
-                <h2>Settings</h2>
-                <Modal.Body>
-                  <Settings />
-                </Modal.Body>
-              </Modal>
-            </Nav.Item>
-
 
           </Nav>
         </Navbar.Body>
