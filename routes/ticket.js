@@ -10,15 +10,15 @@ router
 
 router
     .route('/unissuedTickets')
-    .get(unissuedTickets)
+    .get(auth, unissuedTickets)
 
 router
     .route('/openedTickets')
-    .get(openTickets)
+    .get(auth, openTickets)
 
 router
     .route('/completedTickets')
-    .get(completedTickets)
+    .get(auth, completedTickets)
 
 module.exports = router;
 

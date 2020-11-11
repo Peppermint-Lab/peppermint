@@ -47,6 +47,7 @@ exports.completedTickets = async (req, res) => {
 
 // Create a new ticket
 exports.createTicket = async (req, res) => {
+
     console.log("Create a new ticket API HIT")
     try {
         const {name, company, issue, priority} = req.body
@@ -58,7 +59,6 @@ exports.createTicket = async (req, res) => {
             company,
             issue,
             priority,
-            time,
         })
         newTicket.save().then(result=>{
             res.json({newTicket:result})
