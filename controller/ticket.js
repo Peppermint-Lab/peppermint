@@ -72,11 +72,15 @@ exports.createTicket = async (req, res) => {
 
 // Convert a ticket 
 exports.convertTicket = async (req, res) => {
-    console.log('conversion made')
-    console.log(user._id)
-    console.log()
+    // console.log('conversion made \n')
+    // console.log(req.user._id)
+    // console.log(ticketId)
+
+    const {data} = req.body
+    const ticketId = data['0']._id
+
     try {
-        TicketSchema.findByIdAndUpdate(req.user._id), {
+        TicketSchema.findByIdAndUpdate(ticketId), {
             $push: {assignedto : req.user._id}
         }
     } catch (error) {
