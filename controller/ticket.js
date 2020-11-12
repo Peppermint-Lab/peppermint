@@ -4,8 +4,9 @@ const TicketSchema = mongoose.model('TicketSchema')
 // Get Open Tickets
 exports.openTickets = async (req, res) => {
     // console.log("Open Tickets API HIT")
+    
     try {
-        TicketSchema.find({ status: 'issued', assignedto: '5fa9d7bcb486b22294e4df8c'})
+        TicketSchema.find({ status: 'issued', assignedto: req.user._id })
         .then((tickets) => {
          res.json({tickets})
         })
@@ -33,7 +34,7 @@ exports.unissuedTickets = async (req, res) => {
 exports.completedTickets = async (req, res) => {
     // console.log("Unissued ticket API HIT")
     try {
-        TicketSchema.find({ status: 'completed', assignedto: req.user._id })
+        TicketSchema.find({ status: 'completed',  assignedto: req.user._id })
         .then((tickets) => {
             res.json({tickets})
         })

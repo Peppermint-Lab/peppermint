@@ -70,7 +70,7 @@ const OpenTicket = () => {
 
                 <Column width={100} align="center" fixed>
                     <HeaderCell>Issue</HeaderCell>
-                    <Cell dataKey="iIssue" />
+                    <Cell dataKey="issue" />
                 </Column>
             </Table>
         </div>
