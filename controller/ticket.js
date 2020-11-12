@@ -5,7 +5,7 @@ const TicketSchema = mongoose.model('TicketSchema')
 exports.openTickets = async (req, res) => {
     // console.log("Open Tickets API HIT")
     try {
-        TicketSchema.find({ status: 'open', assignedto: req.user._id })
+        TicketSchema.find({ status: 'issued', assignedto: req.user._id })
         .then(openTickets => {
          res.json({openTickets})
         })
@@ -72,6 +72,8 @@ exports.createTicket = async (req, res) => {
 // Convert a ticket 
 exports.convertTicket = async (req, res) => {
     console.log('conversion made')
+    console.log(user._id)
+    console.log()
     try {
         TicketSchema.findByIdAndUpdate(req.user._id), {
             $push: {assignedto : req.user._id}

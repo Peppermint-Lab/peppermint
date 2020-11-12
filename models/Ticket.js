@@ -7,8 +7,8 @@ const TicketSchema = new mongoose.Schema({
     company: {type: String, required: true},
     issue: { type: String, required: true},
     note: { type: String},
-    status: { type: String, enum: ['open', 'unissued', 'completed'], default: 'unissued'},
-    assignedto: { type: ObjectId, ref: 'User'},
+    status: { type: String, enum: ['issued', 'unissued', 'completed'], default: 'unissued'},
+    assignedto: { type: ObjectId, ref: 'InternalUser'},
     priority:  {type: String, enum: ['Low', 'Normal', 'High'], default: 'Normal'},
     time: {type: Date}
     

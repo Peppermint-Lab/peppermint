@@ -7,43 +7,69 @@ const OpenTicket = () => {
 
     const { Column, HeaderCell, Cell, Pagination } = Table;
 
+    const [data, setData] = useState([])
+
+    async function loadContent() {
+        await fetch(`${baseUrl}/api/v1/tickets/openedTickets`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization":"Bearer " + localStorage.getItem("jwt"),
+            }
+        })
+        .then(res => res.json())
+        .then(result=>{
+            setData(result.tickets)
+        })
+      }
+  
+      useEffect(()=>{
+          async function resolve() {
+              await loadContent();
+                }
+            resolve();
+         }, []);
+
+         console.log(data)
+
+
     return (
         <div>
             <h3 style={{ textAlign:"center"}}>Open Tickets - (4)</h3>
-            <Table height={400}>
+            <Table height={400} data={data}>
                 <Column width={70} align="center" fixed>
-                    <HeaderCell>Id</HeaderCell>
+                    <HeaderCell>#</HeaderCell>
                     <Cell dataKey="id" />
                 </Column>
 
                 <Column width={70} align="center" fixed>
                     <HeaderCell>Date</HeaderCell>
-                    <Cell dataKey="id" />
+                    <Cell dataKey="date" />
                 </Column>
 
                 <Column width={70} align="center" fixed>
                     <HeaderCell>Time</HeaderCell>
-                    <Cell dataKey="id" />
+                    <Cell dataKey="Time" />
                 </Column>
 
                 <Column width={70} align="center" fixed>
                     <HeaderCell>Name</HeaderCell>
-                    <Cell dataKey="id" />
+                    <Cell dataKey="name" />
                 </Column>
 
                 <Column width={100} align="center" fixed>
                     <HeaderCell>Company</HeaderCell>
-                    <Cell dataKey="id" />
+                    <Cell dataKey="company" />
                 </Column>
 
                 <Column width={100} align="center" fixed>
                     <HeaderCell>Priority</HeaderCell>
-                    <Cell dataKey="id" />
+                    <Cell dataKey="priority" />
                 </Column>
 
                 <Column width={100} align="center" fixed>
                     <HeaderCell>Issue</HeaderCell>
-                    <Cell dataKey="id" />
+                    <Cell dataKey="iIssue" />
                 </Column>
             </Table>
         </div>
