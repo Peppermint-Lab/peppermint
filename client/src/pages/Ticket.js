@@ -107,7 +107,7 @@ const UnissuedTicket = () => {
 
          console.log(data)
 
-    const convert = () => {
+    const convert = (id) => {
   
         fetch(`${baseUrl}/api/v1/tickets/convertTicket`, {
             method: 'PUT',

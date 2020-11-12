@@ -74,16 +74,25 @@ exports.createTicket = async (req, res) => {
 exports.convertTicket = async (req, res) => {
     // console.log('conversion made \n')
     // console.log(req.user._id)
-    // console.log(ticketId)
+    
 
     const {data} = req.body
-    const ticketId = data['0']._id
+    const t = data['0']._id
+    const u = JSON.stringify(req.user._id)
+    const up = JSON.parse(u)
+
+    console.log(up)
 
     try {
-        TicketSchema.findByIdAndUpdate(ticketId), {
-            $push: {assignedto : req.user._id}
-        }
+        TicketSchema.findByIdAndUpdate({_id: t}, 
+           {
+            $push: {assignedto : req.user._id}, 
+           }, {
+            new : true 
+        }).exec();
+        console.log('Updated record')
     } catch (error) {
         console.log(error)
     }
+    
 }
