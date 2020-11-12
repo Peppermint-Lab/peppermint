@@ -5,9 +5,9 @@ const TicketSchema = mongoose.model('TicketSchema')
 exports.openTickets = async (req, res) => {
     // console.log("Open Tickets API HIT")
     try {
-        TicketSchema.find({ status: 'issued', assignedto: req.user._id })
-        .then(openTickets => {
-         res.json({openTickets})
+        TicketSchema.find({ status: 'issued', assignedto: '5fa9d7bcb486b22294e4df8c'})
+        .then((tickets) => {
+         res.json({tickets})
         })
     } catch (error) {
         console.log(error)
