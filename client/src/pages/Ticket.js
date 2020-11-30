@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Col, Table } from "rsuite";
+import TicketInfo from "../component/TicketInfo";
 
 import { baseUrl } from "../utils";
 
@@ -32,6 +33,10 @@ const OpenTicket = () => {
          }, []);
 
          console.log(data)
+
+    function showInfo() {
+        <TicketInfo info={data} />
+    }
 
 
     return (
@@ -72,6 +77,20 @@ const OpenTicket = () => {
                     <HeaderCell>Issue</HeaderCell>
                     <Cell dataKey="issue" />
                 </Column>
+
+                <Column width={200} align="center" resizable>
+                    <HeaderCell></HeaderCell>
+                    <Cell>{
+                        row => {
+                            return (
+                                <div>
+                                    <a onClick={showInfo}>Info</a>
+                                </div>
+                            )
+                        }
+                        }</Cell>
+                </Column>
+
             </Table>
         </div>
   
@@ -107,7 +126,7 @@ const UnissuedTicket = () => {
 
          console.log(data)
 
-    const convert = (id) => {
+    const convert = () => {
   
         fetch(`${baseUrl}/api/v1/tickets/convertTicket`, {
             method: 'PUT',

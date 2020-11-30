@@ -9,7 +9,7 @@ import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
-import Monitor from "./pages/Monitor";
+import Monitor from "./pages/monitor";
 
 const Routing = () => {
   return (
