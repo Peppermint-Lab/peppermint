@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import {
   Container,
   Content,
@@ -14,11 +14,12 @@ import {
 import { useHistory } from 'react-router-dom'
 
 import { baseUrl } from "../utils";
+import {UserContext} from '../App'
 
 const Login = () => {
 
-  const history = useHistory()
-
+    const history = useHistory()
+    const {state, dispatch} = useContext(UserContext)
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
 
@@ -37,6 +38,7 @@ const Login = () => {
           if(!data.error) {
               localStorage.setItem("jwt", data.token)
               localStorage.setItem("user", JSON.stringify(data.user))
+              dispatch({type:"USER",payload:data.user})
               history.push('/')
           }
           else {

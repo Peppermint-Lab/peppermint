@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { useEffect, useReducer, useContext, createContext } from 'react'
+import { BrowserRouter as Router, Route, Switch, useHistory, withRouter } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
 import "reactjs-popup/dist/index.css";
@@ -11,11 +11,15 @@ import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/monitor";
 
+import {reducer,initialState} from './reducer/userReducer';
+
+export const UserContext = createContext()
+
 const Routing = () => {
+
   return (
     <Router>
       <Switch>
-        <Route path="/" component={Home} exact />
 
         <Route path="/login">
           <div className="login-container">
@@ -29,6 +33,8 @@ const Routing = () => {
           </div>
         </Route>
 
+        <Route path="/" component={Home} exact />
+
         <Route>
           <Navigation />
           <Route path="/tickets" component={Ticket} />
@@ -40,10 +46,13 @@ const Routing = () => {
 };
 
 const App = () => {
+
+  const [state,dispatch] = useReducer(reducer,initialState)
+
   return (
-    <div>
+    <UserContext.Provider value={{state,dispatch}}>
       <Routing />
-    </div>
+    </UserContext.Provider>
   );
 };
 

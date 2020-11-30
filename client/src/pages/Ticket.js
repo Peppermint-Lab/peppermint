@@ -49,16 +49,6 @@ const OpenTicket = () => {
                 </Column>
 
                 <Column width={70} align="center" fixed>
-                    <HeaderCell>Date</HeaderCell>
-                    <Cell dataKey="date" />
-                </Column>
-
-                <Column width={70} align="center" fixed>
-                    <HeaderCell>Time</HeaderCell>
-                    <Cell dataKey="Time" />
-                </Column>
-
-                <Column width={70} align="center" fixed>
                     <HeaderCell>Name</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
