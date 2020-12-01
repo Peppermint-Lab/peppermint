@@ -57,34 +57,34 @@ const UnissuedTicket = () => {
   
     return (
       <div>
-        <h3 style={{ textAlign: "center" }}>Unissued Tickets - (3)</h3>
-        <Table height={400} data={data}>
-          <Column width={70} align="center" fixed>
+        <h3 style={{ textAlign: "center" }}>Unissued Tickets - </h3>
+        <Table height={400} data={data} cellBordered={true}>
+          <Column width={100} align="center" fixed>
             <HeaderCell>#</HeaderCell>
             <Cell dataKey="id" />
           </Column>
   
-          <Column width={75} align="center" fixed>
+          <Column width={100} align="center" fixed>
             <HeaderCell>Name</HeaderCell>
             <Cell dataKey="name" />
           </Column>
   
-          <Column width={125} align="center" fixed>
+          <Column width={150} align="center" fixed>
             <HeaderCell>Company</HeaderCell>
             <Cell dataKey="company" />
           </Column>
   
-          <Column width={60} align="center" fixed>
+          <Column width={100} align="center" fixed>
             <HeaderCell>Priority</HeaderCell>
             <Cell dataKey="priority" />
           </Column>
   
-          <Column width={200} align="center" fixed>
+          <Column width={600} align="center" fixed>
             <HeaderCell>Issue</HeaderCell>
-            <Cell dataKey="issue" />
+            <Cell dataKey="issue" style={{ textAlign: "left", fontWeight: "bold"}} />
           </Column>
   
-          <Column width={80} align="center" fixed>
+          <Column width={75} align="center" fixed>
             <HeaderCell></HeaderCell>
             <Cell>
               {(row) => {

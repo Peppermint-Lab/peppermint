@@ -47,18 +47,18 @@ const OpenTicket = () => {
     return (
       <div>
         <h3 style={{ textAlign: "center" }}>Open Tickets - {null}</h3>
-        <Table height={400} data={data}>
-          <Column width={70} align="center" fixed>
+        <Table height={300} data={data} cellBordered={true}>
+          <Column width={100} align="center" fixed>
             <HeaderCell>#</HeaderCell>
             <Cell dataKey="id" />
           </Column>
   
-          <Column width={70} align="center" fixed>
+          <Column width={100} align="center" fixed>
             <HeaderCell>Name</HeaderCell>
             <Cell dataKey="name" />
           </Column>
   
-          <Column width={100} align="center" fixed>
+          <Column width={150} align="center" fixed>
             <HeaderCell>Company</HeaderCell>
             <Cell dataKey="company" />
           </Column>
@@ -68,12 +68,12 @@ const OpenTicket = () => {
             <Cell dataKey="priority" />
           </Column>
   
-          <Column width={100} align="center" fixed>
+          <Column width={600} align="center" fixed>
             <HeaderCell>Issue</HeaderCell>
-            <Cell dataKey="issue" />
+            <Cell dataKey="issue" style={{ textAlign: "left", fontWeight: "bold"}}/>
           </Column>
   
-          <Column width={200} align="center" fixed>
+          <Column width={150} align="center" fixed>
             <HeaderCell></HeaderCell>
             <Cell>
               {(row) => {

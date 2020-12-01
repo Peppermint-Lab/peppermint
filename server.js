@@ -19,8 +19,9 @@ require('./models/Ticket')
 
 
 // Routes
-const auth = require('./routes/auth')
+const auth = require('./routes/auth');
 const tickets = require('./routes/ticket');
+const data = require('./routes/data');
 
 // Static Files
 
@@ -34,6 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Express API Routes
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/tickets', tickets);
+app.use('/api/v1/data', data);
 
 // Morgan API Logger
 if(process.env.NODE_ENV === "development") {

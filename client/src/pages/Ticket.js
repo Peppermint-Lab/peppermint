@@ -4,14 +4,14 @@ import { Grid, Col, Table, Modal, Button, Nav } from "rsuite";
 
 // import { baseUrl } from "../utils";
 
+import OpenTickets from '../component/OpenTicket'
+import UnissuedTickets from '../component/UnissuedTicket'
+
 const Ticket = () => {
   return (
-    <div>
-      <Nav>
-        <Nav.Item >Opened Tickets</Nav.Item>
-        <Nav.Item>Closed Tickets</Nav.Item>
-        <Nav.Item>Unissued Tickets</Nav.Item>
-      </Nav>
+    <div style={{margin: 25}}>
+      <OpenTickets /> 
+      <UnissuedTickets />
     </div>
   );
 };
