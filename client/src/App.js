@@ -1,5 +1,9 @@
-import React, { useEffect, useReducer, useContext, createContext } from 'react'
-import { BrowserRouter as Router, Route, Switch, useHistory, withRouter } from "react-router-dom";
+import React, { useReducer, createContext } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
 import "reactjs-popup/dist/index.css";
@@ -12,16 +16,14 @@ import Reg from "./pages/Reg";
 import Monitor from "./pages/monitor";
 import Admin from "./pages/Admin";
 
-import {reducer,initialState} from './reducer/userReducer';
+import { reducer, initialState } from "./reducer/userReducer";
 
-export const UserContext = createContext()
+export const UserContext = createContext();
 
 const Routing = () => {
-
   return (
     <Router>
       <Switch>
-
         <Route path="/login">
           <div className="login-container">
             <Login />
@@ -42,19 +44,16 @@ const Routing = () => {
           <Route path="/monitor" component={Monitor} />
           <Route path="/admin" component={Admin} />
         </Route>
-
-
       </Switch>
     </Router>
   );
 };
 
 const App = () => {
-
-  const [state,dispatch] = useReducer(reducer,initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <UserContext.Provider value={{state,dispatch}}>
+    <UserContext.Provider value={{ state, dispatch }}>
       <Routing />
     </UserContext.Provider>
   );

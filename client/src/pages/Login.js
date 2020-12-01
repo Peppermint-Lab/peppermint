@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import {
   Container,
   Content,
@@ -11,41 +11,40 @@ import {
   ButtonToolbar,
   Button,
 } from "rsuite";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
-import {UserContext} from '../App'
+import { UserContext } from "../App";
 
 const Login = () => {
+  const history = useHistory();
+  const { state, dispatch } = useContext(UserContext);
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
-    const history = useHistory()
-    const {state, dispatch} = useContext(UserContext)
-    const [password, setPassword] = useState('')
-    const [email, setEmail] = useState('')
-
-    const PostData = async () => {
+  const PostData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/login`, {
-          method: "post",
-          headers: {
-              "Content-Type":"application/json"
-          },
-          body: JSON.stringify({
-              email,
-              password
-          })
-      }).then( res => res.json())
-      .then(data => {
-          if(!data.error) {
-              localStorage.setItem("jwt", data.token)
-              localStorage.setItem("user", JSON.stringify(data.user))
-              dispatch({type:"USER",payload:data.user})
-              history.push('/')
-          }
-          else {
-              console.log(data.error)
-          }
-      })
-  }
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.error) {
+          localStorage.setItem("jwt", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          dispatch({ type: "USER", payload: data.user });
+          history.push("/");
+        } else {
+          console.log(data.error);
+        }
+      });
+  };
 
   return (
     <div>
@@ -58,15 +57,26 @@ const Login = () => {
                   <Form fluid>
                     <FormGroup>
                       <ControlLabel>Email</ControlLabel>
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
                     </FormGroup>
                     <FormGroup>
                       <ControlLabel>Password</ControlLabel>
-                      <input name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                      <input
+                        name="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary" onClick={()=>PostData()}>Sign in</Button>
+                        <Button appearance="primary" onClick={() => PostData()}>
+                          Sign in
+                        </Button>
                         <Button appearance="link">Forgot password?</Button>
                       </ButtonToolbar>
                     </FormGroup>
