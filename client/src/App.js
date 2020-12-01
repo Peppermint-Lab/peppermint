@@ -13,7 +13,7 @@ import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
-import Monitor from "./pages/monitor";
+import Monitor from "./pages/Monitor";
 import Admin from "./pages/Admin";
 
 import { reducer, initialState } from "./reducer/userReducer";
@@ -36,7 +36,10 @@ const Routing = () => {
           </div>
         </Route>
 
-        <Route path="/" component={Home} exact />
+        <Route>
+          <Navigation />
+          <Route path="/" component={Home} exact />
+        </Route>
 
         <Route>
           <Navigation />
