@@ -1,21 +1,18 @@
-import React, { useState} from "react";
+import React, {useState} from 'react'
 import {
-  Container,
-  Content,
-  FlexboxGrid,
-  Panel,
-  Form,
-  FormGroup,
-  ControlLabel,
-  ButtonToolbar,
-  Button,
-} from "rsuite";
+    Container,
+    Content,
+    Form,
+    FormGroup,
+    ControlLabel,
+    ButtonToolbar,
+    Button,
+  } from "rsuite";
 import { useHistory } from 'react-router-dom'
 
 import { baseUrl } from "../utils";
 
-const Reg = () => {
-
+const CreateUser = () => {
     const history = useHistory()
 
     const [password, setPassword] = useState('')
@@ -36,7 +33,7 @@ const Reg = () => {
           }).then( res => res.json())
           .then(data => {
               if(!data.error) {
-                  history.push('/login')
+                window.location.reload();
               } else {
                   console.log(data.error)
               }
@@ -44,13 +41,10 @@ const Reg = () => {
       }
 
     return (
-        <div>
-        <div>
+        <div className="createUser-container">
+            <h4>Add new user</h4>
             <Container>
             <Content>
-                <FlexboxGrid justify="center">
-                <FlexboxGrid.Item colspan={12}>
-                    <Panel header={<h3>Sign Up</h3>} bordered>
                     <Form fluid>
                         <FormGroup>
                         <ControlLabel>Name</ControlLabel>
@@ -70,19 +64,22 @@ const Reg = () => {
                         <FormGroup>
                         <ButtonToolbar>
                             <Button appearance="primary" onClick={()=>PostData()}>Sign Up</Button>
-                            <Button appearance="link">Forgot password?</Button>
                         </ButtonToolbar>
                         </FormGroup>
 
                     </Form>
-                    </Panel>
-                </FlexboxGrid.Item>
-                </FlexboxGrid>
             </Content>
             </Container>
         </div>
-        </div>
-    );
-};
+    )
+}
 
-export default Reg;
+const Admin = () => {
+    return (
+        <div>
+            <CreateUser />
+        </div>
+    )
+}
+
+export default Admin

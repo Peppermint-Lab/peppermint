@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button, ButtonToolbar, Radio, RadioGroup} from 'rsuite';
+import { Form, FormGroup, ControlLabel, HelpBlock, Button, ButtonToolbar, Radio, RadioGroup} from 'rsuite';
+import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
 
 const NewTicket = () => {
+
+  const history = useHistory();
 
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
@@ -20,6 +23,7 @@ const NewTicket = () => {
           },
           body: JSON.stringify({
               name,
+              email,
               company,
               issue,
               priority
@@ -30,6 +34,7 @@ const NewTicket = () => {
               if(data.error) {
                   console.log(data.error)
               } else {
+                  history.push('/tickets')
                   console.log("Congrats it worked")
               }
           })

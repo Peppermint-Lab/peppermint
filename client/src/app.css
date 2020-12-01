@@ -22,3 +22,14 @@
     justify-content: center;
     padding-top: 25px;
 }
+
+.createUser-container {
+    display: block;
+    text-align: center;
+    width: 15%;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+    margin: 10px;
+}

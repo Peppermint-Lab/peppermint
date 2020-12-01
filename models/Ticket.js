@@ -6,6 +6,7 @@ const TicketSchema = new mongoose.Schema({
   name: { type: String, required: true },
   company: { type: String, required: true },
   issue: { type: String, required: true },
+  email: { type: String, required: false },
   note: { type: String },
   status: {
     type: String,
@@ -18,7 +19,6 @@ const TicketSchema = new mongoose.Schema({
     enum: ["Low", "Normal", "High"],
     default: "Normal",
   },
-  time: { type: Date },
-});
+}, {timestamps: true});
 
 mongoose.model("TicketSchema", TicketSchema);

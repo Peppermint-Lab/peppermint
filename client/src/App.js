@@ -10,6 +10,7 @@ import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/monitor";
+import Admin from "./pages/Admin";
 
 import {reducer,initialState} from './reducer/userReducer';
 
@@ -39,7 +40,10 @@ const Routing = () => {
           <Navigation />
           <Route path="/tickets" component={Ticket} />
           <Route path="/monitor" component={Monitor} />
+          <Route path="/admin" component={Admin} />
         </Route>
+
+
       </Switch>
     </Router>
   );

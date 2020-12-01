@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Col, Table } from "rsuite";
+import { Grid, Col, Table, Modal, Button } from "rsuite";
 import TicketInfo from "../component/TicketInfo";
+import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
 
 const OpenTicket = () => {
+    
+    const [ticketmodalIsOpen, setTicketIsOpen] = useState(false);
+  
+    function openTicketModal() {
+      setTicketIsOpen(true);
+    }
+  
+    function closeTicketModal() {
+      setTicketIsOpen(false);
+    }
 
     const { Column, HeaderCell, Cell, Pagination } = Table;
 
@@ -33,10 +44,6 @@ const OpenTicket = () => {
          }, []);
 
          console.log(data)
-
-    function showInfo() {
-        <TicketInfo info={data} />
-    }
 
 
     return (
@@ -68,17 +75,25 @@ const OpenTicket = () => {
                     <Cell dataKey="issue" />
                 </Column>
 
-                <Column width={200} align="center" resizable>
+                <Column width={200} align="center" fixed>
                     <HeaderCell></HeaderCell>
                     <Cell>{
                         row => {
                             return (
                                 <div>
-                                    <a onClick={showInfo}>Info</a>
+                                    <Button size="xs" onClick={openTicketModal}>
+                                        Show Info
+                                    <Modal show={ticketmodalIsOpen} onHide={closeTicketModal} keyboard={true} >
+                                        <Modal.Body>
+                                            <TicketInfo info={row}/>
+                                        </Modal.Body>
+                                    </Modal>
+                                    </Button>
                                 </div>
                             )
                         }
-                        }</Cell>
+                        }
+                        </Cell>
                 </Column>
 
             </Table>
@@ -88,6 +103,8 @@ const OpenTicket = () => {
 };
 
 const UnissuedTicket = () => {
+
+    const history = useHistory();
 
     const { Column, HeaderCell, Cell, Pagination } = Table;
 
@@ -133,6 +150,7 @@ const UnissuedTicket = () => {
                 if(data.error) {
                     console.log(data.error)
                 } else {
+                    window.location.reload();
                     console.log("Congrats it worked")
                 }
             })
@@ -142,48 +160,38 @@ const UnissuedTicket = () => {
         <div>
             <h3 style={{ textAlign:"center"}}>Unissued Tickets - (3)</h3>
             <Table height={400} data={data}>
-                <Column width={70} align="center" resizable>
+                <Column width={70} align="center" fixed>
                     <HeaderCell>#</HeaderCell>
                     <Cell dataKey="id" />
                 </Column>
 
-                <Column width={100} align="center" resizable>
-                    <HeaderCell>Date</HeaderCell>
-                    <Cell dataKey="date" />
-                </Column>
-
-                <Column width={100} align="center" resizable>
-                    <HeaderCell>Time</HeaderCell>
-                    <Cell dataKey="time" />
-                </Column>
-
-                <Column width={150} align="center" resizable>
+                <Column width={70} align="center" fixed>
                     <HeaderCell>Name</HeaderCell>
                     <Cell dataKey="name" />
                 </Column>
 
-                <Column width={100} align="center" resizable>
+                <Column width={100} align="center" fixed>
                     <HeaderCell>Company</HeaderCell>
                     <Cell dataKey="company" />
                 </Column>
 
-                <Column width={100} align="center" resizable>
+                <Column width={75} align="center" fixed>
                     <HeaderCell>Priority</HeaderCell>
                     <Cell dataKey="priority" />
                 </Column>
 
-                <Column width={200} align="center" resizable>
+                <Column width={200} align="center" fixed>
                     <HeaderCell>Issue</HeaderCell>
                     <Cell dataKey="issue" />
                 </Column>
 
-                <Column width={200} align="center" resizable>
+                <Column width={200} align="center" fixed>
                     <HeaderCell></HeaderCell>
                     <Cell>{
                         row => {
                             return (
                                 <div>
-                                    <a onClick={convert}>Convert</a>
+                                    <Button size="sm" onClick={convert} >Convert</Button>
                                 </div>
                             )
                         }

@@ -49,16 +49,19 @@ exports.completedTickets = async (req, res) => {
 // Create a new ticket
 exports.createTicket = async (req, res) => {
   console.log("Create a new ticket API HIT");
+
   try {
-    const { name, company, issue, priority } = req.body;
+    const { name, company, issue, priority, email } = req.body;
     if (!name || !company || !issue || !priority) {
       return res.status(422).json({ error: "Please add all the fields" });
     }
+    
     const newTicket = new TicketSchema({
       name,
       company,
       issue,
       priority,
+      email
     });
     newTicket.save().then((result) => {
       res.json({ newTicket: result });

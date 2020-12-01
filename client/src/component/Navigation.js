@@ -55,8 +55,12 @@ const Navigation = () => {
               Tickets
             </Nav.Item>
 
-            <Nav.Item onClick={() => history.push("/monitor")}>
+            <Nav.Item onClick={() => history.push("/monitor")} disabled={true}>
               Monitoring
+            </Nav.Item>
+
+            <Nav.Item onClick={() => history.push("/timesheet")} disabled={true}>
+              TimeSheet
             </Nav.Item>
 
             <Nav.Item onClick={() => history.push("/admin")} disabled={true}>
