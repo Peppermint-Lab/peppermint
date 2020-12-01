@@ -35,11 +35,8 @@ const Routing = () => {
             <Reg />
           </div>
         </Route>
-
-        <Route>
-          <Navigation />
-          <Route path="/" component={Home} exact />
-        </Route>
+          
+        <Route path="/" component={Home} exact />
 
         <Route>
           <Navigation />
