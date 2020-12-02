@@ -83,7 +83,6 @@ const Reg = () => {
                         <Button appearance="primary" onClick={() => PostData()}>
                           Sign Up
                         </Button>
-                        <Button appearance="link">Forgot password?</Button>
                       </ButtonToolbar>
                     </FormGroup>
                   </Form>
