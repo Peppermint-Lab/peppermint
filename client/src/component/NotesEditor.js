@@ -12,10 +12,12 @@ const TextEditor = ({ onSubmit }) => {
         onSubmit({ body })
     }
 
+    ClassicEditor.defaultConfig = config
+
     return (
         <form onSubmit={handleSubmit}>
             <CKEditor
-                editor={ClassicEditor}
+                
                 onChange={(event, editor) => {
                     const data = editor.getData()
                     setBody(data)

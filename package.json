@@ -24,7 +24,8 @@
     "helmet": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.11",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "rsuite": "^4.8.5"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
