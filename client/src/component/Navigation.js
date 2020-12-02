@@ -29,7 +29,7 @@ const Navigation = () => {
     setTicketIsOpen(false);
   }
 
-  const isAdmin = () => {};
+  // const isAdmin = () => {};
 
   return (
     <div>
@@ -50,10 +50,6 @@ const Navigation = () => {
 
             <Nav.Item onClick={() => history.push("/tickets")}>
               Tickets
-            </Nav.Item>
-
-            <Nav.Item onClick={() => history.push("/monitor")} disabled={true}>
-              Monitoring
             </Nav.Item>
 
             <Nav.Item

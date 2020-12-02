@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const colors = require('colors');
 const bodyParser = require('body-parser')
+const helmet = require("helmet");
 
 const connectDB = require('./config/DB');
 dotenv.config({ path: './config/config.env'});
@@ -32,6 +33,7 @@ app.use(cors())
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
 
 // Express API Routes
 app.use('/api/v1/auth', auth);
