@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.1.10",
+    "antd": "^4.9.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-modal": "^3.11.2",

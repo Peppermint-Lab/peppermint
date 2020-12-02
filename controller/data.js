@@ -14,7 +14,7 @@ exports.countUnissuedTickets = (req, res) => {
  
  exports.countOpenedTickets = (req, res) => {
     // console.log("Data api HIT")
-     TicketSchema.count({ status: 'open'})
+     TicketSchema.count({ status: 'issued', assignedto: req.user._id})
      .then(result => {
          res.json({result})
      })
@@ -25,7 +25,7 @@ exports.countUnissuedTickets = (req, res) => {
  
  exports.countCompletedTickets = (req, res) => {
      // console.log("Data api HIT")
-      TicketSchema.count({ status: 'completed'})
+      TicketSchema.count({ status: 'completed', assignedto: req.user._id})
       .then(result => {
           res.json({result})
       })

@@ -5,8 +5,8 @@ const auth = require('../middleware/authCheck');
 const {countUnissuedTickets, countOpenedTickets, countCompletedTickets} = require ('../controller/data');
 
 router  
-    .route('/unissuedTickets')
-    .post(auth, countUnissuedTickets)
+    .route('/unallocatedTickets')
+    .get(auth, countUnissuedTickets)
 
 router
     .route('/openTickets')
