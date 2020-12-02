@@ -52,9 +52,7 @@ const Home = () => {
           </Content>
         </Container>
 
-        <Container>
-          <Notes />
-        </Container>
+        
 
         <Container>
           <Issues />
