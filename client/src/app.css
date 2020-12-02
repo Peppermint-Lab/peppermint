@@ -69,3 +69,11 @@
   margin: 10px;
   margin-left: 72%;
 }
+
+.top-left {
+  display: block;
+  position: absolute;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 20px;
+}
