@@ -1,70 +1,96 @@
 import React, { useState } from "react";
-import { Form, FormGroup, ControlLabel, HelpBlock, Button, ButtonToolbar, Radio, RadioGroup} from 'rsuite';
+import {
+  Form,
+  FormGroup,
+  ControlLabel,
+  HelpBlock,
+  Button,
+  ButtonToolbar,
+  Radio,
+  RadioGroup,
+} from "rsuite";
 // import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
 
 const NewTicket = () => {
-
   // const history = useHistory();
 
-  const [name, setName] = useState('')
-  const [company, setCompany] = useState('')
-  const [email, setEmail] = useState('')
-  const [issue, setIssue] = useState('')
-  const [priority, setPriority] = useState('')
-  
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [issue, setIssue] = useState("");
+  const [priority, setPriority] = useState("");
+
   const postData = () => {
-  
-      fetch(`${baseUrl}/api/v1/tickets/createTicket`, {
-          method: 'POST',
-          headers: {
-              "Content-Type":"application/json"
-          },
-          body: JSON.stringify({
-              name,
-              email,
-              company,
-              issue,
-              priority
-          })
-          })
-          .then(res => res.json())
-          .then(data => {
-              if(data.error) {
-                  console.log(data.error)
-              } else {
-                  console.log("Congrats it worked")
-              }
-          })
-  }
+    fetch(`${baseUrl}/api/v1/tickets/createTicket`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        company,
+        issue,
+        priority,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          console.log("Congrats it worked");
+        }
+      });
+  };
 
   return (
     <div>
       <Form layout="horizontal">
         <FormGroup>
           <ControlLabel>Name</ControlLabel>
-          <input name="name" onChange={(e) => setName(e.target.value)}/>
+          <input name="name" onChange={(e) => setName(e.target.value)} />
           <HelpBlock tooltip>Required</HelpBlock>
         </FormGroup>
         <FormGroup>
           <ControlLabel>Email</ControlLabel>
-          <input name="email" type="email" onChange={(e) => setEmail(e.target.value)}/>
+          <input
+            name="email"
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <HelpBlock tooltip>Required</HelpBlock>
         </FormGroup>
         <FormGroup>
           <ControlLabel>Company</ControlLabel>
-          <input name="company" type="text" onChange={(e) => setCompany(e.target.value)}/>
+          <input
+            name="company"
+            type="text"
+            onChange={(e) => setCompany(e.target.value)}
+          />
           <HelpBlock tooltip>Required</HelpBlock>
         </FormGroup>
         <FormGroup>
           <ControlLabel>Issue</ControlLabel>
-          <input name="textarea" rows={3} componentClass="textarea" onChange={(e) => setIssue(e.target.value)}/>
+          <input
+            name="textarea"
+            rows={3}
+            componentClass="textarea"
+            onChange={(e) => setIssue(e.target.value)}
+          />
           <HelpBlock tooltip>Required</HelpBlock>
         </FormGroup>
         <FormGroup>
           <ControlLabel>Priority</ControlLabel>
-          <RadioGroup name="radioList" inline appearance="picker" defaultValue="A" onChange={setPriority}>
+          <RadioGroup
+            name="radioList"
+            inline
+            appearance="picker"
+            defaultValue="A"
+            onChange={setPriority}
+          >
             <Radio value="Low">Low</Radio>
             <Radio value="Normal">Normal</Radio>
             <Radio value="High">High</Radio>
@@ -72,7 +98,9 @@ const NewTicket = () => {
         </FormGroup>
         <FormGroup>
           <ButtonToolbar>
-            <Button appearance="primary" onClick={() => postData()}>Submit</Button>
+            <Button appearance="primary" onClick={() => postData()}>
+              Submit
+            </Button>
             <Button appearance="default">Cancel</Button>
           </ButtonToolbar>
         </FormGroup>

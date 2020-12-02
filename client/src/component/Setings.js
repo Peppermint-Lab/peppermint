@@ -3,12 +3,11 @@ import { Button } from "rsuite";
 import { useHistory } from "react-router-dom";
 
 const Setings = () => {
-
   const history = useHistory();
 
   function logout() {
     localStorage.clear();
-    history.push('/Login')
+    history.push("/Login");
   }
 
   return (
