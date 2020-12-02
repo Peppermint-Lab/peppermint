@@ -10,7 +10,7 @@ import {
 } from "rsuite";
 // import { useHistory } from "react-router-dom";
 
-import { baseUrl } from "../utils";
+import { baseUrl } from "../utils.js";
 
 const CreateUser = () => {
   // const history = useHistory();

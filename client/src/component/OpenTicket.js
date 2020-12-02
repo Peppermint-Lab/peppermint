@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Modal, Button } from "rsuite";
 import TicketInfo from "../component/TicketInfo";
 
-import { baseUrl } from "../utils";
+import { baseUrl } from "../utils.js";
 
 const OpenTicket = () => {
   const [ticketmodalIsOpen, setTicketIsOpen] = useState(false);

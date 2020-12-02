@@ -22,7 +22,7 @@ const Todo = () => {
 const Notes = () => {
   
  return(
-   <div>
+   <div className="Notes-Container">
      <h3>Notes</h3>
      <Divider />
      
@@ -52,7 +52,9 @@ const Home = () => {
           </Content>
         </Container>
 
-        
+        <Container>
+          <Notes />
+        </Container>
 
         <Container>
           <Issues />

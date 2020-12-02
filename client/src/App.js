@@ -14,11 +14,7 @@ import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
-
-
 import Admin from "./pages/Admin";
-
-
 
 const Routing = () => {
   return (
@@ -39,7 +35,7 @@ const Routing = () => {
         <Route path="/" component={Home} exact />
 
         <Route>
-        <Navigation />
+          <Navigation />
           <Route path="/tickets" component={Ticket} />
           <Route path="/monitor" component={Monitor} />
           <Route path="/admin" component={Admin} />
@@ -50,8 +46,6 @@ const Routing = () => {
 };
 
 const App = () => {
-
-
   return (
       <Routing />
   );

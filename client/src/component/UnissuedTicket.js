@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "rsuite";
 
-import { baseUrl } from "../utils";
+import { baseUrl } from "../utils.js";
 
 const UnissuedTicket = () => {
   // const history = useHistory();
