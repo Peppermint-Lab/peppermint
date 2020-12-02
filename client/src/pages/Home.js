@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Header, Content } from "rsuite";
+import { Container, Header, Content, Icon } from "rsuite";
 
 import Navigation from "../component/Navigation";
 import CreateTodo from '../component/CreateTodo';
@@ -9,13 +9,28 @@ const Todo = () => {
 
   return (
     <div className="Todo-Container">
-        <h1>Todo List</h1>
+        <h3>Todo List</h3>
         <CreateTodo />
         <ListTodo />
     </div>
   )
 }
 
+const Notes = () => {
+  return ( 
+    <div className="Notes-Container"> 
+      <h3>Notes</h3>
+    </div>
+  )
+}
+
+const Issues = () => {
+  return (
+    <div className="Issue-Container">
+      <h3>Issues</h3><Icon />
+    </div>
+  )
+}
 
 const Home = () => {
   return (
@@ -24,11 +39,21 @@ const Home = () => {
         <Header>
           <Navigation />
         </Header>
+
         <Container>
           <Content>
             <Todo />
           </Content>
         </Container>
+
+        <Container>
+          <Notes />
+        </Container>
+
+        <Container>
+          <Issues />
+        </Container>
+
       </Container>
     </div>
   );

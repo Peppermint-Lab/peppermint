@@ -36,7 +36,6 @@
 .Todo-Container {
   display: block;
   position: absolute;
-  float: left;
   background-color: white;
   padding: 1rem;
   border-radius: 20px;
@@ -52,6 +51,19 @@
   padding: 1rem;
   border-radius: 20px;
   box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
-  width: 30%;
+  width: 38%;
   margin: 10px;
+  margin-left: 32%;
+}
+
+.Issue-Container {
+  display: block;
+  position: absolute;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+  width: 27%;
+  margin: 10px;
+  margin-left: 72%;
 }
