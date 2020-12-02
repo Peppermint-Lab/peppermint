@@ -42,6 +42,7 @@
   box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
   width: 30%;
   margin: 10px;
+  height: 85%;
 }
 
 .Notes-Container {
@@ -54,6 +55,7 @@
   width: 38%;
   margin: 10px;
   margin-left: 32%;
+  height: 85%;
 }
 
 .Issue-Container {
