@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useState } from "react";
 import { Container, Header, Content, Divider } from "rsuite";
+
 
 import Navigation from "../component/Navigation";
 import CreateTodo from "../component/CreateTodo";
 import ListTodo from "../component/ListTodo";
 import TicketStats from "../component/TicketStats";
+// import TextEditor from "../component/NotesEditor";
+
+import { config } from '../utils'
 
 const Todo = () => {
   return (
@@ -18,12 +22,13 @@ const Todo = () => {
 };
 
 const Notes = () => {
-  return (
-    <div className="Notes-Container">
-      <h3>Notes</h3>
-      <Divider />
-    </div>
-  );
+  
+
+ return(
+   <div>
+     
+   </div>
+ )
 };
 
 const Issues = () => {
