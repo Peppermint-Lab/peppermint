@@ -1,4 +1,4 @@
-import React, { useReducer, createContext } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -14,11 +14,11 @@ import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
+
+
 import Admin from "./pages/Admin";
 
-import { reducer, initialState } from "./reducer/userReducer";
 
-export const UserContext = createContext();
 
 const Routing = () => {
   return (
@@ -39,7 +39,7 @@ const Routing = () => {
         <Route path="/" component={Home} exact />
 
         <Route>
-          <Navigation />
+        <Navigation />
           <Route path="/tickets" component={Ticket} />
           <Route path="/monitor" component={Monitor} />
           <Route path="/admin" component={Admin} />
@@ -50,12 +50,10 @@ const Routing = () => {
 };
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+
 
   return (
-    <UserContext.Provider value={{ state, dispatch }}>
       <Routing />
-    </UserContext.Provider>
   );
 };
 
