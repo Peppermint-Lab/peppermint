@@ -43,7 +43,7 @@ app.use('/api/v1/todo', todo);
 
 // Morgan API Logger
 if(process.env.NODE_ENV === "development") {
-    app.use(morgan('dev'))
+    app.use(morgan('combined'))
 }
 
 // Express web server PORT

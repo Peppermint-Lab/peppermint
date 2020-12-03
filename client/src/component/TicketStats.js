@@ -106,7 +106,6 @@ const Completed = () => {
       <div className="inside-issue-con">
         <h4>Completed Tickets - {data}</h4>
       </div>
-      <Divider />
     </div>
   );
 };
