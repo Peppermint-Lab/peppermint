@@ -76,4 +76,31 @@
   background-color: white;
   padding: 1rem;
   border-radius: 20px;
+  box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 50%;
+  width: 45%;
+  height: 250px;
+}
+
+.top-right {
+  display: block;
+  position: absolute;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+  margin-left: 55%;
+  width: 45%;
+  height: 250px;
+}
+
+.bottom-left {
+  display: block;
+  position: absolute;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+  margin-top: 60%;
+  width: 45%;
 }

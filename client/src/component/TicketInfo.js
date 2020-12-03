@@ -1,30 +1,34 @@
 import React from 'react'
+import {Container } from 'rsuite'
 
 
 const TicketInfo = (props) => {
 
-    console.log(props)
-
-    const data = props 
+    const data = props.info
     
+    console.log(data)
+
     return (
         <div>
-            
-            <div className="top-left">
-            {data.issue}
-            </div>
+            <Container>
+                <div className="top-left">
+                    <p>{data.issue}</p>
+                </div>
+            </Container>
 
             <div className="top-right">
-
+            <p>{data.name}</p>
             </div>
 
             <div className="bottom-right">
 
             </div>
 
-            <div className="bottom-left">
-
-            </div>
+            <Container>
+                <div className="bottom-left">
+                    {data.company}
+                </div>
+            </Container>
 
         </div>
     )

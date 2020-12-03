@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Modal, Button } from "rsuite";
-import TicketInfo from "../component/TicketInfo";
+// import TicketInfo from "../component/TicketInfo";
+
 
 import { baseUrl } from "../utils.js";
 
@@ -88,8 +89,9 @@ const OpenTicket = () => {
                       onHide={closeTicketModal}
                       keyboard={true}
                     >
+                      <Modal.Header><h3>Ticket Info</h3></Modal.Header>
                       <Modal.Body>
-                        <TicketInfo info={row} />
+                        
                       </Modal.Body>
                     </Modal>
                   </Button>
