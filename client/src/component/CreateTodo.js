@@ -16,12 +16,9 @@ const CreateTodo = () => {
       body: JSON.stringify({
         text,
       }),
-    }).then((res) => res.json());
+    })
+    .then((res) => res.json())
   }
-
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
 
   return (
     <div>

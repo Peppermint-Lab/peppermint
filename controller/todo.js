@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Todo = mongoose.model("Todo");
 
-exports.getTodos = (req, res) => {
+exports.getTodos = async (req, res) => {
     console.log('getTodos')
     try {
         Todo.find({createdBy: req.user._id})
@@ -14,7 +14,7 @@ exports.getTodos = (req, res) => {
     }
 }
 
-exports.createTodo = (req, res) => {
+exports.createTodo = async (req, res) => {
     console.log('createTodo')
     try {
         const {text} = req.body
@@ -34,10 +34,29 @@ exports.createTodo = (req, res) => {
     }
 }
 
-exports.deleteTodo = (req, res) => {
+exports.deleteTodo = async (req, res) => {
     console.log('deleteTodo')
+    
+    
     try {
-        
+        const todo = await new mongoose.Types.ObjectId(req.params.id);
+        if(!todo) {
+            return res.status(404).json({
+                success: false,
+                error: 'Todo not found.'
+            })
+        } 
+        await Todo.findOneAndDelete({"_id": req.params.id});
+        return res.status(201)
+    } catch (error) {
+        console.log(error)
+        return res.status(500)
+    }
+}
+
+exports.markAsDone = (req, res) => {
+    console.log('MarkAsDone')
+    try {
     } catch (error) {
         
     }

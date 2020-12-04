@@ -12,9 +12,9 @@ router
     .route('/createTodo')
     .post(reqLogin, createTodo)
 
-// router
-  //  .route('/todo/deleteTodo')
-  // .delete(reqLogin, deleteTodo)
+router
+    .route('/deleteTodo/:id')
+    .delete(reqLogin, deleteTodo)
 
 
 module.exports = router;
