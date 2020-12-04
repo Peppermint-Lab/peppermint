@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
+import "@reach/dialog/styles.css";
 
 
 import Home from "./pages/Home";

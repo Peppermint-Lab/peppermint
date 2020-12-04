@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reach/dialog": "^0.12.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.3.0",
@@ -11,6 +12,7 @@
     "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "reactjs-popup": "^2.0.4",
     "rsuite": "^4.8.5",
     "web-vitals": "^0.2.4"
   },

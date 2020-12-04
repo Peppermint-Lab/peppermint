@@ -74,13 +74,14 @@
 .top-left {
   display: block;
   position: absolute;
+  padding: 1rem;
+  margin-bottom: 50%;
+  width: 45%;
+  height: 55%;
   background-color: white;
   padding: 1rem;
   border-radius: 20px;
   box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
-  margin-bottom: 50%;
-  width: 45%;
-  height: 250px;
 }
 
 .top-right {
@@ -90,9 +91,9 @@
   padding: 1rem;
   border-radius: 20px;
   box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
-  margin-left: 55%;
+  margin-left: 47%;
   width: 45%;
-  height: 250px;
+  height: 55%;
 }
 
 .bottom-left {
@@ -102,7 +103,19 @@
   padding: 1rem;
   border-radius: 20px;
   box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
-  margin-top: 60%;
+  margin-top: 40%;
+  width: 45%;
+}
+
+.bottom-right {
+  display: block;
+  position: absolute;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+  margin-top: 40%;
+  margin-left: 47%;
   width: 45%;
 }
 
@@ -112,4 +125,26 @@
 
 .todo-list li {
   list-style-type: none;
+}
+
+.popup-content {
+  margin: auto;
+  background: rgb(255, 255, 255);
+  width: 55%;
+  height: 75%;
+  padding: 5px;
+}
+.popup-arrow {
+  color: rgb(255, 255, 255);
+}
+[role='tooltip'].popup-content {
+  width: 200px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
+}
+
+.popup-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+[data-popup='tooltip'].popup-overlay {
+  background: transparent;
 }

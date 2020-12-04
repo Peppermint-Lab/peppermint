@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "rsuite";
+import { Table, Button, Icon, Container, Panel, Input, InputGroup } from "rsuite";
+import Popup from 'reactjs-popup';
 // import TicketInfo from "../component/TicketInfo";
 
 
 import { baseUrl } from "../utils.js";
 
 const OpenTicket = () => {
-  const [ticketmodalIsOpen, setTicketIsOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [data, setData] = useState([]);
 
-  function openTicketModal() {
-    setTicketIsOpen(true);
-  }
-
-  function closeTicketModal() {
-    setTicketIsOpen(false);
-  }
+  const open = () => setModalOpen(true);
+  const close = () => setModalOpen(false);
 
   const { Column, HeaderCell, Cell } = Table;
-
-  const [data, setData] = useState([]);
 
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/tickets/openedTickets`, {
@@ -41,8 +36,6 @@ const OpenTicket = () => {
     }
     resolve();
   }, []);
-
-  console.log(data);
 
   return (
     <div>
@@ -82,19 +75,48 @@ const OpenTicket = () => {
             {(row) => {
               return (
                 <div>
-                  <Button size="xs" onClick={openTicketModal}>
-                    Show Info
-                    <Modal
-                      show={ticketmodalIsOpen}
-                      onHide={closeTicketModal}
-                      keyboard={true}
-                    >
-                      <Modal.Header><h3>Ticket Info</h3></Modal.Header>
-                      <Modal.Body>
-                        
-                      </Modal.Body>
-                    </Modal>
+                  <Button size="xs" onClick={open}>
+                    Show Job Info
                   </Button>
+                  <Popup modal open={modalOpen} nested={true}>
+                  <Button
+                  style={{ float: "right"}}
+                    onClick={() => {
+                      console.log('modal closed ');
+                      close();
+                    }}
+                  >
+                    <Icon icon="close" />
+                  </Button>
+                    <Container>
+                      <div className="top-left">
+                        <h4>Job Issue</h4>
+                        <Input componentClass="textarea" rows={10}  placeholder="If you see this there is no issue entered...." defaultValue={row.issue}/>
+                      </div>
+                    </Container>
+
+                    <Container>
+                      <div className="bottom-left">
+                        <h4>Customer Infomation</h4>
+                        
+                      </div>
+                    </Container>
+
+                    <Container>
+                      <div className="top-right">
+                        <h4>Job Notes</h4>
+                        <Input componentClass="textarea" rows={10}  placeholder="Enter Job notes here..." defaultValue={null}/>
+                      </div>
+                    </Container>
+
+                    <Container>
+                      <div className="bottom-right">
+                        <h4>Time Allocation</h4>
+                        
+                      </div>
+                    </Container>
+
+                  </Popup>
                 </div>
               );
             }}
