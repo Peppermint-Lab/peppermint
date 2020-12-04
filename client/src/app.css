@@ -107,6 +107,11 @@
   width: 45%;
 }
 
+.bottom-left li {
+  list-style-type: none;
+  margin-left: -40px;
+}
+
 .bottom-right {
   display: block;
   position: absolute;

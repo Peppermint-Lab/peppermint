@@ -73,6 +73,7 @@ const OpenTicket = () => {
           <HeaderCell></HeaderCell>
           <Cell>
             {(row) => {
+              // console.log(row)
               return (
                 <div>
                   <Button size="xs" onClick={open}>
@@ -98,7 +99,12 @@ const OpenTicket = () => {
                     <Container>
                       <div className="bottom-left">
                         <h4>Customer Infomation</h4>
-                        
+                        <ul>
+                          <li>Company: {row.company}</li>
+                          <li>Caller: {row.name}</li>
+                          <li>Email: {row.email}</li>
+                          <li>Priority: {row.priority}</li>
+                        </ul>
                       </div>
                     </Container>
 
