@@ -91,6 +91,7 @@ const UnissuedTicket = () => {
           <HeaderCell></HeaderCell>
           <Cell>
             {(row) => {
+              // console.log(row)
               return (
                 <div>
                   <Button size="xs" onClick={convert}>

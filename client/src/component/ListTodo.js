@@ -27,10 +27,18 @@ const ListTodo = () => {
     resolve();
   }, [setData]);
 
-  console.log(data);
+ // console.log(data);
 
-  function Alldone() {
-    
+  const allDone = () => {
+    fetch(`${baseUrl}/api/v1/todo/markAllAsDone`, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        ContentType: "application/json",
+        Accept: "application/json"
+      },
+    })
+    .then(response => response.json())
   }
 
   const oneDone = (item) => {
@@ -44,14 +52,6 @@ const ListTodo = () => {
       },
     })
     .then(response => response.json())
-    .then((data) => {
-      if (!data.error) {
-        window.location.reload()
-        return
-      } else {
-        console.log(data.error);
-      }
-    });
   }
 
   const removeTodo = (id) => {
@@ -79,7 +79,7 @@ const ListTodo = () => {
 
   return (
     <div>
-      <button style={{ marginTop: 10}} onClick={Alldone()}>Mark All Done</button>
+      <button style={{ marginTop: 10}} onClick={allDone}>Mark All Done</button>
       <Divider orientation="left" style={{ width: "auto" }}></Divider>
       {data.map((item) => {
         // console.log(item)

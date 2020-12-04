@@ -55,7 +55,6 @@ exports.createTicket = async (req, res) => {
     if (!name || !company || !issue || !priority) {
       return res.status(422).json({ error: "Please add all the fields" });
     }
-    
     const newTicket = new TicketSchema({
       name,
       company,
