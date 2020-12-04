@@ -105,3 +105,11 @@
   margin-top: 60%;
   width: 45%;
 }
+
+.done {
+  text-decoration: line-through;
+}
+
+.todo-list li {
+  list-style-type: none;
+}

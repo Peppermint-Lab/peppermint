@@ -84,10 +84,10 @@ const ListTodo = () => {
       {data.map((item) => {
         // console.log(item)
         return (
-          <div key={item._id}>
+          <div key={item._id} className="todo-list">
             <ul>
-              <li>
-                <span>{item.text}</span>
+              <li style={{ marginLeft: -35}}>
+                <span className={item.done ? 'done' : ''}>{item.text}</span>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip1}>
                   <button onClick={() => removeTodo(item._id)} style={{ float: "right"}}><Icon icon="close" /></button>
                 </Whisper>
