@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Todo = mongoose.model("Todo");
-const User = mongoose.model("InternalUser");
 
 exports.getTodos = async (req, res) => {
   console.log("getTodos");
@@ -94,40 +93,3 @@ exports.markAllAsDone = (req, res) => {
   }
 };
 
-
-exports.saveNote = (req, res) => {
-  console.log('Note Saved')
-  console.log(req.body)
-  console.log(req.user._id)
-
-  try {
-    const { text } = req.body;
-    if(!text) {
-      return res.status(422).json({error: "Please add some text"});
-    }
-    User.findByIdAndUpdate(
-      {_id: req.user._id},
-      {
-        $push: { notes: text},
-      }, {
-        new: true
-      }
-    ).exec();
-    console.log('Note saved');
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-exports.getNotes = (req, res ) => {
-  console.log('Get Notes')
-  try {
-    User.find({ notes })
-      .populate("notes", "_id name")
-      .then((note) => {
-        res.json({ note });
-      });
-  } catch (error) {
-    console.log(error)
-  }
-}
