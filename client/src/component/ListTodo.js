@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Divider, Icon, Tooltip, Whisper, Button } from "rsuite";
+import { Divider, Icon, Tooltip, Whisper } from "rsuite";
 
 import { baseUrl } from "../utils";
 
@@ -33,21 +33,45 @@ const ListTodo = () => {
     
   }
 
-  function oneDone() {
-
-  }
-
-  const removeTodo = (id) => {
-    console.log(id)
-    fetch(`${baseUrl}/api/v1/todo/deleteTodo/${id}`, {
-      method: "DELETE",
+  const oneDone = (item) => {
+    console.log(item._id)
+    fetch(`${baseUrl}/api/v1/todo/markOneAsDone/${item._id}`, {
+      method: "PUT",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
         ContentType: "application/json",
         Accept: "application/json"
       },
     })
-    .then((res) => res.json())
+    .then(response => response.json())
+    .then((data) => {
+      if (!data.error) {
+        window.location.reload()
+        return
+      } else {
+        console.log(data.error);
+      }
+    });
+  }
+
+  const removeTodo = (id) => {
+    fetch(`${baseUrl}/api/v1/todo/deleteTodo/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+    })
+    .then(response => response.json())
+    .then((data) => {
+      if (!data.error) {
+        window.location.reload()
+        return
+      } else {
+        console.log(data.error);
+      }
+    });
   }
 
   const tooltip1 = <Tooltip>Remove Todo</Tooltip>;
@@ -68,7 +92,7 @@ const ListTodo = () => {
                   <button onClick={() => removeTodo(item._id)} style={{ float: "right"}}><Icon icon="close" /></button>
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
-                  <button onClick={oneDone(data)} style={{ float: "right", marginRight: 5}}><Icon icon="check" /></button>
+                  <button onClick={() => oneDone(item)} style={{ float: "right", marginRight: 5}}><Icon icon="check" /></button>
                 </Whisper>
                 </li>
             </ul>
