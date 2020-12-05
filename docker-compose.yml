@@ -13,6 +13,8 @@ services:
   api:
     image: winter.api
     build: .
+    volumes:
+    - ./:/usr/src/app:cached
     environment: 
       Port: ${PORT}
       JWT_SECRET: ${JWT_SECRET}

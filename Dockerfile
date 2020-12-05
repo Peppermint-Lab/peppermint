@@ -1,8 +1,10 @@
-FROM node:12
+FROM node:12-alpine as builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
+
+RUN apk --no-cache add --virtual builds-deps build-base python
 
 RUN npm install
 
