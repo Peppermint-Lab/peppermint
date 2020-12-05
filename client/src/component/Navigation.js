@@ -6,7 +6,6 @@ import Settings from "./Setings";
 import NewTicket from "./NewTicket";
 
 const Navigation = () => {
-  
   const history = useHistory();
 
   const tooltip = <Tooltip>Create a new Ticket here</Tooltip>;

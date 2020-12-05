@@ -1,13 +1,8 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
 import "@reach/dialog/styles.css";
-
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
@@ -32,7 +27,7 @@ const Routing = () => {
             <Reg />
           </div>
         </Route>
-          
+
         <Route path="/" component={Home} exact />
 
         <Route>
@@ -47,9 +42,7 @@ const Routing = () => {
 };
 
 const App = () => {
-  return (
-      <Routing />
-  );
+  return <Routing />;
 };
 
 export default App;

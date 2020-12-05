@@ -6,7 +6,7 @@ import { baseUrl } from "../utils.js";
 const UnissuedTicket = () => {
   // const history = useHistory();
 
-  const { Column, HeaderCell, Cell, } = Table;
+  const { Column, HeaderCell, Cell } = Table;
 
   const [data, setData] = useState([]);
 

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Icon, Container, Input } from "rsuite";
-import Popup from 'reactjs-popup';
+import Popup from "reactjs-popup";
 // import TicketInfo from "../component/TicketInfo";
-
 
 import { baseUrl } from "../utils.js";
 
@@ -80,19 +79,24 @@ const OpenTicket = () => {
                     Show Job Info
                   </Button>
                   <Popup modal open={modalOpen} nested={true}>
-                  <Button
-                  style={{ float: "right"}}
-                    onClick={() => {
-                      console.log('modal closed ');
-                      close();
-                    }}
-                  >
-                    <Icon icon="close" />
-                  </Button>
+                    <Button
+                      style={{ float: "right" }}
+                      onClick={() => {
+                        console.log("modal closed ");
+                        close();
+                      }}
+                    >
+                      <Icon icon="close" />
+                    </Button>
                     <Container>
                       <div className="top-left">
                         <h4>Job Issue</h4>
-                        <Input componentClass="textarea" rows={10}  placeholder="If you see this there is no issue entered...." defaultValue={row.issue}/>
+                        <Input
+                          componentClass="textarea"
+                          rows={10}
+                          placeholder="If you see this there is no issue entered...."
+                          defaultValue={row.issue}
+                        />
                       </div>
                     </Container>
 
@@ -111,17 +115,20 @@ const OpenTicket = () => {
                     <Container>
                       <div className="top-right">
                         <h4>Job Notes</h4>
-                        <Input componentClass="textarea" rows={10}  placeholder="Enter Job notes here..." defaultValue={null}/>
+                        <Input
+                          componentClass="textarea"
+                          rows={10}
+                          placeholder="Enter Job notes here..."
+                          defaultValue={null}
+                        />
                       </div>
                     </Container>
 
                     <Container>
                       <div className="bottom-right">
                         <h4>Time Allocation</h4>
-                        
                       </div>
                     </Container>
-
                   </Popup>
                 </div>
               );
