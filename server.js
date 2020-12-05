@@ -15,15 +15,17 @@ dotenv.config({ path: './config/config.env'});
 connectDB()
 
 // DB models
-require('./models/InternalUser')
-require('./models/Ticket')
+require('./models/InternalUser');
+require('./models/Ticket');
 require('./models/todo');
+require('./models/notes');
 
 // Routes
 const auth = require('./routes/auth');
 const tickets = require('./routes/ticket');
 const data = require('./routes/data');
 const todo = require('./routes/todo');
+const note = require('./routes/notes');
 
 // Static Files
 
@@ -40,6 +42,7 @@ app.use('/api/v1/auth', auth);
 app.use('/api/v1/tickets', tickets);
 app.use('/api/v1/data', data);
 app.use('/api/v1/todo', todo);
+app.use('/api/v1/note', note);
 
 // Morgan API Logger
 if(process.env.NODE_ENV === "development") {

@@ -3,8 +3,9 @@ const {ObjectId} = mongoose.Schema.Types
 
 // Mongoose Schema for internal_users notes
 const Notes = new mongoose.Schema({
-    note: {type: string },
+    title: {type: String},
+    note: {type: String },
     createdBy: { type: ObjectId, ref: 'InternalUser'},
-  }, {timestamps: yes});
+  }, {timestamps: true});
   
   mongoose.model("Notes", Notes);
