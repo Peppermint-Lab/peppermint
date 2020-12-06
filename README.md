@@ -37,7 +37,39 @@ npm run server
 ## Docker-Compose
 
 ```
+version: '3.1'
 
+services:
+
+  mongo:
+    container_name: api-db
+    image: mongo:4
+    restart: always
+    volumes:
+    - ./docker-data/db:/data/db
+
+  api:
+    container_name: api
+    image: winter-api:latest
+    ports:
+      - 5000:5000
+    restart: on-failure
+    volumes:
+      - ./:/usr/src/app:cached
+      - npm_cache:/root/.npm:delegated
+      - node_modules:/usr/src/app/node_modules:delegated
+    depends_on:
+      - mongo
+
+  client:
+    image: winter-latest:client
+    ports:
+    - "80:80"
+    container_name: client
+
+volumes:
+  npm_cache:
+  node_modules:
 ```
 
 ## Author
