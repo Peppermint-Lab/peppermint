@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Input, InputGroup, Icon } from "rsuite";
 
 import { baseUrl } from "../utils";
@@ -16,8 +16,7 @@ const CreateTodo = () => {
       body: JSON.stringify({
         text,
       }),
-    })
-    .then((res) => res.json())
+    }).then((res) => res.json());
   }
 
   return (

@@ -9,12 +9,12 @@ import {
   Radio,
   RadioGroup,
 } from "rsuite";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
 
 const NewTicket = () => {
-  // const history = useHistory();
+  const history = useHistory();
 
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -98,10 +98,10 @@ const NewTicket = () => {
         </FormGroup>
         <FormGroup>
           <ButtonToolbar>
-            <Button appearance="primary" onClick={() => postData()}>
+            <Button appearance="primary" onClick={() => {postData(); history.push('/')}}>
               Submit
             </Button>
-            <Button appearance="default">Cancel</Button>
+            <Button appearance="default" onClick={() => {history.push('/')}}>Cancel</Button>
           </ButtonToolbar>
         </FormGroup>
       </Form>

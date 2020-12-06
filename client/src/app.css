@@ -142,11 +142,10 @@
 .popup-arrow {
   color: rgb(255, 255, 255);
 }
-[role='tooltip'].popup-content {
+[role="tooltip"].popup-content {
   width: 200px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
 }
-
 
 
 .Note-create-footer {

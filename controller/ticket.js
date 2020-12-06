@@ -60,7 +60,7 @@ exports.createTicket = async (req, res) => {
       company,
       issue,
       priority,
-      email
+      email,
     });
     newTicket.save().then((result) => {
       res.json({ newTicket: result });

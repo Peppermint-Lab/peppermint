@@ -4,9 +4,8 @@ import { Table, Button } from "rsuite";
 import { baseUrl } from "../utils.js";
 
 const UnissuedTicket = () => {
-  // const history = useHistory();
 
-  const { Column, HeaderCell, Cell, } = Table;
+  const { Column, HeaderCell, Cell } = Table;
 
   const [data, setData] = useState([]);
 
@@ -30,8 +29,6 @@ const UnissuedTicket = () => {
     }
     resolve();
   }, []);
-
-  console.log(data);
 
   const convert = () => {
     fetch(`${baseUrl}/api/v1/tickets/convertTicket`, {
