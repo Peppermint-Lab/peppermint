@@ -51,7 +51,6 @@ const ListNote = () => {
         .then(response => response.json())
         .then((data) => {
           if (!data.error) {
-            window.location.reload()
             return
           } else {
             console.log(data.error);
@@ -66,9 +65,9 @@ const ListNote = () => {
         return (
           <div key={item._id} className="todo-list">
             <ul>
-              <li style={{ marginLeft: -35}}>
+              <li style={{ marginLeft: -35}} key={item._id}>
                 {item.title}
-                <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={() => {removeNote(item._id); window.location.reload()}}>Delete</Button>
+                <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={() => {removeNote(item._id); window.location.reload(false);}}>Delete</Button>
                 <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={open}>
                   Edit
                   <Popup modal open={isOpen} closeOnEscape={true}>

@@ -69,7 +69,7 @@ const Login = () => {
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => {PostData, history.push("/");}}>
+                        <Button appearance="primary" onClick={() => {PostData(); history.push("/");}}>
                           Sign in
                         </Button>
                         <Button appearance="link">Forgot password?</Button>
