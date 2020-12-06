@@ -20,7 +20,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const {state,dispatch} = useContext(UserContext)
+  const {dispatch} = useContext(UserContext)
 
   const PostData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/login`, {

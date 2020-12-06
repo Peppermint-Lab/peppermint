@@ -1,7 +1,6 @@
 import React, {
   createContext,
   useEffect,
-  useContext,
   useReducer,
   useState
 } from "react";
@@ -9,9 +8,7 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  useHistory,
   Redirect,
-  useLocation
 } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
@@ -30,9 +27,6 @@ import {reducer,initialState} from './reducers/userReducer'
 export const UserContext = createContext()
 
 const Routing = () => {
-
-  const history = useHistory()
-  // const {state,dispatch} = useContext(UserContext)
 
   function checkAuth(){
     const user = JSON.parse(localStorage.getItem("user"))

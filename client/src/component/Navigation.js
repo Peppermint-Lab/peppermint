@@ -33,7 +33,7 @@ const Navigation = () => {
   function isAdmin() {
     const user = JSON.parse(localStorage.getItem("user"))
 
-    if(user == "admin") {
+    if(user.role === "admin") {
       setCheckAdmin(true)
     } else {
       setCheckAdmin(false)

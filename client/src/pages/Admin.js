@@ -1,4 +1,4 @@
-import React, { useState, useContext, } from "react";
+import React, { useState,  } from "react";
 import {
   Container,
   Content,
@@ -9,7 +9,7 @@ import {
   Button,
 } from "rsuite";
 // import { useHistory } from "react-router-dom";
-import {UserContext} from '../App'
+// import {UserContext} from '../App'
 
 import { baseUrl } from "../utils.js";
 
@@ -92,7 +92,7 @@ const Admin = () => {
   console.log(user.role)
 
   const Render = () => {
-    if(user == "admin") {
+    if(user.role === "admin") {
       return (
         <div>
           <CreateUser />

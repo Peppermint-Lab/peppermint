@@ -5,7 +5,7 @@ import {UserContext} from '../App'
 
 const Setings = () => {
   const history = useHistory();
-  const {state,dispatch} = useContext(UserContext)
+  const {dispatch} = useContext(UserContext)
 
   function logout() {
     localStorage.clear();
