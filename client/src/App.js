@@ -22,16 +22,14 @@ import Monitor from "./pages/Monitor";
 import Admin from "./pages/Admin";
 import Reset from './pages/Reset';
 
-import {reducer,initialState} from './reducers/userReducer'
-
-export const UserContext = createContext()
-
 const Routing = () => {
 
-  function checkAuth(){
+  const [loggedIn, setLoggedIn] = useState()
+
+  async function checkAuth(){
     const user = JSON.parse(localStorage.getItem("user"))
-    if(!user) {
-      setLoggedIn(false)
+    if(user) {
+      await setLoggedIn(true)
     } else {
       return
     }
@@ -39,9 +37,9 @@ const Routing = () => {
 
   useEffect(()=>{
     checkAuth()
-  },[])
+  }, [])
 
-  const [loggedIn, setLoggedIn] = useState(false)
+  // console.log(loggedIn)
 
   return (
     <Router>
@@ -58,7 +56,7 @@ const Routing = () => {
           </div>
         </Route>
 
-        <Route exact path="/">
+        <Route exact path="/" component={checkAuth}>
           {loggedIn ? <Redirect to="/dash" /> : <Redirect to="/login" />}
         </Route>
           
@@ -82,12 +80,8 @@ const Routing = () => {
 
 const App = () => {
 
-  const [state,dispatch] = useReducer(reducer,initialState)
-
   return (
-    <UserContext.Provider value={{state,dispatch}}>
       <Routing />
-    </UserContext.Provider>
 
   );
 };

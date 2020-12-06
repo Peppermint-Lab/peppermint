@@ -5,11 +5,9 @@ import {UserContext} from '../App'
 
 const Setings = () => {
   const history = useHistory();
-  const {dispatch} = useContext(UserContext)
 
   function logout() {
     localStorage.clear();
-    dispatch({type:"CLEAR"})
     history.push("/Login");
   }
 

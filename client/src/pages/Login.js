@@ -20,8 +20,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const {dispatch} = useContext(UserContext)
-
   const PostData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/login`, {
       method: "post",
@@ -39,7 +37,6 @@ const Login = () => {
         if (!data.error) {
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify(data.user))
-          dispatch({type:"USER",  payload:data.user})
           history.push("/dash");
         } else {
           console.log(data.error);

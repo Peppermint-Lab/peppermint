@@ -7,6 +7,7 @@ import {
   ControlLabel,
   ButtonToolbar,
   Button,
+  Modal,
 } from "rsuite";
 // import { useHistory } from "react-router-dom";
 // import {UserContext} from '../App'
@@ -19,6 +20,10 @@ const CreateUser = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
 
   const PostData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/Signup`, {
@@ -46,40 +51,51 @@ const CreateUser = () => {
     <div className="createUser-container">
       <h4>Add new user</h4>
       <Container>
-        <Content>
-          <Form fluid>
-            <FormGroup>
-              <ControlLabel>Name</ControlLabel>
-              <input name="name" onChange={(e) => setName(e.target.value)} />
-            </FormGroup>
+        <Button onClick={open} >
+          Add User
+          <Modal
+          show={modalIsOpen}
+          onHide={close()}
+        >
+          <Modal.Header>Add a new User</Modal.Header>
+          <Modal.Body>
+          <Content>
+            <Form fluid>
+              <FormGroup>
+                <ControlLabel>Name</ControlLabel>
+                <input name="name" onChange={(e) => setName(e.target.value)} />
+              </FormGroup>
 
-            <FormGroup>
-              <ControlLabel>Email</ControlLabel>
-              <input
-                name="password"
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </FormGroup>
+              <FormGroup>
+                <ControlLabel>Email</ControlLabel>
+                <input
+                  name="password"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <ControlLabel>Password</ControlLabel>
-              <input
-                name="password"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormGroup>
+              <FormGroup>
+                <ControlLabel>Password</ControlLabel>
+                <input
+                  name="password"
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <ButtonToolbar>
-                <Button appearance="primary" onClick={() => PostData()}>
-                  Sign Up
-                </Button>
-              </ButtonToolbar>
-            </FormGroup>
-          </Form>
-        </Content>
+              <FormGroup>
+                <ButtonToolbar>
+                  <Button appearance="primary" onClick={() => PostData(), close()}>
+                    Add
+                  </Button>
+                </ButtonToolbar>
+              </FormGroup>
+            </Form>
+          </Content>
+          </Modal.Body>
+          </Modal>
+        </Button>
       </Container>
     </div>
   );
