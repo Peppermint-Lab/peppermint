@@ -8,9 +8,16 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
+RUN apk add --no-cache make gcc g++ python && \
+  npm install && \
+  npm rebuild bcrypt --build-from-source && \
+  apk del make gcc g++ python
+
 RUN npm install --silent --production
 # If you are building your code for production
 # RUN npm ci --only=production
+RUN npm uninstall bcrypt
+RUN npm install bcrypt
 
 # Bundle app source
 COPY . .
