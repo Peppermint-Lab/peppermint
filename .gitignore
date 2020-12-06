@@ -1,3 +1,4 @@
 node_modules
 config
 docker-data/db
+.eslintcache
