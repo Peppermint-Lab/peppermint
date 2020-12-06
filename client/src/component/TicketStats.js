@@ -27,8 +27,6 @@ const Open = () => {
     resolve();
   }, []);
 
-  console.log(data);
-
   return (
     <div>
       <div className="inside-issue-con">
@@ -63,8 +61,6 @@ const Unissued = () => {
     resolve();
   }, []);
 
-  console.log(data);
-
   return (
     <div>
       <div className="inside-issue-con">
@@ -98,9 +94,7 @@ const Completed = () => {
     }
     resolve();
   }, []);
-
-  console.log(data);
-
+  
   return (
     <div>
       <div className="inside-issue-con">

@@ -35,8 +35,6 @@ const Notes = () => {
   const [text, setText] = useState("");
   const [title, setTitle] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  console.log(modalIsOpen)
   
   const open = () => setModalIsOpen(true);
   const close = () => setModalIsOpen(false);
@@ -77,7 +75,8 @@ const Notes = () => {
             onClick={() => {
               console.log('Data sent');
               PostData()
-              close();
+              close()
+              window.location.reload();
             }}
           >
             Save Note
@@ -87,6 +86,7 @@ const Notes = () => {
             onClick={() => {
               console.log('modal closed ');
               close();
+              window.location.reload();
             }}
           >
             close modal

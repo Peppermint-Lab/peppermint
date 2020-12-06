@@ -27,8 +27,11 @@ const data = require("./routes/data");
 const todo = require("./routes/todo");
 const note = require("./routes/notes");
 
+<<<<<<< HEAD
 // Static Files
 
+=======
+>>>>>>> bc465a9fe6cd7c87ec103b95f7374b2de4592b35
 // Express server libraries
 app.use(cors());
 app.use(express.json());

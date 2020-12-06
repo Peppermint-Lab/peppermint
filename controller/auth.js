@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const User = mongoose.model("InternalUser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config/keys");
 
 exports.Signup = async (req, res) => {
   try {
@@ -52,7 +51,7 @@ exports.Login = async (req, res) => {
       bcrypt.compare(password, savedUser.password).then((doMatch) => {
         if (doMatch) {
           // res.json({message: "Sign in Sucessful"})
-          const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
+          const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
           const { _id, name, email } = savedUser;
           res.json({ token, user: { _id, name, email } });
         } else {

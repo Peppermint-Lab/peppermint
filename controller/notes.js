@@ -33,6 +33,7 @@ exports.getNotes = (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 exports.deleteNote = (req, res) => {
   console.log("Delete Note Api");
   try {
@@ -40,3 +41,22 @@ exports.deleteNote = (req, res) => {
     console.log(error);
   }
 };
+=======
+exports.deleteNote = async (req, res) => {
+    console.log('Delete Note Api')
+    try {
+        const note = await new mongoose.Types.ObjectId(req.params.id);
+        if(!note) {
+          return res.status(404).json({
+            success: false,
+            error: "Note not found."
+          });
+        }
+        await Note.findByIdAndDelete({_id: req.params.id});
+        return res.status(201);
+    } catch (error) {
+        console.log(error)
+        return res.status(500);
+    }
+}
+>>>>>>> bc465a9fe6cd7c87ec103b95f7374b2de4592b35
