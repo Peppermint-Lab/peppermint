@@ -5,7 +5,7 @@
     <img alt="License: apache--2.0" src="https://img.shields.io/badge/License-apache--2.0-yellow.svg" />
   </a>
   <a href="https://twitter.com/andrewsjack18 " target="_blank">
-    <img alt="Twitter:  " src="https://img.shields.io/twitter/follow/ .svg?style=social" />
+    <img alt="Twitter:  andrewsjack18" src="https://img.shields.io/twitter/follow/ .svg?style=social" />
   </a>
 </p>
 
@@ -31,6 +31,12 @@ cd client && npm install
 npm run dev 
 npm run client
 npm run server
+
+```
+
+## Docker-Compose
+
+```
 
 ```
 
