@@ -4,23 +4,34 @@
   <a href="https://choosealicense.com/licenses/apache-2.0/" target="_blank">
     <img alt="License: apache--2.0" src="https://img.shields.io/badge/License-apache--2.0-yellow.svg" />
   </a>
-  <a href="https://twitter.com/ " target="_blank">
+  <a href="https://twitter.com/andrewsjack18 " target="_blank">
     <img alt="Twitter:  " src="https://img.shields.io/twitter/follow/ .svg?style=social" />
   </a>
 </p>
 
 > Ticket Management System in order to help helpdesks & service desks manage internal staff &  customer requests
 
-## Install
+## Installing locally for development
 
 ```sh
- 
+git clone https://github.com/jwandrews99/winter.git
+cd winter
+
+npm install
+cd client && npm install
 ```
 
-## Usage
+## Usage from the root folder
+
+- npm run dev - runs both the client and the server at the same using concurrently
+- npm run client - runs the react client on its own
+- npm run server - runs the node server on its own
 
 ```sh
- 
+npm run dev 
+npm run client
+npm run server
+
 ```
 
 ## Author
@@ -44,6 +55,3 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2020 [Jack Andrews](https://github.com/jwandrews99).<br />
 This project is [apache--2.0](https://choosealicense.com/licenses/apache-2.0/) licensed.
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
