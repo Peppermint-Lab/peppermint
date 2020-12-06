@@ -45,7 +45,7 @@ npm run server
 👤 **Jack Andrews**
 
 * Website:  
-* Twitter: [@ ](https://twitter.com/andrewsjack18 )
+* Twitter: [@andrewsjack18 ](https://twitter.com/andrewsjack18 )
 * Github: [@jwandrews99](https://github.com/jwandrews99)
 * LinkedIn: [@jack-andrews-146852131](https://linkedin.com/in/jack-andrews-146852131)
 
