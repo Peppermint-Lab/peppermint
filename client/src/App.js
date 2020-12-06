@@ -1,8 +1,17 @@
-import React from "react";
+import React, {
+  createContext,
+  useEffect,
+  useContext,
+  useReducer,
+  useState
+} from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
+  useHistory,
+  Redirect,
+  useLocation
 } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
@@ -16,8 +25,33 @@ import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
 import Admin from "./pages/Admin";
+import Reset from './pages/Reset';
+
+import {reducer,initialState} from './reducers/userReducer'
+
+export const UserContext = createContext()
 
 const Routing = () => {
+
+  const history = useHistory()
+  const {state,dispatch} = useContext(UserContext)
+
+  function checkAuth(){
+    const user = JSON.parse(localStorage.getItem("user"))
+    if(!user) {
+      setLoggedIn(false)
+    } else {
+      setLoggedIn(true)
+      return
+    }
+  }
+
+  useEffect(()=>{
+    
+  },[])
+
+  const [loggedIn, setLoggedIn] = useState(false)
+
   return (
     <Router>
       <Switch>
@@ -32,8 +66,12 @@ const Routing = () => {
             <Reg />
           </div>
         </Route>
+
+        <Route exact path="/">
+          {loggedIn ? <Redirect to="/dash" /> : <Redirect to="/login" />}
+        </Route>
           
-        <Route path="/" component={Home} exact />
+        <Route path="/dash" component={Home} />
 
         <Route>
           <Navigation />
@@ -42,13 +80,24 @@ const Routing = () => {
           <Route path="/admin" component={Admin} />
         </Route>
       </Switch>
+
+      <Route exact path="/reset">
+        <Reset/>
+      </Route>
+
     </Router>
   );
 };
 
 const App = () => {
+
+  const [state,dispatch] = useReducer(reducer,initialState)
+
   return (
+    <UserContext.Provider value={{state,dispatch}}>
       <Routing />
+    </UserContext.Provider>
+
   );
 };
 

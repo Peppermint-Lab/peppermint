@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Container,
   Content,
@@ -11,6 +11,7 @@ import {
   Button,
 } from "rsuite";
 import { useHistory } from "react-router-dom";
+import {UserContext} from '../App'
 
 import { baseUrl } from '../utils'
 
@@ -18,6 +19,8 @@ const Login = () => {
   const history = useHistory();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+
+  const {state,dispatch} = useContext(UserContext)
 
   const PostData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/login`, {
@@ -32,9 +35,12 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if (!data.error) {
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify(data.user))
+          dispatch({type:"USER",  payload:data.user})
+          history.push("/dash");
         } else {
           console.log(data.error);
         }
@@ -69,7 +75,7 @@ const Login = () => {
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => {PostData(); history.push("/");}}>
+                        <Button appearance="primary" onClick={() => {PostData();}}>
                           Sign in
                         </Button>
                         <Button appearance="link">Forgot password?</Button>
