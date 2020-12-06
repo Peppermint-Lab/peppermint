@@ -2,13 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Divider, Icon, Tooltip, Whisper } from "rsuite";
 
 import { baseUrl } from "../utils";
-import useForceUpdate from "../useForceUpdate";
 
 const ListTodo = () => {
   const [data, setData] = useState([]);
-
-  const forceUpdate = useForceUpdate();
-  console.log(data)
 
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/todo/getTodo`, {
@@ -90,7 +86,7 @@ const ListTodo = () => {
               <li style={{ marginLeft: -35}}>
                 <span className={item.done ? 'done' : ''}>{item.text}</span>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip1}>
-                  <button onClick={() => {removeTodo(item._id); forceUpdate();}} style={{ float: "right"}}><Icon icon="close" /></button>
+                  <button onClick={() => {removeTodo(item._id); window.location.reload()}} style={{ float: "right"}}><Icon icon="close" /></button>
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
                   <button onClick={() => oneDone(item)} style={{ float: "right", marginRight: 5}}><Icon icon="check" /></button>

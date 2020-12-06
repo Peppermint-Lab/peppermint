@@ -79,7 +79,7 @@ const OpenTicket = () => {
                   <Button size="xs" onClick={open}>
                     Show Job Info
                   </Button>
-                  <Popup modal open={modalOpen} nested={true}>
+                  <Popup modal open={modalOpen} >
                   <Button
                   style={{ float: "right"}}
                     onClick={() => {
