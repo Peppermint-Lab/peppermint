@@ -7,6 +7,9 @@
   <a href="https://twitter.com/andrewsjack18 " target="_blank">
     <img alt="Twitter:  andrewsjack18" src="https://img.shields.io/twitter/follow/andrewsjack18 .svg?style=social" />
   </a>
+  <a target="_blank">
+    <img alt="Github Stars: " src="https://img.shields.io/github/stars/jwandrews99/winter?style=social" />
+  </a>
 </p>
 
 > Ticket Management System in order to help helpdesks & service desks manage internal staff &  customer requests
