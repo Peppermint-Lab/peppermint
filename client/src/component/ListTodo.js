@@ -87,12 +87,7 @@ const ListTodo = () => {
               <li style={{ marginLeft: -35 }}>
                 <span className={item.done ? "done" : ""}>{item.text}</span>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip1}>
-                  <button
-                    onClick={() => removeTodo(item._id)}
-                    style={{ float: "right" }}
-                  >
-                    <Icon icon="close" />
-                  </button>
+                  <button onClick={() => {removeTodo(item._id); window.location.reload()}} style={{ float: "right"}}><Icon icon="close" /></button>
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
                   <button

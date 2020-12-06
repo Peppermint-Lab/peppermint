@@ -78,16 +78,16 @@ const OpenTicket = () => {
                   <Button size="xs" onClick={open}>
                     Show Job Info
                   </Button>
-                  <Popup modal open={modalOpen} nested={true}>
-                    <Button
-                      style={{ float: "right" }}
-                      onClick={() => {
-                        console.log("modal closed ");
-                        close();
-                      }}
-                    >
-                      <Icon icon="close" />
-                    </Button>
+                   <Popup modal open={modalOpen} >
+                  <Button
+                  style={{ float: "right"}}
+                    onClick={() => {
+                      console.log('modal closed ');
+                      close();
+                    }}
+                  >
+                    <Icon icon="close" />
+                  </Button>
                     <Container>
                       <div className="top-left">
                         <h4>Job Issue</h4>
