@@ -34,9 +34,7 @@ const Login = () => {
       .then((data) => {
         if (!data.error) {
           localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-         
-          history.push("/");
+          localStorage.setItem("user", JSON.stringify(data.user))
         } else {
           console.log(data.error);
         }
@@ -71,7 +69,7 @@ const Login = () => {
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => PostData()}>
+                        <Button appearance="primary" onClick={() => {PostData, history.push("/");}}>
                           Sign in
                         </Button>
                         <Button appearance="link">Forgot password?</Button>
