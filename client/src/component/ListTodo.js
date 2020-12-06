@@ -2,13 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Divider, Icon, Tooltip, Whisper } from "rsuite";
 
 import { baseUrl } from "../utils";
-import useForceUpdate from "../useForceUpdate";
 
 const ListTodo = () => {
   const [data, setData] = useState([]);
-
-  const forceUpdate = useForceUpdate();
-  console.log(data)
 
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/todo/getTodo`, {
@@ -63,7 +59,6 @@ const ListTodo = () => {
         Accept: "application/json",
       },
     })
-<<<<<<< HEAD
       .then((response) => response.json())
       .then((data) => {
         if (!data.error) {
@@ -74,17 +69,6 @@ const ListTodo = () => {
         }
       });
   };
-=======
-    .then(response => response.json())
-    .then((data) => {
-      if (!data.error) {
-        return
-      } else {
-        console.log(data.error);
-      }
-    });
-  }
->>>>>>> bc465a9fe6cd7c87ec103b95f7374b2de4592b35
 
   const tooltip1 = <Tooltip>Remove Todo</Tooltip>;
   const tooltip2 = <Tooltip>Mark as done</Tooltip>;
@@ -103,16 +87,12 @@ const ListTodo = () => {
               <li style={{ marginLeft: -35 }}>
                 <span className={item.done ? "done" : ""}>{item.text}</span>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip1}>
-<<<<<<< HEAD
                   <button
                     onClick={() => removeTodo(item._id)}
                     style={{ float: "right" }}
                   >
                     <Icon icon="close" />
                   </button>
-=======
-                  <button onClick={() => {removeTodo(item._id); forceUpdate();}} style={{ float: "right"}}><Icon icon="close" /></button>
->>>>>>> bc465a9fe6cd7c87ec103b95f7374b2de4592b35
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
                   <button

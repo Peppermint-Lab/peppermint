@@ -33,15 +33,6 @@ exports.getNotes = (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-exports.deleteNote = (req, res) => {
-  console.log("Delete Note Api");
-  try {
-  } catch (error) {
-    console.log(error);
-  }
-};
-=======
 exports.deleteNote = async (req, res) => {
     console.log('Delete Note Api')
     try {
@@ -59,4 +50,3 @@ exports.deleteNote = async (req, res) => {
         return res.status(500);
     }
 }
->>>>>>> bc465a9fe6cd7c87ec103b95f7374b2de4592b35
