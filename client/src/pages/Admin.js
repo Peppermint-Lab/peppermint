@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, } from "react";
 import {
   Container,
   Content,
@@ -9,6 +9,7 @@ import {
   Button,
 } from "rsuite";
 // import { useHistory } from "react-router-dom";
+import {UserContext} from '../App'
 
 import { baseUrl } from "../utils.js";
 
@@ -85,9 +86,30 @@ const CreateUser = () => {
 };
 
 const Admin = () => {
+
+  const user = JSON.parse(localStorage.getItem("user"))
+
+  console.log(user.role)
+
+  const Render = () => {
+    if(user == "admin") {
+      return (
+        <div>
+          <CreateUser />
+        </div>
+      ) 
+    } else {
+      return (
+        <div>
+          <h1>You do not have the permissions to view this Route</h1>
+        </div>
+      )
+    }
+  }
+
   return (
     <div>
-      <CreateUser />
+      <Render />
     </div>
   );
 };

@@ -34,7 +34,7 @@ export const UserContext = createContext()
 const Routing = () => {
 
   const history = useHistory()
-  const {state,dispatch} = useContext(UserContext)
+  // const {state,dispatch} = useContext(UserContext)
 
   function checkAuth(){
     const user = JSON.parse(localStorage.getItem("user"))
@@ -47,7 +47,7 @@ const Routing = () => {
   }
 
   useEffect(()=>{
-    
+    checkAuth()
   },[])
 
   const [loggedIn, setLoggedIn] = useState(false)

@@ -1,12 +1,15 @@
-import React from "react";
+import React,{useContext} from 'react'
 import { Button } from "rsuite";
 import { useHistory } from "react-router-dom";
+import {UserContext} from '../App'
 
 const Setings = () => {
   const history = useHistory();
+  const {state,dispatch} = useContext(UserContext)
 
   function logout() {
     localStorage.clear();
+    dispatch({type:"CLEAR"})
     history.push("/Login");
   }
 
