@@ -41,7 +41,6 @@ const Routing = () => {
     if(!user) {
       setLoggedIn(false)
     } else {
-      setLoggedIn(true)
       return
     }
   }
