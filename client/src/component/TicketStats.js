@@ -4,6 +4,7 @@ import { Divider } from "rsuite";
 import { baseUrl } from "../utils";
 
 const Open = () => {
+  
   const [data, setData] = useState([]);
 
   async function loadContent() {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Icon, Container, Input } from "rsuite";
 import Popup from "reactjs-popup";
-// import TicketInfo from "../component/TicketInfo";
 
 import { baseUrl } from "../utils.js";
 

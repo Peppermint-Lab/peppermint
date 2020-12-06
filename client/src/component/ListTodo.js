@@ -23,9 +23,7 @@ const ListTodo = () => {
       await loadContent();
     }
     resolve();
-  }, [setData]);
-
-  // console.log(data);
+  }, []);
 
   const allDone = () => {
     fetch(`${baseUrl}/api/v1/todo/markAllAsDone`, {
@@ -39,7 +37,6 @@ const ListTodo = () => {
   };
 
   const oneDone = (item) => {
-    console.log(item._id);
     fetch(`${baseUrl}/api/v1/todo/markOneAsDone/${item._id}`, {
       method: "PUT",
       headers: {
@@ -91,7 +88,7 @@ const ListTodo = () => {
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
                   <button
-                    onClick={() => oneDone(item)}
+                    onClick={() => {oneDone(item); window.location.reload()}}
                     style={{ float: "right", marginRight: 5 }}
                   >
                     <Icon icon="check" />

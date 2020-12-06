@@ -16,7 +16,6 @@ import CreateTodo from "../component/CreateTodo";
 import ListTodo from "../component/ListTodo";
 import TicketStats from "../component/TicketStats";
 import ListNote from "../component/ListNote";
-// import TextEditor from "../component/NotesEditor";
 
 import { baseUrl } from "../utils";
 
@@ -38,6 +37,28 @@ const Notes = () => {
   
   const open = () => setModalIsOpen(true);
   const close = () => setModalIsOpen(false);
+
+  async function loadContent() {
+    await fetch(`${baseUrl}/api/v1/todo/getNotes`, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setText(result);
+      });
+  }
+
+  useEffect(() => {
+    async function resolve() {
+      await loadContent();
+    }
+    resolve();
+  }, []);
+
 
   const PostData = async () => {
     await fetch(`${baseUrl}/api/v1/note/saveNote`, {
