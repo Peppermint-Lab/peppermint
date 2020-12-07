@@ -24,10 +24,10 @@ exports.saveNote = (req, res) => {
   }
 };
 
-exports.getNotes = (req, res) => {
+exports.getNotes = async (req, res) => {
   console.log("Get Notes");
   try {
-    Note.find({ createdBy: req.user._id })
+      await Note.find({ createdBy: req.user._id })
       .populate("createdBy", "_id name")
       .then((note) => {
         res.status(200).json({ note });
@@ -48,7 +48,9 @@ exports.deleteNote = async (req, res) => {
           });
         }
         await Note.findByIdAndDelete({_id: req.params.id});
-        return res.status(201);
+        return res.status(201).json({
+          data: {}
+        });
     } catch (error) {
         console.log(error)
         return res.status(500);
