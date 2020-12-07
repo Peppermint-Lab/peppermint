@@ -1,36 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button } from "rsuite";
 
-import { baseUrl } from "../utils";
+//import { baseUrl } from "../utils";
+import { GlobalContext } from '../Context/GlobalState';
 
 const ListNote = () => {
-  const [data, setData] = useState([]);
-  console.log(data)
+  const { notes, getNotes } = useContext(GlobalContext);  
 
-  async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/note/getNotes`, {
-      method: "get",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-        ContentType: "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setData(result.note);
-      });
-  }
+  // console.log(notes)
 
   useEffect(() => {
-    async function resolve() {
-      await loadContent();
-    }
-    resolve();
+    getNotes();
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div>
-      {data.map((item) => {
+      {notes.map((item) => {
         // console.log(item)
         return (
           <div key={item._id} className="todo-list">
@@ -53,6 +39,6 @@ const ListNote = () => {
       })}
     </div>
   );
-};
+}
 
 export default ListNote;

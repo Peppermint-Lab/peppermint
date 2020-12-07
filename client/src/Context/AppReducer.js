@@ -26,6 +26,11 @@ export default (state, action) => {
                 ...state,
                 todos: action.payload
             }
+        case 'GET_NOTES' :
+            return {
+                ...state,
+                notes: action.payload
+            }
         default:
             return state;
     }

@@ -26,7 +26,7 @@ exports.getNotes = (req, res) => {
     Note.find({ createdBy: req.user._id })
       .populate("createdBy", "_id name")
       .then((note) => {
-        res.json({ note });
+        res.status(200).json({ note });
       });
   } catch (error) {
     console.log(error);

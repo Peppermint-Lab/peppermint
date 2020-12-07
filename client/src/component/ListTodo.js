@@ -8,11 +8,11 @@ const ListTodo = () => {
 
   const { todos, getTodos, deleteTodo, allDone, markDone } = useContext(GlobalContext);  
 
-  console.log(todos)
+  // console.log(todos)
 
   useEffect(() => {
     getTodos();
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);  
 
   const tooltip1 = <Tooltip>Remove Todo</Tooltip>;

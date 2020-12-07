@@ -113,6 +113,22 @@ export const GlobalProvider = ({ children }) => {
             
         }
     }
+
+    async function getNotes() {
+        try {
+            const res = await fetch(`${baseUrl}/api/v1/note/getNotes`, {
+                method: "get",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  ContentType: "application/json",
+                },
+              }).then((res) => res.json())
+              dispatch({type: 'GET_NOTES', payload: res.note})
+              console.log(res.note)
+        } catch (error) {
+            
+        }
+    }
     
     return(
     
@@ -120,11 +136,13 @@ export const GlobalProvider = ({ children }) => {
     // Which is the react hook
     <GlobalContext.Provider value={{
         todos: state.todos,
+        notes: state.notes,
         getTodos,
         addTodo,
         deleteTodo,
         allDone,
-        markDone
+        markDone,
+        getNotes
         }}>
         {children} 
     </GlobalContext.Provider>
