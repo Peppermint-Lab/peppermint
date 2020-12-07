@@ -74,6 +74,9 @@ exports.markOneAsDone = async (req, res) => {
         new: true,
       }
     ).exec();
+    res.status(201).json({
+      data: { }
+    })
     console.log("Updated record");
   } catch (error) {
     console.log(error);
@@ -87,7 +90,9 @@ exports.markAllAsDone = (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        res.send(result);
+        res.status(201).json({
+          result
+        })
       }
     });
   } catch (error) {

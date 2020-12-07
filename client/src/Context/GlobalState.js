@@ -76,6 +76,26 @@ export const GlobalProvider = ({ children }) => {
             
         }
     }
+
+    async function allDone() {
+        try {
+           const res = await fetch(`${baseUrl}/api/v1/todo/markAllAsDone`, {
+                method: "PUT",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  ContentType: "application/json",
+                  Accept: "application/json",
+                },
+              }).then((res) => res.json())
+
+             // dispatch({type: 'ALLDONE_TODO', payload: res})
+
+              console.log(res)
+
+        } catch (error) {
+            
+        }
+    }
     
     return(
     
@@ -85,7 +105,8 @@ export const GlobalProvider = ({ children }) => {
         todos: state.todos,
         getTodos,
         addTodo,
-        deleteTodo
+        deleteTodo,
+        allDone
         }}>
         {children} 
     </GlobalContext.Provider>

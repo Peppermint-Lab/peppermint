@@ -9,9 +9,7 @@ const CreateTodo = () => {
 
   const { addTodo } = useContext(GlobalContext);
 
-  const onSubmit = e => {
-    e.preventDefault();
-
+  const onSubmit = () => {
     addTodo(text);
   }
 

@@ -6,7 +6,7 @@ import { GlobalContext } from '../Context/GlobalState';
 
 const ListTodo = ({ todo }) => {
 
-  const { todos, getTodos, deleteTodo } = useContext(GlobalContext);  
+  const { todos, getTodos, deleteTodo, allDone } = useContext(GlobalContext);  
 
   
 
@@ -14,17 +14,6 @@ const ListTodo = ({ todo }) => {
     getTodos();
      // eslint-disable-next-line
   }, []);
-
-  const allDone = () => {
-    fetch(`${baseUrl}/api/v1/todo/markAllAsDone`, {
-      method: "PUT",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-        ContentType: "application/json",
-        Accept: "application/json",
-      },
-    }).then((response) => response.json());
-  };
 
   const oneDone = (item) => {
     fetch(`${baseUrl}/api/v1/todo/markOneAsDone/${item._id}`, {

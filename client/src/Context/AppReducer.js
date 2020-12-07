@@ -16,6 +16,11 @@ export default (state, action) => {
                 ...state,
                 todos: state.todos.filter(todo => todo._id !== action.payload)
             }
+        case 'ALLDONE_TODO' :
+            return {
+                ...state,
+                todos: null
+            }
         default:
             return state;
     }
