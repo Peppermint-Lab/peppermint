@@ -1,32 +1,19 @@
 import React, { useEffect, useContext } from "react";
 import { Divider, Icon, Tooltip, Whisper } from "rsuite";
 
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
 
 const ListTodo = () => {
 
-  const { todos, getTodos, deleteTodo, allDone } = useContext(GlobalContext);  
+  const { todos, getTodos, deleteTodo, allDone, markDone } = useContext(GlobalContext);  
 
   console.log(todos)
 
   useEffect(() => {
     getTodos();
      // eslint-disable-next-line
-  }, []);
-
-  const oneDone = (item) => {
-    fetch(`${baseUrl}/api/v1/todo/markOneAsDone/${item._id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-        ContentType: "application/json",
-        Accept: "application/json",
-      },
-    }).then((response) => response.json());
-  };
-
-  
+  }, []);  
 
   const tooltip1 = <Tooltip>Remove Todo</Tooltip>;
   const tooltip2 = <Tooltip>Mark as done</Tooltip>;
@@ -49,7 +36,7 @@ const ListTodo = () => {
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
                   <button
-                    onClick={() => {oneDone(todo); window.location.reload()}}
+                    onClick={() => markDone(todo._id)}
                     style={{ float: "right", marginRight: 5 }}
                   >
                     <Icon icon="check" />

@@ -5,7 +5,8 @@ import axios from "axios";
 
 // Initial State
 const initialState = {
-    todos: []
+    todos: [],
+    notes: []
 }
 
 // Create context 
@@ -95,6 +96,23 @@ export const GlobalProvider = ({ children }) => {
             
         }
     }
+
+    async function markDone(id) {
+        try {
+            const res = await fetch(`${baseUrl}/api/v1/todo/markOneAsDone/${id}`, {
+                method: "PUT",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  ContentType: "application/json",
+                  Accept: "application/json",
+                },
+              }).then((response) => response.json());
+
+              dispatch({type: 'MARK_TODO', payload: res.todo})
+        } catch (error) {
+            
+        }
+    }
     
     return(
     
@@ -105,7 +123,8 @@ export const GlobalProvider = ({ children }) => {
         getTodos,
         addTodo,
         deleteTodo,
-        allDone
+        allDone,
+        markDone
         }}>
         {children} 
     </GlobalContext.Provider>

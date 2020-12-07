@@ -66,15 +66,22 @@ exports.markOneAsDone = async (req, res) => {
         success: false,
         error: "Todo not found.",
       });
+    } else {
+      await Todo.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { done: true } },
+        {
+          new: true,
+        }
+      ).exec();
+      console.log("Updated record");
+      Todo.find({ createdBy: req.user._id })
+      .populate("createdBy", "_id name")
+      .then((todo) => {
+        res.json({todo});
+      });
     }
-    await Todo.findOneAndUpdate(
-      { _id: req.params.id },
-      { $set: { done: true } },
-      {
-        new: true,
-      }
-    ).exec();
-    console.log("Updated record");
+
   } catch (error) {
     console.log(error);
   }
