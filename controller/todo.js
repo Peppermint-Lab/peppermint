@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Todo = mongoose.model("Todo");
 
 exports.getTodos = async (req, res) => {
-  console.log("getTodos");
+  // console.log("getTodos");
   try {
     Todo.find({ createdBy: req.user._id })
       .populate("createdBy", "_id name")
       .then((todo) => {
-        res.json({ todo });
+        res.json({todo});
       });
   } catch (error) {
     console.log(error);
@@ -15,19 +15,21 @@ exports.getTodos = async (req, res) => {
 };
 
 exports.createTodo = async (req, res) => {
-  console.log("createTodo");
+  // console.log("createTodo");
   try {
-    const { text } = req.body;
+    const text = req.body.todo;
     if (!text) {
       console.log("No text found!");
       return res.status(422);
     } else {
-      res.status(200);
       const todo = new Todo({
         text,
         createdBy: req.user._id,
       });
       todo.save();
+      res.status(200).json({
+        todo
+      })
     }
   } catch (error) {
     console.log(error);
@@ -45,7 +47,9 @@ exports.deleteTodo = async (req, res) => {
       });
     }
     await Todo.findOneAndDelete({ _id: req.params.id });
-    return res.status(201);
+    return res.status(201).json({
+      data: {}
+    });
   } catch (error) {
     console.log(error);
     return res.status(500);
@@ -83,7 +87,11 @@ exports.markAllAsDone = (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        res.send(result);
+        Todo.find({ createdBy: req.user._id })
+        .populate("createdBy", "_id name")
+        .then((todo) => {
+          res.json({todo});
+        });
       }
     });
   } catch (error) {

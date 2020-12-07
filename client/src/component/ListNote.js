@@ -5,6 +5,7 @@ import { baseUrl } from "../utils";
 
 const ListNote = () => {
   const [data, setData] = useState([]);
+  console.log(data)
 
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/note/getNotes`, {
