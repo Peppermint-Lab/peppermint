@@ -28,7 +28,7 @@ const CreateTodo = () => {
           onChange={setText}
         />
         <InputGroup.Button>
-          <Icon icon="check-square-o" onClick={() => {postData(); window.location.reload();}} />
+          <Icon icon="check-square-o" onClick={null} />
         </InputGroup.Button>
       </InputGroup>
     </div>
