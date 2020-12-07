@@ -37,7 +37,7 @@ export const GlobalProvider = ({ children }) => {
 
     async function addTodo(todo) {
         try {
-            const res = await await fetch(`${baseUrl}/api/v1/todo/createTodo`, {
+            const res = await fetch(`${baseUrl}/api/v1/todo/createTodo`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -47,10 +47,30 @@ export const GlobalProvider = ({ children }) => {
                   todo,
                 }),
               }).then((res) => res.json());
-            console.log(res)
+              
             dispatch({
                 type: 'ADD_TODO',
                 payload: res.todo
+              });
+        } catch (error) {
+            
+        }
+    }
+
+    async function deleteTodo(id) {
+        try {
+            await fetch(`${baseUrl}/api/v1/todo/deleteTodo/${id}`, {
+                method: "DELETE",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }).then((response) => response.json())
+
+              dispatch({
+                  type: 'DELETE_TODO',
+                  payload: id
               });
         } catch (error) {
             
@@ -65,6 +85,7 @@ export const GlobalProvider = ({ children }) => {
         todos: state.todos,
         getTodos,
         addTodo,
+        deleteTodo
         }}>
         {children} 
     </GlobalContext.Provider>

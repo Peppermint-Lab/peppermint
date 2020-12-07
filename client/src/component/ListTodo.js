@@ -1,16 +1,14 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { Divider, Icon, Tooltip, Whisper } from "rsuite";
 
 import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
 
-const ListTodo = () => {
+const ListTodo = ({ todo }) => {
 
-  const { todos, getTodos } = useContext(GlobalContext);  
+  const { todos, getTodos, deleteTodo } = useContext(GlobalContext);  
 
-  // const [data, setData] = useState([todos]);
-
-  console.log(todos)
+  
 
   useEffect(() => {
     getTodos();
@@ -39,25 +37,7 @@ const ListTodo = () => {
     }).then((response) => response.json());
   };
 
-  const removeTodo = (id) => {
-    fetch(`${baseUrl}/api/v1/todo/deleteTodo/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (!data.error) {
-          window.location.reload();
-          return;
-        } else {
-          console.log(data.error);
-        }
-      });
-  };
+  
 
   const tooltip1 = <Tooltip>Remove Todo</Tooltip>;
   const tooltip2 = <Tooltip>Mark as done</Tooltip>;
@@ -76,7 +56,7 @@ const ListTodo = () => {
               <li style={{ marginLeft: -35 }} key={todo._id}>
                 <span className={todo.done ? "done" : ""}>{todo.text}</span>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip1}>
-                  <button onClick={() => {removeTodo(todo._id); window.location.reload()}} style={{ float: "right"}}><Icon icon="close" /></button>
+                  <button onClick={() => deleteTodo(todo._id)} style={{ float: "right"}}><Icon icon="close" /></button>
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
                   <button

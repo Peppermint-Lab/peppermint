@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Todo = mongoose.model("Todo");
 
 exports.getTodos = async (req, res) => {
-  console.log("getTodos");
+  // console.log("getTodos");
   try {
     Todo.find({ createdBy: req.user._id })
       .populate("createdBy", "_id name")
@@ -15,10 +15,7 @@ exports.getTodos = async (req, res) => {
 };
 
 exports.createTodo = async (req, res) => {
-  console.log("createTodo");
- // console.log(req.body.text)
-  console.log(req.body.todo)
- // console.log(req.body)
+  // console.log("createTodo");
   try {
     const text = req.body.todo;
     if (!text) {
@@ -50,7 +47,9 @@ exports.deleteTodo = async (req, res) => {
       });
     }
     await Todo.findOneAndDelete({ _id: req.params.id });
-    return res.status(201);
+    return res.status(201).json({
+      data: {}
+    });
   } catch (error) {
     console.log(error);
     return res.status(500);

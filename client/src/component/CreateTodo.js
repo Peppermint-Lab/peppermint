@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Input, InputGroup, Icon } from "rsuite";
+import { InputGroup, Icon } from "rsuite";
 
 // import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
