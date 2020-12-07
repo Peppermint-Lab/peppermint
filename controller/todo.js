@@ -16,10 +16,11 @@ exports.getTodos = async (req, res) => {
 
 exports.createTodo = async (req, res) => {
   console.log("createTodo");
-  
-
+ // console.log(req.body.text)
+  console.log(req.body.todo)
+ // console.log(req.body)
   try {
-    const { text } = req.body;
+    const text = req.body.todo;
     if (!text) {
       console.log("No text found!");
       return res.status(422);

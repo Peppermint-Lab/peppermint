@@ -36,16 +36,8 @@ export const GlobalProvider = ({ children }) => {
     }
 
     async function addTodo(todo) {
-        console.log(todo)   
-        const config = {
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-               ContentType: "application/json",
-               Accept: "application/json",
-           }
-        }
         try {
-            const res = await fetch(`${baseUrl}/api/v1/todo/createTodo`, {
+            const res = await await fetch(`${baseUrl}/api/v1/todo/createTodo`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -55,9 +47,10 @@ export const GlobalProvider = ({ children }) => {
                   todo,
                 }),
               }).then((res) => res.json());
+            console.log(res)
             dispatch({
                 type: 'ADD_TODO',
-                payload: res
+                payload: res.todo
               });
         } catch (error) {
             

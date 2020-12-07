@@ -8,7 +8,7 @@ const ListTodo = () => {
 
   const { todos, getTodos } = useContext(GlobalContext);  
 
-  const [data, setData] = useState([todos]);
+  // const [data, setData] = useState([todos]);
 
   console.log(todos)
 
