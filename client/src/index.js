@@ -4,8 +4,12 @@ import "./index.css";
 import App from "./App";
 // import reportWebVitals from './reportWebVitals';
 
+import { GlobalProvider } from './Context/GlobalState';
+
 ReactDOM.render(
-        <App />,
+    <GlobalProvider>
+        <App />
+    </GlobalProvider>,
     document.getElementById("root")
     );
 

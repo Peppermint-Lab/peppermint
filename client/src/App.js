@@ -1,7 +1,5 @@
 import React, {
-  createContext,
   useEffect,
-  useReducer,
   useState
 } from "react";
 import {
@@ -82,7 +80,6 @@ const App = () => {
 
   return (
       <Routing />
-
   );
 };
 

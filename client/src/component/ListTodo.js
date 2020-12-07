@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Divider, Icon, Tooltip, Whisper } from "rsuite";
 
 import { baseUrl } from "../utils";
+import { GlobalContext } from '../Context/GlobalState';
 
 const ListTodo = () => {
-  const [data, setData] = useState([]);
 
-  async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/todo/getTodo`, {
-      method: "get",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-        ContentType: "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => { setData(result.todo) });
-  }
+  const { todos, getTodos } = useContext(GlobalContext);  
+
+  const [data, setData] = useState([todos]);
+
+  console.log(todos)
 
   useEffect(() => {
-    async function resolve() {
-      await loadContent();
-    }
-    resolve();
+    getTodos();
+     // eslint-disable-next-line
   }, []);
 
   const allDone = () => {
@@ -76,19 +68,19 @@ const ListTodo = () => {
         Mark All Done
       </button>
       <Divider orientation="left" style={{ width: "auto" }}></Divider>
-      {data.map((item) => {
-        // console.log(item)
+      {todos.map(todo => {
+        // console.log(todo)
         return (
-          <div key={item._id} className="todo-list">
-            <ul>
-              <li style={{ marginLeft: -35 }}>
-                <span className={item.done ? "done" : ""}>{item.text}</span>
+          <div className="todo-list" key={todo._id}>
+            <ul key={todo._id}>
+              <li style={{ marginLeft: -35 }} key={todo._id}>
+                <span className={todo.done ? "done" : ""}>{todo.text}</span>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip1}>
-                  <button onClick={() => {removeTodo(item._id); window.location.reload()}} style={{ float: "right"}}><Icon icon="close" /></button>
+                  <button onClick={() => {removeTodo(todo._id); window.location.reload()}} style={{ float: "right"}}><Icon icon="close" /></button>
                 </Whisper>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
                   <button
-                    onClick={() => {oneDone(item); window.location.reload()}}
+                    onClick={() => {oneDone(todo); window.location.reload()}}
                     style={{ float: "right", marginRight: 5 }}
                   >
                     <Icon icon="check" />

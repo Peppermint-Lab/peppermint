@@ -7,7 +7,7 @@ exports.getTodos = async (req, res) => {
     Todo.find({ createdBy: req.user._id })
       .populate("createdBy", "_id name")
       .then((todo) => {
-        res.json({ todo });
+        res.json({todo});
       });
   } catch (error) {
     console.log(error);
@@ -16,18 +16,22 @@ exports.getTodos = async (req, res) => {
 
 exports.createTodo = async (req, res) => {
   console.log("createTodo");
+  
+
   try {
     const { text } = req.body;
     if (!text) {
       console.log("No text found!");
       return res.status(422);
     } else {
-      res.status(200);
       const todo = new Todo({
         text,
         createdBy: req.user._id,
       });
       todo.save();
+      res.status(200).json({
+        todo
+      })
     }
   } catch (error) {
     console.log(error);

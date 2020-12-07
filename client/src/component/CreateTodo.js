@@ -1,34 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from 'react';
 import { Input, InputGroup, Icon } from "rsuite";
 
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
+import { GlobalContext } from '../Context/GlobalState';
 
 const CreateTodo = () => {
   const [text, setText] = useState("");
 
-  async function postData() {
-    await fetch(`${baseUrl}/api/v1/todo/createTodo`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        text,
-      }),
-    }).then((res) => res.json());
+  const { addTodo } = useContext(GlobalContext);
+
+  const onSubmit = e => {
+    e.preventDefault();
+
+    addTodo(text);
   }
 
   return (
     <div>
       <InputGroup>
-        <Input
+        <input
           style={{ width: 300 }}
           placeholder="Enter Todo... "
-          onChange={setText}
+          value={text} 
+          onChange={(e) => {setText(e.target.value)}}
         />
         <InputGroup.Button>
-          <Icon icon="check-square-o" onClick={null} />
+          <Icon icon="check-square-o" onClick={onSubmit} />
         </InputGroup.Button>
       </InputGroup>
     </div>
