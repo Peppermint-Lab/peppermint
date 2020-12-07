@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Container,
   Header,
@@ -17,7 +17,7 @@ import ListTodo from "../component/ListTodo";
 import TicketStats from "../component/TicketStats";
 import ListNote from "../component/ListNote";
 
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
 
 const Todo = () => {
@@ -35,45 +35,12 @@ const Notes = () => {
   const [text, setText] = useState("");
   const [title, setTitle] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const { notes, saveNote } = useContext(GlobalContext);  
+
   
   const open = () => setModalIsOpen(true);
   const close = () => setModalIsOpen(false);
-
-  async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/todo/getNotes`, {
-      method: "get",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-        ContentType: "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setText(result);
-      });
-  }
-
-  useEffect(() => {
-    async function resolve() {
-      await loadContent();
-    }
-    resolve();
-  }, []);
-
-
-  const PostData = async () => {
-    await fetch(`${baseUrl}/api/v1/note/saveNote`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        text,
-        title
-      }),
-    }).then((res) => res.json());
-  };
 
   return (
     <div className="Notes-Container">
@@ -96,9 +63,8 @@ const Notes = () => {
             className="button"
             onClick={() => {
               console.log('Data sent');
-              PostData()
+              saveNote(text, title)
               close()
-              window.location.reload();
             }}
           >
             Save Note
@@ -108,10 +74,9 @@ const Notes = () => {
             onClick={() => {
               console.log('modal closed ');
               close();
-              window.location.reload();
             }}
           >
-            close modal
+            Close
           </Button>
         </div>
       </div>

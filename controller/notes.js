@@ -7,14 +7,18 @@ exports.saveNote = (req, res) => {
     const { text, title } = req.body;
     if ((!text, !title)) {
       return res.status(422).json({ error: "Please add some text" });
+    } else {
+      const note = new Note({
+        title,
+        note: text,
+        createdBy: req.user._id,
+      });
+      note.save();
+      res.status(200).json({
+        note
+      })
+      console.log("Note saved");
     }
-    const newNote = new Note({
-      title,
-      note: text,
-      createdBy: req.user._id,
-    });
-    newNote.save();
-    console.log("Note saved");
   } catch (error) {
     console.log(error);
   }

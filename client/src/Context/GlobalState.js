@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, } from 'react';
+import React, { createContext, useReducer, useContext} from 'react';
 import AppReducer from './AppReducer';
 import { baseUrl } from "../utils";
 import axios from "axios";
@@ -124,7 +124,30 @@ export const GlobalProvider = ({ children }) => {
                 },
               }).then((res) => res.json())
               dispatch({type: 'GET_NOTES', payload: res.note})
+            console.log(res.note)
+        } catch (error) {
+            
+        }
+    }
+
+    async function saveNote(text, title) {
+        console.log(text)
+        console.log(title)
+        try {
+            const res = await await fetch(`${baseUrl}/api/v1/note/saveNote`, {
+                method: "post",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                },
+                body: JSON.stringify({
+                  text,
+                  title
+                }),
+              }).then((res) => res.json());
               console.log(res.note)
+              dispatch({ type: 'ADD_NOTE', payload: res.note});
+
         } catch (error) {
             
         }
@@ -142,7 +165,8 @@ export const GlobalProvider = ({ children }) => {
         deleteTodo,
         allDone,
         markDone,
-        getNotes
+        getNotes,
+        saveNote
         }}>
         {children} 
     </GlobalContext.Provider>
