@@ -25,7 +25,7 @@ export const GlobalProvider = ({ children }) => {
         }
         try {
             const res = await axios.get(`${baseUrl}/api/v1/todo/getTodo`, config)
-            console.log(res.data.todo)
+            // console.log(res.data.todo)
             dispatch({
                 type: 'GET_TODOS',
                 payload: res.data.todo
@@ -88,9 +88,8 @@ export const GlobalProvider = ({ children }) => {
                 },
               }).then((res) => res.json())
 
-             // dispatch({type: 'ALLDONE_TODO', payload: res})
-
-              console.log(res)
+             dispatch({type: 'ALLDONE_TODO', payload: res.todo})
+             console.log(res)
 
         } catch (error) {
             

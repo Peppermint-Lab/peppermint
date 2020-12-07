@@ -74,9 +74,6 @@ exports.markOneAsDone = async (req, res) => {
         new: true,
       }
     ).exec();
-    res.status(201).json({
-      data: { }
-    })
     console.log("Updated record");
   } catch (error) {
     console.log(error);
@@ -90,9 +87,11 @@ exports.markAllAsDone = (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        res.status(201).json({
-          result
-        })
+        Todo.find({ createdBy: req.user._id })
+        .populate("createdBy", "_id name")
+        .then((todo) => {
+          res.json({todo});
+        });
       }
     });
   } catch (error) {

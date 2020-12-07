@@ -4,11 +4,11 @@ import { Divider, Icon, Tooltip, Whisper } from "rsuite";
 import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
 
-const ListTodo = ({ todo }) => {
+const ListTodo = () => {
 
   const { todos, getTodos, deleteTodo, allDone } = useContext(GlobalContext);  
 
-  
+  console.log(todos)
 
   useEffect(() => {
     getTodos();
