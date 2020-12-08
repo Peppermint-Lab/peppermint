@@ -46,7 +46,12 @@ export default (state, action) => {
     case "USER":
       return {
           ...state,
-          is_authenticated: true
+          user: action.payload
+      }
+    case 'USER_LOGGED' :
+      return {
+        ...state,
+        isAuth: [...state.user, action.payload]
       }
     default:
       return state;

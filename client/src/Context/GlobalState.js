@@ -19,27 +19,6 @@ export const GlobalProvider = ({ children }) => {
 
   const history = useHistory();
 
-  const [authenticated, setAuthenticated] = useState();
-
-  function userCheck() {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      setAuthenticated(false);
-    } else {
-      setAuthenticated(true);
-    }
-  }
-
-  useEffect(() => {
-    userCheck();
-    localStorage.setItem("authenticated", authenticated);
-  }, [authenticated]);
-
-  const defaultContext = {
-    authenticated,
-    setAuthenticated,
-  };
-
   // action
   async function getTodos() {
     const config = {
@@ -173,7 +152,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function signin(email, password) {
     try {
-      const res = await fetch(`${baseUrl}/api/v1/auth/login`, {
+      await fetch(`${baseUrl}/api/v1/auth/login`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -188,13 +167,22 @@ export const GlobalProvider = ({ children }) => {
           if (!data.error) {
             localStorage.setItem("jwt", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
+            dispatch({ type: "USER", payload: data.user });
             console.log(data);
           } else {
             console.log(data.error);
           }
         });
-      dispatch({ type: "USER", payload: res.user });
     } catch (error) {}
+  }
+
+  async function isLoggedIn() {
+      try {
+        const user = await localStorage.getItem("user")
+        dispatch({ type: "USER_LOGGED", payload: user });
+      } catch (error) {
+          console.log(error)
+      }
   }
 
   return (
@@ -214,7 +202,7 @@ export const GlobalProvider = ({ children }) => {
         saveNote,
         deleteNote,
         signin,
-        defaultContext,
+        isLoggedIn
       }}
     >
       {children}

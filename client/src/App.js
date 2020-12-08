@@ -1,5 +1,5 @@
 import React, {
-  useContext, useState,
+  useContext, useEffect, useState,
 } from "react";
 import {
   BrowserRouter as Router,
@@ -63,6 +63,11 @@ const Routing = ({ render, ...routeProps }) => {
 };
 
 const App = () => {
+
+  const { user, isLoggedIn } = useContext(GlobalContext);
+
+  console.log(user)
+  console.log()
 
   return (
       <Routing />
