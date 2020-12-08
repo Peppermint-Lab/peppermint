@@ -21,30 +21,29 @@ import Reset from './pages/Reset';
 
 import { GlobalContext } from './Context/GlobalState';
 
-const Routing = ({ render, ...routeProps }) => {
+const Render = () => {
 
-  const [loggedIn, setLoggedIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  return (
-    <Router>
-      <Switch>
-        <Route path="/login">
-          <div className="login-container">
-            <Login />
-          </div>
-        </Route>
+  useEffect(() => {
+    async function auth() {
+      const user = await localStorage.getItem('user')
+      if(user) {
+        setIsLoggedIn(true)
+      } else {
+        console.log('Not logged in')
+      }
+    }
+    auth();
+  })
 
-        <Route path="/signup">
-          <div className="login-container">
-            <Reg />
-          </div>
-        </Route>
+  console.log(isLoggedIn)
 
-        <Route exact path="/" >
-          {loggedIn ? <Redirect to="/dash" /> : <Redirect to="/login" />}
-        </Route>
-          
-        <Route path="/dash" component={Home} />
+  if(isLoggedIn) {
+    return (
+      <Router>
+      <Switch>          
+        <Route path="/" component={Home} />
 
         <Route>
           <Navigation />
@@ -58,20 +57,33 @@ const Routing = ({ render, ...routeProps }) => {
         <Reset/>
       </Route>
 
+      <Route path="/signup">
+          <div className="login-container">
+            <Reg />
+          </div>
+        </Route>
+
     </Router>
-  );
-};
+    )
+  } else {
+    return (
+      <Router>
+       <Route path="/login">
+          <div className="login-container">
+            <Login />
+          </div>
+        </Route>
+    </Router>
+    )
+  }
+
+}
 
 const App = () => {
 
-  const { user, isLoggedIn } = useContext(GlobalContext);
-
-  console.log(user)
-  console.log()
-
   return (
-      <Routing />
-  );
+    <Render />
+  )
 };
 
 export default App;
