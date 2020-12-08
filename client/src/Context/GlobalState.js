@@ -1,12 +1,14 @@
-import React, { createContext, useReducer, useContext } from "react";
+import React, { createContext, useReducer, useEffect, useState } from "react";
 import AppReducer from "./AppReducer";
 import { baseUrl } from "../utils";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
   todos: [],
   notes: [],
+  user: [],
 };
 
 // Create context
@@ -14,6 +16,29 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
+
+  const history = useHistory();
+
+  const [authenticated, setAuthenticated] = useState();
+
+  function userCheck() {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      setAuthenticated(false);
+    } else {
+      setAuthenticated(true);
+    }
+  }
+
+  useEffect(() => {
+    userCheck();
+    localStorage.setItem("authenticated", authenticated);
+  }, [authenticated]);
+
+  const defaultContext = {
+    authenticated,
+    setAuthenticated,
+  };
 
   // action
   async function getTodos() {
@@ -64,7 +89,7 @@ export const GlobalProvider = ({ children }) => {
           Accept: "application/json",
         },
       }).then((response) => response.json());
-        dispatch({type: "DELETE_TODO", payload: id });
+      dispatch({ type: "DELETE_TODO", payload: id });
     } catch (error) {}
   }
 
@@ -109,7 +134,7 @@ export const GlobalProvider = ({ children }) => {
         },
       }).then((res) => res.json());
       dispatch({ type: "GET_NOTES", payload: res.note });
-      console.log(res.note);
+      // console.log(res.note);
     } catch (error) {}
   }
 
@@ -133,21 +158,43 @@ export const GlobalProvider = ({ children }) => {
 
   async function deleteNote(id) {
     try {
-        console.log(id);
-        await fetch(`${baseUrl}/api/v1/note/deleteNote/${id}`, {
-            method: "DELETE",
-            headers: {
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            },
-        })
-        .then(res => res.json())
-        dispatch({type: "DELETE_NOTE", payload: id});
+      console.log(id);
+      await fetch(`${baseUrl}/api/v1/note/deleteNote/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }).then((res) => res.json());
+      dispatch({ type: "DELETE_NOTE", payload: id });
+    } catch (error) {}
+  }
 
-    } catch (error) {
-        
-    }
+  async function signin(email, password) {
+    try {
+      const res = await fetch(`${baseUrl}/api/v1/auth/login`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.error) {
+            localStorage.setItem("jwt", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            console.log(data);
+          } else {
+            console.log(data.error);
+          }
+        });
+      dispatch({ type: "USER", payload: res.user });
+    } catch (error) {}
   }
 
   return (
@@ -157,6 +204,7 @@ export const GlobalProvider = ({ children }) => {
       value={{
         todos: state.todos,
         notes: state.notes,
+        user: state.user,
         getTodos,
         addTodo,
         deleteTodo,
@@ -164,7 +212,9 @@ export const GlobalProvider = ({ children }) => {
         markDone,
         getNotes,
         saveNote,
-        deleteNote
+        deleteNote,
+        signin,
+        defaultContext,
       }}
     >
       {children}

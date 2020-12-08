@@ -10,39 +10,20 @@ import {
   ButtonToolbar,
   Button,
 } from "rsuite";
-import { useHistory } from "react-router-dom";
-import {UserContext} from '../App'
+// import { useHistory } from "react-router-dom";
 
-import { baseUrl } from '../utils'
+import { GlobalContext } from '../Context/GlobalState';
+// import { baseUrl } from '../utils'
 
 const Login = () => {
-  const history = useHistory();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const PostData = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/login`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        if (!data.error) {
-          localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user))
-          history.push("/dash");
-        } else {
-          console.log(data.error);
-        }
-      });
-  };
+  const { signin } = useContext(GlobalContext);
+
+  const onSubmit = () => {
+    signin(email, password)
+  }
 
   return (
     <div>
@@ -72,7 +53,7 @@ const Login = () => {
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => {PostData();}}>
+                        <Button appearance="primary" onClick={() => onSubmit()}>
                           Sign in
                         </Button>
                         <Button appearance="link">Forgot password?</Button>

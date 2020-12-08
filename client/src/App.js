@@ -1,6 +1,5 @@
 import React, {
-  useEffect,
-  useState
+  useContext, useState,
 } from "react";
 import {
   BrowserRouter as Router,
@@ -20,24 +19,11 @@ import Monitor from "./pages/Monitor";
 import Admin from "./pages/Admin";
 import Reset from './pages/Reset';
 
-const Routing = () => {
+import { GlobalContext } from './Context/GlobalState';
 
-  const [loggedIn, setLoggedIn] = useState()
+const Routing = ({ render, ...routeProps }) => {
 
-  async function checkAuth(){
-    const user = JSON.parse(localStorage.getItem("user"))
-    if(user) {
-      await setLoggedIn(true)
-    } else {
-      return
-    }
-  }
-
-  useEffect(()=>{
-    checkAuth()
-  }, [])
-
-  // console.log(loggedIn)
+  const [loggedIn, setLoggedIn] = useState(true)
 
   return (
     <Router>
@@ -54,7 +40,7 @@ const Routing = () => {
           </div>
         </Route>
 
-        <Route exact path="/" component={checkAuth}>
+        <Route exact path="/" >
           {loggedIn ? <Redirect to="/dash" /> : <Redirect to="/login" />}
         </Route>
           

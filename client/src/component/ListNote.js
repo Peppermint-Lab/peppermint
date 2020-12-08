@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button } from "rsuite";
+import Popup from 'reactjs-popup';
 
 //import { baseUrl } from "../utils";
 import { GlobalContext } from "../Context/GlobalState";
@@ -33,12 +34,32 @@ const ListNote = () => {
               <li style={{ marginLeft: -35 }}>
                 {item.title}
                 <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={() => deleteNote(item._id)}>Delete</Button>
-                <Button size="xs" style={{ float: "right", marginLeft: 5 }}>
+                <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={open}>
                   Edit
-                </Button>
-                <Button size="xs" style={{ float: "right", marginLeft: 5 }}>
+                  <Popup modal open={isOpen} closeOnEscape={true}>
+                  <div className="modal">
+                    <Button className="close" onClick={close}>
+                        &times;
+                    </Button>
+                  </div>
+                  </Popup>
+                  </Button>
+                <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={openView}>
                   View
-                </Button>
+                  <Popup modal open={isViewOpen} closeOnEscape={true}>
+                  <div className="modal">
+                    <Button className="close" onClick={viewClose}>
+                      &times;
+                    </Button>
+                      <div className="header"> 
+                        <h3>{item.title}</h3>
+                      </div>
+                      <div className="content">
+                        <h5>{item.note}</h5>
+                      </div>
+                    </div>
+                  </Popup>
+                  </Button>
               </li>
             </ul>
           </div>
