@@ -45,12 +45,13 @@ export default (state, action) => {
       return null;
     case "USER":
       return {
-          user: action.payload
-      }
+        user: action.payload,
+      };
     case "USER_LOGGED":
       return {
         auth: action.payload
-      }
+      };
+
     default:
       return state;
   }

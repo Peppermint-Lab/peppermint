@@ -19,6 +19,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
+  const history = useHistory()
+
   const { signin } = useContext(GlobalContext);
 
   const onSubmit = async () => {
@@ -53,7 +55,7 @@ const Login = () => {
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => onSubmit() }>
+                        <Button appearance="primary" onClick={() => {onSubmit(); setTimeout(() => history.push('/'), 4000)} }>
                           Sign in
                         </Button>
                         <Button appearance="link">Forgot password?</Button>

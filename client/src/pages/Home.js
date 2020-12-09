@@ -9,6 +9,7 @@ import {
   Input,
 } from "rsuite";
 import Popup from 'reactjs-popup';
+import {useHistory } from 'react-router-dom'
 
 
 import Navigation from "../component/Navigation";
@@ -17,7 +18,7 @@ import ListTodo from "../component/ListTodo";
 import TicketStats from "../component/TicketStats";
 import ListNote from "../component/ListNote";
 
-// import { baseUrl } from "../utils";
+import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
 
 const Todo = () => {
@@ -36,7 +37,7 @@ const Notes = () => {
   const [title, setTitle] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const { notes, saveNote } = useContext(GlobalContext);  
+  const { notes, saveNote } = useContext(GlobalContext); 
 
   
   const open = () => setModalIsOpen(true);
@@ -98,6 +99,25 @@ const Issues = () => {
 };
 
 const Home = () => {
+
+  // const [data, setData] = useState();
+  const history = useHistory();
+
+  useEffect(() => {
+    const call = async () => {
+      const res = localStorage.getItem('jwt')
+      console.log(res)
+      if(!res) {
+        history.push('/login')
+      } else {
+        return console.log('logged in')
+      }
+    }
+    call()
+  }, [])
+
+  // console.log(data)
+  
   return (
     <div>
       <Container>

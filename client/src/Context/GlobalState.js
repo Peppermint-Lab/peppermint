@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useReducer, } from "react";
 import AppReducer from "./AppReducer";
 import { baseUrl } from "../utils";
 import axios from "axios";
@@ -9,7 +9,7 @@ const initialState = {
   todos: [],
   notes: [],
   user: {},
-  auth: false
+  auth: true
 };
 
 // Create context
@@ -17,10 +17,6 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
-
-  const [auth, setAuth] = useState(false)
-
-  console.log(auth)
 
   // action
   async function getTodos() {
@@ -175,11 +171,28 @@ export const GlobalProvider = ({ children }) => {
             console.log(data.error);
           }
         });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function isLogged() {
-    
+    try {
+      await fetch(`${baseUrl}/api/v1/auth/token`, {
+        method: "post",
+        headers: {
+          "Content-Type" : "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt"),
+          "x-auth-token": localStorage.getItem("jwt")
+        },
+      }).then((res) => res.json())
+      .then((res) => {
+        console.log(res)
+       // dispatch({ type: "USER_LOGGED", payload: res });
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -189,6 +202,7 @@ export const GlobalProvider = ({ children }) => {
       value={{
         todos: state.todos,
         notes: state.notes,
+        auth: state.auth,
         user: state.user,
         getTodos,
         addTodo,

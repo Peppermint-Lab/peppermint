@@ -18,6 +18,8 @@ const ListTodo = () => {
   const tooltip1 = <Tooltip>Remove Todo</Tooltip>;
   const tooltip2 = <Tooltip>Mark as done</Tooltip>;
 
+  console.log(todos)
+
   return (
     <div>
       <button style={{ marginTop: 10 }} onClick={allDone}>
