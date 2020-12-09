@@ -21,9 +21,17 @@ import Reset from './pages/Reset';
 
 import { GlobalContext } from './Context/GlobalState';
 
-const Routing = ({ render, ...routeProps }) => {
+const Routing = () => {
 
   const [loggedIn, setLoggedIn] = useState(true)
+
+  const { user, isLogged, auth } = useContext(GlobalContext);
+
+  useEffect(() => {
+    isLogged()
+  })
+
+  console.log(auth)
 
   return (
     <Router>
@@ -63,11 +71,6 @@ const Routing = ({ render, ...routeProps }) => {
 };
 
 const App = () => {
-
-  const { user, isLoggedIn } = useContext(GlobalContext);
-
-  console.log(user)
-  console.log()
 
   return (
       <Routing />

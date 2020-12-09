@@ -1,14 +1,15 @@
-import React, { createContext, useReducer, useEffect, useState } from "react";
+import React, { createContext, useReducer, useState } from "react";
 import AppReducer from "./AppReducer";
 import { baseUrl } from "../utils";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
   todos: [],
   notes: [],
-  user: [],
+  user: {},
+  auth: false
 };
 
 // Create context
@@ -17,7 +18,9 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  const history = useHistory();
+  const [auth, setAuth] = useState(false)
+
+  console.log(auth)
 
   // action
   async function getTodos() {
@@ -161,8 +164,7 @@ export const GlobalProvider = ({ children }) => {
           email,
           password,
         }),
-      })
-        .then((res) => res.json())
+      }).then((res) => res.json())
         .then((data) => {
           if (!data.error) {
             localStorage.setItem("jwt", data.token);
@@ -176,13 +178,8 @@ export const GlobalProvider = ({ children }) => {
     } catch (error) {}
   }
 
-  async function isLoggedIn() {
-      try {
-        const user = await localStorage.getItem("user")
-        dispatch({ type: "USER_LOGGED", payload: user });
-      } catch (error) {
-          console.log(error)
-      }
+  async function isLogged() {
+    
   }
 
   return (
@@ -202,7 +199,7 @@ export const GlobalProvider = ({ children }) => {
         saveNote,
         deleteNote,
         signin,
-        isLoggedIn
+        isLogged
       }}
     >
       {children}

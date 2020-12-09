@@ -10,7 +10,7 @@ import {
   ButtonToolbar,
   Button,
 } from "rsuite";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { GlobalContext } from '../Context/GlobalState';
 // import { baseUrl } from '../utils'
@@ -21,7 +21,7 @@ const Login = () => {
 
   const { signin } = useContext(GlobalContext);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     signin(email, password)
   }
 
@@ -53,7 +53,7 @@ const Login = () => {
                     </FormGroup>
                     <FormGroup>
                       <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => onSubmit()}>
+                        <Button appearance="primary" onClick={() => onSubmit() }>
                           Sign in
                         </Button>
                         <Button appearance="link">Forgot password?</Button>
