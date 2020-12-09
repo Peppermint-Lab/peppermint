@@ -1,6 +1,4 @@
-import React, {
-  useContext, useEffect, useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,73 +15,64 @@ import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
 import Admin from "./pages/Admin";
-import Reset from './pages/Reset';
+import Reset from "./pages/Reset";
 
-import { GlobalContext } from './Context/GlobalState';
+// import { GlobalContext } from "./Context/GlobalState";
 
-const Render = () => {
+const Render = (props) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  console.log(props)
 
   useEffect(() => {
     async function auth() {
-      const user = await localStorage.getItem('user')
-      if(user) {
-        setIsLoggedIn(true)
+      const user = await localStorage.getItem("user");
+      if (user) {
+        await setIsLoggedIn(true);
       } else {
-        console.log('Not logged in')
+        console.log("Not logged in");
       }
     }
     auth();
-  })
+  });
 
-  console.log(isLoggedIn)
+  console.log(isLoggedIn);
 
-  if(isLoggedIn) {
-    return (
-      <Router>
-      <Switch>          
-        <Route path="/" component={Home} />
-
-        <Route>
-          <Navigation />
-          <Route path="/tickets" component={Ticket} />
-          <Route path="/monitor" component={Monitor} />
-          <Route path="/admin" component={Admin} />
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/login">
+          <div className="login-container">
+            <Login />
+          </div>
         </Route>
-      </Switch>
 
-      <Route exact path="/reset">
-        <Reset/>
-      </Route>
-
-      <Route path="/signup">
+        <Route exact path="/signup">
           <div className="login-container">
             <Reg />
           </div>
         </Route>
 
-    </Router>
-    )
-  } else {
-    return (
-      <Router>
-       <Route path="/login">
-          <div className="login-container">
-            <Login />
-          </div>
-        </Route>
-    </Router>
-    )
-  }
+        <Route exact path="/" component={Home} />
 
-}
+        <Route>
+          <Navigation />
+          <Route exact path="/tickets" component={Ticket} />
+          <Route exact path="/monitor" component={Monitor} />
+          <Route exact path="/admin" component={Admin} />
+          <Route exact path="*" component={() => "404 NOT FOUND"} />
+        </Route>
+      </Switch>
+
+      <Route exact path="/reset">
+        <Reset />
+      </Route>
+    </Router>
+  );
+};
 
 const App = () => {
-
-  return (
-    <Render />
-  )
+  return <Render />;
 };
 
 export default App;
