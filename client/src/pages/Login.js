@@ -13,14 +13,12 @@ import {
 import { useHistory } from "react-router-dom";
 import { GlobalContext } from '../Context/GlobalState';
 
-import { baseUrl } from '../utils'
+// import { baseUrl } from '../utils'
 
 const Login = () => {
   const history = useHistory();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
-  const history = useHistory()
 
   const { signin } = useContext(GlobalContext);
 
