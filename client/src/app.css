@@ -8,12 +8,11 @@
 }
 
 .login-container {
-  width: 50%;
-  position: fixed;
-  top: 25%;
-  left: 30%;
-  margin-top: -50px;
-  margin-left: -100px;
+  margin: auto;
+  width: 20%;
+  margin-top: 200px;
+  border-radius: 20px;
+  box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
 }
 
 .monitor-create {

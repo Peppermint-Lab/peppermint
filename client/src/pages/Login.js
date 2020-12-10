@@ -11,15 +11,14 @@ import {
   Button,
 } from "rsuite";
 import { useHistory } from "react-router-dom";
-
 import { GlobalContext } from '../Context/GlobalState';
+
 // import { baseUrl } from '../utils'
 
 const Login = () => {
+  const history = useHistory();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
-  const history = useHistory()
 
   const { signin } = useContext(GlobalContext);
 
@@ -29,12 +28,11 @@ const Login = () => {
 
   return (
     <div>
-      <div>
         <Container>
-          <Content>
+          <Content className="Login">
             <FlexboxGrid justify="center">
               <FlexboxGrid.Item colspan={12}>
-                <Panel header={<h3>Login</h3>} bordered>
+                <Panel header={<h3>Member Login</h3>} style={{ marginLeft: -100}}>
                   <Form fluid>
                     <FormGroup>
                       <ControlLabel>Email</ControlLabel>
@@ -67,7 +65,6 @@ const Login = () => {
             </FlexboxGrid>
           </Content>
         </Container>
-      </div>
     </div>
   );
 };

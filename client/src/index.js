@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 // import reportWebVitals from './reportWebVitals';
 
 import { GlobalProvider } from './Context/GlobalState';
+import { ChakraProvider, CSSReset } from "@chakra-ui/react"
 
 ReactDOM.render(
         <GlobalProvider>
