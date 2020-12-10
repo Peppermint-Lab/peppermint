@@ -9,13 +9,13 @@ import {
   Button,
   Modal,
 } from "rsuite";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 // import {UserContext} from '../App'
 
 import { baseUrl } from "../utils.js";
 
 const CreateUser = () => {
-  // const history = useHistory();
+  const history = useHistory();
 
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -103,6 +103,8 @@ const CreateUser = () => {
 
 const Admin = () => {
 
+  const history = useHistory();
+
   const user = JSON.parse(localStorage.getItem("user"))
 
   console.log(user.role)
@@ -111,15 +113,11 @@ const Admin = () => {
     if(user.role === "admin") {
       return (
         <div>
-          <CreateUser />
+          <h1>You are the admin now</h1>
         </div>
       ) 
     } else {
-      return (
-        <div>
-          <h1>You do not have the permissions to view this Route</h1>
-        </div>
-      )
+      history.push('/')
     }
   }
 

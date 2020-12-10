@@ -1,14 +1,15 @@
-import React, { createContext, useReducer, useEffect, useState } from "react";
+import React, { createContext, useReducer, } from "react";
 import AppReducer from "./AppReducer";
 import { baseUrl } from "../utils";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
   todos: [],
   notes: [],
   user: {},
+  auth: true
 };
 
 // Create context
@@ -159,8 +160,7 @@ export const GlobalProvider = ({ children }) => {
           email,
           password,
         }),
-      })
-        .then((res) => res.json())
+      }).then((res) => res.json())
         .then((data) => {
           if (!data.error) {
             localStorage.setItem("jwt", data.token);
@@ -171,16 +171,28 @@ export const GlobalProvider = ({ children }) => {
             console.log(data.error);
           }
         });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  async function isLoggedIn() {
-      try {
-        const user = await localStorage.getItem("user")
-        dispatch({ type: "USER_LOGGED", payload: user });
-      } catch (error) {
-          console.log(error)
-      }
+  async function isLogged() {
+    try {
+      await fetch(`${baseUrl}/api/v1/auth/token`, {
+        method: "post",
+        headers: {
+          "Content-Type" : "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt"),
+          "x-auth-token": localStorage.getItem("jwt")
+        },
+      }).then((res) => res.json())
+      .then((res) => {
+        console.log(res)
+       // dispatch({ type: "USER_LOGGED", payload: res });
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -190,6 +202,7 @@ export const GlobalProvider = ({ children }) => {
       value={{
         todos: state.todos,
         notes: state.notes,
+        auth: state.auth,
         user: state.user,
         getTodos,
         addTodo,
@@ -200,7 +213,7 @@ export const GlobalProvider = ({ children }) => {
         saveNote,
         deleteNote,
         signin,
-        isLoggedIn
+        isLogged
       }}
     >
       {children}

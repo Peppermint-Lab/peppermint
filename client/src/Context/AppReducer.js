@@ -45,14 +45,13 @@ export default (state, action) => {
       return null;
     case "USER":
       return {
-          ...state,
-          user: action.payload
-      }
-    case 'USER_LOGGED' :
+        user: action.payload,
+      };
+    case "USER_LOGGED":
       return {
-        ...state,
-        isAuth: [...state.user, action.payload]
-      }
+        auth: action.payload
+      };
+
     default:
       return state;
   }

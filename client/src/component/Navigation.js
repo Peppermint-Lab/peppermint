@@ -32,21 +32,17 @@ const Navigation = () => {
 
   function isAdmin() {
     const user = JSON.parse(localStorage.getItem("user"))
-
-    if(!user) {
-      history.push('/login')
-    }
-
-    if(user.role === "admin") {
+    if(user && user.role === "admin") {
       setCheckAdmin(true)
     } else {
-      setCheckAdmin(false)
-      return;
+      if(!user) {
+        history.push('/Login')
+      }
     }
   };
 
   useEffect(()=>{
-   // isAdmin()
+    isAdmin()
   },[])
 
 

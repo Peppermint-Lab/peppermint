@@ -63,3 +63,34 @@ exports.Login = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.Token = async (req, res) => {
+
+  const r = req.header('x-auth-token')
+
+  try {
+    console.log('hit')
+    const token = r;
+    if (!token) return res.json(false);
+    console.log(token)
+
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    if (!verified) return res.json(false);
+    console.log(verified)
+
+    // const user = await User.findById(req.user._id);
+    // if (!user) return res.json(false);
+    // console.log(user)
+
+    return res.status(201).json(true)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.userRes = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  console.log(user)
+  res.status(200).setHeader("Content-Type", 'application/json').json(user);
+};
