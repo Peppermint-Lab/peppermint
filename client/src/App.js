@@ -5,7 +5,6 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
 } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
@@ -20,43 +19,21 @@ import Admin from "./pages/Admin";
 
 import { baseUrl } from "./utils";
 
-import { GlobalContext } from './Context/GlobalState';
+// import { GlobalContext } from "./Context/GlobalState";
 
 
 const Routing = () => {
 
-  const { isLogged, auth } = useContext(GlobalContext);
-
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    const call = async () => {
-      const res = await fetch(`${baseUrl}/api/v1/auth/token`, {
-        method: "post",
-        headers: {
-          "Content-Type" : "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("jwt"),
-          "x-auth-token": localStorage.getItem("jwt")
-        },
-      }).then((res) => res.json())
-      console.log(res)
-      setData(res)
-    }
-    call()
-  }, [])
-
-  console.log(data)
-
   return (
     <Router>
       <Switch>
-        <Route path="/login">
+        <Route exact path="/login">
           <div className="login-container">
             <Login />
           </div>
         </Route>
 
-        <Route path="/signup">
+        <Route exact path="/signup">
           <div className="login-container">
             <Reg />
           </div>
