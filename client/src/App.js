@@ -1,12 +1,8 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
-import 'antd/dist/antd.css';
+import "antd/dist/antd.css";
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
@@ -20,9 +16,7 @@ import Admin from "./pages/Admin";
 
 // import { GlobalContext } from "./Context/GlobalState";
 
-
 const Routing = () => {
-
   return (
     <Router>
       <Switch>
@@ -37,8 +31,8 @@ const Routing = () => {
             <Reg />
           </div>
         </Route>
-        
-        <Route exact path="/" component={Home} /> 
+
+        <Route exact path="/" component={Home} />
 
         <Route>
           <Navigation />
@@ -47,16 +41,12 @@ const Routing = () => {
           <Route exact path="/admin" component={Admin} />
         </Route>
       </Switch>
-
     </Router>
   );
 };
 
 const App = () => {
-
-  return (
-      <Routing />
-  );
+  return <Routing />;
 };
 
 export default App;

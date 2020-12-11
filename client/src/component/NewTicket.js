@@ -98,10 +98,23 @@ const NewTicket = () => {
         </FormGroup>
         <FormGroup>
           <ButtonToolbar>
-            <Button appearance="primary" onClick={() => {postData(); history.push('/')}}>
+            <Button
+              appearance="primary"
+              onClick={() => {
+                postData();
+                history.push("/");
+              }}
+            >
               Submit
             </Button>
-            <Button appearance="default" onClick={() => {history.push('/')}}>Cancel</Button>
+            <Button
+              appearance="default"
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              Cancel
+            </Button>
           </ButtonToolbar>
         </FormGroup>
       </Form>

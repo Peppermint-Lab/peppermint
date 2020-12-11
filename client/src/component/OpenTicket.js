@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Space, Button } from 'antd';
+import { Table, Tag, Space, Button } from "antd";
 import Popup from "reactjs-popup";
 
 import { baseUrl } from "../utils.js";
@@ -37,31 +37,31 @@ const OpenTicket = () => {
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      width: 150
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      width: 150,
     },
     {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      width: 150
+      title: "Company",
+      dataIndex: "company",
+      key: "company",
+      width: 150,
     },
     {
-      title: 'Priority',
-      dataIndex: 'priority',
-      key: 'priority',
+      title: "Priority",
+      dataIndex: "priority",
+      key: "priority",
       width: 50,
     },
     {
-      title: 'Issue',
-      dataIndex: 'issue',
-      key: 'issue',
+      title: "Issue",
+      dataIndex: "issue",
+      key: "issue",
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: "Action",
+      key: "action",
       width: 200,
       render: () => (
         <Space size="middle">

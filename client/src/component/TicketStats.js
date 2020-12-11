@@ -4,7 +4,6 @@ import { Divider } from "rsuite";
 import { baseUrl } from "../utils";
 
 const Open = () => {
-  
   const [data, setData] = useState([]);
 
   async function loadContent() {
@@ -95,7 +94,7 @@ const Completed = () => {
     }
     resolve();
   }, []);
-  
+
   return (
     <div>
       <div className="inside-issue-con">

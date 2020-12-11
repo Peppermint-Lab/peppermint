@@ -8,9 +8,8 @@ import {
   Icon,
   Input,
 } from "rsuite";
-import Popup from 'reactjs-popup';
-import {useHistory } from 'react-router-dom'
-
+import Popup from "reactjs-popup";
+import { useHistory } from "react-router-dom";
 
 import Navigation from "../component/Navigation";
 import CreateTodo from "../component/CreateTodo";
@@ -19,7 +18,7 @@ import TicketStats from "../component/TicketStats";
 import ListNote from "../component/ListNote";
 
 // import { baseUrl } from "../utils";
-import { GlobalContext } from '../Context/GlobalState';
+import { GlobalContext } from "../Context/GlobalState";
 
 const Todo = () => {
   return (
@@ -34,12 +33,11 @@ const Todo = () => {
 
 const Notes = () => {
   const [text, setText] = useState("");
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const { notes, saveNote } = useContext(GlobalContext); 
+  const { notes, saveNote } = useContext(GlobalContext);
 
-  
   const open = () => setModalIsOpen(true);
   const close = () => setModalIsOpen(false);
 
@@ -48,40 +46,51 @@ const Notes = () => {
       <h3>
         Notes
         <Button onClick={open} style={{ float: "right" }}>
-        <Icon icon="plus" />
-        <Popup modal open={modalIsOpen} nested={true}>
-        <div className="modal">
-        <Button className="close" onClick={close}>
-          &times;
-        </Button>
-        <div className="header"> <Input placeholder="Enter Note title here..." onChange={setTitle} /></div>
-        <div className="content">
-          <Input placeholder="Enter Note here..." rows={10} componentClass="textarea" onChange={setText} />
-        </div>
-        <div className="actions">
-        <Button
-            style={{marginRight: 20}}
-            className="button"
-            onClick={() => {
-              console.log('Data sent');
-              saveNote(text, title)
-              close()
-            }}
-          >
-            Save Note
-          </Button>
-          <Button
-            className="button"
-            onClick={() => {
-              console.log('modal closed ');
-              close();
-            }}
-          >
-            Close
-          </Button>
-        </div>
-      </div>
-        </Popup>
+          <Icon icon="plus" />
+          <Popup modal open={modalIsOpen} nested={true}>
+            <div className="modal">
+              <Button className="close" onClick={close}>
+                &times;
+              </Button>
+              <div className="header">
+                {" "}
+                <Input
+                  placeholder="Enter Note title here..."
+                  onChange={setTitle}
+                />
+              </div>
+              <div className="content">
+                <Input
+                  placeholder="Enter Note here..."
+                  rows={10}
+                  componentClass="textarea"
+                  onChange={setText}
+                />
+              </div>
+              <div className="actions">
+                <Button
+                  style={{ marginRight: 20 }}
+                  className="button"
+                  onClick={() => {
+                    console.log("Data sent");
+                    saveNote(text, title);
+                    close();
+                  }}
+                >
+                  Save Note
+                </Button>
+                <Button
+                  className="button"
+                  onClick={() => {
+                    console.log("modal closed ");
+                    close();
+                  }}
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          </Popup>
         </Button>
       </h3>
       <Divider />
@@ -105,29 +114,28 @@ const CompanyNews = () => {
     <div className="News-Container">
       <h4>Latest News</h4>
     </div>
-  )
-}
+  );
+};
 
 const Home = () => {
-
   // const [data, setData] = useState();
   const history = useHistory();
 
   useEffect(() => {
     const call = async () => {
-      const res = localStorage.getItem('jwt')
-      console.log(res)
-      if(!res) {
-        history.push('/login')
+      const res = localStorage.getItem("jwt");
+      console.log(res);
+      if (!res) {
+        history.push("/login");
       } else {
-        return console.log('logged in')
+        return console.log("logged in");
       }
-    }
-    call()
-  }, [])
+    };
+    call();
+  }, []);
 
   // console.log(data)
-  
+
   return (
     <div>
       <Container>
