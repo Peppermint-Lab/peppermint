@@ -10,7 +10,9 @@ import Navigation from "./component/Navigation";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
-import Admin from "./pages/Admin";
+import Dash from './pages/admin/Dash';
+import SideNav from './component/admin/SideNav'
+import Analytics from './pages/admin/Analytics'
 
 // import { baseUrl } from "./utils";
 
@@ -20,6 +22,8 @@ const Routing = () => {
   return (
     <Router>
       <Switch>
+      <Route exact path="/" component={Home} />
+      
         <Route exact path="/login">
           <div className="login-container">
             <Login />
@@ -32,14 +36,21 @@ const Routing = () => {
           </div>
         </Route>
 
-        <Route exact path="/" component={Home} />
-
         <Route>
           <Navigation />
           <Route exact path="/tickets" component={Ticket} />
           <Route exact path="/monitor" component={Monitor} />
-          <Route exact path="/admin" component={Admin} />
+          <Route exact path="/admin/:path?">
+            <div className="navbar">
+              <SideNav />
+            </div>
+            <div className="admin-main">
+              <Route exact path="/admin/dashboard" component={Dash} />
+              <Route exact path="/admin/Analytics" component={Analytics} />
+            </div>
+          </Route>
         </Route>
+
       </Switch>
     </Router>
   );

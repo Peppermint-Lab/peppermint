@@ -197,3 +197,19 @@
 #components-form-demo-normal-login .login-form-button {
   width: 100%;
 }
+
+.Admin-Container {
+  float: right;
+  width: 80%;
+}
+
+.admin-main {
+  display: block;
+  float: right;
+  width: 85%;
+
+}
+
+.navbar {
+  position: absolute;
+}

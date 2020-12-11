@@ -76,7 +76,7 @@ const Navigation = () => {
                 </Nav.Item>
 
                 <Nav.Item
-                  onClick={() => history.push("/admin")}
+                  onClick={() => history.push("/admin/dashboard")}
                   disabled={false}
                 >
                   Admin
