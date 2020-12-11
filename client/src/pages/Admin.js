@@ -1,31 +1,20 @@
-import React, { useState,  } from "react";
-import {
-  Container,
-  Content,
-  Form,
-  FormGroup,
-  ControlLabel,
-  ButtonToolbar,
-  Button,
-  Modal,
-} from "rsuite";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-// import {UserContext} from '../App'
+import { Button, Modal, Form, Input, Radio, } from 'antd';
+// import { GlobalContext } from '../Context/GlobalState';
 
 import { baseUrl } from "../utils.js";
 
-const CreateUser = () => {
-  const history = useHistory();
+const NewUser = () => {
+
+  const [visible, setVisible] = useState(false)
+  const [form] = Form.useForm();
 
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [modalIsOpen, setIsOpen] = useState(false);
 
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
-
-  const PostData = async () => {
+  const postData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/Signup`, {
       method: "post",
       headers: {
@@ -38,68 +27,76 @@ const CreateUser = () => {
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        if (!data.error) {
-          window.location.reload();
-        } else {
-          console.log(data.error);
-        }
-      });
   };
 
-  return (
-    <div className="createUser-container">
-      <h4>Add new user</h4>
-      <Container>
-        <Button onClick={open} >
-          Add User
-          <Modal
-          show={modalIsOpen}
-          onHide={close()}
+  const onCreate = async (values) => {
+    console.log('Received values of form: ', values);
+    setVisible(false);
+    await postData();
+  };
+
+  const onCancel = () => { setVisible(false);}
+
+  return(
+    <div>
+      <Button  type="primary" onClick={() => {setVisible(true);}}>
+        Create new user
+      </Button>
+      <Modal
+      visible={visible}
+      title="Create a new user"
+      okText="Create"
+      cancelText="Cancel"
+      onCancel={onCancel}
+      onOk={() => {
+        form
+          .validateFields()
+          .then((values) => {
+            form.resetFields();
+            onCreate(values);
+          })
+          .catch((info) => {
+            console.log('Validate Failed:', info);
+          });
+      }}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        name="form_in_modal"
+        initialValues={{
+          modifier: 'public',
+        }}
+      >
+        <Form.Item
+          name="name"
+          label="Name"
+          rules={[
+            {
+              required: true,
+              message: 'Please input the name of your new user!',
+            },
+          ]}
         >
-          <Modal.Header>Add a new User</Modal.Header>
-          <Modal.Body>
-          <Content>
-            <Form fluid>
-              <FormGroup>
-                <ControlLabel>Name</ControlLabel>
-                <input name="name" onChange={(e) => setName(e.target.value)} />
-              </FormGroup>
-
-              <FormGroup>
-                <ControlLabel>Email</ControlLabel>
-                <input
-                  name="password"
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <ControlLabel>Password</ControlLabel>
-                <input
-                  name="password"
-                  type="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <ButtonToolbar>
-                  <Button appearance="primary" onClick={() => PostData(), close()}>
-                    Add
-                  </Button>
-                </ButtonToolbar>
-              </FormGroup>
-            </Form>
-          </Content>
-          </Modal.Body>
-          </Modal>
-        </Button>
-      </Container>
+          <Input placeholder="Enter name here..." name="name" onChange={(e) => setName(e.target.value)} />
+        </Form.Item>
+        <Form.Item name="email" label="Email">
+          <Input placeholder="Enter email here...."  onChange={(e) => setEmail(e.target.value)}/>
+        </Form.Item>
+        <Form.Item name="password" label="Password">
+          <Input placeholder="Enter password here..."  onChange={(e) => setPassword(e.target.value)}/>
+        </Form.Item>
+        <Form.Item name="modifier" className="collection-create-form_last-form-item">
+          <Radio.Group>
+            <Radio value="user">User</Radio>
+            <Radio value="admin">Admin</Radio>
+          </Radio.Group>
+        </Form.Item>
+      </Form>
+    </Modal>
     </div>
-  );
-};
+  )
+}
 
 const Admin = () => {
 
@@ -107,13 +104,13 @@ const Admin = () => {
 
   const user = JSON.parse(localStorage.getItem("user"))
 
-  console.log(user.role)
+  // console.log(user.role)
 
   const Render = () => {
     if(user.role === "admin") {
       return (
         <div>
-          <h1>You are the admin now</h1>
+          <NewUser />
         </div>
       ) 
     } else {
