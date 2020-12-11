@@ -18,7 +18,7 @@ import ListTodo from "../component/ListTodo";
 import TicketStats from "../component/TicketStats";
 import ListNote from "../component/ListNote";
 
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
 
 const Todo = () => {

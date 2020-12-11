@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "rsuite";
+import { Table, Tag, Space, Button } from 'antd';
 
 import { baseUrl } from "../utils.js";
 
@@ -52,54 +52,47 @@ const UnissuedTicket = () => {
       });
   };
 
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: 150
+    },
+    {
+      title: 'Company',
+      dataIndex: 'company',
+      key: 'company',
+      width: 150
+    },
+    {
+      title: 'Priority',
+      dataIndex: 'priority',
+      key: 'priority',
+      width: 50,
+    },
+    {
+      title: 'Issue',
+      dataIndex: 'issue',
+      key: 'issue',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      width: 200,
+      render: () => (
+        <Space size="middle">
+          <Button size="small">Convert</Button>
+          <Button size="small"></Button>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <div>
       <h3 style={{ textAlign: "center" }}>Unissued Tickets - </h3>
-      <Table height={400} data={data} cellBordered={true}>
-        <Column width={100} align="center" fixed>
-          <HeaderCell>#</HeaderCell>
-          <Cell dataKey="id" />
-        </Column>
-
-        <Column width={100} align="center" fixed>
-          <HeaderCell>Name</HeaderCell>
-          <Cell dataKey="name" />
-        </Column>
-
-        <Column width={150} align="center" fixed>
-          <HeaderCell>Company</HeaderCell>
-          <Cell dataKey="company" />
-        </Column>
-
-        <Column width={100} align="center" fixed>
-          <HeaderCell>Priority</HeaderCell>
-          <Cell dataKey="priority" />
-        </Column>
-
-        <Column width={600} align="center" fixed>
-          <HeaderCell>Issue</HeaderCell>
-          <Cell
-            dataKey="issue"
-            style={{ textAlign: "left", fontWeight: "bold" }}
-          />
-        </Column>
-
-        <Column width={75} align="center" fixed>
-          <HeaderCell></HeaderCell>
-          <Cell>
-            {(row) => {
-              // console.log(row)
-              return (
-                <div>
-                  <Button size="xs" onClick={convert}>
-                    Convert
-                  </Button>
-                </div>
-              );
-            }}
-          </Cell>
-        </Column>
-      </Table>
+      <Table columns={columns} dataSource={data} />
     </div>
   );
 };
