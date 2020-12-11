@@ -113,6 +113,7 @@ const CompanyNews = () => {
   return (
     <div className="News-Container">
       <h4>Latest News</h4>
+      <Divider />
     </div>
   );
 };

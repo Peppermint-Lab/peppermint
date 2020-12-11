@@ -213,3 +213,9 @@
 .navbar {
   position: absolute;
 }
+
+.stats-card {
+  width: 20%;
+  margin-left: 40px;
+  margin-top: 25px;
+}
