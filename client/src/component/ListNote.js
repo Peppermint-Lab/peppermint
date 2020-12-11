@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button } from "rsuite";
+import { Button } from 'antd';
+import { DeleteTwoTone } from '@ant-design/icons';
 import Popup from 'reactjs-popup';
 
 //import { baseUrl } from "../utils";
@@ -33,7 +34,7 @@ const ListNote = () => {
             <ul>
               <li style={{ marginLeft: -35 }}>
                 {item.title}
-                <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={() => deleteNote(item._id)}>Delete</Button>
+                <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={() => deleteNote(item._id)}><DeleteTwoTone twoToneColor="#FF0000" /></Button>
                 <Button size="xs" style={{float: "right", marginLeft: 5}} onClick={open}>
                   Edit
                   <Popup modal open={isOpen} closeOnEscape={true}>

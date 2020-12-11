@@ -17,11 +17,6 @@ const ListTodo = () => {
     // eslint-disable-next-line
   }, []);  
 
-  const tooltip1 = <Tooltip>Remove Todo</Tooltip>;
-  const tooltip2 = <Tooltip>Mark as done</Tooltip>;
-
-  console.log(todos)
-
   return (
     <div>
       <Button style={{ marginTop: 10 }} onClick={allDone} >
