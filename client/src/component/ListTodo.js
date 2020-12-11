@@ -1,5 +1,7 @@
 import React, { useEffect, useContext } from "react";
-import { Divider, Icon, Tooltip, Whisper } from "rsuite";
+import { Divider, Button, Tooltip } from 'antd';
+import { CheckCircleTwoTone, DeleteTwoTone } from '@ant-design/icons';
+
 
 // import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
@@ -22,9 +24,9 @@ const ListTodo = () => {
 
   return (
     <div>
-      <button style={{ marginTop: 10 }} onClick={allDone}>
+      <Button style={{ marginTop: 10 }} onClick={allDone} >
         Mark All Done
-      </button>
+      </Button>
       <Divider orientation="left" style={{ width: "auto" }}></Divider>
       {todos.map(todo => {
         // console.log(todo)
@@ -33,17 +35,17 @@ const ListTodo = () => {
             <ul key={todo._id}>
               <li style={{ marginLeft: -35 }} key={todo._id}>
                 <span className={todo.done ? "done" : ""}>{todo.text}</span>
-                <Whisper placement="bottom" trigger="hover" speaker={tooltip1}>
-                  <button onClick={() => deleteTodo(todo._id)} style={{ float: "right"}}><Icon icon="close" /></button>
-                </Whisper>
-                <Whisper placement="bottom" trigger="hover" speaker={tooltip2}>
-                  <button
+                <Tooltip placement="right" title="Delete">
+                  <Button onClick={() => deleteTodo(todo._id)} style={{ float: "right"}}><DeleteTwoTone twoToneColor="#FF0000" /></Button>
+                </Tooltip>
+                <Tooltip placement="bottom" title="Mark as done">
+                  <Button
                     onClick={() => markDone(todo._id)}
                     style={{ float: "right", marginRight: 5 }}
                   >
-                    <Icon icon="check" />
-                  </button>
-                </Whisper>
+                    <CheckCircleTwoTone twoToneColor="#52c41a" />
+                  </Button>
+                </Tooltip>
               </li>
             </ul>
           </div>

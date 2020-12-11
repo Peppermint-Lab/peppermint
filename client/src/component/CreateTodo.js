@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { InputGroup, Icon } from "rsuite";
+import { Input, Button } from 'antd';
+import { EditTwoTone } from '@ant-design/icons';
+
 
 // import { baseUrl } from "../utils";
 import { GlobalContext } from '../Context/GlobalState';
@@ -15,17 +17,15 @@ const CreateTodo = () => {
 
   return (
     <div>
-      <InputGroup>
-        <input
+        <Input
           style={{ width: 300 }}
           placeholder="Enter Todo... "
           value={text} 
           onChange={(e) => {setText(e.target.value)}}
         />
-        <InputGroup.Button>
-          <Icon icon="check-square-o" onClick={onSubmit} />
-        </InputGroup.Button>
-      </InputGroup>
+        <Button onClick={onSubmit} style={{ marginLeft: 10}}>
+          <EditTwoTone />
+        </Button>
     </div>
   );
 };
