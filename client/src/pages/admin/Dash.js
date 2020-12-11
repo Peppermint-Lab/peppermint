@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Statistic, Row, Col } from "antd";
+import { Card, Statistic, Row } from "antd";
 
 const TicketStats = () => {
   return (
