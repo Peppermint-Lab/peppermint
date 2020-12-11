@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Form, Input, Button, Checkbox } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Space } from 'antd';
+import { UserOutlined, LockOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 import { GlobalContext } from '../Context/GlobalState';
 
@@ -54,11 +54,12 @@ const Login = () => {
                 },
               ]}
             >
-              <Input
+              <Input.Password
                 style={{width: 300}}
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
