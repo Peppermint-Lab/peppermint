@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button } from 'antd';
+import { Button, Skeleton } from 'antd';
 import { DeleteTwoTone } from '@ant-design/icons';
 import Popup from 'reactjs-popup';
 
@@ -27,7 +27,7 @@ const ListNote = () => {
 
   return (
     <div>
-      {notes.map((item) => {
+      {notes ? notes.map((item) => {
         // console.log(item)
         return (
           <div key={item._id} className="todo-list">
@@ -65,7 +65,7 @@ const ListNote = () => {
             </ul>
           </div>
         );
-      })}
+      }) : <Skeleton />}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Divider, Button, Tooltip } from 'antd';
+import { Divider, Button, Tooltip, Skeleton  } from 'antd';
 import { CheckCircleTwoTone, DeleteTwoTone } from '@ant-design/icons';
 
 
@@ -23,7 +23,7 @@ const ListTodo = () => {
         Mark All Done
       </Button>
       <Divider orientation="left" style={{ width: "auto" }}></Divider>
-      {todos.map(todo => {
+      {todos ? todos.map(todo => {
         // console.log(todo)
         return (
           <div className="todo-list" key={todo._id}>
@@ -45,7 +45,7 @@ const ListTodo = () => {
             </ul>
           </div>
         );
-      })}
+      }) : <Skeleton />}
     </div>
   );
 };

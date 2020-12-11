@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@chakra-ui/react": "^1.0.3",
-    "@chakra-ui/theme": "^1.2.1",
-    "@chakra-ui/theme-tools": "^1.0.1",
     "@reach/dialog": "^0.12.1",
     "@reduxjs/toolkit": "^1.5.0",
     "@testing-library/jest-dom": "^5.11.6",

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Form, Input, Button, Space } from 'antd';
+import { Form, Input, Button, } from 'antd';
 import { UserOutlined, LockOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 import { GlobalContext } from '../Context/GlobalState';

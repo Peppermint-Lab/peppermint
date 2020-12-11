@@ -92,11 +92,21 @@ const Notes = () => {
 
 const Issues = () => {
   return (
-    <div className="Issue-Container">
+    <div className="Right-Container">
       <TicketStats />
+      <Divider />
+      <CompanyNews />
     </div>
   );
 };
+
+const CompanyNews = () => {
+  return (
+    <div className="News-Container">
+      <h4>Latest News</h4>
+    </div>
+  )
+}
 
 const Home = () => {
 
