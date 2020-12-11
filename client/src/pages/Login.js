@@ -1,16 +1,9 @@
 import React, { useState, useContext } from "react";
-import {
-  Container,
-  Content,
-  FlexboxGrid,
-  Panel,
-  Form,
-  FormGroup,
-  ControlLabel,
-  ButtonToolbar,
-  Button,
-} from "rsuite";
 import { useHistory } from "react-router-dom";
+
+import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
 import { GlobalContext } from '../Context/GlobalState';
 
 // import { baseUrl } from '../utils'
@@ -28,43 +21,64 @@ const Login = () => {
 
   return (
     <div>
-        <Container>
-          <Content className="Login">
-            <FlexboxGrid justify="center">
-              <FlexboxGrid.Item colspan={12}>
-                <Panel header={<h3>Member Login</h3>} style={{ marginLeft: -100}}>
-                  <Form fluid>
-                    <FormGroup>
-                      <ControlLabel>Email</ControlLabel>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <ControlLabel>Password</ControlLabel>
-                      <input
-                        name="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => {onSubmit(); setTimeout(() => history.push('/'), 4000)} }>
-                          Sign in
-                        </Button>
-                        <Button appearance="link">Forgot password?</Button>
-                      </ButtonToolbar>
-                    </FormGroup>
-                  </Form>
-                </Panel>
-              </FlexboxGrid.Item>
-            </FlexboxGrid>
-          </Content>
-        </Container>
+         <Form
+            name="normal_login"
+            className="login-form"
+            initialValues={{
+              remember: true,
+            }}
+          >
+            <h1>Member Login</h1>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Email!',
+                },
+              ]}
+            >
+              <Input 
+              style={{width: 300}} 
+              prefix={<UserOutlined className="site-form-item-icon" />} 
+              placeholder="Email" 
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Password!',
+                },
+              ]}
+            >
+              <Input
+                style={{width: 300}}
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item>
+              <a className="login-form-forgot" href="">
+                Forgot password
+              </a>
+            </Form.Item>
+
+            <Form.Item>
+              <Button 
+              type="primary" 
+              htmlType="submit" 
+              className="login-form-button" 
+              onClick={() => {onSubmit(); setTimeout(() => history.push('/'), 4000)}}
+              >
+                Log in
+              </Button>
+            </Form.Item>
+        </Form>
     </div>
   );
 };

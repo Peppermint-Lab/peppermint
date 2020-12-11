@@ -9,10 +9,9 @@
 
 .login-container {
   margin: auto;
-  width: 20%;
+  width: 25%;
   margin-top: 200px;
-  border-radius: 20px;
-  box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+
 }
 
 .monitor-create {
@@ -184,4 +183,17 @@
   background: #ffffff;
   border-radius: 18px;
   border: 1px solid #cfcece;
+}
+
+#components-form-demo-normal-login .login-form {
+  max-width: 300px;
+}
+#components-form-demo-normal-login .login-form-forgot {
+  float: right;
+}
+#components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
+  float: left;
+}
+#components-form-demo-normal-login .login-form-button {
+  width: 100%;
 }

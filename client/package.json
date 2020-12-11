@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.3.0",
+    "antd": "^4.9.2",
     "axios": "^0.21.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

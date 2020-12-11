@@ -1,6 +1,4 @@
-import React, {
-  useContext, useEffect, useState
-} from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -8,6 +6,7 @@ import {
 } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
+import 'antd/dist/antd.css';
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
@@ -17,7 +16,7 @@ import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
 import Admin from "./pages/Admin";
 
-import { baseUrl } from "./utils";
+// import { baseUrl } from "./utils";
 
 // import { GlobalContext } from "./Context/GlobalState";
 
@@ -38,9 +37,7 @@ const Routing = () => {
             <Reg />
           </div>
         </Route>
-          
         
-
         <Route exact path="/" component={Home} /> 
 
         <Route>
