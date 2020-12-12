@@ -2,7 +2,7 @@ import React from 'react'
 
 const Analytics = () => {
     return (
-        <div>
+        <div >
             <h1>Hello</h1>
         </div>
     )

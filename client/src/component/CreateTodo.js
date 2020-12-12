@@ -17,7 +17,7 @@ const CreateTodo = () => {
   return (
     <div>
       <Input
-        style={{ width: 300 }}
+        style={{ width: "35vh" }}
         placeholder="Enter Todo... "
         value={text}
         onChange={(e) => {

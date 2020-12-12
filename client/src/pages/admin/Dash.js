@@ -1,30 +1,9 @@
-import React, {useState, useEffect } from "react";
+import React from "react";
 import { Card, Statistic, Row } from "antd";
 
-import { baseUrl } from "../../utils";
+// import { baseUrl } from "../../utils";
 
 const TicketStats = () => {
-
-  const [api, setApi] = useState()
-
-  const sessions = () => {
-    fetch(`${baseUrl}/api/v1/data/sessions`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    }).then((res) => res.json())
-    .then(res => {
-      console.log(res)
-      setApi(res)
-    })
-  }
-
-  console.log(api)
-
-  useEffect(() => {
-    sessions();
-  })
 
   return (
     <Row>
@@ -45,7 +24,7 @@ const TicketStats = () => {
         </div>
         <div className="stats-card">
           <Card >
-            <Statistic title="Active Sessions" value={api} />
+            <Statistic title="Active Sessions" value={3} />
           </Card>
         </div>
     </Row>
