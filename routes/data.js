@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/authCheck');
 
-const {countUnissuedTickets, countOpenedTickets, countCompletedTickets} = require ('../controller/data');
+const {countUnissuedTickets, countOpenedTickets, countCompletedTickets, sessions} = require ('../controller/data');
 
 router  
     .route('/unallocatedTickets')

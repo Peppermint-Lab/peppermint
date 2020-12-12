@@ -1,13 +1,13 @@
 // Dependencies
 const express = require("express");
-//const path = require('path');
 const app = express();
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const colors = require("colors");
 const bodyParser = require("body-parser");
-const helmet = require("helmet");
+const helmet = require("helmet");  
+
 
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/config.env" });

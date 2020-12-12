@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
@@ -14,7 +14,7 @@ import Dash from './pages/admin/Dash';
 import SideNav from './component/admin/SideNav'
 import Analytics from './pages/admin/Analytics'
 
-// import { baseUrl } from "./utils";
+import { baseUrl } from "./utils";
 
 // import { GlobalContext } from "./Context/GlobalState";
 
@@ -57,6 +57,7 @@ const Routing = () => {
 };
 
 const App = () => {
+
   return <Routing />;
 };
 

@@ -36,7 +36,7 @@ const Notes = () => {
   const [title, setTitle] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const { notes, saveNote } = useContext(GlobalContext);
+  const { saveNote } = useContext(GlobalContext);
 
   const open = () => setModalIsOpen(true);
   const close = () => setModalIsOpen(false);

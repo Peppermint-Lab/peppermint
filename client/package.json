@@ -20,6 +20,7 @@
     "reactjs-popup": "^2.0.4",
     "redux": "^4.0.5",
     "rsuite": "^4.8.5",
+    "socket.io-client": "^3.0.4",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
