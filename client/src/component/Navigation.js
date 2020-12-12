@@ -85,20 +85,8 @@ const Navigation = () => {
 
               <Nav pullRight>
                 <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
-                  <Nav.Item
-                    icon={<Icon icon="plus" />}
-                    onClick={openTicketModal}
-                  >
-                    <Modal
-                      show={ticketmodalIsOpen}
-                      onHide={closeTicketModal}
-                      keyboard={true}
-                    >
-                      <h2 style={{ textAlign: "center" }}>New ticket</h2>
-                      <Modal.Body>
-                        <NewTicket />
-                      </Modal.Body>
-                    </Modal>
+                  <Nav.Item>
+                    <NewTicket />
                   </Nav.Item>
                 </Whisper>
 

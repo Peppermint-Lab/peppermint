@@ -1,50 +1,42 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  FormGroup,
-  ControlLabel,
-  HelpBlock,
-  Button,
-  ButtonToolbar,
-  Radio,
-  RadioGroup,
-} from "rsuite";
-import { Select, Spin, Input } from 'antd';
-import { useHistory } from "react-router-dom";
+import { Select, Modal, Form, Input, Radio, Space } from "antd";
+import { PlusSquareTwoTone } from "@ant-design/icons";
+// import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
 
 const NewTicket = () => {
-  const history = useHistory();
+  // const history = useHistory();
 
   const { Option } = Select;
   const { TextArea } = Input;
-  
+
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState("");
   const [priority, setPriority] = useState("");
   const [options, setOptions] = useState([]);
-  const [clientName, setClientName] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [form] = Form.useForm();
 
-  // console.log(options)
-  // console.log(company)
+  console.log(priority)
 
   const fetchClients = () => {
     fetch(`${baseUrl}/api/v1/client/allclients`, {
-      method: 'GET',
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
-      }
-    }).then((res) => res.json())
-    .then((res) => {
-      if(res) {
-        // console.log(res)
-        setOptions(res.client)
-      }
+      },
     })
-  }
+      .then((res) => res.json())
+      .then((res) => {
+        if (res) {
+          // console.log(res)
+          setOptions(res.client);
+        }
+      });
+  };
 
   const postData = () => {
     fetch(`${baseUrl}/api/v1/tickets/createTicket`, {
@@ -56,7 +48,6 @@ const NewTicket = () => {
         name,
         email,
         company,
-        clientName :  clientName,
         issue,
         priority,
       }),
@@ -71,92 +62,114 @@ const NewTicket = () => {
       });
   };
 
-  useEffect(() => {
-    fetchClients()
-  }, [])
+  const onCreate = async (values) => {
+    console.log("Received values of form: ", values);
+    setVisible(false);
+    await postData();
+  };
 
-  const search = options.map(d => <Option key={d._id}>{d.name}</Option>);
+  const onCancel = () => {
+    setVisible(false);
+  };
+
+  useEffect(() => {
+    fetchClients();
+  }, []);
+
+  const search = options.map((d) => <Option key={d._id}>{d.name}</Option>);
 
   return (
-    <div>
-      <Form layout="horizontal">
-        <FormGroup>
-          <ControlLabel>Name</ControlLabel>
-          <Input style={{ width: 200 }} name="name" onChange={(e) => setName(e.target.value)} />
-          <HelpBlock tooltip>Required</HelpBlock>
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Email</ControlLabel>
-          <Input
-            style={{ width: 200 }}
-            name="email"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <HelpBlock tooltip>Required</HelpBlock>
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Company</ControlLabel>
-          <Select
-            showSearch
-            style={{ width: 200 }}
-            value={company}
-            placeholder="Select a Company"
-            optionFilterProp="children"
-            onChange={setCompany}
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {search}
-          </Select>,
-          <HelpBlock tooltip>Required</HelpBlock>
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Issue</ControlLabel>
-          <TextArea
-            rows={5}
-            style={{ width: 200 }}
-            onChange={(e) => setIssue(e.target.value)}
-          />
-          <HelpBlock tooltip>Required</HelpBlock>
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Priority</ControlLabel>
-          <RadioGroup
-            name="radioList"
-            inline
-            appearance="picker"
-            defaultValue="A"
-            onChange={setPriority}
-          >
-            <Radio value="Low">Low</Radio>
-            <Radio value="Normal">Normal</Radio>
-            <Radio value="High">High</Radio>
-          </RadioGroup>
-        </FormGroup>
-        <FormGroup>
-          <ButtonToolbar>
-            <Button
-              appearance="primary"
-              onClick={() => {
-                postData();
-                history.push("/");
-              }}
+    <div className="ticket-modal">
+      <p
+        type="primary"
+        onClick={() => {
+          setVisible(true);
+        }}
+      >
+        <PlusSquareTwoTone />
+      </p>
+      <Modal
+        visible={visible}
+        title="Create a new Ticket"
+        okText="Create"
+        cancelText="Cancel"
+        onCancel={onCancel}
+        onOk={() => {
+          form
+            .validateFields()
+            .then((values) => {
+              form.resetFields();
+              onCreate(values);
+            })
+            .catch((info) => {
+              console.log("Validate Failed:", info);
+            });
+        }}
+      >
+        <Form
+          size="middle"
+          form={form}
+          layout="vertical"
+          name="form_in_modal"
+          initialValues={{
+            modifier: "public",
+          }}
+        >
+          <Form.Item name="name" label="Name">
+            <Input
+              placeholder="Enter name here..."
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item name="email" label="Email">
+            <Input
+              placeholder="Enter email here...."
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item name="client" label="client">
+            <Select
+              showSearch
+              style={{ width: 200 }}
+              placeholder="Select a client"
+              optionFilterProp="children"
+              onChange={setCompany}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
             >
-              Submit
-            </Button>
-            <Button
-              appearance="default"
-              onClick={() => {
-                history.push("/");
-              }}
+              {search}
+            </Select>
+          </Form.Item>
+          <Form.Item name="issue" label="issue">
+            <TextArea
+              rows={5}
+              style={{ width: 200 }}
+              onChange={(e) => setIssue(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item
+            name="modifier"
+            label="Priority"
+            className="collection-create-form_last-form-item"
+          >
+            <Radio.Group
+              defaultValue="a"
+              buttonStyle="solid"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              style={{ textAlign: "center" }}
             >
-              Cancel
-            </Button>
-          </ButtonToolbar>
-        </FormGroup>
-      </Form>
+            <Space>
+              <Radio.Button value="Low">Low</Radio.Button>
+              <Radio.Button value="Medium">Medium</Radio.Button>
+              <Radio.Button value="High">High</Radio.Button>
+            </Space>
+            </Radio.Group>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
