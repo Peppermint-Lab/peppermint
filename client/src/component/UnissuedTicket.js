@@ -57,9 +57,9 @@ const UnissuedTicket = () => {
       width: 150,
     },
     {
-      title: "Company",
-      dataIndex: "company",
-      key: "company",
+      title: "Client",
+      render: (data) => data.client.name,
+      key: "client",
       width: 150,
     },
     {
@@ -79,7 +79,7 @@ const UnissuedTicket = () => {
       width: 200,
       render: () => (
         <Space size="middle">
-          <Button size="small">Convert</Button>
+          <Button size="small" onClick={convert}>Convert</Button>
           <Button size="small"></Button>
         </Space>
       ),

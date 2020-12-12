@@ -23,10 +23,12 @@ const OpenTicket = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        // console.log(result.tickets);
         setData(result.tickets);
       });
   }
+
+  console.log(data)
 
   useEffect(() => {
     async function resolve() {
@@ -43,9 +45,9 @@ const OpenTicket = () => {
       width: 150,
     },
     {
-      title: "Company",
-      dataIndex: "company",
-      key: "company",
+      title: "Client",
+      render: (data) => data.client.name,
+      key: "client",
       width: 150,
     },
     {

@@ -4,7 +4,7 @@ const { ObjectId } = mongoose.Schema.Types;
 // Mongoose Schema for Tickets
 const TicketSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  company: { type: ObjectId, required: true, ref: "Clients" },
+  client: { type: ObjectId, required: true, ref: "Clients" },
   issue: { type: String, required: true },
   email: { type: String, required: false },
   note: { type: String },

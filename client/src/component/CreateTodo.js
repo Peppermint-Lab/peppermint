@@ -24,7 +24,7 @@ const CreateTodo = () => {
           setText(e.target.value);
         }}
       />
-      <Button onClick={onSubmit} style={{ marginLeft: 10 }}>
+      <Button onClick={onSubmit} style={{ marginLeft: 10, margin: 5 }}>
         <EditTwoTone />
       </Button>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   FormGroup,
@@ -9,7 +9,7 @@ import {
   Radio,
   RadioGroup,
 } from "rsuite";
-import { Select } from 'antd';
+import { Select, Spin, Input } from 'antd';
 import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
@@ -18,12 +18,33 @@ const NewTicket = () => {
   const history = useHistory();
 
   const { Option } = Select;
+  const { TextArea } = Input;
   
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState("");
   const [priority, setPriority] = useState("");
+  const [options, setOptions] = useState([]);
+  const [clientName, setClientName] = useState('');
+
+  // console.log(options)
+  // console.log(company)
+
+  const fetchClients = () => {
+    fetch(`${baseUrl}/api/v1/client/allclients`, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+      }
+    }).then((res) => res.json())
+    .then((res) => {
+      if(res) {
+        // console.log(res)
+        setOptions(res.client)
+      }
+    })
+  }
 
   const postData = () => {
     fetch(`${baseUrl}/api/v1/tickets/createTicket`, {
@@ -35,6 +56,7 @@ const NewTicket = () => {
         name,
         email,
         company,
+        clientName :  clientName,
         issue,
         priority,
       }),
@@ -49,17 +71,24 @@ const NewTicket = () => {
       });
   };
 
+  useEffect(() => {
+    fetchClients()
+  }, [])
+
+  const search = options.map(d => <Option key={d._id}>{d.name}</Option>);
+
   return (
     <div>
       <Form layout="horizontal">
         <FormGroup>
           <ControlLabel>Name</ControlLabel>
-          <input name="name" onChange={(e) => setName(e.target.value)} />
+          <Input style={{ width: 200 }} name="name" onChange={(e) => setName(e.target.value)} />
           <HelpBlock tooltip>Required</HelpBlock>
         </FormGroup>
         <FormGroup>
           <ControlLabel>Email</ControlLabel>
-          <input
+          <Input
+            style={{ width: 200 }}
             name="email"
             type="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -71,25 +100,23 @@ const NewTicket = () => {
           <Select
             showSearch
             style={{ width: 200 }}
-            placeholder="Select a person"
+            value={company}
+            placeholder="Select a Company"
             optionFilterProp="children"
-            onChange={(e) => setName(e.target.value)}
+            onChange={setCompany}
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
           >
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-            <Option value="tom">Tom</Option>
+            {search}
           </Select>,
           <HelpBlock tooltip>Required</HelpBlock>
         </FormGroup>
         <FormGroup>
           <ControlLabel>Issue</ControlLabel>
-          <input
-            name="textarea"
-            rows={3}
-            componentClass="textarea"
+          <TextArea
+            rows={5}
+            style={{ width: 200 }}
             onChange={(e) => setIssue(e.target.value)}
           />
           <HelpBlock tooltip>Required</HelpBlock>

@@ -6,8 +6,9 @@ exports.openTickets = async (req, res) => {
   // console.log("Open Tickets API HIT")
 
   try {
-    TicketSchema.find({ status: "issued", assignedto: req.user._id }).then(
-      (tickets) => {
+    TicketSchema.find({ status: "issued", assignedto: req.user._id })
+    .populate("client", "_id name")
+    .then((tickets) => {
         res.json({ tickets });
       }
     );
@@ -21,7 +22,9 @@ exports.openTickets = async (req, res) => {
 exports.unissuedTickets = async (req, res) => {
   // console.log("Unissued ticket API HIT")
   try {
-    TicketSchema.find({ status: "unissued" }).then((tickets) => {
+    TicketSchema.find({ status: "unissued" })
+    .populate("client", "_id name")
+    .then((tickets) => {
       res.json({ tickets });
     });
     return res.status(200);
@@ -57,7 +60,7 @@ exports.createTicket = async (req, res) => {
     }
     const newTicket = new TicketSchema({
       name,
-      company,
+      client : mongoose.Types.ObjectId(company),
       issue,
       priority,
       email,
