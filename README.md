@@ -16,17 +16,13 @@
 
 ## ✨ Features
 
-- 💡 **TypeScript**: A language for application-scale JavaScript
-- 📜 **Blocks**: Build page with block template
-- 💎 **Hooks**: Use react hooks API instead of traditional class API
-- 📐 **Common Templates**: Typical templates for enterprise applications
-- 🚀 **State of The Art Development**: Newest development stack of React/hooks/Redux/antd/typescript
+- 💡 **Job Logging**
+- 📜 **Client History**
+- 💎 **Notes creation & Todo List**: Use react hooks API instead of traditional class API
+- 📐 **Admin Page**: Admin Dashboard for easy webUI changes and analytics
 - 📱 **Responsive**: Designed for variable screen sizes
-- 🎨 **Theming**: Dynamically switch system theme
-- 🌐 **International**: Built-in i18n solution
-- ⚙️ **Best Practices**: Solid workflow to make your code healthy
-- 🔢 **Mock development**: Easy to use mock development solution
-- ✅ **Usage**: No barriers to use with complete documentation and detailed comments
+- ⚙️ **Docker-Ready**: Solid workflow to make your code healthy
+- ✅ **Usage**: No barriers to use with complete documentation on how to complete tasks
 
 
 ## Installing locally for development
