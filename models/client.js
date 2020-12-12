@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 
 const ClientSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    Contact: { type: String },
-    Number: { type: Number }
+    email: { type: String}, 
+    contactName: { type: String },
+    number: { type: Number }
 }, {timestamps: true});
 
 mongoose.model("Clients", ClientSchema);

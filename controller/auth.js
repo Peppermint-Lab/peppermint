@@ -9,7 +9,7 @@ exports.Signup = async (req, res) => {
     if ((!email || !name, !password)) {
       return res.status(422).json({ error: "Please add all fields" });
     }
-    User.findOne({ email: email }).then((savedUser) => {
+    await User.findOne({ email: email }).then((savedUser) => {
       if (savedUser) {
         return res
           .status(422)
@@ -44,7 +44,7 @@ exports.Login = async (req, res) => {
     if (!email || !password) {
       return res.status(422).json({ error: "please add email or password" });
     }
-    User.findOne({ email: email }).then((savedUser) => {
+    await User.findOne({ email: email }).then((savedUser) => {
       if (!savedUser) {
         return res.status(422).json({ error: "Invalid Email or password" });
       }

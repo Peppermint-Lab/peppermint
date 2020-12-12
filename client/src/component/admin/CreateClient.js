@@ -1,28 +1,28 @@
-import React, { useState, } from "react";
-// import { useHistory } from "react-router-dom";
-import { Modal, Form, Input, Radio } from "antd";
-// import { GlobalContext } from '../Context/GlobalState';
-
+import React, { useState } from 'react'
+import { Modal, Form, Input, } from "antd";
 import { baseUrl } from "../../utils";
 
-const CreateUser = () => {
+
+const CreateClient = () => {
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
   
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
+    const [number, setNumber] = useState("");
+    const [contactName, setContactName] = useState("");
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
   
     const postData = async () => {
-      await fetch(`${baseUrl}/api/v1/auth/Signup`, {
+      await fetch(`${baseUrl}/api/v1/client/create`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name,
-          email,
-          password,
+          contactName,
+          number,
+          email
         }),
       }).then((res) => res.json());
     };
@@ -45,11 +45,11 @@ const CreateUser = () => {
             setVisible(true);
           }}
         >
-          Create new user
+          Create new client
         </p>
         <Modal
           visible={visible}
-          title="Create a new user"
+          title="Add a new client"
           okText="Create"
           cancelText="Cancel"
           onCancel={onCancel}
@@ -79,7 +79,7 @@ const CreateUser = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input the name of your new user!",
+                  message: "Please input the name of your new client!",
                 },
               ]}
             >
@@ -89,26 +89,23 @@ const CreateUser = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </Form.Item>
-            <Form.Item name="email" label="Email">
+            <Form.Item name="contact name" label="Contact Name">
               <Input
-                placeholder="Enter email here...."
+                placeholder="Enter  here...."
+                onChange={(e) => setContactName(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item name="number" label="Contact Number">
+              <Input
+                placeholder="Enter number here..."
+                onChange={(e) => setNumber(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item name="email" label="Contact Email">
+              <Input
+                placeholder="Enter email address here..."
                 onChange={(e) => setEmail(e.target.value)}
               />
-            </Form.Item>
-            <Form.Item name="password" label="Password">
-              <Input
-                placeholder="Enter password here..."
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Item>
-            <Form.Item
-              name="modifier"
-              className="collection-create-form_last-form-item"
-            >
-              <Radio.Group>
-                <Radio value="user">User</Radio>
-                <Radio value="admin">Admin</Radio>
-              </Radio.Group>
             </Form.Item>
           </Form>
         </Modal>
@@ -116,4 +113,4 @@ const CreateUser = () => {
     );
   };
 
-export default CreateUser;
+export default CreateClient

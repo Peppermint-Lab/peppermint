@@ -9,6 +9,7 @@ import {
   Radio,
   RadioGroup,
 } from "rsuite";
+import { Select } from 'antd';
 import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
@@ -16,6 +17,8 @@ import { baseUrl } from "../utils";
 const NewTicket = () => {
   const history = useHistory();
 
+  const { Option } = Select;
+  
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
@@ -65,11 +68,20 @@ const NewTicket = () => {
         </FormGroup>
         <FormGroup>
           <ControlLabel>Company</ControlLabel>
-          <input
-            name="company"
-            type="text"
-            onChange={(e) => setCompany(e.target.value)}
-          />
+          <Select
+            showSearch
+            style={{ width: 200 }}
+            placeholder="Select a person"
+            optionFilterProp="children"
+            onChange={(e) => setName(e.target.value)}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            <Option value="jack">Jack</Option>
+            <Option value="lucy">Lucy</Option>
+            <Option value="tom">Tom</Option>
+          </Select>,
           <HelpBlock tooltip>Required</HelpBlock>
         </FormGroup>
         <FormGroup>

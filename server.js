@@ -19,6 +19,7 @@ require("./models/InternalUser");
 require("./models/Ticket");
 require("./models/todo");
 require("./models/notes");
+require('./models/client');
 
 // Routes
 const auth = require("./routes/auth");
@@ -26,6 +27,7 @@ const tickets = require("./routes/ticket");
 const data = require("./routes/data");
 const todo = require("./routes/todo");
 const note = require("./routes/notes");
+const client = require('./routes/client');
 
 // Express server libraries
 app.use(cors());
@@ -40,6 +42,7 @@ app.use("/api/v1/tickets", tickets);
 app.use("/api/v1/data", data);
 app.use("/api/v1/todo", todo);
 app.use("/api/v1/note", note);
+app.use("/api/v1/client", client);
 
 // Morgan API Logger
 if (process.env.NODE_ENV === "development") {
