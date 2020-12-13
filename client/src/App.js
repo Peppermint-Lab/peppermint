@@ -13,6 +13,7 @@ import Monitor from "./pages/Monitor";
 import Dash from './pages/admin/Dash';
 import SideNav from './component/admin/SideNav'
 import Analytics from './pages/admin/Analytics'
+import ClientList from './pages/admin/ClientList'
 
 import { baseUrl } from "./utils";
 
@@ -47,6 +48,7 @@ const Routing = () => {
             <div className="admin-main">
               <Route exact path="/admin/dashboard" component={Dash} />
               <Route exact path="/admin/Analytics" component={Analytics} />
+              <Route exact path="/admin/clientView" component={ClientList} />
             </div>
           </Route>
         </Route>

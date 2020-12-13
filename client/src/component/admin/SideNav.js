@@ -15,7 +15,7 @@ const { SubMenu } = Menu;
 
 const SideNav = () => {
   const handleClick = (e) => {
-    console.log("click ", e);
+    // console.log("click ", e);
   };
 
   return (
@@ -36,7 +36,10 @@ const SideNav = () => {
         </Menu.Item>
         <SubMenu key="sub3" title="Clients" icon={<SmileTwoTone />}>
           <Menu.Item key="12">
-            <CreateClient>Add new Client</CreateClient>
+            <CreateClient />
+          </Menu.Item>
+          <Menu.Item key="13">
+            <Link to='/admin/clientView'>Client List</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub5" icon={<IdcardTwoTone />} title="Authentication">
