@@ -1,4 +1,6 @@
-<h1 align="center">Welcome to Winter 👋 - Still in Alpha</h1>
+<h1 align="center">Welcome to Peppermint Ticket Management 🍵</h1>
+<p align="center">
+    <img src="logo.png" alt="Logo" >
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.2-blue.svg?cacheSeconds=2592000" />
   <a href="https://choosealicense.com/licenses/apache-2.0/" target="_blank">
