@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, Nav, Icon, Tooltip, Whisper, Modal } from "rsuite";
 import { useHistory } from "react-router-dom";
+
+import { Menu, Switch } from "antd";
 
 import Settings from "./Setings";
 import NewTicket from "./NewTicket";
 
 const Navigation = () => {
   const history = useHistory();
+  const { SubMenu } = Menu;
 
-  const tooltip = <Tooltip>Create a new Ticket here</Tooltip>;
-
-  const [ticketmodalIsOpen, setTicketIsOpen] = useState(false);
-  const [modalIsOpen, setIsOpen] = useState(false);
   const [checkAdmin, setCheckAdmin] = useState(false);
+  const [current, setCurrent] = useState();
+  const [isDark, setIsDark ] = useState('light');
 
-  function openModal() {
-    setIsOpen(true);
+  const changeTheme = (value) => {
+    setIsDark(value ? 'dark' : 'light')
   }
 
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openTicketModal() {
-    setTicketIsOpen(true);
-  }
-
-  function closeTicketModal() {
-    setTicketIsOpen(false);
-  }
+  const handleClick = (e) => {
+    //console.log('click ', e);
+    setCurrent(e.key);
+  };
 
   function isAdmin() {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -49,120 +42,90 @@ const Navigation = () => {
     if (checkAdmin) {
       return (
         <div>
-          <Navbar>
-            <Navbar.Header>
-              <p href="#" className="navbar-brand logo">
-                Project Winter
-              </p>
-            </Navbar.Header>
-            <Navbar.Body>
-              <Nav>
-                <Nav.Item
-                  icon={<Icon icon="home" />}
-                  onClick={() => history.push("/")}
-                >
-                  Home
-                </Nav.Item>
-
-                <Nav.Item onClick={() => history.push("/tickets")}>
-                  Tickets
-                </Nav.Item>
-
-                <Nav.Item
-                  onClick={() => history.push("/timesheet")}
-                  disabled={true}
-                >
-                  TimeSheet
-                </Nav.Item>
-
-                <Nav.Item
-                  onClick={() => history.push("/admin/dashboard")}
-                  disabled={false}
-                >
-                  Admin
-                </Nav.Item>
-              </Nav>
-
-              <Nav pullRight>
-                <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
-                  <Nav.Item>
-                    <NewTicket />
-                  </Nav.Item>
-                </Whisper>
-
-                <Nav.Item icon={<Icon icon="cog" />} onClick={openModal}>
-                  <Modal show={modalIsOpen} onHide={closeModal}>
-                    <h2>Settings</h2>
-                    <Modal.Body>
-                      <Settings />
-                    </Modal.Body>
-                  </Modal>
-                </Nav.Item>
-              </Nav>
-            </Navbar.Body>
-          </Navbar>
+          <Menu
+            mode="horizontal"
+            onClick={handleClick}
+            defaultSelectedKeys={['0']}
+            selectedKeys={current}
+            theme={isDark}
+          >
+            <Menu.Item key={6} disabled={true}>Project Winter</Menu.Item>
+            <Menu.Item key={0} onClick={() => history.push("/")}>
+              Home
+            </Menu.Item>
+            <Menu.Item key={1} onClick={() => history.push("/tickets")}>
+              Tickets
+            </Menu.Item>
+            <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
+              Timesheet
+            </Menu.Item>
+            <Menu.Item key={3} onClick={() => history.push("/admin/dashboard")}>
+              Admin
+            </Menu.Item>
+            <Menu.Item
+              key={5}
+              style={{ float: "right" }}
+            >
+              <Settings />
+            </Menu.Item>
+            <Menu.Item
+              key={4}
+              style={{ float: "right" }}
+              title='New Ticket'
+            >
+            <NewTicket />
+            </Menu.Item>
+            <Switch
+              style={{ float: 'right', marginTop: 13}}
+              checked={isDark === 'dark'}
+              onChange={changeTheme}
+              checkedChildren="Dark"
+              unCheckedChildren="Light"
+            />
+          </Menu>
         </div>
       );
     } else {
       return (
         <div>
-          <Navbar>
-            <Navbar.Header>
-              <p href="#" className="navbar-brand logo">
-                Project Winter
-              </p>
-            </Navbar.Header>
-            <Navbar.Body>
-              <Nav>
-                <Nav.Item
-                  icon={<Icon icon="home" />}
-                  onClick={() => history.push("/")}
-                >
-                  Home
-                </Nav.Item>
-
-                <Nav.Item onClick={() => history.push("/tickets")}>
-                  Tickets
-                </Nav.Item>
-
-                <Nav.Item
-                  onClick={() => history.push("/timesheet")}
-                  disabled={true}
-                >
-                  TimeSheet
-                </Nav.Item>
-              </Nav>
-
-              <Nav pullRight>
-                <Whisper placement="bottom" trigger="hover" speaker={tooltip}>
-                  <Nav.Item
-                    icon={<Icon icon="plus" />}
-                    onClick={openTicketModal}
-                  >
-                    <Modal
-                      show={ticketmodalIsOpen}
-                      onHide={closeTicketModal}
-                      keyboard={true}
-                    >
-                      <h2 style={{ textAlign: "center" }}>New ticket</h2>
-                      <Modal.Body>
-                        <NewTicket />
-                      </Modal.Body>
-                    </Modal>
-                  </Nav.Item>
-                </Whisper>
-
-                <Nav.Item icon={<Icon icon="cog" />} onClick={openModal}>
-                  <Modal show={modalIsOpen} onHide={closeModal}>
-                    <h2>Settings</h2>
-                    <Modal.Body>
-                      <Settings />
-                    </Modal.Body>
-                  </Modal>
-                </Nav.Item>
-              </Nav>
-            </Navbar.Body>
-          </Navbar>
+          <Menu
+            mode="horizontal"
+            onClick={handleClick}
+            selectedKeys={[current]}
+            theme={isDark}
+          >
+            <Menu.Item disabled={true}>Project Winter</Menu.Item>
+            <Menu.Item key={0} onClick={() => history.push("/")}>
+              Home
+            </Menu.Item>
+            <Menu.Item key={1} onClick={() => history.push("/tickets")}>
+              Tickets
+            </Menu.Item>
+            <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
+              Timesheet
+            </Menu.Item>
+            <Menu.Item
+              key={5}
+              onClick={() => history.push("/admin/dashboard")}
+              style={{ float: "right" }}
+            >
+              Settings
+            </Menu.Item>
+            <Menu.Item
+              key={4}
+              onClick={() => history.push("/admin/dashboard")}
+              style={{ float: "right" }}
+            >
+              <NewTicket />
+            </Menu.Item>
+            <Switch
+              style={{ float: 'right', marginTop: 15}}
+              checked={isDark === 'dark'}
+              onChange={changeTheme}
+              checkedChildren="Dark"
+              unCheckedChildren="Light"
+            />
+          </Menu>
         </div>
       );
     }

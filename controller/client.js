@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
                 number
             });
             client.save()
-            .then((client) => {
+            .then(() => {
                 res.status(200).json({message: "Client saved successfully"});
             })
             .catch((err) => {
@@ -34,10 +34,10 @@ exports.create = async (req, res) => {
 }
 
 exports.getAll = async (req, res) => {
-    console.log('getAll')
+    //c console.log('getAll')
     try {
         const client = await Client.find()
-        console.log(client)
+        // console.log(client)
         res.status(200).json({ client });
     } catch (error) {
         console.log(error)

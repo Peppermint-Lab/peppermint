@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Select, Modal, Form, Input, Radio, Space } from "antd";
-import { PlusSquareTwoTone } from "@ant-design/icons";
+import { Select, Modal, Form, Input, Radio, Space, Button } from "antd";
+// import { PlusSquareTwoTone } from "@ant-design/icons";
 // import { useHistory } from "react-router-dom";
 
 import { baseUrl } from "../utils";
 
 const NewTicket = () => {
-  // const history = useHistory();
 
   const { Option } = Select;
   const { TextArea } = Input;
@@ -20,8 +19,6 @@ const NewTicket = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
-  console.log(priority)
-
   const fetchClients = () => {
     fetch(`${baseUrl}/api/v1/client/allclients`, {
       method: "GET",
@@ -32,7 +29,6 @@ const NewTicket = () => {
       .then((res) => res.json())
       .then((res) => {
         if (res) {
-          // console.log(res)
           setOptions(res.client);
         }
       });
@@ -80,14 +76,7 @@ const NewTicket = () => {
 
   return (
     <div className="ticket-modal">
-      <p
-        type="primary"
-        onClick={() => {
-          setVisible(true);
-        }}
-      >
-        <PlusSquareTwoTone />
-      </p>
+      <Button type="text" size='small' key={0} onClick={() => { setVisible(true); }}>New Ticket</Button>
       <Modal
         visible={visible}
         title="Create a new Ticket"
