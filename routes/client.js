@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/authCheck');
 
-const {create, getAll} = require('../controller/client')
+const {create, getAll, deleteClient } = require('../controller/client')
 
 router
     .route('/create')
-    .post(create)
+    .post(auth, create)
 
 router
     .route('/allclients')
-    .get(getAll)
+    .get(auth, getAll)
+
+router
+    .route('/delete/:id')
+    .delete(deleteClient)
 
 module.exports = router;

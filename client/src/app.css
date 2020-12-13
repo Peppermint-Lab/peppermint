@@ -1,6 +1,5 @@
 * {
   margin: 0;
-  overflow: hidden; /* Hide scrollbars */
 }
 
 .navbar-brand {
@@ -13,7 +12,7 @@
 }
 
 .login-container {
-  margin: auto;
+  margin: 0 auto;
   width: 25%;
   margin-top: 200px;
   overflow: hidden; /* Hide scrollbars */

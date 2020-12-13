@@ -44,3 +44,31 @@ exports.getAll = async (req, res) => {
         return res.status(500)
     }
 }
+
+exports.updateClient = async (req, res) => {
+    console.log('Update Client Api')
+    console.log(req.params.id);
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+exports.deleteClient = async (req, res) => {
+    console.log('Delete Client')
+    try {
+        const client = await new mongoose.Types.ObjectId(req.params.id);
+        if(!client) {
+            return res.status(404).json({
+                success: false,
+                error: 'Client not found'
+            });
+        }
+        await Client.findOneAndDelete({ _id: req.params.id});
+        return res.status(201)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: error});
+    }
+}
