@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { Form, Input, Button } from "antd";
+import { useHistory, Link } from "react-router-dom";
+import { Form, Input, Button, Image } from "antd";
 import {
   UserOutlined,
   LockOutlined,
@@ -8,7 +8,9 @@ import {
   EyeTwoTone,
 } from "@ant-design/icons";
 
-import { GlobalContext } from "../Context/GlobalState";
+import logo from './logo.png'
+
+import { GlobalContext } from "../../Context/GlobalState";
 
 // import { baseUrl } from '../utils'
 
@@ -24,15 +26,18 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div >
       <Form
+        style={{ position: 'absolute'}}
         name="normal_login"
         className="login-form"
         initialValues={{
           remember: true,
         }}
       >
-        <h1>Member Login</h1>
+        <div className="logo-login">
+            <Image alt="logo" src={logo} width={300} />
+      </div>
         <Form.Item
           name="username"
           rules={[
@@ -70,9 +75,7 @@ const Login = () => {
           />
         </Form.Item>
         <Form.Item>
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
+          <Link>Forgot Password</Link>
         </Form.Item>
 
         <Form.Item>

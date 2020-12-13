@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
@@ -7,15 +7,13 @@ import "antd/dist/antd.css";
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 import Reg from "./pages/Reg";
 import Monitor from "./pages/Monitor";
 import Dash from './pages/admin/Dash';
 import SideNav from './component/admin/SideNav'
 import Analytics from './pages/admin/Analytics'
 import ClientList from './pages/admin/ClientList'
-
-import { baseUrl } from "./utils";
 
 // import { GlobalContext } from "./Context/GlobalState";
 

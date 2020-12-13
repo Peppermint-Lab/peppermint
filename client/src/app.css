@@ -1,5 +1,6 @@
 * {
   margin: 0;
+  overflow: hidden; /* Hide scrollbars */
 }
 
 .navbar-brand {
@@ -15,7 +16,7 @@
   margin: auto;
   width: 25%;
   margin-top: 200px;
-
+  overflow: hidden; /* Hide scrollbars */
 }
 
 .monitor-create {
