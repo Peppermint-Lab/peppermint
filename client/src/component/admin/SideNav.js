@@ -20,7 +20,7 @@ const SideNav = () => {
   };
 
   return (
-    <div>
+    <div className="sideNav">
       <Menu
         onClick={handleClick}
         style={{ width: 200, height: "90vh" }}

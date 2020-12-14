@@ -93,7 +93,7 @@ const ClientList = () => {
   ];
 
   return (
-    <div style={{ marginLeft: -30, marginTop: 5 }}>
+    <div style={{ marginTop: 5 }}>
       <Table dataSource={clientAll} columns={columns} Pagenation={false} />
     </div>
   );
