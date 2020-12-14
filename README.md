@@ -20,11 +20,12 @@
 
 - 💡 **Job Logging**
 - 📜 **Client History**
-- 💎 **Notes creation & Todo List**: Use react hooks API instead of traditional class API
+- 💎 **Notes creation & Todo List**:
 - 📐 **Admin Page**: Admin Dashboard for easy webUI changes and analytics
 - 📱 **Responsive**: Designed for variable screen sizes
-- ⚙️ **Docker-Ready**: Solid workflow to make your code healthy
+- ⚙️ **Docker-Ready**:
 - ✅ **Usage**: No barriers to use with complete documentation on how to complete tasks
+
 
 
 ## Installing locally for development
