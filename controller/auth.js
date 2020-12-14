@@ -22,7 +22,7 @@ exports.Signup = async (req, res) => {
           name,
         });
 
-       await user
+       user
           .save()
           .then((user) => {
             res.json({ message: "User saved successfully" });
