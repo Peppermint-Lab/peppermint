@@ -11,8 +11,6 @@ const OpenTicket = () => {
   const open = () => setModalOpen(true);
   const close = () => setModalOpen(false);
 
-  const { Column, HeaderCell, Cell } = Table;
-
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/tickets/openedTickets`, {
       method: "GET",
@@ -46,7 +44,7 @@ const OpenTicket = () => {
     },
     {
       title: "Client",
-      render: (data) => data.client.name,
+      render: (data) => data.name,
       key: "client",
       width: 150,
     },

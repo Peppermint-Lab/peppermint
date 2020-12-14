@@ -58,7 +58,7 @@ const UnissuedTicket = () => {
     },
     {
       title: "Client",
-      render: (data) => data.client.name,
+      render: (data) => data.name,
       key: "client",
       width: 150,
     },
