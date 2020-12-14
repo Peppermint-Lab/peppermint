@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const Note = mongoose.model("Notes");
 
-exports.saveNote = (req, res) => {
+exports.saveNote = async (req, res) => {
   console.log(req.body);
   try {
     const { text, title } = req.body;
     if ((!text, !title)) {
       return res.status(422).json({ error: "Please add some text" });
     } else {
-      const note = new Note({
+      const note = await new Note({
         title,
         note: text,
         createdBy: req.user._id,

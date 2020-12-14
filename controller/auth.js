@@ -22,7 +22,7 @@ exports.Signup = async (req, res) => {
           name,
         });
 
-        user
+       await user
           .save()
           .then((user) => {
             res.json({ message: "User saved successfully" });
@@ -91,7 +91,7 @@ exports.Token = async (req, res) => {
 
 exports.resetPasswordAdmin = async (req, res) => {
   try {
-    User.findOne({ _id : mongoose.Types.ObjectId(userId) })
+    await User.findOne({ _id : mongoose.Types.ObjectId(userId) })
     .then(user=>{
       if(!user){
           return res.status(422).json({error:"User doesnt exist"})
@@ -111,7 +111,7 @@ exports.resetPasswordAdmin = async (req, res) => {
 exports.resetPasswordUser = async (req, res) => {
   const { password } = req.body
   try {
-    User.findOne({ _id : mongoose.Types.ObjectId(req.user._id) })
+    await User.findOne({ _id : mongoose.Types.ObjectId(req.user._id) })
     .then(user=>{
       if(!user){
           return res.status(422).json({error:"User doesnt exist"})

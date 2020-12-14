@@ -4,7 +4,7 @@ const Todo = mongoose.model("Todo");
 exports.getTodos = async (req, res) => {
   console.log("getTodos");
   try {
-    Todo.find({ createdBy: req.user._id })
+  await Todo.find({ createdBy: req.user._id })
       .populate("createdBy", "_id name")
       .then((todo) => {
         res.json({todo});
@@ -22,7 +22,7 @@ exports.createTodo = async (req, res) => {
       console.log("No text found!");
       return res.status(422);
     } else {
-      const todo = new Todo({
+      const todo = await new Todo({
         text,
         createdBy: req.user._id,
       });
@@ -90,11 +90,11 @@ exports.markOneAsDone = async (req, res) => {
 exports.markAllAsDone = (req, res) => {
   console.log("markAllAsDone");
   try {
-    Todo.updateMany({ $set: { done: true } }, function (err, result) {
+    await Todo.updateMany({ $set: { done: true } }, function (err, result) {
       if (err) {
         res.send(err);
       } else {
-        Todo.find({ createdBy: req.user._id })
+        await Todo.find({ createdBy: req.user._id })
         .populate("createdBy", "_id name")
         .then((todo) => {
           res.json({todo});

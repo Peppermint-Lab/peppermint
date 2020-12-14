@@ -19,7 +19,7 @@ exports.create = async (req, res) => {
                 contactName,
                 number
             });
-            client.save()
+        await client.save()
             .then(() => {
                 res.status(200).json({message: "Client saved successfully"});
             })

@@ -3,9 +3,9 @@ const TicketSchema = mongoose.model("TicketSchema");
 const session = require('express-session');
 
 
-exports.countUnissuedTickets = (req, res) => {
+exports.countUnissuedTickets = async (req, res) => {
   // console.log("Data api HIT")
-  TicketSchema.count({ status: "unissued" })
+  await TicketSchema.count({ status: "unissued" })
     .then((result) => {
       res.json({ result });
     })
@@ -14,9 +14,9 @@ exports.countUnissuedTickets = (req, res) => {
     });
 };
 
-exports.countOpenedTickets = (req, res) => {
+exports.countOpenedTickets = async (req, res) => {
   // console.log("Data api HIT")
-  TicketSchema.count({ status: "issued", assignedto: req.user._id })
+  await TicketSchema.count({ status: "issued", assignedto: req.user._id })
     .then((result) => {
       res.json({ result });
     })
@@ -25,9 +25,9 @@ exports.countOpenedTickets = (req, res) => {
     });
 };
 
-exports.countCompletedTickets = (req, res) => {
+exports.countCompletedTickets = async (req, res) => {
   // console.log("Data api HIT")
-  TicketSchema.count({ status: "completed", assignedto: req.user._id })
+  await TicketSchema.count({ status: "completed", assignedto: req.user._id })
     .then((result) => {
       res.json({ result });
     })
