@@ -13,9 +13,9 @@ RUN apk add --no-cache make gcc g++ python && \
   npm rebuild bcrypt --build-from-source && \
   apk del make gcc g++ python
 
-RUN npm install --silent --production
+RUN npm install --silent --production && npm cache clean --force
 # If you are building your code for production
-# RUN npm ci --only=production
+RUN npm ci --only=production
 RUN npm uninstall bcrypt
 RUN npm install bcrypt
 
