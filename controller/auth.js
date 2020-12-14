@@ -89,8 +89,51 @@ exports.Token = async (req, res) => {
   }
 };
 
-exports.userRes = async (req, res) => {
-  const user = await User.findById(req.user._id);
-  console.log(user)
-  res.status(200).setHeader("Content-Type", 'application/json').json(user);
-};
+exports.resetPasswordAdmin = async (req, res) => {
+  try {
+    User.findOne({ _id : mongoose.Types.ObjectId(userId) })
+    .then(user=>{
+      if(!user){
+          return res.status(422).json({error:"User doesnt exist"})
+      }
+      bcrypt.hash(password,12).then(hashedpassword=>{
+        user.password = hashedpassword
+        user.save()
+        res.status(201).json({message:"password updated success"})
+        console.log('Users Password updated')
+     })}
+    )} catch (error) {
+    console.log(error)
+    res.status(500)
+  }
+}
+
+exports.resetPasswordUser = async (req, res) => {
+  const { password } = req.body
+  try {
+    User.findOne({ _id : mongoose.Types.ObjectId(req.user._id) })
+    .then(user=>{
+      if(!user){
+          return res.status(422).json({error:"User doesnt exist"})
+      }
+      bcrypt.hash(password,12).then(hashedpassword=>{
+        user.password = hashedpassword
+        user.save()
+        res.status(201).json({message:"password updated success"})
+        console.log('Users Password updated')
+     })}
+    )
+  } catch (error) {
+    console.log(error)
+    res.status(500)
+  }
+}
+
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json({users})
+  } catch (error) {
+    console.log(error)
+  }
+}

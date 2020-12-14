@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 
 import CreateUser from "./CreateUser";
 import CreateClient from "./CreateClient";
+import ResetPassword from "./ResetPassword";
 
 const { SubMenu } = Menu;
 
@@ -44,10 +45,12 @@ const SideNav = () => {
         </SubMenu>
         <SubMenu key="sub5" icon={<IdcardTwoTone />} title="Authentication">
           <Menu.Item key="9">
-            <CreateUser>Add new user</CreateUser>
+            <CreateUser />
           </Menu.Item>
-          <Menu.Item key="10">Edit Roles</Menu.Item>
-          <Menu.Item key="11">Reset Password</Menu.Item>
+          <Menu.Item key='13'>
+            <ResetPassword />
+          </Menu.Item>
+          <Menu.Item key="10">Edit users roles</Menu.Item>
         </SubMenu>
       </Menu>
     </div>
