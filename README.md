@@ -106,4 +106,3 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2020 [Jack Andrews](https://github.com/jwandrews99).<br />
-This project is [apache--2.0](https://choosealicense.com/licenses/apache-2.0/) licensed.
