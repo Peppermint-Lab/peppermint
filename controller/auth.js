@@ -189,5 +189,24 @@ exports.edit = async (req, res) => {
     console.log("Updated record");
   } catch (error) {
     console.log(error)
+    return res.status(500).json({ message: error});
+  }
+}
+
+exports.deleteUser = async (req, res) => {
+  console.log('Delete User')
+  try {
+    const user = await new mongoose.Types.ObjectId(req.params.id);
+        if(!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User not found'
+            });
+        }
+        await User.findOneAndDelete({ _id : req.params.id});
+        return res.status(201)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: error});
   }
 }

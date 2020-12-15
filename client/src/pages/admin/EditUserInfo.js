@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Space, Table, Button } from "antd";
+import { Space, Table, Button, Popconfirm  } from "antd";
 
 import { baseUrl } from "../../utils";
 import ResetPassword from "../../component/admin/ResetPassword";
@@ -22,6 +22,23 @@ const EditUserInfo = () => {
           setUsers(res.users);
         }
       });
+  };
+
+  const deleteClient = async (client) => {
+    const id = client._id;
+    console.log(id)
+    try {
+      await fetch(`${baseUrl}/api/v1/auth/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }).then((response) => response.json());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -52,7 +69,10 @@ const EditUserInfo = () => {
           <Button>
               <EditInfo user={record}/>
           </Button>
-          <Button>Delete</Button>
+          <Popconfirm title="Are you sure you want to delete?"
+          onConfirm={() => deleteClient(record)}>
+            <Button>Delete</Button>
+          </Popconfirm>
           <ResetPassword />
         </Space>
       ),

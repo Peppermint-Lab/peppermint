@@ -12,7 +12,8 @@ const {
   resetPasswordUser,
   changeRole,
   getUserById,
-  edit
+  edit,
+  deleteUser
 } = require("../controller/auth");
 
 router.route("/Login").post(Login);
@@ -32,5 +33,7 @@ router.route("/changeRole").put(mid, changeRole);
 router.route('/getById').post(mid, getUserById);
 
 router.route('/edit').put(mid, edit);
+
+router.route('/delete/:id').delete(mid, deleteUser);
 
 module.exports = router;

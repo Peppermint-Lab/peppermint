@@ -48,7 +48,7 @@ const Routing = () => {
               <Route exact path="/admin/dashboard" component={Dash} />
               <Route exact path="/admin/Analytics" component={Analytics} />
               <Route exact path="/admin/clientView" component={ClientList} />
-              <Route exact='/admin/viewUsers' component={EditUserInfo} />
+              <Route exact path='/admin/viewUsers' component={EditUserInfo} />
             </div>
           </Route>
         </Route>
