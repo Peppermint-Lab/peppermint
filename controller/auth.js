@@ -22,7 +22,7 @@ exports.Signup = async (req, res) => {
           name,
         });
 
-       await user
+       user
           .save()
           .then((user) => {
             res.json({ message: "User saved successfully" });
@@ -135,5 +135,27 @@ exports.getUsers = async (req, res) => {
     res.status(200).json({users})
   } catch (error) {
     console.log(error)
+  }
+}
+
+exports.changeRole = async (req, res) => {
+  console.log(req.body.role)
+  const role = req.body.role
+  const user = req.body.user
+
+  try {
+    await User.findByIdAndUpdate(
+      { _id : mongoose.Types.ObjectId(user)},
+      {
+        $set: { role : role}
+      }, {
+        new : true
+      }
+    ).exec();
+    console.log("Updated record");
+    return res.status(200).json({ message: 'User Role Updated'})
+  } catch (error) {
+    console.log(error)
+    res.status(500)
   }
 }

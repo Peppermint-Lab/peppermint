@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Menu, Switch } from "antd";
+import { Menu, Switch, Button, Modal, Input  } from "antd";
+import { EditTwoTone } from "@ant-design/icons";
 
-import Settings from "./Setings";
 import NewTicket from "./NewTicket";
+
+import { baseUrl } from "../utils";
 
 const Navigation = () => {
   const history = useHistory();
@@ -12,11 +14,23 @@ const Navigation = () => {
 
   const [checkAdmin, setCheckAdmin] = useState(false);
   const [current, setCurrent] = useState();
-  const [isDark, setIsDark ] = useState('light');
+  const [isDark, setIsDark] = useState("light");
+
+  const [visible, setVisible] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const onCancel = () => {
+    setVisible(false);
+  };
+
+  function logout() {
+    localStorage.clear();
+    history.push("/login");
+  }
 
   const changeTheme = (value) => {
-    setIsDark(value ? 'dark' : 'light')
-  }
+    setIsDark(value ? "dark" : "light");
+  };
 
   const handleClick = (e) => {
     //console.log('click ', e);
@@ -38,6 +52,19 @@ const Navigation = () => {
     isAdmin();
   }, []);
 
+  const resetPassword = async () => {
+    await fetch(`${baseUrl}/api/v1/auth/resetPassword/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        password,
+      }),
+    }).then((res) => res.json);
+  };
+
   const Render = () => {
     if (checkAdmin) {
       return (
@@ -45,11 +72,13 @@ const Navigation = () => {
           <Menu
             mode="horizontal"
             onClick={handleClick}
-            defaultSelectedKeys={['0']}
+            defaultSelectedKeys={["0"]}
             selectedKeys={current}
             theme={isDark}
           >
-            <Menu.Item key={6} disabled={true}>Project Winter</Menu.Item>
+            <Menu.Item key={6} disabled={true}>
+              Project Winter
+            </Menu.Item>
             <Menu.Item key={0} onClick={() => history.push("/")}>
               Home
             </Menu.Item>
@@ -62,22 +91,41 @@ const Navigation = () => {
             <Menu.Item key={3} onClick={() => history.push("/admin/dashboard")}>
               Admin
             </Menu.Item>
-            <Menu.Item
-              key={5}
-              style={{ float: "right" }}
-            >
-              <Settings />
+            <Menu.Item key={5} style={{ float: "right" }} onClick={() => {
+                  setVisible(true);
+                }}>
+              Settings
+              <Modal
+                keyboard={true}
+                visible={visible}
+                mask={true}
+                title="Settings"
+                okText="Exit"
+                onOk={onCancel}
+                onCancel={onCancel}
+              >
+                <Input
+                  placeholder="Enter new Password ... "
+                  style={{ width: 200 }}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+                <Button
+                  onClick={resetPassword}
+                  style={{ marginLeft: 10, margin: 5 }}
+                >
+                  <EditTwoTone />
+                </Button>
+                <Button onClick={logout}>Logout</Button>
+              </Modal>
             </Menu.Item>
-            <Menu.Item
-              key={4}
-              style={{ float: "right" }}
-              title='New Ticket'
-            >
-            <NewTicket />
+            <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
+              <NewTicket />
             </Menu.Item>
             <Switch
-              style={{ float: 'right', marginTop: 13}}
-              checked={isDark === 'dark'}
+              style={{ float: "right", marginTop: 13 }}
+              checked={isDark === "dark"}
               onChange={changeTheme}
               checkedChildren="Dark"
               unCheckedChildren="Light"
@@ -119,8 +167,8 @@ const Navigation = () => {
               <NewTicket />
             </Menu.Item>
             <Switch
-              style={{ float: 'right', marginTop: 15}}
-              checked={isDark === 'dark'}
+              style={{ float: "right", marginTop: 15 }}
+              checked={isDark === "dark"}
               onChange={changeTheme}
               checkedChildren="Dark"
               unCheckedChildren="Light"

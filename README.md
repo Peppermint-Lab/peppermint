@@ -3,9 +3,6 @@
     <img src="logo.png" alt="Logo" >
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.2-blue.svg?cacheSeconds=2592000" />
-  <a href="https://choosealicense.com/licenses/apache-2.0/" target="_blank">
-    <img alt="License: apache--2.0" src="https://img.shields.io/badge/License-apache--2.0-yellow.svg" />
-  </a>
   <a href="https://twitter.com/andrewsjack18 " target="_blank">
     <img alt="Twitter:  andrewsjack18" src="https://img.shields.io/twitter/follow/andrewsjack18 .svg?style=social" />
   </a>
@@ -109,4 +106,3 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2020 [Jack Andrews](https://github.com/jwandrews99).<br />
-This project is [apache--2.0](https://choosealicense.com/licenses/apache-2.0/) licensed.

@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import CreateUser from "./CreateUser";
 import CreateClient from "./CreateClient";
 import ResetPassword from "./ResetPassword";
+import ChangeRole from "./ChangeRole";
 
 const { SubMenu } = Menu;
 
@@ -50,7 +51,9 @@ const SideNav = () => {
           <Menu.Item key='13'>
             <ResetPassword />
           </Menu.Item>
-          <Menu.Item key="10">Edit users roles</Menu.Item>
+          <Menu.Item key="10">
+            <ChangeRole />
+          </Menu.Item>
         </SubMenu>
       </Menu>
     </div>

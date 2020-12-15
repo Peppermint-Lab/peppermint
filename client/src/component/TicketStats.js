@@ -30,7 +30,7 @@ const Open = () => {
   return (
     <div>
       <div className="inside-issue-con">
-        <h4>Open Issues - {data}</h4>
+        <h6>Open Issues - {data}</h6>
       </div>
       <Divider />
     </div>
@@ -64,7 +64,7 @@ const Unissued = () => {
   return (
     <div>
       <div className="inside-issue-con">
-        <h4>Unallocated Issues - {data}</h4>
+        <h6>Unallocated Issues - {data}</h6>
       </div>
       <Divider />
     </div>
@@ -98,7 +98,7 @@ const Completed = () => {
   return (
     <div>
       <div className="inside-issue-con">
-        <h4>Completed Tickets - {data}</h4>
+        <h6>Completed Tickets - {data}</h6>
       </div>
     </div>
   );

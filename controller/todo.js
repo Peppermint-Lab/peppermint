@@ -87,14 +87,14 @@ exports.markOneAsDone = async (req, res) => {
   }
 };
 
-exports.markAllAsDone = (req, res) => {
+exports.markAllAsDone = async (req, res) => {
   console.log("markAllAsDone");
   try {
     await Todo.updateMany({ $set: { done: true } }, function (err, result) {
       if (err) {
         res.send(err);
       } else {
-        await Todo.find({ createdBy: req.user._id })
+        Todo.find({ createdBy: req.user._id })
         .populate("createdBy", "_id name")
         .then((todo) => {
           res.json({todo});

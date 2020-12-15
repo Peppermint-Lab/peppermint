@@ -4,7 +4,7 @@ version: '3.1'
 services:
 
   mongo:
-    container_name: api-db
+    container_name: db
     image: mongo:4
     restart: always
     volumes:
@@ -14,7 +14,7 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: 'admin1234'
 
   api:
-    container_name: api
+    container_name: peppermint-api
     build: .
     ports:
       - 5000:5000
@@ -30,7 +30,7 @@ services:
     build: ./client
     ports:
     - "80:80"
-    container_name: client
+    container_name: peppermint-client
 
 volumes:
   npm_cache:
