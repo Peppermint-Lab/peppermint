@@ -60,7 +60,11 @@ exports.deleteNote = async (req, res) => {
 exports.updateNote = async (req, res) => {
   console.log(req.body)
   try {
-    await Note.findByIdAndUpdate({_id})
+    await Note.findByIdAndUpdate({_id: req.body.id }, 
+    { $set: { note: req.body.note } },
+    { new: true }).exec();
+    console.log('Updated Note')
+    res.status(201).json({ success: true, message: 'Note Updated'})
   } catch (error) {
     console.log(error)
   }
