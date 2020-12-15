@@ -3,7 +3,7 @@ const router = express.Router();
 
 const mid = require('../middleware/authCheck');
 
-const {Login, Signup, Token, getUsers, resetPasswordAdmin, resetPasswordUser } = require('../controller/auth')
+const {Login, Signup, Token, getUsers, resetPasswordAdmin, resetPasswordUser, changeRole } = require('../controller/auth')
 
 router
     .route('/Login')
@@ -28,5 +28,9 @@ router
 router
     .route('/resetPassword/user')
     .post(mid, resetPasswordUser)
+
+router 
+    .route('/changeRole')
+    .put(mid, changeRole)
 
 module.exports = router;
