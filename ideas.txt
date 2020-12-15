@@ -1,9 +1,0 @@
-SASS app - Provides a service
-Free on launch / Self Hosted
-ticket system / uptime monitor / Inventory System / Wiki
-
-
-Useful infomation 
-https://dev.to/codicacom/how-to-create-a-progressive-web-application-with-react-539o?utm_source=digest_mailer&utm_medium=email&utm_campaign=digest_email
-https://www.reddit.com/r/webdev/comments/jq5svg/how_i_got_better_at_web_design_as_a_web_developer/
-https://www.sitepoint.com/local-authentication-using-passport-node-js/
