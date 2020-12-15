@@ -3,7 +3,7 @@ import { Divider, Button, Tooltip, Skeleton } from "antd";
 import { CheckCircleTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
 // import { baseUrl } from "../utils";
-import { GlobalContext } from "../Context/GlobalState";
+import { GlobalContext } from "../../Context/GlobalState";
 
 const ListTodo = () => {
   const { todos, getTodos, deleteTodo, allDone, markDone } = useContext(

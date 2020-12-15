@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Tag, Space, Button } from "antd";
 import Popup from "reactjs-popup";
 
-import { baseUrl } from "../utils.js";
+import { baseUrl } from "../../utils.js";
 
 const OpenTicket = () => {
   const [modalOpen, setModalOpen] = useState(false);

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Menu, Switch, Button, Modal, Input  } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
-import NewTicket from "./NewTicket";
+import NewTicket from "./ticket/NewTicket";
 
 import { baseUrl } from "../utils";
 

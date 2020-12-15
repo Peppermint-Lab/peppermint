@@ -4,8 +4,8 @@ import { useHistory } from "react-router-dom";
 
 // import { baseUrl } from "../utils";
 
-import OpenTickets from "../component/OpenTicket";
-import UnissuedTickets from "../component/UnissuedTicket";
+import OpenTickets from "../component/ticket/OpenTicket";
+import UnissuedTickets from "../component/ticket/UnissuedTicket";
 
 const Ticket = () => {
   const history = useHistory();

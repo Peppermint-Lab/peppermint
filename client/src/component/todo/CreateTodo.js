@@ -3,7 +3,7 @@ import { Input, Button } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
 // import { baseUrl } from "../utils";
-import { GlobalContext } from "../Context/GlobalState";
+import { GlobalContext } from "../../Context/GlobalState";
 
 const CreateTodo = () => {
   const [text, setText] = useState("");

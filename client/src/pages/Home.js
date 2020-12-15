@@ -12,10 +12,10 @@ import Popup from "reactjs-popup";
 import { useHistory } from "react-router-dom";
 
 import Navigation from "../component/Navigation";
-import CreateTodo from "../component/CreateTodo";
-import ListTodo from "../component/ListTodo";
-import TicketStats from "../component/TicketStats";
-import ListNote from "../component/ListNote";
+import CreateTodo from "../component/todo/CreateTodo";
+import ListTodo from "../component/todo/ListTodo";
+import TicketStats from "../component/ticket/TicketStats";
+import ListNote from "../component/note/ListNote";
 
 // import { baseUrl } from "../utils";
 import { GlobalContext } from "../Context/GlobalState";

@@ -1,12 +1,12 @@
-import React, { useEffect, useContext, useState } from "react";
-import { Button, Skeleton, Modal, Input, Table, Space, Popconfirm } from "antd";
-import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
+import React, { useEffect, useContext } from "react";
+import { Button, Table, Space, Popconfirm } from "antd";
+import { DeleteTwoTone  } from "@ant-design/icons";
 
-// import ViewNote from "./note/ViewNote";
 
-import { baseUrl } from "../utils";
-import { GlobalContext } from "../Context/GlobalState";
-import EditNote from "./note/EditNote";
+//import { baseUrl } from "../utils";
+
+import { GlobalContext } from "../../Context/GlobalState";
+import EditNote from "./EditNote";
 
 const ListNote = () => {
   const { notes, getNotes, deleteNote } = useContext(GlobalContext);
