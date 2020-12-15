@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Input, Select, Space } from "antd";
+import { Modal, Input, Select, Space, Button } from "antd";
 
 import { baseUrl } from "../../utils";
 
@@ -58,14 +58,14 @@ const ResetPassword = () => {
 
   return (
     <div>
-      <p
-        type="primary"
+      <Button
+        type="default"
         onClick={() => {
           setVisible(true);
         }}
       >
-        Reset users password
-      </p>
+        Reset password
+      </Button>
       <Modal
         visible={visible}
         title="Reset users password"

@@ -138,6 +138,18 @@ exports.getUsers = async (req, res) => {
   }
 }
 
+exports.getUserById = async (req, res) => {
+  const id = req.body.user
+  console.log(req.body)
+  try {
+    const user = await User.findOne({ _id: id})
+    res.status(200).json({user})
+  } catch (error) {
+    console.log(error)
+    res.status(404).json({ message: 'User not found'})
+  }
+}
+
 exports.changeRole = async (req, res) => {
   console.log(req.body.role)
   const role = req.body.role
@@ -157,5 +169,25 @@ exports.changeRole = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500)
+  }
+}
+
+exports.edit = async (req, res) => {
+  console.log(req.body)
+  const n = req.body.name
+  const e = req.body.email
+  const r = req.body.role
+
+  try {
+    await User.findByIdAndUpdate(
+      { _id: mongoose.Types.ObjectId(req.body.id) },
+      {
+        $set: { name: n, role: r, email : e },
+      },
+      { new: true }
+    ).exec();
+    console.log("Updated record");
+  } catch (error) {
+    console.log(error)
   }
 }
