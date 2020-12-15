@@ -56,3 +56,12 @@ exports.deleteNote = async (req, res) => {
         return res.status(500);
     }
 }
+
+exports.updateNote = async (req, res) => {
+  console.log(req.body)
+  try {
+    await Note.findByIdAndUpdate({_id})
+  } catch (error) {
+    console.log(error)
+  }
+}

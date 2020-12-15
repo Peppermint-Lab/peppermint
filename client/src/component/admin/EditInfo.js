@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Input, Space, Radio, Row } from "antd";
 
 import { baseUrl } from "../../utils";

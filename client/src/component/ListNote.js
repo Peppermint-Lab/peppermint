@@ -1,24 +1,50 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Button, Skeleton } from "antd";
-import { DeleteTwoTone } from "@ant-design/icons";
-import Popup from "reactjs-popup";
+import React, { useEffect, useContext, useState } from "react";
+import { Button, Skeleton, Modal, Input } from "antd";
+import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 
-//import { baseUrl } from "../utils";
+// import ViewNote from "./note/ViewNote";
+
+import { baseUrl } from "../utils";
 import { GlobalContext } from "../Context/GlobalState";
 
 const ListNote = () => {
   const { notes, getNotes, deleteNote } = useContext(GlobalContext);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [note, setNote] = useState("");
+  const [id, setId] = useState('');
 
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
+  const { TextArea } = Input;
 
-  const openView = () => setIsViewOpen(true);
-  const viewClose = () => setIsViewOpen(false);
+  console.log(note)
+  console.log(id)
 
-  // console.log(notes)
+  const postData = async () => {
+    await fetch(`${baseUrl}/api/v1/note/updateNote`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        note,
+        id
+      }),
+    }).then((res) => res.json);
+  };
+
+  const onCreate = async (e) => {
+    e.stopPropagation();
+    setVisible(false);
+    await postData();
+  };
+
+  const onCancel = (e) => {
+    e.stopPropagation();
+    setVisible(false);
+    setId();
+    setNote();
+  };
 
   useEffect(() => {
     getNotes();
@@ -29,10 +55,9 @@ const ListNote = () => {
     <div>
       {notes ? (
         notes.map((item) => {
-          // console.log(item)
           return (
             <div key={item._id} className="todo-list">
-              <ul>
+              <ul >
                 <li style={{ marginLeft: -35 }}>
                   {item.title}
                   <Button
@@ -45,36 +70,28 @@ const ListNote = () => {
                   <Button
                     size="xs"
                     style={{ float: "right", marginLeft: 5 }}
-                    onClick={open}
+                    onClick={() => {
+                      setVisible(true);
+                      setId(item._id)
+                      setNote(item.note)
+                    }}
                   >
-                    Edit
-                    <Popup modal open={isOpen} closeOnEscape={true}>
-                      <div className="modal">
-                        <Button className="close" onClick={close}>
-                          &times;
-                        </Button>
-                      </div>
-                    </Popup>
-                  </Button>
-                  <Button
-                    size="xs"
-                    style={{ float: "right", marginLeft: 5 }}
-                    onClick={openView}
-                  >
-                    View
-                    <Popup modal open={isViewOpen} closeOnEscape={true}>
-                      <div className="modal">
-                        <Button className="close" onClick={viewClose}>
-                          &times;
-                        </Button>
-                        <div className="header">
-                          <h3>{item.title}</h3>
-                        </div>
-                        <div className="content">
-                          <h5>{item.note}</h5>
-                        </div>
-                      </div>
-                    </Popup>
+                    <EditTwoTone />
+                    <Modal
+                      keyboard={true}
+                      visible={visible}
+                      title={item.title}
+                      okText="Update"
+                      cancelText="Cancel"
+                      onCancel={onCancel}
+                      onOk={onCreate}
+                    >
+                      <TextArea
+                        defaultValue={item.note}
+                        onChange={(e) => setNote(e.target.value)}
+                        rows={5}
+                      />
+                    </Modal>
                   </Button>
                 </li>
               </ul>
