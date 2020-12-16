@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Menu, Switch, Button, Modal, Input  } from "antd";
+import { Menu, Switch, Button, Modal, Input, Layout } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
 import NewTicket from "./ticket/NewTicket";
@@ -11,6 +11,7 @@ import { baseUrl } from "../utils";
 const Navigation = () => {
   const history = useHistory();
   const { SubMenu } = Menu;
+  const { Header, Content, Footer, Sider } = Layout;
 
   const [checkAdmin, setCheckAdmin] = useState(false);
   const [current, setCurrent] = useState();
@@ -69,68 +70,75 @@ const Navigation = () => {
     if (checkAdmin) {
       return (
         <div>
-          <Menu
-            mode="horizontal"
-            onClick={handleClick}
-            defaultSelectedKeys={["0"]}
-            selectedKeys={current}
-            theme={isDark}
-          >
-            <Menu.Item key={6} disabled={true}>
-              Project Winter
-            </Menu.Item>
-            <Menu.Item key={0} onClick={() => history.push("/")}>
-              Home
-            </Menu.Item>
-            <Menu.Item key={1} onClick={() => history.push("/tickets")}>
-              Tickets
-            </Menu.Item>
-            <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
-              Timesheet
-            </Menu.Item>
-            <Menu.Item key={3} onClick={() => history.push("/admin/dashboard")}>
-              Admin
-            </Menu.Item>
-            <Menu.Item key={5} style={{ float: "right" }} onClick={() => {
-                  setVisible(true);
-                }}>
-              Settings
-              <Modal
-                keyboard={true}
-                visible={visible}
-                mask={true}
-                title="Settings"
-                okText="Exit"
-                onOk={onCancel}
-                onCancel={onCancel}
-              >
-                <Input
-                  placeholder="Enter new Password ... "
-                  style={{ width: 200 }}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                />
-                <Button
-                  onClick={resetPassword}
-                  style={{ marginLeft: 10, margin: 5 }}
+          <Layout>
+            <Menu
+              mode="horizontal"
+              onClick={handleClick}
+              defaultSelectedKeys={["0"]}
+              selectedKeys={current}
+            >
+              <Menu.Item key="Home Page">
+                <a
+                  href="https://pmint.dev/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <EditTwoTone />
-                </Button>
-                <Button onClick={logout}>Logout</Button>
-              </Modal>
-            </Menu.Item>
-            <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
-              <NewTicket />
-            </Menu.Item>
-            <Switch
-              style={{ float: "right", marginTop: 13 }}
-              checked={isDark === "dark"}
-              onChange={changeTheme}
-              checkedChildren="Dark"
-              unCheckedChildren="Light"
-            />
-          </Menu>
+                  Peppermint 🍵
+                </a>
+              </Menu.Item>
+              <Menu.Item key={0} onClick={() => history.push("/")}>
+                Home
+              </Menu.Item>
+              <Menu.Item key={1} onClick={() => history.push("/tickets")}>
+                Tickets
+              </Menu.Item>
+              <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
+                Timesheet
+              </Menu.Item>
+              <Menu.Item
+                key={3}
+                onClick={() => history.push("/admin/dashboard")}
+              >
+                Admin
+              </Menu.Item>
+              <Menu.Item
+                key={5}
+                style={{ float: "right" }}
+                onClick={() => {
+                  setVisible(true);
+                }}
+              >
+                Settings
+                <Modal
+                  keyboard={true}
+                  visible={visible}
+                  mask={true}
+                  title="Settings"
+                  okText="Exit"
+                  onOk={onCancel}
+                  onCancel={onCancel}
+                >
+                  <Input
+                    placeholder="Enter new Password ... "
+                    style={{ width: 200 }}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                  />
+                  <Button
+                    onClick={resetPassword}
+                    style={{ marginLeft: 10, margin: 5 }}
+                  >
+                    <EditTwoTone />
+                  </Button>
+                  <Button onClick={logout}>Logout</Button>
+                </Modal>
+              </Menu.Item>
+              <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
+                <NewTicket />
+              </Menu.Item>
+            </Menu>
+          </Layout>
         </div>
       );
     } else {
