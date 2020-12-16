@@ -95,6 +95,9 @@ const Navigation = () => {
               <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
                 Timesheet
               </Menu.Item>
+              <Menu.Item key={3} onClick={() => history.push("/history")}>
+                History
+              </Menu.Item>
               <Menu.Item
                 key={3}
                 onClick={() => history.push("/admin/dashboard")}
@@ -148,7 +151,6 @@ const Navigation = () => {
             mode="horizontal"
             onClick={handleClick}
             selectedKeys={[current]}
-            theme={isDark}
           >
             <Menu.Item disabled={true}>Project Winter</Menu.Item>
             <Menu.Item key={0} onClick={() => history.push("/")}>
@@ -160,6 +162,9 @@ const Navigation = () => {
             <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
               Timesheet
             </Menu.Item>
+            <Menu.Item key={3} onClick={() => history.push("/history")}>
+                History
+              </Menu.Item>
             <Menu.Item
               key={5}
               onClick={() => history.push("/admin/dashboard")}
