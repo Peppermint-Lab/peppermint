@@ -14,9 +14,11 @@ exports.create = async (req, res) => {
         }
         const newsletter = await new News({
             title,
-            text
+            text,
+            createdBY: req.user.id,
+            active
         });
-        newsletter.save().then((result) => {
+        newsletter.save().then((newsletter) => {
             res.status(200).json({ failed: false, newsletter })
         });
     } catch (error) {
@@ -27,12 +29,11 @@ exports.create = async (req, res) => {
 
 // Get All newsletters
 exports.getNewsletters = async (req, res) => {
-    console.log('Get all users')
+    console.log('Get all newsletters')
     try {
-        await News.find({ active : true })
-        .then((newsletters) => {
-            res.json({ newsletters })
-        })
+        const newsletters = await News.find({ active : true })
+        res.json({ newsletters })
+        console.log(newsletters)
         return res.status(200);
     } catch (error) {
         console.log(error)

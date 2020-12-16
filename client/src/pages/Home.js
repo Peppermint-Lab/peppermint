@@ -19,6 +19,7 @@ import ListNote from "../component/note/ListNote";
 
 // import { baseUrl } from "../utils";
 import { GlobalContext } from "../Context/GlobalState";
+import ListNewsletter from "../component/newsletter/ListNewsletter";
 
 const Todo = () => {
   return (
@@ -114,6 +115,7 @@ const CompanyNews = () => {
     <div className="News-Container">
       <h4>Latest News</h4>
       <Divider />
+      <ListNewsletter />
     </div>
   );
 };
