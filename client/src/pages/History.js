@@ -5,29 +5,26 @@ import { SearchOutlined } from "@ant-design/icons";
 import { baseUrl } from "../utils";
 
 const History = () => {
+  const [data, setData] = useState([]);
 
-    const [data, setData ] = useState([]);
+  const fetchJobs = async () => {
+    await fetch(`${baseUrl}/api/v1/tickets/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        // console.log(result.tickets);
+        setData(result.tickets);
+      });
+  };
 
-    const fetchJobs = async () => {
-        await fetch(`${baseUrl}/api/v1/tickets/all`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
-          })
-            .then((res) => res.json())
-            .then((result) => {
-              // console.log(result.tickets);
-              setData(result.tickets);
-            });
-    }
-
-    useEffect(() => {
-        fetchJobs();
-    }, [])
-
-    console.log(data)
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   const columns = [
     {
@@ -38,7 +35,7 @@ const History = () => {
     },
     {
       title: "Client",
-      dataIndex: ['client', 'name'],
+      dataIndex: ["client", "name"],
       key: "client",
       width: "20%",
     },
@@ -46,29 +43,48 @@ const History = () => {
       title: "email",
       dataIndex: "email",
       key: "email",
-      width: '15%'
+      width: "15%",
     },
     {
-        title: "Issue",
-        dataIndex: "issue",
-        key: "issue",
-        width: "20%",
-      },
-    {
-        title: "status",
-        dataIndex: "status",
-        key: "status",
+      title: "Issue",
+      dataIndex: "issue",
+      key: "issue",
+      width: "20%",
     },
     {
-        title: "Engineer",
-        dataIndex: ["assignedto", 'name'],
-        key: "assignedTo",
+      title: "status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: "Engineer",
+      dataIndex: ["assignedto", "name"],
+      key: "assignedTo",
     },
   ];
 
   return (
     <div>
-      <Table dataSource={data} columns={columns} />
+      <Row>
+        <h3 className="history-title">Filter through all jobs</h3>
+      </Row>
+      <div className="history-input">
+        <Row>
+          <Space>
+            <Input
+              placeholder="Name"
+              style={{ width: 250 }}
+            />
+            <Input placeholder="Client" style={{ width: 250 }} />
+            <Input placeholder="Email" style={{ width: 250 }} />
+            <Input placeholder="Engineer" style={{ width: 250 }} />
+            <Input placeholder="Status" style={{ width: 250 }} />
+          </Space>
+        </Row>
+      </div>
+      <div style={{ marginTop: 50 }}>
+        <Table dataSource={data} columns={columns} />
+      </div>
     </div>
   );
 };

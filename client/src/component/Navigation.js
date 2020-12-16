@@ -99,7 +99,7 @@ const Navigation = () => {
                 History
               </Menu.Item>
               <Menu.Item
-                key={3}
+                key={6}
                 onClick={() => history.push("/admin/dashboard")}
               >
                 Admin
