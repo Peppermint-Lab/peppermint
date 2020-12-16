@@ -14,10 +14,10 @@ router
 
 router
     .route('/delete/:id')
-    .delete(deleteClient)
+    .delete(auth, deleteClient)
 
 router
-    .route('/update/:id')
-    .put(updateClient)
+    .route('/update')
+    .put(auth, updateClient)
 
 module.exports = router;

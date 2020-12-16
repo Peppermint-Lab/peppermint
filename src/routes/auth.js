@@ -10,7 +10,6 @@ const {
   getUsers,
   resetPasswordAdmin,
   resetPasswordUser,
-  changeRole,
   getUserById,
   edit,
   deleteUser
@@ -27,8 +26,6 @@ router.route("/getAllUsers").get(mid, getUsers);
 router.route("/resetPassword").post(mid, resetPasswordAdmin);
 
 router.route("/resetPassword/user").post(mid, resetPasswordUser);
-
-router.route("/changeRole").put(mid, changeRole);
 
 router.route('/getById').post(mid, getUserById);
 

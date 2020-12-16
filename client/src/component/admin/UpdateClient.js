@@ -12,14 +12,14 @@ const UpdateClient = (props) => {
   console.log(props.client)
 
   const postData = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/edit`, {
+    await fetch(`${baseUrl}/api/v1/client/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        id: props.client.id,
+        id: props.client._id,
         clientName,
         name,
         email,
@@ -31,6 +31,7 @@ const UpdateClient = (props) => {
   const onCreate = async (e) => {
     e.stopPropagation();
     setVisible(false);
+    await postData()
   };
 
   const onCancel = (e) => {
@@ -59,7 +60,7 @@ const UpdateClient = (props) => {
             Edit Client Name :{" "}
             <Input
               defaultValue={props.client.name}
-              onChange={(e) => setName(e.target.value) }
+              onChange={(e) => setClientName(e.target.value) }
               style={{ width: 300 }}
             />
           </h5>
@@ -89,7 +90,7 @@ const UpdateClient = (props) => {
             Edit Contact Number :{" "}
             <Input
               defaultValue={props.client.number}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setNumber(e.target.value)}
               style={{ width: 250 }}
             />
           </h5>
