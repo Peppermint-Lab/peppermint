@@ -1,12 +1,40 @@
-import React from 'react'
-import { Button, Skeleton, Modal, Input  } from "antd";
+import React, { useState } from "react";
+import { Button, Modal } from "antd";
 
-const ViewNewsletter = () => {
-    return (
-        <div>
-            <Button>Read</Button>
-        </div>
-    )
-}
+const ViewNewsletter = (props) => {
+  const [visible, setVisible] = useState(false);
 
-export default ViewNewsletter
+  const onCancel = (e) => {
+    e.stopPropagation();
+    setVisible(false);
+  };
+
+  return (
+    <div>
+      <Button
+        size="xs"
+        onClick={() => {
+          setVisible(true);
+        }}
+      >
+        Read
+        <Modal
+        destroyOnClose={true}
+          keyboard={true}
+          visible={visible}
+          title={props.n.title}
+          onCancel={onCancel}
+          footer={[
+              <Button onClick={onCancel}>
+                  Close
+              </Button>
+          ]}
+        >
+          <p>{props.n.text}</p>
+        </Modal>
+      </Button>
+    </div>
+  );
+};
+
+export default ViewNewsletter;

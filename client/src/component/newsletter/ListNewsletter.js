@@ -34,7 +34,7 @@ const ListNewsletter = () => {
           title: "Title",
           dataIndex: "title",
           key: "title",
-          width: 200
+          width: 300
         },
         {
           key: "action",

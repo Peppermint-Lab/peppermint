@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Skeleton, Modal, Input } from "antd";
+import { Button, Modal, Input } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
 import { baseUrl } from "../../utils";
