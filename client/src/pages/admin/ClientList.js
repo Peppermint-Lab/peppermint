@@ -7,6 +7,7 @@ import {
 } from "antd";
 
 import { baseUrl } from "../../utils";
+import UpdateClient from "../../component/admin/UpdateClient";
 
 const ClientList = () => {
   const [clientAll, setClientAll] = useState([]);
@@ -81,6 +82,7 @@ const ClientList = () => {
       width: 200,
       render: (record) => (
         <Space size="middle">
+          <UpdateClient client={record} />
           <Popconfirm
           title="Are you sure you want to delete?"
           onConfirm={() => deleteClient(record)}

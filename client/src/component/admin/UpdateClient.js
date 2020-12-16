@@ -1,38 +1,101 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Form, Input, Select } from "antd";
+import React, { useState } from "react";
+import { Modal, Input, Button, Row  } from "antd";
 import { baseUrl } from "../../utils";
 
-const UpdateClient = () => {
+const UpdateClient = (props) => {
   const [visible, setVisible] = useState(false);
-  const [clientAll, setClientAll] = useState([]);
+  const [clientName, setClientName] = useState(props.client.name);
+  const [name, setName] = useState(props.client.ContactName);
+  const [email, setEmail] = useState(props.client.email);
+  const [number, setNumber] = useState(props.client.number);
 
-  const { Option } = Select;
+  console.log(props.client)
 
-  const fetchClients = () => {
-    fetch(`${baseUrl}/api/v1/client/allclients`, {
-      method: "GET",
+  const postData = async () => {
+    await fetch(`${baseUrl}/api/v1/auth/edit`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setClientAll(res.client);
-        }
-      });
+      body: JSON.stringify({
+        id: props.client.id,
+        clientName,
+        name,
+        email,
+        number
+      }),
+    }).then((res) => res.json);
   };
 
+  const onCreate = async (e) => {
+    e.stopPropagation();
+    setVisible(false);
+  };
 
-  useEffect(() => {
-    fetchClients();
-  }, []);
-
-  const search = clientAll.map((d) => <Option key={d._id}>{d.name}</Option>);
+  const onCancel = (e) => {
+    e.stopPropagation();
+    setVisible(false);
+  };
 
   return (
     <div>
-     
+      <Button
+        onClick={() => {
+          setVisible(true);
+        }}
+      >
+        Update
+        <Modal
+          visible={visible}
+          title="Edit a users info"
+          okText="Update"
+          cancelText="Cancel"
+          onCancel={onCancel}
+          onOk={onCreate}
+        >
+          <Row>
+          <h5>
+            Edit Client Name :{" "}
+            <Input
+              defaultValue={props.client.name}
+              onChange={(e) => setName(e.target.value) }
+              style={{ width: 300 }}
+            />
+          </h5>
+        </Row>
+        <Row>
+          <h5>
+            Edit Contact Name :{" "}
+            <Input
+              defaultValue={props.client.contactName}
+              onChange={(e) => setName(e.target.value) }
+              style={{ width: 300 }}
+            />
+          </h5>
+        </Row>
+        <Row>
+          <h5>
+            Edit Contact Email :{" "}
+            <Input
+              defaultValue={props.client.email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ width: 300 }}
+            />
+          </h5>
+        </Row>
+        <Row>
+          <h5>
+            Edit Contact Number :{" "}
+            <Input
+              defaultValue={props.client.number}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ width: 250 }}
+            />
+          </h5>
+        </Row>
+        </Modal>
+      </Button>
     </div>
   );
 };
