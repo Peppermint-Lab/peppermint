@@ -15,21 +15,21 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 // DB models
-require("./models/InternalUser");
-require("./models/Ticket");
-require("./models/todo");
-require("./models/notes");
-require('./models/client');
-require('./models/news');
+require("./src/models/InternalUser");
+require("./src/models/Ticket");
+require("./src/models/todo");
+require("./src/models/notes");
+require('./src/models/client');
+require('./src/models/news');
 
 // Routes
-const auth = require("./routes/auth");
-const tickets = require("./routes/ticket");
-const data = require("./routes/data");
-const todo = require("./routes/todo");
-const note = require("./routes/notes");
-const client = require('./routes/client');
-const news = require('./routes/news');
+const auth = require("./src/routes/auth");
+const tickets = require("./src/routes/ticket");
+const data = require("./src/routes/data");
+const todo = require("./src/routes/todo");
+const note = require("./src/routes/notes");
+const client = require('./src/routes/client');
+const news = require('./src/routes/news');
 
 // Express server libraries
 app.use(cors());
