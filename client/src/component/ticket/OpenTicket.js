@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Table, Tag, Space, Button } from "antd";
-import Popup from "reactjs-popup";
 
 import { baseUrl } from "../../utils.js";
 
 const OpenTicket = () => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [data, setData] = useState([]);
-
-  const open = () => setModalOpen(true);
-  const close = () => setModalOpen(false);
 
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/tickets/openedTickets`, {
@@ -44,7 +39,7 @@ const OpenTicket = () => {
     },
     {
       title: "Client",
-      render: (data) => data.name,
+      dataIndex: ['client', 'name'],
       key: "client",
       width: 150,
     },

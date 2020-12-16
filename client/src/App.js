@@ -15,6 +15,7 @@ import SideNav from './component/admin/SideNav'
 import Analytics from './pages/admin/Analytics'
 import ClientList from './pages/admin/ClientList'
 import EditUserInfo from './pages/admin/EditUserInfo'
+import History from './pages/History'
 
 // import { GlobalContext } from "./Context/GlobalState";
 
@@ -40,6 +41,7 @@ const Routing = () => {
           <Navigation />
           <Route exact path="/tickets" component={Ticket} />
           <Route exact path="/monitor" component={Monitor} />
+          <Route exact path='/history' component={History} />
           <Route exact path="/admin/:path?">
             <div className="navbar">
               <SideNav />
