@@ -6,7 +6,6 @@ import { Select, Modal, Form, Input, Radio, Space, Button } from "antd";
 import { baseUrl } from "../../utils.js";
 
 const NewTicket = () => {
-
   const { Option } = Select;
   const { TextArea } = Input;
 
@@ -77,7 +76,16 @@ const NewTicket = () => {
 
   return (
     <div className="ticket-modal">
-      <Button type="text" size='small' key={0} onClick={() => { setVisible(true); }}>New Ticket</Button>
+      <Button
+        type="text"
+        size="small"
+        key={0}
+        onClick={() => {
+          setVisible(true);
+        }}
+      >
+        New Ticket
+      </Button>
       <Modal
         visible={visible}
         title="Create a new Ticket"
@@ -151,11 +159,11 @@ const NewTicket = () => {
               onChange={(e) => setPriority(e.target.value)}
               style={{ textAlign: "center" }}
             >
-            <Space>
-              <Radio.Button value="Low">Low</Radio.Button>
-              <Radio.Button value="Medium">Medium</Radio.Button>
-              <Radio.Button value="High">High</Radio.Button>
-            </Space>
+              <Space>
+                <Radio.Button value="Low">Low</Radio.Button>
+                <Radio.Button value="Medium">Medium</Radio.Button>
+                <Radio.Button value="High">High</Radio.Button>
+              </Space>
             </Radio.Group>
           </Form.Item>
         </Form>

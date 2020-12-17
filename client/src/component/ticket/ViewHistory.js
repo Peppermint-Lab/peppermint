@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input, Space, Button, Drawer, Divider, Row } from "antd";
 
-const ViewTicket = (props) => {
+const ViewHistory = (props) => {
   const [ visible, setVisible] = useState(false);
   const [ issue, setIssue ] = useState(props.ticket.issue);
   const [ note, setNote ] = useState(props.ticket.note);
@@ -61,4 +61,4 @@ const ViewTicket = (props) => {
   );
 };
 
-export default ViewTicket;
+export default ViewHistory;

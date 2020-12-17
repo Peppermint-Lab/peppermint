@@ -6,12 +6,13 @@ import { SearchOutlined } from "@ant-design/icons";
 // const data = [];
 
 import { baseUrl } from "../utils";
+import ViewHistory from "../component/ticket/ViewHistory";
 
 class History extends React.Component {
   state = {
     searchText: "",
     searchedColumn: "",
-    data: [{}]
+    data: [{}],
   };
 
   componentDidMount() {
@@ -24,14 +25,15 @@ class History extends React.Component {
       },
     })
       .then((res) => res.json())
-      .then(result => {
-        console.log(result.tickets);
-        this.setState({ data: result.tickets}, () => console.log(this.state.data));
+      .then((result) => {
+        this.setState({ data: result.tickets }, () =>
+          console.log(this.state.data)
+        );
       });
   }
 
   componentWillUnmount() {
-    this.setState({searchText: "", searchedColumn: "",})
+    this.setState({ searchText: "", searchedColumn: "" });
   }
 
   getColumnSearchProps = (dataIndex) => ({
@@ -117,6 +119,10 @@ class History extends React.Component {
     this.setState({ searchText: "" });
   };
 
+  click = (record) => {
+    ViewHistory(record)
+  }
+
   render() {
     const columns = [
       {
@@ -160,9 +166,9 @@ class History extends React.Component {
         key: "issue",
         width: "15%",
         ...this.getColumnSearchProps("issue"),
-      }
+      },
     ];
-    return <Table columns={columns} dataSource={this.state.data} />;
+    return <Table columns={columns} dataSource={this.state.data} pagination={{ pageSize: 10 }}/>;
   }
 }
 

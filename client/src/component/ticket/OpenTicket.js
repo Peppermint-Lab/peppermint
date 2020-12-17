@@ -7,7 +7,6 @@ import ViewTicket from "./ViewTicket.js";
 
 const OpenTicket = () => {
   const [data, setData] = useState([]);
-  const [dataId, setDataId] = useState('');
 
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/tickets/openedTickets`, {
@@ -38,10 +37,7 @@ const OpenTicket = () => {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-
-      })
+      }
     })
       .then((res) => res.json())
   }
@@ -82,7 +78,7 @@ const OpenTicket = () => {
             <Button size="small">Complete</Button>
           </Popconfirm>
             <Button size="small">
-              <Link to="ticket/:id" children={<ViewTicket />} >View</Link>
+              <ViewTicket ticket={record} />
             </Button>
           <Button size="small">Delete</Button>
         </Space>
