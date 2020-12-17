@@ -9,7 +9,7 @@ const {
   completedTickets,
   convertTicket,
   all,
-  filter
+  complete
 } = require("../controller/ticket");
 
 router.route("/createTicket").post(createTicket);
@@ -24,6 +24,6 @@ router.route("/convertTicket").put(auth, convertTicket);
 
 router.route('/all').get(auth, all);
 
-router.route('/filter').post(auth, filter);
+router.route('/complete/:id').post(auth, complete);
 
 module.exports = router;

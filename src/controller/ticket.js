@@ -108,19 +108,20 @@ exports.all = async (req, res) => {
   }
 };
 
-exports.filter = async (req, res) => {
-  console.log(req.body);
-  const ass = mongoose.Types.ObjectId(req.body.assignedto)
+exports.complete = async (req, res) => {
   try {
-    const filtered = await TicketSchema.find({
-      name: new RegExp(req.body.name),
-      // client: new RegExp(req.body.client),
-      email: new RegExp(req.body.email),
-      // assignedto: new RegExp(ass),
-      status: new RegExp(req.body.status)
-    });
-    console.log(filtered)
+    await TicketSchema.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: { status: "completed" },
+      },
+      {
+        new: true,
+      }
+    ).exec();
+    console.log("Updated record");
   } catch (error) {
     console.log(error)
+    return res.status(500);
   }
-};
+}

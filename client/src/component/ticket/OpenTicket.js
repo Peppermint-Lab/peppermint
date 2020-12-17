@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Space, Button, Popconfirm } from "antd";
 
 import { baseUrl } from "../../utils.js";
 
 const OpenTicket = () => {
   const [data, setData] = useState([]);
+  const [dataId, setDataId] = useState('');
 
   async function loadContent() {
     await fetch(`${baseUrl}/api/v1/tickets/openedTickets`, {
@@ -21,14 +22,27 @@ const OpenTicket = () => {
       });
   }
 
-  console.log(data)
-
   useEffect(() => {
     async function resolve() {
       await loadContent();
     }
     resolve();
   }, []);
+
+  const complete = async (record) => {
+    const id = record
+    await fetch(`${baseUrl}/api/v1/tickets/complete/${id}`, {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+
+      })
+    })
+      .then((res) => res.json())
+  }
 
   const columns = [
     {
@@ -58,9 +72,14 @@ const OpenTicket = () => {
       title: "Action",
       key: "action",
       width: 200,
-      render: () => (
+      render: (record) => (
         <Space size="middle">
           <Button size="small">Show</Button>
+          <Popconfirm  title="Are you sure you want to complete?" onConfirm={() => {
+            complete(record._id)
+          }}>
+            <Button size="small">Complete</Button>
+          </Popconfirm>
           <Button size="small">Delete</Button>
         </Space>
       ),
