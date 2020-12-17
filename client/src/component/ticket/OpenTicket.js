@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Table, Space, Button, Popconfirm } from "antd";
+import {Link } from 'react-router-dom'
 
 import { baseUrl } from "../../utils.js";
+import ViewTicket from "./ViewTicket.js";
 
 const OpenTicket = () => {
   const [data, setData] = useState([]);
@@ -74,12 +76,14 @@ const OpenTicket = () => {
       width: 200,
       render: (record) => (
         <Space size="middle">
-          <Button size="small">Show</Button>
           <Popconfirm  title="Are you sure you want to complete?" onConfirm={() => {
             complete(record._id)
           }}>
             <Button size="small">Complete</Button>
           </Popconfirm>
+            <Button size="small">
+              <Link to="ticket/:id" children={<ViewTicket />} >View</Link>
+            </Button>
           <Button size="small">Delete</Button>
         </Space>
       ),
