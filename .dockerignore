@@ -4,3 +4,7 @@ client
 .git
 *Dockerfile*
 *docker-compose*
+k6
+images
+.md
+README.md
