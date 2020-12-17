@@ -97,13 +97,30 @@ exports.convertTicket = async (req, res) => {
 exports.all = async (req, res) => {
   try {
     const tickets = await TicketSchema.find()
-    .populate("client", "_id name")
-    .populate('assignedto', '_id name')
-    .then((tickets) => {
-      res.status(200).json({tickets});
-    })
+      .populate("client", "_id name")
+      .populate("assignedto", "_id name")
+      .then((tickets) => {
+        res.status(200).json({ tickets });
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+};
+
+exports.filter = async (req, res) => {
+  console.log(req.body);
+  const ass = mongoose.Types.ObjectId(req.body.assignedto)
+  try {
+    const filtered = await TicketSchema.find({
+      name: new RegExp(req.body.name),
+      // client: new RegExp(req.body.client),
+      email: new RegExp(req.body.email),
+      // assignedto: new RegExp(ass),
+      status: new RegExp(req.body.status)
+    });
+    console.log(filtered)
   } catch (error) {
     console.log(error)
-    res.status(500)
   }
-}
+};
