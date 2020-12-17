@@ -31,7 +31,7 @@ class History extends React.Component {
   }
 
   componentWillUnmount() {
-    // make fetch request
+    this.setState({searchText: "", searchedColumn: "",})
   }
 
   getColumnSearchProps = (dataIndex) => ({
