@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Space, Row } from "antd";
+import React from "react";
+import { Table, Input, Button, Space } from "antd";
+import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
+
+// const data = [];
 
 import { baseUrl } from "../utils";
 
-const History = () => {
-  const [data, setData] = useState([]);
-  const [filterTable, setFilterTable] = useState(null);
+class History extends React.Component {
+  state = {
+    searchText: "",
+    searchedColumn: "",
+    data: [{}]
+  };
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [client, setClient] = useState("");
-  const [engineer, setEngineer] = useState("");
-  const [status, setStatus] = useState("");
-
-  const fetchJobs = async () => {
-    await fetch(`${baseUrl}/api/v1/tickets/all`, {
+  componentDidMount() {
+    // make fetch request
+    fetch(`${baseUrl}/api/v1/tickets/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -23,130 +24,146 @@ const History = () => {
       },
     })
       .then((res) => res.json())
-      .then((result) => {
-        // console.log(result.tickets);
-        setData(result.tickets);
+      .then(result => {
+        console.log(result.tickets);
+        this.setState({ data: result.tickets}, () => console.log(this.state.data));
       });
-  };
+  }
 
-  const search = async () => {
-    await fetch(`${baseUrl}/api/v1/tickets/filter`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        client,
-        assignedto : engineer,
-        status
-      })
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        // console.log(result.tickets);
-        setFilterTable(result.filter);
-      });
-  };
+  componentWillUnmount() {
+    // make fetch request
+  }
 
-  useEffect(() => {
-    fetchJobs();
-  }, []);
-
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      width: "15%",
-    },
-    {
-      title: "Client",
-      dataIndex: ["client", "name"],
-      key: "client",
-      width: "20%",
-    },
-    {
-      title: "email",
-      dataIndex: "email",
-      key: "email",
-      width: "15%",
-    },
-    {
-      title: "Issue",
-      dataIndex: "issue",
-      key: "issue",
-      width: "20%",
-    },
-    {
-      title: "status",
-      dataIndex: "status",
-      key: "status",
-      wdith: "10%",
-    },
-    {
-      title: "Engineer",
-      dataIndex: ["assignedto", "name"],
-      key: "assignedTo",
-    },
-  ];
-
-  return (
-    <div>
-      <Row>
-        <h3 className="history-title">Filter through all jobs</h3>
-      </Row>
-      <div className="history-input">
-        <Row>
-          <Space>
-            <Input
-              placeholder="Contact Name"
-              style={{ width: 250 }}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Input
-              placeholder="Client"
-              style={{ width: 250 }}
-              onChange={(e) => setClient(e.target.value)}
-            />
-          </Space>
-        </Row>
-      </div>
-      <div className="history-input" style={{ marginLeft: 52}}>
-        <Row>
-          <Space>
-            <Input
-              placeholder="Email"
-              style={{ width: 250 }}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              placeholder="Engineer"
-              style={{ width: 250 }}
-              onChange={(e) => setEngineer(e.target.value)}
-            />
-            <Input
-              placeholder="Status"
-              style={{ width: 250 }}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            <Button >
-              <SearchOutlined onClick={() => search()}  />
-            </Button>
-          </Space>
-        </Row>
-      </div>
-
-      <div style={{ marginTop: 30 }}>
-        <Table
-          dataSource={filterTable == null ? data : filterTable}
-          columns={columns}
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex)
+          }
+          style={{ width: 188, marginBottom: 8, display: "block" }}
         />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => this.handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
       </div>
-    </div>
-  );
-};
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        : "",
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select(), 100);
+      }
+    },
+    render: (text) =>
+      this.state.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+
+  handleReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
+
+  render() {
+    const columns = [
+      {
+        title: " Contact Name",
+        dataIndex: "name",
+        key: "name",
+        width: "15%",
+        ...this.getColumnSearchProps("name"),
+      },
+      {
+        title: "Client",
+        dataIndex: ["client", "name"],
+        key: "client",
+        width: "15%",
+        ...this.getColumnSearchProps("client"),
+      },
+      {
+        title: "Email",
+        dataIndex: "email",
+        key: "email",
+        width: "15%",
+        ...this.getColumnSearchProps("email"),
+      },
+      {
+        title: "Engineer",
+        dataIndex: ["assignedto", "name"],
+        key: "assignedto",
+        width: "15%",
+        ...this.getColumnSearchProps("assignedto"),
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        width: "15%",
+        ...this.getColumnSearchProps("status"),
+      },
+      {
+        title: "Issue",
+        dataIndex: "issue",
+        key: "issue",
+        width: "15%",
+        ...this.getColumnSearchProps("issue"),
+      }
+    ];
+    return <Table columns={columns} dataSource={this.state.data} />;
+  }
+}
 
 export default History;
