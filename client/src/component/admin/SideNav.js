@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import CreateUser from "./CreateUser";
 import CreateClient from "./CreateClient";
 import CreateNewsletter from "../newsletter/CreateNewsletter";
+import AdminList from "../newsletter/AdminList";
 
 const { SubMenu } = Menu;
 
@@ -41,7 +42,7 @@ const SideNav = () => {
             <CreateNewsletter />
           </Menu.Item>
           <Menu.Item key="16">
-
+            <Link to='/admin/newsletters'>All Newsletters</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub3" title="Clients" icon={<SmileTwoTone />}>

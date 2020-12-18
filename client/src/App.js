@@ -16,6 +16,7 @@ import Analytics from './pages/admin/Analytics'
 import ClientList from './pages/admin/ClientList'
 import EditUserInfo from './pages/admin/EditUserInfo'
 import History from './pages/History'
+import AdminList from './component/newsletter/AdminList'
 
 // import { GlobalContext } from "./Context/GlobalState";
 
@@ -51,6 +52,7 @@ const Routing = () => {
               <Route exact path="/admin/Analytics" component={Analytics} />
               <Route exact path="/admin/clientView" component={ClientList} />
               <Route exact path='/admin/viewUsers' component={EditUserInfo} />
+              <Route exact path='/admin/newsletters' component={AdminList} />
             </div>
           </Route>
         </Route>
