@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
         const newsletter = await new News({
             title,
             text,
-            createdBY: req.user.id,
+            createdBy: req.user.id,
             active
         });
         newsletter.save().then((newsletter) => {
@@ -32,6 +32,7 @@ exports.getNewsletters = async (req, res) => {
     console.log('Get all newsletters')
     try {
         const newsletters = await News.find({ active : true })
+        .populate('createdBy', '_id name')
         res.json({ newsletters })
         console.log(newsletters)
         return res.status(200);
@@ -42,6 +43,25 @@ exports.getNewsletters = async (req, res) => {
 }
 
 // Change status of Newsletter
+exports.updateStatus = async (req, res) => {
+    try {
+        await News.find(
+            { _id : req.body.id },
+            {
+                $set: {
+                    title : req.body.title,
+                    text: req.body.text,
+                    active: req.body.active
+                }
+            }, { new: true }
+            ).exec();
+            console.log("Updated record");
+            res.status(200)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ failed: true, message: 'Failed to update '})
+    }
+}
 
 // Delete newsletter
 

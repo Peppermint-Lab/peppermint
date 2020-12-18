@@ -7,6 +7,7 @@ const CreateNewsletter = () => {
   const [visible, setVisible] = useState(false);
   const [title, setTittle ]   =   useState('');
   const [text, setText ] = useState('');
+  const [active, setActive] = useState(false);
 
   const { TextArea } = Input;
 
@@ -19,7 +20,8 @@ const CreateNewsletter = () => {
         },
         body: JSON.stringify({
           title,
-          text
+          text,
+          active 
         }),
       }).then((res) => res.json());
   }
@@ -60,7 +62,7 @@ const CreateNewsletter = () => {
           <TextArea rows={8} placeholder="Enter newsletter content here..."  onChange={(e) => setText(e.target.value)} />
           </div>
           <div style={{ margin: 25}}>
-            <Radio.Group defaultValue="true">
+            <Radio.Group defaultValue={active} value={active} onChange={(e) => setActive(e.target.value)}>
             <Space>
                 <Radio.Button value="true">Active</Radio.Button>
                 <Radio.Button value="false">Hidden</Radio.Button>

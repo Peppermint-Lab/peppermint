@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Space, Button, Popconfirm } from "antd";
-import {Link } from 'react-router-dom'
+import { Table, Space, Button } from "antd";
 
 import { baseUrl } from "../../utils.js";
 import ViewTicket from "./ViewTicket.js";

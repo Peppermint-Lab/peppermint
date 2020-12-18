@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal } from "antd";
+import { Button, Divider, Modal } from "antd";
 
 const ViewNewsletter = (props) => {
   const [visible, setVisible] = useState(false);
@@ -19,18 +19,16 @@ const ViewNewsletter = (props) => {
       >
         Read
         <Modal
-        destroyOnClose={true}
+          destroyOnClose={true}
           keyboard={true}
           visible={visible}
           title={props.n.title}
           onCancel={onCancel}
-          footer={[
-              <Button onClick={onCancel}>
-                  Close
-              </Button>
-          ]}
+          footer={[<Button onClick={onCancel}>Close</Button>]}
         >
           <p>{props.n.text}</p>
+          <Divider />
+          <p>Author : {props.n.createdBy.name}</p>
         </Modal>
       </Button>
     </div>
