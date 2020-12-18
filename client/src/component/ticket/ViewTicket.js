@@ -3,7 +3,7 @@ import { Input, Space, Button, Drawer, Divider, Row, Popconfirm } from "antd";
 
 import { baseUrl } from "../../utils.js";
 
-import Transfer from './Transfer'
+import Transfer from "./Transfer";
 
 const ViewTicket = (props) => {
   const [visible, setVisible] = useState(false);
@@ -43,15 +43,15 @@ const ViewTicket = (props) => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        id : props.ticket._id,
+        id: props.ticket._id,
         issue,
         note,
         name,
         email,
-        number
-      })
+        number,
+      }),
     }).then((res) => res.json());
-  }
+  };
 
   return (
     <div>
@@ -107,15 +107,27 @@ const ViewTicket = (props) => {
         <h4>Contact Details</h4>
         <h5>
           Contact Name:{" "}
-          <Input defaultValue={props.ticket.name} style={{ width: 250 }} />
+          <Input
+            defaultValue={props.ticket.name}
+            style={{ width: 250 }}
+            onChange={(e) => setName(e.target.value)}
+          />
         </h5>
         <h5>
           Email:{" "}
-          <Input defaultValue={props.ticket.email} style={{ width: 250 }} />
+          <Input
+            defaultValue={props.ticket.email}
+            style={{ width: 250 }}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </h5>
         <h5>
           Number:{" "}
-          <Input defaultValue={props.ticket.number} style={{ width: 250 }} />
+          <Input
+            defaultValue={props.ticket.number}
+            style={{ width: 250 }}
+            onChange={(e) => setNumber(e.target.value)}
+          />
         </h5>
         <Divider />
       </Drawer>
