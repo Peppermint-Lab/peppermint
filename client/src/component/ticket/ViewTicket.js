@@ -3,6 +3,8 @@ import { Input, Space, Button, Drawer, Divider, Row, Popconfirm } from "antd";
 
 import { baseUrl } from "../../utils.js";
 
+import Transfer from './Transfer'
+
 const ViewTicket = (props) => {
   const [visible, setVisible] = useState(false);
   const [issue, setIssue] = useState(props.ticket.issue);
@@ -46,7 +48,7 @@ const ViewTicket = (props) => {
       <Drawer width={640} placement="right" onClose={onClose} visible={visible}>
         <h2>Client: {props.ticket.client.name}</h2>
         <Space size="middle">
-          <Button>Transfer</Button>
+          <Transfer ticket={props.ticket} />
           <Popconfirm
             title="Are you sure you want to complete?"
             onConfirm={() => {
