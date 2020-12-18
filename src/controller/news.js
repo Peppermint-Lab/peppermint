@@ -31,7 +31,7 @@ exports.create = async (req, res) => {
 exports.getNewsletters = async (req, res) => {
     console.log('Get all newsletters')
     try {
-        const newsletters = await News.find({ active : true })
+        const newsletters = await News.find()
         .populate('createdBy', '_id name')
         res.json({ newsletters })
         console.log(newsletters)
@@ -64,5 +64,16 @@ exports.updateStatus = async (req, res) => {
 }
 
 // Delete newsletter
-
-// Update newsletter
+exports.deleteN = async (req, res) => {
+    try {
+        await News.findByIdAndDelete({ id: req.params.id})
+        const newsletters = await News.find()
+        .populate('createdBy', '_id name')
+        res.json({ newsletters })
+        console.log(newsletters)
+        return res.status(200);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ failed: true, message: 'Failed to delete '})
+    }
+}

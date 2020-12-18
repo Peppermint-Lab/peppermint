@@ -28,6 +28,22 @@ const AdminList = () => {
       });
   };
 
+  const del = async (id) => {
+    await fetch(`${baseUrl}/api/v1/newsletter/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res) {
+          setData(res.newsletters);
+        }
+      });
+  }
+
   useEffect(() => {
     getN();
   }, []);
@@ -52,7 +68,7 @@ const AdminList = () => {
         <Space>
           <ViewNewsletter n={record} />
           <Edit n={record} />
-          <Button>Delete</Button>
+          <Button onClick={() => del(record._id)} >Delete</Button>
         </Space>
       ),
     },

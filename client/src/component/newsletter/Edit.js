@@ -17,7 +17,7 @@ const Edit = (props) => {
 
   const postData = async () => {
     await fetch(`${baseUrl}/api/v1/newsletter/update`, {
-      method: "Post",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("jwt"),
