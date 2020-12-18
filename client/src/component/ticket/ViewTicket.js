@@ -9,6 +9,9 @@ const ViewTicket = (props) => {
   const [visible, setVisible] = useState(false);
   const [issue, setIssue] = useState(props.ticket.issue);
   const [note, setNote] = useState(props.ticket.note);
+  const [name, setName] = useState(props.ticket.name);
+  const [email, setEmail] = useState(props.ticket.email);
+  const [number, setNumber] = useState(props.ticket.number);
 
   const { TextArea } = Input;
 
@@ -16,11 +19,10 @@ const ViewTicket = (props) => {
     setVisible(true);
   };
 
-  const onClose = () => {
+  const onClose = async () => {
     setVisible(false);
+    await update();
   };
-
-  console.log(props);
 
   const complete = async (record) => {
     const id = record;
@@ -32,6 +34,24 @@ const ViewTicket = (props) => {
       },
     }).then((res) => res.json());
   };
+
+  const update = async () => {
+    await fetch(`${baseUrl}/api/v1/tickets/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        id : props.ticket._id,
+        issue,
+        note,
+        name,
+        email,
+        number
+      })
+    }).then((res) => res.json());
+  }
 
   return (
     <div>
@@ -98,7 +118,6 @@ const ViewTicket = (props) => {
           <Input defaultValue={props.ticket.number} style={{ width: 250 }} />
         </h5>
         <Divider />
-        <h5>Time </h5>
       </Drawer>
     </div>
   );

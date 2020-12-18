@@ -123,10 +123,10 @@ exports.complete = async (req, res) => {
     ).exec();
     console.log("Updated record");
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500);
   }
-}
+};
 
 exports.transfer = async (req, res) => {
   try {
@@ -141,7 +141,31 @@ exports.transfer = async (req, res) => {
     ).exec();
     console.log("Updated record");
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500);
   }
-}
+};
+
+exports.updateJob = async (req, res) => {
+  try {
+    await TicketSchema.findByIdAndUpdate(
+      { _id: req.body.id },
+      {
+        $set: {
+          issue: req.body.issue,
+          note: req.body.note,
+          name: req.body.name,
+          email: req.body.email,
+          number: req.body.number
+        },
+      },
+      {
+        new: true,
+      }
+    ).exec();
+    console.log("Updated record");
+  } catch (error) {
+    console.log(error);
+    return res.status(500);
+  }
+};

@@ -10,7 +10,8 @@ const {
   convertTicket,
   all,
   complete,
-  transfer
+  transfer,
+  updateJob
 } = require("../controller/ticket");
 
 router.route("/createTicket").post(createTicket);
@@ -29,5 +30,6 @@ router.route('/complete/:id').post(auth, complete);
 
 router.route('/transfer').post(auth, transfer);
 
+router.route('/update').put(auth, updateJob)
 
 module.exports = router;

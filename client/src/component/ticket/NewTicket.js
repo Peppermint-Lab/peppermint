@@ -154,7 +154,6 @@ const NewTicket = () => {
             className="collection-create-form_last-form-item"
           >
             <Radio.Group
-              defaultValue="a"
               buttonStyle="solid"
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
@@ -162,7 +161,7 @@ const NewTicket = () => {
             >
               <Space>
                 <Radio.Button value="Low">Low</Radio.Button>
-                <Radio.Button value="Medium">Medium</Radio.Button>
+                <Radio.Button value="Normal">Normal</Radio.Button>
                 <Radio.Button value="High">High</Radio.Button>
               </Space>
             </Radio.Group>
