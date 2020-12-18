@@ -30,18 +30,6 @@ const OpenTicket = () => {
     resolve();
   }, []);
 
-  const complete = async (record) => {
-    const id = record
-    await fetch(`${baseUrl}/api/v1/tickets/complete/${id}`, {
-      method: "Post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      }
-    })
-      .then((res) => res.json())
-  }
-
   const columns = [
     {
       title: "Name",
@@ -72,11 +60,6 @@ const OpenTicket = () => {
       width: 200,
       render: (record) => (
         <Space size="middle">
-          <Popconfirm  title="Are you sure you want to complete?" onConfirm={() => {
-            complete(record._id)
-          }}>
-            <Button size="small">Complete</Button>
-          </Popconfirm>
             <Button size="small">
               <ViewTicket ticket={record} />
             </Button>

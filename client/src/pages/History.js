@@ -6,7 +6,6 @@ import { SearchOutlined } from "@ant-design/icons";
 // const data = [];
 
 import { baseUrl } from "../utils";
-import ViewHistory from "../component/ticket/ViewHistory";
 
 class History extends React.Component {
   state = {
@@ -119,10 +118,6 @@ class History extends React.Component {
     this.setState({ searchText: "" });
   };
 
-  click = (record) => {
-    ViewHistory(record)
-  }
-
   render() {
     const columns = [
       {
@@ -168,6 +163,7 @@ class History extends React.Component {
         ...this.getColumnSearchProps("issue"),
       },
     ];
+
     return <Table columns={columns} dataSource={this.state.data} pagination={{ pageSize: 10 }}/>;
   }
 }

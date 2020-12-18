@@ -8,6 +8,7 @@ exports.openTickets = async (req, res) => {
   try {
     await TicketSchema.find({ status: "issued", assignedto: req.user._id })
       .populate("client", "_id name")
+      .populate("assignedto", "_id name")
       .then((tickets) => {
         res.json({ tickets });
       });
@@ -23,6 +24,7 @@ exports.unissuedTickets = async (req, res) => {
   try {
     await TicketSchema.find({ status: "unissued" })
       .populate("client", "_id name")
+      .populate("assignedto", "_id name")
       .then((tickets) => {
         res.json({ tickets });
       });
