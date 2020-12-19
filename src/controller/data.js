@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const TicketSchema = mongoose.model("TicketSchema");
-const session = require('express-session');
 
 
 exports.countUnissuedTickets = async (req, res) => {
