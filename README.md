@@ -64,7 +64,7 @@ services:
 
   api:
     container_name: api
-    image: winter-api:latest
+    image: andrews1066/peppermint-api:latest
     ports:
       - 5000:5000
     restart: on-failure
@@ -76,7 +76,7 @@ services:
       - mongo
 
   client:
-    image: winter-latest:client
+    image: andrews1066/peppermint:latest
     ports:
     - "80:80"
     container_name: client
