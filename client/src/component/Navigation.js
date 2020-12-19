@@ -93,9 +93,6 @@ const Navigation = () => {
                   <Menu.Item key="tickets:1"><Link to='/ticket/open'>Open Tickets</Link></Menu.Item>
                   <Menu.Item key="tickets:2"><Link to='/ticket/unissued'>Unissued Tickets</Link></Menu.Item>
               </SubMenu>
-              <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
-                Timesheet
-              </Menu.Item>
               <Menu.Item key={3} onClick={() => history.push("/history")}>
                 History
               </Menu.Item>
@@ -159,9 +156,6 @@ const Navigation = () => {
             </Menu.Item>
             <Menu.Item key={1} onClick={() => history.push("/tickets")}>
               Tickets
-            </Menu.Item>
-            <Menu.Item key={2} onClick={() => history.push("/timesheet")}>
-              Timesheet
             </Menu.Item>
             <Menu.Item key={3} onClick={() => history.push("/history")}>
               History
