@@ -22,6 +22,7 @@
     "helmet": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.11",
+    "mongoose-seed": "^0.6.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

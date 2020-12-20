@@ -7,6 +7,7 @@ const cors = require("cors");
 const colors = require("colors");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+const seeder = require('mongoose-seed')
 
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
