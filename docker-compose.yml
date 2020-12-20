@@ -30,7 +30,7 @@ services:
     build: ./client
     ports:
     - "80:80"
-    container_name: peppermint-client
+    container_name: peppermint
 
 volumes:
   npm_cache:
