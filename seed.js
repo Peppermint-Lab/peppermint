@@ -6,12 +6,11 @@ seeder.connect(db, function () {
     seeder.loadModels(['./src/models/InternalUser'])
     seeder.clearModels(['interalusers'])
     seeder.populateModels(data, function() {
-        if(err) {
-            return console.log('seed err', err)
-        }
-        if(done) {
-            return console.log('seed complete', done)
-        }
+       try {
+           console.log('Seed Completed')
+       } catch (error) {
+           console.log(error)
+       }
         seeder.disconnect()
     })
 })
