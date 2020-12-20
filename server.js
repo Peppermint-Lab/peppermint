@@ -6,21 +6,20 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const colors = require("colors");
 const bodyParser = require("body-parser");
-const helmet = require("helmet");  
-
+const helmet = require("helmet");
 
 const connectDB = require("./config/DB");
-dotenv.config({ path: "./config/config.env" });
-
-connectDB();
+dotenv.config({ path: "./config/.env" });
 
 // DB models
 require("./src/models/InternalUser");
 require("./src/models/Ticket");
 require("./src/models/todo");
 require("./src/models/notes");
-require('./src/models/client');
-require('./src/models/news');
+require("./src/models/client");
+require("./src/models/news");
+
+connectDB();
 
 // Routes
 const auth = require("./src/routes/auth");
@@ -28,8 +27,8 @@ const tickets = require("./src/routes/ticket");
 const data = require("./src/routes/data");
 const todo = require("./src/routes/todo");
 const note = require("./src/routes/notes");
-const client = require('./src/routes/client');
-const news = require('./src/routes/news');
+const client = require("./src/routes/client");
+const news = require("./src/routes/news");
 
 // Express server libraries
 app.use(cors());
@@ -45,7 +44,7 @@ app.use("/api/v1/data", data);
 app.use("/api/v1/todo", todo);
 app.use("/api/v1/note", note);
 app.use("/api/v1/client", client);
-app.use('/api/v1/newsletter', news)
+app.use("/api/v1/newsletter", news);
 
 // Morgan API Logger
 if (process.env.NODE_ENV === "development") {

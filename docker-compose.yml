@@ -9,9 +9,6 @@ services:
     restart: always
     volumes:
     - ./docker-data/db:/data/db
-    environment:
-            MONGO_INITDB_ROOT_USERNAME: 'admin'
-            MONGO_INITDB_ROOT_PASSWORD: 'admin1234'
 
   api:
     container_name: peppermint-api

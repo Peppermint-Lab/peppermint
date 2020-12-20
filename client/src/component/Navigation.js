@@ -154,22 +154,21 @@ const Navigation = () => {
             <Menu.Item key={0} onClick={() => history.push("/")}>
               Home
             </Menu.Item>
-            <Menu.Item key={1} onClick={() => history.push("/tickets")}>
-              Tickets
-            </Menu.Item>
+            <SubMenu key="SubMenu" icon={<FileTwoTone />} title="Tickets">
+                  <Menu.Item key="tickets:1"><Link to='/ticket/open'>Open Tickets</Link></Menu.Item>
+                  <Menu.Item key="tickets:2"><Link to='/ticket/unissued'>Unissued Tickets</Link></Menu.Item>
+              </SubMenu>
             <Menu.Item key={3} onClick={() => history.push("/history")}>
               History
             </Menu.Item>
             <Menu.Item
               key={5}
-              onClick={() => history.push("/admin/dashboard")}
               style={{ float: "right" }}
             >
               Settings
             </Menu.Item>
             <Menu.Item
               key={4}
-              onClick={() => history.push("/admin/dashboard")}
               style={{ float: "right" }}
             >
               <NewTicket />
