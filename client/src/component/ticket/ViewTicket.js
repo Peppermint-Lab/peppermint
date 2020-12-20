@@ -104,28 +104,28 @@ const ViewTicket = (props) => {
           />
         </Row>
         <Divider />
-        <h4>Contact Details</h4>
-        <h5>
+        <h4 >Contact Details</h4>
+        <h5 >
           Contact Name:{" "}
           <Input
             defaultValue={props.ticket.name}
-            style={{ width: 250 }}
+            style={{ width: 250, float: 'right'}}
             onChange={(e) => setName(e.target.value)}
           />
         </h5>
-        <h5>
+        <h5 >
           Email:{" "}
           <Input
             defaultValue={props.ticket.email}
-            style={{ width: 250 }}
+            style={{ width: 250, float: 'right' }}
             onChange={(e) => setEmail(e.target.value)}
           />
         </h5>
-        <h5>
+        <h5 >
           Number:{" "}
-          <Input
+          <Input 
             defaultValue={props.ticket.number}
-            style={{ width: 250 }}
+            style={{ width: 250, float: 'right' }}
             onChange={(e) => setNumber(e.target.value)}
           />
         </h5>

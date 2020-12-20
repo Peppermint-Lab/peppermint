@@ -13,9 +13,9 @@
 
 .login-container {
   margin: 0 auto;
-  width: 25%;
+  width: 50%;
   margin-top: 200px;
-  overflow: hidden; /* Hide scrollbars */
+  margin-left: 40%
 }
 
 .monitor-create {

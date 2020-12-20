@@ -61,7 +61,7 @@ const UpdateClient = (props) => {
             <Input
               defaultValue={props.client.name}
               onChange={(e) => setClientName(e.target.value) }
-              style={{ width: 300 }}
+              style={{ width: 300, marginLeft: 18 }}
             />
           </h5>
         </Row>
@@ -81,7 +81,7 @@ const UpdateClient = (props) => {
             <Input
               defaultValue={props.client.email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{ width: 300 }}
+              style={{ width: 300,  marginLeft: 5 }}
             />
           </h5>
         </Row>
@@ -91,7 +91,7 @@ const UpdateClient = (props) => {
             <Input
               defaultValue={props.client.number}
               onChange={(e) => setNumber(e.target.value)}
-              style={{ width: 250 }}
+              style={{ width: 280 }}
             />
           </h5>
         </Row>

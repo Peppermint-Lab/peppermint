@@ -34,7 +34,7 @@ const SideNav = () => {
         <Menu.Item key="sub1" icon={<HomeTwoTone />}>
           <Link to="/admin/dashboard">Dashboard</Link>
         </Menu.Item>
-        <Menu.Item key="sub2" icon={<AppstoreOutlined />}>
+        <Menu.Item key="sub2" icon={<AppstoreOutlined />} disabled={true}>
           <Link to="/admin/analytics">Analytics</Link>
         </Menu.Item>
         <SubMenu key='sub4' title="Newsletter" icon={<FileTextTwoTone />}>

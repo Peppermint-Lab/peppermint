@@ -144,7 +144,6 @@ const NewTicket = () => {
           <Form.Item name="issue" label="issue">
             <TextArea
               rows={5}
-              style={{ width: 200 }}
               onChange={(e) => setIssue(e.target.value)}
             />
           </Form.Item>

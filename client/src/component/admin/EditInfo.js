@@ -77,13 +77,13 @@ const EditInfo = (props) => {
             <Input
               defaultValue={users.email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{ width: 300 }}
+              style={{ width: 300, marginLeft: 5 }}
             />
           </h5>
         </Row>
         <Row>
         <h5>Edit Role : </h5>
-        <Radio.Group buttonStyle="solid" defaultValue={users.role} onChange={(e) => setRole(e.target.value)} style={ { marginLeft: 15}}>
+        <Radio.Group buttonStyle="solid" defaultValue={users.role} onChange={(e) => setRole(e.target.value)} style={ { marginLeft: 20}}>
             <Space>
             <Radio.Button value="user">User</Radio.Button>
             <Radio.Button value="admin">Admin</Radio.Button>
