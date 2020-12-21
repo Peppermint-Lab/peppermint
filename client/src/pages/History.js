@@ -2,8 +2,8 @@ import React from "react";
 import { Table, Input, Button, Space } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
-
-// const data = [];
+import get from "lodash.get";
+import isequal from "lodash.isequal";
 
 import { baseUrl } from "../utils";
 
@@ -35,7 +35,7 @@ class History extends React.Component {
     this.setState({ searchText: "", searchedColumn: "" });
   }
 
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -80,29 +80,30 @@ class History extends React.Component {
     filterIcon: (filtered) => (
       <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
+    onFilter: (value, record) => {
+      return get(record, dataIndex)
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase());
+    },
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select(), 100);
       }
     },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
+
+    render: text => {
+      return isequal(this.state.searchedColumn, dataIndex) ? (
         <Highlighter
           highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
           searchWords={[this.state.searchText]}
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text.toString()}
         />
       ) : (
         text
-      ),
+      );
+    }
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -132,7 +133,7 @@ class History extends React.Component {
         dataIndex: ["client", "name"],
         key: "client",
         width: "15%",
-        ...this.getColumnSearchProps("client"),
+        ...this.getColumnSearchProps(['client', 'name']),
       },
       {
         title: "Email",
@@ -146,7 +147,7 @@ class History extends React.Component {
         dataIndex: ["assignedto", "name"],
         key: "assignedto",
         width: "15%",
-        ...this.getColumnSearchProps("assignedto"),
+        ...this.getColumnSearchProps(["assignedto", 'name']),
       },
       {
         title: "Status",
