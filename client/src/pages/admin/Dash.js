@@ -4,10 +4,9 @@ import { Card, Statistic, Row } from "antd";
 import { baseUrl } from "../../utils";
 
 const TicketStats = () => {
-
-  const [unClaimed, setUnClaimed ] = useState()
-  const [open, setOpen ] = useState()
-  const [complete, setComplete ] = useState()
+  const [unClaimed, setUnClaimed] = useState();
+  const [open, setOpen] = useState();
+  const [complete, setComplete] = useState();
 
   const fetchOpen = async () => {
     await fetch(`${baseUrl}/api/v1/data/getallopen`, {
@@ -21,7 +20,7 @@ const TicketStats = () => {
       .then((result) => {
         setOpen(result.result);
       });
-  }
+  };
 
   const fetchClosed = async () => {
     await fetch(`${baseUrl}/api/v1/data/getallcompleted`, {
@@ -35,7 +34,7 @@ const TicketStats = () => {
       .then((result) => {
         setComplete(result.result);
       });
-  }
+  };
 
   const fetchUnissued = async () => {
     await fetch(`${baseUrl}/api/v1/data/unallocatedTickets`, {
@@ -49,31 +48,31 @@ const TicketStats = () => {
       .then((result) => {
         setUnClaimed(result.result);
       });
-  }
+  };
 
   useEffect(() => {
-    fetchOpen()
-    fetchClosed()
-    fetchUnissued()
-  }, [])
+    fetchOpen();
+    fetchClosed();
+    fetchUnissued();
+  }, []);
 
   return (
     <Row>
-        <div className="stats-card">
-          <Card>
-            <Statistic title="Closed Tickets" value={complete} />
-          </Card>
-        </div>
-        <div className="stats-card">
-          <Card >
-            <Statistic title="Open Tickets" value={open} />
-          </Card>
-        </div>
-        <div className="stats-card">
-          <Card >
-            <Statistic title="Unclaimed Tickets" value={unClaimed} />
-          </Card>
-        </div>
+      <div className="stats-card">
+        <Card>
+          <Statistic title="Closed Tickets" value={complete} />
+        </Card>
+      </div>
+      <div className="stats-card">
+        <Card>
+          <Statistic title="Open Tickets" value={open} />
+        </Card>
+      </div>
+      <div className="stats-card">
+        <Card>
+          <Statistic title="Unclaimed Tickets" value={unClaimed} />
+        </Card>
+      </div>
     </Row>
   );
 };
