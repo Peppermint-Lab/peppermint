@@ -12,7 +12,8 @@ const Setings = () => {
   const [visible, setVisible] = useState(false);
   const [password, setPassword] = useState("");
 
-  const onCancel = () => {
+  const onCancel = (e) => {
+    e.stopPropagation();
     setVisible(false);
   };
 
@@ -51,8 +52,7 @@ const Setings = () => {
         visible={visible}
         mask={true}
         title="Settings"
-        okText="Exit"
-        onOk={onCancel}
+        footer={[<Button onClick={() => setVisible(false)}>Cancel</Button>]}
         onCancel={onCancel}
       >
         <Input placeholder="Enter new Password ... " style={{ width: 200}}  onChange={(e) => {
