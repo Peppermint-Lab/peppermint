@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 
-import { Menu, Switch, Button, Modal, Input, Layout } from "antd";
-import { EditTwoTone, FileTwoTone  } from "@ant-design/icons";
+import { Menu, Switch, Layout } from "antd";
+import { SettingTwoTone, FileTwoTone  } from "@ant-design/icons";
 
 import NewTicket from "./ticket/NewTicket";
 
@@ -16,13 +16,6 @@ const Navigation = () => {
   const [checkAdmin, setCheckAdmin] = useState(false);
   const [current, setCurrent] = useState();
   const [isDark, setIsDark] = useState("light");
-
-  const [visible, setVisible] = useState(false);
-  const [password, setPassword] = useState("");
-
-  const onCancel = () => {
-    setVisible(false);
-  };
 
   function logout() {
     localStorage.clear();
@@ -52,19 +45,6 @@ const Navigation = () => {
   useEffect(() => {
     isAdmin();
   }, []);
-
-  const resetPassword = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/resetPassword/user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        password,
-      }),
-    }).then((res) => res.json);
-  };
 
   const Render = () => {
     if (checkAdmin) {
@@ -102,39 +82,14 @@ const Navigation = () => {
               >
                 Admin
               </Menu.Item>
-              <Menu.Item
-                key={5}
+              <SubMenu
+                key='settings-men'
+                icon={<SettingTwoTone />}
                 style={{ float: "right" }}
-                onClick={() => {
-                  setVisible(true);
-                }}
               >
-                Settings
-                <Modal
-                  keyboard={true}
-                  visible={visible}
-                  mask={true}
-                  title="Settings"
-                  okText="Exit"
-                  onOk={onCancel}
-                  onCancel={onCancel}
-                >
-                  <Input
-                    placeholder="Enter new Password ... "
-                    style={{ width: 200 }}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                  />
-                  <Button
-                    onClick={resetPassword}
-                    style={{ marginLeft: 10, margin: 5 }}
-                  >
-                    <EditTwoTone />
-                  </Button>
-                  <Button onClick={logout}>Logout</Button>
-                </Modal>
-              </Menu.Item>
+                <Menu.Item key="SETTINGS:1"><Link to='/settings'>Settings</Link></Menu.Item>
+                <Menu.Item key="SETTINGS:2" onClick={logout}>Log out</Menu.Item>
+              </SubMenu>
               <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
                 <NewTicket />
               </Menu.Item>

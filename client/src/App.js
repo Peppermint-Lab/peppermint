@@ -19,6 +19,7 @@ import History from './pages/History'
 import AdminList from './component/newsletter/AdminList'
 import Open from "./pages/ticket/Open";
 import Unissued from "./pages/ticket/Unissued";
+import Settings from './pages/Settings'
 
 // import { GlobalContext } from "./Context/GlobalState";
 
@@ -45,6 +46,7 @@ const Routing = () => {
           <Route exact path="/tickets" component={Ticket} />
           <Route exact path="/monitor" component={Monitor} />
           <Route exact path='/history' component={History} />
+          <Route exact path='/settings' component={Settings} />
           <Route exact path='/ticket/:path'>
             <Route exact path='/ticket/open' component={Open} />
             <Route exact path='/ticket/unissued' component={Unissued} />

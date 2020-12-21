@@ -249,3 +249,9 @@
   align-items: center;
   justify-content: center;
 }
+
+.site-layout-content {
+  display: flex;
+  justify-content: center;
+  
+}
