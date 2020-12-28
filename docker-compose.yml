@@ -10,8 +10,8 @@ services:
     volumes:
     - ./docker-data/db:/data/db
 
-  api:
-    container_name: peppermint-api
+  client:
+    container_name: peppermint
     build: .
     ports:
       - 5000:5000
