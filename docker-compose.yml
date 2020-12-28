@@ -23,12 +23,6 @@ services:
     depends_on:
       - mongo
 
-  client:
-    build: ./client
-    ports:
-    - "80:80"
-    container_name: peppermint
-
 volumes:
   npm_cache:
   node_modules:
