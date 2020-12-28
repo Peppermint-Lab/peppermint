@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Container,
-  Header,
-  Content,
-  Divider,
-  Button,
-  Icon,
-  Input,
-} from "rsuite";
+import { Container, Header, Divider, Button, Icon, Input } from "rsuite";
 import Popup from "reactjs-popup";
 import { useHistory } from "react-router-dom";
 
@@ -147,9 +139,7 @@ const Home = () => {
         </Header>
 
         <Container>
-          <Content>
-            <Todo />
-          </Content>
+          <Todo />
         </Container>
 
         <Container>

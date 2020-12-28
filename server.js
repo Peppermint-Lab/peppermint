@@ -1,6 +1,7 @@
 // Dependencies
 const express = require("express");
 const app = express();
+const path = require('path');
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -31,7 +32,6 @@ const client = require("./src/routes/client");
 const news = require("./src/routes/news");
 
 // Express server libraries
-app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,6 +53,13 @@ if (process.env.NODE_ENV === "development") {
 
 // Express web server PORT
 const PORT = process.env.PORT || 5000;
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('/', function(req, res) {
+  res.sendFile('index.html', {root: path.join(__dirname, 'client/build/')});
+});
 
 app.listen(
   PORT,
