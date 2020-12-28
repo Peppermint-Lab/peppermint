@@ -32,6 +32,7 @@ const client = require("./src/routes/client");
 const news = require("./src/routes/news");
 
 // Express server libraries
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
