@@ -35,7 +35,7 @@ class History extends React.Component {
     this.setState({ searchText: "", searchedColumn: "" });
   }
 
-  getColumnSearchProps = dataIndex => ({
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -92,7 +92,7 @@ class History extends React.Component {
       }
     },
 
-    render: text => {
+    render: (text) => {
       return isequal(this.state.searchedColumn, dataIndex) ? (
         <Highlighter
           highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
@@ -103,7 +103,7 @@ class History extends React.Component {
       ) : (
         text
       );
-    }
+    },
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -133,7 +133,7 @@ class History extends React.Component {
         dataIndex: ["client", "name"],
         key: "client",
         width: "15%",
-        ...this.getColumnSearchProps(['client', 'name']),
+        ...this.getColumnSearchProps(["client", "name"]),
       },
       {
         title: "Email",
@@ -147,7 +147,7 @@ class History extends React.Component {
         dataIndex: ["assignedto", "name"],
         key: "assignedto",
         width: "15%",
-        ...this.getColumnSearchProps(["assignedto", 'name']),
+        ...this.getColumnSearchProps(["assignedto", "name"]),
       },
       {
         title: "Status",
@@ -165,7 +165,15 @@ class History extends React.Component {
       },
     ];
 
-    return <Table columns={columns} dataSource={this.state.data} pagination={{ pageSize: 10 }}/>;
+    return (
+      <div>
+        <Table
+          columns={columns}
+          dataSource={this.state.data}
+          pagination={{ pageSize: 10 }}
+        />
+      </div>
+    );
   }
 }
 
