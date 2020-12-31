@@ -56,15 +56,15 @@ version: '3.1'
 services:
 
   mongo:
-    container_name: api-db
+    container_name: db
     image: mongo:4
     restart: always
     volumes:
     - ./docker-data/db:/data/db
 
-  api:
-    container_name: api
-    image: andrews1066/peppermint-api:latest
+  client:
+    container_name: peppermint
+    build: .
     ports:
       - 5000:5000
     restart: on-failure
@@ -74,12 +74,6 @@ services:
       - node_modules:/usr/src/app/node_modules:delegated
     depends_on:
       - mongo
-
-  client:
-    image: andrews1066/peppermint:latest
-    ports:
-    - "80:80"
-    container_name: client
 
 volumes:
   npm_cache:
