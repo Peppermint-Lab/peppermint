@@ -138,11 +138,12 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-  const id = req.body.user;
+  const user = req.body.user;
+  const id = user._id;
   console.log(req.body);
   try {
     const user = await User.findOne({ _id: id });
-    res.status(200).json({ user });
+    res.status(200).json(user);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "User not found" });

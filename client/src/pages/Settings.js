@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Layout, Button, Input, Tabs } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, Input, Tabs } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
@@ -7,9 +7,36 @@ import { useHistory } from "react-router-dom";
 import { baseUrl } from "../utils";
 
 const UserProfile = () => {
+  const [info, setInfo] = useState([]);
+
+  const user = localStorage.getItem("user");
+
+  console.log(info);
+
+  const getData = async () => {
+    await fetch(`${baseUrl}/api/v1/auth/getById`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        user
+      })
+    }).then((res) => res.json)
+      .then((res) => {
+        setInfo(user)
+      })
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div>
       <h3>User Profile</h3>
+      
     </div>
   );
 };
@@ -17,7 +44,6 @@ const UserProfile = () => {
 const ResetPass = () => {
   const [password, setPassword] = useState("");
   const history = useHistory();
-
 
   const resetPassword = async () => {
     await fetch(`${baseUrl}/api/v1/auth/resetPassword/user`, {
