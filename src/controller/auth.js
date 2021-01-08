@@ -142,8 +142,10 @@ exports.getUserById = async (req, res) => {
   const id = user._id;
   console.log(req.body);
   try {
-    const user = await User.findOne({ _id: id });
-    res.status(200).json(user);
+    await User.findOne({ _id: id })
+    .then((user) => {
+      res.json({ user });
+    });
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "User not found" });

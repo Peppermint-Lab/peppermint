@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import { baseUrl } from "../utils";
 
 const UserProfile = () => {
-  const [info, setInfo] = useState([]);
+  const [info, setInfo] = useState({});
 
   const user = localStorage.getItem("user");
 
@@ -24,9 +24,7 @@ const UserProfile = () => {
         user
       })
     }).then((res) => res.json)
-      .then((res) => {
-        setInfo(user)
-      })
+      setInfo(user)
   };
 
   useEffect(() => {
@@ -36,7 +34,7 @@ const UserProfile = () => {
   return (
     <div>
       <h3>User Profile</h3>
-      
+      <h4>Name : {info.name}</h4>
     </div>
   );
 };
