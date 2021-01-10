@@ -138,14 +138,10 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-  const user = req.body.user;
-  const id = user._id;
-  console.log(req.body);
+  console.log(req.body)
   try {
-    await User.findOne({ _id: id })
-    .then((user) => {
-      res.json({ user });
-    });
+    const user = await User.find({ _id: req.body._id })
+    res.json([user])
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "User not found" });

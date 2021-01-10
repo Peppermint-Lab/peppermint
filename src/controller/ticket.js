@@ -98,7 +98,7 @@ exports.convertTicket = async (req, res) => {
 
 exports.all = async (req, res) => {
   try {
-    const tickets = await TicketSchema.find()
+    await TicketSchema.find()
       .populate("client", "_id name")
       .populate("assignedto", "_id name")
       .then((tickets) => {

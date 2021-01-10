@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import { baseUrl } from "../utils";
 
 const UserProfile = () => {
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState([]);
 
   const user = localStorage.getItem("user");
 
@@ -34,7 +34,7 @@ const UserProfile = () => {
   return (
     <div>
       <h3>User Profile</h3>
-      <h4>Name : {info.name}</h4>
+      <h4>Name : </h4>
     </div>
   );
 };
