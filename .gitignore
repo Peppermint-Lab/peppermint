@@ -4,3 +4,4 @@ docker-data/db
 .eslintcache
 docker
 build
+todo.txt

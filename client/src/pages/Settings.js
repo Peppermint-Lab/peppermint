@@ -7,11 +7,19 @@ import { useHistory } from "react-router-dom";
 import { baseUrl } from "../utils";
 
 const UserProfile = () => {
+  const user = localStorage.getItem("user");
   const [info, setInfo] = useState([]);
 
-  const user = localStorage.getItem("user");
+  // console.log(JSON.parse(info));
 
-  console.log(info);
+  function parse() {
+    const userInfo = JSON.parse(info)
+    const ui = JSON.stringify(userInfo)
+    console.log(ui)
+  }
+
+
+  // console.log(userInfo._id)
 
   const getData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/getById`, {
@@ -24,8 +32,10 @@ const UserProfile = () => {
         user
       })
     }).then((res) => res.json)
-      setInfo(user)
+    setInfo(user)
   };
+
+
 
   useEffect(() => {
     getData();

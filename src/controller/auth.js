@@ -141,7 +141,9 @@ exports.getUserById = async (req, res) => {
   console.log(req.body)
   try {
     const user = await User.find({ _id: req.body._id })
-    res.json([user])
+    .then((user) => {
+      res.json({ user })
+    })
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "User not found" });
