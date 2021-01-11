@@ -10,17 +10,6 @@ const UserProfile = () => {
   const user = localStorage.getItem("user");
   const [info, setInfo] = useState([]);
 
-  // console.log(JSON.parse(info));
-
-  function parse() {
-    const userInfo = JSON.parse(info)
-    const ui = JSON.stringify(userInfo)
-    console.log(ui)
-  }
-
-
-  // console.log(userInfo._id)
-
   const getData = async () => {
     await fetch(`${baseUrl}/api/v1/auth/getById`, {
       method: "POST",
@@ -90,9 +79,6 @@ const Settings = () => {
     <div>
       <div className="site-layout-content">
         <Tabs defaultActiveKey="1" centered={true}>
-          <TabPane tab="Details" key="1">
-            <UserProfile />
-          </TabPane>
           <TabPane tab="Reset" key="2">
             <ResetPass />
           </TabPane>
