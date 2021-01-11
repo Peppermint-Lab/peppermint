@@ -21,4 +21,4 @@ RUN npm install bcrypt
 # Bundle app source
 COPY . .
 
-CMD [ "seed -u 'mongodb://mongo/peppermint' ./data", "node", "server.js" ]
+CMD ["node", "server.js" ]
