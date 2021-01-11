@@ -1,6 +1,5 @@
 // imports mongoose which connects to the mongodb database
 const mongoose = require("mongoose");
-const User = require("../src/models/InternalUser");
 
 // Function which inits the connect to the db,
 const connectDB = async () => {
@@ -18,18 +17,5 @@ const connectDB = async () => {
   }
 };
 
-const seed = async () => {
-  User.create[
-    {
-      role: "admin",
-      email: "admin@admin.com",
-      password:
-        "$2b$16$tZw9cK/q1NHS7d9zb8/seujYej.QjdkH2UXzwpCz3ZetYhOdxdxS.",
-      name: "Admin",
-    }
-  ];
-}
-
 // exports so it can be called in server.js
 module.exports = connectDB;
-module.exports = seed;

@@ -14,6 +14,7 @@ RUN apk add --no-cache make gcc g++ python && \
   apk del make gcc g++ python
 
 RUN npm install --silent --production && npm cache clean --force
+RUN npm install -g mongo-seeding-cli
 RUN npm uninstall bcrypt
 RUN npm install bcrypt
 
