@@ -64,7 +64,7 @@ services:
 
   client:
     container_name: peppermint
-    build: .
+    image: andrews1066/peppermint
     ports:
       - 5000:5000
     restart: on-failure
