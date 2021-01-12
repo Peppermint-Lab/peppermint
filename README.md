@@ -64,7 +64,7 @@ services:
 
   client:
     container_name: peppermint
-    image: andrews1066/peppermint
+    image: andrews1066/peppermint:latest
     ports:
       - 5000:5000
     restart: on-failure
