@@ -21,4 +21,5 @@ RUN npm install bcrypt
 # Bundle app source
 COPY . .
 
-CMD ["ls"]
+EXPOSE 5000
+CMD ["npm", "start"]

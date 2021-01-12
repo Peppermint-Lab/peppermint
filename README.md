@@ -68,16 +68,9 @@ services:
     ports:
       - 5000:5000
     restart: on-failure
-    volumes:
-      - ./:/usr/src/app:cached
-      - npm_cache:/root/.npm:delegated
-      - node_modules:/usr/src/app/node_modules:delegated
     depends_on:
       - mongo
 
-volumes:
-  npm_cache:
-  node_modules:
 ```
 
 ## Author
