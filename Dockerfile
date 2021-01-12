@@ -21,4 +21,4 @@ RUN npm install bcrypt
 # Bundle app source
 COPY . .
 
-CMD ["node", "server.js" ]
+CMD ["npm", "start"]
