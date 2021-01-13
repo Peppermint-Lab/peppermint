@@ -71,6 +71,10 @@ services:
     depends_on:
       - mongo
 
+networks: 
+  local:
+    driver: bridge 
+
 ```
 
 ## Author
