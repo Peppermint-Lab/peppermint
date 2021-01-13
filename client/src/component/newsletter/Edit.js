@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Drawer, Button, Divider, Input, Radio, Space } from "antd";
 
-import { baseUrl } from "../../utils.js";
+// import { baseUrl } from "../../utils.js";
 
 const Edit = (props) => {
   const [visible, setVisible] = useState(false);
@@ -16,7 +16,7 @@ const Edit = (props) => {
   };
 
   const postData = async () => {
-    await fetch(`${baseUrl}/api/v1/newsletter/update`, {
+    await fetch(`/api/v1/newsletter/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

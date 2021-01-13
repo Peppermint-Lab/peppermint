@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Space } from "antd";
 
-import { baseUrl } from "../../utils";
+// import { baseUrl } from "../../utils";
 
 
 import ViewNewsletter from "./ViewNewsletter";
@@ -13,7 +13,7 @@ const AdminList = () => {
   console.log(data);
 
   const getN = async () => {
-    await fetch(`${baseUrl}/api/v1/newsletter/get`, {
+    await fetch(`/api/v1/newsletter/get`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const AdminList = () => {
   };
 
   const del = async (id) => {
-    await fetch(`${baseUrl}/api/v1/newsletter/delete/${id}`, {
+    await fetch(`/api/v1/newsletter/delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

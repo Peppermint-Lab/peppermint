@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "antd";
 
-import { baseUrl } from "../../utils";
+// import { baseUrl } from "../../utils";
 import ViewNewsletter from "./ViewNewsletter";
 
 const ListNewsletter = () => {
@@ -10,7 +10,7 @@ const ListNewsletter = () => {
 
     console.log(n)
     const getN = async () => {
-        await fetch(`${baseUrl}/api/v1/newsletter/get`, {
+        await fetch(`/api/v1/newsletter/get`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

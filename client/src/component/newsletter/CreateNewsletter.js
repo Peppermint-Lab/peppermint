@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Radio, Space, Row } from "antd";
+import { Modal, Input, Radio, Space, Row } from "antd";
 
-import { baseUrl } from "../../utils";
+// import { baseUrl } from "../../utils";
 
 const CreateNewsletter = () => {
   const [visible, setVisible] = useState(false);
@@ -12,7 +12,7 @@ const CreateNewsletter = () => {
   const { TextArea } = Input;
 
   const postData = async () => {
-    await fetch(`${baseUrl}/api/v1/newsletter/create`, {
+    await fetch(`/api/v1/newsletter/create`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
