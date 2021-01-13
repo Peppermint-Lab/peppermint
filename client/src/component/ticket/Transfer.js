@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Select, Modal, Button } from "antd";
 
-import { baseUrl } from "../../utils.js";
+// import { baseUrl } from "../../utils.js";
 
 const Transfer = (props) => {
   const { Option } = Select;
@@ -12,7 +12,7 @@ const Transfer = (props) => {
   console.log(props)
 
   const fetchUsers = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/getAllUsers`, {
+    await fetch(`/api/v1/auth/getAllUsers`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ const Transfer = (props) => {
   };
 
   const postData = () => {
-    fetch(`${baseUrl}/api/v1/tickets/transfer`, {
+    fetch(`/api/v1/tickets/transfer`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,6 @@ const Transfer = (props) => {
         <Select
           style={{ }}
           showSearch
-          style={{ width: 200 }}
           placeholder="Select a user"
           optionFilterProp="children"
           onChange={setId}

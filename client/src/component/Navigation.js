@@ -6,12 +6,11 @@ import { SettingTwoTone, FileTwoTone  } from "@ant-design/icons";
 
 import NewTicket from "./ticket/NewTicket";
 
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
 
 const Navigation = () => {
   const history = useHistory();
   const { SubMenu } = Menu;
-  const { Header, Content, Footer, Sider } = Layout;
 
   const [checkAdmin, setCheckAdmin] = useState(false);
   const [current, setCurrent] = useState();

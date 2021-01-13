@@ -5,7 +5,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
 
 class History extends React.Component {
   state = {
@@ -16,7 +16,7 @@ class History extends React.Component {
 
   componentDidMount() {
     // make fetch request
-    fetch(`${baseUrl}/api/v1/tickets/all`, {
+    fetch(`/api/v1/tickets/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

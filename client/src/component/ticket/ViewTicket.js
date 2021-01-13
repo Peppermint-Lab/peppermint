@@ -26,7 +26,7 @@ const ViewTicket = (props) => {
 
   const complete = async (record) => {
     const id = record;
-    await fetch(`${baseUrl}/api/v1/tickets/complete/${id}`, {
+    await fetch(`/api/v1/tickets/complete/${id}`, {
       method: "Post",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ const ViewTicket = (props) => {
   };
 
   const update = async () => {
-    await fetch(`${baseUrl}/api/v1/tickets/update`, {
+    await fetch(`/api/v1/tickets/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

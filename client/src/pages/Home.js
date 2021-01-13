@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Header, Divider, Button, Icon, Input } from "rsuite";
 import Popup from "reactjs-popup";
 import { useHistory } from "react-router-dom";
-import { Col, Row } from "antd";
 
 import Navigation from "../component/Navigation";
 import CreateTodo from "../component/todo/CreateTodo";

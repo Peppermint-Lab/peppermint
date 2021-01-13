@@ -19,7 +19,7 @@ const NewTicket = () => {
   const [form] = Form.useForm();
 
   const fetchClients = () => {
-    fetch(`${baseUrl}/api/v1/client/allclients`, {
+    fetch(`/api/v1/client/allclients`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const NewTicket = () => {
   };
 
   const postData = () => {
-    fetch(`${baseUrl}/api/v1/tickets/createTicket`, {
+    fetch(`/api/v1/tickets/createTicket`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

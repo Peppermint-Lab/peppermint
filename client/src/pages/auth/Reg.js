@@ -12,7 +12,7 @@ import {
 } from "rsuite";
 import { useHistory } from "react-router-dom";
 
-import { baseUrl } from "../../utils.js";
+// import { baseUrl } from "../../utils.js";
 
 const Reg = () => {
   const history = useHistory();
@@ -22,7 +22,7 @@ const Reg = () => {
   const [name, setName] = useState("");
 
   const PostData = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/Signup`, {
+    await fetch(`/api/v1/auth/Signup`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",

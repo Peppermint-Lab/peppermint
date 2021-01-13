@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@nivo/bar": "^0.67.0",
     "@nivo/core": "^0.67.0",
@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "set INLINE_RUNTIME_CHUNK=false && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -6,7 +6,7 @@ import {
   Popconfirm,
 } from "antd";
 
-import { baseUrl } from "../../utils";
+// import { baseUrl } from "../../utils";
 import UpdateClient from "../../component/admin/UpdateClient";
 
 const ClientList = () => {
@@ -15,7 +15,7 @@ const ClientList = () => {
   console.log(clientAll)
 
   const fetchClients = () => {
-    fetch(`${baseUrl}/api/v1/client/allclients`, {
+    fetch(`/api/v1/client/allclients`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ const ClientList = () => {
   const deleteClient = async (client) => {
     const id = client._id;
     try {
-      await fetch(`${baseUrl}/api/v1/client/delete/${id}`, {
+      await fetch(`/api/v1/client/delete/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),

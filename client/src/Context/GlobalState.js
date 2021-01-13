@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, } from "react";
 import AppReducer from "./AppReducer";
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
 import axios from "axios";
 // import { useHistory } from "react-router-dom";
 
@@ -28,7 +28,7 @@ export const GlobalProvider = ({ children }) => {
       },
     };
     try {
-      const res = await axios.get(`${baseUrl}/api/v1/todo/getTodo`, config);
+      const res = await axios.get(`/api/v1/todo/getTodo`, config);
       // console.log(res.data.todo)
       dispatch({
         type: "GET_TODOS",
@@ -39,7 +39,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function addTodo(todo) {
     try {
-      const res = await fetch(`${baseUrl}/api/v1/todo/createTodo`, {
+      const res = await fetch(`/api/v1/todo/createTodo`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function deleteTodo(id) {
     try {
-      await fetch(`${baseUrl}/api/v1/todo/deleteTodo/${id}`, {
+      await fetch(`/api/v1/todo/deleteTodo/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -73,7 +73,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function allDone() {
     try {
-      const res = await fetch(`${baseUrl}/api/v1/todo/markAllAsDone`, {
+      const res = await fetch(`/api/v1/todo/markAllAsDone`, {
         method: "PUT",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -89,7 +89,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function markDone(id) {
     try {
-      const res = await fetch(`${baseUrl}/api/v1/todo/markOneAsDone/${id}`, {
+      const res = await fetch(`/api/v1/todo/markOneAsDone/${id}`, {
         method: "PUT",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -104,7 +104,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function getNotes() {
     try {
-      const res = await fetch(`${baseUrl}/api/v1/note/getNotes`, {
+      const res = await fetch(`/api/v1/note/getNotes`, {
         method: "get",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -118,7 +118,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function saveNote(text, title) {
     try {
-      const res = await await fetch(`${baseUrl}/api/v1/note/saveNote`, {
+      const res = await await fetch(`/api/v1/note/saveNote`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +137,7 @@ export const GlobalProvider = ({ children }) => {
   async function deleteNote(id) {
     try {
       console.log(id);
-      await fetch(`${baseUrl}/api/v1/note/deleteNote/${id}`, {
+      await fetch(`/api/v1/note/deleteNote/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -151,7 +151,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function signin(email, password) {
     try {
-      await fetch(`${baseUrl}/api/v1/auth/login`, {
+      await fetch(`/api/v1/auth/login`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -178,7 +178,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function isLogged() {
     try {
-      await fetch(`${baseUrl}/api/v1/auth/token`, {
+      await fetch(`/api/v1/auth/token`, {
         method: "post",
         headers: {
           "Content-Type" : "application/json",

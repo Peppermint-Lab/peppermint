@@ -4,14 +4,14 @@ import { EditTwoTone } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
 
-import { baseUrl } from "../utils";
+// import { baseUrl } from "../utils";
 
 const UserProfile = () => {
   const user = localStorage.getItem("user");
   const [info, setInfo] = useState([]);
 
   const getData = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/getById`, {
+    await fetch(`/api/v1/auth/getById`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const ResetPass = () => {
   const history = useHistory();
 
   const resetPassword = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/resetPassword/user`, {
+    await fetch(`/api/v1/auth/resetPassword/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

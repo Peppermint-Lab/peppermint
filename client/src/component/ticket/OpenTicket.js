@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Table, Space, Button } from "antd";
 
-import { baseUrl } from "../../utils.js";
+// import { baseUrl } from "../../utils.js";
 import ViewTicket from "./ViewTicket.js";
 
 const OpenTicket = () => {
   const [data, setData] = useState([]);
 
   async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/tickets/openedTickets`, {
+    await fetch(`/api/v1/tickets/openedTickets`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

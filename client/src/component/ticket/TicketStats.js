@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Divider } from "rsuite";
 
-import { baseUrl } from "../../utils.js";
+// import { baseUrl } from "../../utils.js";
 
 const Open = () => {
   const [data, setData] = useState([]);
 
   async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/data/openTickets`, {
+    await fetch(`/api/v1/data/openTickets`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -41,7 +41,7 @@ const Unissued = () => {
   const [data, setData] = useState([]);
 
   async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/data/unallocatedTickets`, {
+    await fetch(`/api/v1/data/unallocatedTickets`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -75,7 +75,7 @@ const Completed = () => {
   const [data, setData] = useState([]);
 
   async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/data/completedTickets`, {
+    await fetch(`/api/v1/data/completedTickets`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),

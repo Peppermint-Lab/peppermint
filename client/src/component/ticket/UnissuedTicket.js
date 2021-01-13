@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Space, Button } from "antd";
 
-import { baseUrl } from "../../utils.js";
+// import { baseUrl } from "../../utils.js";
 
 const UnissuedTicket = () => {
   const [data, setData] = useState([]);
 
   async function loadContent() {
-    await fetch(`${baseUrl}/api/v1/tickets/unissuedTickets`, {
+    await fetch(`/api/v1/tickets/unissuedTickets`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ const UnissuedTicket = () => {
   }, []);
 
   const convert = () => {
-    fetch(`${baseUrl}/api/v1/tickets/convertTicket`, {
+    fetch(`/api/v1/tickets/convertTicket`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
