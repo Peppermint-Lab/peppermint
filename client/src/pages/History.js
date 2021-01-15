@@ -170,7 +170,7 @@ class History extends React.Component {
         <Table
           columns={columns}
           dataSource={this.state.data}
-          pagination={{ pageSize: 10 }}
+          pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}}
         />
       </div>
     );

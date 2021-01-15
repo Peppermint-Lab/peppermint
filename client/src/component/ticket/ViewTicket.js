@@ -65,7 +65,7 @@ const ViewTicket = (props) => {
       >
         View Ticket
       </Button>
-      <Drawer width={640} placement="right" onClose={onClose} visible={visible}>
+      <Drawer className='my-drawer' placement="right" onClose={onClose} visible={visible}>
         <h2>Client: {props.ticket.client.name}</h2>
         <Space size="middle">
           <Transfer ticket={props.ticket} />

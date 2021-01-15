@@ -55,18 +55,20 @@ const UnissuedTicket = () => {
       dataIndex: "name",
       key: "name",
       width: 150,
+      responsive: ['md'],
     },
     {
       title: "Client",
-      render: (data) => data.name,
+      dataIndex: ["client", "name"],
       key: "client",
-      width: 150,
+      width: 75,
     },
     {
       title: "Priority",
       dataIndex: "priority",
       key: "priority",
-      width: 50,
+      width: 30,
+      responsive: ['md'],
     },
     {
       title: "Issue",
@@ -76,7 +78,7 @@ const UnissuedTicket = () => {
     {
       title: "Action",
       key: "action",
-      width: 200,
+      width: 100,
       render: () => (
         <Space size="middle">
           <Button size="small" onClick={convert}>Convert</Button>

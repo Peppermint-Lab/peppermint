@@ -17,7 +17,18 @@
   .Right-Container {
     width: 95% !important;
   }
+  .ant-drawer-open {
+    width: 100% !important; mask: false } 
+   .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
 }
+
+.my-drawer.ant-drawer-open {
+  width: 100% !important; mask: false } 
+   .ant-drawer-content-wrapper {
+    width: 30% !important;
+  }
 
 .main-con {
   display: flex;

@@ -9,8 +9,6 @@ const Transfer = (props) => {
   const [id, setId] = useState("");
   const [visible, setVisible] = useState(false);
 
-  console.log(props)
-
   const fetchUsers = async () => {
     await fetch(`/api/v1/auth/getAllUsers`, {
       method: "GET",
