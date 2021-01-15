@@ -46,7 +46,7 @@ const ListNewsletter = () => {
 
     return (
         <div>
-            <Table showHeader={false} dataSource={n} columns={columns} />
+            <Table showHeader={false} dataSource={n} columns={columns} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['3', '5', '10']}} />
         </div>
     )
 }

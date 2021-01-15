@@ -43,7 +43,7 @@ const ListNote = () => {
 
   return (
     <div>
-      <Table dataSource={notes} columns={columns} showHeader={false} />
+      <Table dataSource={notes} columns={columns} showHeader={false} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
     </div>
   );
 };

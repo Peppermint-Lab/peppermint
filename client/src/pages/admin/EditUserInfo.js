@@ -81,7 +81,7 @@ const EditUserInfo = () => {
 
   return (
     <div>
-      <Table dataSource={users} columns={columns} />
+      <Table dataSource={users} columns={columns} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
     </div>
   );
 };

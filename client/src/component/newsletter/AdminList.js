@@ -76,7 +76,7 @@ const AdminList = () => {
 
   return (
     <div>
-      <Table dataSource={data} columns={columns} />
+      <Table dataSource={data} columns={columns} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}}/>
     </div>
   );
 };

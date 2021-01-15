@@ -89,7 +89,7 @@ const UnissuedTicket = () => {
   return (
     <div>
       <h3 style={{ textAlign: "center" }}>Unissued Tickets - </h3>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
     </div>
   );
 };

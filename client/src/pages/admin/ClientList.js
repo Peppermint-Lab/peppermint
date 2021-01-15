@@ -96,7 +96,7 @@ const ClientList = () => {
 
   return (
     <div style={{ marginTop: 5 }}>
-      <Table dataSource={clientAll} columns={columns} Pagenation={false} />
+      <Table dataSource={clientAll} columns={columns} Pagenation={false} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
     </div>
   );
 };
