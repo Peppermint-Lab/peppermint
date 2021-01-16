@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Divider } from "rsuite";
 
-// import { baseUrl } from "../../utils.js";
 
 const Open = () => {
   const [data, setData] = useState([]);

@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import { Button, Modal, Input } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
-import { baseUrl } from "../../utils";
-
 const EditNote = (props) => {
   const [visible, setVisible] = useState(false);
   const [note, setNote] = useState(props.notes.note);
   const [id, setId] = useState("");
 
   const postData = async () => {
-    await fetch(`${baseUrl}/api/v1/note/updateNote`, {
+    await fetch(`/api/v1/note/updateNote`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

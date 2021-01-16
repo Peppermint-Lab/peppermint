@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Select, Modal, Button } from "antd";
-
-// import { baseUrl } from "../../utils.js";
+import { Select, Modal, Button } from "antd"
 
 const Transfer = (props) => {
   const { Option } = Select;

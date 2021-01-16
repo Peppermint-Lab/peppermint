@@ -6,7 +6,6 @@ import {
   Popconfirm,
 } from "antd";
 
-// import { baseUrl } from "../../utils";
 import UpdateClient from "../../component/admin/UpdateClient";
 
 const ClientList = () => {

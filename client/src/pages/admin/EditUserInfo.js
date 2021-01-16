@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Space, Table, Button, Popconfirm  } from "antd";
 
-import { baseUrl } from "../../utils";
 import ResetPassword from "../../component/admin/ResetPassword";
 import EditInfo from "../../component/admin/EditInfo";
 
@@ -9,7 +8,7 @@ const EditUserInfo = () => {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/getAllUsers`, {
+    await fetch(`/api/v1/auth/getAllUsers`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +27,7 @@ const EditUserInfo = () => {
     const id = client._id;
     console.log(id)
     try {
-      await fetch(`${baseUrl}/api/v1/auth/delete/${id}`, {
+      await fetch(`/api/v1/auth/delete/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("jwt"),

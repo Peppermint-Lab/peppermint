@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 //import { Grid, Col, Table, Modal, Button, Nav } from "rsuite";
 import { useHistory } from "react-router-dom";
 
-// import { baseUrl } from "../utils";
-
 import OpenTickets from "../component/ticket/OpenTicket";
 import UnissuedTickets from "../component/ticket/UnissuedTicket";
 

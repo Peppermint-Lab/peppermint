@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Select, Modal, Form, Input, Radio, Space, Button } from "antd";
-// import { PlusSquareTwoTone } from "@ant-design/icons";
-// import { useHistory } from "react-router-dom";
-
-import { baseUrl } from "../../utils.js";
 
 const NewTicket = () => {
   const { Option } = Select;

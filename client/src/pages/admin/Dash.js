@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Card, Statistic, Row } from "antd";
 
-import { baseUrl } from "../../utils";
-
 const TicketStats = () => {
   const [unClaimed, setUnClaimed] = useState();
   const [open, setOpen] = useState();
   const [complete, setComplete] = useState();
 
   const fetchOpen = async () => {
-    await fetch(`${baseUrl}/api/v1/data/getallopen`, {
+    await fetch(`/api/v1/data/getallopen`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -23,7 +21,7 @@ const TicketStats = () => {
   };
 
   const fetchClosed = async () => {
-    await fetch(`${baseUrl}/api/v1/data/getallcompleted`, {
+    await fetch(`/api/v1/data/getallcompleted`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -37,7 +35,7 @@ const TicketStats = () => {
   };
 
   const fetchUnissued = async () => {
-    await fetch(`${baseUrl}/api/v1/data/unallocatedTickets`, {
+    await fetch(`/api/v1/data/unallocatedTickets`, {
       method: "get",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),

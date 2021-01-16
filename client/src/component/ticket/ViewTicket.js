@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Input, Space, Button, Drawer, Divider, Row, Popconfirm } from "antd";
 
-import { baseUrl } from "../../utils.js";
-
 import Transfer from "./Transfer";
 
 const ViewTicket = (props) => {

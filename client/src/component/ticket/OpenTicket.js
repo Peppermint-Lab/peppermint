@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Space, Button } from "antd";
 
-// import { baseUrl } from "../../utils.js";
 import ViewTicket from "./ViewTicket.js";
 
 const OpenTicket = () => {

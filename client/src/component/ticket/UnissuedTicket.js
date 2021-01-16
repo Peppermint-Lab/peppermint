@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Space, Button } from "antd";
 
-// import { baseUrl } from "../../utils.js";
-
 const UnissuedTicket = () => {
   const [data, setData] = useState([]);
 

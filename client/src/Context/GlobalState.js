@@ -1,8 +1,6 @@
 import React, { createContext, useReducer, } from "react";
 import AppReducer from "./AppReducer";
-// import { baseUrl } from "../utils";
 import axios from "axios";
-// import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {

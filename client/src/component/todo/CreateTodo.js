@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { Input, Button } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
-// import { baseUrl } from "../utils";
 import { GlobalContext } from "../../Context/GlobalState";
 
 const CreateTodo = () => {

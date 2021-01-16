@@ -2,9 +2,6 @@ import React, { useEffect, useContext } from "react";
 import { Button, Table, Space, Popconfirm } from "antd";
 import { DeleteTwoTone  } from "@ant-design/icons";
 
-
-//import { baseUrl } from "../utils";
-
 import { GlobalContext } from "../../Context/GlobalState";
 import EditNote from "./EditNote";
 
