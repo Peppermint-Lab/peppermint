@@ -34,7 +34,7 @@ const Login = () => {
         }}
       >
         <div className="logo-login">
-          <Image alt="logo" src={logo} width={300} />
+          <Image alt="logo" src={logo} width={300} preview={false} />
         </div>
         <Form.Item
           name="username"
