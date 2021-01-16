@@ -80,7 +80,7 @@ const Login = () => {
             className="login-form-button"
             onClick={() => {
               onSubmit();
-              setTimeout(() => history.push("/"), 4000);
+              setTimeout(() => history.push("/"), 5000);
             }}
           >
             Log in

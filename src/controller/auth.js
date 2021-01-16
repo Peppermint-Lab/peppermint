@@ -22,9 +22,8 @@ exports.Signup = async (req, res) => {
           name,
         });
 
-        user.save().then((user) => {
-          res.json({ message: "User saved successfully" });
-        });
+        user.save()
+        res.json({ message: "User saved successfully" });
       });
     });
   } catch (error) {
@@ -51,8 +50,6 @@ exports.Login = async (req, res) => {
           );
           const { _id, name, email, role } = savedUser;
           res.status(200).json({ token, user: { _id, name, email, role } });
-        } else {
-          return res.status(422).json({ error: "Invalid Email or password" });
         }
       });
     });
