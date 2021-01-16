@@ -1,18 +1,14 @@
 import React, { useState } from "react";
+import { Form, Input, Button, Image } from "antd";
 import {
-  Container,
-  Content,
-  FlexboxGrid,
-  Panel,
-  Form,
-  FormGroup,
-  ControlLabel,
-  ButtonToolbar,
-  Button,
-} from "rsuite";
+  UserOutlined,
+  LockOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+} from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 
-// import { baseUrl } from "../../utils.js";
+import logo from "./logo.png";
 
 const Reg = () => {
   const history = useHistory();
@@ -46,51 +42,84 @@ const Reg = () => {
   return (
     <div>
       <div>
-        <Container>
-          <Content>
-            <FlexboxGrid justify="center">
-              <FlexboxGrid.Item colspan={12}>
-                <Panel header={<h3>Sign Up</h3>} bordered>
-                  <Form fluid>
-                    <FormGroup>
-                      <ControlLabel>Name</ControlLabel>
-                      <input
-                        name="name"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </FormGroup>
+        <Form
+          style={{ position: "absolute" }}
+          name="normal_login"
+          className="login-form"
+          initialValues={{
+            remember: true,
+          }}
+        >
+          <div className="logo-login">
+            <Image alt="logo" src={logo} width={300} />
+          </div>
+          <Form.Item
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Email!",
+              },
+            ]}
+          >
+            <Input
+              style={{ width: 300 }}
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "Please input your name!",
+              },
+            ]}
+          >
+            <Input
+              style={{ width: 300 }}
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Name"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Password!",
+              },
+            ]}
+          >
+            <Input.Password
+              style={{ width: 300 }}
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Item>
 
-                    <FormGroup>
-                      <ControlLabel>Email</ControlLabel>
-                      <input
-                        name="password"
-                        type="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <ControlLabel>Password</ControlLabel>
-                      <input
-                        name="password"
-                        type="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </FormGroup>
-
-                    <FormGroup>
-                      <ButtonToolbar>
-                        <Button appearance="primary" onClick={() => PostData()}>
-                          Sign Up
-                        </Button>
-                      </ButtonToolbar>
-                    </FormGroup>
-                  </Form>
-                </Panel>
-              </FlexboxGrid.Item>
-            </FlexboxGrid>
-          </Content>
-        </Container>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              onClick={() => {
+                PostData()
+                setTimeout(() => history.push("/"), 4000);
+              }}
+            >
+              Log in
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );

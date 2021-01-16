@@ -22,6 +22,12 @@
    .ant-drawer-content-wrapper {
     width: 100% !important;
   }
+  .login-container {
+    display: flex;
+    justify-content: center !important;
+    align-items: center;
+    margin-left: -15% !important;
+  }
 }
 
 .my-drawer.ant-drawer-open {

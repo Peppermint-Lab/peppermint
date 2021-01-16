@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Form, Input, Button, Image } from "antd";
 import {
   UserOutlined,
@@ -8,11 +8,9 @@ import {
   EyeTwoTone,
 } from "@ant-design/icons";
 
-import logo from './logo.png'
+import logo from "./logo.png";
 
 import { GlobalContext } from "../../Context/GlobalState";
-
-// import { baseUrl } from '../utils'
 
 const Login = () => {
   const history = useHistory();
@@ -26,9 +24,9 @@ const Login = () => {
   };
 
   return (
-    <div >
+    <div>
       <Form
-        style={{ position: 'absolute'}}
+        style={{ position: "absolute" }}
         name="normal_login"
         className="login-form"
         initialValues={{
@@ -36,8 +34,8 @@ const Login = () => {
         }}
       >
         <div className="logo-login">
-            <Image alt="logo" src={logo} width={300} />
-      </div>
+          <Image alt="logo" src={logo} width={300} />
+        </div>
         <Form.Item
           name="username"
           rules={[
@@ -73,9 +71,6 @@ const Login = () => {
             }
             onChange={(e) => setPassword(e.target.value)}
           />
-        </Form.Item>
-        <Form.Item>
-          <Link>Forgot Password</Link>
         </Form.Item>
 
         <Form.Item>
