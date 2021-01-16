@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Input, Select, Space, Button } from "antd";
 
-import { baseUrl } from "../../utils";
-
 const ResetPassword = () => {
   const [users, setUsers] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -12,7 +10,7 @@ const ResetPassword = () => {
   const { Option } = Select;
 
   const fetchUsers = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/getAllUsers`, {
+    await fetch(`/api/v1/auth/getAllUsers`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +26,7 @@ const ResetPassword = () => {
   };
 
   const postData = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/resetPassword`, {
+    await fetch(`/api/v1/auth/resetPassword`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Space } from "antd";
 
-// import { baseUrl } from "../../utils";
-
-
 import ViewNewsletter from "./ViewNewsletter";
 import Edit from "./Edit";
 

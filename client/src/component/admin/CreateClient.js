@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { Modal, Form, Input, } from "antd";
-import { baseUrl } from "../../utils";
-
 
 const CreateClient = () => {
     const [visible, setVisible] = useState(false);
@@ -13,7 +11,7 @@ const CreateClient = () => {
     const [email, setEmail] = useState("");
   
     const postData = async () => {
-      await fetch(`${baseUrl}/api/v1/client/create`, {
+      await fetch(`/api/v1/client/create`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

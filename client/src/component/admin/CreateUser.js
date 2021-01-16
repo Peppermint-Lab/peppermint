@@ -3,8 +3,6 @@ import React, { useState, } from "react";
 import { Modal, Form, Input, Radio } from "antd";
 // import { GlobalContext } from '../Context/GlobalState';
 
-import { baseUrl } from "../../utils";
-
 const CreateUser = () => {
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
@@ -14,7 +12,7 @@ const CreateUser = () => {
     const [name, setName] = useState("");
   
     const postData = async () => {
-      await fetch(`${baseUrl}/api/v1/auth/Signup`, {
+      await fetch(`/api/v1/auth/Signup`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Input, Space, Radio, Row } from "antd";
 
-import { baseUrl } from "../../utils";
-
 /*
 Show info of selected user
 Edit Button or cancel - If edit is click show Update or cancel 
@@ -18,7 +16,7 @@ const EditInfo = (props) => {
   const [visible, setVisible] = useState(false);
 
   const postData = async () => {
-    await fetch(`${baseUrl}/api/v1/auth/edit`, {
+    await fetch(`/api/v1/auth/edit`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

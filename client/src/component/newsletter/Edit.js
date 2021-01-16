@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Drawer, Button, Divider, Input, Radio, Space } from "antd";
 
-// import { baseUrl } from "../../utils.js";
-
 const Edit = (props) => {
   const [visible, setVisible] = useState(false);
   const [isActive, setIsActive] = useState(props.n.active);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "antd";
 
-// import { baseUrl } from "../../utils";
 import ViewNewsletter from "./ViewNewsletter";
 
 const ListNewsletter = () => {

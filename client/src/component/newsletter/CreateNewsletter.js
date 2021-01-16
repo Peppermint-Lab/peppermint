@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Input, Radio, Space, Row } from "antd";
 
-// import { baseUrl } from "../../utils";
-
 const CreateNewsletter = () => {
   const [visible, setVisible] = useState(false);
   const [title, setTittle ]   =   useState('');

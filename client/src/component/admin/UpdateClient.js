@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Modal, Input, Button, Row  } from "antd";
-import { baseUrl } from "../../utils";
 
 const UpdateClient = (props) => {
   const [visible, setVisible] = useState(false);
@@ -12,7 +11,7 @@ const UpdateClient = (props) => {
   console.log(props.client)
 
   const postData = async () => {
-    await fetch(`${baseUrl}/api/v1/client/update`, {
+    await fetch(`/api/v1/client/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
