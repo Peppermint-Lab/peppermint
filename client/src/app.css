@@ -2,6 +2,10 @@
   margin: 0;
 }
 
+html, body {
+  height: 100vh;
+}
+
 @media only screen and (max-width: 599px) {
   .main-con {
     display: flex;
@@ -18,23 +22,27 @@
     width: 95% !important;
   }
   .ant-drawer-open {
-    width: 100% !important; mask: false } 
-   .ant-drawer-content-wrapper {
+    width: 100% !important;
+    mask: false;
+  }
+  .ant-drawer-content-wrapper {
     width: 100% !important;
   }
   .login-container {
-    display: flex;
+    display: flex !important;
     justify-content: center !important;
-    align-items: center;
-    margin-left: -15% !important;
+    margin-right: 75% !important;
+    margin-top: -250px !important;
   }
 }
 
 .my-drawer.ant-drawer-open {
-  width: 100% !important; mask: false } 
-   .ant-drawer-content-wrapper {
-    width: 30% !important;
-  }
+  width: 100% !important;
+  mask: false;
+}
+.ant-drawer-content-wrapper {
+  width: 30% !important;
+}
 
 .main-con {
   display: flex;
@@ -53,10 +61,12 @@
 }
 
 .login-container {
-  margin: 0 auto;
-  width: 50%;
-  margin-top: 200px;
-  margin-left: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin-right: 25%;
+  margin-top: -10%;
 }
 
 .monitor-create {
