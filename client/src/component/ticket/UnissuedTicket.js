@@ -53,7 +53,7 @@ const UnissuedTicket = () => {
       dataIndex: "name",
       key: "name",
       width: 150,
-      responsive: ['md'],
+      responsive: ["md"],
     },
     {
       title: "Client",
@@ -66,7 +66,7 @@ const UnissuedTicket = () => {
       dataIndex: "priority",
       key: "priority",
       width: 30,
-      responsive: ['md'],
+      responsive: ["md"],
     },
     {
       title: "Issue",
@@ -79,7 +79,9 @@ const UnissuedTicket = () => {
       width: 100,
       render: () => (
         <Space size="middle">
-          <Button size="small" onClick={convert}>Convert</Button>
+          <Button size="small" onClick={convert}>
+            Convert
+          </Button>
           <Button size="small"></Button>
         </Space>
       ),
@@ -89,7 +91,15 @@ const UnissuedTicket = () => {
   return (
     <div>
       <h3 style={{ textAlign: "center" }}>Unissued Tickets - </h3>
-      <Table columns={columns} dataSource={data} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }}
+      />
     </div>
   );
 };

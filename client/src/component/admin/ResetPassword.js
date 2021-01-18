@@ -5,7 +5,7 @@ const ResetPassword = () => {
   const [users, setUsers] = useState([]);
   const [visible, setVisible] = useState(false);
   const [user, setUser] = useState("");
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
 
   const { Option } = Select;
 
@@ -34,7 +34,7 @@ const ResetPassword = () => {
       },
       body: JSON.stringify({
         user,
-        password
+        password,
       }),
     }).then((res) => res.json);
   };
@@ -74,19 +74,19 @@ const ResetPassword = () => {
       >
         <h3>Select a user below</h3>
         <Space>
-        <Select
-          showSearch
-          style={{ width: 200 }}
-          placeholder="Select a client"
-          optionFilterProp="children"
-          onChange={setUser}
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          {search}
-        </Select>
-        <Input onChange={(e) => setPassword(e.target.value)} />
+          <Select
+            showSearch
+            style={{ width: 200 }}
+            placeholder="Select a client"
+            optionFilterProp="children"
+            onChange={setUser}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {search}
+          </Select>
+          <Input onChange={(e) => setPassword(e.target.value)} />
         </Space>
       </Modal>
     </div>

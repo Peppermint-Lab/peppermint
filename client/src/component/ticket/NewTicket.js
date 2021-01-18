@@ -35,7 +35,7 @@ const NewTicket = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt")
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
         name,
@@ -138,10 +138,7 @@ const NewTicket = () => {
             </Select>
           </Form.Item>
           <Form.Item name="issue" label="issue">
-            <TextArea
-              rows={5}
-              onChange={(e) => setIssue(e.target.value)}
-            />
+            <TextArea rows={5} onChange={(e) => setIssue(e.target.value)} />
           </Form.Item>
           <Form.Item
             name="modifier"

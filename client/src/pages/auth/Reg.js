@@ -112,7 +112,7 @@ const Reg = () => {
               htmlType="submit"
               className="login-form-button"
               onClick={() => {
-                PostData()
+                PostData();
                 setTimeout(() => history.push("/"), 4000);
               }}
             >

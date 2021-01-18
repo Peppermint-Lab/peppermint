@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Space, Table, Button, Popconfirm  } from "antd";
+import { Space, Table, Button, Popconfirm } from "antd";
 
 import ResetPassword from "../../component/admin/ResetPassword";
 import EditInfo from "../../component/admin/EditInfo";
@@ -25,7 +25,7 @@ const EditUserInfo = () => {
 
   const deleteClient = async (client) => {
     const id = client._id;
-    console.log(id)
+    console.log(id);
     try {
       await fetch(`/api/v1/auth/delete/${id}`, {
         method: "DELETE",
@@ -66,10 +66,12 @@ const EditUserInfo = () => {
       render: (text, record) => (
         <Space size="middle">
           <Button>
-              <EditInfo user={record}/>
+            <EditInfo user={record} />
           </Button>
-          <Popconfirm title="Are you sure you want to delete?"
-          onConfirm={() => deleteClient(record)}>
+          <Popconfirm
+            title="Are you sure you want to delete?"
+            onConfirm={() => deleteClient(record)}
+          >
             <Button>Delete</Button>
           </Popconfirm>
           <ResetPassword />
@@ -80,7 +82,15 @@ const EditUserInfo = () => {
 
   return (
     <div>
-      <Table dataSource={users} columns={columns} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
+      <Table
+        dataSource={users}
+        columns={columns}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }}
+      />
     </div>
   );
 };

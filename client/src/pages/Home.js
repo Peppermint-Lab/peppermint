@@ -138,10 +138,10 @@ const Home = () => {
           <Navigation />
         </Header>
       </Container>
-      <div className='main-con'>
-          <Todo />
-          <Notes />
-          <Issues />
+      <div className="main-con">
+        <Todo />
+        <Notes />
+        <Issues />
       </div>
     </div>
   );

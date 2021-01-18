@@ -5,7 +5,7 @@ import {
   HomeTwoTone,
   IdcardTwoTone,
   SmileTwoTone,
-  FileTextTwoTone
+  FileTextTwoTone,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -36,12 +36,12 @@ const SideNav = () => {
         <Menu.Item key="sub2" icon={<AppstoreOutlined />} disabled={true}>
           <Link to="/admin/analytics">Analytics</Link>
         </Menu.Item>
-        <SubMenu key='sub4' title="Newsletter" icon={<FileTextTwoTone />}>
+        <SubMenu key="sub4" title="Newsletter" icon={<FileTextTwoTone />}>
           <Menu.Item key="15">
             <CreateNewsletter />
           </Menu.Item>
           <Menu.Item key="16">
-            <Link to='/admin/newsletters'>All Newsletters</Link>
+            <Link to="/admin/newsletters">All Newsletters</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub3" title="Clients" icon={<SmileTwoTone />}>
@@ -49,7 +49,7 @@ const SideNav = () => {
             <CreateClient />
           </Menu.Item>
           <Menu.Item key="13">
-            <Link to='/admin/clientView'>Client List</Link>
+            <Link to="/admin/clientView">Client List</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub5" icon={<IdcardTwoTone />} title="Authentication">
@@ -57,7 +57,7 @@ const SideNav = () => {
             <CreateUser />
           </Menu.Item>
           <Menu.Item key="10">
-          <Link to='/admin/viewUsers'>View Users</Link>
+            <Link to="/admin/viewUsers">View Users</Link>
           </Menu.Item>
         </SubMenu>
       </Menu>

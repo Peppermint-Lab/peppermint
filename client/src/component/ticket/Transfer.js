@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Select, Modal, Button } from "antd"
+import { Select, Modal, Button } from "antd";
 
 const Transfer = (props) => {
   const { Option } = Select;
@@ -28,11 +28,11 @@ const Transfer = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt")
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
         id,
-        find: props.ticket._id
+        find: props.ticket._id,
       }),
     })
       .then((res) => res.json())
@@ -71,11 +71,9 @@ const Transfer = (props) => {
         Transfer
       </Button>
 
-      <Modal visible={visible} onCancel={onCancel} onOk={onCreate}
-      width={300}
-      >
+      <Modal visible={visible} onCancel={onCancel} onOk={onCreate} width={300}>
         <Select
-          style={{ }}
+          style={{}}
           showSearch
           placeholder="Select a user"
           optionFilterProp="children"

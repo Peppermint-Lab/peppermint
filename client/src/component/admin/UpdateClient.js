@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, Button, Row  } from "antd";
+import { Modal, Input, Button, Row } from "antd";
 
 const UpdateClient = (props) => {
   const [visible, setVisible] = useState(false);
@@ -8,7 +8,7 @@ const UpdateClient = (props) => {
   const [email, setEmail] = useState(props.client.email);
   const [number, setNumber] = useState(props.client.number);
 
-  console.log(props.client)
+  console.log(props.client);
 
   const postData = async () => {
     await fetch(`/api/v1/client/update`, {
@@ -22,7 +22,7 @@ const UpdateClient = (props) => {
         clientName,
         name,
         email,
-        number
+        number,
       }),
     }).then((res) => res.json);
   };
@@ -30,7 +30,7 @@ const UpdateClient = (props) => {
   const onCreate = async (e) => {
     e.stopPropagation();
     setVisible(false);
-    await postData()
+    await postData();
   };
 
   const onCancel = (e) => {
@@ -55,45 +55,45 @@ const UpdateClient = (props) => {
           onOk={onCreate}
         >
           <Row>
-          <h5>
-            Edit Client Name :{" "}
-            <Input
-              defaultValue={props.client.name}
-              onChange={(e) => setClientName(e.target.value) }
-              style={{ width: 300, marginLeft: 18 }}
-            />
-          </h5>
-        </Row>
-        <Row>
-          <h5>
-            Edit Contact Name :{" "}
-            <Input
-              defaultValue={props.client.contactName}
-              onChange={(e) => setName(e.target.value) }
-              style={{ width: 300 }}
-            />
-          </h5>
-        </Row>
-        <Row>
-          <h5>
-            Edit Contact Email :{" "}
-            <Input
-              defaultValue={props.client.email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{ width: 300,  marginLeft: 5 }}
-            />
-          </h5>
-        </Row>
-        <Row>
-          <h5>
-            Edit Contact Number :{" "}
-            <Input
-              defaultValue={props.client.number}
-              onChange={(e) => setNumber(e.target.value)}
-              style={{ width: 280 }}
-            />
-          </h5>
-        </Row>
+            <h5>
+              Edit Client Name :{" "}
+              <Input
+                defaultValue={props.client.name}
+                onChange={(e) => setClientName(e.target.value)}
+                style={{ width: 300, marginLeft: 18 }}
+              />
+            </h5>
+          </Row>
+          <Row>
+            <h5>
+              Edit Contact Name :{" "}
+              <Input
+                defaultValue={props.client.contactName}
+                onChange={(e) => setName(e.target.value)}
+                style={{ width: 300 }}
+              />
+            </h5>
+          </Row>
+          <Row>
+            <h5>
+              Edit Contact Email :{" "}
+              <Input
+                defaultValue={props.client.email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ width: 300, marginLeft: 5 }}
+              />
+            </h5>
+          </Row>
+          <Row>
+            <h5>
+              Edit Contact Number :{" "}
+              <Input
+                defaultValue={props.client.number}
+                onChange={(e) => setNumber(e.target.value)}
+                style={{ width: 280 }}
+              />
+            </h5>
+          </Row>
         </Modal>
       </Button>
     </div>

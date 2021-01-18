@@ -23,18 +23,18 @@ const EditInfo = (props) => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        id : users._id,
+        id: users._id,
         name,
         email,
-        role
+        role,
       }),
     }).then((res) => res.json);
   };
 
   const onCreate = async () => {
     setVisible(false);
-    email.toString(email)
-    await postData()
+    email.toString(email);
+    await postData();
   };
 
   const onCancel = () => {
@@ -64,7 +64,7 @@ const EditInfo = (props) => {
             Edit Name :{" "}
             <Input
               defaultValue={users.name}
-              onChange={(e) => setName(e.target.value) }
+              onChange={(e) => setName(e.target.value)}
               style={{ width: 300 }}
             />
           </h5>
@@ -80,13 +80,18 @@ const EditInfo = (props) => {
           </h5>
         </Row>
         <Row>
-        <h5>Edit Role : </h5>
-        <Radio.Group buttonStyle="solid" defaultValue={users.role} onChange={(e) => setRole(e.target.value)} style={ { marginLeft: 20}}>
+          <h5>Edit Role : </h5>
+          <Radio.Group
+            buttonStyle="solid"
+            defaultValue={users.role}
+            onChange={(e) => setRole(e.target.value)}
+            style={{ marginLeft: 20 }}
+          >
             <Space>
-            <Radio.Button value="user">User</Radio.Button>
-            <Radio.Button value="admin">Admin</Radio.Button>
+              <Radio.Button value="user">User</Radio.Button>
+              <Radio.Button value="admin">Admin</Radio.Button>
             </Space>
-        </Radio.Group>
+          </Radio.Group>
         </Row>
       </Modal>
     </div>

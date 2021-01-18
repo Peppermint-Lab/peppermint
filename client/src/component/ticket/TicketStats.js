@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Divider } from "rsuite";
 
-
 const Open = () => {
   const [data, setData] = useState([]);
 

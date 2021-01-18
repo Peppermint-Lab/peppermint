@@ -18,13 +18,11 @@ const UserProfile = () => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        user
-      })
-    }).then((res) => res.json)
-    setInfo(user)
+        user,
+      }),
+    }).then((res) => res.json);
+    setInfo(user);
   };
-
-
 
   useEffect(() => {
     getData();

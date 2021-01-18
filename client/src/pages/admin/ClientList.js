@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  Space,
-  Button,
-  Popconfirm,
-} from "antd";
+import { Table, Space, Button, Popconfirm } from "antd";
 
 import UpdateClient from "../../component/admin/UpdateClient";
 
 const ClientList = () => {
   const [clientAll, setClientAll] = useState([]);
 
-  console.log(clientAll)
+  console.log(clientAll);
 
   const fetchClients = () => {
     fetch(`/api/v1/client/allclients`, {
@@ -49,7 +44,6 @@ const ClientList = () => {
     }
   };
 
-
   const columns = [
     {
       title: "Client Name",
@@ -83,11 +77,11 @@ const ClientList = () => {
         <Space size="middle">
           <UpdateClient client={record} />
           <Popconfirm
-          title="Are you sure you want to delete?"
-          onConfirm={() => deleteClient(record)}
+            title="Are you sure you want to delete?"
+            onConfirm={() => deleteClient(record)}
           >
-          <Button>Delete</Button>
-        </Popconfirm>
+            <Button>Delete</Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -95,7 +89,16 @@ const ClientList = () => {
 
   return (
     <div style={{ marginTop: 5 }}>
-      <Table dataSource={clientAll} columns={columns} Pagenation={false} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
+      <Table
+        dataSource={clientAll}
+        columns={columns}
+        Pagenation={false}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }}
+      />
     </div>
   );
 };

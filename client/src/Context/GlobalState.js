@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, } from "react";
+import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
 import axios from "axios";
 
@@ -7,7 +7,7 @@ const initialState = {
   todos: [],
   notes: [],
   user: {},
-  auth: true
+  auth: true,
 };
 
 // Create context
@@ -158,7 +158,8 @@ export const GlobalProvider = ({ children }) => {
           email,
           password,
         }),
-      }).then((res) => res.json())
+      })
+        .then((res) => res.json())
         .then((data) => {
           if (!data.error) {
             localStorage.setItem("jwt", data.token);
@@ -170,7 +171,7 @@ export const GlobalProvider = ({ children }) => {
           }
         });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -179,17 +180,18 @@ export const GlobalProvider = ({ children }) => {
       await fetch(`/api/v1/auth/token`, {
         method: "post",
         headers: {
-          "Content-Type" : "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("jwt"),
-          "x-auth-token": localStorage.getItem("jwt")
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+          "x-auth-token": localStorage.getItem("jwt"),
         },
-      }).then((res) => res.json())
-      .then((res) => {
-        console.log(res)
-       // dispatch({ type: "USER_LOGGED", payload: res });
       })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          // dispatch({ type: "USER_LOGGED", payload: res });
+        });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -211,7 +213,7 @@ export const GlobalProvider = ({ children }) => {
         saveNote,
         deleteNote,
         signin,
-        isLogged
+        isLogged,
       }}
     >
       {children}

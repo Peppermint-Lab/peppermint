@@ -34,11 +34,11 @@ const OpenTicket = () => {
       dataIndex: "name",
       key: "name",
       width: 150,
-      responsive: ['md'],
+      responsive: ["md"],
     },
     {
       title: "Client",
-      dataIndex: ['client', 'name'],
+      dataIndex: ["client", "name"],
       key: "client",
       width: 75,
     },
@@ -47,7 +47,7 @@ const OpenTicket = () => {
       dataIndex: "priority",
       key: "priority",
       width: 30,
-      responsive: ['md'],
+      responsive: ["md"],
     },
     {
       title: "Issue",
@@ -60,9 +60,9 @@ const OpenTicket = () => {
       width: 100,
       render: (record) => (
         <Space size="middle">
-            <Button size="small">
-              <ViewTicket ticket={record} />
-            </Button>
+          <Button size="small">
+            <ViewTicket ticket={record} />
+          </Button>
         </Space>
       ),
     },
@@ -71,7 +71,15 @@ const OpenTicket = () => {
   return (
     <div>
       <h3 style={{ textAlign: "center" }}>Open Tickets - {null}</h3>
-      <Table columns={columns} dataSource={data} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}}/>
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }}
+      />
     </div>
   );
 };

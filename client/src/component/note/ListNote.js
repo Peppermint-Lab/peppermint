@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { Button, Table, Space, Popconfirm } from "antd";
-import { DeleteTwoTone  } from "@ant-design/icons";
+import { DeleteTwoTone } from "@ant-design/icons";
 
 import { GlobalContext } from "../../Context/GlobalState";
 import EditNote from "./EditNote";
@@ -18,7 +18,7 @@ const ListNote = () => {
       title: "Title",
       dataIndex: "title",
       key: "name",
-      width: 400
+      width: 400,
     },
     {
       key: "action",
@@ -40,7 +40,16 @@ const ListNote = () => {
 
   return (
     <div>
-      <Table dataSource={notes} columns={columns} showHeader={false} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}} />
+      <Table
+        dataSource={notes}
+        columns={columns}
+        showHeader={false}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }}
+      />
     </div>
   );
 };

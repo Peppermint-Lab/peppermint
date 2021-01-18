@@ -49,7 +49,7 @@ export default (state, action) => {
       };
     case "USER_LOGGED":
       return {
-        auth: action.payload
+        auth: action.payload,
       };
 
     default:

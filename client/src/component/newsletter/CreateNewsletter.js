@@ -3,26 +3,26 @@ import { Modal, Input, Radio, Space, Row } from "antd";
 
 const CreateNewsletter = () => {
   const [visible, setVisible] = useState(false);
-  const [title, setTittle ]   =   useState('');
-  const [text, setText ] = useState('');
+  const [title, setTittle] = useState("");
+  const [text, setText] = useState("");
   const [active, setActive] = useState(false);
 
   const { TextArea } = Input;
 
   const postData = async () => {
     await fetch(`/api/v1/newsletter/create`, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-        },
-        body: JSON.stringify({
-          title,
-          text,
-          active 
-        }),
-      }).then((res) => res.json());
-  }
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        title,
+        text,
+        active,
+      }),
+    }).then((res) => res.json());
+  };
 
   const onCreate = async (values) => {
     setVisible(false);
@@ -51,22 +51,34 @@ const CreateNewsletter = () => {
         onCancel={onCancel}
         onOk={onCreate}
       >
-          <div style={{ margin: 25}}>
+        <div style={{ margin: 25 }}>
           <Row>
-          <Input placeholder="Enter newsletter tittle here..." style={{ width: 400, marginLeft: -25}} onChange={(e) => setTittle(e.target.value)}/>  
+            <Input
+              placeholder="Enter newsletter tittle here..."
+              style={{ width: 400, marginLeft: -25 }}
+              onChange={(e) => setTittle(e.target.value)}
+            />
           </Row>
-          </div>
-          <div>
-          <TextArea rows={8} placeholder="Enter newsletter content here..."  onChange={(e) => setText(e.target.value)} />
-          </div>
-          <div style={{ margin: 25}}>
-            <Radio.Group defaultValue={active} value={active} onChange={(e) => setActive(e.target.value)}>
+        </div>
+        <div>
+          <TextArea
+            rows={8}
+            placeholder="Enter newsletter content here..."
+            onChange={(e) => setText(e.target.value)}
+          />
+        </div>
+        <div style={{ margin: 25 }}>
+          <Radio.Group
+            defaultValue={active}
+            value={active}
+            onChange={(e) => setActive(e.target.value)}
+          >
             <Space>
-                <Radio.Button value="true">Active</Radio.Button>
-                <Radio.Button value="false">Hidden</Radio.Button>
+              <Radio.Button value="true">Active</Radio.Button>
+              <Radio.Button value="false">Hidden</Radio.Button>
             </Space>
-            </Radio.Group>
-          </div>
+          </Radio.Group>
+        </div>
       </Modal>
     </div>
   );

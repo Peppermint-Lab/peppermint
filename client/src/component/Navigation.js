@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 
-import { Menu, Switch, Layout } from "antd";
-import { SettingTwoTone, FileTwoTone  } from "@ant-design/icons";
+import { Menu, Layout } from "antd";
+import { SettingTwoTone, FileTwoTone } from "@ant-design/icons";
 
 import NewTicket from "./ticket/NewTicket";
 
@@ -14,16 +14,11 @@ const Navigation = () => {
 
   const [checkAdmin, setCheckAdmin] = useState(false);
   const [current, setCurrent] = useState();
-  const [isDark, setIsDark] = useState("light");
 
   function logout() {
     localStorage.clear();
     history.push("/login");
   }
-
-  const changeTheme = (value) => {
-    setIsDark(value ? "dark" : "light");
-  };
 
   const handleClick = (e) => {
     //console.log('click ', e);
@@ -69,8 +64,12 @@ const Navigation = () => {
                 Home
               </Menu.Item>
               <SubMenu key="SubMenu" icon={<FileTwoTone />} title="Tickets">
-                  <Menu.Item key="tickets:1"><Link to='/ticket/open'>Open Tickets</Link></Menu.Item>
-                  <Menu.Item key="tickets:2"><Link to='/ticket/unissued'>Unissued Tickets</Link></Menu.Item>
+                <Menu.Item key="tickets:1">
+                  <Link to="/ticket/open">Open Tickets</Link>
+                </Menu.Item>
+                <Menu.Item key="tickets:2">
+                  <Link to="/ticket/unissued">Unissued Tickets</Link>
+                </Menu.Item>
               </SubMenu>
               <Menu.Item key={3} onClick={() => history.push("/history")}>
                 History
@@ -82,12 +81,16 @@ const Navigation = () => {
                 Admin
               </Menu.Item>
               <SubMenu
-                key='settings-men'
+                key="settings-men"
                 icon={<SettingTwoTone />}
                 style={{ float: "right" }}
               >
-                <Menu.Item key="SETTINGS:1"><Link to='/settings'>Settings</Link></Menu.Item>
-                <Menu.Item key="SETTINGS:2" onClick={logout}>Log out</Menu.Item>
+                <Menu.Item key="SETTINGS:1">
+                  <Link to="/settings">Settings</Link>
+                </Menu.Item>
+                <Menu.Item key="SETTINGS:2" onClick={logout}>
+                  Log out
+                </Menu.Item>
               </SubMenu>
               <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
                 <NewTicket />
@@ -119,19 +122,27 @@ const Navigation = () => {
                 Home
               </Menu.Item>
               <SubMenu key="SubMenu" icon={<FileTwoTone />} title="Tickets">
-                  <Menu.Item key="tickets:1"><Link to='/ticket/open'>Open Tickets</Link></Menu.Item>
-                  <Menu.Item key="tickets:2"><Link to='/ticket/unissued'>Unissued Tickets</Link></Menu.Item>
+                <Menu.Item key="tickets:1">
+                  <Link to="/ticket/open">Open Tickets</Link>
+                </Menu.Item>
+                <Menu.Item key="tickets:2">
+                  <Link to="/ticket/unissued">Unissued Tickets</Link>
+                </Menu.Item>
               </SubMenu>
               <Menu.Item key={3} onClick={() => history.push("/history")}>
                 History
               </Menu.Item>
               <SubMenu
-                key='settings-men'
+                key="settings-men"
                 icon={<SettingTwoTone />}
                 style={{ float: "right" }}
               >
-                <Menu.Item key="SETTINGS:1"><Link to='/settings'>Settings</Link></Menu.Item>
-                <Menu.Item key="SETTINGS:2" onClick={logout}>Log out</Menu.Item>
+                <Menu.Item key="SETTINGS:1">
+                  <Link to="/settings">Settings</Link>
+                </Menu.Item>
+                <Menu.Item key="SETTINGS:2" onClick={logout}>
+                  Log out
+                </Menu.Item>
               </SubMenu>
               <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
                 <NewTicket />
