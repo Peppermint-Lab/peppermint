@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import CreateUser from "./CreateUser";
 import CreateClient from "./CreateClient";
 import CreateNewsletter from "../newsletter/CreateNewsletter";
-import AdminList from "../newsletter/AdminList";
 
 const { SubMenu } = Menu;
 
@@ -25,7 +24,7 @@ const SideNav = () => {
     <div className="sideNav">
       <Menu
         onClick={handleClick}
-        style={{ width: 200, height: "90vh" }}
+        style={{ height: "90vh" }}
         className="Admin-Side-Nav"
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}

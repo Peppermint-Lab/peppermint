@@ -39,7 +39,7 @@ const AdminList = () => {
           setData(res.newsletters);
         }
       });
-  }
+  };
 
   useEffect(() => {
     getN();
@@ -50,22 +50,22 @@ const AdminList = () => {
       title: "Title",
       dataIndex: "title",
       key: "title",
-      width: "35%",
+      width: "50%",
     },
     {
       title: "CreatedBy",
       dataIndex: ["createdBy", "name"],
       key: "CreatedBy",
-      width: "35%",
+      width: "25%",
     },
     {
       key: "action",
-      width: "30%",
+      width: "25%",
       render: (text, record) => (
         <Space>
           <ViewNewsletter n={record} />
           <Edit n={record} />
-          <Button onClick={() => del(record._id)} >Delete</Button>
+          <Button onClick={() => del(record._id)}>Delete</Button>
         </Space>
       ),
     },
@@ -73,7 +73,16 @@ const AdminList = () => {
 
   return (
     <div>
-      <Table dataSource={data} columns={columns} pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}}/>
+      <Table
+        className="your-table"
+        dataSource={data}
+        columns={columns}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }}
+      />
     </div>
   );
 };

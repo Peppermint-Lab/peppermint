@@ -6,7 +6,7 @@ html, body {
   height: 100vh;
 }
 
-@media only screen and (max-width: 599px) {
+@media only screen and (max-width: 480px) {
   .main-con {
     display: flex;
     flex-direction: column !important;
@@ -35,6 +35,27 @@ html, body {
     margin-top: -250px !important;
   }
 }
+
+@media only screen and (max-width: 1024px) {
+  .admin-main {
+    width: 87% !important;
+  }
+  
+  .side-navbar {
+    width: 20% !important;
+  }
+}
+
+@media only screen and (max-width: 1440px) {
+  .admin-main {
+    width: 87% !important;
+  }
+  
+  .side-navbar {
+    width: 13% !important;
+  }
+}
+
 
 .my-drawer.ant-drawer-open {
   width: 100% !important;
@@ -248,19 +269,14 @@ html, body {
   width: 100%;
 }
 
-.Admin-Container {
-  float: right;
-  width: 80%;
-}
-
 .admin-main {
-  display: block;
+  width: 90%;
   float: right;
-  width: 85%;
 }
 
-.navbar {
-  position: absolute;
+.side-navbar {
+  width: 10%;
+  float: left
 }
 
 .stats-card {

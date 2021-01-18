@@ -45,7 +45,7 @@ const CreateNewsletter = () => {
       </p>
       <Modal
         visible={visible}
-        title="Create a new user"
+        title="Create a new newsletter"
         okText="Create"
         cancelText="Cancel"
         onCancel={onCancel}
@@ -53,7 +53,7 @@ const CreateNewsletter = () => {
       >
           <div style={{ margin: 25}}>
           <Row>
-          <Input placeholder="Enter newsletter tittle here..." style={{ width: 400}} onChange={(e) => setTittle(e.target.value)}/>  
+          <Input placeholder="Enter newsletter tittle here..." style={{ width: 400, marginLeft: -25}} onChange={(e) => setTittle(e.target.value)}/>  
           </Row>
           </div>
           <div>

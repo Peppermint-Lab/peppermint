@@ -52,7 +52,7 @@ const Routing = () => {
             <Route exact path='/ticket/unissued' component={Unissued} />
           </Route>
           <Route exact path="/admin/:path?">
-            <div className="navbar">
+            <div className="side-navbar">
               <SideNav />
             </div>
             <div className="admin-main">
