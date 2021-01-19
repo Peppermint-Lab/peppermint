@@ -63,6 +63,7 @@ const EditUserInfo = () => {
     {
       title: "Action",
       key: "action",
+      responsive: ['md'],
       render: (text, record) => (
         <Space size="middle">
           <Button>

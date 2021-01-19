@@ -56,12 +56,14 @@ const ClientList = () => {
       dataIndex: "contactName",
       key: "contactName",
       width: 150,
+      responsive: ['md'],
     },
     {
       title: "Contact Email",
       dataIndex: "email",
       key: "email",
       width: 50,
+      responsive: ['md'],
     },
     {
       title: "Contact Number",
@@ -72,6 +74,7 @@ const ClientList = () => {
     {
       title: "Action",
       key: "action",
+      responsive: ['md'],
       width: 200,
       render: (record) => (
         <Space size="middle">
