@@ -55,7 +55,7 @@ const TicketStats = () => {
   }, []);
 
   return (
-    <Row>
+    <div className="admin-dash-row">
       <div className="stats-card">
         <Card>
           <Statistic title="Closed Tickets" value={complete} />
@@ -71,13 +71,13 @@ const TicketStats = () => {
           <Statistic title="Unclaimed Tickets" value={unClaimed} />
         </Card>
       </div>
-    </Row>
+    </div>
   );
 };
 
 const Dash = () => {
   return (
-    <div>
+    <div className="">
       <TicketStats />
     </div>
   );
