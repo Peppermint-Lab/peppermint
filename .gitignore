@@ -4,3 +4,4 @@ docker-data/db
 client/.eslintcache
 docker
 todo.txt
+build
