@@ -2,7 +2,8 @@
   margin: 0;
 }
 
-html, body {
+html,
+body {
   height: 100vh;
 }
 
@@ -36,14 +37,14 @@ html, body {
   }
   .Admin-Side-Nav {
     position: relative !important;
-    z-index: 1
+    z-index: 1;
   }
   .admin-dash-row {
     flex-direction: column !important;
     flex-wrap: nowrap;
   }
   .stats-card {
-    width: 50% !important; 
+    width: 50% !important;
   }
 }
 
@@ -51,7 +52,7 @@ html, body {
   .admin-main {
     width: 87% !important;
   }
-  
+
   .side-navbar {
     width: 20% !important;
   }
@@ -61,12 +62,11 @@ html, body {
   .admin-main {
     width: 87% !important;
   }
-  
+
   .side-navbar {
     width: 13% !important;
   }
 }
-
 
 .my-drawer.ant-drawer-open {
   width: 100% !important;
@@ -287,14 +287,14 @@ html, body {
 
 .side-navbar {
   width: 10%;
-  float: left
+  float: left;
 }
 
 .stats-card {
   width: 15%;
   margin-left: 40px;
   margin-top: 25px;
-  padding: 10px
+  padding: 10px;
 }
 
 .collection-create-form_last-form-item {
