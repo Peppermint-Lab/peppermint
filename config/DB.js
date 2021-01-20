@@ -5,7 +5,7 @@ const { exec } = require('child_process');
 // Function which inits the connect to the db,
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI_DOCKER, {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
       // uses the mongo_uri in the .env file to connect
       useNewUrlParser: true,
       useCreateIndex: true,

@@ -74,6 +74,9 @@ const Navigation = () => {
               <Menu.Item key={3} onClick={() => history.push("/history")}>
                 History
               </Menu.Item>
+              <Menu.Item key={9} >
+                <Link to="/time">Time Sheet</Link>
+              </Menu.Item>
               <Menu.Item
                 key={6}
                 onClick={() => history.push("/admin/dashboard")}
