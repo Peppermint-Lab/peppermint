@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Statistic, Row } from "antd";
+import { Card, Statistic } from "antd";
 
 const TicketStats = () => {
   const [unClaimed, setUnClaimed] = useState();
@@ -77,7 +77,7 @@ const TicketStats = () => {
 
 const Dash = () => {
   return (
-    <div className="">
+    <div>
       <TicketStats />
     </div>
   );

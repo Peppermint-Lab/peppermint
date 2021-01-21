@@ -310,3 +310,14 @@ body {
   display: flex;
   flex-direction: row;
 }
+
+.newlog-cont {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+}
+
+.newlog {
+  display: flex;
+  margin: auto
+}

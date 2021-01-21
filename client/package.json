@@ -12,6 +12,7 @@
     "axios": "^0.21.0",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
+    "moment": "^2.29.1",
     "nivo": "^0.31.0",
     "react": "^17.0.1",
     "react-chartjs-2": "^2.11.1",
