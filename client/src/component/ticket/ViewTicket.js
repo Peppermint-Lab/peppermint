@@ -84,11 +84,11 @@ const ViewTicket = (props) => {
         <Divider />
         <Row>
           <Space>
-            <h4>Issue status : {props.ticket.status}</h4>
+            <h6>Issue status : {props.ticket.status}</h6>
             <Divider type="vertical" />
-            <h4 style={{ marginLeft: 75 }}>
+            <h6 style={{ marginLeft: 90 }}>
               Engineer assigned : {props.ticket.assignedto.name}
-            </h4>
+            </h6>
           </Space>
         </Row>
         <Row>
@@ -133,6 +133,7 @@ const ViewTicket = (props) => {
           />
         </h5>
         <Divider />
+        <h4>Time Logged to Ticket</h4>
       </Drawer>
     </div>
   );

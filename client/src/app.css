@@ -315,9 +315,15 @@ body {
   display: flex;
   flex-direction: row;
   padding: 15px;
+  align-items: center;
 }
 
 .newlog {
   display: flex;
-  margin: auto
+  margin: auto;
+  align-items: center;
+}
+
+.newlog p {
+  margin-top: 15px
 }

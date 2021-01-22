@@ -30,7 +30,8 @@ const NewLog = () => {
   return (
     <div className="newlog">
       <Space>
-        <DatePicker onChange={onChangeDate} />
+        <DatePicker onChange={onChangeDate} defaultValue={moment} />
+        <p>Start Time: </p>
         <TimePicker
           defaultValue={moment}
           format={format}
@@ -42,6 +43,7 @@ const NewLog = () => {
           style={{ width: 300 }}
           onChange={(e) => setActivity(e.target.value)}
         />
+        <p>End Time: </p>
         <TimePicker defaultValue={moment()} format={format} onChange={onChangeEnd} />
         <Button>Submit</Button>
       </Space>
