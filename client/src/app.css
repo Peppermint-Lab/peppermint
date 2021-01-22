@@ -48,9 +48,33 @@ body {
   }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (min-width: 500px) and (max-width: 768px) {
   .admin-main {
-    width: 87% !important;
+    width: 95% !important;
+    float: right !important;
+  }
+  .side-navbar {
+    width: 5% !important;
+  }
+  .ant-drawer-open {
+    width: 100% !important;
+    mask: false;
+  }
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+  .Admin-Side-Nav {
+    position: relative !important;
+    z-index: 1;
+  }
+  .stats-card {
+    width: 40% !important;
+  }
+}
+
+@media only screen and (min-width: 770px) and (max-width: 1024px) {
+  .admin-main {
+    width: 80% !important;
   }
 
   .side-navbar {
@@ -58,7 +82,7 @@ body {
   }
 }
 
-@media only screen and (max-width: 1440px) {
+@media only screen and (min-width: 1025px) and (max-width: 1440px) {
   .admin-main {
     width: 87% !important;
   }
@@ -281,7 +305,7 @@ body {
 }
 
 .admin-main {
-  width: 90%;
+  width: 89.5%;
   float: right;
 }
 
