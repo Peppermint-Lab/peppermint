@@ -4,13 +4,13 @@ const { ObjectId } = mongoose.Schema.Types;
 // Mongoose Schema for Tickets
 const TicketSchema = new mongoose.Schema(
   {
+    ticketId: { type: String }, 
     name: { type: String, required: true },
     client: { type: ObjectId, required: true, ref: "Clients" },
     issue: { type: String, required: true },
     email: { type: String, required: false },
     note: { type: String },
-    time: { type: Number },
-    description: { type: String },
+    Log: { type: ObjectId, ref: "Log" }, 
     status: {
       type: String,
       enum: ["issued", "unissued", "completed"],

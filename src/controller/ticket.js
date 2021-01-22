@@ -53,6 +53,8 @@ exports.completedTickets = async (req, res) => {
 
 // Create a new ticket
 exports.createTicket = async (req, res) => {
+  tc = TicketSchema.count()
+  count = tc++
   console.log("Create a new ticket API HIT");
   try {
     const { name, company, issue, priority, email } = req.body;
@@ -65,7 +67,7 @@ exports.createTicket = async (req, res) => {
       issue,
       priority,
       email,
-    });
+    }, {$inc: { ticketId: 1} });
     newTicket.save().then((result) => {
       res.json({ newTicket: result });
     });
