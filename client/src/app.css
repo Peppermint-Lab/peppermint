@@ -82,26 +82,6 @@ body {
   }
 }
 
-@media only screen and (min-width: 1025px) and (max-width: 1440px) {
-  .admin-main {
-    width: 87% !important;
-  }
-
-  .side-navbar {
-    width: 13% !important;
-  }
-}
-
-@media only screen and (min-width: 1441px) and (max-width: 2560px) {
-  .admin-main {
-    width: 92% !important;
-  }
-
-  .side-navbar {
-    width: 5% !important;
-  }
-}
-
 .my-drawer.ant-drawer-open {
   width: 100% !important;
   mask: false;
@@ -320,7 +300,6 @@ body {
 }
 
 .side-navbar {
-  width: 10%;
   float: left;
 }
 

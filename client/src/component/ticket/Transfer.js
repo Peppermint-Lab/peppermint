@@ -73,7 +73,7 @@ const Transfer = (props) => {
 
       <Modal visible={visible} onCancel={onCancel} onOk={onCreate} width={300}>
         <Select
-          style={{}}
+          style={{ width: 200 }}
           showSearch
           placeholder="Select a user"
           optionFilterProp="children"
