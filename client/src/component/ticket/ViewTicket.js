@@ -68,6 +68,7 @@ const ViewTicket = (props) => {
         placement="right"
         onClose={onClose}
         visible={visible}
+        width={600}
       >
         <h2>Client: {props.ticket.client.name}</h2>
         <Space size="middle">
@@ -86,7 +87,7 @@ const ViewTicket = (props) => {
           <Space>
             <h6>Issue status : {props.ticket.status}</h6>
             <Divider type="vertical" />
-            <h6 style={{ marginLeft: 90 }}>
+            <h6 className="drawer-text-right">
               Engineer assigned : {props.ticket.assignedto.name}
             </h6>
           </Space>
