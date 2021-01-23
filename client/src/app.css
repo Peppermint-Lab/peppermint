@@ -50,11 +50,8 @@ body {
 
 @media only screen and (min-width: 500px) and (max-width: 768px) {
   .admin-main {
-    width: 95% !important;
+    width: 100% !important;
     float: right !important;
-  }
-  .side-navbar {
-    width: 5% !important;
   }
   .ant-drawer-open {
     width: 100% !important;
@@ -68,17 +65,37 @@ body {
     z-index: 1;
   }
   .stats-card {
-    width: 40% !important;
+    width: 50% !important;
   }
 }
 
-@media only screen and (min-width: 770px) and (max-width: 1024px) {
+@media only screen and (min-width: 1024px) and (max-width: 1024px) {
   .admin-main {
     width: 80% !important;
   }
 
   .side-navbar {
     width: 20% !important;
+  }
+}
+
+@media only screen and (min-width: 1100px) and (max-width: 1440px) {
+  .admin-main {
+    width: 86% !important;
+  }
+
+  .side-navbar {
+    width: 13% !important;
+  }
+}
+
+@media only screen and (min-width: 2000px) and (max-width: 2560px) {
+  .admin-main {
+    width: 92% !important;
+  }
+
+  .side-navbar {
+    width: 5% !important;
   }
 }
 
