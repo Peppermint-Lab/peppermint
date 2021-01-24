@@ -2,7 +2,7 @@
 <p align="center">
     <img src="./images/logo.png" alt="Logo" >
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.2-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://twitter.com/andrewsjack18 " target="_blank">
     <img alt="Twitter:  andrewsjack18" src="https://img.shields.io/twitter/follow/andrewsjack18 .svg?style=social" />
   </a>
@@ -27,26 +27,7 @@
 
 ## Installing locally for development
 
-```sh
-git clone https://github.com/jwandrews99/winter.git
-cd winter
-
-npm install
-cd client && npm install
-```
-
-## Usage from the root folder
-
-- npm run dev - runs both the client and the server at the same using concurrently
-- npm run client - runs the react client on its own
-- npm run server - runs the node server on its own
-
-```sh
-npm run dev 
-npm run client
-npm run server
-
-```
+If you're interested in developing for Peppermint, wether that be a bug fix or locally we have a guide on our <a href="https://pmint.dev/docs/contributions/">wiki</a>
 
 ## Docker-Compose
 
