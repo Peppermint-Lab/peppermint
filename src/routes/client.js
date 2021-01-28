@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/authCheck');
 
-const {create, getAll, deleteClient, updateClient } = require('../controller/client')
+const {create, getAll, deleteClient, updateClient, createNote } = require('../controller/client')
 
 router
     .route('/create')
@@ -19,5 +19,9 @@ router
 router
     .route('/update')
     .put(auth, updateClient)
+
+router 
+    .route('/createNote')
+    .post(auth, createNote)
 
 module.exports = router;

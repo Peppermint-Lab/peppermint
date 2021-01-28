@@ -106,7 +106,7 @@ body {
     mask: false;
   }
   .ant-drawer-content-wrapper {
-    width: 75% !important;
+    width: 50% !important;
   }
   .drawer-text-right {
     margin-left: 250px

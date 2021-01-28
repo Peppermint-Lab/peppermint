@@ -80,3 +80,27 @@ exports.deleteClient = async (req, res) => {
     return res.status(500).json({ message: error });
   }
 };
+
+exports.createNote = async (req, res) => {
+  console.log(req.body)
+  try {
+    const client = await new mongoose.Types.ObjectId(req.body.id);
+    if (!client) {
+      return res.status(404).json({
+        success: false,
+        error: "Client not found",
+      });
+    }
+    Client.findByIdAndUpdate({
+      _id: mongoose.Types.ObjectId(req.body.id),
+    },
+      {
+        $set: {
+          notes: req.body.note
+        }
+    }, { new: true }).exec();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error });
+  }
+}
