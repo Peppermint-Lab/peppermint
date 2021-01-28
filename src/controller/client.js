@@ -104,3 +104,14 @@ exports.createNote = async (req, res) => {
     return res.status(500).json({ message: error });
   }
 }
+
+exports.getNote = async (req, res) => {
+  console.log(req.params.id)
+  try {
+    const find = await Client.findById({ _id: req.params.id });
+    return res.status(200).json({ find })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error });
+  }
+}

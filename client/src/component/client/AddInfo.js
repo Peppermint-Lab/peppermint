@@ -9,6 +9,8 @@ const AddInfo = (props) => {
 
   const id = props.client.client._id
 
+  console.log(props.client)
+
   async function postData() {
     await fetch(`/api/v1/client/createNote`, {
         method: "POST",
@@ -22,6 +24,19 @@ const AddInfo = (props) => {
         }),
       }).then((res) => res.json());
   }
+  async function getData() {
+    await fetch(`/api/v1/client/getNote/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        }
+      })
+      .then((res) => res.json())
+      .then((result) => {
+        setInfo(result.find.notes)
+      })
+  }
 
   const onCreate = async () => {
     setVisible(false);
@@ -31,6 +46,8 @@ const AddInfo = (props) => {
   const onCancel = () => {
     setVisible(false);
   };
+
+  useEffect(() => getData(), [])
 
   return (
     <div>
