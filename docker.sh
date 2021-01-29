@@ -19,7 +19,7 @@ if [[ -e build ]]; then
     cd ..
     echo 
     echo 'Building docker File'
-    docker build .
+    docker build -t peppermint:latest .
     echo 'Build completed'
 else 
     echo 'No client build folder found'
@@ -33,6 +33,6 @@ else
     cd ..
     echo 
     echo 'Building docker File'
-    docker build .
+    docker build -t peppermint:latest .
     echo 'Build completed'
 fi
