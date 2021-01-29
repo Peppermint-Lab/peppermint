@@ -15,7 +15,7 @@ exports.Signup = async (req, res) => {
           .status(422)
           .json({ error: "user already exists with that email" });
       }
-      bcrypt.hash(password, 16).then((hashedpassword) => {
+      bcrypt.hash(password, 10).then((hashedpassword) => {
         const user = new User({
           email,
           password: hashedpassword,
@@ -89,7 +89,7 @@ exports.resetPasswordAdmin = async (req, res) => {
         if (!user) {
           return res.status(422).json({ error: "User doesnt exist" });
         }
-        bcrypt.hash(password, 12).then((hashedpassword) => {
+        bcrypt.hash(password, 10).then((hashedpassword) => {
           user.password = hashedpassword;
           user.save();
           res.status(201).json({ message: "password updated success" });
@@ -111,7 +111,7 @@ exports.resetPasswordUser = async (req, res) => {
         if (!user) {
           return res.status(422).json({ error: "User doesnt exist" });
         }
-        bcrypt.hash(password, 12).then((hashedpassword) => {
+        bcrypt.hash(password, 10).then((hashedpassword) => {
           user.password = hashedpassword;
           user.save();
           res.status(201).json({ message: "password updated success" });
