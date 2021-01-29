@@ -4,8 +4,13 @@ const { exec } = require('child_process');
 
 // Function which inits the connect to the db,
 const connectDB = async () => {
+  if(process.env.NODE_ENV === 'production') {
+     db = process.env.MONGO_URI_DOCKER
+  } else {
+    db = process.env.MONGO_URI
+  }
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
+    const conn = await mongoose.connect(db, {
       // uses the mongo_uri in the .env file to connect
       useNewUrlParser: true,
       useCreateIndex: true,

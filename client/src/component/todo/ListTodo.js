@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Divider, Button, Tooltip, Skeleton } from "antd";
+import { Divider, Button, Tooltip } from "antd";
 import { CheckCircleTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
 // import { baseUrl } from "../utils";
@@ -53,7 +53,7 @@ const ListTodo = () => {
           );
         })
       ) : (
-        <Skeleton />
+        <p></p>
       )}
     </div>
   );

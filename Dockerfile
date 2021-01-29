@@ -21,6 +21,7 @@ RUN npm install bcrypt
 # Bundle app source
 COPY . .
 
+ENV NODE_ENV=production
 
 EXPOSE 5000
 CMD ["npm", "start"]  
