@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Table, Space, Button, Popconfirm } from "antd";
 
 import UpdateClient from "../../component/admin/UpdateClient";
-
 const ClientList = () => {
   const [clientAll, setClientAll] = useState([]);
 
