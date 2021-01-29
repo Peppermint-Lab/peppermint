@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@nivo/bar": "^0.67.0",
