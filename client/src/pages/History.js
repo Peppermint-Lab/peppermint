@@ -5,8 +5,6 @@ import { SearchOutlined } from "@ant-design/icons";
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 
-// import { baseUrl } from "../utils";
-
 class History extends React.Component {
   state = {
     searchText: "",
@@ -170,7 +168,11 @@ class History extends React.Component {
         <Table
           columns={columns}
           dataSource={this.state.data}
-          pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}}
+          pagination={{
+            defaultPageSize: 10,
+            showSizeChanger: true,
+            pageSizeOptions: ["10", "20", "30"],
+          }}
         />
       </div>
     );

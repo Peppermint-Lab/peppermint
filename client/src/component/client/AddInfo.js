@@ -3,39 +3,39 @@ import { Modal, Button, Input } from "antd";
 
 const AddInfo = (props) => {
   const [visible, setVisible] = useState(false);
-  const [info, setInfo ] = useState();
+  const [info, setInfo] = useState();
 
   const { TextArea } = Input;
 
-  const id = props.client.client._id
+  const id = props.client.client._id;
 
-  console.log(props.client)
+  console.log(props.client);
 
   async function postData() {
     await fetch(`/api/v1/client/createNote`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-        },
-        body: JSON.stringify({
-          id,
-          note : info
-        }),
-      }).then((res) => res.json());
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        id,
+        note: info,
+      }),
+    }).then((res) => res.json());
   }
   async function getData() {
     await fetch(`/api/v1/client/getNote/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-        }
-      })
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
       .then((res) => res.json())
       .then((result) => {
-        setInfo(result.find.notes)
-      })
+        setInfo(result.find.notes);
+      });
   }
 
   const onCreate = async () => {
@@ -47,7 +47,8 @@ const AddInfo = (props) => {
     setVisible(false);
   };
 
-  useEffect(() => getData(), [])
+  // eslint-disable-next-line
+  useEffect(() => getData(), []);
 
   return (
     <div>

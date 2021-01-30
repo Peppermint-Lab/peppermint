@@ -68,7 +68,7 @@ body {
     width: 100% !important;
   }
   .drawer-text-right {
-    margin-left: 250px
+    margin-left: 250px;
   }
 }
 
@@ -90,7 +90,7 @@ body {
     width: 75% !important;
   }
   .drawer-text-right {
-    margin-left: 250px
+    margin-left: 250px;
   }
 }
 
@@ -109,7 +109,7 @@ body {
     width: 50% !important;
   }
   .drawer-text-right {
-    margin-left: 250px
+    margin-left: 250px;
   }
 }
 
@@ -134,11 +134,10 @@ body {
   .ant-drawer-content-wrapper {
     width: 50% !important;
   }
-
 }
 
 .drawer-text-right {
-  margin-left: 100px
+  margin-left: 100px;
 }
 
 .main-con {
@@ -389,5 +388,5 @@ body {
 }
 
 .newlog p {
-  margin-top: 15px
+  margin-top: 15px;
 }

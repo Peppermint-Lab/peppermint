@@ -9,6 +9,7 @@ PostData fetch function which sends all the data.
 */
 
 const EditInfo = (props) => {
+  // eslint-disable-next-line
   const [users, setUsers] = useState(props.user);
   const [name, setName] = useState(props.user.name);
   const [email, setEmail] = useState(props.user.email);

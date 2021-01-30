@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 
 import { Menu, Layout } from "antd";
-import { SettingTwoTone, FileTwoTone } from "@ant-design/icons";
+import { SettingTwoTone } from "@ant-design/icons";
 
 import NewTicket from "./ticket/NewTicket";
-
-// import { baseUrl } from "../utils";
 
 const Navigation = () => {
   const history = useHistory();
@@ -21,7 +19,6 @@ const Navigation = () => {
   }
 
   const handleClick = (e) => {
-    //console.log('click ', e);
     setCurrent(e.key);
   };
 
@@ -63,7 +60,7 @@ const Navigation = () => {
               <Menu.Item key={0} onClick={() => history.push("/")}>
                 Home
               </Menu.Item>
-              <SubMenu key="SubMenu" icon={<FileTwoTone />} title="Tickets">
+              <SubMenu key="SubMenu" title="Tickets">
                 <Menu.Item key="tickets:1">
                   <Link to="/ticket/open">Open Tickets</Link>
                 </Menu.Item>
@@ -121,7 +118,7 @@ const Navigation = () => {
               <Menu.Item key={0} onClick={() => history.push("/")}>
                 Home
               </Menu.Item>
-              <SubMenu key="SubMenu" icon={<FileTwoTone />} title="Tickets">
+              <SubMenu key="SubMenu" title="Tickets">
                 <Menu.Item key="tickets:1">
                   <Link to="/ticket/open">Open Tickets</Link>
                 </Menu.Item>

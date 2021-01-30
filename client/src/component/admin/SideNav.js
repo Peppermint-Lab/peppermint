@@ -16,9 +16,7 @@ import CreateNewsletter from "../newsletter/CreateNewsletter";
 const { SubMenu } = Menu;
 
 const SideNav = () => {
-  const handleClick = (e) => {
-    // console.log("click ", e);
-  };
+  const handleClick = (e) => {};
 
   const { Sider } = Layout;
 
@@ -29,7 +27,7 @@ const SideNav = () => {
           breakpoint="lg"
           collapsedWidth="0"
           theme="light"
-          onBreakpoint={broken => {
+          onBreakpoint={(broken) => {
             console.log(broken);
           }}
           onCollapse={(collapsed, type) => {

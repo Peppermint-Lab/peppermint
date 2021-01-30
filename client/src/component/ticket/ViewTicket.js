@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Input, Space, Button, Drawer, Divider, Row, Popconfirm } from "antd";
 
 import Transfer from "./Transfer";
-// import AddTime from "./AddTime";
 import AddInfo from "../client/AddInfo";
 
 const ViewTicket = (props) => {

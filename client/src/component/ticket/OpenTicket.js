@@ -16,7 +16,6 @@ const OpenTicket = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        // console.log(result.tickets);
         setData(result.tickets);
       });
   }

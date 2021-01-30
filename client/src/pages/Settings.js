@@ -4,10 +4,10 @@ import { EditTwoTone } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
 
-// import { baseUrl } from "../utils";
-
+// eslint-disable-next-line
 const UserProfile = () => {
   const user = localStorage.getItem("user");
+  // eslint-disable-next-line
   const [info, setInfo] = useState([]);
 
   const getData = async () => {
@@ -26,6 +26,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line
   }, []);
 
   return (

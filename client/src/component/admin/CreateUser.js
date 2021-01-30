@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-// import { useHistory } from "react-router-dom";
 import { Modal, Form, Input, Radio } from "antd";
-// import { GlobalContext } from '../Context/GlobalState';
 
 const CreateUser = () => {
   const [visible, setVisible] = useState(false);

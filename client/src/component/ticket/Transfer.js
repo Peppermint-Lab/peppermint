@@ -79,7 +79,7 @@ const Transfer = (props) => {
           optionFilterProp="children"
           onChange={setId}
           filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            option.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
         >
           {search}

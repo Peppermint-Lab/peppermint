@@ -9,7 +9,6 @@ import ListTodo from "../component/todo/ListTodo";
 import TicketStats from "../component/ticket/TicketStats";
 import ListNote from "../component/note/ListNote";
 
-// import { baseUrl } from "../utils";
 import { GlobalContext } from "../Context/GlobalState";
 import ListNewsletter from "../component/newsletter/ListNewsletter";
 
@@ -113,7 +112,6 @@ const CompanyNews = () => {
 };
 
 const Home = () => {
-  // const [data, setData] = useState();
   const history = useHistory();
 
   useEffect(() => {
@@ -127,9 +125,8 @@ const Home = () => {
       }
     };
     call();
+    // eslint-disable-next-line
   }, []);
-
-  // console.log(data)
 
   return (
     <div>
