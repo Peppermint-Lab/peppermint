@@ -17,7 +17,7 @@ const connectDB = async () => {
       useUnifiedTopology: true,
     });
     console.log(`MONGODB Connected: ${conn.connection.host}`.cyan.bold); // Prints out if connected in the console
-    exec(`seed -u ${process.env.MONGO_URI_DOCKER} ./data`, (err, stdout, stderr) => {
+    exec(`seed -u ${db} ./data`, (err, stdout, stderr) => {
       if (err) {
         // node couldn't execute the command
         return;
