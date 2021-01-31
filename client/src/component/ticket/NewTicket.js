@@ -123,10 +123,9 @@ const NewTicket = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Item>
-          <Form.Item name="client" label="client">
+          <Form.Item name="Client" label="Client">
             <Select
               showSearch
-              style={{ width: 200 }}
               placeholder="Select a client"
               optionFilterProp="children"
               onChange={setCompany}

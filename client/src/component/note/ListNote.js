@@ -18,7 +18,7 @@ const ListNote = () => {
       title: "Title",
       dataIndex: "title",
       key: "name",
-      width: 400,
+      width: "90%",
     },
     {
       key: "action",
@@ -29,7 +29,7 @@ const ListNote = () => {
             title="Are you sure you want to delete?"
             onConfirm={() => deleteNote(record._id)}
           >
-            <Button size="xs" style={{ float: "right", marginLeft: 5 }}>
+            <Button size="xs" style={{ float: "right" }}>
               <DeleteTwoTone twoToneColor="#FF0000" />
             </Button>
           </Popconfirm>
