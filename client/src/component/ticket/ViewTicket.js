@@ -3,6 +3,7 @@ import { Input, Space, Button, Drawer, Divider, Row, Popconfirm } from "antd";
 
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
+import TicketTime from "../time/TicketTime";
 
 const ViewTicket = (props) => {
   const [visible, setVisible] = useState(false);
@@ -137,6 +138,7 @@ const ViewTicket = (props) => {
         </h5>
         <Divider />
         <h4>Time Logged to Ticket</h4>
+        <TicketTime />
       </Drawer>
     </div>
   );
