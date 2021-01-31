@@ -138,7 +138,7 @@ const ViewTicket = (props) => {
         </h5>
         <Divider />
         <h4>Time Logged to Ticket</h4>
-        <TicketTime />
+        <TicketTime ticket={props.ticket} />
       </Drawer>
     </div>
   );

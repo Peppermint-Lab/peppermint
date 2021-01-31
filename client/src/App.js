@@ -9,7 +9,7 @@ import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
 import Login from "./pages/auth/Login";
 import Reg from "./pages/auth/Reg";
-import Monitor from "./pages/Monitor";
+// import Monitor from "./pages/Monitor";
 import Dash from './pages/admin/Dash';
 import SideNav from './component/admin/SideNav'
 import Analytics from './pages/admin/Analytics'
@@ -44,7 +44,6 @@ const Routing = () => {
         <Route>
           <Navigation />
           <Route exact path="/tickets" component={Ticket} />
-          <Route exact path="/monitor" component={Monitor} />
           <Route exact path='/history' component={History} />
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/ticket/:path'>

@@ -9,8 +9,6 @@ const AddInfo = (props) => {
 
   const id = props.client.client._id;
 
-  console.log(props.client);
-
   async function postData() {
     await fetch(`/api/v1/client/createNote`, {
       method: "POST",

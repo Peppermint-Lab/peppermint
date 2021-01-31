@@ -14,8 +14,8 @@ const NewTicket = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
-  const fetchClients = () => {
-    fetch(`/api/v1/client/allclients`, {
+  const fetchClients = async () => {
+    await fetch(`/api/v1/client/allclients`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -30,8 +30,8 @@ const NewTicket = () => {
       });
   };
 
-  const postData = () => {
-    fetch(`/api/v1/tickets/createTicket`, {
+  const postData = async () => {
+   await fetch(`/api/v1/tickets/createTicket`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
