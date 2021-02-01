@@ -6,8 +6,8 @@ const Log = new mongoose.Schema(
   {
     user: { type: ObjectId, ref: "InternalUser" },
     ticket: { type: ObjectId, ref: "ticketschemas"}, 
-    stime: { type: Number },
-    etime: { type: Number },
+    time: { type: String },
+    date: { type: String },
     activity: { type: String }
   },
   { timestamps: true }

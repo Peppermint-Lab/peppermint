@@ -24,17 +24,17 @@ const TicketTime = (props) => {
   }
 
   async function postData() {
-    await fetch(`/api/v1/`, {
+    await fetch(`/api/v1/time/createTime`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        ticket : props.ticket._id,
+        ticket: props.ticket._id,
         date,
         time,
-        activity
+        activity,
       }),
     })
       .then((res) => res.json())
@@ -52,8 +52,12 @@ const TicketTime = (props) => {
       <Space>
         <DatePicker onChange={onChangeDate} defaultValue={moment} />
         <TimePicker format={format} onChange={onChangeTime} />
-        <Input style={{ width: 300 }} placeholder="Enter activity here" />
-        <Button>
+        <Input
+          style={{ width: 300 }}
+          placeholder="Enter activity here"
+          onChange={(e) => setActivity(e.target.value)}
+        />
+        <Button onClick={postData}>
           <EditTwoTone />
         </Button>
       </Space>

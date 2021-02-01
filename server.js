@@ -19,6 +19,7 @@ require("./src/models/todo");
 require("./src/models/notes");
 require("./src/models/client");
 require("./src/models/news");
+require('./src/models/Log')
 
 connectDB();
 
@@ -30,15 +31,18 @@ const todo = require("./src/routes/todo");
 const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
+const times = require("./src/routes/time");
 
 // Express server libraries
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(helmet({
-  contentSecurityPolicy: false,
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 
 // Express API Routes
 app.use("/api/v1/auth", auth);
@@ -48,6 +52,7 @@ app.use("/api/v1/todo", todo);
 app.use("/api/v1/note", note);
 app.use("/api/v1/client", client);
 app.use("/api/v1/newsletter", news);
+app.use("/api/v1/time", times);
 
 // Morgan API Logger
 if (process.env.NODE_ENV === "development") {

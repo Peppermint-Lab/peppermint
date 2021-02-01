@@ -49,17 +49,20 @@ exports.updateClient = async (req, res) => {
   console.log(req.body);
 
   try {
-    await Client.findByIdAndUpdate({
-      _id: mongoose.Types.ObjectId(req.body.id),
-    },
+    await Client.findByIdAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(req.body.id),
+      },
       {
         $set: {
           name: req.body.clientName,
           contactName: req.body.name,
           email: req.body.email,
           number: req.body.number,
-        }
-    }, { new: true }).exec();
+        },
+      },
+      { new: true }
+    ).exec();
   } catch (error) {}
 };
 
@@ -82,7 +85,7 @@ exports.deleteClient = async (req, res) => {
 };
 
 exports.createNote = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
     const client = await new mongoose.Types.ObjectId(req.body.id);
     if (!client) {
@@ -91,27 +94,30 @@ exports.createNote = async (req, res) => {
         error: "Client not found",
       });
     }
-    Client.findByIdAndUpdate({
-      _id: mongoose.Types.ObjectId(req.body.id),
-    },
+    Client.findByIdAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(req.body.id),
+      },
       {
         $set: {
-          notes: req.body.note
-        }
-    }, { new: true }).exec();
+          notes: req.body.note,
+        },
+      },
+      { new: true }
+    ).exec();
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error });
   }
-}
+};
 
 exports.getNote = async (req, res) => {
-  console.log(req.params.id)
+  console.log(req.params.id);
   try {
     const find = await Client.findById({ _id: req.params.id });
-    return res.status(200).json({ find })
+    return res.status(200).json({ find });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error });
   }
-}
+};
