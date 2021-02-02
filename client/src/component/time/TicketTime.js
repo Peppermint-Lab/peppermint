@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker, TimePicker, Input, Space, Button } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 import moment from "moment";
@@ -7,10 +7,9 @@ const TicketTime = (props) => {
   const [date, setDate] = useState(moment().format("MM/DD/YYYY"));
   const [time, setTime] = useState();
   const [activity, setActivity] = useState("");
+  const [log, setLog] = useState([]);
 
   const format = "HH:mm";
-
-  console.log(props.ticket);
 
   function onChangeDate(date, dateString) {
     const d = moment(date).format("MM/DD/YYYY");
@@ -46,6 +45,27 @@ const TicketTime = (props) => {
         }
       });
   }
+
+  async function getLogById() {
+    const id = props.ticket._id
+    await fetch(`/api/v1/time/getLog/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setLog(res.log);
+      });
+  }
+
+  console.log(log)
+
+  useEffect(() => {
+    getLogById();
+  }, []);
 
   return (
     <div>
