@@ -165,7 +165,7 @@ exports.updateJob = async (req, res) => {
       }
     ).exec();
     console.log("Updated record");
-    res.status(200);
+    res.status(201);
   } catch (error) {
     console.log(error);
     return res.status(500);

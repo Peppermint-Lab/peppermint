@@ -24,8 +24,9 @@ exports.createLog = async (req, res) => {
 };
 
 exports.getLogById = async (req, res) => {
+  console.log(req.params.id);
   try {
-    const log = await Log.find({ ticket: mongoose.Types.ObjectId(req.params.id) }).populate(
+    const log = await Log.find({ ticket: req.params.id }).populate(
       "user",
       "_id name"
     );
