@@ -6,7 +6,6 @@ import ViewNewsletter from "./ViewNewsletter";
 const ListNewsletter = () => {
   const [n, setN] = useState([]);
 
-  console.log(n);
   const getN = async () => {
     await fetch(`/api/v1/newsletter/get`, {
       method: "GET",

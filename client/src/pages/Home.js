@@ -117,7 +117,6 @@ const Home = () => {
   useEffect(() => {
     const call = async () => {
       const res = localStorage.getItem("jwt");
-      console.log(res);
       if (!res) {
         history.push("/login");
       } else {
