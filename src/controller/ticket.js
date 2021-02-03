@@ -3,8 +3,6 @@ const TicketSchema = mongoose.model("TicketSchema");
 
 // Get Open Tickets
 exports.openTickets = async (req, res) => {
-  // console.log("Open Tickets API HIT")
-
   try {
     await TicketSchema.find({ status: "issued", assignedto: req.user._id })
       .populate("client", "_id name")
@@ -20,7 +18,6 @@ exports.openTickets = async (req, res) => {
 
 // Get unIssued Tickets
 exports.unissuedTickets = async (req, res) => {
-  // console.log("Unissued ticket API HIT")
   try {
     await TicketSchema.find({ status: "unissued" })
       .populate("client", "_id name")
@@ -36,7 +33,6 @@ exports.unissuedTickets = async (req, res) => {
 };
 
 exports.completedTickets = async (req, res) => {
-  // console.log("Unissued ticket API HIT")
   try {
     await TicketSchema.find({
       status: "completed",
@@ -53,21 +49,24 @@ exports.completedTickets = async (req, res) => {
 
 // Create a new ticket
 exports.createTicket = async (req, res) => {
-  tc = TicketSchema.count()
-  count = tc++
+  tc = TicketSchema.count();
+  count = tc++;
   console.log("Create a new ticket API HIT");
   try {
     const { name, company, issue, priority, email } = req.body;
     if (!name || !company || !issue || !priority) {
       return res.status(422).json({ error: "Please add all the fields" });
     }
-    const newTicket = await new TicketSchema({
-      name,
-      client: mongoose.Types.ObjectId(company),
-      issue,
-      priority,
-      email,
-    }, {$inc: { ticketId: 1} });
+    const newTicket = await new TicketSchema(
+      {
+        name,
+        client: mongoose.Types.ObjectId(company),
+        issue,
+        priority,
+        email,
+      },
+      { $inc: { ticketId: 1 } }
+    );
     newTicket.save().then((result) => {
       res.json({ newTicket: result });
     });
@@ -158,7 +157,7 @@ exports.updateJob = async (req, res) => {
           note: req.body.note,
           name: req.body.name,
           email: req.body.email,
-          number: req.body.number
+          number: req.body.number,
         },
       },
       {
@@ -166,7 +165,7 @@ exports.updateJob = async (req, res) => {
       }
     ).exec();
     console.log("Updated record");
-    res.status(200)
+    res.status(201);
   } catch (error) {
     console.log(error);
     return res.status(500);
