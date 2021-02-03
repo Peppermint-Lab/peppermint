@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { DatePicker, TimePicker, Input, Space, Button } from "antd";
-import { EditTwoTone } from "@ant-design/icons";
+import { DatePicker, TimePicker, Input, Space, Button, Tooltip } from "antd";
+import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import moment from "moment";
 
 const TicketTime = (props) => {
@@ -47,7 +47,7 @@ const TicketTime = (props) => {
   }
 
   async function getLogById() {
-    const id = props.ticket._id
+    const id = props.ticket._id;
     await fetch(`/api/v1/time/getLog/${id}`, {
       method: "GET",
       headers: {
@@ -61,7 +61,7 @@ const TicketTime = (props) => {
       });
   }
 
-  console.log(log)
+  console.log(log);
 
   useEffect(() => {
     getLogById();
@@ -81,6 +81,26 @@ const TicketTime = (props) => {
           <EditTwoTone />
         </Button>
       </Space>
+      <div className="ticket-logs" >
+        {log.map((log) => {
+          return (
+            <div key={log._id}>
+              <ul>
+                <li>
+                  <span>{log.date} | </span>
+                  <span></span>
+                  <span>{log.activity}</span>
+                  <Tooltip placement="right" title="Delete">
+                    <Button style={{ float: "right" }}>
+                      <DeleteTwoTone twoToneColor="#FF0000" />
+                    </Button>
+                  </Tooltip>
+                </li>
+              </ul>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

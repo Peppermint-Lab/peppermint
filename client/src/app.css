@@ -28,6 +28,8 @@ body {
   }
   .ant-drawer-content-wrapper {
     width: 100% !important;
+    height: 100% !important;
+    overflow-y: scroll !important;
   }
   .login-container {
     display: flex !important;
@@ -389,4 +391,18 @@ body {
 
 .newlog p {
   margin-top: 15px;
+}
+
+.ticket-logs {
+  margin-top: 10px;
+  margin-left: -40px;
+}
+
+.ticket-logs li {
+  list-style-type: none;
+}
+
+.ant-drawer-content {
+  height: 100%;
+  overflow-y: scroll;
 }

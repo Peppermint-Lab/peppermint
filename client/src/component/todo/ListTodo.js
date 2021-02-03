@@ -2,15 +2,12 @@ import React, { useEffect, useContext } from "react";
 import { Divider, Button, Tooltip } from "antd";
 import { CheckCircleTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
-// import { baseUrl } from "../utils";
 import { GlobalContext } from "../../Context/GlobalState";
 
 const ListTodo = () => {
   const { todos, getTodos, deleteTodo, allDone, markDone } = useContext(
     GlobalContext
   );
-
-  // console.log(todos)
 
   useEffect(() => {
     getTodos();
@@ -25,7 +22,6 @@ const ListTodo = () => {
       <Divider orientation="left" style={{ width: "auto" }}></Divider>
       {todos ? (
         todos.map((todo) => {
-          // console.log(todo)
           return (
             <div className="todo-list" key={todo._id}>
               <ul key={todo._id}>
