@@ -21,7 +21,6 @@ exports.unissuedTickets = async (req, res) => {
   try {
     await TicketSchema.find({ status: "unissued" })
       .populate("client", "_id name")
-      .populate("assignedto", "_id name")
       .then((tickets) => {
         res.json({ tickets });
       });
@@ -49,28 +48,22 @@ exports.completedTickets = async (req, res) => {
 
 // Create a new ticket
 exports.createTicket = async (req, res) => {
-  tc = TicketSchema.count();
-  count = tc++;
   console.log("Create a new ticket API HIT");
   try {
     const { name, company, issue, priority, email } = req.body;
     if (!name || !company || !issue || !priority) {
       return res.status(422).json({ error: "Please add all the fields" });
     }
-    const newTicket = await new TicketSchema(
-      {
-        name,
-        client: mongoose.Types.ObjectId(company),
-        issue,
-        priority,
-        email,
-      },
-      { $inc: { ticketId: 1 } }
-    );
-    newTicket.save().then((result) => {
-      res.json({ newTicket: result });
+    const ticket = await new TicketSchema({
+      name,
+      client: mongoose.Types.ObjectId(company),
+      issue,
+      priority,
+      email,
     });
-    return res.status(200);
+    ticket.save().then(() => {
+      res.status(201).json({ message: "Ticket created correctly" });
+    });
   } catch (error) {
     console.log(error);
   }
