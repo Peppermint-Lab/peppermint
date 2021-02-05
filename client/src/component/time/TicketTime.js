@@ -81,14 +81,15 @@ const TicketTime = (props) => {
           <EditTwoTone />
         </Button>
       </Space>
-      <div className="ticket-logs" >
+      <div className="ticket-logs">
         {log.map((log) => {
           return (
             <div key={log._id}>
               <ul>
                 <li>
                   <span>{log.date} | </span>
-                  <span></span>
+                  <span>{log.time} | </span>
+                  <span>{log.user.name} | </span>
                   <span>{log.activity}</span>
                   <Tooltip placement="right" title="Delete">
                     <Button style={{ float: "right" }}>
