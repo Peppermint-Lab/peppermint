@@ -7,7 +7,7 @@ const connectDB = async () => {
   if(process.env.NODE_ENV === 'production') {
      db = process.env.MONGO_URI_DOCKER
   } else {
-    db = process.env.MONGO_URI
+    db = process.env.MONGO_URI_DEV
   }
   try {
     const conn = await mongoose.connect(db, {
