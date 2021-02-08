@@ -24,13 +24,26 @@ exports.createLog = async (req, res) => {
 };
 
 exports.getLogById = async (req, res) => {
-  console.log(req.params.id);
   try {
     const log = await Log.find({ ticket: req.params.id }).populate(
       "user",
       "_id name"
     );
     res.status(200).json({ log });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({ message: "There has been an error!" });
+  }
+};
+
+exports.deleteLog = async (req, res) => {
+  console.log(req.params.id)
+  try {
+    const log = new mongoose.Types.ObjectId(req.params.id);
+    await Log.findOneAndDelete({ _id: log });
+    return res.status(201).json({
+      data: {},
+    });
   } catch (error) {
     console.log(error);
     return res.status(404).json({ message: "There has been an error!" });

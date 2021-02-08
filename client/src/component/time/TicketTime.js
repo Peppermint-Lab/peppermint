@@ -61,7 +61,16 @@ const TicketTime = (props) => {
       });
   }
 
-  console.log(log);
+  async function deleteLog(id) {
+    await fetch(`/api/v1/time/deleteLog/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+  }
 
   useEffect(() => {
     getLogById();
@@ -92,7 +101,10 @@ const TicketTime = (props) => {
                   <span>{log.user.name} | </span>
                   <span>{log.activity}</span>
                   <Tooltip placement="right" title="Delete">
-                    <Button style={{ float: "right" }}>
+                    <Button
+                      style={{ float: "right" }}
+                      onClick={() => deleteLog(log._id)}
+                    >
                       <DeleteTwoTone twoToneColor="#FF0000" />
                     </Button>
                   </Tooltip>
