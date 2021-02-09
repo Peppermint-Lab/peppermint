@@ -15,6 +15,8 @@ const ViewTicket = (props) => {
 
   const { TextArea } = Input;
 
+  console.log(props)
+
   const showDrawer = () => {
     setVisible(true);
   };
@@ -90,9 +92,7 @@ const ViewTicket = (props) => {
           <Space>
             <h6>Issue status : {props.ticket.status}</h6>
             <Divider type="vertical" />
-            <h6 className="drawer-text-right">
-              Engineer assigned : {props.ticket.assignedto.name}
-            </h6>
+            
           </Space>
         </Row>
         <Row>

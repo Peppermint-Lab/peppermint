@@ -69,7 +69,7 @@ const OpenTicket = () => {
 
   return (
     <div>
-      <h3 style={{ textAlign: "center" }}>Open Tickets - {null}</h3>
+      <h3 style={{ textAlign: "center" }}>Open Tickets</h3>
       <Table
         columns={columns}
         dataSource={data}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, Space, Button } from "antd";
 
+import ViewTicket from "./ViewTicket.js";
+
 const UnissuedTicket = () => {
   const [data, setData] = useState([]);
 
@@ -74,15 +76,16 @@ const UnissuedTicket = () => {
       key: "issue",
     },
     {
-      title: "Action",
       key: "action",
       width: 100,
-      render: () => (
+      render: (record) => (
         <Space size="middle">
           <Button size="small" onClick={convert}>
             Convert
           </Button>
-          <Button size="small"></Button>
+          <Button size="small">
+            <ViewTicket ticket={record} />
+          </Button>
         </Space>
       ),
     },
