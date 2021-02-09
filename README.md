@@ -13,15 +13,30 @@
 
 > Ticket Management System in order to help helpdesks & service desks manage internal staff &  customer requests
 
+##  💻 Demo
+
+If you're interested in trying out Peppermint we currently have a demo working <a href="https://demo.pmint.dev/">here.</a>
+
+The credentials are 
+```
+email: admin@admin.com
+password: 1234
+```
+
 ## ✨ Features
 
 - 💡 **Job Logging**
 - 📜 **Client History**
-- 💎 **Notes creation & Todo List**:
+- 💎 **Notes creation & Todo List**
 - 📐 **Admin Page**: Admin Dashboard for easy webUI changes and analytics
-- 📱 **Responsive**: Designed for variable screen sizes
-- ⚙️ **Docker-Ready**:
+- 📱 **Responsive**: Designed for variable screen sizes from mobile up to 4k
+- ⚙️ **Docker-Ready**: Quickly deploy using docker
 - ✅ **Usage**: No barriers to use with complete documentation on how to complete tasks
+
+
+## Documentation
+
+We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://pmint.dev/docs/gettingStarted">here</a> to be taken directly there.
 
 
 
