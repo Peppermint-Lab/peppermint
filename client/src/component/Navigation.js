@@ -89,7 +89,7 @@ const Navigation = () => {
                   Log out
                 </Menu.Item>
               </SubMenu>
-              <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
+              <Menu.Item key={4} style={{ float: "right" }}>
                 <NewTicket />
               </Menu.Item>
             </Menu>

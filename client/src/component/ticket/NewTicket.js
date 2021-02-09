@@ -9,10 +9,12 @@ const NewTicket = () => {
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState("");
-  const [priority, setPriority] = useState("");
+  const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
+
+  console.log(visible)
 
   const fetchClients = async () => {
     await fetch(`/api/v1/client/allclients`, {
@@ -74,18 +76,17 @@ const NewTicket = () => {
   return (
     <div className="ticket-modal">
       <Button
-        type="text"
+        type="primary"
         size="small"
-        key={0}
         onClick={() => {
           setVisible(true);
         }}
       >
-        New Ticket
+        Create Ticket
       </Button>
       <Modal
         visible={visible}
-        title="Create a new Ticket"
+        title="Create new Ticket"
         okText="Create"
         cancelText="Cancel"
         onCancel={onCancel}
@@ -110,33 +111,33 @@ const NewTicket = () => {
             modifier: "public",
           }}
         >
-          <Form.Item name="name" label="Name">
+          <Form.Item name="name">
             <Input
               placeholder="Enter name here..."
               name="name"
               onChange={(e) => setName(e.target.value)}
             />
           </Form.Item>
-          <Form.Item name="email" label="Email">
+          <Form.Item name="email">
             <Input
               placeholder="Enter email here...."
               onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Item>
-          <Form.Item name="Client" label="Client">
+          <Form.Item name="Client">
             <Select
               showSearch
               placeholder="Select a client"
               optionFilterProp="children"
               onChange={setCompany}
               filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
               {search}
             </Select>
           </Form.Item>
-          <Form.Item name="issue" label="issue">
+          <Form.Item name="issue" label="Issue">
             <TextArea rows={5} onChange={(e) => setIssue(e.target.value)} />
           </Form.Item>
           <Form.Item
@@ -153,7 +154,7 @@ const NewTicket = () => {
               <Space>
                 <Radio.Button value="Low">Low</Radio.Button>
                 <Radio.Button value="Normal">Normal</Radio.Button>
-                <Radio.Button value="High">High</Radio.Button>
+                <Radio.Button value="High" >High</Radio.Button>
               </Space>
             </Radio.Group>
           </Form.Item>
