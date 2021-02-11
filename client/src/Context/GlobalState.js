@@ -7,7 +7,7 @@ const initialState = {
   todos: [],
   notes: [],
   user: {},
-  auth: true,
+  unissuedTicket: [],
 };
 
 // Create context
@@ -27,7 +27,6 @@ export const GlobalProvider = ({ children }) => {
     };
     try {
       const res = await axios.get(`/api/v1/todo/getTodo`, config);
-      // console.log(res.data.todo)
       dispatch({
         type: "GET_TODOS",
         payload: res.data.todo,
@@ -110,7 +109,6 @@ export const GlobalProvider = ({ children }) => {
         },
       }).then((res) => res.json());
       dispatch({ type: "GET_NOTES", payload: res.note });
-      // console.log(res.note);
     } catch (error) {}
   }
 
@@ -127,7 +125,6 @@ export const GlobalProvider = ({ children }) => {
           title,
         }),
       }).then((res) => res.json());
-      console.log(res.note);
       dispatch({ type: "ADD_NOTE", payload: res.note });
     } catch (error) {}
   }
@@ -195,6 +192,22 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
+  async function getUnissuedTicket() {
+    try {
+      const res = await fetch(`/api/v1/tickets/unissuedTickets`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+      }).then((res) => res.json());
+      dispatch({ type: "GET_UNISSUEDTICKETS", payload: res.tickets });
+      console.log(res.tickets);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     // This allows us to use in any component by use usecontext
     // Which is the react hook
@@ -204,6 +217,7 @@ export const GlobalProvider = ({ children }) => {
         notes: state.notes,
         auth: state.auth,
         user: state.user,
+        unissuedTicket: state.unissuedTicket,
         getTodos,
         addTodo,
         deleteTodo,
@@ -214,6 +228,7 @@ export const GlobalProvider = ({ children }) => {
         deleteNote,
         signin,
         isLogged,
+        getUnissuedTicket,
       }}
     >
       {children}

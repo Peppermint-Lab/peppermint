@@ -1,30 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Table, Space, Button } from "antd";
 
 import ViewTicket from "./ViewTicket.js";
+import { GlobalContext } from "../../Context/GlobalState";
 
 const UnissuedTicket = () => {
-  const [data, setData] = useState([]);
 
-  async function loadContent() {
-    await fetch(`/api/v1/tickets/unissuedTickets`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setData(result.tickets);
-      });
-  }
+  const { unissuedTicket, getUnissuedTicket } = useContext(GlobalContext);
+
+  console.log(unissuedTicket)
 
   useEffect(() => {
-    async function resolve() {
-      await loadContent();
-    }
-    resolve();
+    getUnissuedTicket();
+    // eslint-disable-next-line
   }, []);
 
   const convert = () => {
@@ -35,7 +23,7 @@ const UnissuedTicket = () => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        data,
+      
       }),
     })
       .then((res) => res.json())
@@ -93,10 +81,10 @@ const UnissuedTicket = () => {
 
   return (
     <div>
-      <h3 style={{ textAlign: "center" }}>Unissued Tickets - </h3>
+      <h3 style={{ textAlign: "center" }}>Unissued Tickets </h3>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={unissuedTicket}
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: true,

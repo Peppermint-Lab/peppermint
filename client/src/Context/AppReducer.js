@@ -51,6 +51,11 @@ export default (state, action) => {
       return {
         auth: action.payload,
       };
+    case "GET_UNISSUEDTICKETS":
+      return {
+        ...state,
+        unissuedTicket: action.payload,
+      };
 
     default:
       return state;

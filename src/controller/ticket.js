@@ -22,9 +22,8 @@ exports.unissuedTickets = async (req, res) => {
     await TicketSchema.find({ status: "unissued" })
       .populate("client", "_id name")
       .then((tickets) => {
-        res.json({ tickets });
+        res.status(200).json({ tickets });
       });
-    return res.status(200);
   } catch (error) {
     console.log(error);
     return res.status(500);

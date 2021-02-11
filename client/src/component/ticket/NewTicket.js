@@ -14,8 +14,6 @@ const NewTicket = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
-  console.log(visible)
-
   const fetchClients = async () => {
     await fetch(`/api/v1/client/allclients`, {
       method: "GET",
@@ -131,7 +129,7 @@ const NewTicket = () => {
               optionFilterProp="children"
               onChange={setCompany}
               filterOption={(input, option) =>
-                option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
               {search}
