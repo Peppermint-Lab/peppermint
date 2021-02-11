@@ -40,7 +40,7 @@ const ListTodo = () => {
                     </Button>
                   </Tooltip>
                   {todo.done ? (
-                    <Tooltip placement="bottom" title="Unmark as done">
+                    <Tooltip placement="left" title="Unmark as done">
                       <Button
                         onClick={() => markUndone(todo._id)}
                         style={{ float: "right", marginRight: 5 }}
@@ -49,7 +49,7 @@ const ListTodo = () => {
                       </Button>
                     </Tooltip>
                   ) : (
-                    <Tooltip placement="bottom" title="Mark as done">
+                    <Tooltip placement="left" title="Mark as done">
                       <Button
                         onClick={() => markDone(todo._id)}
                         style={{ float: "right", marginRight: 5 }}
