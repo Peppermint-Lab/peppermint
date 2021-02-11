@@ -237,10 +237,21 @@ export const GlobalProvider = ({ children }) => {
       })
         .then((res) => res.json())
         dispatch({ type: "GET_OPENTICKET", payload: res.tickets });
-        console.log(res)
     } catch (error) {
       
     }
+  }
+
+  async function completeTicket(id) {
+    const res = await fetch(`/api/v1/tickets/complete/${id}`, {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    }).then((res) => res.json());
+    dispatch({ type: "COMPLETE_TICKET", payload: res.tickets });
+    console.log(res)
   }
 
   return (
@@ -266,7 +277,8 @@ export const GlobalProvider = ({ children }) => {
         isLogged,
         getUnissuedTicket,
         convertTicket,
-        getOpenTicket
+        getOpenTicket,
+        completeTicket
       }}
     >
       {children}

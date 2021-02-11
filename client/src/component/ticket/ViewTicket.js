@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Input, Space, Button, Drawer, Divider, Row, Popconfirm } from "antd";
 
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
 import TicketTime from "../time/TicketTime";
+
+import { GlobalContext } from "../../Context/GlobalState";
 
 const ViewTicket = (props) => {
   const [visible, setVisible] = useState(false);
@@ -15,6 +17,8 @@ const ViewTicket = (props) => {
 
   const { TextArea } = Input;
 
+  const { completeTicket } = useContext(GlobalContext);
+
   const showDrawer = () => {
     setVisible(true);
   };
@@ -22,17 +26,6 @@ const ViewTicket = (props) => {
   const onClose = async () => {
     setVisible(false);
     await update();
-  };
-
-  const complete = async (record) => {
-    const id = record;
-    await fetch(`/api/v1/tickets/complete/${id}`, {
-      method: "Post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    }).then((res) => res.json());
   };
 
   const update = async () => {
@@ -78,7 +71,7 @@ const ViewTicket = (props) => {
           <Popconfirm
             title="Are you sure you want to complete?"
             onConfirm={() => {
-              complete(props.ticket._id);
+              completeTicket(props.ticket._id);
             }}
           >
             <Button>Complete</Button>

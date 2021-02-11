@@ -73,7 +73,7 @@ exports.convertTicket = async (req, res) => {
   const { data } = req.body;
   const t = data._id;
 
-  console.log(req.body)
+  console.log(req.body);
   try {
     await TicketSchema.findByIdAndUpdate(
       { _id: t },
@@ -84,10 +84,12 @@ exports.convertTicket = async (req, res) => {
         new: true,
       }
     ).exec();
-    const ticket = await TicketSchema.find({ status: "unissued" })
-    .populate("client", "_id name")
+    const ticket = await TicketSchema.find({ status: "unissued" }).populate(
+      "client",
+      "_id name"
+    );
     return res.status(201).json({
-      ticket
+      ticket,
     });
   } catch (error) {
     console.log(error);
@@ -119,7 +121,13 @@ exports.complete = async (req, res) => {
         new: true,
       }
     ).exec();
-    console.log("Updated record");
+    const tickets = await TicketSchema.find({
+      status: "issued",
+      assignedto: req.user._id,
+    })
+      .populate("client", "_id name")
+      .populate("assignedto", "_id name");
+    res.status(200).json({ tickets });
   } catch (error) {
     console.log(error);
     return res.status(500);
