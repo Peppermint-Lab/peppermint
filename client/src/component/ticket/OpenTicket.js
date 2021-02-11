@@ -39,7 +39,6 @@ const OpenTicket = () => {
       key: "issue",
     },
     {
-      title: "Action",
       key: "action",
       width: 100,
       render: (record) => (

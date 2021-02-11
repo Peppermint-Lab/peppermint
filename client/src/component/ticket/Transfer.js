@@ -54,7 +54,6 @@ const Transfer = (props) => {
       >
         Transfer
       </Button>
-
       <Modal visible={visible} onCancel={onCancel} onOk={onCreate} width={300}>
         <Select
           style={{ width: 200 }}
