@@ -61,7 +61,6 @@ const EditUserInfo = () => {
       key: "role",
     },
     {
-      title: "Action",
       key: "action",
       responsive: ["md"],
       render: (text, record) => (

@@ -71,7 +71,6 @@ const ClientList = () => {
       width: 75,
     },
     {
-      title: "Action",
       key: "action",
       responsive: ["md"],
       width: 200,
