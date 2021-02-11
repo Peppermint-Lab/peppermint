@@ -25,9 +25,7 @@ class History extends React.Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        this.setState({ data: result.tickets }, () =>
-          console.log(this.state.data)
-        );
+        this.setState({ data: result.tickets });
       });
   }
 

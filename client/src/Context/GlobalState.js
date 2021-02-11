@@ -254,6 +254,25 @@ export const GlobalProvider = ({ children }) => {
     console.log(res)
   }
 
+  async function transferTicket(id, ticket) {
+    try {
+      const res = await fetch(`/api/v1/tickets/transfer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+        body: JSON.stringify({
+          id,
+          find: ticket,
+        }),
+      }).then((res) => res.json())
+      dispatch({ type: "TRANSFER_TICKET", payload: res.tickets });
+    } catch (error) {
+      
+    }
+  }
+
   return (
     // This allows us to use in any component by use usecontext
     // Which is the react hook
@@ -278,7 +297,8 @@ export const GlobalProvider = ({ children }) => {
         getUnissuedTicket,
         convertTicket,
         getOpenTicket,
-        completeTicket
+        completeTicket,
+        transferTicket
       }}
     >
       {children}

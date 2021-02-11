@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Select, Modal, Button } from "antd";
+
+import { GlobalContext } from "../../Context/GlobalState";
 
 const Transfer = (props) => {
   const { Option } = Select;
   const [users, setUsers] = useState([]);
   const [id, setId] = useState("");
   const [visible, setVisible] = useState(false);
+
+  const ticket = props.ticket._id
+
+  const { transferTicket } = useContext(GlobalContext);
 
   const fetchUsers = async () => {
     await fetch(`/api/v1/auth/getAllUsers`, {
@@ -23,31 +29,9 @@ const Transfer = (props) => {
       });
   };
 
-  const postData = () => {
-    fetch(`/api/v1/tickets/transfer`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        id,
-        find: props.ticket._id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          console.log("Congrats it worked");
-        }
-      });
-  };
-
   const onCreate = async () => {
     setVisible(false);
-    await postData();
+    await transferTicket(id, ticket)
   };
 
   const onCancel = () => {
