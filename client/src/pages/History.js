@@ -5,7 +5,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import get from "lodash.get";
 import isequal from "lodash.isequal";
 
-import ViewTicket from "../component/ticket/ViewTicket.js";
+// import ViewTicket from "../component/ticket/ViewTicket.js";
 
 class History extends React.Component {
   state = {
@@ -162,13 +162,6 @@ class History extends React.Component {
         key: "issue",
         width: "15%",
         ...this.getColumnSearchProps("issue"),
-      }, 
-      {
-        render: (text, record) => (
-          <Space size="middle">
-            
-          </Space>
-        ),
       }
     ];
 
