@@ -8,6 +8,7 @@ const initialState = {
   notes: [],
   user: {},
   unissuedTicket: [],
+  openTicket: []
 };
 
 // Create context
@@ -220,9 +221,25 @@ export const GlobalProvider = ({ children }) => {
         }),
       }).then((res) => res.json())
       dispatch({ type: "CONVERT_TICKET", payload: res.ticket });
-      console.log(res.ticket)
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async function getOpenTicket() {
+    try {
+      const res = await fetch(`/api/v1/tickets/openedTickets`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+      })
+        .then((res) => res.json())
+        dispatch({ type: "GET_OPENTICKET", payload: res.tickets });
+        console.log(res)
+    } catch (error) {
+      
     }
   }
 
@@ -236,6 +253,7 @@ export const GlobalProvider = ({ children }) => {
         auth: state.auth,
         user: state.user,
         unissuedTicket: state.unissuedTicket,
+        openTicket: state.openTicket,
         getTodos,
         addTodo,
         deleteTodo,
@@ -247,7 +265,8 @@ export const GlobalProvider = ({ children }) => {
         signin,
         isLogged,
         getUnissuedTicket,
-        convertTicket
+        convertTicket,
+        getOpenTicket
       }}
     >
       {children}

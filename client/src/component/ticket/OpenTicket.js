@@ -1,30 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Table, Space, Button } from "antd";
 
 import ViewTicket from "./ViewTicket.js";
+import { GlobalContext } from "../../Context/GlobalState";
 
 const OpenTicket = () => {
-  const [data, setData] = useState([]);
-
-  async function loadContent() {
-    await fetch(`/api/v1/tickets/openedTickets`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setData(result.tickets);
-      });
-  }
+  const { openTicket, getOpenTicket } = useContext(GlobalContext);
 
   useEffect(() => {
-    async function resolve() {
-      await loadContent();
-    }
-    resolve();
+    getOpenTicket();
+    // eslint-disable-next-line
   }, []);
 
   const columns = [
@@ -72,7 +57,7 @@ const OpenTicket = () => {
       <h3 style={{ textAlign: "center" }}>Open Tickets</h3>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={openTicket}
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: true,
