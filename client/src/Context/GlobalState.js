@@ -95,7 +95,6 @@ export const GlobalProvider = ({ children }) => {
           Accept: "application/json",
         },
       }).then((response) => response.json());
-
       dispatch({ type: "MARK_TODO", payload: res.todo });
     } catch (error) {}
   }
@@ -273,6 +272,22 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
+  async function markUndone(id) {
+    try {
+      const res = await fetch(`/api/v1/todo/markUndone/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+          ContentType: "application/json",
+          Accept: "application/json",
+        },
+      }).then((response) => response.json());
+      dispatch({ type: "UNMARK_TODO", payload: res.todo });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     // This allows us to use in any component by use usecontext
     // Which is the react hook
@@ -298,7 +313,8 @@ export const GlobalProvider = ({ children }) => {
         convertTicket,
         getOpenTicket,
         completeTicket,
-        transferTicket
+        transferTicket,
+        markUndone
       }}
     >
       {children}

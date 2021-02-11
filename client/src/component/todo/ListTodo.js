@@ -1,11 +1,15 @@
 import React, { useEffect, useContext } from "react";
 import { Divider, Button, Tooltip } from "antd";
-import { CheckCircleTwoTone, DeleteTwoTone } from "@ant-design/icons";
+import {
+  CheckCircleTwoTone,
+  DeleteTwoTone,
+  MinusCircleTwoTone,
+} from "@ant-design/icons";
 
 import { GlobalContext } from "../../Context/GlobalState";
 
 const ListTodo = () => {
-  const { todos, getTodos, deleteTodo, allDone, markDone } = useContext(
+  const { todos, getTodos, deleteTodo, allDone, markDone, markUndone } = useContext(
     GlobalContext
   );
 
@@ -35,14 +39,25 @@ const ListTodo = () => {
                       <DeleteTwoTone twoToneColor="#FF0000" />
                     </Button>
                   </Tooltip>
-                  <Tooltip placement="bottom" title="Mark as done">
-                    <Button
-                      onClick={() => markDone(todo._id)}
-                      style={{ float: "right", marginRight: 5 }}
-                    >
-                      <CheckCircleTwoTone twoToneColor="#52c41a" />
-                    </Button>
-                  </Tooltip>
+                  {todo.done ? (
+                    <Tooltip placement="bottom" title="Unmark as done">
+                      <Button
+                        onClick={() => markUndone(todo._id)}
+                        style={{ float: "right", marginRight: 5 }}
+                      >
+                        <MinusCircleTwoTone />
+                      </Button>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip placement="bottom" title="Mark as done">
+                      <Button
+                        onClick={() => markDone(todo._id)}
+                        style={{ float: "right", marginRight: 5 }}
+                      >
+                        <CheckCircleTwoTone twoToneColor="#52c41a" />
+                      </Button>
+                    </Tooltip>
+                  )}
                 </li>
               </ul>
             </div>

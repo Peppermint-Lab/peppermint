@@ -26,6 +26,11 @@ export default (state, action) => {
         ...state,
         todos: action.payload,
       };
+    case "UNMARK_TODO":
+      return {
+        ...state,
+        todos: action.payload,
+      };
     case "GET_NOTES":
       return {
         ...state,
@@ -56,26 +61,26 @@ export default (state, action) => {
         ...state,
         unissuedTicket: action.payload,
       };
-    case "CONVERT_TICKET": 
+    case "CONVERT_TICKET":
       return {
         ...state,
-        unissuedTicket: action.payload
-      }
-    case "GET_OPENTICKET": 
-    return {
-      ...state,
-      openTicket: action.payload
-    }
+        unissuedTicket: action.payload,
+      };
+    case "GET_OPENTICKET":
+      return {
+        ...state,
+        openTicket: action.payload,
+      };
     case "COMPLETE_TICKET":
       return {
         ...state,
-        openTicket: action.payload
-      }
+        openTicket: action.payload,
+      };
     case "TRANSFER_TICKET":
       return {
         ...state,
-        openTicket: action.payload
-      }
+        openTicket: action.payload,
+      };
     default:
       return state;
   }

@@ -57,8 +57,6 @@ exports.deleteTodo = async (req, res) => {
 };
 
 exports.markOneAsDone = async (req, res) => {
-  console.log("markOneAsDone");
-  console.log(req.params.id);
   try {
     const todo = await new mongoose.Types.ObjectId(req.params.id);
     if (!todo) {
@@ -101,6 +99,27 @@ exports.markAllAsDone = async (req, res) => {
         });
       }
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.markUndone = async (req, res) => {
+  console.log('hit')
+  console.log(req.params.id)
+  try {
+    await Todo.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { done: false } },
+        {
+          new: true,
+        }
+      ).exec();
+      Todo.find({ createdBy: req.user._id })
+      .populate("createdBy", "_id name")
+      .then((todo) => {
+        res.status(200).json({todo});
+      });
   } catch (error) {
     console.log(error);
   }

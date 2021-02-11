@@ -15,8 +15,8 @@ import ListNewsletter from "../component/newsletter/ListNewsletter";
 const Todo = () => {
   return (
     <div className="Todo-Container">
-      <h3>Todo List</h3>
-      <Divider />
+      <h3>To-do List</h3>
+      <Divider style={{}} />
       <CreateTodo />
       <ListTodo />
     </div>

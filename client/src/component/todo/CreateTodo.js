@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Input, Button } from "antd";
-import { EditTwoTone } from "@ant-design/icons";
+import { EditTwoTone, PlusSquareTwoTone } from "@ant-design/icons";
 
 import { GlobalContext } from "../../Context/GlobalState";
 
@@ -16,15 +16,15 @@ const CreateTodo = () => {
   return (
     <div>
       <Input
-        style={{ width: 200 }}
-        placeholder="Enter Todo... "
+        style={{ width: 300 }}
+        placeholder="Enter Task... "
         value={text}
         onChange={(e) => {
           setText(e.target.value);
         }}
       />
       <Button onClick={onSubmit} style={{ marginLeft: 10, margin: 5 }}>
-        <EditTwoTone />
+      <EditTwoTone />
       </Button>
     </div>
   );
