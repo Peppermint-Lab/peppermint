@@ -15,8 +15,6 @@ const ViewTicket = (props) => {
 
   const { TextArea } = Input;
 
-  console.log(props)
-
   const showDrawer = () => {
     setVisible(true);
   };

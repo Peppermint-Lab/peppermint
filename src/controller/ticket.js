@@ -71,8 +71,9 @@ exports.createTicket = async (req, res) => {
 // Convert a ticket
 exports.convertTicket = async (req, res) => {
   const { data } = req.body;
-  const t = data["0"]._id;
+  const t = data._id;
 
+  console.log(req.body)
   try {
     await TicketSchema.findByIdAndUpdate(
       { _id: t },
@@ -83,7 +84,11 @@ exports.convertTicket = async (req, res) => {
         new: true,
       }
     ).exec();
-    console.log("Updated record");
+    const ticket = await TicketSchema.find({ status: "unissued" })
+    .populate("client", "_id name")
+    return res.status(201).json({
+      ticket
+    });
   } catch (error) {
     console.log(error);
   }

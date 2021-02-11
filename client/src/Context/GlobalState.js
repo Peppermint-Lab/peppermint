@@ -202,9 +202,27 @@ export const GlobalProvider = ({ children }) => {
         },
       }).then((res) => res.json());
       dispatch({ type: "GET_UNISSUEDTICKETS", payload: res.tickets });
-      console.log(res.tickets);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function convertTicket(data) {
+    try {
+      const res = await fetch(`/api/v1/tickets/convertTicket`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+        body: JSON.stringify({
+          data
+        }),
+      }).then((res) => res.json())
+      dispatch({ type: "CONVERT_TICKET", payload: res.ticket });
+      console.log(res.ticket)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -229,6 +247,7 @@ export const GlobalProvider = ({ children }) => {
         signin,
         isLogged,
         getUnissuedTicket,
+        convertTicket
       }}
     >
       {children}

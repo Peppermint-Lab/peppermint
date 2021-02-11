@@ -6,36 +6,12 @@ import { GlobalContext } from "../../Context/GlobalState";
 
 const UnissuedTicket = () => {
 
-  const { unissuedTicket, getUnissuedTicket } = useContext(GlobalContext);
-
-  console.log(unissuedTicket)
+  const { unissuedTicket, getUnissuedTicket, convertTicket } = useContext(GlobalContext);
 
   useEffect(() => {
     getUnissuedTicket();
     // eslint-disable-next-line
   }, []);
-
-  const convert = () => {
-    fetch(`/api/v1/tickets/convertTicket`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-      
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          window.location.reload();
-          console.log("Congrats it worked");
-        }
-      });
-  };
 
   const columns = [
     {
@@ -68,7 +44,7 @@ const UnissuedTicket = () => {
       width: 100,
       render: (record) => (
         <Space size="middle">
-          <Button size="small" onClick={convert}>
+          <Button size="small" onClick={() => convertTicket(record)}>
             Convert
           </Button>
           <Button size="small">

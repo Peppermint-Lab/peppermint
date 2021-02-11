@@ -56,6 +56,11 @@ export default (state, action) => {
         ...state,
         unissuedTicket: action.payload,
       };
+    case "CONVERT_TICKET": 
+      return {
+        ...state,
+        unissuedTicket: action.payload
+      }
 
     default:
       return state;
