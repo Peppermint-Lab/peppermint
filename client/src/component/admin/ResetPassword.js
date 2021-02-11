@@ -1,47 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Input, Select, Space, Button } from "antd";
+import { Modal, Input, Button } from "antd";
 
-const ResetPassword = () => {
-  const [users, setUsers] = useState([]);
+const ResetPassword = (props) => {
   const [visible, setVisible] = useState(false);
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(props.user._id);
   const [password, setPassword] = useState("");
 
-  const { Option } = Select;
-
-  const fetchUsers = async () => {
-    await fetch(`/api/v1/auth/getAllUsers`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setUsers(res.users);
-        }
-      });
-  };
-
   const postData = async () => {
-    await fetch(`/api/v1/auth/resetPassword`, {
+    const id = user
+    await fetch(`/api/v1/auth/resetPassword/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        user,
         password,
       }),
     }).then((res) => res.json);
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const onCreate = async () => {
     setVisible(false);
@@ -51,8 +28,6 @@ const ResetPassword = () => {
   const onCancel = () => {
     setVisible(false);
   };
-
-  const search = users.map((d) => <Option key={d._id}>{d.name}</Option>);
 
   return (
     <div>
@@ -72,22 +47,7 @@ const ResetPassword = () => {
         onCancel={onCancel}
         onOk={onCreate}
       >
-        <h3>Select a user below</h3>
-        <Space>
-          <Select
-            showSearch
-            style={{ width: 200 }}
-            placeholder="Select a client"
-            optionFilterProp="children"
-            onChange={setUser}
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {search}
-          </Select>
-          <Input onChange={(e) => setPassword(e.target.value)} />
-        </Space>
+          <Input onChange={(e) => setPassword(e.target.value)} placeholder="Enter users new password" />
       </Modal>
     </div>
   );

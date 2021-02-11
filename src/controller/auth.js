@@ -83,9 +83,10 @@ exports.Token = async (req, res) => {
 };
 
 exports.resetPasswordAdmin = async (req, res) => {
+  const { password } = req.body;
   try {
-    await User.findOne({ _id: mongoose.Types.ObjectId(userId) }).then(
-      (user) => {
+    await User.findOne({ _id: mongoose.Types.ObjectId(req.params.id)})
+    .then((user) => {
         if (!user) {
           return res.status(422).json({ error: "User doesnt exist" });
         }

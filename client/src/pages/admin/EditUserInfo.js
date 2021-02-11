@@ -75,7 +75,7 @@ const EditUserInfo = () => {
           >
             <Button>Delete</Button>
           </Popconfirm>
-          <ResetPassword />
+          <ResetPassword user={record} />
         </Space>
       ),
     },

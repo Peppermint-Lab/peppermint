@@ -23,7 +23,7 @@ router.route("/token").post(mid, Token);
 
 router.route("/getAllUsers").get(mid, getUsers);
 
-router.route("/resetPassword").post(mid, resetPasswordAdmin);
+router.route("/resetPassword/:id").post(mid, resetPasswordAdmin);
 
 router.route("/resetPassword/user").post(mid, resetPasswordUser);
 
