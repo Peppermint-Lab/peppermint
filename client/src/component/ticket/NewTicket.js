@@ -56,7 +56,6 @@ const NewTicket = () => {
   };
 
   const onCreate = async (values) => {
-    console.log("Received values of form: ", values);
     setVisible(false);
     await postData();
   };
@@ -85,9 +84,8 @@ const NewTicket = () => {
       <Modal
         visible={visible}
         title="Create new Ticket"
-        okText="Create"
-        cancelText="Cancel"
         onCancel={onCancel}
+        centered
         onOk={() => {
           form
             .validateFields()
@@ -99,6 +97,10 @@ const NewTicket = () => {
               console.log("Validate Failed:", info);
             });
         }}
+        footer={[
+          <Button style={{ float: 'left'}} onClick={() => onCancel()}>Cancel</Button>,
+          <Button onClick={() => onCreate()}>Submit</Button>
+        ]}
       >
         <Form
           size="middle"
