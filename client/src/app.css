@@ -119,6 +119,9 @@ body {
   .drawer-text-right {
     margin-left: 250px;
   }
+  .ticket-logs Button {
+    margin-right: 30px !important;
+  }
 }
 
 @media only screen and (min-width: 2000px) and (max-width: 2560px) {
@@ -141,6 +144,9 @@ body {
   }
   .ant-drawer-content-wrapper {
     width: 50% !important;
+  }
+  .ticket-logs Button {
+    margin-right: 15px;
   }
 }
 
@@ -404,6 +410,10 @@ body {
   margin-left: -40px;
 }
 
+.ticket-logs Button {
+  float: right;
+}
+
 .ticket-logs li {
   list-style-type: none;
 }
@@ -422,5 +432,5 @@ body {
 .ticket-log {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 12px
 }

@@ -102,7 +102,6 @@ const TicketTime = (props) => {
                   <span>{log.activity}</span>
                   <Tooltip placement="right" title="Delete">
                     <Button
-                      style={{ float: "right", marginRight: 15 }}
                       onClick={() => deleteLog(log._id)}
                     >
                       <DeleteTwoTone twoToneColor="#FF0000" />
