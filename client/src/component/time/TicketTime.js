@@ -78,8 +78,8 @@ const TicketTime = (props) => {
 
   return (
     <div>
-      <Space>
-        <DatePicker onChange={onChangeDate} defaultValue={moment} />
+      <div className="ticket-log">
+      <DatePicker onChange={onChangeDate} defaultValue={moment} />
         <TimePicker format={format} onChange={onChangeTime} />
         <Input
           style={{ width: 300 }}
@@ -89,7 +89,7 @@ const TicketTime = (props) => {
         <Button onClick={postData}>
           <EditTwoTone />
         </Button>
-      </Space>
+      </div>
       <div className="ticket-logs">
         {log.map((log) => {
           return (
@@ -102,7 +102,7 @@ const TicketTime = (props) => {
                   <span>{log.activity}</span>
                   <Tooltip placement="right" title="Delete">
                     <Button
-                      style={{ float: "right" }}
+                      style={{ float: "right", marginRight: 15 }}
                       onClick={() => deleteLog(log._id)}
                     >
                       <DeleteTwoTone twoToneColor="#FF0000" />

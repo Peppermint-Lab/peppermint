@@ -48,6 +48,12 @@ body {
   .stats-card {
     width: 50% !important;
   }
+  .ticket-log {
+    display: flex;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
 }
 
 @media only screen and (min-width: 500px) and (max-width: 768px) {
@@ -411,4 +417,10 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.ticket-log {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
