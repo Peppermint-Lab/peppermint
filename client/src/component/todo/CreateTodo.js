@@ -14,9 +14,8 @@ const CreateTodo = () => {
   };
 
   return (
-    <div>
+    <div className="todoList">
       <Input
-        style={{ width: 300 }}
         placeholder="Enter Task... "
         value={text}
         onChange={(e) => {

@@ -406,3 +406,9 @@ body {
   height: 100%;
   overflow-y: scroll;
 }
+
+.todoList {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
