@@ -55,11 +55,12 @@ const EditNote = (props) => {
           cancelText="Cancel"
           onCancel={onCancel}
           onOk={onCreate}
+          centered
         >
           <TextArea
             defaultValue={props.notes.note}
             onChange={(e) => setNote(e.target.value)}
-            rows={5}
+            rows={30}
           />
         </Modal>
       </Button>

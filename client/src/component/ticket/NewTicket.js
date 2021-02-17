@@ -60,8 +60,8 @@ const NewTicket = () => {
     await postData();
   };
 
-  const onCancel = () => {
-    setVisible(false);
+  const onCancel = async () => {
+    await setVisible(false);
   };
 
   useEffect(() => {
