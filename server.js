@@ -8,6 +8,7 @@ const cors = require("cors");
 const colors = require("colors");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
@@ -23,6 +24,11 @@ require('./src/models/Log')
 
 connectDB();
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
 // Routes
 const auth = require("./src/routes/auth");
 const tickets = require("./src/routes/ticket");
@@ -35,6 +41,7 @@ const times = require("./src/routes/time");
 
 // Express server libraries
 app.use(cors());
+app.use(limiter);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,14 +52,14 @@ app.use(
 );
 
 // Express API Routes
-app.use("/api/v1/auth", auth);
-app.use("/api/v1/tickets", tickets);
-app.use("/api/v1/data", data);
-app.use("/api/v1/todo", todo);
-app.use("/api/v1/note", note);
-app.use("/api/v1/client", client);
-app.use("/api/v1/newsletter", news);
-app.use("/api/v1/time", times);
+app.use("/api/v1/auth", limiter, auth);
+app.use("/api/v1/tickets", limiter, tickets);
+app.use("/api/v1/data", limiter, data);
+app.use("/api/v1/todo", limiter, todo);
+app.use("/api/v1/note", limiter, note);
+app.use("/api/v1/client", limiter, client);
+app.use("/api/v1/newsletter", limiter, news);
+app.use("/api/v1/time", limiter, times);
 
 // Morgan API Logger
 if (process.env.NODE_ENV === "development") {
