@@ -41,7 +41,6 @@ const times = require("./src/routes/time");
 
 // Express server libraries
 app.use(cors());
-app.use(limiter);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
