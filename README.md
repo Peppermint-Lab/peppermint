@@ -75,7 +75,7 @@ services:
 
 * Website:  
 * Twitter: [@andrewsjack18 ](https://twitter.com/andrewsjack18 )
-* Github: [@jwandrews99](https://github.com/jwandrews99)
+* Github: [@potts99](https://github.com/jwandrews99)
 * LinkedIn: [@jack-andrews-146852131](https://linkedin.com/in/jack-andrews-146852131)
 
 ## 🤝 Contributing
