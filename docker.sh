@@ -1,38 +1,38 @@
 ## Bash Script to run docker build process.
 
 echo 'Checking for build folder in root'
-echo 
+echo
 
-if [[ -e build ]]; then 
+if [[ -e build ]]; then
     echo 'Build folder already present'
     echo 'Deleting build folder'
     rm -rf build
-    echo 
-    echo 
+    echo
+    echo
     echo 'Creating new build for client'
     cd client
     npm run build
     echo 'Moving build to root'
-    echo 
+    echo
     echo
     mv -- build ..
     cd ..
-    echo 
+    echo
     echo 'Building docker File'
-    docker build -t peppermint:latest .
+    docker build -t peppermint:latest pepperlabs/peppermint pepperlabs/peppermint:latest pepperlabs/peppermint:v0.1.5-alpha. .
     echo 'Build completed'
-else 
+else
     echo 'No client build folder found'
-    echo 
+    echo
     echo 'Creating new build for client'
     cd client
     npm run build
     echo 'Moving build to root'
-    echo 
+    echo
     mv -- build ..
     cd ..
-    echo 
+    echo
     echo 'Building docker File'
-    docker build -t peppermint:latest .
+    docker build -t peppermint:latest pepperlabs/peppermint pepperlabs/peppermint:latest pepperlabs/peppermint:v0.1.5-alpha. .
     echo 'Build completed'
 fi
