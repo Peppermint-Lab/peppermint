@@ -13,7 +13,7 @@ RUN apk add --no-cache make gcc g++ python && \
   npm rebuild bcrypt --build-from-source && \
   apk del make gcc g++ python
   
-RUN RUN apk --no-cache add --virtual builds-deps build-base python
+RUN apk --no-cache add --virtual builds-deps build-base python
 
 RUN npm install --silent --production && npm cache clean --force
 RUN npm install -g mongo-seeding-cli
