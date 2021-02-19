@@ -2,13 +2,14 @@
 <p align="center">
     <img src="./images/logo.png" alt="Logo" >
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.1-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.1.5-blue.svg?cacheSeconds=2592000" />
   <a href="https://twitter.com/andrewsjack18 " target="_blank">
     <img alt="Twitter:  andrewsjack18" src="https://img.shields.io/twitter/follow/andrewsjack18 .svg?style=social" />
   </a>
   <a target="_blank">
     <img alt="Github Stars: " src="https://img.shields.io/github/stars/jwandrews99/winter?style=social" />
   </a>
+  <img src="https://img.shields.io/docker/pulls/pepperlabs/peppermint" />
 </p>
 
 > Ticket Management System in order to help helpdesks & service desks manage internal staff &  customer requests
