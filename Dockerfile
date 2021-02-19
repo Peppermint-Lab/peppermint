@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN sudo apt update && sudo apt upgrade -y
+RUN sudo apt update && sudo apt upgrade 
 
 RUN sudo apt install build-essential
 
