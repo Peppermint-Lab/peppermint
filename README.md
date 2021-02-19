@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to Peppermint Ticket Management 🍵</h1>
 <p align="center">
     <img src="./images/logo.png" alt="Logo" >
-<p>
+<p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://twitter.com/andrewsjack18 " target="_blank">
     <img alt="Twitter:  andrewsjack18" src="https://img.shields.io/twitter/follow/andrewsjack18 .svg?style=social" />
