@@ -8,6 +8,10 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
+RUN sudo apt update && sudo apt upgrade -y
+
+RUN sudo apt install build-essential
+
 RUN apk add --no-cache make gcc g++ python && \
   npm install && \
   npm rebuild bcrypt --build-from-source && \
