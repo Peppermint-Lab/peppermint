@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Log = mongoose.model("Log");
 
 exports.createLog = async (req, res) => {
+  console.log(req.body)
   try {
     const { ticket, date, time, activity } = req.body;
     if (!ticket || !date || !time || !activity) {
