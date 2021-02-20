@@ -3,6 +3,11 @@
   "version": "0.1.5",
   "description": "Ticket system",
   "main": "server.js",
+  "bin": "server.js",
+  "pkg": {
+    "assets": [ "build/**/*", "data/*", "src/**/*", "images/*", "config/*", "node_modules/**/*" ],
+    "targets": [ "node12-macos-x64", "node10-win-x64" ]
+  },
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
