@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
@@ -8,7 +9,7 @@ const initialState = {
   notes: [],
   user: {},
   unissuedTicket: [],
-  openTicket: []
+  openTicket: [],
 };
 
 // Create context
@@ -16,6 +17,8 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
+
+  const history = useHistory();
 
   // action
   async function getTodos() {
@@ -159,7 +162,6 @@ export const GlobalProvider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => {
           if (!data.error) {
-            localStorage.setItem("jwt", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
             dispatch({ type: "USER", payload: data.user });
             console.log(data);
@@ -175,17 +177,21 @@ export const GlobalProvider = ({ children }) => {
   async function isLogged() {
     try {
       await fetch(`/api/v1/auth/token`, {
-        method: "post",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-          "x-auth-token": localStorage.getItem("jwt"),
+          Accept: "application/json",
         },
       })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-          // dispatch({ type: "USER_LOGGED", payload: res });
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response)
+          const res = response;
+          if (res.auth === false || null ) {
+            history.push("/login");
+          } else {
+            return console.log("logged in");
+          }
         });
     } catch (error) {
       console.log(error);

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Header, Divider, Button, Icon, Input } from "rsuite";
 import Popup from "reactjs-popup";
 import { useHistory } from "react-router-dom";
-import Cookies from "js-cookie";
 
 import Navigation from "../component/Navigation";
 import CreateTodo from "../component/todo/CreateTodo";
@@ -128,7 +127,7 @@ const Home = () => {
         .then((response) => {
           console.log(response)
           const res = response;
-          if (res.auth === false || null ) {
+          if (res.auth === false ) {
             history.push("/login");
           } else {
             return console.log("logged in");

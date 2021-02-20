@@ -34,10 +34,11 @@ exports.Signup = async (req, res) => {
 exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const emailLower = email.toLowerCase();
     if (!email || !password) {
       return res.status(422).json({ error: "please add email or password" });
     }
-    await User.findOne({ email: email }).then((savedUser) => {
+    await User.findOne({ email: emailLower }).then((savedUser) => {
       if (!savedUser) {
         return res.status(422).json({ error: "Invalid Email or password" });
       }
