@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Header, Divider, Button, Icon, Input } from "rsuite";
 import Popup from "reactjs-popup";
 import { useHistory } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import Navigation from "../component/Navigation";
 import CreateTodo from "../component/todo/CreateTodo";
@@ -115,15 +116,26 @@ const Home = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const call = async () => {
-      const res = localStorage.getItem("jwt");
-      if (!res) {
-        history.push("/login");
-      } else {
-        return console.log("logged in");
-      }
-    };
-    call();
+    async function auth() {
+      await fetch(`/api/v1/auth/token`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response)
+          const res = response;
+          if (res.auth === false || null ) {
+            history.push("/login");
+          } else {
+            return console.log("logged in");
+          }
+        });
+    }
+    auth();
     // eslint-disable-next-line
   }, []);
 

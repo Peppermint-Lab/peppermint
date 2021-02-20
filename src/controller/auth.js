@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 exports.Signup = async (req, res) => {
   try {
     const { email, name, password } = req.body;
+    const emailLower = email.toLowerCase();
     if ((!email || !name, !password)) {
       return res.status(422).json({ error: "Please add all fields" });
     }
@@ -17,12 +18,11 @@ exports.Signup = async (req, res) => {
       }
       bcrypt.hash(password, 10).then((hashedpassword) => {
         const user = new User({
-          email,
+          email: emailLower,
           password: hashedpassword,
           name,
         });
-
-        user.save()
+        user.save();
         res.json({ message: "User saved successfully" });
       });
     });
@@ -43,13 +43,18 @@ exports.Login = async (req, res) => {
       }
       bcrypt.compare(password, savedUser.password).then((doMatch) => {
         if (doMatch) {
-          // res.json({message: "Sign in Sucessful"})
           const token = jwt.sign(
-            { _id: savedUser._id },
+            { _id: savedUser._id, expiresIn: 86400 },
             process.env.JWT_SECRET
           );
           const { _id, name, email, role } = savedUser;
-          res.status(200).json({ token, user: { _id, name, email, role } });
+          res.cookie("token", token, {
+            maxAge: 1000 * 60 * 60 * 24,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production" ? true : false,
+            sameSite: true,
+          });
+          res.status(200).json({ user: { _id, name, email, role } });
         }
       });
     });
@@ -59,34 +64,29 @@ exports.Login = async (req, res) => {
 };
 
 exports.Token = async (req, res) => {
-  const r = req.header("x-auth-token");
-
+  const { token } = req.cookies;
+  console.log(token)
   try {
-    console.log("hit");
-    const token = r;
-    if (!token) return res.json(false);
-    console.log(token);
-
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    if (!verified) return res.json(false);
-    console.log(verified);
-
-    // const user = await User.findById(req.user._id);
-    // if (!user) return res.json(false);
-    // console.log(user)
-
-    return res.status(201).json(true);
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "You must be logged in", auth: false });
+    } else {
+      return res
+        .status(200)
+        .json({ message: "You are already logged in", auth: true });
+    }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message, auth: false });
   }
 };
 
 exports.resetPasswordAdmin = async (req, res) => {
   const { password } = req.body;
   try {
-    await User.findOne({ _id: mongoose.Types.ObjectId(req.params.id)})
-    .then((user) => {
+    await User.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }).then(
+      (user) => {
         if (!user) {
           return res.status(422).json({ error: "User doesnt exist" });
         }
@@ -136,12 +136,11 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
-    const user = await User.find({ _id: req.body._id })
-    .then((user) => {
-      res.json({ user })
-    })
+    const user = await User.find({ _id: req.body._id }).then((user) => {
+      res.json({ user });
+    });
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "User not found" });

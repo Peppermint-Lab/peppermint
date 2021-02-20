@@ -106,54 +106,59 @@ const Navigation = () => {
     } else {
       return (
         <div>
-          <Layout>
-            <Menu
-              mode="horizontal"
-              onClick={handleClick}
-              defaultSelectedKeys={["0"]}
-              selectedKeys={current}
-            >
-              <Menu.Item key="Home Page">
-                <a
-                  href="https://pmint.dev/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Peppermint 🍵
-                </a>
-              </Menu.Item>
-              <Menu.Item key={0} onClick={() => history.push("/")}>
-                Home
-              </Menu.Item>
-              <SubMenu key="SubMenu" title="Tickets">
-                <Menu.Item key="tickets:1">
-                  <Link to="/ticket/open">Open Tickets</Link>
-                </Menu.Item>
-                <Menu.Item key="tickets:2">
-                  <Link to="/ticket/unissued">Unissued Tickets</Link>
-                </Menu.Item>
-              </SubMenu>
-              <Menu.Item key={3} onClick={() => history.push("/history")}>
-                History
-              </Menu.Item>
-              <SubMenu
-                key="settings-men"
-                icon={<SettingTwoTone />}
-                style={{ float: "right" }}
+        <Layout>
+          <Menu
+            mode="horizontal"
+            onClick={handleClick}
+            defaultSelectedKeys={["0"]}
+            selectedKeys={current}
+          >
+            <Menu.Item key="Home Page">
+              <a
+                href="https://pmint.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Menu.Item key="SETTINGS:1">
-                  <Link to="/settings">Settings</Link>
-                </Menu.Item>
-                <Menu.Item key="SETTINGS:2" onClick={logout}>
-                  Log out
-                </Menu.Item>
-              </SubMenu>
-              <Menu.Item key={4} style={{ float: "right" }} title="New Ticket">
-                <NewTicket />
+                Peppermint 🍵
+              </a>
+            </Menu.Item>
+            <Menu.Item key={0} onClick={() => history.push("/")}>
+              Home
+            </Menu.Item>
+            <SubMenu key="SubMenu" title="Tickets">
+              <Menu.Item key="tickets:1">
+                <Link to="/ticket/open">Open Tickets</Link>
               </Menu.Item>
-            </Menu>
-          </Layout>
-        </div>
+              <Menu.Item key="tickets:2">
+                <Link to="/ticket/unissued">Unissued Tickets</Link>
+              </Menu.Item>
+            </SubMenu>
+            <Menu.Item key={3} onClick={() => history.push("/history")}>
+              History
+            </Menu.Item>
+            <SubMenu
+              key="settings-men"
+              icon={<SettingTwoTone />}
+              style={{ float: "right" }}
+            >
+              <Menu.Item key="SETTINGS:1">
+                <Link to="/settings">Settings</Link>
+              </Menu.Item>
+              <Menu.Item key="SETTINGS:2" onClick={logout}>
+                Log out
+              </Menu.Item>
+            </SubMenu>
+            <Menu.Item key={10} style={{ float: "right" }}>
+            <FeedbackFish projectId="d01cb6ead51020">
+              <Button size="small" type="text">Feedback</Button>
+            </FeedbackFish>
+            </Menu.Item>
+            <Menu.Item key={4} style={{ float: "right" }}>
+              <NewTicket />
+            </Menu.Item>
+          </Menu>
+        </Layout>
+      </div>
       );
     }
   };

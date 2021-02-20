@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^12.3.0",
     "antd": "^4.9.2",
     "axios": "^0.21.0",
+    "js-cookie": "^2.2.1",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
     "moment": "^2.29.1",

@@ -19,7 +19,7 @@ router.route("/Login").post(Login);
 
 router.route("/Signup").post(Signup);
 
-router.route("/token").post(mid, Token);
+router.route("/token").get(mid, Token);
 
 router.route("/getAllUsers").get(mid, getUsers);
 

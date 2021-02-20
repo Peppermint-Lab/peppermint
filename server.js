@@ -9,9 +9,12 @@ const colors = require("colors");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const cookieParser = require('cookie-parser')
 
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
+
+app.use(cookieParser())
 
 // DB models
 require("./src/models/InternalUser");

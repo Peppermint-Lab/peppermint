@@ -3,10 +3,22 @@
   "version": "0.1.5",
   "description": "Ticket system",
   "main": "server.js",
-  "bin": "server.js",
+  "bin": {
+    "project": "server.js"
+  },
   "pkg": {
-    "assets": [ "build/**/*", "data/*", "src/**/*", "images/*", "config/*", "node_modules/**/*" ],
-    "targets": [ "node12-macos-x64", "node10-win-x64" ]
+    "assets": [
+      "build/**/*",
+      "data/*",
+      "src/**/*",
+      "images/*",
+      "config/*",
+      "node_modules/**/*"
+    ],
+    "targets": [
+      "node12-macos-x64",
+      "node10-win-x64"
+    ]
   },
   "scripts": {
     "start": "node server",
@@ -22,6 +34,7 @@
     "body-parser": "^1.19.0",
     "chart.js": "^2.9.4",
     "colors": "^1.4.0",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
