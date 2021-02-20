@@ -8,7 +8,6 @@ import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
 import Login from "./pages/auth/Login";
-import Reg from "./pages/auth/Reg";
 // import Monitor from "./pages/Monitor";
 import Dash from './pages/admin/Dash';
 import SideNav from './component/admin/SideNav'
@@ -32,12 +31,6 @@ const Routing = () => {
         <Route exact path="/login">
           <div className="login-container">
             <Login />
-          </div>
-        </Route>
-
-        <Route exact path="/signup">
-          <div className="login-container">
-            <Reg />
           </div>
         </Route>
 

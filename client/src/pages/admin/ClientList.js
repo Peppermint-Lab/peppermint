@@ -1,11 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { Table, Space, Button, Popconfirm } from "antd";
+import { useHistory } from "react-router-dom";
 
 import UpdateClient from "../../component/admin/UpdateClient";
-const ClientList = () => {
-  const [clientAll, setClientAll] = useState([]);
 
-  console.log(clientAll);
+const ClientList = () => {
+
+  const history = useHistory();
+
+  useEffect(() => {
+    async function auth() {
+      await fetch(`/api/v1/auth/token`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response)
+          const res = response;
+          if (res.auth === false ) {
+            history.push("/login");
+          } else {
+            return console.log("logged in");
+          }
+        });
+    }
+    auth();
+    // eslint-disable-next-line
+  }, []);
+
+  const [clientAll, setClientAll] = useState([]);
 
   const fetchClients = () => {
     fetch(`/api/v1/client/allclients`, {

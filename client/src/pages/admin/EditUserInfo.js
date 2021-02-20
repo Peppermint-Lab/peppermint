@@ -1,11 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Space, Table, Button, Popconfirm } from "antd";
+import { useHistory } from "react-router-dom";
 
 import ResetPassword from "../../component/admin/ResetPassword";
 import EditInfo from "../../component/admin/EditInfo";
 
+
 const EditUserInfo = () => {
   const [users, setUsers] = useState([]);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    async function auth() {
+      await fetch(`/api/v1/auth/token`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response)
+          const res = response;
+          if (res.auth === false ) {
+            history.push("/login");
+          } else {
+            return console.log("logged in");
+          }
+        });
+    }
+    auth();
+    // eslint-disable-next-line
+  }, []);
 
   const fetchUsers = async () => {
     await fetch(`/api/v1/auth/getAllUsers`, {

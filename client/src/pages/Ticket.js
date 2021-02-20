@@ -5,19 +5,30 @@ import OpenTickets from "../component/ticket/OpenTicket";
 import UnissuedTickets from "../component/ticket/UnissuedTicket";
 
 const Ticket = () => {
-  const history = useHistory();
+  const history = useHistory()
 
   useEffect(() => {
-    const call = async () => {
-      const res = localStorage.getItem("jwt");
-      console.log(res);
-      if (!res) {
-        history.push("/login");
-      } else {
-        return console.log("logged in");
-      }
-    };
-    call();
+    async function auth() {
+      await fetch(`/api/v1/auth/token`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response)
+          const res = response;
+          if (res.auth === false ) {
+            history.push("/login");
+          } else {
+            return console.log("logged in");
+          }
+        });
+    }
+    auth();
+    // eslint-disable-next-line
   }, []);
 
   return (

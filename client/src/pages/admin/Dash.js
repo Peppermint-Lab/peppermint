@@ -1,10 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { Card, Statistic } from "antd";
+import { useHistory } from "react-router-dom";
 
 const TicketStats = () => {
   const [unClaimed, setUnClaimed] = useState();
   const [open, setOpen] = useState();
   const [complete, setComplete] = useState();
+
+  const history = useHistory();
+  
+  useEffect(() => {
+    async function auth() {
+      await fetch(`/api/v1/auth/token`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response)
+          const res = response;
+          if (res.auth === false ) {
+            history.push("/login");
+          } else {
+            return console.log("logged in");
+          }
+        });
+    }
+    auth();
+    // eslint-disable-next-line
+  }, []);
 
   const fetchOpen = async () => {
     await fetch(`/api/v1/data/getallopen`, {
