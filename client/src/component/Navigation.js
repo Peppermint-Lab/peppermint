@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
+import { FeedbackFish } from '@feedback-fish/react'
 
-import { Menu, Layout } from "antd";
+
+import { Menu, Layout, Button } from "antd";
 import { SettingTwoTone } from "@ant-design/icons";
 
 import NewTicket from "./ticket/NewTicket";
@@ -89,6 +91,11 @@ const Navigation = () => {
                   Log out
                 </Menu.Item>
               </SubMenu>
+              <Menu.Item key={10} style={{ float: "right" }}>
+              <FeedbackFish projectId="d01cb6ead51020">
+                <Button size="small" type="text">Feedback</Button>
+              </FeedbackFish>
+              </Menu.Item>
               <Menu.Item key={4} style={{ float: "right" }}>
                 <NewTicket />
               </Menu.Item>
