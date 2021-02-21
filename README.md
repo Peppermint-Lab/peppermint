@@ -34,12 +34,13 @@ password: 1234
 - ⚙️ **Docker-Ready**: Quickly deploy using docker
 - ✅ **Usage**: No barriers to use with complete documentation on how to complete tasks
 
+## Roadmap
+
+There is currently a trello roadmap available which is updated daily - https://trello.com/b/tOMsptar/peppermint
 
 ## Documentation
 
 We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://pmint.dev/docs/gettingStarted">here</a> to be taken directly there.
-
-
 
 ## Installing locally for development
 
