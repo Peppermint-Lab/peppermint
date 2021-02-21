@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/authCheck");
+
+const {
+  isAuth,
+  isAdmin
+} = require("../middleware/authCheck");
 
 const {
   create,
@@ -9,12 +13,12 @@ const {
   deleteN,
 } = require("../controller/news");
 
-router.route("/create").post(auth, create);
+router.route("/create").post(isAuth, isAdmin, create);
 
-router.route("/get").get(auth, getNewsletters);
+router.route("/get").get(isAuth, getNewsletters);
 
-router.route("/update").put(auth, updateStatus);
+router.route("/update").put(isAuth, isAdmin, updateStatus);
 
-router.route("/delete/:id").delete(auth, deleteN);
+router.route("/delete/:id").delete(isAuth, isAdmin, deleteN);
 
 module.exports = router;

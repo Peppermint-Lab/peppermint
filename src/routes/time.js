@@ -1,13 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/authCheck");
 
-const { createLog, getLogById, deleteLog } = require("../controller/timeLog");
+const {
+    isAuth,
+} = require("../middleware/authCheck");
 
-router.route("/createTime").post(auth, createLog);
+const {
+    createLog,
+    getLogById,
+    deleteLog
+} = require("../controller/timeLog");
 
-router.route("/getLog/:id").get(auth, getLogById);
+router.route("/createTime").post(isAuth, createLog);
 
-router.route("/deleteLog/:id").delete(auth, deleteLog);
+router.route("/getLog/:id").get(isAuth, getLogById);
+
+router.route("/deleteLog/:id").delete(isAuth, deleteLog);
 
 module.exports = router;
