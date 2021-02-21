@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
 import "antd/dist/antd.css";
 import ReactGA from 'react-ga';
+import { createBrowserHistory } from 'history';
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
@@ -25,9 +26,16 @@ import Settings from './pages/Settings'
 
 ReactGA.initialize('G-3C28LH0SBN');
 
+const history = createBrowserHistory();
+
+history.listen(location => {
+  ReactGA.set({ page: location.pathname }); // Update the user's current page
+  ReactGA.pageview(location.pathname); // Record a pageview for the given page
+});
+
 const Routing = () => {
   return (
-    <Router>
+    <Router history={history} >
       <Switch>
       <Route exact path="/" component={Home} />
       
@@ -65,14 +73,8 @@ const Routing = () => {
   );
 };
 
+
 const App = () => {
-
-  const location = useLocation();
-
-  // Fired on every route change
-  useEffect(() => {
-    ReactGA.pageview(location.pathname + location.search);
-  }, [location]);
 
   return <Routing />;
 };
