@@ -68,6 +68,11 @@ const NewTicket = () => {
     fetchClients();
   }, []);
 
+  const onVisible = async (e) => {
+    e.stopPropagation();
+    await setVisible(true);
+  }
+
   const search = options.map((d) => <Option key={d._id}>{d.name}</Option>);
 
   return (
@@ -75,8 +80,8 @@ const NewTicket = () => {
       <Button
         type="primary"
         size="small"
-        onClick={() => {
-          setVisible(true);
+        onClick={(e) => {
+          onVisible(e)
         }}
       >
         Create Ticket
