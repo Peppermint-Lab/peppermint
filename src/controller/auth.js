@@ -51,8 +51,6 @@ exports.Login = async (req, res) => {
           const { _id, name, email, role } = savedUser;
           res.cookie("token", token, {
             maxAge: 1000 * 60 * 60 * 24,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production" ? true : false,
             sameSite: true,
           });
           res.status(200).json({ user: { _id, name, email, role } });
