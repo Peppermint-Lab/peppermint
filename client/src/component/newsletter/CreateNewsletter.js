@@ -1,32 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Modal, Input, Radio, Space, Row } from "antd";
+
+import { GlobalContext } from "../../Context/GlobalState";
 
 const CreateNewsletter = () => {
   const [visible, setVisible] = useState(false);
-  const [title, setTittle] = useState("");
-  const [text, setText] = useState("");
-  const [active, setActive] = useState(false);
+  const [title, setTitle] = useState();
+  const [text, setText] = useState();
+  const [active, setActive] = useState();
+  
+  const { createNewsletter, getNewsletter, newsletter } = useContext(GlobalContext);
 
   const { TextArea } = Input;
 
-  const postData = async () => {
-    await fetch(`/api/v1/newsletter/create`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        title,
-        text,
-        active,
-      }),
-    }).then((res) => res.json());
-  };
-
   const onCreate = async (values) => {
     setVisible(false);
-    await postData();
+    await createNewsletter(title, text, active)
   };
 
   const onCancel = () => {
@@ -56,7 +45,7 @@ const CreateNewsletter = () => {
             <Input
               placeholder="Enter newsletter tittle here..."
               style={{ width: 400, marginLeft: -25 }}
-              onChange={(e) => setTittle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </Row>
         </div>

@@ -1,14 +1,10 @@
 const mongoose = require("mongoose");
 const News = mongoose.model("news");
 
-
 // Create a new newsletter
 exports.create = async (req, res) => {
-    console.log('Creating a new newsletter')
-    console.log(req.user.id)
-    console.log(req.body)
     try {
-        const { title, text } = req.body
+        const { title, text, active } = req.body
         if(!title, !text ) {
             return res.status(422).json({ error: "Please add all the fields" });
         }
@@ -29,7 +25,6 @@ exports.create = async (req, res) => {
 
 // Get All newsletters
 exports.getNewsletters = async (req, res) => {
-    console.log('Get all newsletters')
     try {
         const newsletters = await News.find()
         .populate('createdBy', '_id name')

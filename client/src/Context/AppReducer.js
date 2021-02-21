@@ -81,6 +81,11 @@ export default (state, action) => {
         ...state,
         openTicket: action.payload,
       };
+    case "CREATE_NEWSLETTER": 
+      return {
+        ...state,
+        newsletter: action.payload
+      }
     default:
       return state;
   }

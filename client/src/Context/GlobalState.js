@@ -10,6 +10,7 @@ const initialState = {
   user: {},
   unissuedTicket: [],
   openTicket: [],
+  newsletters: [],
 };
 
 // Create context
@@ -294,6 +295,25 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
+  async function createNewsletter(title, text, active) {
+    try {
+      const res = await fetch(`/api/v1/newsletter/create`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          text,
+          active,
+        }),
+      }).then((res) => res.json());
+      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     // This allows us to use in any component by use usecontext
     // Which is the react hook
@@ -305,6 +325,7 @@ export const GlobalProvider = ({ children }) => {
         user: state.user,
         unissuedTicket: state.unissuedTicket,
         openTicket: state.openTicket,
+        newsletters: state.newsletters,
         getTodos,
         addTodo,
         deleteTodo,
@@ -320,7 +341,8 @@ export const GlobalProvider = ({ children }) => {
         getOpenTicket,
         completeTicket,
         transferTicket,
-        markUndone
+        markUndone,
+        createNewsletter
       }}
     >
       {children}
