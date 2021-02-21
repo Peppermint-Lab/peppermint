@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const User = mongoose.model("InternalUser");
 
 // Check to make sure the request is coming from an authenticated user
-exports.isAuth = async (req, res, next) => {
+exports.isAuth = (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) {
@@ -14,7 +14,7 @@ exports.isAuth = async (req, res, next) => {
         return res.status(401).json({ error: "You must be logged in", auth: false });
       }
       const { _id } = payload;
-      await User.findById(_id).then((userdata) => {
+      User.findById(_id).then((userdata) => {
         req.user = userdata;
         next();
       });
@@ -26,7 +26,7 @@ exports.isAuth = async (req, res, next) => {
 }
 
 // Check to make sure the request is coming from a user who's role is 'admin'
-exports.isAdmin = async (req, res, next) => {
+exports.isAdmin = (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) {
@@ -37,7 +37,7 @@ exports.isAdmin = async (req, res, next) => {
         return res.status(401).json({ error: "You must be authenticated", auth: false });
       }
       const { _id } = payload;
-      await User.findById(_id).then((userdata) => {
+      User.findById(_id).then((userdata) => {
         if(userdata.role !== 'admin' ) {
           return res.status(403).json({ message: 'Forbidden' });
         } else {
