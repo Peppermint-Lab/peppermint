@@ -1,8 +1,9 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
 import "antd/dist/antd.css";
+import ReactGA from 'react-ga';
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
@@ -21,6 +22,8 @@ import Unissued from "./pages/ticket/Unissued";
 import Settings from './pages/Settings'
 
 // import { GlobalContext } from "./Context/GlobalState";
+
+ReactGA.initialize('G-3C28LH0SBN');
 
 const Routing = () => {
   return (
@@ -63,6 +66,13 @@ const Routing = () => {
 };
 
 const App = () => {
+
+  const location = useLocation();
+
+  // Fired on every route change
+  useEffect(() => {
+    ReactGA.pageview(location.pathname + location.search);
+  }, [location]);
 
   return <Routing />;
 };
