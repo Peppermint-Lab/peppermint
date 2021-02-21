@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const mid = require("../middleware/authCheck");
+const {
+  isAuth,
+  isAdmin
+} = require("../middleware/authCheck");
 
 const {
   Login,
@@ -19,18 +22,18 @@ router.route("/Login").post(Login);
 
 router.route("/Signup").post(Signup);
 
-router.route("/token").get(mid, Token);
+router.route("/token").get(isAuth, Token);
 
-router.route("/getAllUsers").get(mid, getUsers);
+router.route("/getAllUsers").get(isAuth, isAdmin, getUsers);
 
-router.route("/resetPassword/:id").post(mid, resetPasswordAdmin);
+router.route("/resetPassword/:id").post(isAuth, isAdmin, resetPasswordAdmin);
 
-router.route("/resetPassword/user").post(mid, resetPasswordUser);
+router.route("/resetPassword/user").post(isAuth, resetPasswordUser);
 
-router.route('/getById').post(mid, getUserById);
+router.route('/getById').post(isAuth, isAdmin, getUserById);
 
-router.route('/edit').put(mid, edit);
+router.route('/edit').put(isAuth, isAdmin, edit);
 
-router.route('/delete/:id').delete(mid, deleteUser);
+router.route('/delete/:id').delete(isAuth, isAdmin, deleteUser);
 
 module.exports = router;

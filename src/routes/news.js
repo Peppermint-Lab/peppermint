@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/authCheck");
+
+const {
+  isAuth,
+} = require("../middleware/authCheck");
 
 const {
   create,
@@ -9,12 +12,12 @@ const {
   deleteN,
 } = require("../controller/news");
 
-router.route("/create").post(auth, create);
+router.route("/create").post(isAuth, create);
 
-router.route("/get").get(auth, getNewsletters);
+router.route("/get").get(isAuth, getNewsletters);
 
-router.route("/update").put(auth, updateStatus);
+router.route("/update").put(isAuth, updateStatus);
 
-router.route("/delete/:id").delete(auth, deleteN);
+router.route("/delete/:id").delete(isAuth, deleteN);
 
 module.exports = router;

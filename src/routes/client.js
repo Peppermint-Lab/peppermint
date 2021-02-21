@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/authCheck");
+
+const {
+  isAuth,
+} = require("../middleware/authCheck");
 
 const {
   create,
@@ -11,16 +14,16 @@ const {
   getNote,
 } = require("../controller/client");
 
-router.route("/create").post(auth, create);
+router.route("/create").post(isAuth, create);
 
-router.route("/allclients").get(auth, getAll);
+router.route("/allclients").get(isAuth, getAll);
 
-router.route("/delete/:id").delete(auth, deleteClient);
+router.route("/delete/:id").delete(isAuth, deleteClient);
 
-router.route("/update").put(auth, updateClient);
+router.route("/update").put(isAuth, updateClient);
 
-router.route("/createNote").post(auth, createNote);
+router.route("/createNote").post(isAuth, createNote);
 
-router.route('/getNote/:id').get(auth, getNote);
+router.route('/getNote/:id').get(isAuth, getNote);
 
 module.exports = router;

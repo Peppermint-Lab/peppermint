@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/authCheck");
+
+const {
+  isAuth,
+} = require("../middleware/authCheck");
 
 const {
   countUnissuedTickets,
@@ -10,14 +13,14 @@ const {
   countAllCompletedTickets
 } = require("../controller/data");
 
-router.route("/unallocatedTickets").get(auth, countUnissuedTickets);
+router.route("/unallocatedTickets").get(isAuth, countUnissuedTickets);
 
-router.route("/openTickets").get(auth, countOpenedTickets);
+router.route("/openTickets").get(isAuth, countOpenedTickets);
 
-router.route("/completedTickets").get(auth, countCompletedTickets);
+router.route("/completedTickets").get(isAuth, countCompletedTickets);
 
-router.route("/getallopen").get(auth, countAllOpenedTickets);
+router.route("/getallopen").get(isAuth, countAllOpenedTickets);
 
-router.route("/getallcompleted").get(auth, countAllCompletedTickets);
+router.route("/getallcompleted").get(isAuth, countAllCompletedTickets);
 
 module.exports = router;
