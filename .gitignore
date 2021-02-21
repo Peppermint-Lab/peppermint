@@ -4,7 +4,5 @@ docker-data/db
 client/.eslintcache
 docker
 todo.txt
-build
 client/.eslintcache
-k6
 binaries
