@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/authCheck");
+
+const {
+  isAuth,
+} = require("../middleware/authCheck");
 
 const {
   createTicket,
@@ -14,22 +17,22 @@ const {
   updateJob,
 } = require("../controller/ticket");
 
-router.route("/createTicket").post(auth, createTicket);
+router.route("/createTicket").post(isAuth, createTicket);
 
-router.route("/unissuedTickets").get(auth, unissuedTickets);
+router.route("/unissuedTickets").get(isAuth, unissuedTickets);
 
-router.route("/openedTickets").get(auth, openTickets);
+router.route("/openedTickets").get(isAuth, openTickets);
 
-router.route("/completedTickets").get(auth, completedTickets);
+router.route("/completedTickets").get(isAuth, completedTickets);
 
-router.route("/convertTicket").put(auth, convertTicket);
+router.route("/convertTicket").put(isAuth, convertTicket);
 
-router.route("/all").get(auth, all);
+router.route("/all").get(isAuth, all);
 
-router.route("/complete/:id").post(auth, complete);
+router.route("/complete/:id").post(isAuth, complete);
 
-router.route("/transfer").post(auth, transfer);
+router.route("/transfer").post(isAuth, transfer);
 
-router.route("/update").put(auth, updateJob);
+router.route("/update").put(isAuth, updateJob);
 
 module.exports = router;
