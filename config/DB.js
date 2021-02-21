@@ -19,13 +19,9 @@ const connectDB = async () => {
     console.log(`MONGODB Connected: ${conn.connection.host}`.cyan.bold); // Prints out if connected in the console
     exec(`seed -u ${db} ./data`, (err, stdout, stderr) => {
       if (err) {
-        // node couldn't execute the command
         return;
       }
-    
-      // the *entire* stdout and stderr (buffered)
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
+      console.log("Seeding completed".cyan.bold)
     });
   } catch (err) {
     console.log(`Error: ${err.message}`.red); // Prints out if fails to connect

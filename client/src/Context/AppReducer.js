@@ -84,7 +84,12 @@ export default (state, action) => {
     case "CREATE_NEWSLETTER": 
       return {
         ...state,
-        newsletter: action.payload
+        newsletters: action.payload
+      }
+    case "GET_NEWSLETTER": 
+      return {
+        ...state,
+        newsletters: action.payload
       }
     default:
       return state;

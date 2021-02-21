@@ -9,7 +9,7 @@ const CreateNewsletter = () => {
   const [text, setText] = useState();
   const [active, setActive] = useState();
   
-  const { createNewsletter, getNewsletter, newsletter } = useContext(GlobalContext);
+  const { createNewsletter } = useContext(GlobalContext);
 
   const { TextArea } = Input;
 

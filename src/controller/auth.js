@@ -64,7 +64,6 @@ exports.Login = async (req, res) => {
 
 exports.Token = async (req, res) => {
   const { token } = req.cookies;
-  console.log(token)
   try {
     if (!token) {
       return res

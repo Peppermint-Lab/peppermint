@@ -308,9 +308,25 @@ export const GlobalProvider = ({ children }) => {
           active,
         }),
       }).then((res) => res.json());
-      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
+      console.log(res.newsletters)
+      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletters });
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async function getNewsletter() {
+    try {
+      const res = await fetch(`/api/v1/newsletter/get`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        dispatch({ type: "GET_NEWSLETTER", payload: res.newsletter });
+    } catch (error) {
+      
     }
   }
 
@@ -342,7 +358,8 @@ export const GlobalProvider = ({ children }) => {
         completeTicket,
         transferTicket,
         markUndone,
-        createNewsletter
+        createNewsletter,
+        getNewsletter
       }}
     >
       {children}

@@ -14,7 +14,6 @@ exports.getTodos = async (req, res) => {
 };
 
 exports.createTodo = async (req, res) => {
-  // console.log("createTodo");
   try {
     const text = req.body.todo;
     if (!text) {
@@ -36,7 +35,6 @@ exports.createTodo = async (req, res) => {
 };
 
 exports.deleteTodo = async (req, res) => {
-  console.log("deleteTodo");
   try {
     const todo = await new mongoose.Types.ObjectId(req.params.id);
     if (!todo) {
@@ -85,7 +83,6 @@ exports.markOneAsDone = async (req, res) => {
 };
 
 exports.markAllAsDone = async (req, res) => {
-  console.log("markAllAsDone");
   try {
     await Todo.updateMany({ $set: { done: true } }, function (err, result) {
       if (err) {
@@ -104,8 +101,6 @@ exports.markAllAsDone = async (req, res) => {
 };
 
 exports.markUndone = async (req, res) => {
-  console.log('hit')
-  console.log(req.params.id)
   try {
     await Todo.findOneAndUpdate(
         { _id: req.params.id },
