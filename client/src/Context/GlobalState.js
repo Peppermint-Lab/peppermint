@@ -303,7 +303,7 @@ export const GlobalProvider = ({ children }) => {
           active,
         }),
       }).then((res) => res.json());
-      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletters });
+      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
     } catch (error) {
       console.log(error);
     }
@@ -317,7 +317,6 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      console.log(res.newsletters);
       dispatch({ type: "GET_NEWSLETTER", payload: res.newsletters });
     } catch (error) {}
   }
@@ -330,7 +329,7 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletter });
+      dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletters });
     } catch (error) {}
   }
 

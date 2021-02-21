@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Note = mongoose.model("Notes");
 
 exports.saveNote = async (req, res) => {
-  console.log(req.body);
   try {
     const { text, title } = req.body;
     if ((!text, !title)) {
@@ -17,7 +16,6 @@ exports.saveNote = async (req, res) => {
       res.status(200).json({
         note,
       });
-      console.log("Note saved");
     }
   } catch (error) {
     console.log(error);

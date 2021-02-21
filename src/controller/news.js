@@ -7,16 +7,16 @@ exports.create = async (req, res) => {
     const { title, text, active } = req.body;
     if ((!title, !text)) {
       return res.status(422).json({ error: "Please add all the fields" });
+    } else {
+      const newsletter = await new News({
+        title,
+        text,
+        createdBy: req.user.id,
+        active,
+      });
+      newsletter.save();
+      res.status(200).json({ newsletter });
     }
-    const newsletter = await new News({
-      title,
-      text,
-      createdBy: req.user.id,
-      active,
-    });
-    newsletter.save();
-    const newsletters = await News.find().populate("createdBy", "_id name");
-    res.status(200).json({ failed: false, newsletters });
   } catch (error) {
     console.log(error);
     res.status(500).json({ failed: true, message: "Failed to create " });
@@ -39,7 +39,7 @@ exports.getNewsletters = async (req, res) => {
 // Change status of Newsletter
 exports.updateStatus = async (req, res) => {
   try {
-    await News.find(
+    await News.findByIdAndUpdate(
       { _id: req.body.id },
       {
         $set: {
@@ -50,7 +50,6 @@ exports.updateStatus = async (req, res) => {
       },
       { new: true }
     ).exec();
-    console.log("Updated record");
     res.status(200);
   } catch (error) {
     console.log(error);
