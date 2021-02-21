@@ -9,12 +9,12 @@ const colors = require("colors");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const cookieParser = require('cookie-parser')
+const cookieParser = require("cookie-parser");
 
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
 
-app.use(cookieParser())
+app.use(cookieParser());
 
 // DB models
 require("./src/models/InternalUser");
@@ -23,13 +23,13 @@ require("./src/models/todo");
 require("./src/models/notes");
 require("./src/models/client");
 require("./src/models/news");
-require('./src/models/Log')
+require("./src/models/Log");
 
 connectDB();
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
 });
 
 // Routes
@@ -55,13 +55,13 @@ app.use(
 
 // Express API Routes
 app.use("/api/v1/auth", limiter, auth);
-app.use("/api/v1/tickets", limiter, tickets);
-app.use("/api/v1/data", limiter, data);
-app.use("/api/v1/todo", limiter, todo);
-app.use("/api/v1/note", limiter, note);
-app.use("/api/v1/client", limiter, client);
-app.use("/api/v1/newsletter", limiter, news);
-app.use("/api/v1/time", limiter, times);
+app.use("/api/v1/tickets", tickets);
+app.use("/api/v1/data", data);
+app.use("/api/v1/todo", todo);
+app.use("/api/v1/note", note);
+app.use("/api/v1/client", client);
+app.use("/api/v1/newsletter", news);
+app.use("/api/v1/time", times);
 
 // Morgan API Logger
 if (process.env.NODE_ENV === "development") {
