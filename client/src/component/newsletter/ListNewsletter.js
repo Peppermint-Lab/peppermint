@@ -6,7 +6,7 @@ import ViewNewsletter from "./ViewNewsletter";
 import { GlobalContext } from "../../Context/GlobalState";
 
 const ListNewsletter = () => {
-  const { getNewsletter, newsletter } = useContext(GlobalContext);
+  const { getNewsletter, newsletters } = useContext(GlobalContext);
 
   useEffect(() => {
     getNewsletter();
@@ -29,7 +29,7 @@ const ListNewsletter = () => {
     <div>
       <Table
         showHeader={false}
-        dataSource={newsletter}
+        dataSource={newsletters}
         columns={columns}
         pagination={{
           defaultPageSize: 10,

@@ -91,6 +91,11 @@ export default (state, action) => {
         ...state,
         newsletters: action.payload
       }
+    case "DELETE_NEWSLETTER": 
+      return {
+        ...state,
+        newsletters: action.payload
+      }
     default:
       return state;
   }

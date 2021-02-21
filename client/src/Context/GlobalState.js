@@ -186,9 +186,9 @@ export const GlobalProvider = ({ children }) => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(response)
+          console.log(response);
           const res = response;
-          if (res.auth === false || null ) {
+          if (res.auth === false || null) {
             history.push("/login");
           } else {
             return console.log("logged in");
@@ -223,12 +223,12 @@ export const GlobalProvider = ({ children }) => {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
-          data
+          data,
         }),
-      }).then((res) => res.json())
+      }).then((res) => res.json());
       dispatch({ type: "CONVERT_TICKET", payload: res.ticket });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -240,12 +240,9 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
-      })
-        .then((res) => res.json())
-        dispatch({ type: "GET_OPENTICKET", payload: res.tickets });
-    } catch (error) {
-      
-    }
+      }).then((res) => res.json());
+      dispatch({ type: "GET_OPENTICKET", payload: res.tickets });
+    } catch (error) {}
   }
 
   async function completeTicket(id) {
@@ -257,7 +254,7 @@ export const GlobalProvider = ({ children }) => {
       },
     }).then((res) => res.json());
     dispatch({ type: "COMPLETE_TICKET", payload: res.tickets });
-    console.log(res)
+    console.log(res);
   }
 
   async function transferTicket(id, ticket) {
@@ -272,11 +269,9 @@ export const GlobalProvider = ({ children }) => {
           id,
           find: ticket,
         }),
-      }).then((res) => res.json())
+      }).then((res) => res.json());
       dispatch({ type: "TRANSFER_TICKET", payload: res.tickets });
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   async function markUndone(id) {
@@ -291,7 +286,7 @@ export const GlobalProvider = ({ children }) => {
       }).then((response) => response.json());
       dispatch({ type: "UNMARK_TODO", payload: res.todo });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -308,10 +303,9 @@ export const GlobalProvider = ({ children }) => {
           active,
         }),
       }).then((res) => res.json());
-      console.log(res.newsletters)
       dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletters });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -322,12 +316,22 @@ export const GlobalProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-        .then((res) => res.json())
-        dispatch({ type: "GET_NEWSLETTER", payload: res.newsletter });
-    } catch (error) {
-      
-    }
+      }).then((res) => res.json());
+      console.log(res.newsletters);
+      dispatch({ type: "GET_NEWSLETTER", payload: res.newsletters });
+    } catch (error) {}
+  }
+
+  async function deleteNewsletter(id) {
+    try {
+      const res = await fetch(`/api/v1/newsletter/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+      dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletter });
+    } catch (error) {}
   }
 
   return (
@@ -359,7 +363,8 @@ export const GlobalProvider = ({ children }) => {
         transferTicket,
         markUndone,
         createNewsletter,
-        getNewsletter
+        getNewsletter,
+        deleteNewsletter,
       }}
     >
       {children}

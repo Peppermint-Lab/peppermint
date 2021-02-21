@@ -60,12 +60,11 @@ exports.updateStatus = async (req, res) => {
 
 // Delete newsletter
 exports.deleteN = async (req, res) => {
+  console.log(req.params.id)
   try {
-    await News.findByIdAndDelete({ id: req.params.id });
+    await News.findByIdAndDelete({ _id: req.params.id });
     const newsletters = await News.find().populate("createdBy", "_id name");
-    res.json({ newsletters });
-    console.log(newsletters);
-    return res.status(200);
+    res.status(200).json({ newsletters });
   } catch (error) {
     console.log(error);
     res.status(500).json({ failed: true, message: "Failed to delete " });
