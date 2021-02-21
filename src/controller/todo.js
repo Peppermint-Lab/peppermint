@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Todo = mongoose.model("Todo");
 
 exports.getTodos = async (req, res) => {
-  console.log("getTodos");
   try {
   await Todo.find({ createdBy: req.user._id })
       .populate("createdBy", "_id name")

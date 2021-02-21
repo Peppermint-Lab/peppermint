@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const reqLogin = require("../middleware/authCheck");
+const {
+  isAuth,
+} = require("../middleware/authCheck");
 
 const {
   getTodos,
@@ -11,16 +13,16 @@ const {
   markUndone,
 } = require("../controller/todo");
 
-router.route("/getTodo").get(reqLogin, getTodos);
+router.route("/getTodo").get(isAuth, getTodos);
 
-router.route("/createTodo").post(reqLogin, createTodo);
+router.route("/createTodo").post(isAuth, createTodo);
 
-router.route("/deleteTodo/:id").delete(reqLogin, deleteTodo);
+router.route("/deleteTodo/:id").delete(isAuth, deleteTodo);
 
-router.route("/markOneAsDone/:id").put(reqLogin, markOneAsDone);
+router.route("/markOneAsDone/:id").put(isAuth, markOneAsDone);
 
-router.route("/markAllAsDone").put(reqLogin, markAllAsDone);
+router.route("/markAllAsDone").put(isAuth, markAllAsDone);
 
-router.route("/markUndone/:id").put(reqLogin, markUndone);
+router.route("/markUndone/:id").put(isAuth, markUndone);
 
 module.exports = router;
