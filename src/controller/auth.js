@@ -7,7 +7,7 @@ exports.Signup = async (req, res) => {
   try {
     const { email, name, password } = req.body;
     const emailLower = email.toLowerCase();
-    if ((!email || !name, !password)) {
+    if ((!email, !name, !password)) {
       return res.status(422).json({ error: "Please add all fields" });
     }
     await User.findOne({ email: email }).then((savedUser) => {

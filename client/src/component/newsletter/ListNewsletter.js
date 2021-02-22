@@ -1,15 +1,29 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 
 import ViewNewsletter from "./ViewNewsletter";
 
-import { GlobalContext } from "../../Context/GlobalState";
-
 const ListNewsletter = () => {
-  const { getNewsletter, newsletters } = useContext(GlobalContext);
+
+  const [news, setNews ] = useState([]);
 
   useEffect(() => {
-    getNewsletter();
+    async function getNewsletter() {
+      try {
+        await fetch(`/api/v1/newsletter/get/active`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((res) => res.json())
+          .then((res) => {
+            setNews(res.newsletters)
+          })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getNewsletter()
   }, []);
 
   const columns = [
@@ -29,7 +43,7 @@ const ListNewsletter = () => {
     <div>
       <Table
         showHeader={false}
-        dataSource={newsletters}
+        dataSource={news}
         columns={columns}
         pagination={{
           defaultPageSize: 10,

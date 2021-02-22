@@ -36,6 +36,19 @@ exports.getNewsletters = async (req, res) => {
   }
 };
 
+// Get All Active newsletters
+exports.getActiveNewsletters = async (req, res) => {
+  try {
+    const newsletters = await News.find({active: true}).populate("createdBy", "_id name");
+    return res.status(200).json({ newsletters });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ failed: true, message: "Failed to get newsletters " });
+  }
+};
+
 // Change status of Newsletter
 exports.updateStatus = async (req, res) => {
   try {

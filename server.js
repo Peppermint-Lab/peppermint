@@ -29,7 +29,7 @@ connectDB();
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 1000, // limit each IP to 100 requests per windowMs
 });
 
 // Routes
@@ -69,7 +69,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Express web server PORT
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "build")));
