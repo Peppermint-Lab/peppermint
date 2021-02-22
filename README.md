@@ -44,6 +44,18 @@ services:
 
 We currently do not have any one click installers for any online marketplace as of yet - but once we get more stable and feature rich that will change.
 
+## Supported Environment Variables
+
+You can utilize the following environment variables in Yacht. None of them are manditory.
+
+| Variable  | Description |
+| ------------- | ------------- |
+| PUID | Set userid that the container will run as. |
+| PGID | Set groupid that the container will run as. |
+| JWT_SECRET  | Keep your passwords and user logins secure with a JWT SECRET  |
+| MONGO_URI_DOCKER | Have a different url for your mongoDB database? Enter that string here |
+| PORT | Choose a custom port to run the app on rather than the default 5000 |
+
 ##  💻 Demo
 
 If you're interested in trying out Peppermint we currently have a demo working <a href="https://demo.pmint.dev/">here.</a>
