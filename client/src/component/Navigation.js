@@ -50,7 +50,7 @@ const Navigation = () => {
               defaultSelectedKeys={["0"]}
               selectedKeys={current}
             >
-              <Menu.Item key="Home Page">
+              <Menu.Item key="Home Page" >
                 <a
                   href="https://pmint.dev/"
                   target="_blank"
@@ -59,7 +59,7 @@ const Navigation = () => {
                   Peppermint 🍵
                 </a>
               </Menu.Item>
-              <Menu.Item key={0} onClick={() => history.push("/")}>
+              <Menu.Item key={0} onClick={() => history.push("/Home")}>
                 Home
               </Menu.Item>
               <SubMenu key="SubMenu" title="Tickets">

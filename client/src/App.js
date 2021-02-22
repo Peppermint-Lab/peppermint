@@ -37,7 +37,7 @@ const Routing = () => {
   return (
     <Router history={history} >
       <Switch>
-      <Route exact path="/" component={Home} />
+      <Route exact path="/Home" component={Home} />
       
         <Route exact path="/login">
           <div className="login-container">
