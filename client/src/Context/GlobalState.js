@@ -19,8 +19,6 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  const history = useHistory();
-
   // action
   async function getTodos() {
     const config = {
@@ -165,7 +163,6 @@ export const GlobalProvider = ({ children }) => {
           if (!data.error) {
             localStorage.setItem("user", JSON.stringify(data.user));
             dispatch({ type: "USER", payload: data.user });
-            console.log(data);
           } else {
             console.log(data.error);
           }
@@ -186,16 +183,36 @@ export const GlobalProvider = ({ children }) => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(response);
           const res = response;
           if (res.auth === false || null) {
-            history.push("/login");
+            // doesnt recognise history.push
           } else {
             return console.log("logged in");
           }
         });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function createTicket(name, email, company, issue, priority) {
+    try {
+      const res = await fetch(`/api/v1/tickets/createTicket`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          issue,
+          priority,
+        }),
+      }).then((res) => res.json())
+      dispatch({ type: "ADD_TICKET", payload: res.ticket });
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -364,6 +381,7 @@ export const GlobalProvider = ({ children }) => {
         createNewsletter,
         getNewsletter,
         deleteNewsletter,
+        createTicket
       }}
     >
       {children}

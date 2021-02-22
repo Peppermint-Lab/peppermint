@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Select, Modal, Form, Input, Radio, Space, Button } from "antd";
 
+import { GlobalContext } from "../../Context/GlobalState";
+
+
+
 const NewTicket = () => {
+
+  const { createTicket } = useContext(GlobalContext);
+
   const { Option } = Select;
   const { TextArea } = Input;
 
@@ -10,6 +17,7 @@ const NewTicket = () => {
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState("");
   const [priority, setPriority] = useState("Normal");
+
   const [options, setOptions] = useState([]);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
@@ -30,34 +38,9 @@ const NewTicket = () => {
       });
   };
 
-  const postData = async () => {
-   await fetch(`/api/v1/tickets/createTicket`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        company,
-        issue,
-        priority,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          console.log("Congrats it worked");
-        }
-      });
-  };
-
-  const onCreate = async (values) => {
+  const onCreate = async () => {
     setVisible(false);
-    await postData();
+    await createTicket(name, email, company, issue, priority);
   };
 
   const onCancel = async () => {
