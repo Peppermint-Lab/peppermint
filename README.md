@@ -97,6 +97,3 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 
 Give a ⭐️ if this project helped you!
 
-## 📝 License
-
-Copyright © 2020 [Jack Andrews](https://github.com/jwandrews99).<br />
