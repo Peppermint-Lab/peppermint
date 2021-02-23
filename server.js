@@ -14,8 +14,6 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
 
-app.use(cookieParser());
-
 // DB models
 require("./src/models/InternalUser");
 require("./src/models/Ticket");
@@ -50,7 +48,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   helmet({
     contentSecurityPolicy: false,
-  })
+  }), 
+cookieParser()
 );
 
 // Express API Routes

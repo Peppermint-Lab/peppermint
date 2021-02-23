@@ -22,8 +22,6 @@ import Open from "./pages/ticket/Open";
 import Unissued from "./pages/ticket/Unissued";
 import Settings from './pages/Settings'
 
-// import { GlobalContext } from "./Context/GlobalState";
-
 ReactGA.initialize('G-3C28LH0SBN');
 
 const history = createBrowserHistory();
@@ -37,7 +35,7 @@ const Routing = () => {
   return (
     <Router history={history} >
       <Switch>
-      <Route exact path="/Home" component={Home} />
+      <Route exact path="/" component={Home} />
       
         <Route exact path="/login">
           <div className="login-container">

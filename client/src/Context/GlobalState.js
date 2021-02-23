@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
@@ -11,6 +11,7 @@ const initialState = {
   unissuedTicket: [],
   openTicket: [],
   newsletters: [],
+  clients: []
 };
 
 // Create context
@@ -351,6 +352,20 @@ export const GlobalProvider = ({ children }) => {
     } catch (error) {}
   }
 
+  async function getClients() {
+    try {
+      const res = await fetch(`/api/v1/client/allclients`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      }).then((res) => res.json())
+        dispatch({ type: "GET_CLIENTS", payload: res.client });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     // This allows us to use in any component by use usecontext
     // Which is the react hook
@@ -363,6 +378,7 @@ export const GlobalProvider = ({ children }) => {
         unissuedTicket: state.unissuedTicket,
         openTicket: state.openTicket,
         newsletters: state.newsletters,
+        clients: state.clients,
         getTodos,
         addTodo,
         deleteTodo,
@@ -382,7 +398,8 @@ export const GlobalProvider = ({ children }) => {
         createNewsletter,
         getNewsletter,
         deleteNewsletter,
-        createTicket
+        createTicket,
+        getClients
       }}
     >
       {children}

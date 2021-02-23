@@ -33,10 +33,8 @@ exports.create = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
-  //c console.log('getAll')
   try {
     const client = await Client.find();
-    // console.log(client)
     res.status(200).json({ client });
   } catch (error) {
     console.log(error);

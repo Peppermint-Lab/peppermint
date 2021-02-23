@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { Table, Space, Button, Popconfirm } from "antd";
 import { useHistory } from "react-router-dom";
 
 import UpdateClient from "../../component/admin/UpdateClient";
+import { GlobalContext } from "../../Context/GlobalState";
 
 const ClientList = () => {
 
   const history = useHistory();
+  const { clients, getClients } = useContext(GlobalContext);
+
+  console.log(clients[0])
 
   useEffect(() => {
     async function auth() {
@@ -19,7 +23,6 @@ const ClientList = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(response)
           const res = response;
           if (res.auth === false ) {
             history.push("/login");
@@ -32,26 +35,9 @@ const ClientList = () => {
     // eslint-disable-next-line
   }, []);
 
-  const [clientAll, setClientAll] = useState([]);
-
-  const fetchClients = () => {
-    fetch(`/api/v1/client/allclients`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setClientAll(res.client);
-        }
-      });
-  };
-
   useEffect(() => {
-    fetchClients();
+    getClients();
+    // eslint-disable-next-line
   }, []);
 
   const deleteClient = async (client) => {
@@ -60,7 +46,6 @@ const ClientList = () => {
       await fetch(`/api/v1/client/delete/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -118,7 +103,7 @@ const ClientList = () => {
   return (
     <div style={{ marginTop: 5 }}>
       <Table
-        dataSource={clientAll}
+        dataSource={clients[0]}
         columns={columns}
         Pagenation={false}
         pagination={{

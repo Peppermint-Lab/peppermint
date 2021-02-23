@@ -96,6 +96,11 @@ export default (state, action) => {
         ...state,
         user: action.payload
       }
+    case "GET_CLIENTS": 
+      return {
+        ...state,
+        clients: [...state.clients, action.payload]
+      }
     case "CLEAR":
         return null;
     default:
