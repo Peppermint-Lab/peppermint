@@ -366,6 +366,27 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
+  async function createClient(name, contactName, number, email) {
+    try {
+     const res = await fetch(`/api/v1/client/create`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          contactName,
+          number,
+          email,
+        }),
+      }).then((res) => res.json());
+      console.log(res)
+      dispatch({ type: "CREATE_CLIENT", payload: res.client });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     // This allows us to use in any component by use usecontext
     // Which is the react hook
@@ -399,7 +420,8 @@ export const GlobalProvider = ({ children }) => {
         getNewsletter,
         deleteNewsletter,
         createTicket,
-        getClients
+        getClients,
+        createClient
       }}
     >
       {children}

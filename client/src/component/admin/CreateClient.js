@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Modal, Form, Input } from "antd";
+
+import { GlobalContext } from "../../Context/GlobalState";
 
 const CreateClient = () => {
   const [visible, setVisible] = useState(false);
@@ -10,26 +12,11 @@ const CreateClient = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const postData = async () => {
-    await fetch(`/api/v1/client/create`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        name,
-        contactName,
-        number,
-        email,
-      }),
-    }).then((res) => res.json());
-  };
+  const { createClient } = useContext(GlobalContext);
 
-  const onCreate = async (values) => {
-    console.log("Received values of form: ", values);
+  const onCreate = async () => {
     setVisible(false);
-    await postData();
+    await createClient(name, contactName, number, email);
   };
 
   const onCancel = () => {
@@ -47,6 +34,7 @@ const CreateClient = () => {
         Create new client
       </p>
       <Modal
+        centered
         visible={visible}
         title="Add a new client"
         okText="Create"

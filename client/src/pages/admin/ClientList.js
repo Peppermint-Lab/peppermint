@@ -10,8 +10,6 @@ const ClientList = () => {
   const history = useHistory();
   const { clients, getClients } = useContext(GlobalContext);
 
-  console.log(clients[0])
-
   useEffect(() => {
     async function auth() {
       await fetch(`/api/v1/auth/token`, {
@@ -103,7 +101,7 @@ const ClientList = () => {
   return (
     <div style={{ marginTop: 5 }}>
       <Table
-        dataSource={clients[0]}
+        dataSource={clients}
         columns={columns}
         Pagenation={false}
         pagination={{
