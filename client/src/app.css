@@ -500,3 +500,10 @@ body {
   align-items: center;
   gap: 12px
 }
+
+.version {
+  float: right;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 5px
+}
