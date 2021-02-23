@@ -7,11 +7,11 @@ import axios from "axios";
 const initialState = {
   todos: [],
   notes: [],
-  user: {},
   unissuedTicket: [],
   openTicket: [],
   newsletters: [],
-  clients: []
+  clients: [],
+  users: []
 };
 
 // Create context
@@ -164,32 +164,8 @@ export const GlobalProvider = ({ children }) => {
           console.log(data)
           if (!data.error) {
             localStorage.setItem("user", JSON.stringify(data.user));
-            dispatch({ type: "LOGGED_IN", payload: data });
           } else {
             console.log(data.error);
-          }
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function isLogged() {
-    try {
-      await fetch(`/api/v1/auth/token`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          const res = response;
-          if (res.auth === false || null) {
-            // doesnt recognise history.push
-          } else {
-            return console.log("logged in");
           }
         });
     } catch (error) {
@@ -380,8 +356,41 @@ export const GlobalProvider = ({ children }) => {
           email,
         }),
       }).then((res) => res.json());
-      console.log(res)
       dispatch({ type: "CREATE_CLIENT", payload: res.client });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function createUser(name, email, password) {
+    try {
+      const res = await fetch(`/api/v1/auth/Signup`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      }).then((res) => res.json());
+      dispatch({ type: "CREATE_USER", payload: res.user });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function getUsers() {
+    try {
+      const res = await fetch(`/api/v1/auth/getAllUsers`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        dispatch({ type: "GET_USERS", payload: res.users });
     } catch (error) {
       console.log(error)
     }
@@ -409,7 +418,6 @@ export const GlobalProvider = ({ children }) => {
         saveNote,
         deleteNote,
         signin,
-        isLogged,
         getUnissuedTicket,
         convertTicket,
         getOpenTicket,
@@ -421,7 +429,9 @@ export const GlobalProvider = ({ children }) => {
         deleteNewsletter,
         createTicket,
         getClients,
-        createClient
+        createClient,
+        createUser,
+        getUsers
       }}
     >
       {children}

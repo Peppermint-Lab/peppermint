@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Modal, Form, Input, Radio } from "antd";
+
+import { GlobalContext } from "../../Context/GlobalState";
 
 const CreateUser = () => {
   const [visible, setVisible] = useState(false);
@@ -9,24 +11,12 @@ const CreateUser = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
 
-  const postData = async () => {
-    await fetch(`/api/v1/auth/Signup`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    }).then((res) => res.json());
-  };
+  const { createUser } = useContext(GlobalContext);
 
   const onCreate = async (values) => {
     console.log("Received values of form: ", values);
     setVisible(false);
-    await postData();
+    await createUser(name, email, password);
   };
 
   const onCancel = () => {

@@ -49,8 +49,8 @@ export default (state, action) => {
     case "ADD_TICKET":
       return {
         ...state,
-        unissuedTicket: [...state.unissuedTicket, action.payload]
-      }
+        unissuedTicket: [...state.unissuedTicket, action.payload],
+      };
     case "GET_UNISSUEDTICKETS":
       return {
         ...state,
@@ -76,38 +76,43 @@ export default (state, action) => {
         ...state,
         openTicket: action.payload,
       };
-    case "CREATE_NEWSLETTER": 
+    case "CREATE_NEWSLETTER":
       return {
         ...state,
-        newsletters: [...state.newsletters, action.payload]
-      }
-    case "GET_NEWSLETTER": 
+        newsletters: [...state.newsletters, action.payload],
+      };
+    case "GET_NEWSLETTER":
       return {
         ...state,
-        newsletters: action.payload
-      }
-    case "DELETE_NEWSLETTER": 
+        newsletters: action.payload,
+      };
+    case "DELETE_NEWSLETTER":
       return {
         ...state,
-        newsletters: action.payload
-      }
-    case "LOGGED_IN": 
+        newsletters: action.payload,
+      };
+    case "GET_CLIENTS":
       return {
         ...state,
-        user: action.payload
-      }
-    case "GET_CLIENTS": 
+        clients: action.payload,
+      };
+    case "CREATE_CLIENT":
       return {
         ...state,
-        clients: action.payload
-      }
-    case "CREATE_CLIENT": 
+        clients: [...state.clients, action.payload],
+      };
+    case "CREATE_USER":
       return {
         ...state,
-        clients: [...state.clients, action.payload]
-      }
+        users: [...state.users, action.payload],
+      };
+    case "GET_USERS":
+      return {
+        ...state,
+        users: action.payload
+      };
     case "CLEAR":
-        return null;
+      return null;
     default:
       return state;
   }
