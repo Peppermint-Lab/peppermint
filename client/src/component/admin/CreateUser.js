@@ -34,6 +34,7 @@ const CreateUser = () => {
         Create new user
       </p>
       <Modal
+        centered
         visible={visible}
         title="Create a new user"
         okText="Create"
