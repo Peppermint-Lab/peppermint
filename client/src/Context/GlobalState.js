@@ -160,9 +160,10 @@ export const GlobalProvider = ({ children }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data)
           if (!data.error) {
             localStorage.setItem("user", JSON.stringify(data.user));
-            dispatch({ type: "USER", payload: data.user });
+            dispatch({ type: "LOGGED_IN", payload: data });
           } else {
             console.log(data.error);
           }

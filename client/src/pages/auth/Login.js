@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Form, Input, Button, Image } from "antd";
+import { Form, Input, Button, Image, notification } from "antd";
 import {
   UserOutlined,
   LockOutlined,
@@ -10,18 +10,51 @@ import {
 
 import logo from "./logo.png";
 
-import { GlobalContext } from "../../Context/GlobalState";
-
 const Login = () => {
   const history = useHistory();
+
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const { signin } = useContext(GlobalContext);
+  const errorNotification = async () => {
+    const args = await {
+      message: "Login Error",
+      description: [error],
+      duration: 3,
+    }
+    notification.open(args)
+  }
 
-  const onSubmit = async () => {
-    signin(email, password);
-  };
+  async function signin() {
+    try {
+      await fetch(`/api/v1/auth/login`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+        .then((res) => res.json())
+        .then(async (data) => {
+          console.log(data)
+          if (!data.error && data.auth === true) {
+            localStorage.setItem("user", JSON.stringify(data.user));
+            history.push('/home')
+          } else {
+            setError(data.error)
+            setLoading(false)
+            await errorNotification()
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div>
@@ -78,9 +111,10 @@ const Login = () => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
+            loading={loading}
             onClick={() => {
-              onSubmit();
-              setTimeout(() => history.push("/"), 1000);
+              setLoading(true)
+              signin()
             }}
           >
             Log in

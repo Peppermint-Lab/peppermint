@@ -36,11 +36,11 @@ exports.Login = async (req, res) => {
     const { email, password } = req.body;
     const emailLower = email.toLowerCase();
     if (!email || !password) {
-      return res.status(422).json({ error: "please add email or password" });
+      return res.status(422).json({ error: "please add email or password", auth: false });
     }
     await User.findOne({ email: emailLower }).then((savedUser) => {
       if (!savedUser) {
-        return res.status(422).json({ error: "Invalid Email or password" });
+        return res.status(422).json({ error: "Invalid Email or password", auth: false });
       }
       bcrypt.compare(password, savedUser.password).then((doMatch) => {
         if (doMatch) {
@@ -53,12 +53,15 @@ exports.Login = async (req, res) => {
             maxAge: 1000 * 60 * 60 * 24,
             sameSite: true,
           });
-          res.status(200).json({ user: { _id, name, email, role } });
+          res.status(200).json({ user: { _id, name, email, role }, auth: true });
+        } else {
+          res.status(422).json({ error: "Invalid Email or password", auth: false })
         }
       });
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Unable to process request", auth: false })
   }
 };
 

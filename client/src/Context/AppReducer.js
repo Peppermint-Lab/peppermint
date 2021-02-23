@@ -91,6 +91,11 @@ export default (state, action) => {
         ...state,
         newsletters: action.payload
       }
+    case "LOGGED_IN": 
+      return {
+        ...state,
+        user: action.payload
+      }
     case "CLEAR":
         return null;
     default:
