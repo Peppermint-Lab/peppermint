@@ -68,8 +68,7 @@ const TicketTime = (props) => {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
-    })
-      .then((res) => res.json())
+    }).then((res) => res.json());
   }
 
   useEffect(() => {
@@ -79,8 +78,8 @@ const TicketTime = (props) => {
   return (
     <div>
       <div className="ticket-log">
-      <DatePicker onChange={onChangeDate} defaultValue={moment} />
-        <TimePicker format={format} onChange={onChangeTime} />
+        <DatePicker onChange={onChangeDate} defaultValue={moment} />
+        <TimePicker format={format} onChange={onChangeTime} allowClear placeholder="Duration" />
         <Input
           style={{ width: 300 }}
           placeholder="Enter activity here"
@@ -101,9 +100,7 @@ const TicketTime = (props) => {
                   <span>{log.user.name} | </span>
                   <span>{log.activity}</span>
                   <Tooltip placement="right" title="Delete">
-                    <Button
-                      onClick={() => deleteLog(log._id)}
-                    >
+                    <Button onClick={() => deleteLog(log._id)}>
                       <DeleteTwoTone twoToneColor="#FF0000" />
                     </Button>
                   </Tooltip>

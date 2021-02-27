@@ -22,8 +22,6 @@ import Open from "./pages/ticket/Open";
 import Unissued from "./pages/ticket/Unissued";
 import Settings from './pages/Settings'
 
-// import { GlobalContext } from "./Context/GlobalState";
-
 ReactGA.initialize('G-3C28LH0SBN');
 
 const history = createBrowserHistory();

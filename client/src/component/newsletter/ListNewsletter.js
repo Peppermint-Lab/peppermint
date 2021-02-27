@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 
 import ViewNewsletter from "./ViewNewsletter";
 
 const ListNewsletter = () => {
-  const [n, setN] = useState([]);
 
-  const getN = async () => {
-    await fetch(`/api/v1/newsletter/get`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setN(res.newsletters);
-        }
-      });
-  };
+  const [news, setNews ] = useState([]);
 
   useEffect(() => {
-    getN();
+    async function getNewsletter() {
+      try {
+        await fetch(`/api/v1/newsletter/get/active`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((res) => res.json())
+          .then((res) => {
+            setNews(res.newsletters)
+          })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getNewsletter()
   }, []);
 
   const columns = [
@@ -43,7 +43,7 @@ const ListNewsletter = () => {
     <div>
       <Table
         showHeader={false}
-        dataSource={n}
+        dataSource={news}
         columns={columns}
         pagination={{
           defaultPageSize: 10,

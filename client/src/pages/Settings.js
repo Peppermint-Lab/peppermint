@@ -71,6 +71,14 @@ const ResetPass = () => {
   );
 };
 
+const Version = () => {
+  return (
+    <div className="version">
+      <p>Version: 0.1.6</p>
+    </div>
+  )
+}
+
 const Settings = () => {
   const { TabPane } = Tabs;
 
@@ -102,6 +110,7 @@ const Settings = () => {
 
   return (
     <div>
+      <Version />
       <div className="site-layout-content">
         <Tabs defaultActiveKey="1" centered={true}>
           <TabPane tab="Reset" key="2">
