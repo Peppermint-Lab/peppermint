@@ -7,7 +7,7 @@ import { GlobalProvider } from './Context/GlobalState';
 
 ReactDOM.render(
         <GlobalProvider>
-            <App />
+          <App />
         </GlobalProvider>,
     document.getElementById("root")
     );
