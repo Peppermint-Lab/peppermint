@@ -1,48 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Table, Button, Space } from "antd";
 
 import ViewNewsletter from "./ViewNewsletter";
 import Edit from "./Edit";
 
+import { GlobalContext } from "../../Context/GlobalState";
+
 const AdminList = () => {
-  const [data, setData] = useState([]);
 
-  console.log(data);
-
-  const getN = async () => {
-    await fetch(`/api/v1/newsletter/get`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setData(res.newsletters);
-        }
-      });
-  };
-
-  const del = async (id) => {
-    await fetch(`/api/v1/newsletter/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setData(res.newsletters);
-        }
-      });
-  };
+  const { getNewsletter, newsletters, deleteNewsletter } = useContext(GlobalContext);
 
   useEffect(() => {
-    getN();
+    getNewsletter();
   }, []);
 
   const columns = [
@@ -65,7 +34,7 @@ const AdminList = () => {
         <Space>
           <ViewNewsletter n={record} />
           <Edit n={record} />
-          <Button onClick={() => del(record._id)}>Delete</Button>
+          <Button onClick={() => deleteNewsletter(record._id)}>Delete</Button>
         </Space>
       ),
     },
@@ -75,7 +44,7 @@ const AdminList = () => {
     <div>
       <Table
         className="your-table"
-        dataSource={data}
+        dataSource={newsletters}
         columns={columns}
         pagination={{
           defaultPageSize: 10,

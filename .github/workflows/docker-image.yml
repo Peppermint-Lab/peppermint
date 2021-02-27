@@ -2,9 +2,7 @@ name: Peppermint
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ Version-0.1.6 ]
 
 jobs:
   build:
@@ -45,8 +43,6 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           push: true
           tags: |
-            pepperlabs/peppermint
-            pepperlabs/peppermint:latest
-            pepperlabs/peppermint:v0.1.5-alpha
+            pepperlabs/peppermint:dev
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache

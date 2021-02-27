@@ -37,6 +37,10 @@ body {
     margin-right: 75% !important;
     margin-top: -250px !important;
   }
+  .admin-main {
+    width: 100% !important;
+    position: absolute !important;
+  }
   .Admin-Side-Nav {
     position: relative !important;
     z-index: 1;
@@ -54,12 +58,42 @@ body {
     align-items: flex-start !important;
     gap: 10px;
   }
+  .ticket-view-contact {
+    display: flex;
+    flex-direction: column !important;
+  }
+  .ticket-view-contact h5 {
+    font-size: 14px;
+  }
+  .ticket-view-contact Input {
+    width: 200px !important;
+  }
+  .ticket-view-info {
+    display: flex;
+    flex-direction: column !important;
+    width: 100% !important;
+
+  }
 }
 
-@media only screen and (min-width: 500px) and (max-width: 768px) {
+@media only screen and (min-width: 480px) and (max-width: 768px) {
+  .main-con {
+    display: flex;
+    flex-direction: column !important;
+    width: 100%;
+  }
+  .Todo-Container {
+    width: 95% !important;
+  }
+  .Notes-Container {
+    width: 95% !important;
+  }
+  .Right-Container {
+    width: 95% !important;
+  }
   .admin-main {
     width: 100% !important;
-    float: right !important;
+    position: absolute !important;
   }
   .Admin-Side-Nav {
     position: relative !important;
@@ -80,12 +114,60 @@ body {
   }
 }
 
-@media only screen and (min-width: 900px) and (max-width: 1024px) {
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  .admin-main {
+    width: 100% !important;
+    position: absolute !important;
+  }
+  .Admin-Side-Nav {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  .stats-card {
+    width: 50% !important;
+  }
+  .ant-drawer-open {
+    width: 100% !important;
+    mask: false;
+  }
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+  .drawer-text-right {
+    margin-left: 250px;
+  }
+}
+
+@media only screen and (min-width: 960px) and (max-width: 1024px) {
   .admin-main {
     width: 80% !important;
+    position: static !important;
   }
   .side-navbar {
     width: 20% !important;
+  }
+  .stats-card {
+    width: 50% !important;
+  }
+  .ant-drawer-open {
+    width: 100% !important;
+    mask: false;
+  }
+  .ant-drawer-content-wrapper {
+    width: 75% !important;
+  }
+  .drawer-text-right {
+    margin-left: 250px;
+  }
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1190px) {
+  .admin-main {
+    width: 82% !important;
+    position: static !important;
+  }
+  .side-navbar {
+    width: 15% !important;
   }
   .stats-card {
     width: 50% !important;
@@ -175,7 +257,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin-right: 25%;
+  margin-right: 15%;
   margin-top: -10%;
 }
 
@@ -433,4 +515,17 @@ body {
   display: flex;
   align-items: center;
   gap: 12px
+}
+
+.version {
+  float: right;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 5px
+}
+
+.ticket-view-info {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }

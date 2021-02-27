@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Space, Table, Button, Popconfirm } from "antd";
 import { useHistory } from "react-router-dom";
 
 import ResetPassword from "../../component/admin/ResetPassword";
 import EditInfo from "../../component/admin/EditInfo";
+import { GlobalContext } from "../../Context/GlobalState";
 
 
 const EditUserInfo = () => {
-  const [users, setUsers] = useState([]);
 
   const history = useHistory();
+  const { users, getUsers } = useContext(GlobalContext);
 
   useEffect(() => {
     async function auth() {
@@ -35,22 +36,6 @@ const EditUserInfo = () => {
     // eslint-disable-next-line
   }, []);
 
-  const fetchUsers = async () => {
-    await fetch(`/api/v1/auth/getAllUsers`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setUsers(res.users);
-        }
-      });
-  };
-
   const deleteClient = async (client) => {
     const id = client._id;
     console.log(id);
@@ -69,7 +54,7 @@ const EditUserInfo = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    getUsers();
   }, []);
 
   const columns = [

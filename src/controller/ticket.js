@@ -47,7 +47,7 @@ exports.completedTickets = async (req, res) => {
 
 // Create a new ticket
 exports.createTicket = async (req, res) => {
-  console.log("Create a new ticket API HIT");
+  console.log(req.body);
   try {
     const { name, company, issue, priority, email } = req.body;
     if (!name || !company || !issue || !priority) {
@@ -61,7 +61,7 @@ exports.createTicket = async (req, res) => {
       email,
     });
     ticket.save().then(() => {
-      res.status(201).json({ message: "Ticket created correctly" });
+      res.status(201).json({ message: "Ticket created correctly", ticket });
     });
   } catch (error) {
     console.log(error);

@@ -46,15 +46,10 @@ export default (state, action) => {
         ...state,
         notes: state.notes.filter((note) => note._id !== action.payload),
       };
-    case "CLEAR":
-      return null;
-    case "USER":
+    case "ADD_TICKET":
       return {
-        user: action.payload,
-      };
-    case "USER_LOGGED":
-      return {
-        auth: action.payload,
+        ...state,
+        unissuedTicket: [...state.unissuedTicket, action.payload],
       };
     case "GET_UNISSUEDTICKETS":
       return {
@@ -81,6 +76,43 @@ export default (state, action) => {
         ...state,
         openTicket: action.payload,
       };
+    case "CREATE_NEWSLETTER":
+      return {
+        ...state,
+        newsletters: [...state.newsletters, action.payload],
+      };
+    case "GET_NEWSLETTER":
+      return {
+        ...state,
+        newsletters: action.payload,
+      };
+    case "DELETE_NEWSLETTER":
+      return {
+        ...state,
+        newsletters: action.payload,
+      };
+    case "GET_CLIENTS":
+      return {
+        ...state,
+        clients: action.payload,
+      };
+    case "CREATE_CLIENT":
+      return {
+        ...state,
+        clients: [...state.clients, action.payload],
+      };
+    case "CREATE_USER":
+      return {
+        ...state,
+        users: [...state.users, action.payload],
+      };
+    case "GET_USERS":
+      return {
+        ...state,
+        users: action.payload
+      };
+    case "CLEAR":
+      return null;
     default:
       return state;
   }

@@ -17,26 +17,19 @@ exports.create = async (req, res) => {
         contactName,
         number,
       });
-      client
-        .save()
-        .then(() => {
-          res.status(200).json({ message: "Client saved successfully" });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.json({ err });
-        });
+      client.save();
+      const clients = Client.find();
+      res.status(200).json({ message: "Client saved successfully", client });
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error });
   }
 };
 
 exports.getAll = async (req, res) => {
-  //c console.log('getAll')
   try {
     const client = await Client.find();
-    // console.log(client)
     res.status(200).json({ client });
   } catch (error) {
     console.log(error);

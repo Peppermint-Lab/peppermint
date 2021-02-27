@@ -1,15 +1,17 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
   todos: [],
   notes: [],
-  user: {},
   unissuedTicket: [],
   openTicket: [],
+  newsletters: [],
+  clients: [],
+  users: []
 };
 
 // Create context
@@ -17,8 +19,6 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
-
-  const history = useHistory();
 
   // action
   async function getTodos() {
@@ -161,10 +161,9 @@ export const GlobalProvider = ({ children }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data)
           if (!data.error) {
             localStorage.setItem("user", JSON.stringify(data.user));
-            dispatch({ type: "USER", payload: data.user });
-            console.log(data);
           } else {
             console.log(data.error);
           }
@@ -174,27 +173,24 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function isLogged() {
+  async function createTicket(name, email, company, issue, priority) {
     try {
-      await fetch(`/api/v1/auth/token`, {
-        method: "GET",
+      const res = await fetch(`/api/v1/tickets/createTicket`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response)
-          const res = response;
-          if (res.auth === false || null ) {
-            history.push("/login");
-          } else {
-            return console.log("logged in");
-          }
-        });
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          issue,
+          priority,
+        }),
+      }).then((res) => res.json())
+      dispatch({ type: "ADD_TICKET", payload: res.ticket });
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -222,12 +218,12 @@ export const GlobalProvider = ({ children }) => {
           Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
-          data
+          data,
         }),
-      }).then((res) => res.json())
+      }).then((res) => res.json());
       dispatch({ type: "CONVERT_TICKET", payload: res.ticket });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -239,12 +235,9 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
-      })
-        .then((res) => res.json())
-        dispatch({ type: "GET_OPENTICKET", payload: res.tickets });
-    } catch (error) {
-      
-    }
+      }).then((res) => res.json());
+      dispatch({ type: "GET_OPENTICKET", payload: res.tickets });
+    } catch (error) {}
   }
 
   async function completeTicket(id) {
@@ -256,7 +249,7 @@ export const GlobalProvider = ({ children }) => {
       },
     }).then((res) => res.json());
     dispatch({ type: "COMPLETE_TICKET", payload: res.tickets });
-    console.log(res)
+    console.log(res);
   }
 
   async function transferTicket(id, ticket) {
@@ -271,11 +264,9 @@ export const GlobalProvider = ({ children }) => {
           id,
           find: ticket,
         }),
-      }).then((res) => res.json())
+      }).then((res) => res.json());
       dispatch({ type: "TRANSFER_TICKET", payload: res.tickets });
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   async function markUndone(id) {
@@ -289,6 +280,117 @@ export const GlobalProvider = ({ children }) => {
         },
       }).then((response) => response.json());
       dispatch({ type: "UNMARK_TODO", payload: res.todo });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function createNewsletter(title, text, active) {
+    try {
+      const res = await fetch(`/api/v1/newsletter/create`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          text,
+          active,
+        }),
+      }).then((res) => res.json());
+      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getNewsletter() {
+    try {
+      const res = await fetch(`/api/v1/newsletter/get`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+      dispatch({ type: "GET_NEWSLETTER", payload: res.newsletters });
+    } catch (error) {}
+  }
+
+  async function deleteNewsletter(id) {
+    try {
+      const res = await fetch(`/api/v1/newsletter/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+      dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletters });
+    } catch (error) {}
+  }
+
+  async function getClients() {
+    try {
+      const res = await fetch(`/api/v1/client/allclients`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      }).then((res) => res.json())
+        dispatch({ type: "GET_CLIENTS", payload: res.client });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function createClient(name, contactName, number, email) {
+    try {
+     const res = await fetch(`/api/v1/client/create`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          contactName,
+          number,
+          email,
+        }),
+      }).then((res) => res.json());
+      dispatch({ type: "CREATE_CLIENT", payload: res.client });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function createUser(name, email, password) {
+    try {
+      const res = await fetch(`/api/v1/auth/Signup`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      }).then((res) => res.json());
+      dispatch({ type: "CREATE_USER", payload: res.user });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function getUsers() {
+    try {
+      const res = await fetch(`/api/v1/auth/getAllUsers`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        dispatch({ type: "GET_USERS", payload: res.users });
     } catch (error) {
       console.log(error)
     }
@@ -305,6 +407,8 @@ export const GlobalProvider = ({ children }) => {
         user: state.user,
         unissuedTicket: state.unissuedTicket,
         openTicket: state.openTicket,
+        newsletters: state.newsletters,
+        clients: state.clients,
         getTodos,
         addTodo,
         deleteTodo,
@@ -314,13 +418,20 @@ export const GlobalProvider = ({ children }) => {
         saveNote,
         deleteNote,
         signin,
-        isLogged,
         getUnissuedTicket,
         convertTicket,
         getOpenTicket,
         completeTicket,
         transferTicket,
-        markUndone
+        markUndone,
+        createNewsletter,
+        getNewsletter,
+        deleteNewsletter,
+        createTicket,
+        getClients,
+        createClient,
+        createUser,
+        getUsers
       }}
     >
       {children}

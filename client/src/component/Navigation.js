@@ -24,8 +24,8 @@ const Navigation = () => {
     setCurrent(e.key);
   };
 
-  function isAdmin() {
-    const user = JSON.parse(localStorage.getItem("user"));
+  async function isAdmin() {
+    const user = await JSON.parse(localStorage.getItem("user"));
     if (user && user.role === "admin") {
       setCheckAdmin(true);
     } else {
@@ -50,7 +50,7 @@ const Navigation = () => {
               defaultSelectedKeys={["0"]}
               selectedKeys={current}
             >
-              <Menu.Item key="Home Page">
+              <Menu.Item key={1}>
                 <a
                   href="https://pmint.dev/"
                   target="_blank"

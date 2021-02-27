@@ -83,50 +83,50 @@ const ViewTicket = (props) => {
           <Space>
             <h6>Issue status : {props.ticket.status}</h6>
             <Divider type="vertical" />
-            
           </Space>
         </Row>
-        <Row>
-          <TextArea
-            rows={6}
-            defaultValue={props.ticket.issue}
-            style={{ width: "45%" }}
-            placeholder="Issue goes here ..."
-            onChange={(e) => setIssue(e.target.value)}
-          />
-          <TextArea
-            defaultValue={props.ticket.note}
-            style={{ width: "45%", float: "right", marginLeft: 25 }}
-            placeholder="Job notes goes here ..."
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </Row>
+        <div className="ticket-view-info">
+            <TextArea
+              rows={6}
+              defaultValue={props.ticket.issue}
+              placeholder="Issue goes here ..."
+              onChange={(e) => setIssue(e.target.value)}
+            />
+            <TextArea
+              rows={6}
+              defaultValue={props.ticket.note}
+              placeholder="Job notes goes here ..."
+              onChange={(e) => setNote(e.target.value)}
+            />
+        </div>
         <Divider />
-        <h4>Contact Details</h4>
-        <h5>
-          Contact Name:{" "}
-          <Input
-            defaultValue={props.ticket.name}
-            style={{ width: 250, float: "right" }}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </h5>
-        <h5>
-          Email:{" "}
-          <Input
-            defaultValue={props.ticket.email}
-            style={{ width: 250, float: "right" }}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </h5>
-        <h5>
-          Number:{" "}
-          <Input
-            defaultValue={props.ticket.number}
-            style={{ width: 250, float: "right" }}
-            onChange={(e) => setNumber(e.target.value)}
-          />
-        </h5>
+        <div className="ticket-view-contact">
+          <h4>Contact Details</h4>
+          <h5>
+            Contact Name:{" "}
+            <Input
+              defaultValue={props.ticket.name}
+              style={{ width: 250, float: "right" }}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </h5>
+          <h5>
+            Email:{" "}
+            <Input
+              defaultValue={props.ticket.email}
+              style={{ width: 250, float: "right" }}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </h5>
+          <h5>
+            Number:{" "}
+            <Input
+              defaultValue={props.ticket.number}
+              style={{ width: 250, float: "right" }}
+              onChange={(e) => setNumber(e.target.value)}
+            />
+          </h5>
+        </div>
         <Divider />
         <h4>Time Logged to Ticket</h4>
         <TicketTime ticket={props.ticket} />
