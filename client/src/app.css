@@ -58,6 +58,22 @@ body {
     align-items: flex-start !important;
     gap: 10px;
   }
+  .ticket-view-contact {
+    display: flex;
+    flex-direction: column !important;
+  }
+  .ticket-view-contact h5 {
+    font-size: 14px;
+  }
+  .ticket-view-contact Input {
+    width: 200px !important;
+  }
+  .ticket-view-info {
+    display: flex;
+    flex-direction: column !important;
+    width: 100% !important;
+
+  }
 }
 
 @media only screen and (min-width: 480px) and (max-width: 768px) {
@@ -506,4 +522,10 @@ body {
   font-size: 12px;
   font-weight: bold;
   margin-right: 5px
+}
+
+.ticket-view-info {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }

@@ -44,7 +44,7 @@ const Login = () => {
           console.log(data)
           if (!data.error && data.auth === true) {
             localStorage.setItem("user", JSON.stringify(data.user));
-            history.push('/home')
+            history.push('/')
           } else {
             setError(data.error)
             setLoading(false)
