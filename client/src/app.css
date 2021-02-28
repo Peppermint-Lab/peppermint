@@ -518,10 +518,10 @@ body {
 }
 
 .version {
-  float: right;
+  position: absolute;
   font-size: 12px;
   font-weight: bold;
-  margin-right: 5px
+  margin-left: 98%;
 }
 
 .ticket-view-info {

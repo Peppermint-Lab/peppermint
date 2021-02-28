@@ -11,7 +11,7 @@ const initialState = {
   openTicket: [],
   newsletters: [],
   clients: [],
-  users: []
+  user: []
 };
 
 // Create context
@@ -161,9 +161,10 @@ export const GlobalProvider = ({ children }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data)
           if (!data.error) {
+            console.log(data)
             localStorage.setItem("user", JSON.stringify(data.user));
+            dispatch({ type: "USER_LOGGED", payload: data.user });
           } else {
             console.log(data.error);
           }

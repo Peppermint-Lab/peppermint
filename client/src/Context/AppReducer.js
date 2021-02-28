@@ -111,6 +111,11 @@ export default (state, action) => {
         ...state,
         users: action.payload
       };
+    case "USER_LOGGED":
+      return {
+        ...state,
+        user: action.payload
+      }
     case "CLEAR":
       return null;
     default:

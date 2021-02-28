@@ -1,38 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Tabs } from "antd";
+import { Button, Divider, Input, Tabs, Form } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
 
 // eslint-disable-next-line
 const UserProfile = () => {
-  const user = localStorage.getItem("user");
-  // eslint-disable-next-line
-  const [info, setInfo] = useState([]);
-
-  const getData = async () => {
-    await fetch(`/api/v1/auth/getById`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        user,
-      }),
-    }).then((res) => res.json);
-    setInfo(user);
-  };
-
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line
-  }, []);
+  const user = JSON.parse(localStorage.getItem('user'))
 
   return (
     <div>
-      <h3>User Profile</h3>
-      <h4>Name : </h4>
+      <h3>Account <Button type="primary" style={{ float: "right", marginTop: 5 }}>Save</Button></h3>
+      <Divider />
+      <h5>Profile</h5>
+      <p>This information will be linked to your tickets.</p>
+      <div>
+        <Form name="profile" initialValues={{ remember: false}} layout="vertical" >
+          <Form.Item label="Name">
+            <Input defaultValue={user.name} />
+          </Form.Item>
+          <Form.Item label="Email">
+            <Input defaultValue={user.email} />
+          </Form.Item>
+          <Form.Item label="Email">
+            <Input defaultValue={user.email} />
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 };
@@ -74,7 +68,7 @@ const ResetPass = () => {
 const Version = () => {
   return (
     <div className="version">
-      <p>Version: 0.1.6</p>
+      <p>0.1.7</p>
     </div>
   )
 }
@@ -113,6 +107,9 @@ const Settings = () => {
       <Version />
       <div className="site-layout-content">
         <Tabs defaultActiveKey="1" centered={true}>
+          <TabPane tab="Profile" key="1">
+            <UserProfile />
+          </TabPane>
           <TabPane tab="Reset" key="2">
             <ResetPass />
           </TabPane>

@@ -48,6 +48,7 @@ exports.Login = async (req, res) => {
             { _id: savedUser._id, expiresIn: 86400 },
             process.env.JWT_SECRET
           );
+          console.log(savedUser)
           const { _id, name, email, role } = savedUser;
           res.cookie("token", token, {
             maxAge: 1000 * 60 * 60 * 24,
