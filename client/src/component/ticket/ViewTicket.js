@@ -19,15 +19,6 @@ const ViewTicket = (props) => {
 
   const { completeTicket } = useContext(GlobalContext);
 
-  const showDrawer = () => {
-    setVisible(true);
-  };
-
-  const onClose = async () => {
-    setVisible(false);
-    await update();
-  };
-
   const update = async () => {
     await fetch(`/api/v1/tickets/update`, {
       method: "PUT",
@@ -44,6 +35,15 @@ const ViewTicket = (props) => {
         number,
       }),
     }).then((res) => res.json());
+  };
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = async () => {
+    setVisible(false);
+    await update();
   };
 
   return (

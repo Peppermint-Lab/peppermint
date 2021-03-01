@@ -15,7 +15,8 @@ const {
   resetPasswordUser,
   getUserById,
   edit,
-  deleteUser
+  deleteUser,
+  profile
 } = require("../controller/auth");
 
 router.route("/Login").post(Login);
@@ -33,6 +34,8 @@ router.route("/resetPassword/user").post(isAuth, resetPasswordUser);
 router.route('/getById').post(isAuth, isAdmin, getUserById);
 
 router.route('/edit').put(isAuth, isAdmin, edit);
+
+router.route('/profile').put(isAuth, profile);
 
 router.route('/delete/:id').delete(isAuth, isAdmin, deleteUser);
 

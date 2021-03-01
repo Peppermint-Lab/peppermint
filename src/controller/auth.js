@@ -48,7 +48,6 @@ exports.Login = async (req, res) => {
             { _id: savedUser._id, expiresIn: 86400 },
             process.env.JWT_SECRET
           );
-          console.log(savedUser)
           const { _id, name, email, role } = savedUser;
           res.cookie("token", token, {
             maxAge: 1000 * 60 * 60 * 24,
@@ -173,9 +172,8 @@ exports.changeRole = async (req, res) => {
 };
 
 exports.edit = async (req, res) => {
-  console.log(req.body);
   const n = req.body.name;
-  const e = req.body.email;
+  const e = req.body.email.toLowerCase();
   const r = req.body.role;
 
   try {
@@ -186,12 +184,31 @@ exports.edit = async (req, res) => {
       },
       { new: true }
     ).exec();
-    console.log("Updated record");
+    res.status(200).json({ message: "User updated", fail: false})
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: error, fail: false });
   }
 };
+
+exports.profile = async (req, res) => {
+  const emailLower = req.body.email.toLowerCase()
+  try {
+    await User.findByIdAndUpdate(
+      { _id: req.user.id },
+      {
+        $set: { name: req.body.name, email: emailLower }
+      },
+      { new: true }
+    ).exec();
+    const userInfo = User.findById({ _id: req.user._id })
+    const { _id, name, email, role } = userInfo;
+    res.status(200).json({ message: "User updated", user: { _id, name, email, role }, fail: false})
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error, fail: true });
+  }
+}
 
 exports.deleteUser = async (req, res) => {
   console.log("Delete User");

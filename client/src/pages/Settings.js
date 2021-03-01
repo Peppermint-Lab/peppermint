@@ -11,13 +11,36 @@ const UserProfile = () => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
 
+  async function postData() {
+    await fetch(`/api/v1/auth/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name ? name : user.name,
+        email: email ? email : user.email
+      }),
+    }).then((res) => res.json())
+      .then((res) => {
+      console.log(res)
+    })
+  }
+
+  const onFinish = async () => {
+    email.toLowerCase()
+    await postData()
+  };
+
   return (
     <div>
       <h3>
         Account{" "}
         <Button
+          onClick={postData}
           disabled={name || email ? false : true}
           type="primary"
+          htmlType="submit"
           style={{ float: "right", marginTop: 5 }}
         >
           Save
@@ -31,6 +54,7 @@ const UserProfile = () => {
           name="profile"
           initialValues={{ remember: false }}
           layout="vertical"
+          onFinish={onFinish}
         >
           <Form.Item label="Name">
             <Input
