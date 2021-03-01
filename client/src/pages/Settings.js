@@ -6,24 +6,40 @@ import { useHistory } from "react-router-dom";
 
 // eslint-disable-next-line
 const UserProfile = () => {
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
 
   return (
     <div>
-      <h3>Account <Button type="primary" style={{ float: "right", marginTop: 5 }}>Save</Button></h3>
+      <h3>
+        Account{" "}
+        <Button
+          disabled={name || email ? false : true}
+          type="primary"
+          style={{ float: "right", marginTop: 5 }}
+        >
+          Save
+        </Button>
+      </h3>
       <Divider />
       <h5>Profile</h5>
       <p>This information will be linked to your tickets.</p>
       <div>
-        <Form name="profile" initialValues={{ remember: false}} layout="vertical" >
+        <Form
+          name="profile"
+          initialValues={{ remember: false }}
+          layout="vertical"
+        >
           <Form.Item label="Name">
-            <Input defaultValue={user.name} />
+            <Input
+              defaultValue={user.name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </Form.Item>
           <Form.Item label="Email">
-            <Input defaultValue={user.email} />
-          </Form.Item>
-          <Form.Item label="Email">
-            <Input defaultValue={user.email} />
+            <Input defaultValue={user.email} onChange={(e) => setEmail(e.target.value)} />
           </Form.Item>
         </Form>
       </div>
@@ -70,8 +86,8 @@ const Version = () => {
     <div className="version">
       <p>0.1.7</p>
     </div>
-  )
-}
+  );
+};
 
 const Settings = () => {
   const { TabPane } = Tabs;
@@ -89,9 +105,9 @@ const Settings = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(response)
+          console.log(response);
           const res = response;
-          if (res.auth === false ) {
+          if (res.auth === false) {
             history.push("/login");
           } else {
             return console.log("logged in");
