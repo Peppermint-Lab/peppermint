@@ -133,7 +133,7 @@ const ResetPass = () => {
 const Version = () => {
   return (
     <div className="version">
-      <p>0.1.7</p>
+      <p>v0.1.7</p>
     </div>
   );
 };
