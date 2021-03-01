@@ -67,6 +67,7 @@ const ResetPass = () => {
 
   return (
     <div>
+      <h3>Security</h3>
       <Input
         placeholder="Enter new Password ... "
         style={{ width: 200 }}
@@ -125,8 +126,7 @@ const Settings = () => {
         <Tabs defaultActiveKey="1" centered={true}>
           <TabPane tab="Profile" key="1">
             <UserProfile />
-          </TabPane>
-          <TabPane tab="Reset" key="2">
+            <Divider />
             <ResetPass />
           </TabPane>
         </Tabs>
