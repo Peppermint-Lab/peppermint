@@ -162,7 +162,6 @@ export const GlobalProvider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => {
           if (!data.error) {
-            console.log(data)
             localStorage.setItem("user", JSON.stringify(data.user));
             dispatch({ type: "USER_LOGGED", payload: data.user });
           } else {

@@ -174,7 +174,6 @@ exports.updateJob = async (req, res) => {
         new: true,
       }
     ).exec();
-    console.log("Updated record");
     res.status(201);
   } catch (error) {
     console.log(error);

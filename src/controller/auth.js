@@ -195,15 +195,17 @@ exports.profile = async (req, res) => {
   const emailLower = req.body.email.toLowerCase()
   try {
     await User.findByIdAndUpdate(
-      { _id: req.user.id },
+      { _id: req.user._id },
       {
         $set: { name: req.body.name, email: emailLower }
       },
       { new: true }
     ).exec();
-    const userInfo = User.findById({ _id: req.user._id })
-    const { _id, name, email, role } = userInfo;
-    res.status(200).json({ message: "User updated", user: { _id, name, email, role }, fail: false})
+      User.findOne({ _id: req.user._id })
+      .then((user) => {
+        const { _id, name, email, role } = user;
+        res.status(200).json({ message: "User updated", user: {_id, name, email, role}, fail: false})
+      })
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error, fail: true });

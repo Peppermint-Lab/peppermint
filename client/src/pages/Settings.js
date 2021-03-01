@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Divider, Input, Tabs, Form } from "antd";
+import { Button, Divider, Input, Tabs, Form, message } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
@@ -11,6 +11,14 @@ const UserProfile = () => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
 
+  const success = () => {
+    message.success("Information updated!");
+  };
+
+  const fail = () => {
+    message.error("Information failed to update");
+  };
+
   async function postData() {
     await fetch(`/api/v1/auth/profile`, {
       method: "PUT",
@@ -19,17 +27,29 @@ const UserProfile = () => {
       },
       body: JSON.stringify({
         name: name ? name : user.name,
-        email: email ? email : user.email
+        email: email ? email : user.email,
       }),
-    }).then((res) => res.json())
-      .then((res) => {
-      console.log(res)
     })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res.fail === false) {
+          localStorage.clear();
+          localStorage.setItem("user", JSON.stringify(res.user));
+          success();
+        } else {
+          fail();
+        }
+      });
   }
 
   const onFinish = async () => {
-    email.toLowerCase()
-    await postData()
+    email.toLowerCase();
+    await postData();
+  };
+
+  const onFinishFail = async () => {
+    await fail();
   };
 
   return (
@@ -55,6 +75,7 @@ const UserProfile = () => {
           initialValues={{ remember: false }}
           layout="vertical"
           onFinish={onFinish}
+          onFinishFailed={onFinishFail}
         >
           <Form.Item label="Name">
             <Input
@@ -63,7 +84,10 @@ const UserProfile = () => {
             />
           </Form.Item>
           <Form.Item label="Email">
-            <Input defaultValue={user.email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              defaultValue={user.email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </Form.Item>
         </Form>
       </div>
@@ -115,7 +139,6 @@ const Version = () => {
 };
 
 const Settings = () => {
-  const { TabPane } = Tabs;
 
   const history = useHistory();
 
@@ -147,13 +170,9 @@ const Settings = () => {
     <div>
       <Version />
       <div className="site-layout-content">
-        <Tabs defaultActiveKey="1" centered={true}>
-          <TabPane tab="Profile" key="1">
-            <UserProfile />
-            <Divider />
-            <ResetPass />
-          </TabPane>
-        </Tabs>
+        <UserProfile />
+        <Divider />
+        <ResetPass />
       </div>
     </div>
   );

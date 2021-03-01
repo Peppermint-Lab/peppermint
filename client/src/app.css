@@ -463,6 +463,9 @@ body {
 .site-layout-content {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .admin-dash-row {
@@ -518,10 +521,10 @@ body {
 }
 
 .version {
-  position: absolute;
+  position: fixed;
   font-size: 12px;
   font-weight: bold;
-  margin-left: 98%;
+  margin-left: 97%;
 }
 
 .ticket-view-info {
