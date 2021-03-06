@@ -23,11 +23,12 @@ exports.Signup = async (req, res) => {
           name,
         });
         user.save();
-        res.json({ message: "User saved successfully", user });
+        res.status(200).json({ message: "User saved successfully", user, failed: false });
       });
     });
   } catch (error) {
     console.log(error);
+    res.json({ message: error, failed: true });
   }
 };
 
@@ -99,9 +100,10 @@ exports.resetPasswordAdmin = async (req, res) => {
         });
       }
     );
+    res.status(200).json({ message: "Password reset successfully", failed: false })
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ message: error, failed: true })
   }
 };
 
@@ -116,43 +118,39 @@ exports.resetPasswordUser = async (req, res) => {
         bcrypt.hash(password, 10).then((hashedpassword) => {
           user.password = hashedpassword;
           user.save();
-          res.status(201).json({ message: "password updated success" });
-          console.log("Users Password updated");
+          res.status(201).json({ message: "password updated success", failed: true });
         });
       }
     );
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ message: error, failed: true });
   }
 };
 
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find();
-    res.status(200).json({ users });
+    res.status(200).json({ users, failed: false });
   } catch (error) {
     console.log(error);
+    res.status(422).json({ users, failed: true });
   }
 };
 
 exports.getUserById = async (req, res) => {
   console.log(req.body);
   try {
-    const user = await User.find({ _id: req.body._id }).then((user) => {
-      res.json({ user });
+    await User.find({ _id: req.body._id }).then((user) => {
+      res.json({ user, failed: false });
     });
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "User not found" });
+    res.status(404).json({ message: "User not found", error, failed: true });
   }
 };
 
 exports.changeRole = async (req, res) => {
-  console.log(req.body.role);
-  const role = req.body.role;
-  const user = req.body.user;
-
   try {
     await User.findByIdAndUpdate(
       { _id: mongoose.Types.ObjectId(user) },
@@ -164,18 +162,14 @@ exports.changeRole = async (req, res) => {
       }
     ).exec();
     console.log("Updated record");
-    return res.status(200).json({ message: "User Role Updated" });
+    return res.status(200).json({ message: "User Role Updated", failed: false });
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ message: error, failed: true });
   }
 };
 
 exports.edit = async (req, res) => {
-  const n = req.body.name;
-  const e = req.body.email.toLowerCase();
-  const r = req.body.role;
-
   try {
     await User.findByIdAndUpdate(
       { _id: mongoose.Types.ObjectId(req.body.id) },
@@ -184,10 +178,10 @@ exports.edit = async (req, res) => {
       },
       { new: true }
     ).exec();
-    res.status(200).json({ message: "User updated", fail: false})
+    return res.status(200).json({ message: "User Updated", failed: false });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: error, fail: false });
+    return res.status(500).json({ message: error, failed: true });
   }
 };
 
@@ -213,7 +207,6 @@ exports.profile = async (req, res) => {
 }
 
 exports.deleteUser = async (req, res) => {
-  console.log("Delete User");
   try {
     const user = await new mongoose.Types.ObjectId(req.params.id);
     if (!user) {
@@ -223,9 +216,9 @@ exports.deleteUser = async (req, res) => {
       });
     }
     await User.findOneAndDelete({ _id: req.params.id });
-    return res.status(201);
+    return res.status(201).json({ message: "User deleted", fail: false });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: error, failed: true });
   }
 };
