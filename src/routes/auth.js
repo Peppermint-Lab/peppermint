@@ -29,7 +29,7 @@ router.route("/getAllUsers").get(isAuth, isAdmin, getUsers);
 
 router.route("/resetPassword/:id").post(isAuth, isAdmin, resetPasswordAdmin);
 
-router.route("/resetPassword/user").post(isAuth, resetPasswordUser);
+router.route("/resetPassword/user/:id").post(isAuth, resetPasswordUser);
 
 router.route('/getById').post(isAuth, isAdmin, getUserById);
 

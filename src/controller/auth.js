@@ -91,16 +91,16 @@ exports.resetPasswordAdmin = async (req, res) => {
       (user) => {
         if (!user) {
           return res.status(422).json({ error: "User doesnt exist" });
+        } else {
+          bcrypt.hash(password, 10).then((hashedpassword) => {
+            user.password = hashedpassword;
+            user.save();
+          });
+          res.status(200).json({ message: "Password reset successfully", failed: false })
         }
-        bcrypt.hash(password, 10).then((hashedpassword) => {
-          user.password = hashedpassword;
-          user.save();
-          res.status(201).json({ message: "password updated success" });
-          console.log("Users Password updated");
-        });
       }
     );
-    res.status(200).json({ message: "Password reset successfully", failed: false })
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error, failed: true })
@@ -109,17 +109,19 @@ exports.resetPasswordAdmin = async (req, res) => {
 
 exports.resetPasswordUser = async (req, res) => {
   const { password } = req.body;
+  console.log(password, req.params.id)
   try {
-    await User.findOne({ _id: mongoose.Types.ObjectId(req.user._id) }).then(
+    await User.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }).then(
       (user) => {
         if (!user) {
           return res.status(422).json({ error: "User doesnt exist" });
+        } else {
+          bcrypt.hash(password, 10).then((hashedpassword) => {
+            user.password = hashedpassword;
+            user.save();
+          });
+          res.status(201).json({ message: "password updated success", failed: false });
         }
-        bcrypt.hash(password, 10).then((hashedpassword) => {
-          user.password = hashedpassword;
-          user.save();
-          res.status(201).json({ message: "password updated success", failed: true });
-        });
       }
     );
   } catch (error) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Divider, Input, Tabs, Form, message } from "antd";
+import { Button, Divider, Input, Form, message } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
 import { useHistory } from "react-router-dom";
@@ -32,7 +32,6 @@ const UserProfile = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (res.fail === false) {
           localStorage.clear();
           localStorage.setItem("user", JSON.stringify(res.user));
@@ -97,20 +96,34 @@ const UserProfile = () => {
 
 const ResetPass = () => {
   const [password, setPassword] = useState("");
-  const history = useHistory();
+
+  const success = () => {
+    message.success("Password updated");
+  };
+
+  const fail = (f) => {
+    message.error(`${f}`);
+  };
 
   const resetPassword = async () => {
-    await fetch(`/api/v1/auth/resetPassword/user`, {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const id = user._id;
+    await fetch(`/api/v1/auth/resetPassword/user/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
         password,
       }),
-    }).then((res) => res.json);
-    history.push("/");
+    }).then((res) => res.json())
+      .then((res) => {
+        if (res.failed === false) {
+          success();
+        } else {
+          fail(res.message);
+        }
+      });
   };
 
   return (
@@ -139,7 +152,6 @@ const Version = () => {
 };
 
 const Settings = () => {
-
   const history = useHistory();
 
   useEffect(() => {
