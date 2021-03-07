@@ -1,7 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
 import axios from "axios";
-// import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
@@ -12,7 +11,7 @@ const initialState = {
   newsletters: [],
   clients: [],
   user: [],
-  users: []
+  users: [],
 };
 
 // Create context
@@ -188,10 +187,10 @@ export const GlobalProvider = ({ children }) => {
           issue,
           priority,
         }),
-      }).then((res) => res.json())
+      }).then((res) => res.json());
       dispatch({ type: "ADD_TICKET", payload: res.ticket });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -334,18 +333,18 @@ export const GlobalProvider = ({ children }) => {
       const res = await fetch(`/api/v1/client/allclients`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-      }).then((res) => res.json())
-        dispatch({ type: "GET_CLIENTS", payload: res.client });
+      }).then((res) => res.json());
+      dispatch({ type: "GET_CLIENTS", payload: res.client });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async function createClient(name, contactName, number, email) {
     try {
-     const res = await fetch(`/api/v1/client/create`, {
+      const res = await fetch(`/api/v1/client/create`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -359,13 +358,13 @@ export const GlobalProvider = ({ children }) => {
       }).then((res) => res.json());
       dispatch({ type: "CREATE_CLIENT", payload: res.client });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async function createUser(name, email, password) {
     try {
-      const res = await fetch(`/api/v1/auth/Signup`, {
+      await fetch(`/api/v1/auth/Signup`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -376,9 +375,8 @@ export const GlobalProvider = ({ children }) => {
           password,
         }),
       }).then((res) => res.json());
-      dispatch({ type: "CREATE_USER", payload: res.user });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -389,11 +387,10 @@ export const GlobalProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-        .then((res) => res.json())
-        dispatch({ type: "GET_USERS", payload: res.users });
+      }).then((res) => res.json());
+      dispatch({ type: "GET_USERS", payload: res.users });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -433,7 +430,7 @@ export const GlobalProvider = ({ children }) => {
         getClients,
         createClient,
         createUser,
-        getUsers
+        getUsers,
       }}
     >
       {children}

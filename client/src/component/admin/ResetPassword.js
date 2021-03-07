@@ -28,7 +28,6 @@ const ResetPassword = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (res.failed === false) {
           success();
         } else {
