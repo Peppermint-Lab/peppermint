@@ -36,6 +36,8 @@ const EditUserInfo = () => {
     // eslint-disable-next-line
   }, []);
 
+  console.log(users)
+
   const deleteClient = async (client) => {
     const id = client._id;
     console.log(id);

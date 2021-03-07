@@ -11,7 +11,8 @@ const initialState = {
   openTicket: [],
   newsletters: [],
   clients: [],
-  user: []
+  user: [],
+  users: []
 };
 
 // Create context
@@ -405,6 +406,7 @@ export const GlobalProvider = ({ children }) => {
         notes: state.notes,
         auth: state.auth,
         user: state.user,
+        users: state.users,
         unissuedTicket: state.unissuedTicket,
         openTicket: state.openTicket,
         newsletters: state.newsletters,
