@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./app.css";
 import "rsuite/dist/styles/rsuite-default.css";
 import "antd/dist/antd.css";
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
+import io from 'socket.io-client';
 
 import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
@@ -73,6 +74,15 @@ const Routing = () => {
 
 
 const App = () => {
+
+  useEffect(() => {
+    async function soc() {
+      const socket = await io.connect("/")
+      socket.on('visitor enters');
+      socket.on('visitor exits');
+    }
+    soc()
+  }, [])
 
   return <Routing />;
 };

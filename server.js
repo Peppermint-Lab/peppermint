@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
+const socket = require('socket.io');
 
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
@@ -48,8 +49,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   helmet({
     contentSecurityPolicy: false,
-  }), 
-cookieParser()
+  }),
+  cookieParser()
 );
 
 // Express API Routes
@@ -76,9 +77,27 @@ app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "build/") });
 });
 
-app.listen(
+const server = app.listen(
   PORT,
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.green.bold
   )
 );
+
+// Set up socket.io
+const io = socket(server);
+let online = 0;
+
+io.on("connection", (socket) => {
+  online++;
+  console.log(`Socket ${socket.id} connected.`)
+  console.log(`Online: ${online}`)
+  io.emit("visitor enters", online);
+
+  socket.on("disconnect", () => {
+    online--;
+    console.log(`Socket ${socket.id} disconnected.`)
+    console.log(`Online: ${online}`)
+    io.emit("visitor exits", online);
+  });
+});

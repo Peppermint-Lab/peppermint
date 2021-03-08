@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Card, Statistic } from "antd";
 import { useHistory } from "react-router-dom";
+import io from 'socket.io-client';
 
 const TicketStats = () => {
   const [unClaimed, setUnClaimed] = useState();
   const [open, setOpen] = useState();
   const [complete, setComplete] = useState();
+  const [online, setOnline ] = useState(0);
 
   const history = useHistory();
+
+  useEffect(() => {
+    async function soc() {
+      const socket = await io.connect("/")
+      socket.on('visitor enters', data => setOnline({ data }));
+      socket.on('visitor exits', data => setOnline({ data }));
+    }
+    soc()
+  }, [])
   
   useEffect(() => {
     async function auth() {
@@ -96,6 +107,11 @@ const TicketStats = () => {
       <div className="stats-card">
         <Card>
           <Statistic title="Unclaimed Tickets" value={unClaimed} />
+        </Card>
+      </div>
+      <div className="stats-card">
+        <Card>
+          <Statistic title="Online Users" value={online.data} />
         </Card>
       </div>
     </div>
