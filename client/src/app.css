@@ -441,7 +441,7 @@ body {
 }
 
 .admin-main {
-  width: 89.5%;
+  width: 88.5%;
   float: right;
 }
 
@@ -471,6 +471,8 @@ body {
 .admin-dash-row {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center
 }
 
 .newlog-cont {
@@ -531,4 +533,9 @@ body {
   display: flex;
   flex-direction: row;
   gap: 10px;
+}
+
+.api-log {
+  display: flex;
+  width: 35%;
 }
