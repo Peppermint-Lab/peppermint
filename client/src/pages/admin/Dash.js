@@ -127,7 +127,12 @@ const ApiLogger = () => {
       const socket = await io.connect("/")
       socket.on('file', data => setText({ data }));
     }
+    async function rev() {
+      const reverse = await text.reverse()
+      setText({ reverse })
+    }
     soc()
+    rev()
   }, [])
 
   return (
@@ -139,7 +144,7 @@ const ApiLogger = () => {
       pagination={{
         defaultPageSize: 15,
         showSizeChanger: true,
-        pageSizeOptions: ["20", "30", "40"],
+        pageSizeOptions: ["15", "30", "40"],
       }}
       renderItem={item => <List.Item>{item}</List.Item>}
     />
