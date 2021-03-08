@@ -43,9 +43,7 @@ const OpenTicket = () => {
       width: 100,
       render: (record) => (
         <Space size="middle">
-          <Button size="small">
             <ViewTicket ticket={record} />
-          </Button>
         </Space>
       ),
     },
