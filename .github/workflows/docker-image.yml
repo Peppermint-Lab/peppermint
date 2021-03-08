@@ -2,7 +2,7 @@ name: Peppermint
 
 on:
   push:
-    branches: [ Version-0.1.6 ]
+    branches: [ master ]
 
 jobs:
   build:
