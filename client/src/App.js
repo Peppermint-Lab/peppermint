@@ -9,7 +9,6 @@ import Home from "./pages/Home";
 import Ticket from "./pages/Ticket";
 import Navigation from "./component/Navigation";
 import Login from "./pages/auth/Login";
-// import Monitor from "./pages/Monitor";
 import Dash from './pages/admin/Dash';
 import SideNav from './component/admin/SideNav'
 import Analytics from './pages/admin/Analytics'
