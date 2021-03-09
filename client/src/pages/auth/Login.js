@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Form, Input, Button, Image, notification } from "antd";
+import { Form, Input, Button, Image, notification, Spin } from "antd";
 import {
   UserOutlined,
   LockOutlined,
@@ -17,6 +17,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [toggle, setToggle] = useState(false)
 
   const errorNotification = async () => {
     const args = await {
@@ -41,10 +42,12 @@ const Login = () => {
       })
         .then((res) => res.json())
         .then(async (data) => {
-          console.log(data)
           if (!data.error && data.auth === true) {
             localStorage.setItem("user", JSON.stringify(data.user));
-            history.push('/')
+            setToggle(true)
+            setTimeout(() => {
+              history.push('/')
+            }, 1000)
           } else {
             setError(data.error)
             setLoading(false)
@@ -58,6 +61,7 @@ const Login = () => {
 
   return (
     <div>
+      <Spin spinning={toggle}>
       <Form
         style={{ position: "absolute" }}
         name="normal_login"
@@ -121,6 +125,7 @@ const Login = () => {
           </Button>
         </Form.Item>
       </Form>
+      </Spin>
     </div>
   );
 };

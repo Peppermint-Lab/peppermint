@@ -159,6 +159,9 @@ body {
   .drawer-text-right {
     margin-left: 250px;
   }
+  .login-container {
+    margin-right: 15% !important;
+  }
 }
 
 @media only screen and (min-width: 1025px) and (max-width: 1190px) {
@@ -182,6 +185,9 @@ body {
   .drawer-text-right {
     margin-left: 250px;
   }
+  .login-container {
+    margin-right: 15% !important;
+  }
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1440px) {
@@ -203,6 +209,9 @@ body {
   }
   .ticket-logs Button {
     margin-right: 30px !important;
+  }
+  .login-container {
+    margin-right: 15% !important;
   }
 }
 
@@ -230,6 +239,9 @@ body {
   .ticket-logs Button {
     margin-right: 15px;
   }
+  .login-container {
+    margin-right: 15% !important;
+  }
 }
 
 .drawer-text-right {
@@ -253,12 +265,13 @@ body {
 }
 
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin-right: 15%;
-  margin-top: -10%;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%; 
+  margin-left: -150px;
+  margin-top: -150px;
 }
 
 .monitor-create {
