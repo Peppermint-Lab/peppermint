@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 const TicketSchema = mongoose.model("TicketSchema");
-
+const User = mongoose.model("InternalUser");
 
 exports.countUnissuedTickets = async (req, res) => {
-  // console.log("Data api HIT")
   await TicketSchema.count({ status: "unissued" })
     .then((result) => {
       res.json({ result });
@@ -14,7 +13,6 @@ exports.countUnissuedTickets = async (req, res) => {
 };
 
 exports.countOpenedTickets = async (req, res) => {
-  // console.log("Data api HIT")
   await TicketSchema.count({ status: "issued", assignedto: req.user._id })
     .then((result) => {
       res.json({ result });
@@ -25,7 +23,6 @@ exports.countOpenedTickets = async (req, res) => {
 };
 
 exports.countCompletedTickets = async (req, res) => {
-  // console.log("Data api HIT")
   await TicketSchema.count({ status: "completed", assignedto: req.user._id })
     .then((result) => {
       res.json({ result });
@@ -36,8 +33,7 @@ exports.countCompletedTickets = async (req, res) => {
 };
 
 exports.countAllOpenedTickets = async (req, res) => {
-  // console.log("Data api HIT")
-  await TicketSchema.count({ status: "issued"})
+  await TicketSchema.count({ status: "issued" })
     .then((result) => {
       res.json({ result });
     })
@@ -47,8 +43,7 @@ exports.countAllOpenedTickets = async (req, res) => {
 };
 
 exports.countAllCompletedTickets = async (req, res) => {
-  // console.log("Data api HIT")
-  await TicketSchema.count({ status: "completed"})
+  await TicketSchema.count({ status: "completed" })
     .then((result) => {
       res.json({ result });
     })

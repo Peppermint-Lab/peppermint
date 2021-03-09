@@ -106,7 +106,7 @@ const TicketStats = () => {
       </div>
       <div className="stats-card">
         <Card>
-          <Statistic title="Unclaimed Tickets" value={unClaimed} />
+          <Statistic title="Unissued Tickets" value={unClaimed} />
         </Card>
       </div>
       <div className="stats-card">
@@ -120,19 +120,14 @@ const TicketStats = () => {
 
 const ApiLogger = () => {
 
-  const [text, setText ] = useState([]);
+  const [text, setText ] = useState([].reverse());
 
   useEffect(() => {
     async function soc() {
       const socket = await io.connect("/")
       socket.on('file', data => setText({ data }));
     }
-    async function rev() {
-      const reverse = await text.reverse()
-      setText({ reverse })
-    }
     soc()
-    rev()
   }, [])
 
   return (
@@ -152,11 +147,23 @@ const ApiLogger = () => {
   )
 }
 
+const UserStats = () => {
+
+
+
+  return (
+    <div>
+
+    </div>
+  )
+}
+
 const Dash = () => {
   return (
     <div>
       <TicketStats />
       <ApiLogger />
+      <UserStats />
     </div>
   );
 };
