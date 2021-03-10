@@ -14,7 +14,6 @@ const CreateUser = () => {
   const { createUser } = useContext(GlobalContext);
 
   const onCreate = async (values) => {
-    console.log("Received values of form: ", values);
     setVisible(false);
     await createUser(name, email, password);
   };

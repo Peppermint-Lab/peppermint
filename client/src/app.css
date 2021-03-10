@@ -72,7 +72,17 @@ body {
     display: flex;
     flex-direction: column !important;
     width: 100% !important;
-
+  }
+  .version {
+    display: none !important;
+  }
+  .admin-dash {
+    display: flex;
+    flex-direction: column
+  }
+  .api-log {
+    width: 95% !important;
+    margin-left: 10px !important;
   }
 }
 
@@ -112,6 +122,9 @@ body {
   .drawer-text-right {
     margin-left: 250px;
   }
+  .version {
+    margin-left: 10px !important;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 959px) {
@@ -136,6 +149,9 @@ body {
   .drawer-text-right {
     margin-left: 250px;
   }
+  .version {
+    margin-left: 10px !important;
+  }
 }
 
 @media only screen and (min-width: 960px) and (max-width: 1024px) {
@@ -158,6 +174,9 @@ body {
   }
   .drawer-text-right {
     margin-left: 250px;
+  }
+  .login-container {
+    margin-right: 15% !important;
   }
 }
 
@@ -182,6 +201,12 @@ body {
   .drawer-text-right {
     margin-left: 250px;
   }
+  .login-container {
+    margin-right: 15% !important;
+  }
+  .version {
+    margin-left: 10px !important;
+  }
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1440px) {
@@ -203,6 +228,9 @@ body {
   }
   .ticket-logs Button {
     margin-right: 30px !important;
+  }
+  .login-container {
+    margin-right: 15% !important;
   }
 }
 
@@ -230,6 +258,9 @@ body {
   .ticket-logs Button {
     margin-right: 15px;
   }
+  .login-container {
+    margin-right: 15% !important;
+  }
 }
 
 .drawer-text-right {
@@ -253,12 +284,13 @@ body {
 }
 
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin-right: 15%;
-  margin-top: -10%;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%; 
+  margin-left: -150px;
+  margin-top: -150px;
 }
 
 .monitor-create {
@@ -441,7 +473,7 @@ body {
 }
 
 .admin-main {
-  width: 89.5%;
+  width: 88.5%;
   float: right;
 }
 
@@ -463,11 +495,16 @@ body {
 .site-layout-content {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .admin-dash-row {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center
 }
 
 .newlog-cont {
@@ -518,14 +555,19 @@ body {
 }
 
 .version {
-  float: right;
+  position: fixed;
   font-size: 12px;
   font-weight: bold;
-  margin-right: 5px
+  margin-left: 96%;
 }
 
 .ticket-view-info {
   display: flex;
   flex-direction: row;
   gap: 10px;
+}
+
+.api-log {
+  display: flex;
+  width: 35%;
 }

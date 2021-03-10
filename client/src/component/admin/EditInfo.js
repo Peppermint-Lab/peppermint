@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Input, Space, Radio, Row } from "antd";
 
-/*
-Show info of selected user
-Edit Button or cancel - If edit is click show Update or cancel 
-
-PostData fetch function which sends all the data. 
-*/
-
 const EditInfo = (props) => {
   // eslint-disable-next-line
   const [users, setUsers] = useState(props.user);
@@ -35,6 +28,7 @@ const EditInfo = (props) => {
   const onCreate = async () => {
     setVisible(false);
     email.toString(email);
+    email.toLowerCase()
     await postData();
   };
 

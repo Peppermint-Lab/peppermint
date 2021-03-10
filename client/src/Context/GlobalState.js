@@ -1,7 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
 import axios from "axios";
-// import { useHistory } from "react-router-dom";
 
 // Initial State
 const initialState = {
@@ -11,7 +10,8 @@ const initialState = {
   openTicket: [],
   newsletters: [],
   clients: [],
-  users: []
+  user: [],
+  users: [],
 };
 
 // Create context
@@ -161,9 +161,9 @@ export const GlobalProvider = ({ children }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data)
           if (!data.error) {
             localStorage.setItem("user", JSON.stringify(data.user));
+            dispatch({ type: "USER_LOGGED", payload: data.user });
           } else {
             console.log(data.error);
           }
@@ -187,10 +187,10 @@ export const GlobalProvider = ({ children }) => {
           issue,
           priority,
         }),
-      }).then((res) => res.json())
+      }).then((res) => res.json());
       dispatch({ type: "ADD_TICKET", payload: res.ticket });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -333,18 +333,18 @@ export const GlobalProvider = ({ children }) => {
       const res = await fetch(`/api/v1/client/allclients`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-      }).then((res) => res.json())
-        dispatch({ type: "GET_CLIENTS", payload: res.client });
+      }).then((res) => res.json());
+      dispatch({ type: "GET_CLIENTS", payload: res.client });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async function createClient(name, contactName, number, email) {
     try {
-     const res = await fetch(`/api/v1/client/create`, {
+      const res = await fetch(`/api/v1/client/create`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -358,13 +358,13 @@ export const GlobalProvider = ({ children }) => {
       }).then((res) => res.json());
       dispatch({ type: "CREATE_CLIENT", payload: res.client });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async function createUser(name, email, password) {
     try {
-      const res = await fetch(`/api/v1/auth/Signup`, {
+      await fetch(`/api/v1/auth/Signup`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -375,9 +375,8 @@ export const GlobalProvider = ({ children }) => {
           password,
         }),
       }).then((res) => res.json());
-      dispatch({ type: "CREATE_USER", payload: res.user });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -388,11 +387,10 @@ export const GlobalProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-        .then((res) => res.json())
-        dispatch({ type: "GET_USERS", payload: res.users });
+      }).then((res) => res.json());
+      dispatch({ type: "GET_USERS", payload: res.users });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -405,6 +403,7 @@ export const GlobalProvider = ({ children }) => {
         notes: state.notes,
         auth: state.auth,
         user: state.user,
+        users: state.users,
         unissuedTicket: state.unissuedTicket,
         openTicket: state.openTicket,
         newsletters: state.newsletters,
@@ -431,7 +430,7 @@ export const GlobalProvider = ({ children }) => {
         getClients,
         createClient,
         createUser,
-        getUsers
+        getUsers,
       }}
     >
       {children}

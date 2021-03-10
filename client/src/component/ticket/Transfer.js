@@ -47,6 +47,7 @@ const Transfer = (props) => {
   return (
     <div>
       <Button
+        style={{ width: 144 }}
         key={0}
         onClick={() => {
           setVisible(true);

@@ -10,6 +10,9 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
+const socket = require("socket.io");
+const fs = require("fs");
+const readline = require("readline");
 
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
@@ -45,27 +48,35 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  }), 
-cookieParser()
-);
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(cookieParser());
+
+let accessLogStream = fs.createWriteStream(path.join(__dirname, "api.txt"), {
+  flags: "a",
+});
 
 // Express API Routes
-app.use("/api/v1/auth", limiter, auth);
-app.use("/api/v1/tickets", tickets);
-app.use("/api/v1/data", data);
-app.use("/api/v1/todo", todo);
-app.use("/api/v1/note", note);
-app.use("/api/v1/client", client);
-app.use("/api/v1/newsletter", news);
-app.use("/api/v1/time", times);
-
-// Morgan API Logger
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("combined"));
-}
+app.use(
+  "/api/v1/auth",
+  morgan("tiny", { stream: accessLogStream }),
+  limiter,
+  auth
+);
+app.use(
+  "/api/v1/tickets",
+  morgan("tiny", { stream: accessLogStream }),
+  tickets
+);
+app.use("/api/v1/data", morgan("tiny", { stream: accessLogStream }), data);
+app.use("/api/v1/todo", morgan("tiny", { stream: accessLogStream }), todo);
+app.use("/api/v1/note", morgan("tiny", { stream: accessLogStream }), note);
+app.use("/api/v1/client", morgan("tiny", { stream: accessLogStream }), client);
+app.use(
+  "/api/v1/newsletter",
+  morgan("tiny", { stream: accessLogStream }),
+  news
+);
+app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
 
 // Express web server PORT
 const PORT = process.env.PORT;
@@ -76,9 +87,50 @@ app.get("*", function (req, res) {
   res.sendFile("index.html", { root: path.join(__dirname, "build/") });
 });
 
-app.listen(
+const server = app.listen(
   PORT,
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.green.bold
   )
 );
+
+// Set up socket.io
+const io = socket(server);
+let online = 0;
+
+function convert(file) {
+  return new Promise((resolve, reject) => {
+    const stream = fs.createReadStream(file);
+    // Handle stream error (IE: file not found)
+    stream.on("error", reject);
+
+    const reader = readline.createInterface({
+      input: stream,
+    });
+
+    const array = [];
+
+    reader.on("line", (line) => {
+      array.push(line);
+    });
+
+    reader.on("close", () => resolve(array));
+  });
+}
+
+io.on("connection", (socket) => {
+  online++;
+  console.log(`Socket ${socket.id} connected.`);
+  console.log(`Online: ${online}`);
+  io.emit("visitor enters", online);
+  convert('./api.txt').then((res) => {
+    io.emit("file", res);
+  });
+
+  socket.on("disconnect", () => {
+    online--;
+    console.log(`Socket ${socket.id} disconnected.`);
+    console.log(`Online: ${online}`);
+    io.emit("visitor exits", online);
+  });
+});

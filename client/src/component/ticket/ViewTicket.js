@@ -1,5 +1,15 @@
 import React, { useState, useContext } from "react";
-import { Input, Space, Button, Drawer, Divider, Row, Popconfirm } from "antd";
+import {
+  Input,
+  Space,
+  Button,
+  Drawer,
+  Divider,
+  Row,
+  Popconfirm,
+  Dropdown,
+  Menu,
+} from "antd";
 
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
@@ -19,14 +29,23 @@ const ViewTicket = (props) => {
 
   const { completeTicket } = useContext(GlobalContext);
 
-  const showDrawer = () => {
-    setVisible(true);
-  };
+  function handleMenuClick(e) {}
 
-  const onClose = async () => {
-    setVisible(false);
-    await update();
-  };
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="1">
+        <Transfer ticket={props.ticket} />
+      </Menu.Item>
+      <Menu.Item key="2">
+        <Button onClick={() => completeTicket(props.ticket._id)} style={{ width: 144 }}>
+          Complete
+        </Button>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <AddInfo client={props.ticket} />
+      </Menu.Item>
+    </Menu>
+  );
 
   const update = async () => {
     await fetch(`/api/v1/tickets/update`, {
@@ -46,18 +65,26 @@ const ViewTicket = (props) => {
     }).then((res) => res.json());
   };
 
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = async () => {
+    setVisible(false);
+    await update();
+  };
+
   return (
     <div>
-      <Button
-        type="text"
-        size="small"
+      <Dropdown.Button
+        overlay={menu}
         key={0}
         onClick={() => {
           showDrawer();
         }}
       >
         View Ticket
-      </Button>
+      </Dropdown.Button>
       <Drawer
         className="my-drawer"
         placement="right"
@@ -86,18 +113,18 @@ const ViewTicket = (props) => {
           </Space>
         </Row>
         <div className="ticket-view-info">
-            <TextArea
-              rows={6}
-              defaultValue={props.ticket.issue}
-              placeholder="Issue goes here ..."
-              onChange={(e) => setIssue(e.target.value)}
-            />
-            <TextArea
-              rows={6}
-              defaultValue={props.ticket.note}
-              placeholder="Job notes goes here ..."
-              onChange={(e) => setNote(e.target.value)}
-            />
+          <TextArea
+            rows={6}
+            defaultValue={props.ticket.issue}
+            placeholder="Issue goes here ..."
+            onChange={(e) => setIssue(e.target.value)}
+          />
+          <TextArea
+            rows={6}
+            defaultValue={props.ticket.note}
+            placeholder="Job notes goes here ..."
+            onChange={(e) => setNote(e.target.value)}
+          />
         </div>
         <Divider />
         <div className="ticket-view-contact">

@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Card, Statistic } from "antd";
+import { Card, Statistic, List, Pagination  } from "antd";
 import { useHistory } from "react-router-dom";
+import io from 'socket.io-client';
 
 const TicketStats = () => {
   const [unClaimed, setUnClaimed] = useState();
   const [open, setOpen] = useState();
   const [complete, setComplete] = useState();
+  const [online, setOnline ] = useState(0);
 
   const history = useHistory();
+
+  useEffect(() => {
+    async function soc() {
+      const socket = await io.connect("/")
+      socket.on('visitor enters', data => setOnline({ data }));
+      socket.on('visitor exits', data => setOnline({ data }));
+    }
+    soc()
+  }, [])
   
   useEffect(() => {
     async function auth() {
@@ -95,17 +106,64 @@ const TicketStats = () => {
       </div>
       <div className="stats-card">
         <Card>
-          <Statistic title="Unclaimed Tickets" value={unClaimed} />
+          <Statistic title="Unissued Tickets" value={unClaimed} />
+        </Card>
+      </div>
+      <div className="stats-card">
+        <Card>
+          <Statistic title="Online Users" value={online.data} />
         </Card>
       </div>
     </div>
   );
 };
 
-const Dash = () => {
+const ApiLogger = () => {
+
+  const [text, setText ] = useState([].reverse());
+
+  useEffect(() => {
+    async function soc() {
+      const socket = await io.connect("/")
+      socket.on('file', data => setText({ data }));
+    }
+    soc()
+  }, [])
+
+  return (
+    <div className="api-log">
+      <List
+      size="small"
+      bordered
+      dataSource={text.data}
+      pagination={{
+        defaultPageSize: 15,
+        showSizeChanger: true,
+        pageSizeOptions: ["15", "30", "40"],
+      }}
+      renderItem={item => <List.Item>{item}</List.Item>}
+    />
+    </div>
+  )
+}
+
+const UserStats = () => {
+
+
+
   return (
     <div>
+
+    </div>
+  )
+}
+
+const Dash = () => {
+  return (
+    <div className="admin-dash">
       <TicketStats />
+      <ApiLogger />
+      <UserStats />
     </div>
   );
 };
