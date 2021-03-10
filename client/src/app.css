@@ -72,7 +72,17 @@ body {
     display: flex;
     flex-direction: column !important;
     width: 100% !important;
-
+  }
+  .version {
+    display: none !important;
+  }
+  .admin-dash {
+    display: flex;
+    flex-direction: column
+  }
+  .api-log {
+    width: 95% !important;
+    margin-left: 10px !important;
   }
 }
 
@@ -112,6 +122,9 @@ body {
   .drawer-text-right {
     margin-left: 250px;
   }
+  .version {
+    margin-left: 10px !important;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 959px) {
@@ -135,6 +148,9 @@ body {
   }
   .drawer-text-right {
     margin-left: 250px;
+  }
+  .version {
+    margin-left: 10px !important;
   }
 }
 
@@ -187,6 +203,9 @@ body {
   }
   .login-container {
     margin-right: 15% !important;
+  }
+  .version {
+    margin-left: 10px !important;
   }
 }
 

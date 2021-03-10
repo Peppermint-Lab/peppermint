@@ -160,7 +160,7 @@ const UserStats = () => {
 
 const Dash = () => {
   return (
-    <div>
+    <div className="admin-dash">
       <TicketStats />
       <ApiLogger />
       <UserStats />
