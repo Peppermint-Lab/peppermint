@@ -82,11 +82,11 @@ There is currently a trello roadmap available which is updated daily - https://t
 
 ## Documentation
 
-We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://pmint.dev/docs/gettingStarted">here</a> to be taken directly there.
+We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://docs.pmint.dev/">here</a> to be taken directly there.
 
 ## Installing locally for development
 
-If you're interested in developing for Peppermint, wether that be a bug fix or locally we have a guide on our <a href="https://pmint.dev/docs/contributions/">wiki</a>
+If you're interested in developing for Peppermint, wether that be a bug fix or locally we have a guide on our <a href="https://docs.pmint.dev/contributions/">wiki</a>
 
 ## Notes for ARM devices
 
