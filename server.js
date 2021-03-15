@@ -25,6 +25,7 @@ require("./src/models/notes");
 require("./src/models/client");
 require("./src/models/news");
 require("./src/models/Log");
+require("./src/models/file");
 
 connectDB();
 
@@ -42,6 +43,7 @@ const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
 const times = require("./src/routes/time");
+const uploadRouter = require('./src/routes/uploads');
 
 // Express server libraries
 app.use(cors());
@@ -65,18 +67,15 @@ app.use(
 app.use(
   "/api/v1/tickets",
   morgan("tiny", { stream: accessLogStream }),
-  tickets
+  tickets,
 );
 app.use("/api/v1/data", morgan("tiny", { stream: accessLogStream }), data);
 app.use("/api/v1/todo", morgan("tiny", { stream: accessLogStream }), todo);
 app.use("/api/v1/note", morgan("tiny", { stream: accessLogStream }), note);
 app.use("/api/v1/client", morgan("tiny", { stream: accessLogStream }), client);
-app.use(
-  "/api/v1/newsletter",
-  morgan("tiny", { stream: accessLogStream }),
-  news
-);
+app.use("/api/v1/newsletter", morgan("tiny", { stream: accessLogStream }), news);
 app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
+app.use('/api/v1/uploads', uploadRouter(upload));
 
 // Express web server PORT
 const PORT = process.env.PORT;
@@ -123,7 +122,7 @@ io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected.`);
   console.log(`Online: ${online}`);
   io.emit("visitor enters", online);
-  convert('./api.txt').then((res) => {
+  convert("./api.txt").then((res) => {
     io.emit("file", res);
   });
 
@@ -134,3 +133,25 @@ io.on("connection", (socket) => {
     io.emit("visitor exits", online);
   });
 });
+
+// create storage engine
+const storage = new GridFsStorage({
+  url,
+  file: (req, file) => {
+      return new Promise((resolve, reject) => {
+          crypto.randomBytes(16, (err, buf) => {
+              if (err) {
+                  return reject(err);
+              }
+              const filename = file.originalname;
+              const fileInfo = {
+                  filename: filename,
+                  bucketName: 'uploads'
+              };
+              resolve(fileInfo);
+          });
+      });
+  }
+});
+
+const upload = multer({ storage });

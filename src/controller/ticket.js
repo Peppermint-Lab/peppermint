@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
+const multer = require("multer");
+const crypto = require("crypto");
+const GridFsStorage = require("multer-gridfs-storage");
+const path = require('path');
+
+
+const url = process.env.MONGO_URI_DEV;
+
 const TicketSchema = mongoose.model("TicketSchema");
+const File = mongoose.model("file");
 
 // Get Open Tickets
 exports.openTickets = async (req, res) => {
@@ -180,3 +189,4 @@ exports.updateJob = async (req, res) => {
     return res.status(500);
   }
 };
+

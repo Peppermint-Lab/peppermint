@@ -10,12 +10,15 @@ import {
   Dropdown,
   Menu,
 } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
 import TicketTime from "../time/TicketTime";
 
 import { GlobalContext } from "../../Context/GlobalState";
+
+import axios from 'axios'
 
 const ViewTicket = (props) => {
   const [visible, setVisible] = useState(false);
@@ -24,12 +27,23 @@ const ViewTicket = (props) => {
   const [name, setName] = useState(props.ticket.name);
   const [email, setEmail] = useState(props.ticket.email);
   const [number, setNumber] = useState(props.ticket.number);
-
+  const [file, setFile ] = useState([])
   const { TextArea } = Input;
 
   const { completeTicket } = useContext(GlobalContext);
 
   function handleMenuClick(e) {}
+
+  const postData = async () => {
+    const id = props.ticket._id
+    const data = new FormData()
+    data.append('file', file);
+    data.append('id', id);
+
+   await axios.post(`/api/v1/tickets/upload`,
+      data, { // receive two parameter endpoint url ,form data 
+   });
+ }
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -37,12 +51,19 @@ const ViewTicket = (props) => {
         <Transfer ticket={props.ticket} />
       </Menu.Item>
       <Menu.Item key="2">
-        <Button onClick={() => completeTicket(props.ticket._id)} style={{ width: 144 }}>
+        <Button
+          onClick={() => completeTicket(props.ticket._id)}
+          style={{ width: 144 }}
+        >
           Complete
         </Button>
       </Menu.Item>
       <Menu.Item key="3">
         <AddInfo client={props.ticket} />
+      </Menu.Item>
+      <Menu.Item key="4">
+      <input type = "file" onChange={(e)=>setFile(e.target.files[0])}/>
+      <Button onClick={() => postData(props.ticket._id)}><UploadOutlined /></Button>
       </Menu.Item>
     </Menu>
   );
