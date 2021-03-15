@@ -17,6 +17,7 @@ import axios from "axios";
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
 import TicketTime from "../time/TicketTime";
+import Files from './Files'
 
 import { GlobalContext } from "../../Context/GlobalState";
 
@@ -149,8 +150,11 @@ const ViewTicket = (props) => {
           />
         </div>
         <Divider />
+        <h5>Files Attached to ticket</h5>
+        <Files ticket={props.ticket} />
+        <Divider />
         <div className="ticket-view-contact">
-          <h4>Contact Details</h4>
+          <h5>Contact Details</h5>
           <h5>
             Contact Name:{" "}
             <Input
