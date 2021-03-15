@@ -14,6 +14,11 @@ const socket = require("socket.io");
 const fs = require("fs");
 const readline = require("readline");
 
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const crypto = require('crypto');
+// const methodOverride = require('method-override');
+
 const connectDB = require("./config/DB");
 dotenv.config({ path: "./config/.env" });
 
@@ -28,6 +33,29 @@ require("./src/models/Log");
 require("./src/models/file");
 
 connectDB();
+const url = process.env.MONGO_URI_DEV;
+
+// create storage engine
+const storage = new GridFsStorage({
+  url,
+  file: (req, file) => {
+      return new Promise((resolve, reject) => {
+          crypto.randomBytes(16, (err, buf) => {
+              if (err) {
+                  return reject(err);
+              }
+              const filename = file.originalname;
+              const fileInfo = {
+                  filename: filename,
+                  bucketName: 'uploads'
+              };
+              resolve(fileInfo);
+          });
+      });
+  }
+});
+
+const upload = multer({ storage });
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -133,25 +161,3 @@ io.on("connection", (socket) => {
     io.emit("visitor exits", online);
   });
 });
-
-// create storage engine
-const storage = new GridFsStorage({
-  url,
-  file: (req, file) => {
-      return new Promise((resolve, reject) => {
-          crypto.randomBytes(16, (err, buf) => {
-              if (err) {
-                  return reject(err);
-              }
-              const filename = file.originalname;
-              const fileInfo = {
-                  filename: filename,
-                  bucketName: 'uploads'
-              };
-              resolve(fileInfo);
-          });
-      });
-  }
-});
-
-const upload = multer({ storage });

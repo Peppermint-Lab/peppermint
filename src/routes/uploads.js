@@ -1,10 +1,11 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const uploadRouter = express.Router();
+
 const url = process.env.MONGO_URI_DEV;
 
 const TicketSchema = mongoose.model("TicketSchema");
 const File = mongoose.model("file");
-
-const express = require("express");
-const mongoose = require("mongoose");
 
 module.exports = (upload) => {
   const connect = mongoose.createConnection(url, {
@@ -51,4 +52,6 @@ module.exports = (upload) => {
       });
     } catch (error) {}
   });
+
+  return uploadRouter;
 };
