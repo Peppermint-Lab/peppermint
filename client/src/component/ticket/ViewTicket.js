@@ -12,13 +12,13 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
+import axios from "axios";
+
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
 import TicketTime from "../time/TicketTime";
 
 import { GlobalContext } from "../../Context/GlobalState";
-
-import axios from 'axios'
 
 const ViewTicket = (props) => {
   const [visible, setVisible] = useState(false);
@@ -27,23 +27,23 @@ const ViewTicket = (props) => {
   const [name, setName] = useState(props.ticket.name);
   const [email, setEmail] = useState(props.ticket.email);
   const [number, setNumber] = useState(props.ticket.number);
-  const [file, setFile ] = useState([])
+  const [file, setFile] = useState([]);
   const { TextArea } = Input;
+
+  console.log(file);
 
   const { completeTicket } = useContext(GlobalContext);
 
   function handleMenuClick(e) {}
 
   const postData = async () => {
-    const id = props.ticket._id
-    const data = new FormData()
-    data.append('file', file);
-    data.append('id', id);
+    let data = new FormData();
+    data.append("file", file);
+    data.append("filename", file.name);
+    data.append("ticket", props.ticket._id);
 
-   await axios.post(`/api/v1/tickets/upload`,
-      data, { // receive two parameter endpoint url ,form data 
-   });
- }
+    await axios.post("/api/v1/uploads", data);
+  };
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -62,8 +62,10 @@ const ViewTicket = (props) => {
         <AddInfo client={props.ticket} />
       </Menu.Item>
       <Menu.Item key="4">
-      <input type = "file" onChange={(e)=>setFile(e.target.files[0])}/>
-      <Button onClick={() => postData(props.ticket._id)}><UploadOutlined /></Button>
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+        <Button onClick={() => postData()}>
+          <UploadOutlined />
+        </Button>
       </Menu.Item>
     </Menu>
   );
@@ -73,7 +75,6 @@ const ViewTicket = (props) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
         id: props.ticket._id,

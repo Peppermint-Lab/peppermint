@@ -39,6 +39,7 @@ const url = process.env.MONGO_URI_DEV;
 const storage = new GridFsStorage({
   url,
   file: (req, file) => {
+    // console.log(file)
       return new Promise((resolve, reject) => {
           crypto.randomBytes(16, (err, buf) => {
               if (err) {
@@ -72,6 +73,7 @@ const client = require("./src/routes/client");
 const news = require("./src/routes/news");
 const times = require("./src/routes/time");
 const uploadRouter = require('./src/routes/uploads');
+
 
 // Express server libraries
 app.use(cors());

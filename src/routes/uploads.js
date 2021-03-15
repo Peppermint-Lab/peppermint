@@ -7,6 +7,10 @@ const url = process.env.MONGO_URI_DEV;
 const TicketSchema = mongoose.model("TicketSchema");
 const File = mongoose.model("file");
 
+const {
+  isAuth,
+} = require("../middleware/authCheck");
+
 module.exports = (upload) => {
   const connect = mongoose.createConnection(url, {
     useNewUrlParser: true,
@@ -22,11 +26,12 @@ module.exports = (upload) => {
     });
   });
 
-  uploadRouter.route("/").post(upload.single("file"), (req, res) => {
-    console.log(req.body, req.file, req.data);
+  uploadRouter.route("/").post(upload.single("file"), isAuth, (req, res) => {
+    console.log(req.body);
+    console.log(req.file)
     try {
       // check for existing files
-      File.findOne({ caption: req.body.filename }).then((file) => {
+      File.findOne({ filename: req.body.filename }).then((file) => {
         console.log(file);
         if (file) {
           return res.status(200).json({
@@ -35,9 +40,10 @@ module.exports = (upload) => {
           });
         }
         let newFile = new File({
-          filename: req.file.filename,
+          filename: req.body.filename,
           user: req.user._id,
-          ticket: req.params.id,
+          ticket: req.body.ticket,
+          fileId: mongoose.Types.ObjectId(req.file.id)
         });
 
         newFile
