@@ -33,7 +33,7 @@ require("./src/models/Log");
 require("./src/models/file");
 
 connectDB();
-const url = process.env.MONGO_URI_DEV;
+const url = process.env.MONGO_URI_DOCKER;
 
 // create storage engine
 const storage = new GridFsStorage({
