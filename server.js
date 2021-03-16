@@ -33,13 +33,12 @@ require("./src/models/Log");
 require("./src/models/file");
 
 connectDB();
-const url = process.env.MONGO_URI_DEV;
+const url = process.env.MONGO_URI_DOCKER;
 
 // create storage engine
 const storage = new GridFsStorage({
   url,
   file: (req, file) => {
-    // console.log(file)
       return new Promise((resolve, reject) => {
           crypto.randomBytes(16, (err, buf) => {
               if (err) {
