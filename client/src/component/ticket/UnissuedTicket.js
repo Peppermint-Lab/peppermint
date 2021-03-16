@@ -44,12 +44,10 @@ const UnissuedTicket = () => {
       width: 100,
       render: (record) => (
         <Space size="middle">
-          <Button size="small" onClick={() => convertTicket(record)}>
+          <Button size="middle" onClick={() => convertTicket(record)}>
             Convert
           </Button>
-          <Button size="small">
             <ViewTicket ticket={record} />
-          </Button>
         </Space>
       ),
     },

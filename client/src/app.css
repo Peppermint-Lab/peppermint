@@ -571,3 +571,8 @@ body {
   display: flex;
   width: 35%;
 }
+
+.Uploader{
+  padding: 5rem;
+  margin: 0 auto;
+}

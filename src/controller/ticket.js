@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const TicketSchema = mongoose.model("TicketSchema");
+const TicketSchema = mongoose.model("TicketSchema");;
 
 // Get Open Tickets
 exports.openTickets = async (req, res) => {
@@ -180,3 +180,4 @@ exports.updateJob = async (req, res) => {
     return res.status(500);
   }
 };
+

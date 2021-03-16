@@ -10,10 +10,14 @@ import {
   Dropdown,
   Menu,
 } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+
+import axios from "axios";
 
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
 import TicketTime from "../time/TicketTime";
+import Files from './Files'
 
 import { GlobalContext } from "../../Context/GlobalState";
 
@@ -24,12 +28,23 @@ const ViewTicket = (props) => {
   const [name, setName] = useState(props.ticket.name);
   const [email, setEmail] = useState(props.ticket.email);
   const [number, setNumber] = useState(props.ticket.number);
-
+  const [file, setFile] = useState([]);
   const { TextArea } = Input;
+
+  console.log(file);
 
   const { completeTicket } = useContext(GlobalContext);
 
   function handleMenuClick(e) {}
+
+  const postData = async () => {
+    let data = new FormData();
+    data.append("file", file);
+    data.append("filename", file.name);
+    data.append("ticket", props.ticket._id);
+
+    await axios.post("/api/v1/uploads", data);
+  };
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -37,12 +52,21 @@ const ViewTicket = (props) => {
         <Transfer ticket={props.ticket} />
       </Menu.Item>
       <Menu.Item key="2">
-        <Button onClick={() => completeTicket(props.ticket._id)} style={{ width: 144 }}>
+        <Button
+          onClick={() => completeTicket(props.ticket._id)}
+          style={{ width: 144 }}
+        >
           Complete
         </Button>
       </Menu.Item>
       <Menu.Item key="3">
         <AddInfo client={props.ticket} />
+      </Menu.Item>
+      <Menu.Item key="4">
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+        <Button onClick={() => postData()}>
+          <UploadOutlined />
+        </Button>
       </Menu.Item>
     </Menu>
   );
@@ -52,7 +76,6 @@ const ViewTicket = (props) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
         id: props.ticket._id,
@@ -127,8 +150,11 @@ const ViewTicket = (props) => {
           />
         </div>
         <Divider />
+        <h5>Files Attached to ticket</h5>
+        <Files ticket={props.ticket} />
+        <Divider />
         <div className="ticket-view-contact">
-          <h4>Contact Details</h4>
+          <h5>Contact Details</h5>
           <h5>
             Contact Name:{" "}
             <Input
