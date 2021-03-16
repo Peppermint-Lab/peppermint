@@ -11,7 +11,7 @@ services:
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:dev
+    image: pepperlabs/peppermint:latest
     ports:
       - 5000:5000
     restart: on-failure
