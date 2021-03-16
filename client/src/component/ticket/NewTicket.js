@@ -3,8 +3,6 @@ import { Select, Modal, Form, Input, Radio, Space, Button } from "antd";
 
 import { GlobalContext } from "../../Context/GlobalState";
 
-
-
 const NewTicket = () => {
 
   const { createTicket } = useContext(GlobalContext);
@@ -38,23 +36,20 @@ const NewTicket = () => {
       });
   };
 
-  const onCreate = async () => {
+  const onCreate = async (e) => {
+    e.stopPropagation()
     setVisible(false);
     await createTicket(name, email, company, issue, priority);
   };
 
-  const onCancel = async () => {
+  const onCancel = async (e) => {
     await setVisible(false);
+    e.stopPropagation()
   };
 
   useEffect(() => {
     fetchClients();
   }, []);
-
-  const onVisible = async (e) => {
-    e.stopPropagation();
-    await setVisible(true);
-  }
 
   const search = options.map((d) => <Option key={d._id}>{d.name}</Option>);
 
@@ -64,12 +59,14 @@ const NewTicket = () => {
         type="primary"
         size="small"
         onClick={(e) => {
-          onVisible(e)
+          e.stopPropagation()
+          setVisible(true);
         }}
       >
         Create Ticket
       </Button>
       <Modal
+        destroyOnClose={true}
         visible={visible}
         title="Create new Ticket"
         onCancel={onCancel}
@@ -153,3 +150,5 @@ const NewTicket = () => {
 };
 
 export default NewTicket;
+
+
