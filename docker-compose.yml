@@ -3,7 +3,7 @@ version: "3.1"
 
 services:
   mongo:
-    container_name: db
+    container_name: mongo
     image: mongo:4
     restart: always
     volumes:
@@ -11,7 +11,7 @@ services:
 
   client:
     container_name: peppermint
-    build: .
+    image: pepperlabs/peppermint:latest
     ports:
       - 5000:5000
     restart: on-failure

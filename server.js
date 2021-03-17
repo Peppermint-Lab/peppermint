@@ -20,7 +20,7 @@ const crypto = require('crypto');
 // const methodOverride = require('method-override');
 
 const connectDB = require("./config/DB");
-dotenv.config({ path: "./config/.env" });
+require('dotenv').config({ path: path.resolve(__dirname, './config/.env') });
 
 // DB models
 require("./src/models/InternalUser");
@@ -33,7 +33,11 @@ require("./src/models/Log");
 require("./src/models/file");
 
 connectDB();
-const url = process.env.MONGO_URI_DOCKER;
+if(process.env.NODE_ENV === 'production') {
+  url = process.env.MONGO_URI_DOCKER
+} else {
+ url = process.env.MONGO_URI_DEV
+}
 
 // create storage engine
 const storage = new GridFsStorage({
