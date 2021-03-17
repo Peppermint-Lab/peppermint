@@ -10,8 +10,7 @@ const connectDB = async () => {
     db = process.env.MONGO_URI_DEV
   }
   try {
-    const conn = await mongoose.connect(db, {
-      // uses the mongo_uri in the .env file to connect
+    const conn = await mongoose.connect(db.toString(), {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,

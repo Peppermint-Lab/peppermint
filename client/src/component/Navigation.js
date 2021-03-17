@@ -36,7 +36,7 @@ const Navigation = () => {
   const [issue, setIssue] = useState("");
   const [priority, setPriority] = useState("Normal");
 
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState([] || null);
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 

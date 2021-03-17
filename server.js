@@ -14,13 +14,13 @@ const socket = require("socket.io");
 const fs = require("fs");
 const readline = require("readline");
 
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
-const crypto = require('crypto');
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+const crypto = require("crypto");
 // const methodOverride = require('method-override');
 
 const connectDB = require("./config/DB");
-require('dotenv').config({ path: path.resolve(__dirname, './config/.env') });
+require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
 
 // DB models
 require("./src/models/InternalUser");
@@ -33,30 +33,31 @@ require("./src/models/Log");
 require("./src/models/file");
 
 connectDB();
-if(process.env.NODE_ENV === 'production') {
-  url = process.env.MONGO_URI_DOCKER
+let url = null;
+if (process.env.NODE_ENV === "production") {
+  url = process.env.MONGO_URI_DOCKER.toString();
 } else {
- url = process.env.MONGO_URI_DEV
+  url = process.env.MONGO_URI_DEV.toString();
 }
 
 // create storage engine
 const storage = new GridFsStorage({
   url,
   file: (req, file) => {
-      return new Promise((resolve, reject) => {
-          crypto.randomBytes(16, (err, buf) => {
-              if (err) {
-                  return reject(err);
-              }
-              const filename = file.originalname;
-              const fileInfo = {
-                  filename: filename,
-                  bucketName: 'uploads'
-              };
-              resolve(fileInfo);
-          });
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = file.originalname;
+        const fileInfo = {
+          filename: filename,
+          bucketName: "uploads",
+        };
+        resolve(fileInfo);
       });
-  }
+    });
+  },
 });
 
 const upload = multer({ storage });
@@ -75,8 +76,7 @@ const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
 const times = require("./src/routes/time");
-const uploadRouter = require('./src/routes/uploads');
-
+const uploadRouter = require("./src/routes/uploads");
 
 // Express server libraries
 app.use(cors());
@@ -100,15 +100,19 @@ app.use(
 app.use(
   "/api/v1/tickets",
   morgan("tiny", { stream: accessLogStream }),
-  tickets,
+  tickets
 );
 app.use("/api/v1/data", morgan("tiny", { stream: accessLogStream }), data);
 app.use("/api/v1/todo", morgan("tiny", { stream: accessLogStream }), todo);
 app.use("/api/v1/note", morgan("tiny", { stream: accessLogStream }), note);
 app.use("/api/v1/client", morgan("tiny", { stream: accessLogStream }), client);
-app.use("/api/v1/newsletter", morgan("tiny", { stream: accessLogStream }), news);
+app.use(
+  "/api/v1/newsletter",
+  morgan("tiny", { stream: accessLogStream }),
+  news
+);
 app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
-app.use('/api/v1/uploads', uploadRouter(upload));
+app.use("/api/v1/uploads", uploadRouter(upload));
 
 // Express web server PORT
 const PORT = process.env.PORT;
