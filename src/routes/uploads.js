@@ -16,9 +16,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 module.exports = (upload) => {
-
-
-  
   const connect = mongoose.createConnection(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -68,11 +65,41 @@ module.exports = (upload) => {
 
   // GET file linked to ticket
   uploadRouter.route("/files/:id").get((req, res, next) => {
-    File.find({ ticket: mongoose.Types.ObjectId(req.params.id) }).then((files) => {
-      res.status(200).json({
-        success: true,
-        files,
-      });
+    File.find({ ticket: mongoose.Types.ObjectId(req.params.id) }).then(
+      (files) => {
+        res.status(200).json({
+          success: true,
+          files,
+        });
+      }
+    );
+  });
+
+  // Delete file linked to ticket
+  uploadRouter.route("/files/del").post((req, res, next) => {
+    File.findOne({ _id: req.body.file }).then((file) => {
+      if (file) {
+        File.deleteOne({ _id: req.body.file }).then(() => {
+          return console.log("file deleted");
+        });
+      } else {
+        console.log("Error");
+      }
+    });
+    gfs.delete(new mongoose.Types.ObjectId(req.body.fileid), (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(404).json({ err: err });
+      }
+      File.find({ ticket: mongoose.Types.ObjectId(req.body.ticket) }).then(
+        (files) => {
+          res.status(200).json({
+            success: true,
+            files,
+            message: `File with ID ${req.params.id} is deleted`,
+          });
+        }
+      );
     });
   });
 

@@ -21,7 +21,6 @@ import axios from "axios";
 
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
-import TicketTime from "../time/TicketTime";
 import Files from "./Files";
 
 import { GlobalContext } from "../../Context/GlobalState";
@@ -152,7 +151,6 @@ const ViewTicket = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setLog(res.log);
       });
   }
@@ -275,7 +273,6 @@ const ViewTicket = (props) => {
           </div>
           <div className="ticket-logs">
             {log.map((log) => {
-              console.log(log);
               return (
                 <div key={log._id}>
                   <ul>
@@ -285,7 +282,7 @@ const ViewTicket = (props) => {
                       <span>{log.user.name} | </span>
                       <span>{log.activity}</span>
                       <Tooltip placement="right" title="Delete">
-                        <Button onClick={() => deleteLog(log._id)}>
+                        <Button onClick={deleteLog(log._id)}>
                           <DeleteTwoTone twoToneColor="#FF0000" />
                         </Button>
                       </Tooltip>
