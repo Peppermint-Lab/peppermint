@@ -32,7 +32,7 @@ services:
 
   client:
     container_name: peppermint
-    build: .
+    image: pepperlabs/peppermint:latest
     ports:
       - 5000:5000
     restart: on-failure
