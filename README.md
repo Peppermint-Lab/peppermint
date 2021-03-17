@@ -50,7 +50,7 @@ We currently do not have any one click installers for any online marketplace as 
 
 ## Supported Environment Variables
 
-You can utilize the following environment variables in Yacht. None of them are manditory.
+You can utilize the following environment variables in Peppermint. None of them are manditory.
 
 | Variable  | Description |
 | ------------- | ------------- |
