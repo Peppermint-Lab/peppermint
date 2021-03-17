@@ -13,13 +13,13 @@ services:
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:latest
+    build: .
     ports:
       - 5000:5000
     restart: on-failure
     depends_on:
       - mongo
     environment:
-      MONGO_URI_DOCKER: 'mongodb://mongo:27017/peppermint'
-      JWT_SECRET: 'ZwfJtS3muY65CaeZ' # This is an example secret
+      MONGO_URI_DOCKER: mongodb://mongo:27017/pepper
+      JWT_SECRET: 'ZwfJtS3muY65CaeZ' 
       PORT: 5000
