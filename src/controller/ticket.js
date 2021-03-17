@@ -174,7 +174,7 @@ exports.updateJob = async (req, res) => {
         new: true,
       }
     ).exec();
-    res.status(201);
+    res.status(201).json({ success: true, message: 'Ticket saved'});
   } catch (error) {
     console.log(error);
     return res.status(500);

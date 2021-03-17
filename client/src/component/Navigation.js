@@ -79,11 +79,12 @@ const Navigation = () => {
   };
 
   useEffect(() => {
-    isAdmin();
     fetchClients();
+    isAdmin();
+    // eslint-disable-next-line
   }, []);
 
-  const search = options.map((d) => <Option key={d._id}>{d.name}</Option>);
+  const search = options ? options.map((d) => <Option key={d._id}>{d.name}</Option>) : null 
 
   const Render = () => {
     if (checkAdmin) {

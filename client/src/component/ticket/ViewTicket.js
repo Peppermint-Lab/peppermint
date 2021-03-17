@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Input,
   Space,
@@ -9,15 +9,20 @@ import {
   Popconfirm,
   Dropdown,
   Menu,
+  DatePicker,
+  TimePicker,
+  Tooltip,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
+
+import moment from "moment";
 
 import axios from "axios";
 
 import Transfer from "./Transfer";
 import AddInfo from "../client/AddInfo";
 import TicketTime from "../time/TicketTime";
-import Files from './Files'
+import Files from "./Files";
 
 import { GlobalContext } from "../../Context/GlobalState";
 
@@ -31,7 +36,14 @@ const ViewTicket = (props) => {
   const [file, setFile] = useState([]);
   const { TextArea } = Input;
 
-  console.log(file);
+  const [date, setDate] = useState(moment().format("MM/DD/YYYY"));
+  const [time, setTime] = useState();
+  const [activity, setActivity] = useState("");
+  const [log, setLog] = useState([]);
+
+  const id = props.ticket._id;
+
+  const format = "HH:mm";
 
   const { completeTicket } = useContext(GlobalContext);
 
@@ -96,6 +108,67 @@ const ViewTicket = (props) => {
     setVisible(false);
     await update();
   };
+
+  function onChangeDate(date, dateString) {
+    const d = moment(date).format("MM/DD/YYYY");
+    setDate(d);
+  }
+
+  function onChangeTime(time) {
+    const t = time;
+    const m = moment(t).format("hh:mm");
+    setTime(m);
+  }
+
+  async function postTimeData() {
+    await fetch(`/api/v1/time/createTime`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ticket: props.ticket._id,
+        date,
+        time,
+        activity,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          console.log("Congrats it worked");
+        }
+      });
+  }
+
+  async function getLogById() {
+    await fetch(`/api/v1/time/getLog/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setLog(res.log);
+      });
+  }
+
+  async function deleteLog(id) {
+    await fetch(`/api/v1/time/deleteLog/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+  }
+
+  useEffect(() => {
+    getLogById();
+  }, []);
 
   return (
     <div>
@@ -182,7 +255,47 @@ const ViewTicket = (props) => {
         </div>
         <Divider />
         <h4>Time Logged to Ticket</h4>
-        <TicketTime ticket={props.ticket} />
+        <div>
+          <div className="ticket-log">
+            <DatePicker onChange={onChangeDate} defaultValue={moment} />
+            <TimePicker
+              format={format}
+              onChange={onChangeTime}
+              allowClear
+              placeholder="Duration"
+            />
+            <Input
+              style={{ width: 300 }}
+              placeholder="Enter activity here"
+              onChange={(e) => setActivity(e.target.value)}
+            />
+            <Button onClick={postTimeData}>
+              <EditTwoTone />
+            </Button>
+          </div>
+          <div className="ticket-logs">
+            {log.map((log) => {
+              console.log(log);
+              return (
+                <div key={log._id}>
+                  <ul>
+                    <li>
+                      <span>{log.date} | </span>
+                      <span>{log.time} | </span>
+                      <span>{log.user.name} | </span>
+                      <span>{log.activity}</span>
+                      <Tooltip placement="right" title="Delete">
+                        <Button onClick={() => deleteLog(log._id)}>
+                          <DeleteTwoTone twoToneColor="#FF0000" />
+                        </Button>
+                      </Tooltip>
+                    </li>
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </Drawer>
     </div>
   );
