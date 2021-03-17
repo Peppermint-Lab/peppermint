@@ -39,7 +39,6 @@ if (process.env.NODE_ENV === "production") {
   url = process.env.MONGO_URI_DEV;
 }
 
-console.log(process.env.MONGO_URI_DOCKER)
 
 // create storage engine
 const storage = new GridFsStorage({

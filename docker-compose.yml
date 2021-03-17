@@ -20,6 +20,6 @@ services:
     depends_on:
       - mongo
     environment:
-      MONGO_URI_DOCKER: mongodb://mongo:27017/pepper
+      MONGO_URI_DOCKER: mongodb://mongo:27017/peppermint
       JWT_SECRET: 'ZwfJtS3muY65CaeZ' 
       PORT: 5000

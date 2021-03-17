@@ -2,14 +2,23 @@ const express = require("express");
 const mongoose = require("mongoose");
 const uploadRouter = express.Router();
 
-const url = process.env.MONGO_URI_DEV;
-
 const TicketSchema = mongoose.model("TicketSchema");
 const File = mongoose.model("file");
 
 const { isAuth } = require("../middleware/authCheck");
 
+let url = null;
+
+if (process.env.NODE_ENV === "production") {
+  url = process.env.MONGO_URI_DOCKER;
+} else {
+  url = process.env.MONGO_URI_DEV;
+}
+
 module.exports = (upload) => {
+
+
+  
   const connect = mongoose.createConnection(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
