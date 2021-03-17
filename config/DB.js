@@ -10,7 +10,7 @@ const connectDB = async () => {
     db = process.env.MONGO_URI_DEV
   }
   try {
-    const conn = await mongoose.connect(db.toString(), {
+    const conn = await mongoose.connect(db, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,

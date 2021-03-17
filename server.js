@@ -35,10 +35,12 @@ require("./src/models/file");
 connectDB();
 let url = null;
 if (process.env.NODE_ENV === "production") {
-  url = process.env.MONGO_URI_DOCKER.toString();
+  url = process.env.MONGO_URI_DOCKER;
 } else {
-  url = process.env.MONGO_URI_DEV.toString();
+  url = process.env.MONGO_URI_DEV;
 }
+
+console.log(process.env.MONGO_URI_DOCKER)
 
 // create storage engine
 const storage = new GridFsStorage({
