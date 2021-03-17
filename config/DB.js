@@ -1,6 +1,8 @@
 // imports mongoose which connects to the mongodb database
 const mongoose = require("mongoose");
+const path = require("path");
 const { exec } = require('child_process');
+require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
 
 // Function which inits the connect to the db,
 const connectDB = async () => {
