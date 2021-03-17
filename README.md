@@ -20,25 +20,29 @@ Keep in mind, this is an alpha so the risk of data loss is real and it may not b
 Check out the getting started guide if this is the first time you've used Peppermint: 
 
 ```
-version: '3.1'
+version: "3.1"
 
 services:
-
   mongo:
     container_name: db
     image: mongo:4
     restart: always
     volumes:
-    - ./docker-data/db:/data/db
+      - ./docker-data/db:/data/db
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:latest
+    build: .
     ports:
       - 5000:5000
     restart: on-failure
     depends_on:
       - mongo
+    environment:
+      MONGO_URI_DOCKER: "mongodb://mongo:27017/peppermint"
+      JWT_SECRET: "ZwfJtS3muY65CaeZ" # This is an example secret
+      PORT: 5000
+
 
 ```
 
