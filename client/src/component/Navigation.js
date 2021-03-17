@@ -217,7 +217,7 @@ const Navigation = () => {
                               .indexOf(input.toLowerCase()) >= 0
                           }
                         >
-                          {search}
+                          {search || null}
                         </Select>
                       </Form.Item>
                       <Form.Item name="issue" label="Issue">
@@ -377,7 +377,7 @@ const Navigation = () => {
                               .indexOf(input.toLowerCase()) >= 0
                           }
                         >
-                          {search}
+                          {search || null}
                         </Select>
                       </Form.Item>
                       <Form.Item name="issue" label="Issue">
