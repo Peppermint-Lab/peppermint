@@ -103,5 +103,29 @@ module.exports = (upload) => {
     });
   });
 
+  // Download file
+  uploadRouter.route("/files/download/:id").post((req, res, next) => {
+    gfs.findOne({ fileId: mongoose.Types.ObjectId(req.params.id) }, function (err, file) {
+      if (err) {
+          return res.status(400).send(err);
+      }
+      else if (!file) {
+          return res.status(404).send('Error on the database looking for the file.');
+      }
+  
+      res.set('Content-Type', file.contentType);
+      res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
+  
+      var readstream = gfs.createReadStream({
+        _id: req.params.id,
+      });
+  
+      readstream.on("error", function(err) { 
+          res.end();
+      });
+      readstream.pipe(res);
+    });
+  });
+
   return uploadRouter;
 };
