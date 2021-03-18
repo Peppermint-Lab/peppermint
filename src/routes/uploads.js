@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const uploadRouter = express.Router();
+const fs = require("fs");
+const Grid = require("gridfs-stream");
 
 const TicketSchema = mongoose.model("TicketSchema");
 const File = mongoose.model("file");
@@ -24,7 +26,8 @@ module.exports = (upload) => {
   let gfs;
 
   connect.once("open", () => {
-    // initialize stream
+    gfs2 = Grid(connect.db, mongoose.mongo);
+    gfs2.collection("uploads");
     gfs = new mongoose.mongo.GridFSBucket(connect.db, {
       bucketName: "uploads",
     });
@@ -104,26 +107,27 @@ module.exports = (upload) => {
   });
 
   // Download file
-  uploadRouter.route("/files/download/:id").post((req, res, next) => {
-    gfs.findOne({ fileId: mongoose.Types.ObjectId(req.params.id) }, function (err, file) {
-      if (err) {
-          return res.status(400).send(err);
+  uploadRouter.route("/files/download/:filename").get((req, res, next) => {
+    // console.log(req.params.filename);
+    gfs2.collection("uploads"); //set collection name to lookup into
+
+    gfs2.files.find({ filename: req.params.filename }).toArray((err, files) => {
+      if (!files[0] || files.length === 0) {
+        return res.status(200).json({
+          success: false,
+          message: "No files available",
+        });
+      } else {
+        /** create read stream */
+        var readstream = gfs2.createReadStream({
+          filename: req.params.filename,
+          root: "upload",
+        });
+        /** set the proper content type */
+        res.set("Content-Type", files[0].contentType);
+        /** return response */
+        return readstream.pipe(res);
       }
-      else if (!file) {
-          return res.status(404).send('Error on the database looking for the file.');
-      }
-  
-      res.set('Content-Type', file.contentType);
-      res.set('Content-Disposition', 'attachment; filename="' + file.filename + '"');
-  
-      var readstream = gfs.createReadStream({
-        _id: req.params.id,
-      });
-  
-      readstream.on("error", function(err) { 
-          res.end();
-      });
-      readstream.pipe(res);
     });
   });
 

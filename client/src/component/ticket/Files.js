@@ -33,12 +33,23 @@ const Files = (props) => {
       body: JSON.stringify({
         file: file._id,
         fileid: file.fileId,
-        ticket: props.ticket._id
+        ticket: props.ticket._id,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
         setFiles(res.files);
+      });
+  }
+
+  async function downloadFile(file) {
+    const filename = file.filename;
+    await fetch(`/api/v1/uploads/files/download/${filename}`, {
+      method: "get",
+    })
+      .then((res) => res.blob())
+      .then((blob) => {
+
       });
   }
 
@@ -60,14 +71,20 @@ const Files = (props) => {
                   <Button
                     ghost
                     style={{ float: "right" }}
-                    onClick={e => {
+                    onClick={(e) => {
                       e.stopPropagation();
                       deleteFile(file);
                     }}
                   >
                     <MinusCircleTwoTone twoToneColor="#FF0000	" />
                   </Button>
-                  <Button ghost>
+                  <Button
+                    ghost
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadFile(file);
+                    }}
+                  >
                     <UploadOutlined style={{ color: "black" }} />
                   </Button>
                 </Space>
