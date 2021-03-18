@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const TicketSchema = mongoose.model("TicketSchema");;
+const TicketSchema = mongoose.model("TicketSchema");
+const File = mongoose.model("file");
+const fs = require("fs");
 
 // Get Open Tickets
 exports.openTickets = async (req, res) => {
@@ -174,10 +176,37 @@ exports.updateJob = async (req, res) => {
         new: true,
       }
     ).exec();
-    res.status(201).json({ success: true, message: 'Ticket saved'});
+    res.status(201).json({ success: true, message: "Ticket saved" });
   } catch (error) {
     console.log(error);
     return res.status(500);
   }
 };
 
+exports.saveFile = async (req, res) => {
+  const file = req.files.file;
+  const uploadPath =  'files/' + `${req.body.ticket}/` + file.name;
+
+
+  console.log(file);
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded.");
+    } else {
+      const newFile = new File({
+        filename: file.name,
+        user: req.user._id,
+        ticket: req.body.ticket,
+        path: uploadPath,
+      });
+      newFile.save().then(() => {
+        file.mv(uploadPath, function(err) {
+          if(err) {
+            return res.status(500).json({ sucess: false, err})
+          }
+          return res.status(200).json({ sucess: true, message: 'File Uploaded!'})
+        })
+      })
+    }
+  } catch (error) {}
+};

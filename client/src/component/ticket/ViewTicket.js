@@ -48,13 +48,14 @@ const ViewTicket = (props) => {
 
   function handleMenuClick(e) {}
 
+  console.log(file)
+
   const postData = async () => {
     let data = new FormData();
     data.append("file", file);
     data.append("filename", file.name);
     data.append("ticket", props.ticket._id);
-
-    await axios.post("/api/v1/uploads", data);
+    await axios.post("/api/v1/tickets/uploadFile", data);
   };
 
   const menu = (

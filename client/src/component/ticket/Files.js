@@ -48,9 +48,6 @@ const Files = (props) => {
       method: "get",
     })
       .then((res) => res.blob())
-      .then((blob) => {
-
-      });
   }
 
   useEffect(() => {

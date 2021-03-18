@@ -13,6 +13,7 @@ const {
   complete,
   transfer,
   updateJob,
+  saveFile
 } = require("../controller/ticket");
 
 router.route("/createTicket").post(isAuth, createTicket);
@@ -32,5 +33,7 @@ router.route("/complete/:id").post(isAuth, complete);
 router.route("/transfer").post(isAuth, transfer);
 
 router.route("/update").put(isAuth, updateJob);
+
+router.route("/uploadFile").post(isAuth, saveFile);
 
 module.exports = router;
