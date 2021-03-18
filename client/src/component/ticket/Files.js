@@ -12,7 +12,7 @@ const Files = (props) => {
 
   async function getFiles() {
     const id = props.ticket._id;
-    await fetch(`/api/v1/uploads/files/${id}`, {
+    await fetch(`/api/v1/tickets/file/listFiles/${id}`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -25,19 +25,20 @@ const Files = (props) => {
   }
 
   async function deleteFile(file) {
-    await fetch(`/api/v1/uploads/files/del`, {
+    await fetch(`/api/v1/tickets/file/del`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         file: file._id,
-        fileid: file.fileId,
         ticket: props.ticket._id,
+        path: file.path
       }),
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res)
         setFiles(res.files);
       });
   }

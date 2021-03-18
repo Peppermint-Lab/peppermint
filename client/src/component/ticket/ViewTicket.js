@@ -48,8 +48,6 @@ const ViewTicket = (props) => {
 
   function handleMenuClick(e) {}
 
-  console.log(file)
-
   const postData = async () => {
     let data = new FormData();
     data.append("file", file);

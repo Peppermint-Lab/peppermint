@@ -185,10 +185,7 @@ exports.updateJob = async (req, res) => {
 
 exports.saveFile = async (req, res) => {
   const file = req.files.file;
-  const uploadPath =  'files/' + `${req.body.ticket}/` + file.name;
-
-
-  console.log(file);
+  const uploadPath = "files/" + `${req.body.ticket}/` + file.name;
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
@@ -200,13 +197,42 @@ exports.saveFile = async (req, res) => {
         path: uploadPath,
       });
       newFile.save().then(() => {
-        file.mv(uploadPath, function(err) {
-          if(err) {
-            return res.status(500).json({ sucess: false, err})
+        file.mv(uploadPath, function (err) {
+          if (err) {
+            return res.status(500).json({ sucess: false, err });
           }
-          return res.status(200).json({ sucess: true, message: 'File Uploaded!'})
-        })
-      })
+          return res
+            .status(200)
+            .json({ sucess: true, message: "File Uploaded!" });
+        });
+      });
     }
+  } catch (error) {}
+};
+
+exports.listFile = async (req, res) => {
+  try {
+    const files = await File.find({
+      ticket: mongoose.Types.ObjectId(req.params.id),
+    });
+    res.status(200).json({ sucess: true, files });
+  } catch (error) {}
+};
+
+exports.deleteFile = async (req, res) => {
+  const path = req.body.path
+  try {
+    await File.deleteOne({ _id: req.body.file }).then(() => {
+      fs.unlink(path, (err) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+      })
+    })
+    const files = await File.find({
+      ticket: mongoose.Types.ObjectId(req.params.id),
+    });
+    res.status(200).json({ sucess: true, files, message: 'File Deleted' });
   } catch (error) {}
 };
