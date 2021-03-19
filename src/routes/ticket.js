@@ -15,7 +15,8 @@ const {
   updateJob,
   saveFile,
   listFile,
-  deleteFile
+  deleteFile,
+  downloadFile
 } = require("../controller/ticket");
 
 router.route("/createTicket").post(isAuth, createTicket);
@@ -41,5 +42,7 @@ router.route("/uploadFile").post(isAuth, saveFile);
 router.route("/file/listFiles/:id").get(isAuth, listFile)
 
 router.route('/file/del').post(isAuth, deleteFile)
+
+router.route('/file/download/:id').get(isAuth, downloadFile)
 
 module.exports = router;

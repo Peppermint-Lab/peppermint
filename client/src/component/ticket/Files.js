@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Space, Button } from "antd";
-
 import {
   FileTwoTone,
   MinusCircleTwoTone,
   UploadOutlined,
 } from "@ant-design/icons";
+import FileSaver from "file-saver";
 
 const Files = (props) => {
   const [files, setFiles] = useState([]);
@@ -33,22 +33,25 @@ const Files = (props) => {
       body: JSON.stringify({
         file: file._id,
         ticket: props.ticket._id,
-        path: file.path
+        path: file.path,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        console.log(res);
         setFiles(res.files);
       });
   }
 
   async function downloadFile(file) {
-    const filename = file.filename;
-    await fetch(`/api/v1/uploads/files/download/${filename}`, {
+    const id = file.path;
+    await fetch(`/api/v1/tickets/file/download/${id}`, {
       method: "get",
-    })
-      .then((res) => res.blob())
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+    // FileSaver.saveAs(`/api/v1/tickets/file/download/${id}`, file.filename)
   }
 
   useEffect(() => {
@@ -59,13 +62,15 @@ const Files = (props) => {
     <div>
       {files.map((file) => {
         console.log(file);
+        const id = file.path;
+        const url = `/api/v1/tickets/file/download/${id}`;
         return (
           <div className="todo-list" key={file._id}>
             <ul style={{ marginLeft: -40 }}>
               <li>
                 <Space>
                   <FileTwoTone />
-                  <span>{file.filename}</span>
+                  <a href={url}>{file.filename}</a>
                   <Button
                     ghost
                     style={{ float: "right" }}
@@ -78,7 +83,7 @@ const Files = (props) => {
                   </Button>
                   <Button
                     ghost
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.stopPropagation();
                       downloadFile(file);
                     }}

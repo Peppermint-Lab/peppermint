@@ -220,19 +220,29 @@ exports.listFile = async (req, res) => {
 };
 
 exports.deleteFile = async (req, res) => {
-  const path = req.body.path
+  const path = req.body.path;
   try {
     await File.deleteOne({ _id: req.body.file }).then(() => {
       fs.unlink(path, (err) => {
         if (err) {
-          console.error(err)
-          return
+          console.error(err);
+          return;
         }
-      })
-    })
+      });
+    });
     const files = await File.find({
       ticket: mongoose.Types.ObjectId(req.params.id),
     });
-    res.status(200).json({ sucess: true, files, message: 'File Deleted' });
+    res.status(200).json({ sucess: true, files, message: "File Deleted" });
+  } catch (error) {}
+};
+
+exports.downloadFile = async (req, res) => {
+  console.log(req.params.id);
+    console.log("Hit");
+  try {
+    // res.download(file, (err) => {
+    // console.log(err)
+    // })
   } catch (error) {}
 };
