@@ -185,7 +185,7 @@ exports.updateJob = async (req, res) => {
 
 exports.saveFile = async (req, res) => {
   const file = req.files.file;
-  const uploadPath = "files/" + `${req.body.ticket}/` + file.name;
+  const uploadPath = "files/" + `${req.params.id}/` + file.name;
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
@@ -193,7 +193,7 @@ exports.saveFile = async (req, res) => {
       const newFile = new File({
         filename: file.name,
         user: req.user._id,
-        ticket: req.body.ticket,
+        ticket: req.params.id,
         path: uploadPath,
       });
       newFile.save().then(() => {

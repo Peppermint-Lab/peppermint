@@ -12,6 +12,8 @@ import {
   DatePicker,
   TimePicker,
   Tooltip,
+  Upload,
+  message,
 } from "antd";
 import { UploadOutlined, EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
@@ -56,6 +58,35 @@ const ViewTicket = (props) => {
     await axios.post("/api/v1/tickets/uploadFile", data);
   };
 
+  const propsUpload = {
+    name: "file",
+    action: `/api/v1/tickets/uploadFile/${id}`,
+    data: () => {
+      let data = new FormData();
+      data.append("file", file);
+      data.append("filename", file.name);
+      data.append("ticket", props.ticket._id);
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    progress: {
+      strokeColor: {
+        "0%": "#108ee9",
+        "100%": "#87d068",
+      },
+      strokeWidth: 3,
+      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
+    },
+  };
+
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1">
@@ -73,10 +104,11 @@ const ViewTicket = (props) => {
         <AddInfo client={props.ticket} />
       </Menu.Item>
       <Menu.Item key="4">
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <Button onClick={() => postData()}>
-          <UploadOutlined />
-        </Button>
+        <Upload {...propsUpload}>
+          <Button icon={<UploadOutlined />} style={{ width: 144 }}>
+            Upload File
+          </Button>
+        </Upload>
       </Menu.Item>
     </Menu>
   );

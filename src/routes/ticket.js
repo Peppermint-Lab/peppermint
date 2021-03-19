@@ -37,7 +37,7 @@ router.route("/transfer").post(isAuth, transfer);
 
 router.route("/update").put(isAuth, updateJob);
 
-router.route("/uploadFile").post(isAuth, saveFile);
+router.route("/uploadFile/:id").post(isAuth, saveFile);
 
 router.route("/file/listFiles/:id").get(isAuth, listFile)
 
