@@ -44,23 +44,6 @@ const Files = (props) => {
       });
   }
 
-  async function downloadFile(file) {
-    await fetch(`/api/v1/tickets/file/download`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        file,
-      }),
-    })
-      .then((res) => {
-        console.log(res);
-       // download(res.data, file.filename)
-      });
-    // FileSaver.saveAs(`/api/v1/tickets/file/download/${id}`, file.filename)
-  }
-
   function download(file) {
     const url = `/api/v1/tickets/file/download`
     let data = new FormData();
