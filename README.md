@@ -8,6 +8,12 @@
   </a>
   <img src="https://img.shields.io/docker/pulls/pepperlabs/peppermint" />
 </p>
+<p align="center">This project is supported by:</p>
+<p align="center">
+  <a href="https://www.digitalocean.com/">
+    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/SVG/DO_Logo_horizontal_blue.svg" width="201px">
+  </a>
+</p>
 
 > Ticket Management System in order to help helpdesks & service desks manage internal staff &  customer requests
 
