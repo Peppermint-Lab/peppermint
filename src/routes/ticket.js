@@ -43,6 +43,6 @@ router.route("/file/listFiles/:id").get(isAuth, listFile)
 
 router.route('/file/del').post(isAuth, deleteFile)
 
-router.route('/file/download/:id').get(isAuth, downloadFile)
+router.route('/file/download').post(isAuth, downloadFile)
 
 module.exports = router;

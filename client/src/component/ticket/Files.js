@@ -5,7 +5,8 @@ import {
   MinusCircleTwoTone,
   UploadOutlined,
 } from "@ant-design/icons";
-import FileSaver from "file-saver";
+import fileDownload  from 'js-file-download';
+import axios from "axios";
 
 const Files = (props) => {
   const [files, setFiles] = useState([]);
@@ -44,14 +45,31 @@ const Files = (props) => {
   }
 
   async function downloadFile(file) {
-    const id = file.path;
-    await fetch(`/api/v1/tickets/file/download/${id}`, {
-      method: "get",
+    await fetch(`/api/v1/tickets/file/download`, {
+      method: "post",
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => res.json());
+      body: JSON.stringify({
+        file,
+      }),
+    })
+      .then((res) => {
+        console.log(res);
+       // download(res.data, file.filename)
+      });
     // FileSaver.saveAs(`/api/v1/tickets/file/download/${id}`, file.filename)
+  }
+
+  function download(file) {
+    const url = `/api/v1/tickets/file/download`
+    let data = new FormData();
+    data.append("filepath", file.path);
+    axios.post(url, data, {
+      responseType: 'blob',
+    }).then(res => {
+      fileDownload(res.data, file.filename);
+    });
   }
 
   useEffect(() => {
@@ -61,7 +79,7 @@ const Files = (props) => {
   return (
     <div>
       {files.map((file) => {
-        console.log(file);
+        // console.log(file);
         const id = file.path;
         const url = `/api/v1/tickets/file/download/${id}`;
         return (
@@ -85,7 +103,7 @@ const Files = (props) => {
                     ghost
                     onClick={async (e) => {
                       e.stopPropagation();
-                      downloadFile(file);
+                      download(file);
                     }}
                   >
                     <UploadOutlined style={{ color: "black" }} />
