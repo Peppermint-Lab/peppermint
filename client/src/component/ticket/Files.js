@@ -62,16 +62,13 @@ const Files = (props) => {
   return (
     <div>
       {files.map((file) => {
-        // console.log(file);
-        const id = file.path;
-        const url = `/api/v1/tickets/file/download/${id}`;
         return (
           <div className="todo-list" key={file._id}>
             <ul style={{ marginLeft: -40 }}>
               <li>
                 <Space>
                   <FileTwoTone />
-                  <a href={url}>{file.filename}</a>
+                  <span>{file.filename}</span>
                   <Button
                     ghost
                     style={{ float: "right" }}
