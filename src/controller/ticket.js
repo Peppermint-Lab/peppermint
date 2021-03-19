@@ -238,11 +238,7 @@ exports.deleteFile = async (req, res) => {
 };
 
 exports.downloadFile = async (req, res) => {
-  console.log(req.params.id);
-    console.log("Hit");
   try {
-    // res.download(file, (err) => {
-    // console.log(err)
-    // })
+    
   } catch (error) {}
 };
