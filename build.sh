@@ -18,9 +18,7 @@ if [[ -e build ]]; then
     mv -- build ..
     cd ..
     echo
-    echo 'Building docker File'
-    docker build -t peppermint:latest pepperlabs/peppermint pepperlabs/peppermint:latest pepperlabs/peppermint:v0.1.5-alpha. .
-    echo 'Build completed'
+    echo 'React Client built'
 else
     echo 'No client build folder found'
     echo
@@ -32,7 +30,5 @@ else
     mv -- build ..
     cd ..
     echo
-    echo 'Building docker File'
-    docker build -t peppermint:latest pepperlabs/peppermint pepperlabs/peppermint:latest pepperlabs/peppermint:v0.1.5-alpha. .
-    echo 'Build completed'
+    echo 'React Client built'
 fi
