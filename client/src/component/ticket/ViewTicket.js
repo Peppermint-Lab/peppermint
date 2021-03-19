@@ -50,14 +50,6 @@ const ViewTicket = (props) => {
 
   function handleMenuClick(e) {}
 
-  const postData = async () => {
-    let data = new FormData();
-    data.append("file", file);
-    data.append("filename", file.name);
-    data.append("ticket", props.ticket._id);
-    await axios.post("/api/v1/tickets/uploadFile", data);
-  };
-
   const propsUpload = {
     name: "file",
     action: `/api/v1/tickets/uploadFile/${id}`,
@@ -229,6 +221,11 @@ const ViewTicket = (props) => {
             <Button>Complete</Button>
           </Popconfirm>
           <AddInfo client={props.ticket} />
+          <Upload {...propsUpload}>
+          <Button icon={<UploadOutlined />} style={{ width: 144 }}>
+            Upload File
+          </Button>
+        </Upload>
         </Space>
         <Divider />
         <Row>
