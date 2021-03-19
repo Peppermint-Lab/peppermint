@@ -10,10 +10,10 @@ const file = new mongoose.Schema(
       required: true,
       type: String,
     },
-    fileId: {
+    path: {
       required: true,
-      type: String,
-    },
+      type: String
+    }
   },
   { timestamps: true }
 );

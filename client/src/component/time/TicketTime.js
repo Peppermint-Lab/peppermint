@@ -9,6 +9,8 @@ const TicketTime = (props) => {
   const [activity, setActivity] = useState("");
   const [log, setLog] = useState([]);
 
+  const id = props.ticket._id;
+
   const format = "HH:mm";
 
   function onChangeDate(date, dateString) {
@@ -27,7 +29,6 @@ const TicketTime = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
         ticket: props.ticket._id,
@@ -47,16 +48,15 @@ const TicketTime = (props) => {
   }
 
   async function getLogById() {
-    const id = props.ticket._id;
     await fetch(`/api/v1/time/getLog/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res)
         setLog(res.log);
       });
   }
@@ -66,7 +66,6 @@ const TicketTime = (props) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     }).then((res) => res.json());
   }
@@ -91,6 +90,7 @@ const TicketTime = (props) => {
       </div>
       <div className="ticket-logs">
         {log.map((log) => {
+          console.log(log)
           return (
             <div key={log._id}>
               <ul>

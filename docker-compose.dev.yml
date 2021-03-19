@@ -1,0 +1,25 @@
+# Use root/example as user/password credentials
+version: "3.1"
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:4
+    restart: always
+    ports:
+       - "27017:27017"
+    volumes:
+      - ./docker-data/db:/data/db
+
+  client:
+    container_name: peppermint
+    image: pepperlabs/peppermint:dev
+    ports:
+      - 5000:5000
+    restart: on-failure
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI_DOCKER: mongodb://mongo:27017/peppermint
+      JWT_SECRET: 'ZwfJtS3muY65CaeZ' 
+      PORT: 5000

@@ -26,7 +26,8 @@ exports.createLog = async (req, res) => {
 
 exports.getLogById = async (req, res) => {
   try {
-    const log = await Log.find({ ticket: req.params.id }).populate(
+    const log = await Log.find({ ticket: req.params.id })
+    .populate(
       "user",
       "_id name"
     );

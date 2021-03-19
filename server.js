@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const socket = require("socket.io");
 const fs = require("fs");
 const readline = require("readline");
+const fileUpload = require("express-fileupload");
 
 const multer = require("multer");
 const GridFsStorage = require("multer-gridfs-storage");
@@ -39,29 +40,6 @@ if (process.env.NODE_ENV === "production") {
   url = process.env.MONGO_URI_DEV;
 }
 
-
-// create storage engine
-const storage = new GridFsStorage({
-  url,
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(16, (err, buf) => {
-        if (err) {
-          return reject(err);
-        }
-        const filename = file.originalname;
-        const fileInfo = {
-          filename: filename,
-          bucketName: "uploads",
-        };
-        resolve(fileInfo);
-      });
-    });
-  },
-});
-
-const upload = multer({ storage });
-
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 1000, // limit each IP to 100 requests per windowMs
@@ -76,7 +54,6 @@ const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
 const times = require("./src/routes/time");
-const uploadRouter = require("./src/routes/uploads");
 
 // Express server libraries
 app.use(cors());
@@ -85,6 +62,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cookieParser());
+app.use(fileUpload({
+  useTempFiles : true,
+  tempFileDir : '/tmp/',
+  createParentPath: true
+}));
 
 let accessLogStream = fs.createWriteStream(path.join(__dirname, "api.txt"), {
   flags: "a",
@@ -112,7 +94,6 @@ app.use(
   news
 );
 app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
-app.use("/api/v1/uploads", uploadRouter(upload));
 
 // Express web server PORT
 const PORT = process.env.PORT;
