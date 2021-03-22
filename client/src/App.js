@@ -19,6 +19,7 @@ import AdminList from "./component/newsletter/AdminList";
 import Open from "./pages/ticket/Open";
 import Unissued from "./pages/ticket/Unissued";
 import Settings from "./pages/Settings";
+import Dashboard from './pages/Dashboard'
 
 const Routing = () => {
   return (
@@ -34,6 +35,7 @@ const Routing = () => {
 
         <Route>
           <Navigation />
+          <Route exact path="/test" component={Dashboard} />
           <Route exact path="/tickets" component={Ticket} />
           <Route exact path="/history" component={History} />
           <Route exact path="/settings" component={Settings} />
