@@ -1,10 +1,6 @@
 * {
   margin: 0;
-}
-
-html,
-body {
-  height: 100vh;
+  overflow: hidden
 }
 
 @media only screen and (max-width: 480px) {
@@ -272,6 +268,7 @@ body {
   flex-direction: row;
   width: 100%;
   flex-wrap: nowrap;
+  min-height: 95vh
 }
 
 .navbar-brand {
