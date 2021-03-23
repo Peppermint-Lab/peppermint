@@ -9,7 +9,7 @@ const ListNote = () => {
   const { notes, getNotes, deleteNote } = useContext(GlobalContext);
 
   useEffect(() => {
-    // getNotes();
+    getNotes();
     // eslint-disable-next-line
   }, []);
 
@@ -29,7 +29,7 @@ const ListNote = () => {
             title="Are you sure you want to delete?"
             onConfirm={() => deleteNote(record._id)}
           >
-            <Button size="xs" style={{ float: "right" }}>
+            <Button size="xs">
               <DeleteTwoTone twoToneColor="#FF0000" />
             </Button>
           </Popconfirm>
@@ -40,6 +40,7 @@ const ListNote = () => {
 
   return (
     <div>
+      <h3>Notes</h3>
       <Table
         dataSource={notes}
         columns={columns}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import 'antd/dist/antd.css';
+import './App.css'
 
 import UserDash from './pages/UserDash'
 import Login from './pages/auth/Login'

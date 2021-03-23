@@ -1,7 +1,10 @@
+import { Button } from "antd";
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 const Header = () => {
+  const history = useHistory();
+
   const [expanded, setExpanded] = useState(false);
   const [show, setShow] = useState(false);
   const [user, setUser] = useState(
@@ -10,6 +13,11 @@ const Header = () => {
       email: "admin@test.com",
     }
   );
+
+  function logout() {
+    localStorage.clear();
+    history.push("/login");
+  }
 
   return (
     <div>
@@ -48,7 +56,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          JA
+                          {user.name[0]}
                         </span>
                       </span>
                     </button>
@@ -66,14 +74,14 @@ const Header = () => {
                   >
                     <Link
                       href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
                       role="menuitem"
                     >
                       Settings
                     </Link>
                     <button
-                      onClick={null}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => logout()}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full float-left	"
                       role="menuitem"
                     >
                       Sign out
@@ -252,7 +260,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          JA
+                        {user.name[0]}
                         </span>
                       </span>
                     </div>
@@ -273,7 +281,7 @@ const Header = () => {
                       Settings
                     </Link>
                     <Link
-                      href="#"
+                      
                       className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Sign out

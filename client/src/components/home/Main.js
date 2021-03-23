@@ -31,7 +31,7 @@ const Main = () => {
                         <div class="flex-shrink-0">
                           <span class="inline-flex items-center justify-center h-14 w-14 rounded-full bg-gray-500">
                             <span class="text-xl font-medium leading-none text-white">
-                              JA
+                            {user.name[0]}
                             </span>
                           </span>
                         </div>
@@ -66,7 +66,7 @@ const Main = () => {
               </section>
 
               <section aria-labelledby="quick-links-title">
-                <div class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:gap-px">
+                <div class="rounded-lg  overflow-hidden s sm:divide-y-0 sm:gap-px">
                   <h2 class="sr-only" id="quick-links-title">
                     Notes and Tasks
                   </h2>
@@ -78,7 +78,8 @@ const Main = () => {
                       </li>
                     </ul>
                   </div>
-                  <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                  
+                  <div class="bg-white shadow overflow-hidden sm:rounded-md mt-5">
                     <ul class="divide-y divide-gray-200">
                       <li class="px-4 py-4 sm:px-6">
                         <ListNote />

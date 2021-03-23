@@ -11,7 +11,7 @@ import { GlobalContext } from "../../Context/GlobalState";
 const ListTodo = () => {
   const {
     todos,
-    // getTodos,
+    getTodos,
     deleteTodo,
     allDone,
     markDone,
@@ -19,7 +19,7 @@ const ListTodo = () => {
   } = useContext(GlobalContext);
 
   useEffect(() => {
-    //getTodos();
+    getTodos();
     // eslint-disable-next-line
   }, []);
 
@@ -32,12 +32,13 @@ const ListTodo = () => {
       {todos ? (
         todos.map((todo) => {
           return (
-            <div className="todo-list" key={todo._id}>
+            <div className="flex flex-col mx-auto ml-10 px-1" key={todo._id}>
               <ul key={todo._id}>
                 <li style={{ marginLeft: -35 }} key={todo._id}>
                   <span className={todo.done ? "done" : ""}>{todo.text}</span>
                   <Tooltip placement="right" title="Delete">
                     <Button
+                      ghost
                       onClick={() => deleteTodo(todo._id)}
                       style={{ float: "right" }}
                     >
@@ -47,6 +48,7 @@ const ListTodo = () => {
                   {todo.done ? (
                     <Tooltip placement="left" title="Unmark as done">
                       <Button
+                        ghost
                         onClick={() => markUndone(todo._id)}
                         style={{ float: "right", marginRight: 5 }}
                       >
@@ -56,6 +58,7 @@ const ListTodo = () => {
                   ) : (
                     <Tooltip placement="left" title="Mark as done">
                       <Button
+                        ghost
                         onClick={() => markDone(todo._id)}
                         style={{ float: "right", marginRight: 5 }}
                       >
