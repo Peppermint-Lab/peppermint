@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import ListNote from "../notes/ListNote";
 
 import CreateTodo from "../todos/CreateTodo";
 import ListTodo from "../todos/ListTodo";
@@ -67,13 +68,20 @@ const Main = () => {
               <section aria-labelledby="quick-links-title">
                 <div class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:gap-px">
                   <h2 class="sr-only" id="quick-links-title">
-                    Notes and Todos
+                    Notes and Tasks
                   </h2>
                   <div class="bg-white shadow overflow-hidden sm:rounded-md">
                     <ul class="divide-y divide-gray-200">
                       <li class="px-4 py-4 sm:px-6">
                         <CreateTodo />
                         <ListTodo />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                    <ul class="divide-y divide-gray-200">
+                      <li class="px-4 py-4 sm:px-6">
+                        <ListNote />
                       </li>
                     </ul>
                   </div>

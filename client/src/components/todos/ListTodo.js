@@ -25,10 +25,10 @@ const ListTodo = () => {
 
   return (
     <div>
-      <Button style={{ marginTop: 10 }} onClick={allDone}>
+      <Button className="ml-2 mt-1" onClick={allDone}>
         Mark All Done
       </Button>
-      <Divider orientation="left" style={{ width: "auto" }}></Divider>
+      <Divider orientation="left" className="w-full"></Divider>
       {todos ? (
         todos.map((todo) => {
           return (
