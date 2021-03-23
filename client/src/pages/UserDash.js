@@ -5,7 +5,7 @@ import Header from '../components/navigation/Header'
 
 const UserDash = () => {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <Header />
       <Main />
     </div>
