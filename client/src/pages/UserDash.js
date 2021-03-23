@@ -1,18 +1,21 @@
-import React from "react";
-import Link from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { Menu } from "antd";
+import { SettingTwoTone } from "@ant-design/icons";
 
 const Header = () => {
+  const [expanded, setExpanded] = useState(false);
   return (
     <div>
       <div className="min-h-screen bg-gray-100">
-        <header class="pb-24 bg-gradient-to-r from-light-blue-800 to-cyan-600">
-          <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-            <div class="relative flex flex-wrap items-center justify-center lg:justify-between">
-              <div class="absolute left-0 py-5 flex-shrink-0 lg:static">
+        <header className="pb-24 bg-gradient-to-r from-light-blue-800 to-cyan-600">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="relative flex flex-wrap items-center justify-center lg:justify-between">
+              <div className="absolute left-0 py-5 flex-shrink-0 lg:static">
                 <Link href="#">
-                  <span class="sr-only">Workflow</span>
+                  <span className="sr-only">Workflow</span>
                   <svg
-                    class="h-8 w-auto"
+                    className="h-8 w-auto"
                     fill="none"
                     viewBox="0 0 35 32"
                     xmlns="http://www.w3.org/2000/svg"
@@ -25,19 +28,20 @@ const Header = () => {
                 </Link>
               </div>
 
-              <div class="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
-                <div class="ml-4 relative flex-shrink-0">
+              <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
+                <div className="ml-4 relative flex-shrink-0">
                   <div>
                     <button
                       type="button"
-                      class="bg-white rounded-full flex text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100"
+                      className="bg-white rounded-full flex text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100"
                       id="user-menu"
+                      onClick={() => setExpanded(!expanded)}
                       aria-expanded="false"
                       aria-haspopup="true"
                     >
-                      <span class="sr-only">Open user menu</span>
+                      <span className="sr-only">Open user menu</span>
                       <img
-                        class="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full"
                         src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
                         alt=""
                       />
@@ -45,28 +49,28 @@ const Header = () => {
                   </div>
 
                   <div
-                    class="origin-top-right z-40 absolute -right-2 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className={`${expanded ? 'hidden' : 'origin-top-right z-40 absolute -right-2 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'}`}
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="user-menu"
                   >
                     <Link
                       href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
                       Your Profile
                     </Link>
                     <Link
                       href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
                       Settings
                     </Link>
                     <Link
                       href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
                       Sign out
@@ -75,13 +79,13 @@ const Header = () => {
                 </div>
               </div>
 
-              <div class="w-full py-5 lg:border-t lg:border-white lg:border-opacity-20">
-                <div class="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center">
-                  <div class="hidden lg:block lg:col-span-2">
-                    <nav class="flex space-x-4">
+              <div className="w-full py-5 lg:border-t lg:border-white lg:border-opacity-20">
+                <div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center">
+                  <div className="hidden lg:block lg:col-span-2">
+                    <nav className="flex space-x-4">
                       <Link
                         href="#"
-                        class="text-white text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                        className="text-white text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="page"
                       >
                         Home
@@ -89,7 +93,7 @@ const Header = () => {
 
                       <Link
                         href="#"
-                        class="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                        className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
                         Profile
@@ -97,7 +101,7 @@ const Header = () => {
 
                       <Link
                         href="#"
-                        class="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                        className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
                         Resources
@@ -105,7 +109,7 @@ const Header = () => {
 
                       <Link
                         href="#"
-                        class="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                        className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
                         Company Directory
@@ -113,22 +117,22 @@ const Header = () => {
 
                       <Link
                         href="#"
-                        class="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                        className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
                         Openings
                       </Link>
                     </nav>
                   </div>
-                  <div class="px-12 lg:px-0">
-                    <div class="max-w-xs mx-auto w-full lg:max-w-md">
-                      <label for="search" class="sr-only">
+                  <div className="px-12 lg:px-0">
+                    <div className="max-w-xs mx-auto w-full lg:max-w-md">
+                      <label for="search" className="sr-only">
                         Search
                       </label>
-                      <div class="relative text-white focus-within:text-gray-600">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                      <div className="relative text-white focus-within:text-gray-600">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
                           <svg
-                            class="h-5 w-5"
+                            className="h-5 w-5"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                             fill="currentColor"
@@ -143,7 +147,7 @@ const Header = () => {
                         </div>
                         <input
                           id="search"
-                          class="block w-full text-white bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 focus:text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm"
+                          className="block w-full text-white bg-white bg-opacity-20 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 focus:text-gray-900 placeholder-white focus:outline-none focus:bg-opacity-100 focus:border-transparent focus:placeholder-gray-500 focus:ring-0 sm:text-sm"
                           placeholder="Search"
                           type="search"
                           name="search"
@@ -154,16 +158,16 @@ const Header = () => {
                 </div>
               </div>
 
-              <div class="absolute right-0 flex-shrink-0 lg:hidden">
+              <div className="absolute right-0 flex-shrink-0 lg:hidden">
                 <button
                   type="button"
-                  class="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-cyan-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-cyan-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white"
                   aria-expanded="false"
                 >
-                  <span class="sr-only">Open main menu</span>
+                  <span className="sr-only">Open main menu</span>
 
                   <svg
-                    class="block h-6 w-6"
+                    className="block h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -179,7 +183,7 @@ const Header = () => {
                   </svg>
 
                   <svg
-                    class="hidden h-6 w-6"
+                    className="hidden h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -198,31 +202,31 @@ const Header = () => {
             </div>
           </div>
 
-          <div class="lg:hidden">
+          <div className="lg:hidden">
             <div
-              class="z-20 fixed inset-0 bg-black bg-opacity-25"
+              className="z-20 fixed inset-0 bg-black bg-opacity-25"
               aria-hidden="true"
             ></div>
 
-            <div class="z-30 absolute top-0 inset-x-0 max-w-3xl mx-auto w-full p-2 transition transform origin-top">
-              <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y divide-gray-200">
-                <div class="pt-3 pb-2">
-                  <div class="flex items-center justify-between px-4">
+            <div className="z-30 absolute top-0 inset-x-0 max-w-3xl mx-auto w-full p-2 transition transform origin-top">
+              <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y divide-gray-200">
+                <div className="pt-3 pb-2">
+                  <div className="flex items-center justify-between px-4">
                     <div>
                       <img
-                        class="h-8 w-auto"
+                        className="h-8 w-auto"
                         src="https://tailwindui.com/img/logos/workflow-mark-cyan-600.svg"
                         alt="Workflow"
                       />
                     </div>
-                    <div class="-mr-2">
+                    <div className="-mr-2">
                       <button
                         type="button"
-                        class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500"
+                        className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500"
                       >
-                        <span class="sr-only">Close menu</span>
+                        <span className="sr-only">Close menu</span>
                         <svg
-                          class="h-6 w-6"
+                          className="h-6 w-6"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -239,60 +243,60 @@ const Header = () => {
                       </button>
                     </div>
                   </div>
-                  <div class="mt-3 px-2 space-y-1">
+                  <div className="mt-3 px-2 space-y-1">
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Home
                     </Link>
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Profile
                     </Link>
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Resources
                     </Link>
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Company Directory
                     </Link>
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Openings
                     </Link>
                   </div>
                 </div>
-                <div class="pt-4 pb-2">
-                  <div class="flex items-center px-5">
-                    <div class="flex-shrink-0">
+                <div className="pt-4 pb-2">
+                  <div className="flex items-center px-5">
+                    <div className="flex-shrink-0">
                       <img
-                        class="h-10 w-10 rounded-full"
+                        className="h-10 w-10 rounded-full"
                         src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
                         alt=""
                       />
                     </div>
-                    <div class="ml-3 min-w-0 flex-1">
-                      <div class="text-base font-medium text-gray-800 truncate">
+                    <div className="ml-3 min-w-0 flex-1">
+                      <div className="text-base font-medium text-gray-800 truncate">
                         Rebecca Nicholas
                       </div>
-                      <div class="text-sm font-medium text-gray-500 truncate">
+                      <div className="text-sm font-medium text-gray-500 truncate">
                         rebecca.nicholas@example.com
                       </div>
                     </div>
-                    <button class="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
-                      <span class="sr-only">View notifications</span>
+                    <button className="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                      <span className="sr-only">View notifications</span>
                       <svg
-                        class="h-6 w-6"
+                        className="h-6 w-6"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -308,22 +312,22 @@ const Header = () => {
                       </svg>
                     </button>
                   </div>
-                  <div class="mt-3 px-2 space-y-1">
+                  <div className="mt-3 px-2 space-y-1">
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Your Profile
                     </Link>
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Settings
                     </Link>
                     <Link
                       href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Sign out
                     </Link>
