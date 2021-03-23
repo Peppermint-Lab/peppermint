@@ -59,22 +59,15 @@ const Header = () => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
-                      Your Profile
-                    </Link>
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                    >
                       Settings
                     </Link>
-                    <Link
-                      href="#"
+                    <button
+                      onClick={null}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
                       Sign out
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -88,7 +81,7 @@ const Header = () => {
                         className="text-white text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="page"
                       >
-                        Home
+                        Dashboard
                       </Link>
 
                       <Link
@@ -104,7 +97,7 @@ const Header = () => {
                         className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
-                        Resources
+                        Tickets
                       </Link>
 
                       <Link
@@ -112,7 +105,7 @@ const Header = () => {
                         className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
-                        Company Directory
+                        History
                       </Link>
 
                       <Link
@@ -120,7 +113,7 @@ const Header = () => {
                         className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
-                        Openings
+                        Admin
                       </Link>
                     </nav>
                   </div>
