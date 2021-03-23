@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
+import CreateTodo from "../todos/CreateTodo";
+import ListTodo from "../todos/ListTodo";
+
 const Main = () => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || {
@@ -62,13 +65,19 @@ const Main = () => {
               </section>
 
               <section aria-labelledby="quick-links-title">
-                <div class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
+                <div class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:gap-px">
                   <h2 class="sr-only" id="quick-links-title">
                     Notes and Todos
                   </h2>
-                  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                      
+                  <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                    <ul class="divide-y divide-gray-200">
+                      <li class="px-4 py-4 sm:px-6">
+                        <CreateTodo />
+                        <ListTodo />
+                      </li>
+                    </ul>
                   </div>
+                  
                 </div>
               </section>
             </div>
