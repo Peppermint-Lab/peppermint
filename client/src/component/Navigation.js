@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { FeedbackFish } from "@feedback-fish/react";
+// import { FeedbackFish } from "@feedback-fish/react";
 
 import { Menu, Layout, Button, Select, Modal, Form, Input, Radio, Space, } from "antd";
 import { SettingTwoTone } from "@ant-design/icons";
 
-import NewTicket from "./ticket/NewTicket";
+// import NewTicket from "./ticket/NewTicket";
 
 import { GlobalContext } from "../Context/GlobalState";
 
@@ -138,13 +138,6 @@ const Navigation = () => {
                   Log out
                 </Menu.Item>
               </SubMenu>
-              <Menu.Item key={10} style={{ float: "right" }}>
-                <FeedbackFish projectId="d01cb6ead51020">
-                  <Button size="small" type="text">
-                    Feedback
-                  </Button>
-                </FeedbackFish>
-              </Menu.Item>
               <Menu.Item key={4} style={{ float: "right" }}>
                 <div className="ticket-modal">
                   <Button
@@ -298,13 +291,6 @@ const Navigation = () => {
                   Log out
                 </Menu.Item>
               </SubMenu>
-              <Menu.Item key={10} style={{ float: "right" }}>
-                <FeedbackFish projectId="d01cb6ead51020">
-                  <Button size="small" type="text">
-                    Feedback
-                  </Button>
-                </FeedbackFish>
-              </Menu.Item>
               <Menu.Item key={4} style={{ float: "right" }}>
               <div className="ticket-modal">
                   <Button
