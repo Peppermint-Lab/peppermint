@@ -47,8 +47,8 @@ const Login = () => {
 
   return (
     <div>
-      <Spin spinning={toggle}>
         <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <Spin spinning={toggle}>
           <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <img
               class="mx-auto h-12 w-auto"
@@ -123,8 +123,8 @@ const Login = () => {
               </div>
             </div>
           </div>
+          </Spin>
         </div>
-      </Spin>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import ListNote from "../notes/ListNote";
 
@@ -6,12 +6,57 @@ import CreateTodo from "../todos/CreateTodo";
 import ListTodo from "../todos/ListTodo";
 
 const Main = () => {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || {
-      name: "Admin",
-      email: "admin@test.com",
-    }
-  );
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [openTickets, setOpenTickets] = useState()
+  const [completedTickets, setCompletedTickets] = useState()
+  const [unissuedTickets, setUnissuedTickets] = useState()
+
+  async function getOpenTickets() {
+    await fetch(`/api/v1/data/openTickets`, {
+      method: "get",
+      headers: {
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setOpenTickets(result.result);
+      });
+  }
+
+  async function getCompletedTickets() {
+    await fetch(`/api/v1/data/completedTickets`, {
+      method: "get",
+      headers: {
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setCompletedTickets(result.result);
+      });
+  }
+
+  async function getUnissuedTickets() {
+    await fetch(`/api/v1/data/unallocatedTickets`, {
+      method: "get",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setUnissuedTickets(result.result);
+      });
+  }
+
+  useEffect(() => {
+    getOpenTickets()
+    getCompletedTickets()
+    getUnissuedTickets()
+  })
+
 
   return (
     <div>
@@ -48,18 +93,18 @@ const Main = () => {
                   </div>
                   <div class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
                     <div class="px-6 py-5 text-sm font-medium text-center">
-                      <span class="text-gray-900">12 </span>
-                      <span class="text-gray-600">Vacation days left</span>
+                      <span class="text-gray-900">{openTickets} </span>
+                      <span class="text-gray-600">Tickets Open</span>
                     </div>
 
                     <div class="px-6 py-5 text-sm font-medium text-center">
-                      <span class="text-gray-900">4 </span>
-                      <span class="text-gray-600">Sick days left</span>
+                      <span class="text-gray-900">{completedTickets} </span>
+                      <span class="text-gray-600">Tickets Unissued</span>
                     </div>
 
                     <div class="px-6 py-5 text-sm font-medium text-center">
-                      <span class="text-gray-900">2 </span>
-                      <span class="text-gray-600">Personal days left</span>
+                      <span class="text-gray-900">{unissuedTickets} </span>
+                      <span class="text-gray-600">Tickets Completed</span>
                     </div>
                   </div>
                 </div>
