@@ -1,11 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
-// import { FeedbackFish } from "@feedback-fish/react";
+import { FeedbackFish } from "@feedback-fish/react";
 
-import { Menu, Layout, Button, Select, Modal, Form, Input, Radio, Space, } from "antd";
+import {
+  Menu,
+  Layout,
+  Button,
+  Select,
+  Modal,
+  Form,
+  Input,
+  Radio,
+  Space,
+} from "antd";
 import { SettingTwoTone } from "@ant-design/icons";
 
-// import NewTicket from "./ticket/NewTicket";
+import NewTicket from "./ticket/NewTicket";
 
 import { GlobalContext } from "../Context/GlobalState";
 
@@ -68,14 +78,14 @@ const Navigation = () => {
   };
 
   const onCreate = async (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     setVisible(false);
     await createTicket(name, email, company, issue, priority);
   };
 
   const onCancel = async (e) => {
     await setVisible(false);
-    e.stopPropagation()
+    e.stopPropagation();
   };
 
   useEffect(() => {
@@ -84,7 +94,9 @@ const Navigation = () => {
     // eslint-disable-next-line
   }, []);
 
-  const search = options ? options.map((d) => <Option key={d._id}>{d.name}</Option>) : null 
+  const search = options
+    ? options.map((d) => <Option key={d._id}>{d.name}</Option>)
+    : null;
 
   const Render = () => {
     if (checkAdmin) {
@@ -140,106 +152,7 @@ const Navigation = () => {
               </SubMenu>
               <Menu.Item key={4} style={{ float: "right" }}>
                 <div className="ticket-modal">
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={(e) => {
-                      
-                      setVisible(true);
-                    }}
-                  >
-                    Create Ticket
-                  </Button>
-                  <Modal
-                    destroyOnClose={true}
-                    visible={visible}
-                    title="Create new Ticket"
-                    onCancel={onCancel}
-                    centered
-                    onOk={() => {
-                      form
-                        .validateFields()
-                        .then((values) => {
-                          form.resetFields();
-                          onCreate(values);
-                        })
-                        .catch((info) => {
-                          console.log("Validate Failed:", info);
-                        });
-                    }}
-                    footer={[
-                      <Button
-                        style={{ float: "left" }}
-                        onClick={() => onCancel()}
-                      >
-                        Cancel
-                      </Button>,
-                      <Button onClick={() => onCreate()}>Submit</Button>,
-                    ]}
-                  >
-                    <Form
-                      size="middle"
-                      form={form}
-                      layout="vertical"
-                      name="form_in_modal"
-                      initialValues={{
-                        modifier: "public",
-                      }}
-                    >
-                      <Form.Item name="name">
-                        <Input
-                          placeholder="Enter name here..."
-                          name="name"
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                      </Form.Item>
-                      <Form.Item name="email">
-                        <Input
-                          placeholder="Enter email here...."
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-                      </Form.Item>
-                      <Form.Item name="Client">
-                        <Select
-                          showSearch
-                          placeholder="Select a client"
-                          optionFilterProp="children"
-                          onChange={setCompany}
-                          filterOption={(input, option) =>
-                            option.children
-                              .toLowerCase()
-                              .indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          {search || null}
-                        </Select>
-                      </Form.Item>
-                      <Form.Item name="issue" label="Issue">
-                        <TextArea
-                          rows={5}
-                          onChange={(e) => setIssue(e.target.value)}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        name="modifier"
-                        label="Priority"
-                        className="collection-create-form_last-form-item"
-                      >
-                        <Radio.Group
-                          buttonStyle="solid"
-                          value={priority}
-                          onChange={(e) => setPriority(e.target.value)}
-                          style={{ textAlign: "center" }}
-                        >
-                          <Space>
-                            <Radio.Button value="Low">Low</Radio.Button>
-                            <Radio.Button value="Normal">Normal</Radio.Button>
-                            <Radio.Button value="High">High</Radio.Button>
-                          </Space>
-                        </Radio.Group>
-                      </Form.Item>
-                    </Form>
-                  </Modal>
+                  <NewTicket />
                 </div>
               </Menu.Item>
             </Menu>
@@ -291,108 +204,16 @@ const Navigation = () => {
                   Log out
                 </Menu.Item>
               </SubMenu>
-              <Menu.Item key={4} style={{ float: "right" }}>
-              <div className="ticket-modal">
-                  <Button
-                    type="primary"
-                    size="small"
-                    onClick={(e) => {
-                      
-                      setVisible(true);
-                    }}
-                  >
-                    Create Ticket
+              <Menu.Item key={10} style={{ float: "right" }}>
+                <FeedbackFish projectId="d01cb6ead51020">
+                  <Button size="small" type="text">
+                    Feedback
                   </Button>
-                  <Modal
-                    destroyOnClose={true}
-                    visible={visible}
-                    title="Create new Ticket"
-                    onCancel={onCancel}
-                    centered
-                    onOk={() => {
-                      form
-                        .validateFields()
-                        .then((values) => {
-                          form.resetFields();
-                          onCreate(values);
-                        })
-                        .catch((info) => {
-                          console.log("Validate Failed:", info);
-                        });
-                    }}
-                    footer={[
-                      <Button
-                        style={{ float: "left" }}
-                        onClick={() => onCancel()}
-                      >
-                        Cancel
-                      </Button>,
-                      <Button onClick={() => onCreate()}>Submit</Button>,
-                    ]}
-                  >
-                    <Form
-                      size="middle"
-                      form={form}
-                      layout="vertical"
-                      name="form_in_modal"
-                      initialValues={{
-                        modifier: "public",
-                      }}
-                    >
-                      <Form.Item name="name">
-                        <Input
-                          placeholder="Enter name here..."
-                          name="name"
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                      </Form.Item>
-                      <Form.Item name="email">
-                        <Input
-                          placeholder="Enter email here...."
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-                      </Form.Item>
-                      <Form.Item name="Client">
-                        <Select
-                          showSearch
-                          placeholder="Select a client"
-                          optionFilterProp="children"
-                          onChange={setCompany}
-                          filterOption={(input, option) =>
-                            option.children
-                              .toLowerCase()
-                              .indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          {search || null}
-                        </Select>
-                      </Form.Item>
-                      <Form.Item name="issue" label="Issue">
-                        <TextArea
-                          rows={5}
-                          onChange={(e) => setIssue(e.target.value)}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        name="modifier"
-                        label="Priority"
-                        className="collection-create-form_last-form-item"
-                      >
-                        <Radio.Group
-                          buttonStyle="solid"
-                          value={priority}
-                          onChange={(e) => setPriority(e.target.value)}
-                          style={{ textAlign: "center" }}
-                        >
-                          <Space>
-                            <Radio.Button value="Low">Low</Radio.Button>
-                            <Radio.Button value="Normal">Normal</Radio.Button>
-                            <Radio.Button value="High">High</Radio.Button>
-                          </Space>
-                        </Radio.Group>
-                      </Form.Item>
-                    </Form>
-                  </Modal>
+                </FeedbackFish>
+              </Menu.Item>
+              <Menu.Item key={4} style={{ float: "right" }}>
+                <div className="ticket-modal">
+                  <NewTicket />
                 </div>
               </Menu.Item>
             </Menu>
