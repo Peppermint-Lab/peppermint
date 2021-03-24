@@ -1,10 +1,16 @@
 import React from 'react'
+import { HotKeys } from "react-hotkeys";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import 'antd/dist/antd.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './App.css'
 
 import UserDash from './pages/UserDash'
 import Login from './pages/auth/Login'
+
+const keyMap = {
+  CLOSE: ["escape"]
+};
 
 const Routing = () => {
     return (
@@ -25,7 +31,9 @@ const Routing = () => {
 const App = () => {
     return (
         <div>
+          <HotKeys keyMap={keyMap}>
             <Routing />
+          </HotKeys>
         </div>
     )
 }

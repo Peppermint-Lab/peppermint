@@ -5,3 +5,30 @@
 .todo-list li {
   list-style-type: none;
 }
+
+.App-header {
+  background-color: #282c34;
+  min-height: 5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  margin-bottom: 2vh;
+  text-align: center;
+}
+
+.wrapper-class {
+  padding: 1rem;
+  border: 1px solid #ccc;
+}
+.editor-class {
+  background-color:lightgray;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  min-height: 50vh
+}
+.toolbar-class {
+  border: 1px solid #ccc;
+}

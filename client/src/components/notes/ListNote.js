@@ -3,6 +3,7 @@ import { Button, Table, Space, Popconfirm } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
 
 import { GlobalContext } from "../../Context/GlobalState";
+import AddNote from "./AddNote";
 // import EditNote from "./EditNote";
 
 const ListNote = () => {
@@ -40,7 +41,10 @@ const ListNote = () => {
 
   return (
     <div>
-      <h3>Notes</h3>
+      <div className="flex flex-row ">
+        <h3>Notes</h3>
+        <AddNote />
+      </div>
       <Table
         dataSource={notes}
         columns={columns}
