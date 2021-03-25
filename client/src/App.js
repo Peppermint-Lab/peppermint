@@ -7,6 +7,8 @@ import './App.css'
 
 import UserDash from './pages/UserDash'
 import Login from './pages/auth/Login'
+import Header from './components/navigation/Header';
+import Settings from './pages/Settings'
 
 const keyMap = {
   CLOSE: ["escape"]
@@ -20,7 +22,12 @@ const Routing = () => {
 
           <Route exact path="/login">
             <Login />
-        </Route>
+          </Route>
+
+         <Route>
+           <Header />
+           <Route exact path="/settings" component={Settings} />
+        </Route> 
   
           
         </Switch>

@@ -73,19 +73,19 @@ const Header = () => {
                     aria-labelledby="user-menu"
                   >
                     <Link
-                      href="#"
+                      to="/settings"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
                       role="menuitem"
                     >
                       Settings
                     </Link>
-                    <button
+                    <Link
                       onClick={() => logout()}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full float-left	"
                       role="menuitem"
                     >
                       Sign out
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -95,19 +95,11 @@ const Header = () => {
                   <div className="hidden lg:block lg:col-span-2">
                     <nav className="flex space-x-4">
                       <Link
-                        href="#"
+                        to="/"
                         className="text-white text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="page"
                       >
                         Dashboard
-                      </Link>
-
-                      <Link
-                        href="#"
-                        className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
-                        aria-current="false"
-                      >
-                        Profile
                       </Link>
 
                       <Link
@@ -225,7 +217,7 @@ const Header = () => {
                   </div>
                   <div className="mt-3 px-2 space-y-1">
                     <Link
-                      href="#"
+                      to="/"
                       className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Dashboard
@@ -275,7 +267,7 @@ const Header = () => {
                   </div>
                   <div className="mt-3 px-2 space-y-1">
                     <Link
-                      href="#"
+                      to="/settings"
                       className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Settings
