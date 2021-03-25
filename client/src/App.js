@@ -9,6 +9,7 @@ import UserDash from './pages/UserDash'
 import Login from './pages/auth/Login'
 import Header from './components/navigation/Header';
 import Settings from './pages/Settings'
+import Tickets from './pages/Tickets'
 
 const keyMap = {
   CLOSE: ["escape"]
@@ -27,6 +28,7 @@ const Routing = () => {
          <Route>
            <Header />
            <Route exact path="/settings" component={Settings} />
+           <Route exact path="/tickets" component={Tickets} />
         </Route> 
   
           
