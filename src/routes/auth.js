@@ -16,7 +16,11 @@ const {
   getUserById,
   edit,
   deleteUser,
-  profile
+  profile,
+  saveFile,
+  deleteFile,
+  downloadFile,
+  listFile
 } = require("../controller/auth");
 
 router.route("/Login").post(Login);
@@ -38,5 +42,13 @@ router.route('/edit').put(isAuth, isAdmin, edit);
 router.route('/profile').put(isAuth, profile);
 
 router.route('/delete/:id').delete(isAuth, isAdmin, deleteUser);
+
+router.route("/uploadFile").post(isAuth, saveFile);
+
+router.route("/file/listFiles").get(isAuth, listFile)
+
+router.route('/file/del').post(isAuth, deleteFile)
+
+router.route('/file/download').post(isAuth, downloadFile)
 
 module.exports = router;

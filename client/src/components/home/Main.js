@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Upload, message, Button } from "antd";
+import { UploadOutlined, DeleteTwoTone } from "@ant-design/icons";
+
 import Active from "../newsletter/Active";
 import ListNote from "../notes/ListNote";
-
 import CreateTodo from "../todos/CreateTodo";
 import ListTodo from "../todos/ListTodo";
+import Files from './Files'
 
 const Main = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  const [openTickets, setOpenTickets] = useState()
-  const [completedTickets, setCompletedTickets] = useState()
-  const [unissuedTickets, setUnissuedTickets] = useState()
+  const [openTickets, setOpenTickets] = useState();
+  const [completedTickets, setCompletedTickets] = useState();
+  const [unissuedTickets, setUnissuedTickets] = useState();
+  const [file, setFile] = useState([]);
 
   async function getOpenTickets() {
     await fetch(`/api/v1/data/openTickets`, {
@@ -42,7 +46,6 @@ const Main = () => {
     await fetch(`/api/v1/data/unallocatedTickets`, {
       method: "get",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
         ContentType: "application/json",
       },
     })
@@ -53,11 +56,38 @@ const Main = () => {
   }
 
   useEffect(() => {
-    getOpenTickets()
-    getCompletedTickets()
-    getUnissuedTickets()
-  })
+    getOpenTickets();
+    getCompletedTickets();
+    getUnissuedTickets();
+  }, []);
 
+  const propsUpload = {
+    name: "file",
+    action: `/api/v1/auth/uploadFile`,
+    data: () => {
+      let data = new FormData();
+      data.append("file", file);
+      data.append("filename", file.name);
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    progress: {
+      strokeColor: {
+        "0%": "#108ee9",
+        "100%": "#87d068",
+      },
+      strokeWidth: 3,
+      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
+    },
+  };
 
   return (
     <div>
@@ -77,7 +107,7 @@ const Main = () => {
                         <div class="flex-shrink-0">
                           <span class="inline-flex items-center justify-center h-14 w-14 rounded-full bg-gray-500">
                             <span class="text-xl font-medium leading-none text-white">
-                            {user.name[0]}
+                              {user.name[0]}
                             </span>
                           </span>
                         </div>
@@ -124,7 +154,7 @@ const Main = () => {
                       </li>
                     </ul>
                   </div>
-                  
+
                   <div class="bg-white shadow overflow-hidden sm:rounded-md mt-5">
                     <ul class="divide-y divide-gray-200">
                       <li class="px-4 py-4 sm:px-6">
@@ -132,7 +162,6 @@ const Main = () => {
                       </li>
                     </ul>
                   </div>
-                  
                 </div>
               </section>
             </div>
@@ -154,15 +183,18 @@ const Main = () => {
 
               <section aria-labelledby="recent-hires-title">
                 <div class="rounded-lg bg-white overflow-hidden shadow">
-                  <div class="p-6">
+                  <div class="p-6 flex flex-col">
                     <h2
                       class="text-base font-medium text-gray-900"
                       id="recent-hires-title"
                     >
                       Personal Files
                     </h2>
-                    
+                    <Upload {...propsUpload} className="mb-3" >
+                      <button><UploadOutlined /></button>
+                    </Upload>
                   </div>
+                  <Files />
                 </div>
               </section>
             </div>
