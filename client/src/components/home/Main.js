@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Active from "../newsletter/Active";
 import ListNote from "../notes/ListNote";
 
 import CreateTodo from "../todos/CreateTodo";
@@ -146,40 +147,7 @@ const Main = () => {
                     >
                       Announcements
                     </h2>
-                    <div class="flow-root mt-6">
-                      <ul class="-my-5 divide-y divide-gray-200">
-                        <li class="py-5">
-                          <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
-                            <h3 class="text-sm font-semibold text-gray-800">
-                              <Link
-                                href="#"
-                                class="hover:underline focus:outline-none"
-                              >
-                                <span
-                                  class="absolute inset-0"
-                                  aria-hidden="true"
-                                ></span>
-                                Office closed on July 2nd
-                              </Link>
-                            </h3>
-                            <p class="mt-1 text-sm text-gray-600 line-clamp-2">
-                              Cum qui rem deleniti. Suscipit in dolor veritatis
-                              sequi aut. Vero ut earum quis deleniti. Ut a sunt
-                              eum cum ut repudiandae possimus. Nihil ex tempora
-                              neque cum consectetur dolores.
-                            </p>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="mt-6">
-                      <Link
-                        href="#"
-                        class="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                      >
-                        View all
-                      </Link>
-                    </div>
+                    <Active />
                   </div>
                 </div>
               </section>
