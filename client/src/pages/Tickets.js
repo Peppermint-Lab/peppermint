@@ -1,104 +1,42 @@
-import React, { useEffect, useContext } from "react";
-import { GlobalContext } from "../Context/GlobalState";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Open from "../components/ticket/Open";
+import Unissued from "../components/ticket/Unissued";
 
 const Tickets = () => {
-  const { openTicket, getOpenTicket } = useContext(GlobalContext);
-  useEffect(() => {
-    getOpenTicket();
-    // eslint-disable-next-line
-  }, []);
-
-  const high = "bg-red-100 text-red-800";
-  const low = "bg-blue-100 text-blue-800";
-  const normal = 'bg-green-100 text-green-800'
+  const [open, setOpen] = useState(true);
+  const [unissued, setUnissued] = useState(false);
 
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8 -mt-10">
-      <div class="flex flex-col">
-        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Client
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Priority
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Issue
-                    </th>
-                    <th scope="col" class="relative px-6 py-3">
-                      <span class="sr-only">Edit</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {openTicket.map((ticket) => {
+    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8 -mt-20">
+      <div>
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <Link
+            onClick={() => {
+              setOpen(true);
+              setUnissued(false);
+            }}
+            class="text-white border-transparent hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+          >
+            Open Tickets
+          </Link>
 
-                    let p = ticket.priority
-                    let badge 
-
-                    if(p === 'Low') {
-                        badge = low
-                    } 
-                    if(p === 'normal') {
-                        badge = normal
-                    }
-                    if(p === 'high') {
-                        badge = high
-                    }
-
-                    return (
-                      <tr class="bg-white">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {ticket.name}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {ticket.client.name}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}>
-                            {ticket.priority}
-                          </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {ticket.issue}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Link
-                            href="#"
-                            class="text-indigo-600 hover:text-indigo-900"
-                          >
-                            Edit
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+          <Link
+            onClick={() => {
+              setOpen(false);
+              setUnissued(true);
+            }}
+            class="text-white border-transparent hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+          >
+            Unissued Tickets
+          </Link>
+        </nav>
+      </div>
+      <div className={`${open ? "" : "hidden"}`}>
+        <Open />
+      </div>
+      <div className={`${unissued ? "" : "hidden"}`}>
+        <Unissued />
       </div>
     </div>
   );

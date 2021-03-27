@@ -16,8 +16,11 @@ const {
   saveFile,
   listFile,
   deleteFile,
-  downloadFile
+  downloadFile,
+  getTicketById
 } = require("../controller/ticket");
+
+router.route('/getTicketById/:id').get(isAuth, getTicketById)
 
 router.route("/createTicket").post(isAuth, createTicket);
 

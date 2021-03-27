@@ -1,6 +1,6 @@
 import React from 'react'
 import { HotKeys } from "react-hotkeys";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, withRouter  } from "react-router-dom";
 import 'antd/dist/antd.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './App.css'
@@ -10,14 +10,18 @@ import Login from './pages/auth/Login'
 import Header from './components/navigation/Header';
 import Settings from './pages/Settings'
 import Tickets from './pages/Tickets'
+import Detail from './components/ticket/Detail'
 
 const keyMap = {
   CLOSE: ["escape"]
 };
 
 const Routing = () => {
+
+
+
     return (
-      <Router>
+      <Router >
         <Switch>
           <Route exact path="/" component={UserDash} />
 
@@ -29,6 +33,7 @@ const Routing = () => {
            <Header />
            <Route exact path="/settings" component={Settings} />
            <Route exact path="/tickets" component={Tickets} />
+           <Route path ="/tickets/:id" component={withRouter(Detail)} key={Math.random()} />
         </Route> 
   
           

@@ -1,6 +1,6 @@
-import { Button } from "antd";
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import Create from "../ticket/Create";
 
 const Header = () => {
   const history = useHistory();
@@ -43,6 +43,8 @@ const Header = () => {
               </div>
 
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
+                <Create />
+
                 <div className="ml-4 relative flex-shrink-0">
                   <div>
                     <button
@@ -127,7 +129,6 @@ const Header = () => {
                       </Link>
                     </nav>
                   </div>
-                  
                 </div>
               </div>
 
@@ -178,9 +179,19 @@ const Header = () => {
 
           <div className="lg:hidden">
             <div
-              className={`${show ? 'z-30 absolute top-0 inset-x-0 max-w-3xl mx-auto w-full p-2 transition transform origin-to' : 'hidden'}`}
+              className={`${
+                show
+                  ? "z-30 absolute top-0 inset-x-0 max-w-3xl mx-auto w-full p-2 transition transform origin-to"
+                  : "hidden"
+              }`}
             >
-              <div className={`${show ? 'rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y divide-gray-200' : 'hidden'}`}>
+              <div
+                className={`${
+                  show
+                    ? "rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y divide-gray-200"
+                    : "hidden"
+                }`}
+              >
                 <div className="pt-3 pb-2">
                   <div className="flex items-center justify-between px-4">
                     <div>
@@ -252,7 +263,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                        {user.name[0]}
+                          {user.name[0]}
                         </span>
                       </span>
                     </div>
@@ -272,10 +283,7 @@ const Header = () => {
                     >
                       Settings
                     </Link>
-                    <Link
-                      
-                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                    >
+                    <Link className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">
                       Sign out
                     </Link>
                   </div>
