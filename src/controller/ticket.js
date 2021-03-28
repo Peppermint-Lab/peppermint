@@ -7,7 +7,7 @@ const fs = require("fs");
 exports.getTicketById = async (req, res) => {
   try {
     await TicketSchema.findById({ _id: req.params.id })
-      .populate("client", "_id name")
+      .populate("client", "_id name number")
       .populate("assignedto", "_id name")
       .then((ticket) => {
         res.json({ ticket });
@@ -22,7 +22,7 @@ exports.getTicketById = async (req, res) => {
 exports.openTickets = async (req, res) => {
   try {
     await TicketSchema.find({ status: "issued", assignedto: req.user._id })
-      .populate("client", "_id name")
+      .populate("client", "_id name number")
       .populate("assignedto", "_id name")
       .then((tickets) => {
         res.json({ tickets });

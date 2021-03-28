@@ -14,6 +14,8 @@
     "dompurify": "^2.2.7",
     "draft-convert": "^2.1.10",
     "draft-js": "^0.11.7",
+    "js-file-download": "^0.4.12",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "^1.14.5",
