@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { Switch } from 'antd';
 import Create from "../ticket/Create";
+import useDarkMode from "../../hooks/useDarkMode";
 
 const Header = () => {
   const history = useHistory();
+  const [colorTheme, setTheme] = useDarkMode();
 
   const [expanded, setExpanded] = useState(false);
   const [show, setShow] = useState(false);
@@ -22,7 +25,7 @@ const Header = () => {
   return (
     <div>
       <div className="">
-        <header className="pb-24 bg-gradient-to-r from-green-800 to-green-400">
+        <header className="pb-24 bg-gradient-to-r from-green-800 to-green-400 dark:bg-white">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="relative flex flex-wrap items-center justify-center lg:justify-between">
               <div className="absolute left-0 py-5 flex-shrink-0 lg:static">
@@ -43,8 +46,12 @@ const Header = () => {
               </div>
 
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
+                <div>
+                  <Switch onChange={() => {
+                    setTheme(!colorTheme)
+                  }} />
+                </div>
                 <Create />
-
                 <div className="ml-4 relative flex-shrink-0">
                   <div>
                     <button

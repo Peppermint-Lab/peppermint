@@ -8,6 +8,14 @@ const UserDash = () => {
   const history = useHistory();
 
   useEffect(() => {
+    if(localStorage.getItem('user') === null) {
+      history.push('/login')
+    } else {
+      return true
+    }
+  })
+
+  useEffect(() => {
     async function auth() {
       await fetch(`/api/v1/auth/token`, {
         method: "GET",

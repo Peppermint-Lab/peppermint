@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
+
+const Open = (props) => {
+  console.log(props);
+
+  return <div></div>;
+};
 
 const Active = () => {
   const [news, setNews] = useState([]);
+  const [read, setRead] = useState(false);
 
   useEffect(() => {
     async function getNewsletter() {
@@ -31,15 +37,15 @@ const Active = () => {
         {news ? (
           news.map((annoucment) => {
             return (
+              <div>
               <ul class="-my-5 divide-y divide-gray-200" key={annoucment._id}>
                 <li class="py-5">
                   <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
                     <h3 class="text-sm font-semibold text-gray-800">
-                      <Link to="" class="hover:underline focus:outline-none">
-                        <span
-                          class="absolute inset-0"
-                          aria-hidden="true"
-                        ></span>
+                      <Link
+                        onClick={() => setRead(true)}
+                        class="hover:underline focus:outline-none"
+                      >
                         {annoucment.title}
                       </Link>
                     </h3>
@@ -48,7 +54,8 @@ const Active = () => {
                     </p>
                   </div>
                 </li>
-              </ul>
+              </ul>          
+              </div>
             );
           })
         ) : (
