@@ -43,7 +43,7 @@ router.route('/profile').put(isAuth, profile);
 
 router.route('/delete/:id').delete(isAuth, isAdmin, deleteUser);
 
-router.route("/uploadFile").post(isAuth, saveFile);
+router.route("/uploadFile/upload").post(isAuth, saveFile);
 
 router.route("/file/listFiles").get(isAuth, listFile)
 

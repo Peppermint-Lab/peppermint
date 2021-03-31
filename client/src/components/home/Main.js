@@ -63,7 +63,7 @@ const Main = () => {
 
   const propsUpload = {
     name: "file",
-    action: `/api/v1/auth/uploadFile`,
+    action: `/api/v1/auth/uploadFile/upload`,
     data: () => {
       let data = new FormData();
       data.append("file", file);

@@ -5,7 +5,7 @@ const { ObjectId } = mongoose.Schema.Types;
 const file = new mongoose.Schema(
   {
     user: { type: ObjectId, ref: "InternalUser", required: true },
-    ticket: { type: ObjectId, ref: "ticketschemas" },
+    ticket: { type: ObjectId, ref: "ticketschemas", required: false },
     filename: {
       required: true,
       type: String,
