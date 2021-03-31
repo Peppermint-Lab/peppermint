@@ -229,7 +229,6 @@ exports.saveFile = async (req, res) => {
   const file = req.files.file;
   const uploadPath = "files/" + `${req.user._id}/` + file.name;
 
-  console.log(file)
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
