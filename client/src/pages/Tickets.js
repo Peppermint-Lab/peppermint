@@ -8,7 +8,7 @@ const Tickets = () => {
   const [unissued, setUnissued] = useState(false);
 
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8 -mt-20">
+    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 -mt-20">
       <div>
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
           <Link

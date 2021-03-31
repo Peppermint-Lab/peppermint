@@ -22,7 +22,7 @@ const Header = () => {
   return (
     <div>
       <div className="">
-        <header className="pb-24 bg-gradient-to-r from-green-800 to-green-400">
+        <header className="pb-16 bg-gradient-to-r from-green-800 to-green-400">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="relative flex flex-wrap items-center justify-center lg:justify-between">
               <div className="absolute left-0 py-5 flex-shrink-0 lg:static">
@@ -121,7 +121,7 @@ const Header = () => {
                       </Link>
 
                       <Link
-                        href="#"
+                        to='/admin/dashboard'
                         className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
@@ -246,15 +246,11 @@ const Header = () => {
                       History
                     </Link>
                     <Link
-                      href="#"
+                      to='/admin/dashboard'
                       className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Admin
                     </Link>
-                    <Link
-                      href="#"
-                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                    ></Link>
                   </div>
                 </div>
                 <div className="pt-4 pb-2">
