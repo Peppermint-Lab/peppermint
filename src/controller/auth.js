@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("InternalUser");
+const File = mongoose.model("file");
+const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -229,7 +231,6 @@ exports.saveFile = async (req, res) => {
   const file = req.files.file;
   const uploadPath = "files/" + `${req.user._id}/` + file.name;
 
-  console.log(file)
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
@@ -250,13 +251,17 @@ exports.saveFile = async (req, res) => {
         });
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: error })
+  }
 };
 
 exports.listFile = async (req, res) => {
   try {
     const files = await File.find({
       user: mongoose.Types.ObjectId(req.user._id),
+      ticket: null
     });
     res.status(200).json({ sucess: true, files });
   } catch (error) {}

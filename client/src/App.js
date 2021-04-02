@@ -11,6 +11,7 @@ import Header from './components/navigation/Header';
 import Settings from './pages/Settings'
 import Tickets from './pages/Tickets'
 import Detail from './components/ticket/Detail'
+import Admin from './pages/Admin';
 
 const keyMap = {
   CLOSE: ["escape"]
@@ -34,6 +35,9 @@ const Routing = () => {
            <Route exact path="/settings" component={Settings} />
            <Route exact path="/tickets" component={Tickets} />
            <Route path ="/tickets/:id" component={withRouter(Detail)} key={Math.random()} />
+           <Route exact path="/admin/:path?">
+             <Route exact path='/admin/dashboard' component={Admin} />
+          </Route>
         </Route> 
   
           

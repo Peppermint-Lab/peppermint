@@ -1,27 +1,103 @@
-import React from "react";
-// import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Space, Button } from "antd";
+import fileDownload from "js-file-download";
+import axios from "axios";
+import {
+  FileTwoTone,
+  MinusCircleTwoTone,
+  UploadOutlined,
+} from "@ant-design/icons";
 
 const Files = () => {
+
+  const [files, setFiles] = useState([]);
+
+  console.log(files)
+
+  async function getFiles() {
+    await fetch(`/api/v1/auth/file/listFiles`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setFiles(res.files);
+      });
+  }
+
+  async function deleteFile(file) {
+    await fetch(`/api/v1/auth/file/del`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        file: file._id,
+        path: file.path,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setFiles(res.files);
+      });
+  }
+
+  function download(file) {
+    const url = `/api/v1/auth/file/download`;
+    let data = new FormData();
+    data.append("filepath", file.path);
+    axios
+      .post(url, data, {
+        responseType: "blob",
+      })
+      .then((res) => {
+        fileDownload(res.data, file.filename);
+      });
+  }
+
+  useEffect(() => {
+    getFiles();
+  }, []);
+
   return (
     <div>
       <div class="flow-root p-5 mx-auto -mt-5 ml-1">
-        <ul class="-my-5 divide-y divide-gray-200">
-          <li class="py-4">
-            <div class="flex items-center space-x-4">
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 truncate">
-                  Leonard Krasner
-                </p>
-                <p class="text-sm text-gray-500 truncate">@leonardkrasner</p>
-              </div>
-              <div>
-                <button className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
-                  download
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
+      {files.map((file) => {
+        return (
+          <div className="w-full" key={file._id}>
+            <ul>
+              <li>
+                <Space>
+                  <FileTwoTone />
+                  <span>{file.filename}</span>
+                  <Button
+                    ghost
+                    style={{ float: "right" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteFile(file);
+                    }}
+                  >
+                    <MinusCircleTwoTone twoToneColor="#FF0000	" />
+                  </Button>
+                  <Button
+                    ghost
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      download(file);
+                    }}
+                  >
+                    <UploadOutlined style={{ color: "black" }} />
+                  </Button>
+                </Space>
+              </li>
+            </ul>
+          </div>
+        );
+      })}
       </div>
     </div>
   );

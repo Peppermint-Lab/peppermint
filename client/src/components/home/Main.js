@@ -63,7 +63,7 @@ const Main = () => {
 
   const propsUpload = {
     name: "file",
-    action: `/api/v1/auth/uploadFile`,
+    action: `/api/v1/auth/uploadFile/upload`,
     data: () => {
       let data = new FormData();
       data.append("file", file);
@@ -91,7 +91,7 @@ const Main = () => {
 
   return (
     <div>
-      <main class="-mt-24 pb-8">
+      <main class="-mt-16 pb-8">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h1 class="sr-only">Profile</h1>
           <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">

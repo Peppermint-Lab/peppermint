@@ -222,7 +222,10 @@ exports.saveFile = async (req, res) => {
         });
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: error })
+  }
 };
 
 exports.listFile = async (req, res) => {
