@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import { HotKeys } from "react-hotkeys";
 import { BrowserRouter as Router, Route, Switch, withRouter  } from "react-router-dom";
 import 'antd/dist/antd.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './App.css'
+import io from "socket.io-client";
 
 import UserDash from './pages/UserDash'
 import Login from './pages/auth/Login'
@@ -47,6 +48,15 @@ const Routing = () => {
   };
 
 const App = () => {
+
+  useEffect(() => {
+    async function soc() {
+      const socket = await io.connect("/");
+      socket.on("visitor enters");
+      socket.on("visitor exits");
+    }
+    soc();
+  }, []);
 
     return (
         <div>
