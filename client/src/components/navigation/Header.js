@@ -120,7 +120,7 @@ const Header = () => {
                       </Link>
 
                       <Link
-                        href="#"
+                        to="/history"
                         className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                         aria-current="false"
                       >
@@ -247,7 +247,7 @@ const Header = () => {
                       Tickets
                     </Link>
                     <Link
-                      href="#"
+                      to="/history"
                       className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       History

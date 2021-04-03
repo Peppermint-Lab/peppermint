@@ -13,14 +13,13 @@ import Settings from './pages/Settings'
 import Tickets from './pages/Tickets'
 import Detail from './components/ticket/Detail'
 import Admin from './pages/Admin';
+import History from "./pages/History";
 
 const keyMap = {
   CLOSE: ["escape"]
 };
 
 const Routing = () => {
-
-
 
     return (
       <Router >
@@ -35,6 +34,7 @@ const Routing = () => {
            <Header />
            <Route exact path="/settings" component={Settings} />
            <Route exact path="/tickets" component={Tickets} />
+           <Route exact path="/history" component={History} />
            <Route path ="/tickets/:id" component={withRouter(Detail)} key={Math.random()} />
            <Route exact path="/admin/:path?">
              <Route exact path='/admin/dashboard' component={Admin} />

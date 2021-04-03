@@ -1,18 +1,29 @@
-import React, { useEffect, useContext } from "react";
-import { GlobalContext } from "../../Context/GlobalState";
-import { Link  } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const Open = ({ match }) => {
-  const { openTicket, getOpenTicket } = useContext(GlobalContext);
+const History = () => {
+  const [tickets, setTickets] = useState([]);
+
+  async function getHistory() {
+    await fetch(`/api/v1/tickets/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setTickets(result.tickets);
+      });
+  }
+
   useEffect(() => {
-    getOpenTicket();
-    // eslint-disable-next-line
-  }, []);
+    getHistory();
+  });
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
-
 
   return (
     <div class="flex flex-col">
@@ -46,13 +57,25 @@ const Open = ({ match }) => {
                   >
                     Issue
                   </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Engineer
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Status
+                  </th>
                   <th scope="col" class="relative px-6 py-3">
                     <span class="sr-only">Edit</span>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {openTicket.map((ticket) => {
+                {tickets.map((ticket) => {
                   let p = ticket.priority;
                   let badge;
 
@@ -84,9 +107,18 @@ const Open = ({ match }) => {
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {ticket.issue}
                       </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {ticket.assignedto.name}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {ticket.status}
+                      </td>
                       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <Link
-                          to={{pathname:`tickets/${ticket._id}`, state: ticket }}
+                          to={{
+                            pathname: `tickets/${ticket._id}`,
+                            state: ticket,
+                          }}
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           view
@@ -104,4 +136,4 @@ const Open = ({ match }) => {
   );
 };
 
-export default Open;
+export default History;
