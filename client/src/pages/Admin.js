@@ -13,24 +13,26 @@ const Admin = () => {
   const [client, setClient] = useState(false);
   const [auth, setAuth] = useState(false);
 
+  const [show, setShow] = useState(false);
+
   return (
     <div>
-      <div class="h-screen flex overflow-hidden bg-gray-100">
+      <div className="h-screen flex overflow-hidden bg-gray-100">
         <div
-          class="fixed inset-0 flex z-40 md:hidden"
+          className={show ? "fixed inset-0 flex z-40 md:hidden" : "hidden"}
           role="dialog"
           aria-modal="true"
         >
           <div
-            class="fixed inset-0 bg-gray-600 bg-opacity-75"
+            className="fixed inset-0 bg-gray-600 bg-opacity-75"
             aria-hidden="true"
           ></div>
-          <div class="relative flex-1 flex flex-col max-w-xs w-full bg-white">
-            <div class="absolute top-0 right-0 -mr-12 pt-2">
-              <button class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                <span class="sr-only">Close sidebar</span>
+          <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
+            <div className="absolute top-0 right-0 -mr-12 pt-2">
+              <button onClick={() => setShow(false)} className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <span className="sr-only">Close sidebar</span>
                 <svg
-                  class="h-6 w-6 text-white"
+                  className="h-6 w-6 text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -47,18 +49,18 @@ const Admin = () => {
               </button>
             </div>
 
-            <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-              <nav class="mt-5 px-2 space-y-1">
+            <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+              <nav className="mt-5 px-2 space-y-1">
                 <Link
                   onClick={() => {
                     setDash(true);
                     setNews(false);
                     setClient(false);
                   }}
-                  class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                  className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
                   <svg
-                    class="text-gray-500 mr-4 h-6 w-6"
+                    className="text-gray-500 mr-4 h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -80,12 +82,12 @@ const Admin = () => {
                     setDash(false);
                     setNews(true);
                     setClient(false);
-                    setAuth(false)
+                    setAuth(false);
                   }}
-                  class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                  className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
                   <svg
-                    class="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
+                    className="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -107,12 +109,12 @@ const Admin = () => {
                     setClient(true);
                     setDash(false);
                     setNews(false);
-                    setAuth(false)
+                    setAuth(false);
                   }}
-                  class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                  className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
                   <svg
-                    class="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
+                    className="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -134,12 +136,12 @@ const Admin = () => {
                     setClient(false);
                     setDash(false);
                     setNews(false);
-                    setAuth(true)
+                    setAuth(true);
                   }}
-                  class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                  className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
                   <svg
-                    class="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
+                    className="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -158,15 +160,13 @@ const Admin = () => {
               </nav>
             </div>
           </div>
-
-          <div class="flex-shrink-0 w-14"></div>
         </div>
 
-        <div class="hidden md:flex md:flex-shrink-0">
-          <div class="flex flex-col w-64">
-            <div class="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
-              <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-                <nav class="mt-5 flex-1 px-2 bg-white space-y-1">
+        <div className="hidden md:flex md:flex-shrink-0">
+          <div className="flex flex-col w-64">
+            <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
+              <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
                   <Link
                     onClick={() => {
                       setDash(true);
@@ -174,10 +174,10 @@ const Admin = () => {
                       setClient(false);
                       setAuth(false);
                     }}
-                    class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:text-gray-900 hover:bg-gray-100"
+                    className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:text-gray-900 hover:bg-gray-100"
                   >
                     <svg
-                      class="text-gray-500 mr-3 h-6 w-6"
+                      className="text-gray-500 mr-3 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -201,10 +201,10 @@ const Admin = () => {
                       setClient(false);
                       setAuth(false);
                     }}
-                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                   >
                     <svg
-                      class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
+                      className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -228,10 +228,10 @@ const Admin = () => {
                       setNews(false);
                       setAuth(false);
                     }}
-                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                   >
                     <svg
-                      class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
+                      className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -255,10 +255,10 @@ const Admin = () => {
                       setNews(false);
                       setClient(false);
                     }}
-                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                   >
                     <svg
-                      class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
+                      className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -280,12 +280,12 @@ const Admin = () => {
           </div>
         </div>
 
-        <div class="flex flex-col w-0 flex-1 overflow-hidden">
-          <div class="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
-            <button class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-              <span class="sr-only">Open sidebar</span>
+        <div className="flex flex-col w-0 flex-1 overflow-hidden">
+          <div className="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
+            <button onClick={() => setShow(true)} className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+              <span className="sr-only">Open sidebar</span>
               <svg
-                class="h-6 w-6"
+                className="h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -302,7 +302,7 @@ const Admin = () => {
             </button>
           </div>
           <main
-            class="flex-1 relative z-0 overflow-y-auto focus:outline-none"
+            className="flex-1 relative z-0 overflow-y-auto focus:outline-none"
             tabindex="0"
           >
             <div className={dash ? "" : "hidden"}>
