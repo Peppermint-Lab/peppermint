@@ -43,7 +43,7 @@ const Create = () => {
     fetchClients();
   }, []);
 
-  const search = options.map((d) => <Option key={d._id}>{d.name}</Option>);
+  const search = options.map((d) => <Option key={d._id}>{d.name}</Option> || <Option key={Math.random()}><p>Please add a client in the admin panel</p></Option>);
 
   return (
     <div>
