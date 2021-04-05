@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { GlobalContext } from "../../Context/GlobalState";
 
 import Update from '../../components/client/Update'
+import Create from '../../components/client/Create'
+
 
 const Client = () => {
   const history = useHistory();
@@ -105,8 +107,11 @@ const Client = () => {
         tabindex="0"
       >
         <div className="py-6">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="flex flex-row max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <h1 className="text-2xl font-semibold text-gray-900">Clients</h1>
+            <div className="ml-3">
+                <Create />
+              </div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="py-4">
