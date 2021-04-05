@@ -12,8 +12,6 @@ const Files = () => {
 
   const [files, setFiles] = useState([]);
 
-  console.log(files)
-
   async function getFiles() {
     await fetch(`/api/v1/auth/file/listFiles`, {
       method: "get",
@@ -65,7 +63,7 @@ const Files = () => {
   return (
     <div>
       <div class="flow-root p-5 mx-auto -mt-5 ml-1">
-      {files.map((file) => {
+      {files ? files.map((file) => {
         return (
           <div className="w-full" key={file._id}>
             <ul>
@@ -97,7 +95,9 @@ const Files = () => {
             </ul>
           </div>
         );
-      })}
+      }) : (
+        <p>No files found</p>
+      )}
       </div>
     </div>
   );
