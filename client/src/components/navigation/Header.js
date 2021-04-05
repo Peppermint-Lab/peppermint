@@ -46,11 +46,6 @@ const Header = () => {
               </div>
 
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
-                <div>
-                  <Switch onChange={() => {
-                    setTheme(!colorTheme)
-                  }} />
-                </div>
                 <Create />
                 <div className="ml-4 relative flex-shrink-0">
                   <div>
@@ -234,6 +229,7 @@ const Header = () => {
                     </div>
                   </div>
                   <div className="mt-3 px-2 space-y-1">
+                    <Create />
                     <Link
                       to="/"
                       className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
