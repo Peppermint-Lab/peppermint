@@ -123,20 +123,26 @@ const Main = () => {
                     </div>
                   </div>
                   <div class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+                    <Link to='/tickets'>
                     <div class="px-6 py-5 text-sm font-medium text-center">
                       <span class="text-gray-900">{openTickets} </span>
                       <span class="text-gray-600">Tickets Open</span>
                     </div>
+                    </Link>
 
+                    <Link to='/tickets'>
                     <div class="px-6 py-5 text-sm font-medium text-center">
                       <span class="text-gray-900">{completedTickets} </span>
                       <span class="text-gray-600">Tickets Unissued</span>
                     </div>
+                    </Link>
 
+                    <Link to='/history'>
                     <div class="px-6 py-5 text-sm font-medium text-center">
                       <span class="text-gray-900">{unissuedTickets} </span>
                       <span class="text-gray-600">Tickets Completed</span>
                     </div>
+                    </Link>
                   </div>
                 </div>
               </section>

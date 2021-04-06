@@ -78,6 +78,16 @@ const AddNote = () => {
                 </div>
               </div>
               <div className="mt-5 sm:mt-6">
+              <div className="flex flex-row px-2 m-1">
+              <button
+                  onClick={() => {
+                    setModalIsOpen(!modalIsOpen);
+                  }}
+                  type="button"
+                  className="mx-auto w-1/2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                >
+                  Exit
+                </button>
                 <button
                   onClick={() => {
                     setModalIsOpen(!modalIsOpen);
@@ -87,10 +97,11 @@ const AddNote = () => {
                     EditorState.createEmpty()
                   }}
                   type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  className=" mx-auto w-1/2 rounded-md border border-transparent shadow-sm px-4 py-2 ml-3 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                 >
                   Go back to dashboard to save
                 </button>
+              </div>
               </div>
             </div>
           </div>

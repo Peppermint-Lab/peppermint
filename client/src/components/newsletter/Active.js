@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Open = (props) => {
-  console.log(props);
-
-  return <div></div>;
-};
-
 const Active = () => {
   const [news, setNews] = useState([]);
   const [read, setRead] = useState(false);
@@ -40,7 +34,7 @@ const Active = () => {
               <div>
               <ul class="-my-5 divide-y divide-gray-200" key={annoucment._id}>
                 <li class="py-5">
-                  <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
+                  <div class="relative ">
                     <h3 class="text-sm font-semibold text-gray-800">
                       <Link
                         onClick={() => setRead(true)}
