@@ -27,7 +27,6 @@ const ListNote = () => {
       render: (text, record) => (
         <div className="flex flex-row float-right">
           <ViewNote note={record} />
-          <Button size="xs" style={{ marginRight: 10}} >Edit</Button>
           <Popconfirm
             title="Are you sure you want to delete?"
             onConfirm={() => deleteNote(record._id)}
