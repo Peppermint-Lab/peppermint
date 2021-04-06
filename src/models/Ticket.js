@@ -6,9 +6,9 @@ const TicketSchema = new mongoose.Schema(
   {
     ticketId: { type: String },
     name: { type: String, required: true },
-    client: { type: ObjectId, required: true, ref: "Clients" },
+    client: { type: ObjectId, ref: "Clients" },
     issue: { type: String, required: true },
-    email: { type: String, required: false },
+    email: { type: String,},
     note: { type: String },
     Log: { type: ObjectId, ref: "Log" },
     status: {
@@ -21,10 +21,6 @@ const TicketSchema = new mongoose.Schema(
       type: String,
       enum: ["Low", "Normal", "High"],
       default: "Normal",
-    },
-    file: {
-      data: Buffer,
-      contentType: String,
     },
   },
   { timestamps: true }

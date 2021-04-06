@@ -4,16 +4,16 @@ const { ObjectId } = mongoose.Schema.Types;
 // Mongoose Schema for Tickets
 const file = new mongoose.Schema(
   {
-    user: { type: ObjectId, ref: "InternalUser" },
-    ticket: { type: ObjectId, ref: "ticketschemas" },
+    user: { type: ObjectId, ref: "InternalUser", required: true },
+    ticket: { type: ObjectId, ref: "ticketschemas", required: false },
     filename: {
       required: true,
       type: String,
     },
     path: {
       required: true,
-      type: String
-    }
+      type: String,
+    },
   },
   { timestamps: true }
 );

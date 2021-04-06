@@ -3,11 +3,26 @@ const TicketSchema = mongoose.model("TicketSchema");
 const File = mongoose.model("file");
 const fs = require("fs");
 
+// Get by ID
+exports.getTicketById = async (req, res) => {
+  try {
+    await TicketSchema.findById({ _id: req.params.id })
+      .populate("client", "_id name number")
+      .populate("assignedto", "_id name")
+      .then((ticket) => {
+        res.json({ ticket });
+      });
+  } catch (error) {
+    console.log(error);
+    return res.status(404);
+  }
+}
+
 // Get Open Tickets
 exports.openTickets = async (req, res) => {
   try {
     await TicketSchema.find({ status: "issued", assignedto: req.user._id })
-      .populate("client", "_id name")
+      .populate("client", "_id name number")
       .populate("assignedto", "_id name")
       .then((tickets) => {
         res.json({ tickets });
@@ -207,7 +222,10 @@ exports.saveFile = async (req, res) => {
         });
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: error })
+  }
 };
 
 exports.listFile = async (req, res) => {
