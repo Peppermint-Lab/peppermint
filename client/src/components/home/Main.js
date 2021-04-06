@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Upload, message, Button } from "antd";
-import { UploadOutlined, DeleteTwoTone } from "@ant-design/icons";
+import { Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 import Active from "../newsletter/Active";
 import ListNote from "../notes/ListNote";

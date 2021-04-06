@@ -52,7 +52,7 @@ const AddNote = () => {
                     placeholder="Enter a title here.."
                     onChange={(e) => setTitle(e.target.value)}
                   />
-                  <Input.TextArea rows={15} />
+                  <Input.TextArea rows={15}  onChange={(e) => setText(e.target.value)} placeholder="Enter a text here.." />
                 </div>
               </div>
               <div className="mt-5 sm:mt-6">
