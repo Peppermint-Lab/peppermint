@@ -10,7 +10,7 @@ import ListTodo from "../todos/ListTodo";
 import Files from './Files'
 
 const Main = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || '');
   const [openTickets, setOpenTickets] = useState();
   const [completedTickets, setCompletedTickets] = useState();
   const [unissuedTickets, setUnissuedTickets] = useState();
@@ -107,7 +107,7 @@ const Main = () => {
                         <div class="flex-shrink-0">
                           <span class="inline-flex items-center justify-center h-14 w-14 rounded-full bg-gray-500">
                             <span class="text-xl font-medium leading-none text-white">
-                              {user.name[0]}
+                              {user ? user.name[0] : ''}
                             </span>
                           </span>
                         </div>
@@ -116,7 +116,7 @@ const Main = () => {
                             Welcome back,
                           </p>
                           <p class="text-xl font-bold text-gray-900 sm:text-2xl">
-                            {user.name}
+                            {user.name || ''}
                           </p>
                         </div>
                       </div>

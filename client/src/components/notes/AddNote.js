@@ -5,28 +5,12 @@ import { HotKeys } from "react-hotkeys";
 
 import { GlobalContext } from "../../Context/GlobalState";
 
-import { EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { convertToHTML } from "draft-convert";
-
 const AddNote = () => {
   const [title, setTitle] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [text, setText] = useState('');
 
   const { saveNote } = useContext(GlobalContext);
-
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-  const [text, setText] = useState(null);
-  const handleEditorChange = (state) => {
-    setEditorState(state);
-    convertContentToHTML();
-  };
-  const convertContentToHTML = () => {
-    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setText(currentContentAsHTML);
-  };
 
   const handlers = {
     CLOSE: () => setModalIsOpen(false),
@@ -68,13 +52,7 @@ const AddNote = () => {
                     placeholder="Enter a title here.."
                     onChange={(e) => setTitle(e.target.value)}
                   />
-                  <Editor
-                    editorState={editorState}
-                    onEditorStateChange={handleEditorChange}
-                    wrapperClassName="wrapper-class"
-                    editorClassName="editor-class"
-                    toolbarClassName="toolbar-class"
-                  />
+                  <Input.TextArea rows={15} />
                 </div>
               </div>
               <div className="mt-5 sm:mt-6">
@@ -92,9 +70,6 @@ const AddNote = () => {
                   onClick={() => {
                     setModalIsOpen(!modalIsOpen);
                     saveNote(text, title);
-                    setText("");
-                    setTitle("");
-                    EditorState.createEmpty()
                   }}
                   type="button"
                   className=" mx-auto w-1/2 rounded-md border border-transparent shadow-sm px-4 py-2 ml-3 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"

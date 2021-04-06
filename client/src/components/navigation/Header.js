@@ -11,7 +11,7 @@ const Header = () => {
 
   const [expanded, setExpanded] = useState(false);
   const [show, setShow] = useState(false);
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || '' );
 
   function logout() {
     localStorage.clear();
@@ -50,7 +50,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          {user.name[0]}
+                          {user ? user.name[0] : ''}
                         </span>
                       </span>
                     </button>
@@ -252,7 +252,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          {user.name[0]}
+                        {user ? user.name[0] : ''}
                         </span>
                       </span>
                     </div>
