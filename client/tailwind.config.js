@@ -7,6 +7,7 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
+      opacity: ['disabled'],
       colors: {
         "light-blue": colors.lightBlue,
         teal: colors.teal,

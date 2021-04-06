@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import { Input, message, Upload, Divider } from "antd";
 import moment from "moment";
 
@@ -20,6 +20,8 @@ const Detail = (props) => {
   const [number, setNumber] = useState(ticket.number);
   const [file, setFile] = useState([]);
   const [badge, setBadge] = useState("");
+
+  const history = useContext(GlobalContext);
 
   const id = props.match.params.id;
 
@@ -198,9 +200,13 @@ const Detail = (props) => {
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
                     <button
-                      onClick={() => completeTicket(ticket._id)}
+                      onClick={async () => {
+                        await completeTicket(ticket._id)
+                        history.push('/tickets')
+                      }}
                       type="button"
                       className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                      disabled={ticket.status === 'completed' ? true : true }
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
