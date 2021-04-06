@@ -1,13 +1,11 @@
 // tailwind.config.js
 const colors = require("tailwindcss/colors");
 
-
 module.exports = {
-  purge: [],
-  darkMode: 'class', // or 'media' or 'class'
+  darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
-      opacity: ['disabled'],
+      opacity: ["disabled"],
       colors: {
         "light-blue": colors.lightBlue,
         teal: colors.teal,
