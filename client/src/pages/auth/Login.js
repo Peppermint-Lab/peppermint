@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Spin, Input, Button } from "antd";
 import {
-  UserOutlined,
   LockOutlined,
   EyeInvisibleOutlined,
   EyeTwoTone,
 } from "@ant-design/icons";
+
+import logo from "./logo.png";
 
 const Login = () => {
   const history = useHistory();
@@ -51,9 +52,9 @@ const Login = () => {
           <Spin spinning={toggle}>
           <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <img
-              class="mx-auto h-12 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-              alt="Workflow"
+              class="mx-auto h-24 w-auto"
+              src={logo}
+              alt="logo hasnt loaded properly"
             />
             <h2 class="mt-2 text-center text-3xl font-extrabold text-gray-900">
               Sign in to your account
