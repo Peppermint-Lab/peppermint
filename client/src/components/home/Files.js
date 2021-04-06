@@ -62,7 +62,7 @@ const Files = () => {
 
   return (
     <div>
-      <div class="flow-root p-5 mx-auto -mt-5 ml-1">
+      <div className="flow-root p-5 mx-auto -mt-5 ml-1">
       {files ? files.map((file) => {
         return (
           <div className="w-full" key={file._id}>

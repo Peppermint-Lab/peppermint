@@ -91,56 +91,56 @@ const Main = () => {
 
   return (
     <div>
-      <main class="-mt-16 pb-8">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 class="sr-only">Profile</h1>
-          <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
-            <div class="grid grid-cols-1 gap-4 lg:col-span-2">
+      <main className="-mt-16 pb-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+          <h1 className="sr-only">Profile</h1>
+          <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
               <section aria-labelledby="profile-overview-title">
-                <div class="rounded-lg bg-white overflow-hidden shadow">
-                  <h2 class="sr-only" id="profile-overview-title">
+                <div className="rounded-lg bg-white overflow-hidden shadow">
+                  <h2 className="sr-only" id="profile-overview-title">
                     Profile Overview
                   </h2>
-                  <div class="bg-white p-6">
-                    <div class="sm:flex sm:items-center sm:justify-between">
-                      <div class="sm:flex sm:space-x-5">
-                        <div class="flex-shrink-0">
-                          <span class="inline-flex items-center justify-center h-14 w-14 rounded-full bg-gray-500">
-                            <span class="text-xl font-medium leading-none text-white">
+                  <div className="bg-white p-6">
+                    <div className="sm:flex sm:items-center sm:justify-between">
+                      <div className="sm:flex sm:space-x-5">
+                        <div className="flex-shrink-0">
+                          <span className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-gray-500">
+                            <span className="text-xl font-medium leading-none text-white">
                               {user ? user.name[0] : ''}
                             </span>
                           </span>
                         </div>
-                        <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                          <p class="text-sm font-medium text-gray-600">
+                        <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+                          <p className="text-sm font-medium text-gray-600">
                             Welcome back,
                           </p>
-                          <p class="text-xl font-bold text-gray-900 sm:text-2xl">
+                          <p className="text-xl font-bold text-gray-900 sm:text-2xl">
                             {user.name || ''}
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+                  <div className="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
                     <Link to='/tickets'>
-                    <div class="px-6 py-5 text-sm font-medium text-center">
-                      <span class="text-gray-900">{openTickets} </span>
-                      <span class="text-gray-600">Tickets Open</span>
+                    <div className="px-6 py-5 text-sm font-medium text-center">
+                      <span className="text-gray-900">{openTickets} </span>
+                      <span className="text-gray-600">Tickets Open</span>
                     </div>
                     </Link>
 
                     <Link to='/tickets'>
-                    <div class="px-6 py-5 text-sm font-medium text-center">
-                      <span class="text-gray-900">{completedTickets} </span>
-                      <span class="text-gray-600">Tickets Unissued</span>
+                    <div className="px-6 py-5 text-sm font-medium text-center">
+                      <span className="text-gray-900">{completedTickets} </span>
+                      <span className="text-gray-600">Tickets Unissued</span>
                     </div>
                     </Link>
 
                     <Link to='/history'>
-                    <div class="px-6 py-5 text-sm font-medium text-center">
-                      <span class="text-gray-900">{unissuedTickets} </span>
-                      <span class="text-gray-600">Tickets Completed</span>
+                    <div className="px-6 py-5 text-sm font-medium text-center">
+                      <span className="text-gray-900">{unissuedTickets} </span>
+                      <span className="text-gray-600">Tickets Completed</span>
                     </div>
                     </Link>
                   </div>
@@ -148,22 +148,22 @@ const Main = () => {
               </section>
 
               <section aria-labelledby="quick-links-title">
-                <div class="rounded-lg  overflow-hidden s sm:divide-y-0 sm:gap-px">
-                  <h2 class="sr-only" id="quick-links-title">
+                <div className="rounded-lg  overflow-hidden s sm:divide-y-0 sm:gap-px">
+                  <h2 className="sr-only" id="quick-links-title">
                     Notes and Tasks
                   </h2>
-                  <div class="bg-white shadow overflow-hidden sm:rounded-md">
-                    <ul class="divide-y divide-gray-200">
-                      <li class="px-4 py-4 sm:px-6">
+                  <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                    <ul className="divide-y divide-gray-200">
+                      <li className="px-4 py-4 sm:px-6">
                         <CreateTodo />
                         <ListTodo />
                       </li>
                     </ul>
                   </div>
 
-                  <div class="bg-white shadow overflow-hidden sm:rounded-md mt-5">
-                    <ul class="divide-y divide-gray-200">
-                      <li class="px-4 py-4 sm:px-6">
+                  <div className="bg-white shadow overflow-hidden sm:rounded-md mt-5">
+                    <ul className="divide-y divide-gray-200">
+                      <li className="px-4 py-4 sm:px-6">
                         <ListNote />
                       </li>
                     </ul>
@@ -172,12 +172,12 @@ const Main = () => {
               </section>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <section aria-labelledby="announcements-title">
-                <div class="rounded-lg bg-white overflow-hidden shadow">
-                  <div class="p-6">
+                <div className="rounded-lg bg-white overflow-hidden shadow">
+                  <div className="p-6">
                     <h2
-                      class="text-base font-medium text-gray-900"
+                      className="text-base font-medium text-gray-900"
                       id="announcements-title"
                     >
                       Announcements
@@ -188,10 +188,10 @@ const Main = () => {
               </section>
 
               <section aria-labelledby="recent-hires-title">
-                <div class="rounded-lg bg-white overflow-hidden shadow">
-                  <div class="p-6 flex flex-col">
+                <div className="rounded-lg bg-white overflow-hidden shadow">
+                  <div className="p-6 flex flex-col">
                     <h2
-                      class="text-base font-medium text-gray-900"
+                      className="text-base font-medium text-gray-900"
                       id="recent-hires-title"
                     >
                       Personal Files
