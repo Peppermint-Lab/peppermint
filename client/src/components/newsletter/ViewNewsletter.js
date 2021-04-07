@@ -9,15 +9,10 @@ const ViewNewsletter = (props) => {
     setVisible(false);
   };
 
+  console.log(props)
+
   return (
     <div>
-      <Button
-        size="xs"
-        onClick={() => {
-          setVisible(true);
-        }}
-      >
-        Read
         <Modal
           destroyOnClose={true}
           keyboard={true}
@@ -30,7 +25,6 @@ const ViewNewsletter = (props) => {
           <Divider />
           <p>Author : {props.n.createdBy.name}</p>
         </Modal>
-      </Button>
     </div>
   );
 };
