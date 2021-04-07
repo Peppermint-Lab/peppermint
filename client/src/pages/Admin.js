@@ -14,6 +14,7 @@ const Admin = () => {
   const [auth, setAuth] = useState(false);
 
   const [show, setShow] = useState(false);
+  const [select, setSelect] = useState('dash');
 
   return (
     <div>
@@ -56,8 +57,10 @@ const Admin = () => {
                     setDash(true);
                     setNews(false);
                     setClient(false);
+                    setAuth(false)
+                    setSelect('dash');
                   }}
-                  className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                  className={select === 'dash' ? 'bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md' : 'text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md' }
                 >
                   <svg
                     className="text-gray-500 mr-4 h-6 w-6"
@@ -173,9 +176,9 @@ const Admin = () => {
                       setNews(false);
                       setClient(false);
                       setAuth(false);
+                      setSelect('dash')
                     }}
-                    className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:text-gray-900 hover:bg-gray-100"
-                  >
+                    className={select === 'dash' ? 'bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md' : 'text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md' }                  >
                     <svg
                       className="text-gray-500 mr-3 h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -200,8 +203,9 @@ const Admin = () => {
                       setNews(true);
                       setClient(false);
                       setAuth(false);
+                      setSelect('News')
                     }}
-                    className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    className={select === 'News' ? 'bg-gray-100 text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md'}
                   >
                     <svg
                       className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
@@ -227,8 +231,9 @@ const Admin = () => {
                       setDash(false);
                       setNews(false);
                       setAuth(false);
+                      setSelect('Clients')
                     }}
-                    className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    className={select === 'Clients' ? 'bg-gray-100 text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md'}
                   >
                     <svg
                       className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
@@ -254,8 +259,9 @@ const Admin = () => {
                       setDash(false);
                       setNews(false);
                       setClient(false);
+                      setSelect('intUser')
                     }}
-                    className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    className={select === 'intUser' ? 'bg-gray-100 text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md'}
                   >
                     <svg
                       className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
