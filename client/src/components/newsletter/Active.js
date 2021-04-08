@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Divider, Modal } from "antd";
-
-// import ViewNewsletter from "./ViewNewsletter";
 
 const Active = () => {
   const [news, setNews] = useState([]);
@@ -59,45 +56,45 @@ const Active = () => {
                       </p>
                     </div>
                       <div
-                        class={visible ? 'fixed z-10 inset-0 overflow-y-auto' : 'hidden'}
+                        className={visible ? 'fixed z-10 inset-0 overflow-y-auto' : 'hidden'}
                         aria-labelledby="modal-title"
                         role="dialog"
                         aria-modal="true"
                       >
-                        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                           <div
-                            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                            className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                             aria-hidden="true"
                           ></div>
 
                           <span
-                            class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                            className="hidden sm:inline-block sm:align-middle sm:h-screen"
                             aria-hidden="true"
                           >
                             &#8203;
                           </span>
 
-                          <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
                             <div>
-                              <div class="mt-3 text-left sm:mt-5">
+                              <div className="mt-3 text-left sm:mt-5">
                                 <h3
-                                  class="text-lg leading-6 font-medium text-gray-900"
+                                  className="text-lg leading-6 font-medium text-gray-900"
                                   id="modal-title"
                                 >
                                   {n.title}
                                 </h3>
-                                <div class="mt-2">
-                                  <p class="text-sm text-gray-500">
+                                <div className="mt-2">
+                                  <p className="text-sm text-gray-500">
                                   {n.text}
                                   </p>
                                 </div>
                               </div>
                             </div>
-                            <div class="mt-5 sm:mt-6">
+                            <div className="mt-5 sm:mt-6">
                               <button
                                 onClick={() => setVisible(false)}
                                 type="button"
-                                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                                className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                               >
                                 Go back to dashboard
                               </button>
@@ -116,7 +113,7 @@ const Active = () => {
       </div>
       <div className="mt-6">
         <Link
-          href="#"
+          to=""
           className="hidden w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
         >
           View all

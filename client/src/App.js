@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { HotKeys } from "react-hotkeys";
 import { BrowserRouter as Router, Route, Switch, withRouter  } from "react-router-dom";
 import 'antd/dist/antd.css';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './App.css'
 import io from "socket.io-client";
 

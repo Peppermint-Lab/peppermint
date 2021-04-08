@@ -1,49 +1,13 @@
 import React, { useState } from "react";
 import Profile from "../components/settings/Profile";
-import { Link, useHistory } from "react-router-dom";
-import { Button, Divider, Input, Form, message } from "antd";
+import { Link,  } from "react-router-dom";
 
 import Password from '../components/settings/Password'
 
 const Settings = () => {
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
   const [showProfile, setShowProfile ] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-
-  const success = () => {
-    message.success("Information updated!");
-  };
-
-  const fail = () => {
-    message.error("Information failed to update");
-  };
-
-  async function postData() {
-    await fetch(`/api/v1/auth/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name ? name : user.name,
-        email: email ? email : user.email,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.fail === false) {
-          localStorage.clear();
-          localStorage.setItem("user", JSON.stringify(res.user));
-          success();
-        } else {
-          fail();
-        }
-      });
-  }
 
   return (
     <div>

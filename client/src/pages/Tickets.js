@@ -10,7 +10,7 @@ const Tickets = () => {
   return (
     <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 -mt-20">
       <div>
-        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
           <Link
             onClick={() => {
               setOpen(true);
@@ -26,7 +26,7 @@ const Tickets = () => {
               setOpen(false);
               setUnissued(true);
             }}
-            class="text-white border-transparent hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+            className="text-white border-transparent hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
           >
             Unissued Tickets
           </Link>

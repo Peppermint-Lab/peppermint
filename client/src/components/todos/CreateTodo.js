@@ -18,7 +18,7 @@ const CreateTodo = () => {
     <div className="mx-1 p-1">
       <label
         forHTML="text"
-        class="block text-sm font-medium text-gray-700 ml-1"
+        className="block text-sm font-medium text-gray-700 ml-1"
       >
         Create Task
       </label>

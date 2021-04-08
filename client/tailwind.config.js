@@ -2,7 +2,8 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  darkMode: "class", // or 'media' or 'class'
+  darkMode: false,
+  purge: false,
   theme: {
     extend: {
       opacity: ["disabled"],
@@ -17,5 +18,9 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("@tailwindcss/forms"), 
+    require("@tailwindcss/line-clamp"),
+
+  ],
 };

@@ -1,11 +1,17 @@
 // craco.config.js
+const CracoAntDesignPlugin = require("craco-antd");
+
 module.exports = {
-    style: {
+  plugins: [{ plugin: CracoAntDesignPlugin }],
+};
+
+module.exports = {
+  style: {
       postcss: {
-        plugins: [
-          require('tailwindcss'),
-          require('autoprefixer'),
-        ],
+          plugins: [
+              require('tailwindcss'),
+              require('autoprefixer'),
+          ],
       },
-    },
   }
+}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Button, Divider, Input, Form, message } from "antd";
-import { Link, useHistory } from "react-router-dom";
+import { message } from "antd";
 
 const Profile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -41,31 +40,31 @@ const Profile = () => {
 
   return (
     <div>
-      <div class="py-6 px-4 sm:p-6 lg:pb-8">
+      <div className="py-6 px-4 sm:p-6 lg:pb-8">
         <div>
-          <h2 class="text-lg leading-6 font-medium text-gray-900">Profile</h2>
-          <p class="mt-1 text-sm text-gray-500">
+          <h2 className="text-lg leading-6 font-medium text-gray-900">Profile</h2>
+          <p className="mt-1 text-sm text-gray-500">
             This information will be displayed publicly so be careful what you
             share.
           </p>
         </div>
 
-        <div class="mt-6 flex flex-col lg:flex-row">
-          <div class="flex-grow space-y-6">
+        <div className="mt-6 flex flex-col lg:flex-row">
+          <div className="flex-grow space-y-6">
             <div>
               <label
                 for="username"
-                class="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700"
               >
                 Username
               </label>
-              <div class="mt-1 rounded-md shadow-sm flex">
+              <div className="mt-1 rounded-md shadow-sm flex">
                 <input
                   type="text"
                   name="username"
                   id="username"
                   autocomplete="username"
-                  class="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                  className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
                   defaultValue={user.name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -74,16 +73,16 @@ const Profile = () => {
             <div>
               <label
                 for="username"
-                class="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700"
               >
                 Email
               </label>
-              <div class="mt-1 rounded-md shadow-sm flex">
+              <div className="mt-1 rounded-md shadow-sm flex">
                 <input
                   type="email"
                   name="email"
                   autocomplete="email"
-                  class="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                  className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
                   defaultValue={user.email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -94,13 +93,13 @@ const Profile = () => {
         
       </div>
 
-      <div class="mt-4 py-4 px-4 flex justify-end sm:px-6">
+      <div className="mt-4 py-4 px-4 flex justify-end sm:px-6">
         <button
           onClick={async () => {
             await postData()
           } }
           type="submit"
-          class="ml-5 bg-light-blue-700 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500"
+          className="ml-5 bg-light-blue-700 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500"
         >
           Save
         </button>
