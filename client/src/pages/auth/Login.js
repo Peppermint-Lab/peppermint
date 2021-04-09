@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Spin, Input, message } from "antd";
+import { Spin, Input, notification } from "antd";
 import {
   LockOutlined,
   EyeInvisibleOutlined,
@@ -16,6 +16,16 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [error, setError] = useState("");
+
+  const errorNotification = async () => {
+    const args = await {
+      message: "Login Error",
+      description: [error],
+      duration: 3,
+    };
+    await notification.open(args);
+  };
 
   async function signin() {
     try {
@@ -31,6 +41,7 @@ const Login = () => {
       })
         .then((res) => res.json())
         .then(async (data) => {
+          console.log(data);
           if (!data.error && data.auth === true) {
             localStorage.setItem("user", JSON.stringify(data.user));
             setToggle(true);
@@ -38,7 +49,10 @@ const Login = () => {
               history.push("/");
             }, 1000);
           } else {
-            setLoading(false);
+            await setError(data.error)
+            // setLoading(false)
+            await errorNotification();
+
           }
         });
     } catch (error) {
@@ -48,8 +62,8 @@ const Login = () => {
 
   return (
     <div>
-        <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-          <Spin spinning={toggle}>
+      <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <Spin spinning={toggle}>
           <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <img
               class="mx-auto h-24 w-auto"
@@ -122,8 +136,8 @@ const Login = () => {
               </div>
             </div>
           </div>
-          </Spin>
-        </div>
+        </Spin>
+      </div>
     </div>
   );
 };
