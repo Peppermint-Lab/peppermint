@@ -308,7 +308,7 @@ const Admin = () => {
             </button>
           </div>
           <main
-            className="flex-1 relative z-0 overflow-y-auto focus:outline-none"
+            className="flex-1 relative z-0 overflow-hidden focus:outline-none"
             tabindex="0"
           >
             <div className={dash ? "" : "hidden"}>
