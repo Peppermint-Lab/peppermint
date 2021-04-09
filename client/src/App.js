@@ -57,7 +57,7 @@ const App = () => {
     async function soc() {
       const socket = await io.connect("/");
       socket.once("visitor enters", () => console.log(socket.id));
-      socket.once("visitor exits", () => socket.destoryConnection());
+      socket.once("visitor exits", () => socket.disconnect());
     }
     soc();
   }, []);
