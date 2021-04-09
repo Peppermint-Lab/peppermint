@@ -19,7 +19,7 @@ const History = () => {
 
   useEffect(() => {
     getHistory();
-  });
+  }, []);
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";

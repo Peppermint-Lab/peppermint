@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Spin, Input } from "antd";
+import { Spin, Input, message } from "antd";
 import {
+  LockOutlined,
   EyeInvisibleOutlined,
   EyeTwoTone,
 } from "@ant-design/icons";
-import "antd/lib/input/style/index.css";
 
 import logo from "./logo.png";
 
@@ -48,31 +48,31 @@ const Login = () => {
 
   return (
     <div>
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
           <Spin spinning={toggle}>
-          <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <img
-              className="mx-auto h-24 w-auto"
+              class="mx-auto h-24 w-auto"
               src={logo}
               alt="logo hasnt loaded properly"
             />
-            <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
+            <h2 class="mt-2 text-center text-3xl font-extrabold text-gray-900">
               Sign in to your account
             </h2>
           </div>
 
-          <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
-            <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-              <div className="space-y-6">
+          <div class="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+              <div class="space-y-6">
                 <div>
                   <label
                     for="email"
-                    className="block text-sm font-medium text-gray-700"
+                    class="block text-sm font-medium text-gray-700"
                   >
                     Email address
                   </label>
-                  <div className="mt-1">
-                    <input
+                  <div class="mt-1">
+                    <Input
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Email"
                       id="email"
@@ -87,13 +87,14 @@ const Login = () => {
 
                 <div>
                   <label
-                    forHTML="password"
-                    className="block text-sm font-medium text-gray-700"
+                    for="password"
+                    class="block text-sm font-medium text-gray-700"
                   >
                     Password
                   </label>
-                  <div className="mt-1">
+                  <div class="mt-1">
                     <Input.Password
+                      prefix={<LockOutlined />}
                       type="password"
                       placeholder="Password"
                       iconRender={(visible) =>
@@ -102,14 +103,13 @@ const Login = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       autocomplete="current-password"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
                   </div>
                 </div>
 
                 <div>
                   <button
-                    loading={loading}
                     onClick={() => {
                       setLoading(true);
                       signin();

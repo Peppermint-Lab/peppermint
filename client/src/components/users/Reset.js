@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, Button, message } from "antd";
+import { Modal, Button, message } from "antd";
 
 const Reset = (props) => {
   const [visible, setVisible] = useState(false);
@@ -62,7 +62,9 @@ const Reset = (props) => {
         onCancel={onCancel}
         onOk={onCreate}
       >
-        <Input
+        <input
+          type="password"
+          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter users new password"
         />

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Modal, Form, Input } from "antd";
+import { Modal, Form } from "antd";
 
 import { GlobalContext } from "../../Context/GlobalState";
 
@@ -81,26 +81,34 @@ const Create = () => {
               },
             ]}
           >
-            <Input
+            <input
+              type="text"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="Enter name here..."
               name="name"
               onChange={(e) => setName(e.target.value)}
             />
           </Form.Item>
           <Form.Item name="contact name" label="Contact Name">
-            <Input
+            <input
+              type="text"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="Enter  here...."
               onChange={(e) => setContactName(e.target.value)}
             />
           </Form.Item>
           <Form.Item name="number" label="Contact Number">
-            <Input
+            <input
+              type="text"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="Enter number here..."
               onChange={(e) => setNumber(e.target.value)}
             />
           </Form.Item>
           <Form.Item name="email" label="Contact Email">
-            <Input
+            <input
+              type="text"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               placeholder="Enter email address here..."
               onChange={(e) => setEmail(e.target.value)}
             />

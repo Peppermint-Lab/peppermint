@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, Button, Row } from "antd";
+import { Modal, Button, Row } from "antd";
 
 const Update = (props) => {
   const [visible, setVisible] = useState(false);
@@ -54,43 +54,47 @@ const Update = (props) => {
           onCancel={onCancel}
           onOk={onCreate}
         >
-          <Row>
+          <Row className="m-2">
             <h5>
               Edit Client Name :{" "}
-              <Input
+              <input
+                type="text"
+                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 defaultValue={props.client.name}
                 onChange={(e) => setClientName(e.target.value)}
-                style={{ width: 300, marginLeft: 18 }}
               />
             </h5>
           </Row>
-          <Row>
+          <Row className="m-2">
             <h5>
               Edit Contact Name :{" "}
-              <Input
+              <input
+                type="text"
+                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 defaultValue={props.client.contactName}
                 onChange={(e) => setName(e.target.value)}
-                style={{ width: 300 }}
               />
             </h5>
           </Row>
-          <Row>
+          <Row className="m-2">
             <h5>
               Edit Contact Email :{" "}
-              <Input
+              <input
+                type="text"
+                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 defaultValue={props.client.email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ width: 300, marginLeft: 5 }}
               />
             </h5>
           </Row>
-          <Row>
+          <Row className="m-2">
             <h5>
               Edit Contact Number :{" "}
-              <Input
+              <input
+                type="text"
+                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 defaultValue={props.client.number}
                 onChange={(e) => setNumber(e.target.value)}
-                style={{ width: 280 }}
               />
             </h5>
           </Row>

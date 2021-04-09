@@ -44,8 +44,9 @@ const Edit = (props) => {
           <Divider />
           <h4>
             Title :{" "}
-            <Input
-              style={{ width: 300 }}
+            <input
+              type="text"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               onChange={(e) => setTitle(e.target.value)}
             />
           </h4>

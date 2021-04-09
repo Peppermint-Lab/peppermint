@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, Space, Radio, Row, Button } from "antd";
+import { Modal, Space, Radio, Row, Button } from "antd";
 
 const Edit = (props) => {
   // eslint-disable-next-line
@@ -56,37 +56,36 @@ const Edit = (props) => {
         <Row>
           <h5>
             Edit Name :{" "}
-            <Input
+            <input
+              type="text"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               defaultValue={users.name}
               onChange={(e) => setName(e.target.value)}
-              style={{ width: 300 }}
             />
           </h5>
         </Row>
         <Row>
           <h5>
             Edit Email :{" "}
-            <Input
+            <input
+              type="text"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               defaultValue={users.email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{ width: 300, marginLeft: 5 }}
             />
           </h5>
         </Row>
-        <Row>
           <h5>Edit Role : </h5>
           <Radio.Group
             buttonStyle="solid"
             defaultValue={users.role}
             onChange={(e) => setRole(e.target.value)}
-            style={{ marginLeft: 20 }}
           >
             <Space>
               <Radio.Button value="user">User</Radio.Button>
               <Radio.Button value="admin">Admin</Radio.Button>
             </Space>
           </Radio.Group>
-        </Row>
       </Modal>
     </div>
   );
