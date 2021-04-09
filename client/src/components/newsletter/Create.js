@@ -7,15 +7,15 @@ const Create = () => {
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState();
   const [text, setText] = useState();
-  const [active, setActive] = useState();
-  
+  const [active, setActive] = useState('false');
+
   const { createNewsletter } = useContext(GlobalContext);
 
   const { TextArea } = Input;
 
   const onCreate = async () => {
     setVisible(false);
-    await createNewsletter(title, text, active)
+    await createNewsletter(title, text, active);
   };
 
   const onCancel = () => {
@@ -51,23 +51,31 @@ const Create = () => {
         onCancel={onCancel}
         onOk={onCreate}
       >
-        <div style={{ margin: 25 }}>
+        <div className="m-4 p-2 flex justify-items-center w-full">
           <Row>
-            <Input
+            <label for="email" class="sr-only">
+              Email
+            </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-96 sm:text-sm border-gray-300 rounded-md"
               placeholder="Enter newsletter tittle here..."
-              style={{ width: 400, marginLeft: -25 }}
+              style={{ marginLeft: -25 }}
               onChange={(e) => setTitle(e.target.value)}
             />
           </Row>
         </div>
         <div>
           <TextArea
-            rows={8}
+            rows={15}
+            className="w-full"
             placeholder="Enter newsletter content here..."
             onChange={(e) => setText(e.target.value)}
           />
         </div>
-        <div style={{ margin: 25 }}>
+        <div className='mt-4'>
           <Radio.Group
             defaultValue={active}
             value={active}
