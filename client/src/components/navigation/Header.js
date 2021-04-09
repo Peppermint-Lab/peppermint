@@ -112,6 +112,7 @@ const Header = () => {
                         History
                       </Link>
 
+                      <div className={user.role === 'admin' ? '' : 'hidden'}>
                       <Link
                         to='/admin/dashboard'
                         className="text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
@@ -119,6 +120,7 @@ const Header = () => {
                       >
                         Admin
                       </Link>
+                      </div>
                     </nav>
                   </div>
                 </div>
