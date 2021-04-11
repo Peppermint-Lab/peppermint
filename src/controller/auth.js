@@ -178,7 +178,7 @@ exports.edit = async (req, res) => {
     await User.findByIdAndUpdate(
       { _id: mongoose.Types.ObjectId(req.body.id) },
       {
-        $set: { name: n, role: r, email: e },
+        $set: { name: req.body.name, role: req.body.role, email: req.body.email },
       },
       { new: true }
     ).exec();

@@ -17,10 +17,11 @@ const {
   listFile,
   deleteFile,
   downloadFile,
-  getTicketById
+  getTicketById,
+  unComplete,
 } = require("../controller/ticket");
 
-router.route('/getTicketById/:id').get(isAuth, getTicketById)
+router.route("/getTicketById/:id").get(isAuth, getTicketById);
 
 router.route("/createTicket").post(isAuth, createTicket);
 
@@ -36,16 +37,18 @@ router.route("/all").get(isAuth, all);
 
 router.route("/complete/:id").post(isAuth, complete);
 
+router.route("/uncomplete/:id").post(isAuth, unComplete);
+
 router.route("/transfer").post(isAuth, transfer);
 
 router.route("/update").put(isAuth, updateJob);
 
 router.route("/uploadFile/:id").post(isAuth, saveFile);
 
-router.route("/file/listFiles/:id").get(isAuth, listFile)
+router.route("/file/listFiles/:id").get(isAuth, listFile);
 
-router.route('/file/del').post(isAuth, deleteFile)
+router.route("/file/del").post(isAuth, deleteFile);
 
-router.route('/file/download').post(isAuth, downloadFile)
+router.route("/file/download").post(isAuth, downloadFile);
 
 module.exports = router;

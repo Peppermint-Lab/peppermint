@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import { Input, message, Upload, Divider } from "antd";
 import moment from "moment";
 
@@ -8,7 +8,7 @@ import File from "./File";
 import Transfer from "./Transfer";
 
 const Detail = (props) => {
-  const { completeTicket } = useContext(GlobalContext);
+  const { completeTicket, unCompleteTicket } = useContext(GlobalContext);
 
   const [ticket, setTicket] = useState(props.location.state || null);
   const [edit, setEdit] = useState(false);
@@ -21,7 +21,7 @@ const Detail = (props) => {
   const [file, setFile] = useState([]);
   const [badge, setBadge] = useState("");
 
-  const history = useContext(GlobalContext);
+  const history = useHistory()
 
   const id = props.match.params.id;
 
@@ -199,14 +199,14 @@ const Detail = (props) => {
                     </button>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
-                    <button
+                    {ticket.status === 'issued' ? (
+                      <button
                       onClick={async () => {
                         await completeTicket(ticket._id)
                         history.push('/tickets')
                       }}
                       type="button"
                       className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                      disabled={ticket.status === 'completed' ? true : true }
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -222,6 +222,30 @@ const Detail = (props) => {
                       </svg>
                       <span>Complete</span>
                     </button>
+                    ) : (
+                      <button
+                      onClick={async () => {
+                        await unCompleteTicket(ticket._id)
+                        history.push('/tickets')
+                      }}
+                      type="button"
+                      className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      <span>Un-complete</span>
+                    </button>
+                    )}
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
                     <Transfer ticket={ticket} />

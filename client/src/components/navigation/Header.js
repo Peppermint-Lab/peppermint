@@ -25,14 +25,14 @@ const Header = () => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="relative flex flex-wrap items-center justify-center lg:justify-between">
               <div className="absolute left-0 py-5 flex-shrink-0 lg:static">
-                <Link to='https://pmint.dev/'>
+                <a href='https://pmint.dev/' target="_blank"  rel="noreferrer" >
                   <span className="sr-only">Logo should be here?</span>
                   <img 
                   className="h-8"
                   src={logo}
                   alt="Logo logo"
                   />
-                </Link>
+                </a>
               </div>
 
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">

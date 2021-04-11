@@ -139,7 +139,7 @@ exports.complete = async (req, res) => {
     ).exec();
     const tickets = await TicketSchema.find({
       status: "issued",
-      assignedto: req.user._id,
+      assignedto: req.user._id
     })
       .populate("client", "_id name")
       .populate("assignedto", "_id name");
@@ -149,6 +149,30 @@ exports.complete = async (req, res) => {
     return res.status(500);
   }
 };
+
+exports.unComplete = async (req, res) => {
+  try {
+    await TicketSchema.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: { status: "issued", assignedto: req.user._id },
+      },
+      {
+        new: true,
+      }
+    ).exec();
+    const tickets = await TicketSchema.find({
+      status: "issued",
+      assignedto: req.user._id,
+    })
+      .populate("client", "_id name")
+      .populate("assignedto", "_id name");
+    res.status(200).json({ tickets });
+  } catch (error) {
+    console.log(error);
+    return res.status(500);
+  }
+}
 
 exports.transfer = async (req, res) => {
   try {
