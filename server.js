@@ -13,11 +13,8 @@ const socket = require("socket.io");
 const fs = require("fs");
 const readline = require("readline");
 const fileUpload = require("express-fileupload");
-
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
-const crypto = require("crypto");
-// const methodOverride = require('method-override');
+const osutils = require("os-utils");
+const os = require('os');
 
 const connectDB = require("./config/DB");
 require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
@@ -62,11 +59,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cookieParser());
-app.use(fileUpload({
-  useTempFiles : true,
-  tempFileDir : '/tmp/',
-  createParentPath: true
-}));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+    createParentPath: true,
+  })
+);
 
 let accessLogStream = fs.createWriteStream(path.join(__dirname, "api.txt"), {
   flags: "a",
@@ -135,11 +134,39 @@ function convert(file) {
   });
 }
 
+function stats() {
+  let system = osutils.platform();
+  let cpu = osutils.cpuCount();
+  let cpuUse = osutils.cpuUsage(function(v){
+    cpuUse = v
+  });
+  let loadAverage = osutils.loadavg(5).toFixed(2);
+  let totalMem = osutils.totalmem();
+  let freeMem = osutils.freemem().toFixed(2);
+  let freeMemPercentage = osutils.freememPercentage().toFixed(2);
+  let uptime = new Date(os.uptime() * 1000).toISOString().substr(11, 8)
+
+
+  io.emit("stats", {
+    system,
+    cpu,
+    loadAverage,
+    totalMem,
+    freeMem,
+    freeMemPercentage,
+    uptime,
+    cpuUse
+  });
+}
+
+setInterval(stats, 1000);
+
 io.on("connection", (socket) => {
   online++;
   console.log(`Socket ${socket.id} connected.`);
   console.log(`Online: ${online}`);
   io.emit("visitor enters", online);
+  stats();
   convert("./api.txt").then((res) => {
     io.emit("file", res);
   });

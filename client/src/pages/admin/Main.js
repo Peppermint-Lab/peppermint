@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import io from "socket.io-client";
 import { Card, Statistic, List } from "antd";
+import moment from "moment";
+
 
 const Main = () => {
   const [unClaimed, setUnClaimed] = useState();
@@ -9,8 +11,11 @@ const Main = () => {
   const [complete, setComplete] = useState();
   const [online, setOnline] = useState(0);
   const [text, setText] = useState([].reverse());
+  const [data, setData] = useState([]);
 
   const history = useHistory();
+
+  // console.log(data)
 
   useEffect(() => {
     async function soc() {
@@ -25,6 +30,14 @@ const Main = () => {
     async function soc() {
       const socket = await io.connect("/");
       socket.on("file", (data) => setText({ data }));
+    }
+    soc();
+  }, []);
+
+  useEffect(() => {
+    async function soc() {
+      const socket = await io.connect("/");
+      socket.on("stats", (data) => setData(data));
     }
     soc();
   }, []);
@@ -151,7 +164,47 @@ const Main = () => {
                 />
               </div>
               <div className="flex:2 ml-5">
-                
+              <div className='flex-col'>
+              <div className="flex flex-row">
+                  <div className="ml-1">
+                    <Card>
+                      <Statistic title="System OS" value={data.os} />
+                    </Card>
+                  </div>
+                  <div className="ml-1">
+                    <Card>
+                      <Statistic title="Cpu Count" value={data.cpu} />
+                    </Card>
+                  </div>
+                  <div className="ml-1">
+                    <Card>
+                      <Statistic title="Cpu Load Average 5mins %" value={data.loadAverage} />
+                    </Card>
+                  </div>
+                  <div className="ml-1">
+                    <Card>
+                      <Statistic title="Uptime" value={data.uptime} />
+                    </Card>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-row">
+                  <div className="ml-1">
+                    <Card>
+                      <Statistic title="Free Memory MB" value={data.freeMem} />
+                    </Card>
+                  </div>
+                  <div className="ml-1">
+                    <Card>
+                      <Statistic title="Free Memory %" value={data.freeMemPercentage} />
+                    </Card>
+                  </div>
+                  <div className="ml-1">
+                    <Card>
+                      <Statistic title="Total Memory MB" value={data.totalMem} />
+                    </Card>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
