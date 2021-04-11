@@ -4,7 +4,6 @@ import io from "socket.io-client";
 import { Card, Statistic, List } from "antd";
 import moment from "moment";
 
-
 const Main = () => {
   const [unClaimed, setUnClaimed] = useState();
   const [open, setOpen] = useState();
@@ -147,48 +146,38 @@ const Main = () => {
                     <Statistic title="Online Users" value={online.data} />
                   </Card>
                 </div>
+                <div className="ml-1">
+                  <Card>
+                    <Statistic title="System OS" value={data.system} />
+                  </Card>
+                </div>
+                <div className="ml-1">
+                  <Card>
+                    <Statistic title="Cpu Count" value={data.cpu} />
+                  </Card>
+                </div>
               </div>
             </div>
             <div className="flex py-1 px-3">
               <div className="flex:1">
-                <List
-                  size="small"
-                  bordered
-                  dataSource={text.data}
-                  pagination={{
-                    defaultPageSize: 15,
-                    showSizeChanger: true,
-                    pageSizeOptions: ["15", "30", "40"],
-                  }}
-                  renderItem={(item) => <List.Item>{item}</List.Item>}
-                />
-              </div>
-              <div className="flex:2 ml-5">
-              <div className='flex-col'>
-              <div className="flex flex-row">
-                  <div className="ml-1">
-                    <Card>
-                      <Statistic title="System OS" value={data.os} />
-                    </Card>
-                  </div>
-                  <div className="ml-1">
-                    <Card>
-                      <Statistic title="Cpu Count" value={data.cpu} />
-                    </Card>
-                  </div>
-                  <div className="ml-1">
-                    <Card>
-                      <Statistic title="Cpu Load Average 5mins %" value={data.loadAverage} />
-                    </Card>
-                  </div>
-                  <div className="ml-1">
-                    <Card>
-                      <Statistic title="Uptime" value={data.uptime} />
-                    </Card>
+                <div className="flex-col">
+                  <div className="flex flex-row">
+                    <div className="ml-1">
+                      <Card>
+                        <Statistic
+                          title="Cpu Load Average 5mins %"
+                          value={data.loadAverage}
+                        />
+                      </Card>
+                    </div>
+                    <div className="ml-1">
+                      <Card>
+                        <Statistic title="Uptime" value={data.uptime} />
+                      </Card>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex flex-row">
+                <div className="flex flex-row">
                   <div className="ml-1">
                     <Card>
                       <Statistic title="Free Memory MB" value={data.freeMem} />
@@ -196,14 +185,35 @@ const Main = () => {
                   </div>
                   <div className="ml-1">
                     <Card>
-                      <Statistic title="Free Memory %" value={data.freeMemPercentage} />
+                      <Statistic
+                        title="Free Memory %"
+                        value={data.freeMemPercentage}
+                      />
                     </Card>
                   </div>
                   <div className="ml-1">
                     <Card>
-                      <Statistic title="Total Memory MB" value={data.totalMem} />
+                      <Statistic
+                        title="Total Memory MB"
+                        value={data.totalMem}
+                      />
                     </Card>
                   </div>
+                </div>
+              </div>
+              <div className="flex:2 ml-5 h-2/4">
+                <div className="h-2/4">
+                  <List
+                    size="small"
+                    bordered
+                    dataSource={text.data}
+                    pagination={{
+                      defaultPageSize: 10,
+                      showSizeChanger: true,
+                      pageSizeOptions: ["15", "30", "40"],
+                    }}
+                    renderItem={(item) => <List.Item>{item}</List.Item>}
+                  />
                 </div>
               </div>
             </div>
