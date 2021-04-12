@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Create from "../ticket/Create";
-// import useDarkMode from "../../hooks/useDarkMode";
 
-import logo from './pmint.svg'
+import logo from "./pmint.svg";
 
 const Header = () => {
   const history = useHistory();
@@ -11,7 +10,9 @@ const Header = () => {
 
   const [expanded, setExpanded] = useState(false);
   const [show, setShow] = useState(false);
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || '' );
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || ""
+  );
 
   function logout() {
     localStorage.clear();
@@ -25,15 +26,12 @@ const Header = () => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="relative flex flex-wrap items-center justify-center lg:justify-between">
               <div className="absolute left-0 py-5 flex-shrink-0 lg:static">
-                <a href='https://pmint.dev/' target="_blank"  rel="noreferrer" >
+                <a href="https://pmint.dev/" target="_blank" rel="noreferrer">
                   <span className="sr-only">Logo should be here?</span>
-                  <img 
-                  className="h-8"
-                  src={logo}
-                  alt="Logo logo"
-                  />
+                  <img className="h-10" src={logo} alt="Logo logo" />
                 </a>
               </div>
+
 
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
                 <Create />
@@ -50,7 +48,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          {user ? user.name[0] : ''}
+                          {user ? user.name[0] : ""}
                         </span>
                       </span>
                     </button>
@@ -113,8 +111,12 @@ const Header = () => {
                       </Link>
 
                       <Link
-                        to='/admin/dashboard'
-                        className={user.role === 'admin' ? 'text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10' : 'hidden'}
+                        to="/admin/dashboard"
+                        className={
+                          user.role === "admin"
+                            ? "text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                            : "hidden"
+                        }
                         aria-current="false"
                       >
                         Admin
@@ -239,7 +241,7 @@ const Header = () => {
                       History
                     </Link>
                     <Link
-                      to='/admin/dashboard'
+                      to="/admin/dashboard"
                       className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
                     >
                       Admin
@@ -252,7 +254,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                        {user ? user.name[0] : ''}
+                          {user ? user.name[0] : ""}
                         </span>
                       </span>
                     </div>
