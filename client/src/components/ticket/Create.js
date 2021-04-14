@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { HotKeys } from "react-hotkeys";
 import { Select, Form, Input, Radio, Space } from "antd";
-import "antd/lib/input/style/index.css";
-
 import { GlobalContext } from "../../Context/GlobalState";
 
 const Create = () => {
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
+  const [company, setCompany] = useState();
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState("");
   const [priority, setPriority] = useState("Normal");
@@ -28,7 +26,6 @@ const Create = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
       .then((res) => res.json())
@@ -38,6 +35,7 @@ const Create = () => {
         }
       });
   };
+
 
   useEffect(() => {
     fetchClients();

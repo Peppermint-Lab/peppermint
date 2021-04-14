@@ -61,39 +61,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cookieParser());
-app.use(
-  fileUpload({
-    useTempFiles: true,
-    tempFileDir: "/tmp/",
-    createParentPath: true,
-  })
-);
+app.use(fileUpload({useTempFiles: true, tempFileDir: "/tmp/", createParentPath: true, }));
 
 let accessLogStream = fs.createWriteStream(path.join(__dirname, "api.txt"), {
   flags: "a",
 });
 
 // Express API Routes
-app.use(
-  "/api/v1/auth",
-  morgan("tiny", { stream: accessLogStream }),
-  limiter,
-  auth
-);
-app.use(
-  "/api/v1/tickets",
-  morgan("tiny", { stream: accessLogStream }),
-  tickets
-);
+app.use("/api/v1/auth",morgan("tiny", { stream: accessLogStream }),limiter, auth);
+app.use("/api/v1/tickets",morgan("tiny", { stream: accessLogStream }),tickets);
 app.use("/api/v1/data", morgan("tiny", { stream: accessLogStream }), data);
 app.use("/api/v1/todo", morgan("tiny", { stream: accessLogStream }), todo);
 app.use("/api/v1/note", morgan("tiny", { stream: accessLogStream }), note);
 app.use("/api/v1/client", morgan("tiny", { stream: accessLogStream }), client);
-app.use(
-  "/api/v1/newsletter",
-  morgan("tiny", { stream: accessLogStream }),
-  news
-);
+app.use("/api/v1/newsletter", morgan("tiny", { stream: accessLogStream }), news);
 app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
 
 // Express web server PORT

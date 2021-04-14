@@ -188,7 +188,11 @@ export const GlobalProvider = ({ children }) => {
           priority,
         }),
       }).then((res) => res.json());
-      dispatch({ type: "ADD_TICKET", payload: res.ticket });
+      if (res.failed === true) {
+        console.log(res.error);
+      } else {
+        dispatch({ type: "ADD_TICKET", payload: res.ticket });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -215,7 +219,6 @@ export const GlobalProvider = ({ children }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
           data,
@@ -257,7 +260,7 @@ export const GlobalProvider = ({ children }) => {
       },
     }).then((res) => res.json());
     dispatch({ type: "COMPLETE_TICKET", payload: res.tickets });
-    console.log(res)
+    console.log(res);
   }
 
   async function transferTicket(id, ticket) {
