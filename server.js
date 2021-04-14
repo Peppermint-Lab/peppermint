@@ -15,6 +15,7 @@ const readline = require("readline");
 const fileUpload = require("express-fileupload");
 const osutils = require("os-utils");
 const os = require('os');
+const compression = require('compression')
 
 const connectDB = require("./config/DB");
 require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
@@ -54,6 +55,7 @@ const times = require("./src/routes/time");
 
 // Express server libraries
 app.use(cors());
+app.use(compression())
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
