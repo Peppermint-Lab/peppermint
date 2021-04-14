@@ -8,8 +8,6 @@ const Update = (props) => {
   const [email, setEmail] = useState(props.client.email);
   const [number, setNumber] = useState(props.client.number);
 
-  console.log(props.client);
-
   const postData = async () => {
     await fetch(`/api/v1/client/update`, {
       method: "PUT",

@@ -23,16 +23,20 @@ const ListTodo = () => {
     // eslint-disable-next-line
   }, []);
 
+  console.log(todos)
+
   return (
     <div>
+      <div className={!todos.length ? 'hidden' : ''}>
       <Button className="ml-2 mt-1" onClick={allDone}>
         Mark All Done
       </Button>
+      </div>
       <Divider orientation="left" className="w-full"></Divider>
       {todos ? (
         todos.map((todo) => {
           return (
-            <div className="flex flex-col mx-auto ml-10 px-1" key={todo._id}>
+            <div className="flex flex-col mx-auto ml-11 px-1" key={todo._id}>
               <ul key={todo._id}>
                 <li style={{ marginLeft: -35 }} key={todo._id}>
                   <span className={todo.done ? "done" : ""}>{todo.text}</span>

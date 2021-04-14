@@ -9,8 +9,6 @@ const ViewNewsletter = (props) => {
     setVisible(false);
   };
 
-  console.log(props)
-
   return (
     <div>
         <Modal

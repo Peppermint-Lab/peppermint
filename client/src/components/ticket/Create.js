@@ -58,7 +58,7 @@ const Create = () => {
           <button
             onClick={() => setShow(true)}
             type="button"
-            className="flex-shrink-0 p-1 text-cyan-200 rounded-full hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white"
+            className="flex-shrink-0 p-3 text-cyan-200 rounded-full hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white"
           >
             <span className="sr-only">View notifications</span>
             <span className="text-white">Create Ticket</span>

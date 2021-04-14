@@ -3,7 +3,9 @@ const colors = require("tailwindcss/colors");
 
 module.exports = {
   darkMode: false,
-  purge: false,
+  purge: [
+    'src/**/*.js'
+  ],
   theme: {
     extend: {
       opacity: ["disabled"],

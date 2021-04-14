@@ -233,7 +233,6 @@ export const GlobalProvider = ({ children }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
       }).then((res) => res.json());
       dispatch({ type: "GET_OPENTICKET", payload: res.tickets });
@@ -245,11 +244,20 @@ export const GlobalProvider = ({ children }) => {
       method: "Post",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     }).then((res) => res.json());
     dispatch({ type: "COMPLETE_TICKET", payload: res.tickets });
-    console.log(res);
+  }
+
+  async function unCompleteTicket(id) {
+    const res = await fetch(`/api/v1/tickets/uncomplete/${id}`, {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+    dispatch({ type: "COMPLETE_TICKET", payload: res.tickets });
+    console.log(res)
   }
 
   async function transferTicket(id, ticket) {
@@ -258,7 +266,6 @@ export const GlobalProvider = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
           id,
@@ -431,6 +438,7 @@ export const GlobalProvider = ({ children }) => {
         createClient,
         createUser,
         getUsers,
+        unCompleteTicket,
       }}
     >
       {children}

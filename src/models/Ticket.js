@@ -6,7 +6,7 @@ const TicketSchema = new mongoose.Schema(
   {
     ticketId: { type: String },
     name: { type: String, required: true },
-    client: { type: ObjectId, ref: "Clients" },
+    client: { type: ObjectId, ref: "Clients", required: true },
     issue: { type: String, required: true },
     email: { type: String,},
     note: { type: String },
