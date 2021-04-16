@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  firstName String
+  LastName  String
+  password  String
+  email     String   @unique
+  isAdmin   Boolean
+  todos     Todos[]
+  tickets   Ticket[]
+  file      File[]
+  newsletter Newsletter[]
+  notes Notes[]
+}
+
+model Ticket {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  issue      String
+  email      String
+  note       String
+  isIssued   Boolean
+  isComplete Boolean
+  isUnissued Boolean
+  priority   String
+  assignedTo User     @relation(fields: [userId], references: [id])
+  client     Client   @relation(fields: [clientId], references: [id])
+  clientId   Int
+  userId     Int
+}
+
+model Client {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  name        String
+  email       String
+  contactName String
+  number      Int
+  notes       String
+  tickets     Ticket[]
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  filename  String
+  path      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Newsletter {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  title String
+  text String
+  createdBy User @relation(fields: [authorId], references: [id])
+  authorId Int
+  active Boolean
+}
+
+model Notes {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  title String
+  note String
+  createdBy User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model Todos {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  text      String
+  done      Boolean
+  createdBy User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
