@@ -1,33 +1,33 @@
-const mongoose = require("mongoose");
-const User = mongoose.model("InternalUser");
-const File = mongoose.model("file");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 exports.Signup = async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, firstName, LastName, password } = req.body;
     const emailLower = email.toLowerCase();
-    if ((!email, !name, !password)) {
+    if ((!email, !firstName, !LastName, !password)) {
       return res.status(422).json({ error: "Please add all fields" });
     }
-    await User.findOne({ email: email }).then((savedUser) => {
-      if (savedUser) {
-        return res
-          .status(422)
-          .json({ error: "user already exists with that email" });
-      }
-      bcrypt.hash(password, 10).then((hashedpassword) => {
-        const user = new User({
+    try {
+      user = await prisma.user.create({
+        data: {
+          firstName,
+          LastName,
           email: emailLower,
-          password: hashedpassword,
-          name,
-        });
-        user.save();
-        res.status(200).json({ message: "User saved successfully", user, failed: false });
+          password: bcrypt.hash(password, 10),
+          isAdmin: false,
+        },
       });
-    });
+      res
+        .status(200)
+        .json({ message: "User saved successfully", failed: false });
+    } catch (error) {
+      res.json({ error: "A user with that username already exists 😮" });
+      return;
+    }
   } catch (error) {
     console.log(error);
     res.json({ message: error, failed: true });
@@ -39,32 +39,39 @@ exports.Login = async (req, res) => {
     const { email, password } = req.body;
     const emailLower = email.toLowerCase();
     if (!email || !password) {
-      return res.status(422).json({ error: "please add email or password", auth: false });
+      return res
+        .status(422)
+        .json({ error: "please add email or password", auth: false });
     }
-    await User.findOne({ email: emailLower }).then((savedUser) => {
-      if (!savedUser) {
-        return res.status(422).json({ error: "Invalid Email or password", auth: false });
-      }
-      bcrypt.compare(password, savedUser.password).then((doMatch) => {
-        if (doMatch) {
-          const token = jwt.sign(
-            { _id: savedUser._id, expiresIn: 86400 },
-            process.env.JWT_SECRET
-          );
-          const { _id, name, email, role } = savedUser;
-          res.cookie("token", token, {
-            maxAge: 1000 * 60 * 60 * 24,
-            sameSite: true,
-          });
-          res.status(200).json({ user: { _id, name, email, role }, auth: true });
-        } else {
-          res.status(422).json({ error: "Invalid Email or password", auth: false })
-        }
-      });
+    const user = await prisma.user.findUnique({
+      where: { emailLower },
     });
+    if (user && bcrypt.compare(password, user.password)) {
+      const token = jwt.sign(
+        {
+          email: user.email,
+          id: user.id,
+          role: user.isAdmin,
+          time: new Date(),
+        },
+        process.env.JWT_SECRET
+      );
+      res.cookie("token", token, {
+        maxAge: 1000 * 60 * 60 * 12,
+        sameSite: true,
+      });
+      res.status(200).json({
+        user: { _id, firstName, LastName, email, isAdmin },
+        auth: true,
+      });
+    } else {
+      res
+        .status(500)
+        .json({ message: "Unable to process request", auth: false });
+    }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Unable to process request", auth: false })
+    res.status(500).json({ message: "Unable to process request", auth: false });
   }
 };
 
@@ -98,20 +105,21 @@ exports.resetPasswordAdmin = async (req, res) => {
             user.password = hashedpassword;
             user.save();
           });
-          res.status(200).json({ message: "Password reset successfully", failed: false })
+          res
+            .status(200)
+            .json({ message: "Password reset successfully", failed: false });
         }
       }
     );
-
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error, failed: true })
+    res.status(500).json({ message: error, failed: true });
   }
 };
 
 exports.resetPasswordUser = async (req, res) => {
   const { password } = req.body;
-  console.log(password, req.params.id)
+  console.log(password, req.params.id);
   try {
     await User.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }).then(
       (user) => {
@@ -122,7 +130,9 @@ exports.resetPasswordUser = async (req, res) => {
             user.password = hashedpassword;
             user.save();
           });
-          res.status(201).json({ message: "password updated success", failed: false });
+          res
+            .status(201)
+            .json({ message: "password updated success", failed: false });
         }
       }
     );
@@ -166,7 +176,9 @@ exports.changeRole = async (req, res) => {
       }
     ).exec();
     console.log("Updated record");
-    return res.status(200).json({ message: "User Role Updated", failed: false });
+    return res
+      .status(200)
+      .json({ message: "User Role Updated", failed: false });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error, failed: true });
@@ -178,7 +190,11 @@ exports.edit = async (req, res) => {
     await User.findByIdAndUpdate(
       { _id: mongoose.Types.ObjectId(req.body.id) },
       {
-        $set: { name: req.body.name, role: req.body.role, email: req.body.email },
+        $set: {
+          name: req.body.name,
+          role: req.body.role,
+          email: req.body.email,
+        },
       },
       { new: true }
     ).exec();
@@ -190,25 +206,28 @@ exports.edit = async (req, res) => {
 };
 
 exports.profile = async (req, res) => {
-  const emailLower = req.body.email.toLowerCase()
+  const emailLower = req.body.email.toLowerCase();
   try {
     await User.findByIdAndUpdate(
       { _id: req.user._id },
       {
-        $set: { name: req.body.name, email: emailLower }
+        $set: { name: req.body.name, email: emailLower },
       },
       { new: true }
     ).exec();
-      User.findOne({ _id: req.user._id })
-      .then((user) => {
-        const { _id, name, email, role } = user;
-        res.status(200).json({ message: "User updated", user: {_id, name, email, role}, fail: false})
-      })
+    User.findOne({ _id: req.user._id }).then((user) => {
+      const { _id, name, email, role } = user;
+      res.status(200).json({
+        message: "User updated",
+        user: { _id, name, email, role },
+        fail: false,
+      });
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error, fail: true });
   }
-}
+};
 
 exports.deleteUser = async (req, res) => {
   try {
@@ -252,8 +271,8 @@ exports.saveFile = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: error })
+    console.log(error);
+    res.status(500).json({ message: error });
   }
 };
 
@@ -261,7 +280,7 @@ exports.listFile = async (req, res) => {
   try {
     const files = await File.find({
       user: mongoose.Types.ObjectId(req.user._id),
-      ticket: null
+      ticket: null,
     });
     res.status(200).json({ sucess: true, files });
   } catch (error) {}
@@ -286,13 +305,12 @@ exports.deleteFile = async (req, res) => {
 };
 
 exports.downloadFile = async (req, res) => {
-  const filepath = req.body.filepath
+  const filepath = req.body.filepath;
   try {
     res.download(filepath, (err) => {
-      if (err) console.log(err)
-    }) 
+      if (err) console.log(err);
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
-

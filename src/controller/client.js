@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Client = mongoose.model("Clients");
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 exports.create = async (req, res) => {
   try {

@@ -17,20 +17,9 @@ const osutils = require("os-utils");
 const os = require('os');
 const compression = require('compression')
 
-const connectDB = require("./config/DB");
 require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
 
-// DB models
-require("./src/models/InternalUser");
-require("./src/models/Ticket");
-require("./src/models/todo");
-require("./src/models/notes");
-require("./src/models/client");
-require("./src/models/news");
-require("./src/models/Log");
-require("./src/models/file");
 
-connectDB();
 let url = null;
 if (process.env.NODE_ENV === "production") {
   url = process.env.MONGO_URI_DOCKER;
