@@ -21,6 +21,9 @@
     ]
   },
   "scripts": {
+    "seed": "prisma db seed --preview-feature",
+    "migrate": "prisma migrate dev --preview-feature",
+    "generate": "prisma generate",
     "start": "node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
@@ -30,6 +33,7 @@
   "author": "Jack Andrews",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^2.21.2",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
