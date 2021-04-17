@@ -1,5 +1,5 @@
 // TODO models in Prisma do not have same fields as Mongoose models
-import { prisma } from "../../prisma/prisma";
+const { prisma } = require ("../../prisma/prisma");
 const fs = require("fs");
 
 // Get by ID

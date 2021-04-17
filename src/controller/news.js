@@ -1,4 +1,5 @@
-import { prisma } from "../../prisma/prisma";
+const { prisma } = require ("../../prisma/prisma");
+
 
 // Create a new newsletter
 exports.create = async (req, res) => {

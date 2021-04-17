@@ -1,6 +1,7 @@
 // TODO error handling can be refined by using Prisma exceptions codes
 const { PrismaClientKnownRequestError } = require('@prisma/client/runtime');
-import { prisma } from "../../prisma/prisma";
+const { prisma } = require ("../../prisma/prisma");
+
 
 exports.saveNote = async (req, res) => {
   try {

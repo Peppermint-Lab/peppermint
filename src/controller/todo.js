@@ -1,4 +1,6 @@
-import { prisma } from "../../prisma/prisma";
+const { prisma } = require ("../../prisma/prisma");
+
+
 
 const doesTodoExist = async (id) => {
   const exists = await prisma.todos.findUnique({

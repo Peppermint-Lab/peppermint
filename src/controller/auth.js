@@ -1,9 +1,9 @@
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-import { prisma } from "../../prisma/prisma";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-const prisma = new PrismaClient();
+const { prisma } = require ("../../prisma/prisma");
+const { PrismaClientKnownRequestError } = require('@prisma/client/runtime');
+
 
 exports.Signup = async (req, res) => {
   try {

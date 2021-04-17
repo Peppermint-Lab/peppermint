@@ -1,6 +1,6 @@
 // TODO remove isUnissued from Ticket model and use isIssued (false) instead
 // TODO maybe use a utility fun like below to avoid duplication
-import { prisma } from "../../prisma/prisma";
+const { prisma } = require ("../../prisma/prisma");
 
 const filterCount = (filterObj) => {
   return prisma.ticket.count({

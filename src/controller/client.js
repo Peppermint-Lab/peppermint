@@ -1,5 +1,5 @@
 const { PrismaClientKnownRequestError } = require('@prisma/client/runtime');
-import { prisma } from "../../prisma/prisma";
+const { prisma } = require ("../../prisma/prisma");
 
 exports.create = async (req, res) => {
   try {
