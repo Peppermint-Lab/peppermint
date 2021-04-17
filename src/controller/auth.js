@@ -196,12 +196,17 @@ exports.changeRole = async (req, res) => {
 exports.edit = async (req, res) => {
   // TODO email needs toLowerCase?
   // TODO add name field to User model or change its usage to combination of first and last name
+
+  // done -> lower case
+  // done -> added first and last name
+  const email = req.body.email.toLowerCase()
   try {
     await prisma.user.update({
       where: { id: Number(req.body.id) },
       data: {
-        name: req.body.name,
-        email: req.body.email,
+        firstName: req.body.fname,
+        lastName: req.body.lname,
+        email: email,
       }
     });
     return res.status(200).json({ message: "User Updated", failed: false });
