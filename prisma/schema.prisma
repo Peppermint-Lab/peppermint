@@ -16,7 +16,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   firstName String
-  LastName  String
+  lastName  String
   password  String
   email     String   @unique
   isAdmin   Boolean
@@ -36,7 +36,6 @@ model Ticket {
   note       String
   isIssued   Boolean
   isComplete Boolean
-  isUnissued Boolean
   priority   String
   assignedTo User     @relation(fields: [userId], references: [id])
   client     Client   @relation(fields: [clientId], references: [id])
@@ -52,7 +51,7 @@ model Client {
   email       String
   contactName String
   number      Int
-  notes       String
+  notes       String?
   tickets     Ticket[]
 }
 
@@ -91,7 +90,7 @@ model Todos {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   text      String
-  done      Boolean
+  done      Boolean  @default(false)
   createdBy User     @relation(fields: [userId], references: [id])
   userId    Int
 }
