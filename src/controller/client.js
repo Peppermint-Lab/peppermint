@@ -10,7 +10,7 @@ exports.create = async (req, res) => {
 
     prisma.client.findUnique({
       where: { name: name }
-    }).then((dupeClient) => {
+    }).then(async (dupeClient) => {
       if (dupeClient) {
         return res.status(422).json({ error: "client already exists" });
       }

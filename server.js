@@ -40,7 +40,7 @@ const todo = require("./src/routes/todo");
 const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
-const times = require("./src/routes/time");
+// const times = require("./src/routes/time");
 
 // Express server libraries
 app.use(cors());
@@ -64,7 +64,7 @@ app.use("/api/v1/todo", morgan("tiny", { stream: accessLogStream }), todo);
 app.use("/api/v1/note", morgan("tiny", { stream: accessLogStream }), note);
 app.use("/api/v1/client", morgan("tiny", { stream: accessLogStream }), client);
 app.use("/api/v1/newsletter", morgan("tiny", { stream: accessLogStream }), news);
-app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
+// app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
 
 // Express web server PORT
 const PORT = process.env.PORT;
