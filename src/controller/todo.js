@@ -1,13 +1,26 @@
-const mongoose = require("mongoose");
-const Todo = mongoose.model("Todo");
+import { prisma } from "../../prisma/prisma";
+
+const doesTodoExist = async (id) => {
+  const exists = await prisma.todos.findUnique({
+    where: {
+      id: id
+    }
+  }).then(Boolean)
+
+  return exists
+}
 
 exports.getTodos = async (req, res) => {
   try {
-  await Todo.find({ createdBy: req.user._id })
-      .populate("createdBy", "_id name")
-      .then((todo) => {
-        res.json({todo});
-      });
+    const todos = await prisma.todos.findMany({
+      where: { createdBy: req.user._id },
+      select: {
+        id: true,
+        text: true,
+        done: true,
+      }
+    })
+    res.json({ todos })
   } catch (error) {
     console.log(error);
   }
@@ -20,11 +33,12 @@ exports.createTodo = async (req, res) => {
       console.log("No text found!");
       return res.status(422);
     } else {
-      const todo = await new Todo({
-        text,
-        createdBy: req.user._id,
-      });
-      todo.save();
+      const todo = await prisma.todos.create({
+        data: {
+          text,
+          createdBy: req.user._id,
+        }
+      })
       res.status(200).json({
         todo
       })
@@ -36,14 +50,18 @@ exports.createTodo = async (req, res) => {
 
 exports.deleteTodo = async (req, res) => {
   try {
-    const todo = await new mongoose.Types.ObjectId(req.params.id);
+    const todo = await doesTodoExist(req.params.id);
     if (!todo) {
       return res.status(404).json({
         success: false,
         error: "Todo not found.",
       });
     }
-    await Todo.findOneAndDelete({ _id: req.params.id });
+    await prisma.todos.delete({
+      where: {
+        id: req.params.id
+      }
+    })
     return res.status(201).json({
       data: {}
     });
@@ -55,28 +73,26 @@ exports.deleteTodo = async (req, res) => {
 
 exports.markOneAsDone = async (req, res) => {
   try {
-    const todo = await new mongoose.Types.ObjectId(req.params.id);
+    const todo = await doesTodoExist(req.params.id);
     if (!todo) {
       return res.status(404).json({
         success: false,
         error: "Todo not found.",
       });
     } else {
-      await Todo.findOneAndUpdate(
-        { _id: req.params.id },
-        { $set: { done: true } },
-        {
-          new: true,
-        }
-      ).exec();
-      console.log("Updated record");
-      Todo.find({ createdBy: req.user._id })
-      .populate("createdBy", "_id name")
-      .then((todo) => {
-        res.json({todo});
-      });
-    }
 
+      prisma.todos.update({
+        where: {
+          id: req.params.id
+        },
+        data: {
+          done: true
+        }
+      }).then((todo) => {
+        res.json({ todo });
+      });
+      console.log("Updated record");
+    }
   } catch (error) {
     console.log(error);
   }
@@ -84,36 +100,41 @@ exports.markOneAsDone = async (req, res) => {
 
 exports.markAllAsDone = async (req, res) => {
   try {
-    await Todo.updateMany({ $set: { done: true } }, function (err, result) {
-      if (err) {
-        res.send(err);
-      } else {
-        Todo.find({ createdBy: req.user._id })
-        .populate("createdBy", "_id name")
-        .then((todo) => {
-          res.json({todo});
-        });
+
+    prisma.todos.updateMany({
+      where: {
+        createdBy: req.params.id
+      },
+      data: {
+        done: true,
       }
-    });
+    }).then(_ => {
+      return prisma.todos.findMany({
+        where: {
+          createdBy: req.user._id
+        }
+      })
+    }).then((todos) => {
+      res.json({ todos })
+    })
   } catch (error) {
+    res.send(error)
     console.log(error);
   }
 };
 
 exports.markUndone = async (req, res) => {
   try {
-    await Todo.findOneAndUpdate(
-        { _id: req.params.id },
-        { $set: { done: false } },
-        {
-          new: true,
-        }
-      ).exec();
-      Todo.find({ createdBy: req.user._id })
-      .populate("createdBy", "_id name")
-      .then((todo) => {
-        res.status(200).json({todo});
-      });
+    prisma.todos.update({
+      where: {
+        id: req.params.id
+      },
+      data: {
+        done: false
+      }
+    }).then(todo => {
+      res.status(200).json({ todo });
+    })
   } catch (error) {
     console.log(error);
   }

@@ -1,3 +1,5 @@
+// TODO add Log model to Prisma?
+
 const mongoose = require("mongoose");
 const Log = mongoose.model("Log");
 
