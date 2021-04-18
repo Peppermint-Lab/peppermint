@@ -48,7 +48,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          {user ? user.name[0] : ""}
+                          {user ? user.firstName[0] : ""}
                         </span>
                       </span>
                     </button>
@@ -254,13 +254,13 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          {user ? user.name[0] : ""}
+                          {user ? user.firstName[0] : ""}
                         </span>
                       </span>
                     </div>
                     <div className="ml-3 min-w-0 flex-1">
                       <div className="text-base font-medium text-gray-800 truncate">
-                        {user.name}
+                        {user.firstName}
                       </div>
                       <div className="text-sm font-medium text-gray-500 truncate">
                         {user.email}

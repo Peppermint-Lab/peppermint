@@ -67,7 +67,7 @@ app.use("/api/v1/newsletter", morgan("tiny", { stream: accessLogStream }), news)
 // app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
 
 // Express web server PORT
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "build")));
