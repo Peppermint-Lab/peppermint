@@ -32,13 +32,12 @@ const Files = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        file: file._id,
+        file: file.id,
         path: file.path,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setFiles(res.files);
       });
   }

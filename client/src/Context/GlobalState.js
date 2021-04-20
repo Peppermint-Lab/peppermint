@@ -80,11 +80,9 @@ export const GlobalProvider = ({ children }) => {
           Accept: "application/json",
         },
       }).then((res) => res.json());
-
-      dispatch({ type: "ALLDONE_TODO", payload: res.todos });
-      console.log(res);
+      await dispatch({ type: "ALLDONE_TODO", payload: res.todos });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -97,10 +95,25 @@ export const GlobalProvider = ({ children }) => {
           Accept: "application/json",
         },
       }).then((response) => response.json());
-      console.log(res)
-      dispatch({ type: "MARK_TODO", payload: res.todo });
+      await dispatch({ type: "MARK_TODO", payload: res.todos });
     } catch (error) {
-      console.log(error)
+      console.log(error);
+    }
+  }
+
+  async function markUndone(id) {
+    try {
+      const res = await fetch(`/api/v1/todo/markUndone/${id}`, {
+        method: "PUT",
+        headers: {
+          ContentType: "application/json",
+          Accept: "application/json",
+        },
+      }).then((response) => response.json());
+      await dispatch({ type: "UNMARK_TODO", payload: res.todos });
+      console.log(res)
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -279,21 +292,6 @@ export const GlobalProvider = ({ children }) => {
       }).then((res) => res.json());
       dispatch({ type: "TRANSFER_TICKET", payload: res.tickets });
     } catch (error) {}
-  }
-
-  async function markUndone(id) {
-    try {
-      const res = await fetch(`/api/v1/todo/markUndone/${id}`, {
-        method: "PUT",
-        headers: {
-          ContentType: "application/json",
-          Accept: "application/json",
-        },
-      }).then((response) => response.json());
-      dispatch({ type: "UNMARK_TODO", payload: res.todo });
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   async function createNewsletter(title, text, active) {

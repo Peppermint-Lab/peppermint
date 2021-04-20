@@ -266,7 +266,7 @@ exports.deleteUser = async (req, res) => {
 
 exports.saveFile = async (req, res) => {
   const file = req.files.file;
-  const uploadPath = "files/" + `${req.user._id}/` + file.name;
+  const uploadPath = "files/" + `${req.user.id}/` + file.name;
 
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -275,7 +275,7 @@ exports.saveFile = async (req, res) => {
       prisma.file.create({
         data: {
           filename: file.name,
-          userId: Number(req.user._id),
+          userId: Number(req.user.id),
           path: uploadPath,
         }
       }).then(() => {
@@ -310,9 +310,10 @@ exports.listFile = async (req, res) => {
 
 exports.deleteFile = async (req, res) => {
   const path = req.body.path;
+  console.log(req.body)
   try {
     await prisma.file.delete({
-      where: Number(req.body.file)
+      where:{ id: Number(req.body.file)}
     }).then(() => {
       fs.unlink(path, (err) => {
         if (err) {
@@ -322,7 +323,7 @@ exports.deleteFile = async (req, res) => {
       });
     });
     const files = await prisma.file.findMany({
-      where: {userId: Number(req.user._id)}
+      where: {userId: Number(req.user.id)}
     });
     res.status(200).json({ sucess: true, files, message: "File Deleted" });
   } catch (error) {

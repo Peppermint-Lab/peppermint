@@ -1,14 +1,16 @@
-const { prisma } = require ("../../prisma/prisma");
+const { prisma } = require("../../prisma/prisma");
 
 const doesTodoExist = async (id) => {
-  const exists = await prisma.todos.findUnique({
-    where: {
-      id: Number(id)
-    }
-  }).then(Boolean)
+  const exists = await prisma.todos
+    .findUnique({
+      where: {
+        id: Number(id),
+      },
+    })
+    .then(Boolean);
 
-  return exists
-}
+  return exists;
+};
 
 exports.getTodos = async (req, res) => {
   try {
@@ -18,9 +20,9 @@ exports.getTodos = async (req, res) => {
         id: true,
         text: true,
         done: true,
-      }
-    })
-    res.json({ todos })
+      },
+    });
+    res.json({ todos });
   } catch (error) {
     console.log(error);
   }
@@ -37,11 +39,11 @@ exports.createTodo = async (req, res) => {
         data: {
           text,
           userId: Number(req.user.id),
-        }
-      })
+        },
+      });
       res.status(200).json({
-        todo
-      })
+        todo,
+      });
     }
   } catch (error) {
     console.log(error);
@@ -49,7 +51,7 @@ exports.createTodo = async (req, res) => {
 };
 
 exports.deleteTodo = async (req, res) => {
-  console.log(req.params.id)
+  console.log(req.params.id);
   try {
     const todo = await doesTodoExist(Number(req.params.id));
     if (!todo) {
@@ -60,11 +62,11 @@ exports.deleteTodo = async (req, res) => {
     }
     await prisma.todos.delete({
       where: {
-        id: Number(req.params.id)
-      }
-    })
+        id: Number(req.params.id),
+      },
+    });
     return res.status(201).json({
-      data: {}
+      data: {},
     });
   } catch (error) {
     console.log(error);
@@ -81,17 +83,25 @@ exports.markOneAsDone = async (req, res) => {
         error: "Todo not found.",
       });
     } else {
-
-      prisma.todos.update({
-        where: {
-          id: Number(req.params.id)
-        },
-        data: {
-          done: true
-        }
-      }).then((todo) => {
-        res.json({ todo });
-      });
+      prisma.todos
+        .update({
+          where: {
+            id: Number(req.params.id),
+          },
+          data: {
+            done: true,
+          },
+        })
+        .then((_) => {
+          return prisma.todos.findMany({
+            where: {
+              userId: req.user.id,
+            },
+          });
+        })
+        .then((todos) => {
+          res.json({ todos });
+        });
       console.log("Updated record");
     }
   } catch (error) {
@@ -101,41 +111,52 @@ exports.markOneAsDone = async (req, res) => {
 
 exports.markAllAsDone = async (req, res) => {
   try {
-
-    prisma.todos.updateMany({
-      where: {
-        userId: Number(req.user.id)
-      },
-      data: {
-        done: true,
-      }
-    }).then(_ => {
-      return prisma.todos.findMany({
+    prisma.todos
+      .updateMany({
         where: {
-          userId: req.user.id
-        }
+          userId: Number(req.user.id),
+        },
+        data: {
+          done: true,
+        },
       })
-    }).then((todos) => {
-      res.json({ todos })
-    })
+      .then((_) => {
+        return prisma.todos.findMany({
+          where: {
+            userId: req.user.id,
+          },
+        });
+      })
+      .then((todos) => {
+        res.json({ todos });
+      });
   } catch (error) {
-    res.send(error)
+    res.send(error);
     console.log(error);
   }
 };
 
 exports.markUndone = async (req, res) => {
   try {
-    prisma.todos.update({
-      where: {
-        id: Number(req.params.id)
-      },
-      data: {
-        done: false
-      }
-    }).then(todo => {
-      res.status(200).json({ todo });
-    })
+    prisma.todos
+      .update({
+        where: {
+          id: Number(req.params.id),
+        },
+        data: {
+          done: false,
+        },
+      })
+      .then((_) => {
+        return prisma.todos.findMany({
+          where: {
+            userId: req.user.id,
+          },
+        });
+      })
+      .then((todos) => {
+        res.json({ todos });
+      });
   } catch (error) {
     console.log(error);
   }
