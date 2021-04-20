@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { prisma } = require ("../../prisma/prisma");
 
 
 // Check to make sure the request is coming from an authenticated user

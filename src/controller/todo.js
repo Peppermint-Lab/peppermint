@@ -1,11 +1,9 @@
 const { prisma } = require ("../../prisma/prisma");
 
-
-
 const doesTodoExist = async (id) => {
   const exists = await prisma.todos.findUnique({
     where: {
-      id: id
+      id: Number(id)
     }
   }).then(Boolean)
 
@@ -15,7 +13,7 @@ const doesTodoExist = async (id) => {
 exports.getTodos = async (req, res) => {
   try {
     const todos = await prisma.todos.findMany({
-      where: { createdBy: req.user._id },
+      where: { userId: req.user.id },
       select: {
         id: true,
         text: true,
@@ -38,7 +36,7 @@ exports.createTodo = async (req, res) => {
       const todo = await prisma.todos.create({
         data: {
           text,
-          createdBy: req.user._id,
+          userId: Number(req.user.id),
         }
       })
       res.status(200).json({
@@ -51,8 +49,9 @@ exports.createTodo = async (req, res) => {
 };
 
 exports.deleteTodo = async (req, res) => {
+  console.log(req.params.id)
   try {
-    const todo = await doesTodoExist(req.params.id);
+    const todo = await doesTodoExist(Number(req.params.id));
     if (!todo) {
       return res.status(404).json({
         success: false,
@@ -61,7 +60,7 @@ exports.deleteTodo = async (req, res) => {
     }
     await prisma.todos.delete({
       where: {
-        id: req.params.id
+        id: Number(req.params.id)
       }
     })
     return res.status(201).json({
@@ -85,7 +84,7 @@ exports.markOneAsDone = async (req, res) => {
 
       prisma.todos.update({
         where: {
-          id: req.params.id
+          id: Number(req.params.id)
         },
         data: {
           done: true
@@ -105,7 +104,7 @@ exports.markAllAsDone = async (req, res) => {
 
     prisma.todos.updateMany({
       where: {
-        createdBy: req.params.id
+        userId: Number(req.user.id)
       },
       data: {
         done: true,
@@ -113,7 +112,7 @@ exports.markAllAsDone = async (req, res) => {
     }).then(_ => {
       return prisma.todos.findMany({
         where: {
-          createdBy: req.user._id
+          userId: req.user.id
         }
       })
     }).then((todos) => {
@@ -129,7 +128,7 @@ exports.markUndone = async (req, res) => {
   try {
     prisma.todos.update({
       where: {
-        id: req.params.id
+        id: Number(req.params.id)
       },
       data: {
         done: false

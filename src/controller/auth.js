@@ -171,27 +171,27 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-exports.changeRole = async (req, res) => {
-  try {
-    // TODO add role field to User model
-    await User.findByIdAndUpdate(
-      { _id: mongoose.Types.ObjectId(user) },
-      {
-        $set: { role: role },
-      },
-      {
-        new: true,
-      }
-    ).exec();
-    console.log("Updated record");
-    return res
-      .status(200)
-      .json({ message: "User Role Updated", failed: false });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error, failed: true });
-  }
-};
+// exports.changeRole = async (req, res) => {
+//   try {
+//     // TODO add role field to User model
+//     await User.findByIdAndUpdate(
+//       { _id: mongoose.Types.ObjectId(user) },
+//       {
+//         $set: { isAdmin: role },
+//       },
+//       {
+//         new: true,
+//       }
+//     ).exec();
+//     console.log("Updated record");
+//     return res
+//       .status(200)
+//       .json({ message: "User Role Updated", failed: false });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: error, failed: true });
+//   }
+// };
 
 exports.edit = async (req, res) => {
   // TODO email needs toLowerCase?
@@ -299,7 +299,7 @@ exports.listFile = async (req, res) => {
   try {
 
     const files = await prisma.file.findMany({
-      where: { userId: Number(req.user._id) }
+      where: { userId: Number(req.user.id) }
     });
     res.status(200).json({ sucess: true, files });
   } catch (error) {

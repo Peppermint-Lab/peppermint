@@ -13,7 +13,7 @@ exports.saveNote = async (req, res) => {
         data: {
           title,
           note: text,
-          userId: Number(req.user._id),  // unsure if can be replaced by a connect statement
+          userId: Number(req.user.id),  // unsure if can be replaced by a connect statement
         }
       });
       res.status(200).json({
@@ -28,7 +28,7 @@ exports.saveNote = async (req, res) => {
 exports.getNotes = async (req, res) => {
   try {
     await prisma.notes.findMany({
-      where: { userId: Number(req.user._id) },
+      where: { userId: Number(req.user.id) },
       include: {
         createdBy: {
           select: { id: true, firstName: true, lastName: true }

@@ -20,7 +20,7 @@ exports.countUnissuedTickets = async (req, res) => {
 
 exports.countOpenedTickets = async (req, res) => {
   await prisma.ticket.count({
-    where: { isIssued: true, userId: Number(req.user._id) }
+    where: { isIssued: true, userId: Number(req.user.id) }
   }).then((result) => {
     res.json({ result });
   }).catch((err) => {
@@ -31,7 +31,7 @@ exports.countOpenedTickets = async (req, res) => {
 exports.countCompletedTickets = async (req, res) => {
 
   await prisma.ticket.count({
-    where: { isComplete: true, userId: Number(req.user._id) }
+    where: { isComplete: true, userId: Number(req.user.id) }
   }).then((result) => {
     res.json({ result });
   }).catch((err) => {

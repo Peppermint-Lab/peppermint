@@ -33,7 +33,7 @@ export const GlobalProvider = ({ children }) => {
       const res = await axios.get(`/api/v1/todo/getTodo`, config);
       dispatch({
         type: "GET_TODOS",
-        payload: res.data.todo,
+        payload: res.data.todos,
       });
     } catch (error) {}
   }
@@ -63,7 +63,6 @@ export const GlobalProvider = ({ children }) => {
       await fetch(`/api/v1/todo/deleteTodo/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -77,15 +76,16 @@ export const GlobalProvider = ({ children }) => {
       const res = await fetch(`/api/v1/todo/markAllAsDone`, {
         method: "PUT",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           ContentType: "application/json",
           Accept: "application/json",
         },
       }).then((res) => res.json());
 
-      dispatch({ type: "ALLDONE_TODO", payload: res.todo });
+      dispatch({ type: "ALLDONE_TODO", payload: res.todos });
       console.log(res);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function markDone(id) {
@@ -93,13 +93,15 @@ export const GlobalProvider = ({ children }) => {
       const res = await fetch(`/api/v1/todo/markOneAsDone/${id}`, {
         method: "PUT",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           ContentType: "application/json",
           Accept: "application/json",
         },
       }).then((response) => response.json());
+      console.log(res)
       dispatch({ type: "MARK_TODO", payload: res.todo });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function getNotes() {
@@ -284,7 +286,6 @@ export const GlobalProvider = ({ children }) => {
       const res = await fetch(`/api/v1/todo/markUndone/${id}`, {
         method: "PUT",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           ContentType: "application/json",
           Accept: "application/json",
         },

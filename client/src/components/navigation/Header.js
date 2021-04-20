@@ -113,7 +113,7 @@ const Header = () => {
                       <Link
                         to="/admin/dashboard"
                         className={
-                          user.role === "admin"
+                          user.isAdmin === true
                             ? "text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                             : "hidden"
                         }
@@ -241,11 +241,16 @@ const Header = () => {
                       History
                     </Link>
                     <Link
-                      to="/admin/dashboard"
-                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                    >
-                      Admin
-                    </Link>
+                        to="/admin/dashboard"
+                        className={
+                          user.isAdmin === true
+                            ? "text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                            : "hidden"
+                        }
+                        aria-current="false"
+                      >
+                        Admin
+                      </Link>
                   </div>
                 </div>
                 <div className="pt-4 pb-2">

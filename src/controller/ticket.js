@@ -30,7 +30,7 @@ exports.getTicketById = async (req, res) => {
 exports.openTickets = async (req, res) => {
   try {
     await prisma.ticket.findMany({
-      where: { isIssued: true, userId: Number(req.user._id) },
+      where: { isIssued: true, userId: Number(req.user.id) },
       include: {
         client: {
           select: { id: true, name: true, number: true }
@@ -70,7 +70,7 @@ exports.unissuedTickets = async (req, res) => {
 exports.completedTickets = async (req, res) => {
   try {
     await prisma.ticket.findMany({
-      where: { isComplete: true, userId: Number(req.user._id) }
+      where: { isComplete: true, userId: Number(req.user.id) }
     }).then((tickets) => {
       res.json({ tickets });
     });
@@ -118,7 +118,7 @@ exports.convertTicket = async (req, res) => {
     await prisma.ticket.update({
       where: { id: Number(t) },
       data: {
-        isIssued: true, userId: Number(req.user._id)
+        isIssued: true, userId: Number(req.user.id)
       }
     });
 
@@ -171,7 +171,7 @@ exports.complete = async (req, res) => {
     });
 
     const tickets = await prisma.ticket.findMany({
-      where: { isIssued: true, userId: Number(req.user._id) },
+      where: { isIssued: true, userId: Number(req.user.id) },
       include: {
         client: {
           select: { id: true, name: true }
@@ -193,12 +193,12 @@ exports.unComplete = async (req, res) => {
     await prisma.ticket.update({
       where: { id: Number(req.params.id) },
       data: {
-        isComplete: true, isIssued: true, userId: Number(req.user._id)
+        isComplete: true, isIssued: true, userId: Number(req.user.id)
       }
     });
 
     const tickets = await prisma.ticket.findMany({
-      where: { isIssued: true, userId: Number(req.user._id) },
+      where: { isIssued: true, userId: Number(req.user.id) },
       include: {
         client: {
           select: { id: true, name: true }
@@ -227,7 +227,7 @@ exports.transfer = async (req, res) => {
     });
 
     const tickets = await prisma.ticket.findMany({
-      where: { isIssued: true, userId: Number(req.user._id) },
+      where: { isIssued: true, userId: Number(req.user.id) },
       include: {
         client: {
           select: { id: true, name: true }
@@ -272,7 +272,7 @@ exports.saveFile = async (req, res) => {
       await prisma.file.create({
         data: {
           filename: file.name,
-          userId: req.user._id,
+          userId: req.user.id,
           path: uploadPath,
         }
       }).then(() => {
