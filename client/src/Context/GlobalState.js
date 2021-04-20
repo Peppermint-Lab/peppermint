@@ -111,7 +111,7 @@ export const GlobalProvider = ({ children }) => {
         },
       }).then((response) => response.json());
       await dispatch({ type: "UNMARK_TODO", payload: res.todos });
-      console.log(res)
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +126,7 @@ export const GlobalProvider = ({ children }) => {
           ContentType: "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "GET_NOTES", payload: res.note });
+      await dispatch({ type: "GET_NOTES", payload: res.notes });
     } catch (error) {}
   }
 
@@ -136,20 +136,18 @@ export const GlobalProvider = ({ children }) => {
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
           text,
           title,
         }),
       }).then((res) => res.json());
-      dispatch({ type: "ADD_NOTE", payload: res.note });
+      await dispatch({ type: "ADD_NOTE", payload: res.note });
     } catch (error) {}
   }
 
   async function deleteNote(id) {
     try {
-      console.log(id);
       await fetch(`/api/v1/note/deleteNote/${id}`, {
         method: "DELETE",
         headers: {

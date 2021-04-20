@@ -1,7 +1,6 @@
 // TODO error handling can be refined by using Prisma exceptions codes
-const { PrismaClientKnownRequestError } = require('@prisma/client/runtime');
-const { prisma } = require ("../../prisma/prisma");
-
+const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
+const { prisma } = require("../../prisma/prisma");
 
 exports.saveNote = async (req, res) => {
   try {
@@ -13,8 +12,8 @@ exports.saveNote = async (req, res) => {
         data: {
           title,
           note: text,
-          userId: Number(req.user.id),  // unsure if can be replaced by a connect statement
-        }
+          userId: Number(req.user.id), // unsure if can be replaced by a connect statement
+        },
       });
       res.status(200).json({
         note,
@@ -27,16 +26,18 @@ exports.saveNote = async (req, res) => {
 
 exports.getNotes = async (req, res) => {
   try {
-    await prisma.notes.findMany({
-      where: { userId: Number(req.user.id) },
-      include: {
-        createdBy: {
-          select: { id: true, firstName: true, lastName: true }
-        }
-      }
-    }).then(notes => {
-      res.status(200).json({ notes });
-    });
+    await prisma.notes
+      .findMany({
+        where: { userId: Number(req.user.id) },
+        include: {
+          createdBy: {
+            select: { id: true, firstName: true, lastName: true },
+          },
+        },
+      })
+      .then((notes) => {
+        res.status(200).json({ notes });
+      });
   } catch (error) {
     console.log(error);
   }
@@ -45,13 +46,13 @@ exports.getNotes = async (req, res) => {
 exports.deleteNote = async (req, res) => {
   try {
     await prisma.notes.delete({
-      where: { id: Number(req.params.id) }
+      where: { id: Number(req.params.id) },
     });
     return res.status(201).json({
       data: {},
     });
   } catch (error) {
-    console.log(error);    
+    console.log(error);
     if (error instanceof PrismaClientKnownRequestError) {
       return res.status(404).json({
         success: false,
@@ -67,7 +68,7 @@ exports.updateNote = async (req, res) => {
   try {
     await prisma.notes.update({
       where: { id: Number(req.body.id) },
-      data: { note: req.body.note }
+      data: { note: req.body.note },
     });
     console.log("Updated Note");
     res.status(201).json({ success: true, message: "Note Updated" });

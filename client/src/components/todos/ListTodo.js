@@ -23,23 +23,20 @@ const ListTodo = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log(todos)
-
   return (
     <div>
-      <div className={!todos.length ? 'hidden' : ''}>
-      <Button className="ml-2 mt-1" onClick={allDone}>
-        Mark All Done
-      </Button>
+      <div className={!todos.length ? "hidden" : ""}>
+        <Button className="ml-2 mt-1" onClick={allDone}>
+          Mark All Done
+        </Button>
       </div>
       <Divider orientation="left" className="w-full"></Divider>
       {todos ? (
         todos.map((todo) => {
-          console.log(todo)
           return (
             <div className="flex flex-col mx-auto ml-11 px-1" key={todo.id}>
               <ul>
-                <li style={{ marginLeft: -35 }} >
+                <li style={{ marginLeft: -35 }}>
                   <span className={todo.done ? "done" : ""}>{todo.text}</span>
                   <Tooltip placement="right" title="Delete">
                     <Button
