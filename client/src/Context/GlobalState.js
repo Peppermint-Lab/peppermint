@@ -343,7 +343,8 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "GET_CLIENTS", payload: res.client });
+      console.log(res)
+      await dispatch({ type: "GET_CLIENTS", payload: res.clients });
     } catch (error) {
       console.log(error);
     }

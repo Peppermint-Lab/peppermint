@@ -148,13 +148,13 @@ exports.resetPasswordUser = async (req, res) => {
 };
 
 exports.getUsers = async (req, res) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.status(200).json({ users, failed: false });
-  } catch (error) {
-    console.log(error);
-    res.status(422).json({ users, failed: true });
-  }
+  // try {
+  //   const users = await prisma.user.findMany();
+  //   res.status(200).json({ users, failed: false });
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(422).json({ error, failed: true });
+  // }
 };
 
 exports.getUserById = async (req, res) => {
@@ -171,7 +171,7 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// exports.changeRole = async (req, res) => {
+exports.changeRole = async (req, res) => {
 //   try {
 //     // TODO add role field to User model
 //     await User.findByIdAndUpdate(
@@ -191,7 +191,7 @@ exports.getUserById = async (req, res) => {
 //     console.log(error);
 //     res.status(500).json({ message: error, failed: true });
 //   }
-// };
+};
 
 exports.edit = async (req, res) => {
   // TODO email needs toLowerCase?

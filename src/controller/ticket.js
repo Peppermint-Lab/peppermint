@@ -52,7 +52,7 @@ exports.openTickets = async (req, res) => {
 exports.unissuedTickets = async (req, res) => {
   try {
     await prisma.ticket.findMany({
-      where: { isUnissued: true },
+      where: { isIssued: false },
       include: {
         client: {
           select: { id: true, name: true }

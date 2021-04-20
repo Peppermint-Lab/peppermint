@@ -8,12 +8,12 @@ exports.create = async (req, res) => {
       return res.status(422).json({ error: "Please add all fields" });
     }
 
-    prisma.client.findUnique({
-      where: { name: name }
-    }).then(async (dupeClient) => {
-      if (dupeClient) {
-        return res.status(422).json({ error: "client already exists" });
-      }
+    // await prisma.client.findUnique({
+    //   where: { name: req.body.name }
+    // }).then(async (dupeClient) => {
+    //   if (dupeClient) {
+    //     return res.status(422).json({ error: "client already exists" });
+    //   }
       const client = await prisma.client.create({
         data: {
           name,
@@ -23,7 +23,7 @@ exports.create = async (req, res) => {
         }
       })
       res.status(200).json({ message: "Client saved successfully", client });
-    });
+    // });
 
   } catch (error) {
     console.log(error);

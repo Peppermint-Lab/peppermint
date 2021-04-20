@@ -47,10 +47,10 @@ model Client {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
-  name        String
+  name        String   
   email       String
   contactName String
-  number      Int
+  number      String?
   notes       String?
   tickets     Ticket[]
 }

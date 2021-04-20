@@ -22,7 +22,8 @@
   },
   "scripts": {
     "seed": "prisma db seed --preview-feature",
-    "migrate": "prisma migrate dev --preview-feature",
+    "migrate-dev": "prisma migrate dev --preview-feature",
+    "migrate": "prisma migrate deploy",
     "generate": "prisma generate",
     "start": "node server",
     "server": "nodemon server",
