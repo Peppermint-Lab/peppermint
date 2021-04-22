@@ -304,8 +304,8 @@ export const GlobalProvider = ({ children }) => {
           text,
           active,
         }),
-      }).then((res) => res.json());
-      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
+      }).then(async (res) => await res.json());
+      await dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
     } catch (error) {
       console.log(error);
     }
@@ -319,7 +319,7 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "GET_NEWSLETTER", payload: res.newsletters });
+      await dispatch({ type: "GET_NEWSLETTER", payload: res.newsletters });
     } catch (error) {}
   }
 
@@ -331,7 +331,7 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletters });
+      await dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletters });
     } catch (error) {}
   }
 

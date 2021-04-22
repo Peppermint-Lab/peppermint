@@ -18,10 +18,9 @@ const Edit = (props) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        id: props.n._id,
+        id: props.n.id,
         text,
         title,
         active: isActive,
@@ -40,12 +39,13 @@ const Edit = (props) => {
           visible={visible}
         >
           <h4>Active : {props.n.active.toString()}</h4>
-          <h4>Created By : {props.n.createdBy.name}</h4>
+          <h4>Created By : {props.n.createdBy ? props.n.createdBy.firstName : 'please reload'}</h4>
           <Divider />
           <h4>
             Title :{" "}
             <input
               type="text"
+              defaultValue={props.n.title}
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               onChange={(e) => setTitle(e.target.value)}
             />

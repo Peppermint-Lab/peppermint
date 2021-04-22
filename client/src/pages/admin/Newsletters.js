@@ -25,7 +25,7 @@ const Newsletters = () => {
     },
     {
       title: "CreatedBy",
-      dataIndex: ["createdBy", "name"],
+      dataIndex: ["createdBy", "firstName"],
       key: "CreatedBy",
       width: "25%",
     },
@@ -36,7 +36,7 @@ const Newsletters = () => {
         <Space>
           <ViewNewsletter n={record} />
           <Edit n={record} />
-          <Button onClick={() => deleteNewsletter(record._id)}>Delete</Button>
+          <Button onClick={() => deleteNewsletter(record.id)}>Delete</Button>
         </Space>
       ),
     },

@@ -37,6 +37,7 @@ exports.isAdmin = (req, res, next) => {
     }
     jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
       if (err) {
+        console.log(err)
         return res.status(401).json({ error: "You must be authenticated", auth: false });
       }
       const { id } = payload;
@@ -49,7 +50,6 @@ exports.isAdmin = (req, res, next) => {
           return res.status(403).json({ message: 'Forbidden' });
         } else {
           req.user = userdata;
-          res.status(200).json({ message: 'isAdmin' });
           next();
         }
       });

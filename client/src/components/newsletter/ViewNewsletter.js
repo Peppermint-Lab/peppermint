@@ -21,7 +21,7 @@ const ViewNewsletter = (props) => {
         >
           <p>{props.n.text}</p>
           <Divider />
-          <p>Author : {props.n.createdBy.name}</p>
+          <p>Author : {props.n.createdBy ? props.n.createdBy.name : 'please reload'}</p>
         </Modal>
     </div>
   );
