@@ -458,7 +458,7 @@ const Detail = (props) => {
                       <div className="flex-shrink-0">
                         <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                           <span className="font-medium leading-none text-white">
-                          {ticket.assignedTo.firstName[0]}
+                          {ticket.assignedTo ? ticket.assignedto.firstName[0] : ''}
                           </span>
                         </span>
                       </div>
