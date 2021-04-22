@@ -37,8 +37,7 @@ const Auth = () => {
   }, []);
 
   const deleteClient = async (client) => {
-    const id = client._id;
-    console.log(id);
+    const id = client.id;
     try {
       await fetch(`/api/v1/auth/delete/${id}`, {
         method: "DELETE",

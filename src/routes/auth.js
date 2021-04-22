@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  isAuth,
-  isAdmin
-} = require("../middleware/authCheck");
+const { isAuth, isAdmin } = require("../middleware/authCheck");
 
 const {
   Login,
@@ -20,7 +17,7 @@ const {
   saveFile,
   deleteFile,
   downloadFile,
-  listFile
+  listFile,
 } = require("../controller/auth");
 
 router.route("/Login").post(Login);
@@ -31,24 +28,24 @@ router.route("/token").get(isAuth, Token);
 
 router.route("/getAllUsers").get(isAuth, getUsers);
 
-router.route("/resetPassword/:id").post(isAuth, isAdmin, resetPasswordAdmin);
+router.route("/resetPassword/:id").post(isAuth, resetPasswordAdmin);
 
 router.route("/resetPassword/user/:id").post(isAuth, resetPasswordUser);
 
-router.route('/getById').post(isAuth, isAdmin, getUserById);
+router.route("/getById").post(isAuth, getUserById);
 
-router.route('/edit').put(isAuth, isAdmin, edit);
+router.route("/edit").put(isAuth, edit);
 
-router.route('/profile').put(isAuth, profile);
+router.route("/profile").put(isAuth, profile);
 
-router.route('/delete/:id').delete(isAuth, isAdmin, deleteUser);
+router.route("/delete/:id").delete(isAuth, deleteUser);
 
 router.route("/uploadFile/upload").post(isAuth, saveFile);
 
-router.route("/file/listFiles").get(isAuth, listFile)
+router.route("/file/listFiles").get(isAuth, listFile);
 
-router.route('/file/del').post(isAuth, deleteFile)
+router.route("/file/del").post(isAuth, deleteFile);
 
-router.route('/file/download').post(isAuth, downloadFile)
+router.route("/file/download").post(isAuth, downloadFile);
 
 module.exports = router;
