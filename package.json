@@ -28,7 +28,8 @@
     "start": "node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\" "
+    "dev": "concurrently \"npm run server\" \"npm run client\" ",
+    "docker": "npm run migrate && npm run generate && npm run seed && npm run server"
   },
   "keywords": [],
   "author": "Jack Andrews",

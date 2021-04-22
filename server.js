@@ -17,7 +17,7 @@ const osutils = require("os-utils");
 const os = require('os');
 const compression = require('compression')
 
-require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 
 let url = null;
