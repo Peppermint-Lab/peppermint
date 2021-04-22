@@ -6,10 +6,10 @@ import { GlobalContext } from "../../Context/GlobalState";
 const Transfer = (props) => {
   const { Option } = Select;
   const [users, setUsers] = useState([]);
-  const [id, setId] = useState("");
+  const [id, setId] = useState();
   const [visible, setVisible] = useState(false);
 
-  const ticket = props.ticket._id
+  const ticket = props.ticket.id;
 
   const { transferTicket } = useContext(GlobalContext);
 
@@ -18,7 +18,6 @@ const Transfer = (props) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
       .then((res) => res.json())
@@ -31,7 +30,7 @@ const Transfer = (props) => {
 
   const onCreate = async () => {
     setVisible(false);
-    await transferTicket(id, ticket)
+    await transferTicket(id, ticket);
   };
 
   const onCancel = () => {
@@ -42,7 +41,11 @@ const Transfer = (props) => {
     fetchUsers();
   }, []);
 
-  const search = users.map((d) => <Option key={d._id}>{d.name}</Option>);
+  const search = users.map((d) => (
+    <Option key={d.id}>
+      {d.firstName} {d.lastName}
+    </Option>
+  ));
 
   return (
     <div>
@@ -73,4 +76,3 @@ const Transfer = (props) => {
 };
 
 export default Transfer;
-

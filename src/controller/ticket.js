@@ -215,7 +215,7 @@ exports.unComplete = async (req, res) => {
     await prisma.ticket.update({
       where: { id: Number(req.params.id) },
       data: {
-        isComplete: true,
+        isComplete: false,
         isIssued: true,
         userId: Number(req.user.id),
       },
@@ -240,6 +240,7 @@ exports.unComplete = async (req, res) => {
 };
 
 exports.transfer = async (req, res) => {
+  console.log(req.body)
   try {
     await prisma.ticket.update({
       where: { id: Number(req.body.find) },
