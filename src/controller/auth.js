@@ -1,25 +1,24 @@
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { prisma } = require ("../../prisma/prisma");
-const { PrismaClientKnownRequestError } = require('@prisma/client/runtime');
-
+const { prisma } = require("../../prisma/prisma");
+const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
 
 exports.Signup = async (req, res) => {
   try {
-    const { email, firstName, LastName, password } = req.body;
+    const { email, firstName, lastName, password } = req.body;
     const emailLower = email.toLowerCase();
-    if ((!email, !firstName, !LastName, !password)) {
+    if ((!email, !firstName, !lastName, !password)) {
+      console.log('failed')
       return res.status(422).json({ error: "Please add all fields" });
     }
     try {
-
       await prisma.user.create({
         data: {
           firstName,
           lastName,
           email: emailLower,
-          password: bcrypt.hash(password, 10),
+          password: String(bcrypt.hash(password, 10)),
           isAdmin: false,
         },
       });
@@ -27,7 +26,8 @@ exports.Signup = async (req, res) => {
         .status(200)
         .json({ message: "User saved successfully", failed: false });
     } catch (error) {
-      res.json({ error: "A user with that username already exists 😮" });
+      res.json({ error: "A user with that email already exists 😮", error });
+      console.log(error)
       return;
     }
   } catch (error) {
@@ -64,8 +64,11 @@ exports.Login = async (req, res) => {
       });
       res.status(200).json({
         user: {
-          id: user.id, firstName: user.firstName,
-          lastName: user.lastName, email: user.email, isAdmin: user.isAdmin
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          isAdmin: user.isAdmin,
         },
         auth: true,
       });
@@ -107,13 +110,12 @@ exports.resetPasswordAdmin = async (req, res) => {
     await prisma.user.update({
       where: { id: Number(req.params.id) },
       data: {
-        password: hashedPass
-      }
+        password: hashedPass,
+      },
     });
     res
       .status(200)
       .json({ message: "Password reset successfully", failed: false });
-
   } catch (error) {
     console.log(error);
     if (error instanceof PrismaClientKnownRequestError) {
@@ -125,21 +127,18 @@ exports.resetPasswordAdmin = async (req, res) => {
 
 exports.resetPasswordUser = async (req, res) => {
   const { password } = req.body;
-  console.log(password, req.params.id);
   try {
     const hashedPass = await bcrypt.hash(password, 10);
     await prisma.user.update({
       where: { id: Number(req.params.id) },
       data: {
-        password: hashedPass
-      }
+        password: hashedPass,
+      },
     });
     res
       .status(201)
       .json({ message: "password updated success", failed: false });
-
   } catch (error) {
-    console.log(error);
     if (error instanceof PrismaClientKnownRequestError) {
       return res.status(422).json({ error: "User doesnt exist" });
     }
@@ -147,50 +146,50 @@ exports.resetPasswordUser = async (req, res) => {
   }
 };
 
-exports.getUsers = async (req, res) => {
-  // try {
-  //   const users = await prisma.user.findMany();
-  //   res.status(200).json({ users, failed: false });
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(422).json({ error, failed: true });
-  // }
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await prisma.user.findMany({})
+    res.json({users, failed: false})
+  } catch (error) {
+    console.log(error);
+    return res.status(422).json({ error, failed: true });
+  }
 };
 
 exports.getUserById = async (req, res) => {
-  console.log(req.body);
   try {
-    await prisma.user.findUnique({
-      where: { id: Number(req.body._id) }
-    }).then(user => {
-      res.json({ user, failed: false });
-    });
+    await prisma.user
+      .findUnique({
+        where: { id: Number(req.body._id) },
+      })
+      .then((user) => {
+        res.json({ user, failed: false });
+      });
   } catch (error) {
-    console.log(error);
     res.status(404).json({ message: "User not found", error, failed: true });
   }
 };
 
 exports.changeRole = async (req, res) => {
-//   try {
-//     // TODO add role field to User model
-//     await User.findByIdAndUpdate(
-//       { _id: mongoose.Types.ObjectId(user) },
-//       {
-//         $set: { isAdmin: role },
-//       },
-//       {
-//         new: true,
-//       }
-//     ).exec();
-//     console.log("Updated record");
-//     return res
-//       .status(200)
-//       .json({ message: "User Role Updated", failed: false });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: error, failed: true });
-//   }
+  //   try {
+  //     // TODO add role field to User model
+  //     await User.findByIdAndUpdate(
+  //       { _id: mongoose.Types.ObjectId(user) },
+  //       {
+  //         $set: { isAdmin: role },
+  //       },
+  //       {
+  //         new: true,
+  //       }
+  //     ).exec();
+  //     console.log("Updated record");
+  //     return res
+  //       .status(200)
+  //       .json({ message: "User Role Updated", failed: false });
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(500).json({ message: error, failed: true });
+  //   }
 };
 
 exports.edit = async (req, res) => {
@@ -199,7 +198,7 @@ exports.edit = async (req, res) => {
 
   // done -> lower case
   // done -> added first and last name
-  const email = req.body.email.toLowerCase()
+  const email = req.body.email.toLowerCase();
   try {
     await prisma.user.update({
       where: { id: Number(req.body.id) },
@@ -207,7 +206,7 @@ exports.edit = async (req, res) => {
         firstName: req.body.fname,
         lastName: req.body.lname,
         email: email,
-      }
+      },
     });
     return res.status(200).json({ message: "User Updated", failed: false });
   } catch (error) {
@@ -227,19 +226,21 @@ exports.profile = async (req, res) => {
       data: {
         name: req.body.name,
         email: emailLower,
-      }
+      },
     });
 
-    await prisma.user.findUnique({
-      where: { id: Number(req.body.id) }
-    }).then(user => {
-      const { id, name, email } = user;
-      res.status(200).json({
-        message: "User updated",
-        user: { id, name, email },
-        fail: false,
+    await prisma.user
+      .findUnique({
+        where: { id: Number(req.body.id) },
+      })
+      .then((user) => {
+        const { id, name, email } = user;
+        res.status(200).json({
+          message: "User updated",
+          user: { id, name, email },
+          fail: false,
+        });
       });
-    });
   } catch (error) {
     console.log(error);
     if (error instanceof PrismaClientKnownRequestError) {
@@ -252,7 +253,7 @@ exports.profile = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     await prisma.user.delete({
-      where: { id: Number(req.params.id) }
+      where: { id: Number(req.params.id) },
     });
     return res.status(201).json({ message: "User deleted", fail: false });
   } catch (error) {
@@ -272,22 +273,24 @@ exports.saveFile = async (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
     } else {
-      prisma.file.create({
-        data: {
-          filename: file.name,
-          userId: Number(req.user.id),
-          path: uploadPath,
-        }
-      }).then(() => {
-        file.mv(uploadPath, function (err) {
-          if (err) {
-            return res.status(500).json({ sucess: false, err });
-          }
-          return res
-            .status(200)
-            .json({ sucess: true, message: "File Uploaded!" });
+      prisma.file
+        .create({
+          data: {
+            filename: file.name,
+            userId: Number(req.user.id),
+            path: uploadPath,
+          },
+        })
+        .then(() => {
+          file.mv(uploadPath, function (err) {
+            if (err) {
+              return res.status(500).json({ sucess: false, err });
+            }
+            return res
+              .status(200)
+              .json({ sucess: true, message: "File Uploaded!" });
+          });
         });
-      })
     }
   } catch (error) {
     console.log(error);
@@ -297,33 +300,34 @@ exports.saveFile = async (req, res) => {
 
 exports.listFile = async (req, res) => {
   try {
-
     const files = await prisma.file.findMany({
-      where: { userId: Number(req.user.id) }
+      where: { userId: Number(req.user.id) },
     });
     res.status(200).json({ sucess: true, files });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({ message: error, failed: true });
   }
 };
 
 exports.deleteFile = async (req, res) => {
   const path = req.body.path;
-  console.log(req.body)
+  console.log(req.body);
   try {
-    await prisma.file.delete({
-      where:{ id: Number(req.body.file)}
-    }).then(() => {
-      fs.unlink(path, (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
+    await prisma.file
+      .delete({
+        where: { id: Number(req.body.file) },
+      })
+      .then(() => {
+        fs.unlink(path, (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+        });
       });
-    });
     const files = await prisma.file.findMany({
-      where: {userId: Number(req.user.id)}
+      where: { userId: Number(req.user.id) },
     });
     res.status(200).json({ sucess: true, files, message: "File Deleted" });
   } catch (error) {

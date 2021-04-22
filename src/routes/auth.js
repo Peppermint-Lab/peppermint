@@ -29,7 +29,7 @@ router.route("/Signup").post(Signup);
 
 router.route("/token").get(isAuth, Token);
 
-router.route("/getAllUsers").get(isAuth, isAdmin, getUsers);
+router.route("/getAllUsers").get(isAuth, getUsers);
 
 router.route("/resetPassword/:id").post(isAuth, isAdmin, resetPasswordAdmin);
 

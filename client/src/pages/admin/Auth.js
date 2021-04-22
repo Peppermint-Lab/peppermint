@@ -60,18 +60,13 @@ const Auth = () => {
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
+      dataIndex: "firstName",
       key: "name",
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-    },
-    {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
     },
     {
       key: "action",
