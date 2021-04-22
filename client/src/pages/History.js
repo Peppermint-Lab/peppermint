@@ -26,6 +26,8 @@ const Table = () => {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
+  console.log(tickets)
+
   return (
     <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 -mt-16">
       <div className="flex flex-col">
@@ -111,10 +113,10 @@ const Table = () => {
                               {ticket.issue || ""}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.assignedto ? ticket.assignedto.name : 'not assigned'}
+                              {ticket.assignedTo ? ticket.assignedTo.firstName + (' ') + ticket.assignedTo.lastName : 'not assigned'}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.status}
+                            {ticket.isComplete ? 'Completed' : 'Issued'}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                               <Link

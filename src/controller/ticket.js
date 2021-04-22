@@ -188,6 +188,7 @@ exports.complete = async (req, res) => {
       where: { id: Number(req.params.id) },
       data: {
         isComplete: true,
+        isIssued: false
       },
     });
 
