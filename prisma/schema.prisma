@@ -31,9 +31,10 @@ model Ticket {
   id         Int      @id @default(autoincrement())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
+  name       String
   issue      String
   email      String
-  note       String
+  note       String?
   isIssued   Boolean
   isComplete Boolean
   priority   String
@@ -41,6 +42,7 @@ model Ticket {
   client     Client   @relation(fields: [clientId], references: [id])
   clientId   Int
   userId     Int
+  
 }
 
 model Client {

@@ -186,7 +186,7 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function createTicket(name, email, company, issue, priority) {
+  async function createTicket(name, email, company, issue, priority, engineer) {
     try {
       const res = await fetch(`/api/v1/tickets/createTicket`, {
         method: "POST",
@@ -199,6 +199,7 @@ export const GlobalProvider = ({ children }) => {
           company,
           issue,
           priority,
+          engineer
         }),
       }).then((res) => res.json());
       if (res.failed === true) {

@@ -366,11 +366,11 @@ const Detail = (props) => {
                       <div className="text-sm font-medium text-gray-900">
                         <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                           <span className="font-medium leading-none text-white">
-                            {ticket.assignedto.name[0]}
+                            {ticket.assignedTo.firstName[0]}
                           </span>
                         </span>
                       </div>
-                      <span>{ticket.assignedto.name}</span>
+                      <span>{ticket.assignedTo.firstName} {ticket.assignedTo.lastName}</span>
                     </p>
                   </li>
                 </ul>
@@ -458,12 +458,12 @@ const Detail = (props) => {
                       <div className="flex-shrink-0">
                         <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                           <span className="font-medium leading-none text-white">
-                            {ticket.assignedto.name[0]}
+                          {ticket.assignedTo.firstName[0]}
                           </span>
                         </span>
                       </div>
                       <div className="text-sm font-medium text-gray-900">
-                        <span>{ticket.assignedto.name}</span>
+                        <span> {ticket.assignedTo.firstName}</span>
                       </div>
                     </div>
                   </li>
