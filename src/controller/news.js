@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const News = mongoose.model("news");
+const { prisma } = require("../../prisma/prisma");
 
 // Create a new newsletter
 exports.create = async (req, res) => {
@@ -8,14 +7,16 @@ exports.create = async (req, res) => {
     if ((!title, !text)) {
       return res.status(422).json({ error: "Please add all the fields" });
     } else {
-      const newsletter = await new News({
-        title,
-        text,
-        createdBy: req.user.id,
-        active,
+      const newsletter = await prisma.newsletter.create({
+        data: {
+          title,
+          text,
+          authorId: Number(req.user.id),
+          active: Boolean(active),
+        },
       });
-      newsletter.save();
-      res.status(200).json({ newsletter });
+      console.log(newsletter)
+      return res.status(200).json({ newsletter });
     }
   } catch (error) {
     console.log(error);
@@ -26,7 +27,13 @@ exports.create = async (req, res) => {
 // Get All newsletters
 exports.getNewsletters = async (req, res) => {
   try {
-    const newsletters = await News.find().populate("createdBy", "_id name");
+    const newsletters = await prisma.newsletter.findMany({
+      include: {
+        createdBy: {
+          select: { id: true, firstName: true, lastName: true },
+        },
+      },
+    });
     return res.status(200).json({ newsletters });
   } catch (error) {
     console.log(error);
@@ -39,7 +46,14 @@ exports.getNewsletters = async (req, res) => {
 // Get All Active newsletters
 exports.getActiveNewsletters = async (req, res) => {
   try {
-    const newsletters = await News.find({active: true}).populate("createdBy", "_id name");
+    const newsletters = await prisma.newsletter.findMany({
+      where: { active: true },
+      include: {
+        createdBy: {
+          select: { id: true, firstName: true, lastName: true },
+        },
+      },
+    });
     return res.status(200).json({ newsletters });
   } catch (error) {
     console.log(error);
@@ -52,17 +66,14 @@ exports.getActiveNewsletters = async (req, res) => {
 // Change status of Newsletter
 exports.updateStatus = async (req, res) => {
   try {
-    await News.findByIdAndUpdate(
-      { _id: req.body.id },
-      {
-        $set: {
-          title: req.body.title,
-          text: req.body.text,
-          active: req.body.active,
-        },
+    await prisma.newsletter.update({
+      where: { id: Number(req.body.id) },
+      data: {
+        title: req.body.title,
+        text: req.body.text,
+        active: req.body.active,
       },
-      { new: true }
-    ).exec();
+    });
     res.status(200);
   } catch (error) {
     console.log(error);
@@ -72,10 +83,18 @@ exports.updateStatus = async (req, res) => {
 
 // Delete newsletter
 exports.deleteN = async (req, res) => {
-  console.log(req.params.id)
+  console.log(req.params.id);
   try {
-    await News.findByIdAndDelete({ _id: req.params.id });
-    const newsletters = await News.find().populate("createdBy", "_id name");
+    await prisma.newsletter.delete({
+      where: { id: Number(req.params.id) },
+    });
+    const newsletters = await prisma.newsletter.findMany({
+      include: {
+        createdBy: {
+          select: { id: true, firstName: true, lastName: true },
+        },
+      },
+    });
     res.status(200).json({ newsletters });
   } catch (error) {
     console.log(error);

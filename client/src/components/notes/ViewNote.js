@@ -23,7 +23,7 @@ const ViewNote = (props) => {
           <Button size="xs" style={{ marginRight: 10}} onClick={() => setShow(!show)}>View</Button>
         </div>
         <div
-          className={`${show ? "fixed z-10 inset-0  w-full" : "hidden"}`}
+          className={`${show  ? "fixed z-10 inset-0  w-full" : "hidden"}`}
           aria-labelledby="dialog-1-title"
           role="dialog"
           aria-modal="true"

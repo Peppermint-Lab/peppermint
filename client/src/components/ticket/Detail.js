@@ -199,10 +199,10 @@ const Detail = (props) => {
                     </button>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
-                    {ticket.status === 'issued' ? (
+                    {ticket.isComplete === false ? (
                       <button
                       onClick={async () => {
-                        await completeTicket(ticket._id)
+                        await completeTicket(ticket.id)
                         history.push('/tickets')
                       }}
                       type="button"
@@ -225,7 +225,7 @@ const Detail = (props) => {
                     ) : (
                       <button
                       onClick={async () => {
-                        await unCompleteTicket(ticket._id)
+                        await unCompleteTicket(ticket.id)
                         history.push('/tickets')
                       }}
                       type="button"
@@ -308,7 +308,7 @@ const Detail = (props) => {
                   <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
                 </svg>
                 <span className="text-green-700 text-sm font-medium">
-                  {ticket.status}
+                  {ticket.isComplete ? 'Completed' : 'Issued'}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
@@ -366,11 +366,11 @@ const Detail = (props) => {
                       <div className="text-sm font-medium text-gray-900">
                         <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                           <span className="font-medium leading-none text-white">
-                            {ticket.assignedto ? ticket.assignedto.name[0] : ''}
+                            {ticket.assignedTo.firstName[0]}
                           </span>
                         </span>
                       </div>
-                      <span>{ticket.assignedto ? ticket.assignedto.name : 'not assigned'}</span>
+                      <span>{ticket.assignedTo.firstName} {ticket.assignedTo.lastName}</span>
                     </p>
                   </li>
                 </ul>
@@ -412,7 +412,7 @@ const Detail = (props) => {
                   <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
                 </svg>
                 <span className="text-green-700 text-sm font-medium">
-                  {ticket.status}
+                {ticket.isComplete ? 'Completed' : 'Issued'}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
@@ -458,12 +458,12 @@ const Detail = (props) => {
                       <div className="flex-shrink-0">
                         <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                           <span className="font-medium leading-none text-white">
-                          {ticket.assignedto ? ticket.assignedto.name[0] : ''}
+                          {ticket.assignedTo ? ticket.assignedto.firstName[0] : ''}
                           </span>
                         </span>
                       </div>
                       <div className="text-sm font-medium text-gray-900">
-                        <span>{ticket.assignedto ? ticket.assignedto.name : 'not assigned'}</span>
+                        <span> {ticket.assignedTo.firstName}</span>
                       </div>
                     </div>
                   </li>

@@ -14,14 +14,14 @@ const {
   getActiveNewsletters
 } = require("../controller/news");
 
-router.route("/create").post(isAuth, isAdmin, create);
+router.route("/create").post(isAuth, create);
 
 router.route("/get").get(isAuth, getNewsletters);
 
 router.route("/get/active").get(isAuth, getActiveNewsletters);
 
-router.route("/update").put(isAuth, isAdmin, updateStatus);
+router.route("/update").put(isAuth,  updateStatus);
 
-router.route("/delete/:id").delete(isAuth, isAdmin, deleteN);
+router.route("/delete/:id").delete(isAuth, deleteN);
 
 module.exports = router;

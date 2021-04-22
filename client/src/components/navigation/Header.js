@@ -48,7 +48,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          {user ? user.name[0] : ""}
+                          {user ? user.firstName[0] : ""}
                         </span>
                       </span>
                     </button>
@@ -113,7 +113,7 @@ const Header = () => {
                       <Link
                         to="/admin/dashboard"
                         className={
-                          user.role === "admin"
+                          user.isAdmin === true
                             ? "text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
                             : "hidden"
                         }
@@ -241,11 +241,16 @@ const Header = () => {
                       History
                     </Link>
                     <Link
-                      to="/admin/dashboard"
-                      className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                    >
-                      Admin
-                    </Link>
+                        to="/admin/dashboard"
+                        className={
+                          user.isAdmin === true
+                            ? "text-cyan-100 text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                            : "hidden"
+                        }
+                        aria-current="false"
+                      >
+                        Admin
+                      </Link>
                   </div>
                 </div>
                 <div className="pt-4 pb-2">
@@ -254,13 +259,13 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                         <span class="text-xs font-medium leading-none text-white">
-                          {user ? user.name[0] : ""}
+                          {user ? user.firstName[0] : ""}
                         </span>
                       </span>
                     </div>
                     <div className="ml-3 min-w-0 flex-1">
                       <div className="text-base font-medium text-gray-800 truncate">
-                        {user.name}
+                        {user.firstName}
                       </div>
                       <div className="text-sm font-medium text-gray-500 truncate">
                         {user.email}

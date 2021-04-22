@@ -3,10 +3,11 @@ import { Modal, Space, Radio, Row, Button } from "antd";
 
 const Edit = (props) => {
   // eslint-disable-next-line
-  const [users, setUsers] = useState(props.user);
-  const [name, setName] = useState(props.user.name);
+  const [user, setUsers] = useState(props.user);
+  const [firstName, setFirstName] = useState(props.user.firstName);
+  const [lastName, setLastName] = useState(props.user.lastName);
   const [email, setEmail] = useState(props.user.email);
-  const [role, setRole] = useState(props.user.role);
+  const [role, setRole] = useState(props.user.isAdmin);
   const [visible, setVisible] = useState(false);
 
   const postData = async () => {
@@ -17,8 +18,9 @@ const Edit = (props) => {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        id: users._id,
-        name,
+        id: user.id,
+        firstName,
+        lastName,
         email,
         role,
       }),
@@ -56,12 +58,20 @@ const Edit = (props) => {
         <Row>
           <h5>
             Edit Name :{" "}
+            <div className="flex flex-row">
             <input
               type="text"
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              defaultValue={users.name}
-              onChange={(e) => setName(e.target.value)}
+              defaultValue={user.firstName}
+              onChange={(e) => setFirstName(e.target.value)}
             />
+            <input
+              type="text"
+              className="ml-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              defaultValue={user.lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            </div>
           </h5>
         </Row>
         <Row>
@@ -70,7 +80,7 @@ const Edit = (props) => {
             <input
               type="text"
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              defaultValue={users.email}
+              defaultValue={user.email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </h5>
@@ -78,12 +88,12 @@ const Edit = (props) => {
           <h5>Edit Role : </h5>
           <Radio.Group
             buttonStyle="solid"
-            defaultValue={users.role}
+            defaultValue={user.isAdmin}
             onChange={(e) => setRole(e.target.value)}
           >
             <Space>
-              <Radio.Button value="user">User</Radio.Button>
-              <Radio.Button value="admin">Admin</Radio.Button>
+              <Radio.Button value={false}>User</Radio.Button>
+              <Radio.Button value={true}>Admin</Radio.Button>
             </Space>
           </Radio.Group>
       </Modal>

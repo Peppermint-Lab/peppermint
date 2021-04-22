@@ -9,13 +9,14 @@ const Create = () => {
 
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const { createUser } = useContext(GlobalContext);
 
   const onCreate = async (values) => {
     setVisible(false);
-    await createUser(name, email, password);
+    await createUser(firstName, lastName, email, password);
   };
 
   const onCancel = () => {
@@ -80,13 +81,22 @@ const Create = () => {
               },
             ]}
           >
+            <div className="flex flex-row">
             <input
               type="text"
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              placeholder="Enter name here..."
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 sm:text-sm border-gray-300 rounded-md"
+              placeholder="Enter first name here..."
               name="name"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setFirstName(e.target.value)}
             />
+            <input
+              type="text"
+              className="ml-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 sm:text-sm border-gray-300 rounded-md"
+              placeholder="Enter last name here..."
+              name="name"
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            </div>
           </Form.Item>
           <Form.Item name="email" label="Email">
             <input

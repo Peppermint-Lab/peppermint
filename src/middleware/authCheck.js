@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
-const User = mongoose.model("InternalUser");
+const { prisma } = require ("../../prisma/prisma");
+
 
 // Check to make sure the request is coming from an authenticated user
 exports.isAuth = (req, res, next) => {
@@ -9,15 +9,18 @@ exports.isAuth = (req, res, next) => {
     if (!token) {
       return res.status(401).json({ error: "You must be logged in", auth: false });
     }
-    jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
       if (err) {
         return res.status(401).json({ error: "You must be logged in", auth: false });
       }
-      const { _id } = payload;
-      User.findById(_id).then((userdata) => {
-        req.user = userdata;
-        next();
-      });
+      const { id } = payload;
+      const user = await prisma.user.findUnique({
+        where: {
+          id,
+        },
+      })
+      req.user = user;
+      next()
     });
   } catch(error) {
     console.log(error);
@@ -32,13 +35,18 @@ exports.isAdmin = (req, res, next) => {
     if (!token) {
       return res.status(401).json({ error: "You must be logged in", auth: false });
     }
-    jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
       if (err) {
+        console.log(err)
         return res.status(401).json({ error: "You must be authenticated", auth: false });
       }
-      const { _id } = payload;
-      User.findById(_id).then((userdata) => {
-        if(userdata.role !== 'admin' ) {
+      const { id } = payload;
+      await prisma.user.findUnique({
+        where: {
+          id,
+        },
+      }).then((userdata) => {
+        if(userdata.isAdmin !== true ) {
           return res.status(403).json({ message: 'Forbidden' });
         } else {
           req.user = userdata;

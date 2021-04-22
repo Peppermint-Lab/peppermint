@@ -14,7 +14,7 @@ export default (state, action) => {
       case "DELETE_TODO":
         return {
           ...state,
-          todos: state.todos.filter((todo) => todo._id !== action.payload),
+          todos: state.todos.filter((todo) => todo.id !== action.payload),
         };
       case "ALLDONE_TODO":
         return {
@@ -44,7 +44,7 @@ export default (state, action) => {
       case "DELETE_NOTE":
         return {
           ...state,
-          notes: state.notes.filter((note) => note._id !== action.payload),
+          notes: state.notes.filter((note) => note.id !== action.payload),
         };
       case "ADD_TICKET":
         return {

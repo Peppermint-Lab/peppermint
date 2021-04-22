@@ -33,7 +33,7 @@ export const GlobalProvider = ({ children }) => {
       const res = await axios.get(`/api/v1/todo/getTodo`, config);
       dispatch({
         type: "GET_TODOS",
-        payload: res.data.todo,
+        payload: res.data.todos,
       });
     } catch (error) {}
   }
@@ -63,7 +63,6 @@ export const GlobalProvider = ({ children }) => {
       await fetch(`/api/v1/todo/deleteTodo/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -77,15 +76,14 @@ export const GlobalProvider = ({ children }) => {
       const res = await fetch(`/api/v1/todo/markAllAsDone`, {
         method: "PUT",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           ContentType: "application/json",
           Accept: "application/json",
         },
       }).then((res) => res.json());
-
-      dispatch({ type: "ALLDONE_TODO", payload: res.todo });
-      console.log(res);
-    } catch (error) {}
+      await dispatch({ type: "ALLDONE_TODO", payload: res.todos });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function markDone(id) {
@@ -93,13 +91,30 @@ export const GlobalProvider = ({ children }) => {
       const res = await fetch(`/api/v1/todo/markOneAsDone/${id}`, {
         method: "PUT",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           ContentType: "application/json",
           Accept: "application/json",
         },
       }).then((response) => response.json());
-      dispatch({ type: "MARK_TODO", payload: res.todo });
-    } catch (error) {}
+      await dispatch({ type: "MARK_TODO", payload: res.todos });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function markUndone(id) {
+    try {
+      const res = await fetch(`/api/v1/todo/markUndone/${id}`, {
+        method: "PUT",
+        headers: {
+          ContentType: "application/json",
+          Accept: "application/json",
+        },
+      }).then((response) => response.json());
+      await dispatch({ type: "UNMARK_TODO", payload: res.todos });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function getNotes() {
@@ -111,7 +126,7 @@ export const GlobalProvider = ({ children }) => {
           ContentType: "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "GET_NOTES", payload: res.note });
+      await dispatch({ type: "GET_NOTES", payload: res.notes });
     } catch (error) {}
   }
 
@@ -121,20 +136,18 @@ export const GlobalProvider = ({ children }) => {
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
           text,
           title,
         }),
       }).then((res) => res.json());
-      dispatch({ type: "ADD_NOTE", payload: res.note });
+      await dispatch({ type: "ADD_NOTE", payload: res.note });
     } catch (error) {}
   }
 
   async function deleteNote(id) {
     try {
-      console.log(id);
       await fetch(`/api/v1/note/deleteNote/${id}`, {
         method: "DELETE",
         headers: {
@@ -173,7 +186,7 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function createTicket(name, email, company, issue, priority) {
+  async function createTicket(name, email, company, issue, priority, engineer) {
     try {
       const res = await fetch(`/api/v1/tickets/createTicket`, {
         method: "POST",
@@ -186,9 +199,14 @@ export const GlobalProvider = ({ children }) => {
           company,
           issue,
           priority,
+          engineer
         }),
       }).then((res) => res.json());
-      dispatch({ type: "ADD_TICKET", payload: res.ticket });
+      if (res.failed === true) {
+        console.log(res.error);
+      } else {
+        dispatch({ type: "ADD_TICKET", payload: res.ticket });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -215,7 +233,6 @@ export const GlobalProvider = ({ children }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
           data,
@@ -257,7 +274,7 @@ export const GlobalProvider = ({ children }) => {
       },
     }).then((res) => res.json());
     dispatch({ type: "COMPLETE_TICKET", payload: res.tickets });
-    console.log(res)
+    console.log(res);
   }
 
   async function transferTicket(id, ticket) {
@@ -276,22 +293,6 @@ export const GlobalProvider = ({ children }) => {
     } catch (error) {}
   }
 
-  async function markUndone(id) {
-    try {
-      const res = await fetch(`/api/v1/todo/markUndone/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-          ContentType: "application/json",
-          Accept: "application/json",
-        },
-      }).then((response) => response.json());
-      dispatch({ type: "UNMARK_TODO", payload: res.todo });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async function createNewsletter(title, text, active) {
     try {
       const res = await fetch(`/api/v1/newsletter/create`, {
@@ -304,8 +305,8 @@ export const GlobalProvider = ({ children }) => {
           text,
           active,
         }),
-      }).then((res) => res.json());
-      dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
+      }).then(async (res) => await res.json());
+      await dispatch({ type: "CREATE_NEWSLETTER", payload: res.newsletter });
     } catch (error) {
       console.log(error);
     }
@@ -319,7 +320,7 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "GET_NEWSLETTER", payload: res.newsletters });
+      await dispatch({ type: "GET_NEWSLETTER", payload: res.newsletters });
     } catch (error) {}
   }
 
@@ -331,7 +332,7 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletters });
+      await dispatch({ type: "DELETE_NEWSLETTER", payload: res.newsletters });
     } catch (error) {}
   }
 
@@ -343,7 +344,7 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      dispatch({ type: "GET_CLIENTS", payload: res.client });
+      await dispatch({ type: "GET_CLIENTS", payload: res.clients });
     } catch (error) {
       console.log(error);
     }
@@ -369,7 +370,7 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function createUser(name, email, password) {
+  async function createUser(firstName, lastName, email, password) {
     try {
       await fetch(`/api/v1/auth/Signup`, {
         method: "post",
@@ -377,7 +378,8 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          firstName,
+          lastName,
           email,
           password,
         }),
@@ -395,6 +397,7 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
+      console.log(res)
       dispatch({ type: "GET_USERS", payload: res.users });
     } catch (error) {
       console.log(error);

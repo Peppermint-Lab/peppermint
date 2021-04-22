@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import { HotKeys } from "react-hotkeys";
 import { Select, Form, Input, Radio, Space } from "antd";
-import "antd/lib/input/style/index.css";
-
 import { GlobalContext } from "../../Context/GlobalState";
 
 const Create = () => {
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
+  const [company, setCompany] = useState();
+  const [engineer, setEngineer] = useState();
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
+  const [users, setUsers] = useState([]);
   const [form] = Form.useForm();
 
   const { createTicket } = useContext(GlobalContext);
@@ -28,23 +28,51 @@ const Create = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
     })
       .then((res) => res.json())
       .then((res) => {
         if (res) {
-          setOptions(res.client);
+          setOptions(res.clients);
         }
       });
   };
 
+  async function getUsers() {
+    try {
+      const res = await fetch(`/api/v1/auth/getAllUsers`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res) {
+            setUsers(res.users);
+          }
+        });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchClients();
+    getUsers();
   }, []);
 
   const search = options ? (
-    options.map((d) => <Option key={d._id}>{d.name}</Option>)
+    options.map((d) => <Option key={d.id}>{d.name}</Option>)
+  ) : (
+    <Option key="no_id">
+      <p>Please refresh</p>
+    </Option>
+  );
+
+  const userSearch = users ? (
+    users.map((d) => <Option key={d.id}>{d.firstName} {d.lastName}</Option>)
   ) : (
     <Option key="no_id">
       <p>Please refresh</p>
@@ -120,7 +148,6 @@ const Create = () => {
                         placeholder="Enter email here...."
                         onChange={(e) => setEmail(e.target.value)}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-
                       />
                     </Form.Item>
                     <Form.Item name="Client">
@@ -136,6 +163,21 @@ const Create = () => {
                         }
                       >
                         {search}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item name="Eningeer">
+                      <Select
+                        showSearch
+                        placeholder="Select a engineer"
+                        optionFilterProp="children"
+                        onChange={setEngineer}
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        {userSearch}
                       </Select>
                     </Form.Item>
                     <Form.Item name="issue" label="Issue">
@@ -170,7 +212,14 @@ const Create = () => {
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <button
                   onClick={async () => {
-                    await createTicket(name, email, company, issue, priority);
+                    await createTicket(
+                      name,
+                      email,
+                      company,
+                      issue,
+                      priority,
+                      engineer
+                    );
                     setShow(false);
                   }}
                   type="button"

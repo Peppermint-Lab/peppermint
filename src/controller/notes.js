@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const Note = mongoose.model("Notes");
+// TODO error handling can be refined by using Prisma exceptions codes
+const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
+const { prisma } = require("../../prisma/prisma");
 
 exports.saveNote = async (req, res) => {
   try {
@@ -7,12 +8,13 @@ exports.saveNote = async (req, res) => {
     if ((!text, !title)) {
       return res.status(422).json({ error: "Please add some text" });
     } else {
-      const note = await new Note({
-        title,
-        note: text,
-        createdBy: req.user._id,
+      const note = await prisma.notes.create({
+        data: {
+          title,
+          note: text,
+          userId: Number(req.user.id), // unsure if can be replaced by a connect statement
+        },
       });
-      note.save();
       res.status(200).json({
         note,
       });
@@ -24,10 +26,17 @@ exports.saveNote = async (req, res) => {
 
 exports.getNotes = async (req, res) => {
   try {
-    await Note.find({ createdBy: req.user._id })
-      .populate("createdBy", "_id name")
-      .then((note) => {
-        res.status(200).json({ note });
+    await prisma.notes
+      .findMany({
+        where: { userId: Number(req.user.id) },
+        include: {
+          createdBy: {
+            select: { id: true, firstName: true, lastName: true },
+          },
+        },
+      })
+      .then((notes) => {
+        res.status(200).json({ notes });
       });
   } catch (error) {
     console.log(error);
@@ -36,19 +45,20 @@ exports.getNotes = async (req, res) => {
 
 exports.deleteNote = async (req, res) => {
   try {
-    const note = await new mongoose.Types.ObjectId(req.params.id);
-    if (!note) {
-      return res.status(404).json({
-        success: false,
-        error: "Note not found.",
-      });
-    }
-    await Note.findByIdAndDelete({ _id: req.params.id });
+    await prisma.notes.delete({
+      where: { id: Number(req.params.id) },
+    });
     return res.status(201).json({
       data: {},
     });
   } catch (error) {
     console.log(error);
+    if (error instanceof PrismaClientKnownRequestError) {
+      return res.status(404).json({
+        success: false,
+        error: "Note not found.",
+      });
+    }
     return res.status(500);
   }
 };
@@ -56,11 +66,10 @@ exports.deleteNote = async (req, res) => {
 exports.updateNote = async (req, res) => {
   console.log(req.body);
   try {
-    await Note.findByIdAndUpdate(
-      { _id: req.body.id },
-      { $set: { note: req.body.note } },
-      { new: true }
-    ).exec();
+    await prisma.notes.update({
+      where: { id: Number(req.body.id) },
+      data: { note: req.body.note },
+    });
     console.log("Updated Note");
     res.status(201).json({ success: true, message: "Note Updated" });
   } catch (error) {

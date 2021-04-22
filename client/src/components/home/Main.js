@@ -107,7 +107,7 @@ const Main = () => {
                         <div className="flex-shrink-0">
                           <span className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-gray-500">
                             <span className="text-xl font-medium leading-none text-white">
-                              {user ? user.name[0] : ''}
+                              {user ? user.firstName[0] : ''}
                             </span>
                           </span>
                         </div>
@@ -116,7 +116,7 @@ const Main = () => {
                             Welcome back,
                           </p>
                           <p className="text-xl font-bold text-gray-900 sm:text-2xl">
-                            {user.name || ''}
+                            {user.firstName || ''}
                           </p>
                         </div>
                       </div>

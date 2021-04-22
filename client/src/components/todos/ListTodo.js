@@ -23,27 +23,25 @@ const ListTodo = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log(todos)
-
   return (
     <div>
-      <div className={!todos.length ? 'hidden' : ''}>
-      <Button className="ml-2 mt-1" onClick={allDone}>
-        Mark All Done
-      </Button>
+      <div className={!todos.length ? "hidden" : ""}>
+        <Button className="ml-2 mt-1" onClick={allDone}>
+          Mark All Done
+        </Button>
       </div>
       <Divider orientation="left" className="w-full"></Divider>
       {todos ? (
         todos.map((todo) => {
           return (
-            <div className="flex flex-col mx-auto ml-11 px-1" key={todo._id}>
-              <ul key={todo._id}>
-                <li style={{ marginLeft: -35 }} key={todo._id}>
+            <div className="flex flex-col mx-auto ml-11 px-1" key={todo.id}>
+              <ul>
+                <li style={{ marginLeft: -35 }}>
                   <span className={todo.done ? "done" : ""}>{todo.text}</span>
                   <Tooltip placement="right" title="Delete">
                     <Button
                       ghost
-                      onClick={() => deleteTodo(todo._id)}
+                      onClick={() => deleteTodo(todo.id)}
                       style={{ float: "right" }}
                     >
                       <DeleteTwoTone twoToneColor="#FF0000" />
@@ -53,7 +51,7 @@ const ListTodo = () => {
                     <Tooltip placement="left" title="Unmark as done">
                       <Button
                         ghost
-                        onClick={() => markUndone(todo._id)}
+                        onClick={() => markUndone(todo.id)}
                         style={{ float: "right", marginRight: 5 }}
                       >
                         <MinusCircleTwoTone />
@@ -63,7 +61,7 @@ const ListTodo = () => {
                     <Tooltip placement="left" title="Mark as done">
                       <Button
                         ghost
-                        onClick={() => markDone(todo._id)}
+                        onClick={() => markDone(todo.id)}
                         style={{ float: "right", marginRight: 5 }}
                       >
                         <CheckCircleTwoTone twoToneColor="#52c41a" />
@@ -76,7 +74,7 @@ const ListTodo = () => {
           );
         })
       ) : (
-        <p></p>
+        <p>None Found</p>
       )}
     </div>
   );

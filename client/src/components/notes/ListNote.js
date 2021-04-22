@@ -29,7 +29,7 @@ const ListNote = () => {
           <ViewNote note={record} />
           <Popconfirm
             title="Are you sure you want to delete?"
-            onConfirm={() => deleteNote(record._id)}
+            onConfirm={() => deleteNote(record.id)}
           >
             <Button size="xs" style={{ marginRight: 10}}>
               <DeleteTwoTone twoToneColor="#FF0000" />
