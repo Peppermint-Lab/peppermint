@@ -5,7 +5,6 @@ const { prisma } = require("../../prisma/prisma");
 const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
 
 exports.Signup = async (req, res) => {
-  console.log(req.body)
   try {
     const { email, firstName, lastName, password } = req.body;
     const emailLower = email.toLowerCase();
@@ -172,42 +171,16 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-exports.changeRole = async (req, res) => {
-  //   try {
-  //     // TODO add role field to User model
-  //     await User.findByIdAndUpdate(
-  //       { _id: mongoose.Types.ObjectId(user) },
-  //       {
-  //         $set: { isAdmin: role },
-  //       },
-  //       {
-  //         new: true,
-  //       }
-  //     ).exec();
-  //     console.log("Updated record");
-  //     return res
-  //       .status(200)
-  //       .json({ message: "User Role Updated", failed: false });
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(500).json({ message: error, failed: true });
-  //   }
-};
-
 exports.edit = async (req, res) => {
-  // TODO email needs toLowerCase?
-  // TODO add name field to User model or change its usage to combination of first and last name
 
-  // done -> lower case
-  // done -> added first and last name
-  const email = req.body.email.toLowerCase();
   try {
     await prisma.user.update({
       where: { id: Number(req.body.id) },
       data: {
-        firstName: req.body.fname,
-        lastName: req.body.lname,
-        email: email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        isAdmin: req.body.role
       },
     });
     return res.status(200).json({ message: "User Updated", failed: false });
