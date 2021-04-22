@@ -369,7 +369,7 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function createUser(name, email, password) {
+  async function createUser(firstName, lastName, email, password) {
     try {
       await fetch(`/api/v1/auth/Signup`, {
         method: "post",
@@ -377,7 +377,8 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          firstName,
+          lastName,
           email,
           password,
         }),

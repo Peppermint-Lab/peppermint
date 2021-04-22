@@ -5,9 +5,11 @@ const { prisma } = require("../../prisma/prisma");
 const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
 
 exports.Signup = async (req, res) => {
+  console.log(req.body)
   try {
     const { email, firstName, lastName, password } = req.body;
     const emailLower = email.toLowerCase();
+    const hashed = bcrypt.hash(password, 10)
     if ((!email, !firstName, !lastName, !password)) {
       console.log('failed')
       return res.status(422).json({ error: "Please add all fields" });
@@ -18,7 +20,7 @@ exports.Signup = async (req, res) => {
           firstName,
           lastName,
           email: emailLower,
-          password: String(bcrypt.hash(password, 10)),
+          password: String(hashed),
           isAdmin: false,
         },
       });
