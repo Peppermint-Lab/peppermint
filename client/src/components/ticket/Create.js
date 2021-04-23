@@ -52,7 +52,6 @@ const Create = () => {
             setUsers(res.users);
           }
         });
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
