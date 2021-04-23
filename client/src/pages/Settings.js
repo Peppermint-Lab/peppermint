@@ -4,6 +4,11 @@ import { Link,  } from "react-router-dom";
 
 import Password from '../components/settings/Password'
 
+const linkStyles = {
+  active: "bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium",
+  inactive: "border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium",
+}
+
 const Settings = () => {
 
   const [showProfile, setShowProfile ] = useState(true)
@@ -24,7 +29,7 @@ const Settings = () => {
                             setShowPassword(false)
                         }
                     }
-                    className="bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium"
+                    className={showProfile ? linkStyles.active : linkStyles.inactive}
                     aria-current="page"
                   >
                     <svg
@@ -50,7 +55,7 @@ const Settings = () => {
                         setShowProfile(false)
                         setShowPassword(true)
                     }}
-                    className="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium"
+                    className={showPassword ? linkStyles.active : linkStyles.inactive}           
                   >
                     <svg
                       className="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
