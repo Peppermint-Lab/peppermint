@@ -14,6 +14,32 @@ async function main() {
       password: "$2b$10$BFmibvOW7FtY0soAAwujoO9y2tIyB7WEJ2HNq9O7zh9aeejMvRsKu",
     },
   });
+  
+  const unkownClient = await prisma.client.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      id: 2,
+      name: "unknown",
+      email: "unknown",
+      contactName: "unknown",
+      number: "12345678"
+    }
+  })
+
+  const unkownUser = await prisma.user.upsert({
+    where: { email: "unkown" },
+    update: {},
+    create: {
+      id: 2,
+      firstName: "unknown",
+      lastName: "unknown",
+      password: "unknown",
+      email: "unknown",
+      isAdmin: false,
+      password: String(Math.floor(Math.random() * 1000))
+    }
+  })
 
   const internal = await prisma.client.upsert({
     where: { id: Number(1) },
@@ -27,7 +53,7 @@ async function main() {
     },
   })
 
-  console.log({ admin, internal });
+  console.log({ admin, internal, unkownClient, unkownUser });
 }
 
 main()

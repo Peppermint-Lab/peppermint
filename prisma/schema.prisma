@@ -50,7 +50,7 @@ model Client {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
   name        String   
-  email       String
+  email       String   @unique
   contactName String
   number      String?
   notes       String?
