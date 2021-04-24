@@ -174,17 +174,7 @@ const Main = () => {
 
             <div className="grid grid-cols-1 gap-4">
               <section aria-labelledby="announcements-title">
-                <div className="rounded-lg bg-white overflow-hidden shadow">
-                  <div className="p-6">
-                    <h2
-                      className="text-base font-medium text-gray-900"
-                      id="announcements-title"
-                    >
-                      Announcements
-                    </h2>
-                    <Active />
-                  </div>
-                </div>
+                <Active />
               </section>
 
               <section aria-labelledby="recent-hires-title">
