@@ -26,4 +26,4 @@ services:
       PORT: 5000
       DB_USERNAME: peppermint
       DB_PASSWORD: 1234
-      DB_HOST: 'postgres'
+      DB_HOST: postgres
