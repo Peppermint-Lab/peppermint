@@ -16,10 +16,10 @@ async function main() {
   });
 
   await prisma.client.upsert({
-    where: { email: "unknown" },
+    where: { id: 1 },
     update: {},
     create: {
-      id: 2,
+      id: 1,
       name: "unknown",
       email: "unknown",
       contactName: "unknown",
@@ -27,9 +27,10 @@ async function main() {
   })
 
   await prisma.user.upsert({
-    where: { email: "unknown" },
+    where: { id: 2 },
     update: {},
     create: {
+      id: 2,
       firstName: "unknown",
       lastName: "unknown",
       password: "unknown",

@@ -212,7 +212,7 @@ const Create = () => {
               </div>
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <button
-                  onClick={async () => {                    
+                  onClick={async (e) => {                    
                     await createTicket(
                       name,
                       email,
@@ -221,6 +221,7 @@ const Create = () => {
                       priority,
                       engineer
                     );
+                    e.stopPropagation();
                     form.resetFields();
                     setShow(false);                    
                   }}
