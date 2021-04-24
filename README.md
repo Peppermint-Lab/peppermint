@@ -29,12 +29,16 @@ Check out the getting started guide if this is the first time you've used Pepper
 version: "3.1"
 
 services:
-  mongo:
-    container_name: db
-    image: mongo:4
+  postgres:
+    container_name: postgres
+    image: postgres:latest
     restart: always
     volumes:
       - ./docker-data/db:/data/db
+    environment: 
+      POSTGRES_USER: peppermint
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: peppermint
 
   client:
     container_name: peppermint
@@ -43,16 +47,20 @@ services:
       - 5000:5000
     restart: on-failure
     depends_on:
-      - mongo
+      - postgres
     environment:
-      MONGO_URI_DOCKER: "mongodb://mongo:27017/peppermint"
-      JWT_SECRET: "ZwfJtS3muY65CaeZ" # This is an example secret
+      JWT_SECRET: 'ZwfJtS3muY65CaeZ' 
       PORT: 5000
+      DB_USERNAME: peppermint
+      DB_PASSWORD: 1234
+      DB_HOST: 'postgres'
 
 
 ```
 
-We currently do not have any one click installers for any online marketplace as of yet - but once we get more stable and feature rich that will change.
+## One click installers
+
+- We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>
 
 ## Supported Environment Variables
 
@@ -63,7 +71,8 @@ You can utilize the following environment variables in Peppermint. None of them 
 | PUID | Set userid that the container will run as. |
 | PGID | Set groupid that the container will run as. |
 | JWT_SECRET  | Keep your passwords and user logins secure with a JWT SECRET  |
-| MONGO_URI_DOCKER | Have a different url for your mongoDB database? Enter that string here |
+| DB_USERNAME | Enter database username here |
+| DB_PASSWORD | Enter database password here |
 | PORT | Choose a custom port to run the app on rather than the default 5000 |
 
 ##  💻 Demo

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Create from "../ticket/Create";
 
@@ -18,6 +18,14 @@ const Header = () => {
     localStorage.clear();
     history.push("/login");
   }
+
+  useEffect(() => {
+    if(localStorage.getItem('user') === null) {
+      history.push('/login')
+    } else {
+      return true
+    }
+  })
 
   return (
     <div>
