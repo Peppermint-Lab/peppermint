@@ -15,7 +15,19 @@ async function main() {
     },
   });
 
-  console.log({ admin });
+  const internal = await prisma.client.upsert({
+    where: { id: Number(1) },
+    update: {},
+    create: {
+      id: 1,
+      email: `internal@admin.com`,
+      name: "internal",
+      contactName: "admin",
+      number: '123456789',
+    },
+  })
+
+  console.log({ admin, internal });
 }
 
 main()

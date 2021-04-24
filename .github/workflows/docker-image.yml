@@ -45,6 +45,6 @@ jobs:
           tags: |
             pepperlabs/peppermint
             pepperlabs/peppermint:latest
-            pepperlabs/peppermint:v0.1.7-alpha
+            pepperlabs/peppermint:v0.1.8-alpha
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
