@@ -11,7 +11,7 @@ const Detail = (props) => {
   const { completeTicket, unCompleteTicket } = useContext(GlobalContext);
 
   const [ticket, setTicket] = useState(props.location.state || null);
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(true);
 
   const [note, setNote] = useState(ticket.note);
   const [issue, setIssue] = useState(ticket.issue);
@@ -21,9 +21,11 @@ const Detail = (props) => {
   const [file, setFile] = useState([]);
   const [badge, setBadge] = useState("");
 
-  const history = useHistory()
+  const history = useHistory();
 
   const id = props.match.params.id;
+
+  console.log(issue, note);
 
   useEffect(() => {
     async function getTicket() {
@@ -51,15 +53,13 @@ const Detail = (props) => {
     if (ticket.priority === "Low") {
       setBadge(low);
     }
-    if (ticket.priority === "normal") {
+    if (ticket.priority === "Normal") {
       setBadge(normal);
     }
     if (ticket.priority === "High") {
       setBadge(high);
     }
   }, []);
-
-  const { TextArea } = Input;
 
   const update = async () => {
     await fetch(`/api/v1/tickets/update`, {
@@ -68,7 +68,7 @@ const Detail = (props) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: ticket._id,
+        id: ticket.id,
         issue,
         note,
         name,
@@ -85,7 +85,7 @@ const Detail = (props) => {
       let data = new FormData();
       data.append("file", file);
       data.append("filename", file.name);
-      data.append("ticket", ticket._id);
+      data.append("ticket", ticket.id);
     },
     onChange(info) {
       if (info.file.status !== "uploading") {
@@ -111,10 +111,14 @@ const Detail = (props) => {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
+  const setInput = (setter) => (event) => {
+    setter(event.currentTarget.value);
+  };
+
   return (
     <div className="relative">
       <div className="py-8 xl:py-10">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 " >
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 ">
           <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
             <div>
               <div>
@@ -201,50 +205,50 @@ const Detail = (props) => {
                   <div className="mt-4 flex space-x-3 md:mt-0">
                     {ticket.isComplete === false ? (
                       <button
-                      onClick={async () => {
-                        await completeTicket(ticket.id)
-                        history.push('/tickets')
-                      }}
-                      type="button"
-                      className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                        onClick={async () => {
+                          await completeTicket(ticket.id);
+                          history.push("/tickets");
+                        }}
+                        type="button"
+                        className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
                       >
-                        <path
-                          fill-rule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                      <span>Complete</span>
-                    </button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        <span>Complete</span>
+                      </button>
                     ) : (
                       <button
-                      onClick={async () => {
-                        await unCompleteTicket(ticket.id)
-                        history.push('/tickets')
-                      }}
-                      type="button"
-                      className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                        onClick={async () => {
+                          await unCompleteTicket(ticket.id);
+                          history.push("/tickets");
+                        }}
+                        type="button"
+                        className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
                       >
-                        <path
-                          fill-rule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                      <span>Un-complete</span>
-                    </button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        <span>Un-complete</span>
+                      </button>
                     )}
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
@@ -253,16 +257,20 @@ const Detail = (props) => {
                 </div>
 
                 <div className="py-3 xl:pt-6 xl:pb-0 ">
-                  <h1 className="text-xl">Description</h1>
-                  <div className={edit ? "hidden" : "prose max-w-none"}>
-                    {ticket.issue}
+                  <div>
+                    <h1 className="text-xl">Description</h1>
                   </div>
-                  <div className={edit ? "prose max-w-none" : "hidden"}>
-                    <TextArea
-                      rows={6}
-                      defaultValue={ticket.issue}
-                      onchange={(e) => setIssue(e.target.value)}
-                    />
+                  <div>
+                    <div>
+                      <div>
+                        <textarea
+                          id="issuesText"
+                          className="resize border rounded-md w-full"
+                          defaultValue={ticket.issue}
+                          onchange={setInput(setIssue)}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -277,18 +285,13 @@ const Detail = (props) => {
                 </h2>
                 <div className="flow-root -mt-4"></div>
               </div>
-              <div className={edit ? "hidden" : "mt-3"}>
-                {ticket.note ? (
-                  ticket.note
-                ) : (
-                  <p>No work has been entered yet</p>
-                )}
-              </div>
-              <div className={edit ? "mt-3" : "hidden"}>
-                <TextArea
-                  rows={6}
+
+              <div className="mt-3">
+                <textarea
+                  id="notesText"
+                  className="resize border rounded-md w-full"
                   defaultValue={ticket.notes}
-                  onchange={(e) => setNote(e.target.value)}
+                  onchange={setInput(setNote)}
                 />
               </div>
             </section>
@@ -308,7 +311,7 @@ const Detail = (props) => {
                   <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
                 </svg>
                 <span className="text-green-700 text-sm font-medium">
-                  {ticket.isComplete ? 'Completed' : 'Issued'}
+                  {ticket.isComplete ? "Completed" : "Issued"}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
@@ -370,7 +373,10 @@ const Detail = (props) => {
                           </span>
                         </span>
                       </div>
-                      <span>{ticket.assignedTo.firstName} {ticket.assignedTo.lastName}</span>
+                      <span>
+                        {ticket.assignedTo.firstName}{" "}
+                        {ticket.assignedTo.lastName}
+                      </span>
                     </p>
                   </li>
                 </ul>
@@ -412,7 +418,7 @@ const Detail = (props) => {
                   <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
                 </svg>
                 <span className="text-green-700 text-sm font-medium">
-                {ticket.isComplete ? 'Completed' : 'Issued'}
+                  {ticket.isComplete ? "Completed" : "Issued"}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
@@ -458,7 +464,9 @@ const Detail = (props) => {
                       <div className="flex-shrink-0">
                         <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                           <span className="font-medium leading-none text-white">
-                          {ticket.assignedTo ? ticket.assignedTo.firstName[0] : ''}
+                            {ticket.assignedTo
+                              ? ticket.assignedTo.firstName[0]
+                              : ""}
                           </span>
                         </span>
                       </div>

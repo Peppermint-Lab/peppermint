@@ -130,13 +130,6 @@ const Main = () => {
                     </div>
                     </Link>
 
-                    <Link to='/tickets'>
-                    <div className="px-6 py-5 text-sm font-medium text-center">
-                      <span className="text-gray-900">{unissuedTickets} </span>
-                      <span className="text-gray-600">Tickets Unissued</span>
-                    </div>
-                    </Link>
-
                     <Link to='/history'>
                     <div className="px-6 py-5 text-sm font-medium text-center">
                       <span className="text-gray-900">{completedTickets} </span>

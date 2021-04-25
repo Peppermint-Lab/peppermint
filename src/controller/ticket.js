@@ -272,12 +272,10 @@ exports.transfer = async (req, res) => {
 exports.updateJob = async (req, res) => {
   try {
     await prisma.ticket.update({
-      where: { id: Number(req.body.find) },
+      where: { id: Number(req.body.id) },
       data: {
-        assignedTo: {
           issue: req.body.issue,
           note: req.body.note,
-        },
       },
     });
     res.status(201).json({ success: true, message: "Ticket saved" });
