@@ -255,12 +255,12 @@ const Detail = (props) => {
                 <div className="py-3 xl:pt-6 xl:pb-0 ">
                   <h1 className="text-xl">Description</h1>
                   <div className={edit ? "hidden" : "prose max-w-none"}>
-                    {ticket.issue}
+                    {issue}
                   </div>
                   <div className={edit ? "prose max-w-none" : "hidden"}>
                     <TextArea
                       rows={6}
-                      defaultValue={ticket.issue}
+                      defaultValue={issue}
                       onChange={(e) => setIssue(e.target.value)}
                     />
                   </div>
@@ -278,8 +278,8 @@ const Detail = (props) => {
                 <div className="flow-root -mt-4"></div>
               </div>
               <div className={edit ? "hidden" : "mt-3"}>
-                {ticket.note ? (
-                  ticket.note
+                {note ? (
+                  note
                 ) : (
                   <p>No work has been entered yet</p>
                 )}
@@ -287,7 +287,7 @@ const Detail = (props) => {
               <div className={edit ? "mt-3" : "hidden"}>
                 <TextArea
                   rows={6}
-                  defaultValue={ticket.notes}
+                  defaultValue={note}
                   onChange={(e) => setNote(e.target.value)}
                 />
               </div>
