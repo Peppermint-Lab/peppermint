@@ -14,6 +14,8 @@ const CreateTodo = () => {
     addTodo(text);
   };
 
+  console.log(text)
+
   return (
     <div className="mx-1 p-1">
       <label
