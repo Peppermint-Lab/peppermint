@@ -188,7 +188,7 @@ exports.complete = async (req, res) => {
       where: { id: Number(req.params.id) },
       data: {
         isComplete: true,
-        isIssued: false
+        isIssued: false,
       },
     });
 
@@ -240,7 +240,7 @@ exports.unComplete = async (req, res) => {
 };
 
 exports.transfer = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
     await prisma.ticket.update({
       where: { id: Number(req.body.find) },
@@ -274,8 +274,8 @@ exports.updateJob = async (req, res) => {
     await prisma.ticket.update({
       where: { id: Number(req.body.id) },
       data: {
-          issue: req.body.issue,
-          note: req.body.note,
+        issue: req.body.issue,
+        note: req.body.note,
       },
     });
     res.status(201).json({ success: true, message: "Ticket saved" });
@@ -292,11 +292,11 @@ exports.saveFile = async (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
     } else {
-      await prisma.file
+      await prisma.ticketFile
         .create({
           data: {
             filename: file.name,
-            userId: req.user.id,
+            ticketId: Number(req.params.id),
             path: uploadPath,
           },
         })
@@ -318,19 +318,21 @@ exports.saveFile = async (req, res) => {
 };
 
 exports.listFile = async (req, res) => {
-  // TODO File model needs Ticket
+  console.log("hjit");
   try {
-    const files = await File.find({
-      ticket: mongoose.Types.ObjectId(req.params.id),
+    const files = await prisma.ticketFile.findMany({
+      where: { ticketId: Number(req.user.id) },
     });
     res.status(200).json({ sucess: true, files });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.deleteFile = async (req, res) => {
   const path = req.body.path;
   try {
-    await prisma.file
+    await prisma.ticketFile
       .delete({
         where: { id: Number(req.body.file) },
       })
@@ -342,13 +344,14 @@ exports.deleteFile = async (req, res) => {
           }
         });
       });
-    // TODO File model needs Ticket
 
-    await File.find({
-      ticket: mongoose.Types.ObjectId(req.params.id),
+    const files = await prisma.ticketFile.findMany({
+      where: { ticketId: Number(req.user.id) },
     });
-    res.status(200).json({ sucess: true, files, message: "File Deleted" });
-  } catch (error) {}
+    res.status(200).json({ sucess: true, message: "File Deleted", files });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.downloadFile = async (req, res) => {

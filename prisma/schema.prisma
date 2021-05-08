@@ -12,19 +12,19 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  firstName String
-  lastName  String
-  password  String
-  email     String   @unique
-  isAdmin   Boolean
-  todos     Todos[]
-  tickets   Ticket[]
-  file      File[]
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+  firstName  String
+  lastName   String
+  password   String
+  email      String       @unique
+  isAdmin    Boolean
+  todos      Todos[]
+  tickets    Ticket[]
+  file       File[]
   newsletter Newsletter[]
-  notes Notes[]
+  notes      Notes[]
 }
 
 model Ticket {
@@ -42,14 +42,14 @@ model Ticket {
   client     Client   @relation(fields: [clientId], references: [id])
   clientId   Int
   userId     Int
-  
+  TicketFile TicketFile[]
 }
 
 model Client {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
-  name        String   
+  name        String
   email       String   @unique
   contactName String
   number      String?
@@ -66,25 +66,34 @@ model File {
   user      User     @relation(fields: [userId], references: [id])
 }
 
+model TicketFile {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  filename  String
+  path      String
+  ticketId  Int
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+}
+
 model Newsletter {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  title String
-  text String
-  createdBy User @relation(fields: [authorId], references: [id])
-  authorId Int
-  active Boolean
+  title     String
+  text      String
+  createdBy User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  active    Boolean
 }
 
 model Notes {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  title String
-  note String
-  createdBy User @relation(fields: [userId], references: [id])
-  userId Int
+  title     String
+  note      String
+  createdBy User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
 
 model Todos {

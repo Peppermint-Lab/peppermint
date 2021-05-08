@@ -9,10 +9,10 @@ import {
 } from "@ant-design/icons";
 
 const File = (props) => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState();
 
   async function getFiles() {
-    const id = props.ticket._id;
+    const id = props.ticket.id;
     await fetch(`/api/v1/tickets/file/listFiles/${id}`, {
       method: "get",
       headers: {
@@ -21,7 +21,11 @@ const File = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setFiles(res.files);
+        if(res.files.length !== 0) {
+          setFiles(res.files);
+        } else {
+          console.log('No files')
+        }      
       });
   }
 
@@ -32,15 +36,19 @@ const File = (props) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        file: file._id,
-        ticket: props.ticket._id,
+        file: file.id,
+        ticket: props.ticket.id,
         path: file.path,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
-        setFiles(res.files);
+        console.log(res)
+        if(res.files.length !== 0) {
+          setFiles(res.files);
+        } else {
+          setFiles(null)
+        }  
       });
   }
 
@@ -61,11 +69,14 @@ const File = (props) => {
     getFiles();
   }, []);
 
+  console.log(files)
+
   return (
-    <div>
-      {files.map((file) => {
+    <div className={files ? '' : 'hidden'}>
+      <h1>Files attached to job</h1>
+      {files ? (files.map((file) => {
         return (
-          <div className="todo-list" key={file._id}>
+          <div className='todo-list' key={file._id}>
             <ul>
               <li>
                 <Space>
@@ -95,7 +106,9 @@ const File = (props) => {
             </ul>
           </div>
         );
-      })}
+      })) : (
+        <p>There are no files here</p>
+      )}
     </div>
   );
 };

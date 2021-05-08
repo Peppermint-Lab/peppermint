@@ -379,7 +379,6 @@ const Detail = (props) => {
             </div>
             <div className="-mt-10">
               <div className="flex flex-col">
-                <h1>Files attached to job</h1>
                 <File ticket={ticket} />
               </div>
             </div>
@@ -472,7 +471,6 @@ const Detail = (props) => {
             </div>
             <div className="mt-6">
               <div className="flex flex-col">
-                <h1>Files attached to job</h1>
                 <File ticket={ticket} />
               </div>
             </div>
