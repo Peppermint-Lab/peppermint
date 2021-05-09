@@ -16,6 +16,10 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Build React Client
+        run: build.sh
+        shell: bash
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
