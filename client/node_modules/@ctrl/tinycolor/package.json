@@ -1,0 +1,77 @@
+{
+  "name": "@ctrl/tinycolor",
+  "version": "3.4.0",
+  "description": "Fast, small color manipulation and conversion for JavaScript",
+  "author": "Scott Cooper <scttcper@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "homepage": "https://tinycolor.vercel.app",
+  "repository": "scttcper/tinycolor",
+  "keywords": [
+    "typescript",
+    "color",
+    "manipulation",
+    "tinycolor",
+    "hsa",
+    "rgb"
+  ],
+  "main": "dist/public_api.js",
+  "module": "dist/module/public_api.js",
+  "typings": "dist/public_api.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build:demo": "rollup -c rollup.demo.js",
+    "watch:demo": "rollup -c rollup.demo.js -w",
+    "lint": "eslint --ext .js,.ts, .",
+    "lint:fix": "eslint --fix --ext .js,.ts, .",
+    "prepare": "npm run build",
+    "build": "del-cli dist && tsc -p tsconfig.build.json && tsc -p tsconfig.module.json && ts-node build",
+    "build:docs": "typedoc --out demo/public/docs --hideGenerator --tsconfig tsconfig.build.json src/public_api.ts",
+    "test": "jest",
+    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit --coverage",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "7.12.1",
+    "@babel/preset-typescript": "7.12.7",
+    "@ctrl/eslint-config": "1.2.11",
+    "@jest/globals": "26.6.2",
+    "@types/node": "14.14.22",
+    "del-cli": "3.0.1",
+    "jest": "26.6.3",
+    "jest-junit": "12.0.0",
+    "rollup": "2.38.0",
+    "rollup-plugin-livereload": "2.0.0",
+    "rollup-plugin-serve": "1.1.0",
+    "rollup-plugin-sourcemaps": "0.6.3",
+    "rollup-plugin-terser": "7.0.2",
+    "rollup-plugin-typescript2": "0.29.0",
+    "rollup-plugin-uglify": "6.0.4",
+    "ts-node": "9.1.1",
+    "typedoc": "0.20.16",
+    "typescript": "4.1.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-modules-commonjs"
+    ]
+  },
+  "release": {
+    "branch": "master"
+  },
+  "engines": {
+    "node": ">=10"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "lessOptions": {
+      "description": "Options to pass through to `Less` (https://github.com/webpack-contrib/less-loader#lessoptions).",
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
+    },
+    "prependData": {
+      "description": "Prepends `Less` code before the actual entry file (https://github.com/webpack-contrib/less-loader#prependdata).",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
+    },
+    "appendData": {
+      "description": "Add `Less` code after the actual entry file (https://github.com/webpack-contrib/less-loader#postponeddata).",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
+    },
+    "sourceMap": {
+      "description": "Enables/Disables generation of source maps (https://github.com/webpack-contrib/less-loader#sourcemap).",
+      "type": "boolean"
+    },
+    "implementation": {
+      "description": "The implementation of the `Less` to be used (https://github.com/webpack-contrib/less-loader#implementation).",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

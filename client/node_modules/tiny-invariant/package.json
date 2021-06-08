@@ -1,0 +1,54 @@
+{
+  "name": "tiny-invariant",
+  "version": "1.1.0",
+  "keywords": [
+    "invariant",
+    "error"
+  ],
+  "description": "A tiny invariant function",
+  "main": "dist/tiny-invariant.cjs.js",
+  "module": "dist/tiny-invariant.esm.js",
+  "types": "dist/tiny-invariant.d.ts",
+  "sideEffects": false,
+  "files": [
+    "/dist",
+    "/src"
+  ],
+  "author": "Alex Reardon <alexreardon@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexreardon/tiny-invariant.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexreardon/tiny-invariant/issues"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "yarn jest",
+    "lint": "yarn prettier:check",
+    "prettier:write": "yarn prettier --debug-check src/** test/**",
+    "prettier:check": "yarn prettier --write src/** test/**",
+    "typecheck": "yarn tsc --noEmit src/*.ts test/*.ts",
+    "validate": "yarn lint && yarn typecheck",
+    "build:clean": "rimraf dist",
+    "build:flow": "cp src/tiny-invariant.js.flow dist/tiny-invariant.cjs.js.flow",
+    "build:typescript": "tsc ./src/tiny-invariant.ts --emitDeclarationOnly --declaration --outDir ./dist",
+    "build:dist": "yarn rollup --config rollup.config.js",
+    "build": "yarn build:clean && yarn build:dist && yarn build:typescript",
+    "prepublishOnly": "yarn build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^2.3.0",
+    "@rollup/plugin-typescript": "^3.0.0",
+    "@types/jest": "^25.1.0",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.1",
+    "rollup": "^1.30.1",
+    "rollup-plugin-terser": "^5.2.0",
+    "ts-expect": "^1.1.0",
+    "ts-jest": "^25.0.0",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.5"
+  }
+}

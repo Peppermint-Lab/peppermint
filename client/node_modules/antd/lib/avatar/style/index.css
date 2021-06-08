@@ -1,0 +1,108 @@
+/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
+/* stylelint-disable no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
+.ant-avatar {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: 'tnum';
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  color: #fff;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+  background: #ccc;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 50%;
+}
+.ant-avatar-image {
+  background: transparent;
+}
+.ant-avatar .ant-image-img {
+  display: block;
+}
+.ant-avatar-string {
+  position: absolute;
+  left: 50%;
+  transform-origin: 0 center;
+}
+.ant-avatar.ant-avatar-icon {
+  font-size: 18px;
+}
+.ant-avatar.ant-avatar-icon > .anticon {
+  margin: 0;
+}
+.ant-avatar-lg {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+}
+.ant-avatar-lg-string {
+  position: absolute;
+  left: 50%;
+  transform-origin: 0 center;
+}
+.ant-avatar-lg.ant-avatar-icon {
+  font-size: 24px;
+}
+.ant-avatar-lg.ant-avatar-icon > .anticon {
+  margin: 0;
+}
+.ant-avatar-sm {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+}
+.ant-avatar-sm-string {
+  position: absolute;
+  left: 50%;
+  transform-origin: 0 center;
+}
+.ant-avatar-sm.ant-avatar-icon {
+  font-size: 14px;
+}
+.ant-avatar-sm.ant-avatar-icon > .anticon {
+  margin: 0;
+}
+.ant-avatar-square {
+  border-radius: 2px;
+}
+.ant-avatar > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.ant-avatar-group {
+  display: inline-flex;
+}
+.ant-avatar-group .ant-avatar {
+  border: 1px solid #fff;
+}
+.ant-avatar-group .ant-avatar:not(:first-child) {
+  margin-left: -8px;
+}
+.ant-avatar-group-popover .ant-avatar + .ant-avatar {
+  margin-left: 3px;
+}
+.ant-avatar-group-rtl .ant-avatar:not(:first-child) {
+  margin-right: -8px;
+  margin-left: 0;
+}
+.ant-avatar-group-popover.ant-popover-rtl .ant-avatar + .ant-avatar {
+  margin-right: 3px;
+  margin-left: 0;
+}

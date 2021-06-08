@@ -1,0 +1,30 @@
+{
+  "name": "js-file-download",
+  "version": "0.4.12",
+  "description": "Javascript function that triggers browser to save javascript-generated content to a file",
+  "main": "file-download.js",
+  "scripts": {
+    "lint": "eslint file-download.js",
+    "test": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kennethjiang/js-file-download.git"
+  },
+  "keywords": [
+    "javascript",
+    "file",
+    "react",
+    "download"
+  ],
+  "author": "Kenneth Jiang <kenneth.jiang@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kennethjiang/js-file-download/issues"
+  },
+  "homepage": "https://github.com/kennethjiang/js-file-download",
+  "typings": "js-file-download.d.ts",
+  "devDependencies": {
+    "eslint": "^5.8.0"
+  }
+}

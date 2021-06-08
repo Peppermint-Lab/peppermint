@@ -1,0 +1,64 @@
+{
+  "name": "copy-anything",
+  "sideEffects": false,
+  "version": "2.0.3",
+  "description": "An optimised way to copy'ing an object. A small and simple integration",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "typings": "types/index.d.ts",
+  "scripts": {
+    "test": "ava",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "rollup": "rollup -c build/rollup.js",
+    "build": "npm run lint && npm run test && npm run rollup"
+  },
+  "dependencies": {
+    "is-what": "^3.12.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "ava": "^3.15.0",
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-tree-shaking": "^1.8.0",
+    "rollup": "^2.38.4",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.1.3"
+  },
+  "keywords": [
+    "copy",
+    "clone",
+    "json-stringify",
+    "stringify-parse",
+    "object",
+    "copy-objects",
+    "clone-objects",
+    "json-stringify-json-parse",
+    "deep-clone",
+    "deep-copy",
+    "typescript",
+    "ts"
+  ],
+  "author": "Luca Ban - Mesqueeb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mesqueeb/copy-anything/issues"
+  },
+  "homepage": "https://github.com/mesqueeb/copy-anything#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesqueeb/copy-anything.git"
+  },
+  "ava": {
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "tsconfig-paths/register",
+      "ts-node/register"
+    ]
+  }
+}

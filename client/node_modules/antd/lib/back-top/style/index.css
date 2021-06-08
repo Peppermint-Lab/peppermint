@@ -1,0 +1,58 @@
+/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
+/* stylelint-disable no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
+.ant-back-top {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: 'tnum';
+  position: fixed;
+  right: 100px;
+  bottom: 50px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.ant-back-top:empty {
+  display: none;
+}
+.ant-back-top-rtl {
+  right: auto;
+  left: 100px;
+  direction: rtl;
+}
+.ant-back-top-content {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  color: #fff;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.45);
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+.ant-back-top-content:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+  transition: all 0.3s;
+}
+.ant-back-top-icon {
+  font-size: 24px;
+  line-height: 40px;
+}
+@media screen and (max-width: 768px) {
+  .ant-back-top {
+    right: 60px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .ant-back-top {
+    right: 20px;
+  }
+}

@@ -1,0 +1,449 @@
+@prefix-cls: rc-picker;
+
+@background-color: rgb(255, 240, 255);
+
+@input-placeholder-color: hsv(0, 0, 75%);
+
+.placeholder(@color: @input-placeholder-color) {
+  // Firefox
+  &::-moz-placeholder {
+    opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
+  }
+
+  &::placeholder {
+    color: @color;
+  }
+
+  &:placeholder-shown {
+    text-overflow: ellipsis;
+  }
+}
+
+.@{prefix-cls} {
+  display: inline-flex;
+
+  &-rtl {
+    direction: rtl;
+  }
+
+  &-focused {
+    border: 1px solid blue;
+  }
+  &-panel {
+    border: 1px solid #666;
+    background: @background-color;
+    display: inline-block;
+    vertical-align: top;
+
+    &-focused {
+      border-color: blue;
+    }
+
+    &-rtl {
+      direction: rtl;
+    }
+  }
+
+  // ===================== Shared Panel =====================
+  &-decade-panel,
+  &-year-panel,
+  &-month-panel,
+  &-week-panel,
+  &-date-panel,
+  &-time-panel {
+    display: flex;
+    flex-direction: column;
+
+    table {
+      text-align: center;
+      border-collapse: collapse;
+    }
+  }
+
+  // Header
+  &-header {
+    display: flex;
+
+    > * {
+      flex: none;
+    }
+
+    &-view {
+      flex: auto;
+      text-align: center;
+
+      > button {
+        border: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  // Content
+  &-cell {
+    color: #aaa;
+
+    &-disabled {
+      opacity: 0.2;
+    }
+
+    &-inner {
+      font-size: 12px;
+      width: 100%;
+      height: 20px;
+      line-height: 20px;
+      display: inline-block;
+      box-sizing: border-box;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      transition: background 0.3s, border 0.3s;
+
+      &:hover {
+        background: fade(blue, 30%) !important;
+      }
+    }
+
+    &-in-view {
+      color: #333;
+    }
+
+    &-in-range > &-inner {
+      background: fade(blue, 5%);
+    }
+    &-range-hover-start,
+    &-range-hover-end,
+    &-range-hover {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border: 1px solid green;
+        border-left: 0;
+        border-right: 0;
+        pointer-events: none;
+      }
+    }
+
+    &-range-hover-start::after {
+      border-left: 1px solid green !important;
+    }
+    &-range-hover-end::after {
+      border-right: 1px solid green !important;
+    }
+
+    &-today > &-inner {
+      border: 1px solid blue;
+    }
+    &-range-start > &-inner,
+    &-range-end > &-inner,
+    &-selected > &-inner {
+      background: fade(blue, 20%);
+    }
+  }
+
+  &-footer,
+  &-picker-footer {
+    background: green;
+  }
+
+  &-ranges {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none;
+
+    > li {
+      display: inline-block;
+    }
+  }
+
+  &-ok {
+    float: right;
+  }
+
+  // ================== Year & Month Panel ==================
+  &-year-panel,
+  &-month-panel {
+    .@{prefix-cls}-cell-inner {
+      width: 80px;
+    }
+  }
+
+  // ====================== Week Panel ======================
+  &-week-panel {
+    &-row {
+      &:hover {
+        .@{prefix-cls}-cell {
+          background: red;
+        }
+      }
+
+      &-selected {
+        .@{prefix-cls}-cell {
+          background: rgba(0, 0, 255, 0.3);
+        }
+      }
+    }
+
+    .@{prefix-cls}-cell,
+    .@{prefix-cls}-cell-inner {
+      width: 20px;
+    }
+
+    .@{prefix-cls}-cell-week {
+      font-size: 12px;
+      color: #999;
+      font-weight: bold;
+    }
+
+    .@{prefix-cls}-cell:hover > .@{prefix-cls}-cell-inner,
+    .@{prefix-cls}-cell-selected > .@{prefix-cls}-cell-inner {
+      background: transparent;
+    }
+  }
+
+  // ====================== Date Panel ======================
+  &-date-panel {
+    .@{prefix-cls}-cell-inner {
+      width: 20px;
+    }
+  }
+
+  // ====================== Time Panel ======================
+  &-time-panel {
+    width: auto;
+
+    .@{prefix-cls}-content {
+      display: flex;
+      max-height: 200px;
+    }
+
+    &-column {
+      flex: none;
+      text-align: left;
+      list-style: none;
+      margin: 0;
+      padding: 0 0 180px 0;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      width: 50px;
+      transition: background 0.3s;
+      font-size: 12px;
+
+      &-active {
+        background: rgba(0, 0, 255, 0.1);
+      }
+
+      &:hover {
+        overflow-y: auto;
+      }
+
+      > li {
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+
+        .@{prefix-cls}-time-panel-cell-inner {
+          color: #333;
+          padding: 0 0 0 12px;
+          margin: 0;
+          height: 20px;
+          line-height: 20px;
+          display: block;
+          width: 100%;
+          text-align: left;
+
+          .@{prefix-cls}-panel-rtl & {
+            padding: 0 12px 0 0;
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  // ====================== Date Time =======================
+  &-datetime-panel {
+    display: flex;
+
+    .@{prefix-cls}-time-panel {
+      border-left: 1px solid #999;
+    }
+
+    .@{prefix-cls}-date-panel,
+    .@{prefix-cls}-time-panel {
+      transition: opacity 0.3s;
+    }
+
+    // Keyboard
+    &-active {
+      .@{prefix-cls}-date-panel,
+      .@{prefix-cls}-time-panel {
+        opacity: 0.3;
+
+        &-active {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  // ======================== Input =========================
+  &-input {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+
+    .@{prefix-cls}-rtl & {
+      text-align: right;
+    }
+
+    > input {
+      width: 100%;
+      .placeholder();
+    }
+
+    &-placeholder {
+      > input {
+        color: @input-placeholder-color;
+      }
+    }
+  }
+
+  &-clear {
+    position: absolute;
+    right: 4px;
+    top: 0;
+    cursor: pointer;
+
+    .@{prefix-cls}-rtl & {
+      right: auto;
+      left: 4px;
+    }
+
+    &-btn::after {
+      content: '×';
+    }
+  }
+
+  // ======================= Dropdown =======================
+  &-dropdown {
+    position: absolute;
+    box-shadow: 0 0 1px red;
+
+    &-range {
+      padding: 10px 0;
+    }
+
+    &-hidden {
+      display: none;
+    }
+
+    // Panel
+    @arrow-size: 10px;
+
+    &-placement-topLeft,
+    &-placement-topRight {
+      .@{prefix-cls}-range-arrow {
+        bottom: @arrow-size / 2 + 1px;
+        transform: rotate(135deg);
+      }
+    }
+    &-placement-bottomLeft,
+    &-placement-bottomright {
+      .@{prefix-cls}-range-arrow {
+        top: @arrow-size / 2 + 1px;
+        transform: rotate(-45deg);
+      }
+    }
+
+    .@{prefix-cls}-range-arrow {
+      position: absolute;
+      width: @arrow-size;
+      height: @arrow-size;
+      z-index: 1;
+      left: @arrow-size;
+      margin-left: 10px;
+      transition: all 0.3s;
+
+      .@{prefix-cls}-dropdown-rtl& {
+        right: @arrow-size;
+        left: auto;
+        margin-left: 0;
+        margin-right: 10px;
+      }
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        box-sizing: border-box;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .@{prefix-cls}-dropdown-rtl& {
+          right: 50%;
+          left: auto;
+          transform: translate(50%, -50%);
+        }
+      }
+
+      &::before {
+        width: @arrow-size;
+        height: @arrow-size;
+        border: @arrow-size / 2 solid blue;
+        border-color: blue blue transparent transparent;
+      }
+      &::after {
+        width: @arrow-size - 2px;
+        height: @arrow-size - 2px;
+        border: (@arrow-size - 2px) / 2 solid blue;
+        border-color: @background-color @background-color transparent
+          transparent;
+      }
+    }
+  }
+
+  // ========================================================
+  // =                     Range Picker                     =
+  // ========================================================
+  &-range {
+    display: inline-flex;
+    position: relative;
+
+    &-wrapper {
+      display: flex;
+    }
+
+    .@{prefix-cls}-active-bar {
+      background: green;
+      bottom: 0;
+      height: 3px;
+      pointer-events: none;
+      transition: all 0.3s;
+      opacity: 0;
+    }
+
+    &.@{prefix-cls}-focused {
+      .@{prefix-cls}-active-bar {
+        opacity: 1;
+      }
+    }
+  }
+
+  &-panel-container {
+    display: inline-block;
+    vertical-align: top;
+    transition: margin 0.3s;
+  }
+}
