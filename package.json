@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.2.0",
+    "@heroicons/react": "^1.0.1",
     "next": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"

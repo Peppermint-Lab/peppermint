@@ -1,6 +1,8 @@
 import 'tailwindcss/tailwind.css'
 import Head from 'next/head'
 
+import Layout from './component/Layout'
+
 function MyApp({ Component, pageProps }) {
   return (
     <div>
@@ -8,7 +10,9 @@ function MyApp({ Component, pageProps }) {
         <title>Peppermint</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </div>
   )
 }
