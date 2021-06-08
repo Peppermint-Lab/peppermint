@@ -1,5 +1,0 @@
-Gruntfile.js
-dist/*
-tmp/*
-lib/*
-test/browser/less.min.js
