@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
-
 import { CheckCircleIcon, OfficeBuildingIcon } from "@heroicons/react/solid";
+import TodoList from "./component/TodoList";
+
 
 export default function Home() {
   const [openTickets, setOpenTickets] = useState();
@@ -81,6 +82,17 @@ export default function Home() {
               </div>
             ))}
           </dl>
+        </div>
+
+        <div className="bg-white overflow-hidden shadow sm:rounded-lg mt-5 w-1/2 h-full">
+          <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
+            <div className="px-4 py-5 sm:p-6">
+              <div>
+                <h1 className="font-bold leading-7 text-gray-900">Todo List</h1>
+              </div>
+              <TodoList />
+            </div>
+          </div>
         </div>
       </main>
     </div>

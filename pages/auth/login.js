@@ -26,7 +26,7 @@ export default function Login() {
             localStorage.setItem("user", JSON.stringify(data.user));
             setToggle(true);
             setTimeout(() => {
-              history.push("/");
+              router.push("/");
             }, 1000);
           } else {
             await setError(data.error);
