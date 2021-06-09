@@ -3,7 +3,15 @@ import Head from 'next/head'
 
 import Layout from './component/Layout'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, router }) {
+
+  if (router.pathname.startsWith('/auth')) {
+    return (
+          <Component {...pageProps} />
+    )
+  }
+
+
   return (
     <div>
       <Head>
