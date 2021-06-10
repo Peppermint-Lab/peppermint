@@ -2,6 +2,9 @@ import { Fragment, useState } from "react";
 import { CheckCircleIcon, OfficeBuildingIcon } from "@heroicons/react/solid";
 
 const New = () => {
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || ""
+  );
   const [openTickets, setOpenTickets] = useState();
   const [completedTickets, setCompletedTickets] = useState();
   const [unissuedTickets, setUnissuedTickets] = useState();
@@ -14,8 +17,8 @@ const New = () => {
   ];
 
   return (
-      <div>
-          <main className="p-1">
+    <div>
+      <main className="p-1">
         {/* Page header */}
         <div className="bg-white shadow">
           <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
@@ -36,7 +39,7 @@ const New = () => {
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        Good morning, Jack Andrews
+                        Good morning, {user.firstName + " " + user.lastName}
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -54,7 +57,7 @@ const New = () => {
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                           aria-hidden="true"
                         />
-                        Administrator
+                        {user.isAdmin ? "Admin" : "Engineer"}
                       </dd>
                     </dl>
                   </div>
@@ -93,7 +96,7 @@ const New = () => {
           </div>
         </div>
       </main>
-      </div>
+    </div>
   );
 };
 

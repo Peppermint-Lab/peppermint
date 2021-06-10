@@ -21,6 +21,7 @@ const navigation = [
   
   export default function SideLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || '');
   
     return (
       <div className="h-screen flex overflow-hidden bg-gray-100">
