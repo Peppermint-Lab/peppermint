@@ -91,7 +91,7 @@ const Main = () => {
 
   return (
     <div>
-      <main className="-mt-16 pb-8">
+      <main className="pb-8">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <h1 className="sr-only">Profile</h1>
           <div className="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">

@@ -12,12 +12,13 @@ import io from "socket.io-client";
 
 import UserDash from "./pages/UserDash";
 import Login from "./pages/auth/Login";
-import Header from "./components/navigation/Header";
 import Settings from "./pages/Settings";
 import Tickets from "./pages/Tickets";
 import Detail from "./components/ticket/Detail";
 import Admin from "./pages/Admin";
 import History from "./pages/History";
+import SideLayout from "./components/navigation/sideLayout";
+import CheckAuth from "./components/wrapper/CheckAuth";
 
 const keyMap = {
   CLOSE: ["escape"],
@@ -26,28 +27,41 @@ const keyMap = {
 const Routing = () => {
   return (
     <Router>
+      <CheckAuth>
       <Switch>
-        <Route exact path="/" component={UserDash} />
+        <Route exact path="/">
+          <SideLayout>
+            <UserDash />
+          </SideLayout>
+        </Route>
 
         <Route exact path="/login">
           <Login />
         </Route>
 
         <Route>
-          <Header />
-          <Route exact path="/settings" component={Settings} />
-          <Route exact path="/tickets" component={Tickets} />
-          <Route exact path="/history" component={History} />
-          <Route
-            path="/tickets/:id"
-            component={withRouter(Detail)}
-            key={Math.random()}
-          />
+          <SideLayout>
+            <Route exact path="/settings" component={Settings} />
+            <Route exact path="/tickets" component={Tickets} />
+            <Route exact path="/history" component={History} />
+            <Route
+              path="/tickets/:id"
+              component={withRouter(Detail)}
+              key={Math.random()}
+            />
+          </SideLayout>
+        </Route>
+
+        <Route>
           <Route exact path="/admin/:path?">
-            <Route exact path="/admin/dashboard" component={Admin} />
+            <SideLayout>
+              <Route exact path="/admin/dashboard" component={Admin} />
+            </SideLayout>
           </Route>
         </Route>
+        
       </Switch>
+      </CheckAuth>
     </Router>
   );
 };

@@ -4,6 +4,8 @@
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@craco/craco": "^6.1.1",
+    "@headlessui/react": "^1.2.0",
+    "@heroicons/react": "^1.0.1",
     "@tailwindcss/forms": "^0.2.1",
     "@tailwindcss/line-clamp": "^0.2.0",
     "@testing-library/jest-dom": "^5.11.9",
