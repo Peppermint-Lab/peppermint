@@ -18,7 +18,7 @@ const Admin = () => {
 
   return (
     <div>
-      <div className="h-screen flex overflow-hidden bg-gray-100">
+      <div className="flex bg-gray-100 ">
         <div
           className={show ? "fixed inset-0 flex z-40 md:hidden" : "hidden"}
           role="dialog"

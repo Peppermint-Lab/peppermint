@@ -201,21 +201,21 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex:2 ml-5 h-2/4">
+              {/* <div className="flex:2 ml-5 h-2/4">
                 <div className="h-2/4">
                   <List
                     size="small"
                     bordered
                     dataSource={text.data}
                     pagination={{
-                      defaultPageSize: 10,
+                      defaultPageSize: 8,
                       showSizeChanger: true,
                       pageSizeOptions: ["15", "30", "40"],
                     }}
                     renderItem={(item) => <List.Item>{item}</List.Item>}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

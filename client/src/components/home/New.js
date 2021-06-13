@@ -67,14 +67,14 @@ const New = () => {
                 <div className="flex items-center">
                   <span className="hidden sm:inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500">
                     <span className="text-lg font-medium leading-none text-white">
-                      JA
+                    {user.firstName[0] + user.lastName[0]}
                     </span>
                   </span>
                   <div>
                     <div className="flex items-center">
                       <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500 sm:hidden">
                         <span className="text-lg font-medium leading-none text-white">
-                          JA
+                        {user.firstName[0] + user.lastName[0]}
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
