@@ -26,7 +26,7 @@ const ListTodo = () => {
   return (
     <div>
       <div className={!todos.length ? "hidden" : ""}>
-        <Button className="ml-2 mt-1" onClick={allDone}>
+        <Button className="mt-2" onClick={allDone}>
           Mark All Done
         </Button>
       </div>
@@ -34,9 +34,9 @@ const ListTodo = () => {
       {todos ? (
         todos.map((todo) => {
           return (
-            <div className="flex flex-col mx-auto ml-11 px-1" key={todo.id}>
+            <div className="flex flex-col mx-auto px-1" key={todo.id}>
               <ul>
-                <li style={{ marginLeft: -35 }}>
+                <li>
                   <span className={todo.done ? "done" : ""}>{todo.text}</span>
                   <Tooltip placement="right" title="Delete">
                     <Button

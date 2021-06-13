@@ -1,7 +1,18 @@
-import { Fragment, useState } from "react";
-import { CheckCircleIcon, OfficeBuildingIcon } from "@heroicons/react/solid";
+import { useState, useContext } from "react";
+import {
+  CheckCircleIcon,
+  OfficeBuildingIcon,
+  ArrowRightIcon,
+} from "@heroicons/react/solid";
+import ListTodo from "../todos/ListTodo";
+
+import { GlobalContext } from "../../Context/GlobalState";
 
 const New = () => {
+
+  const { addTodo } = useContext(GlobalContext);
+
+
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || ""
   );
@@ -10,11 +21,17 @@ const New = () => {
   const [unissuedTickets, setUnissuedTickets] = useState();
   const [file, setFile] = useState([]);
 
+  const [text, setText] = useState("");
+
   const stats = [
     { name: "Total Subscribers", stat: "71,897" },
     { name: "Avg. Open Rate", stat: "58.16%" },
     { name: "Avg. Click Rate", stat: "24.57%" },
   ];
+
+  const onSubmit = () => {
+    addTodo(text);
+  };
 
   return (
     <div>
@@ -91,7 +108,24 @@ const New = () => {
               <div>
                 <h1 className="font-bold leading-7 text-gray-900">Todo List</h1>
               </div>
-              {/* <TodoList /> */}
+              <div className="flex flex-row items-center w-full">
+                <div className="mt-1 relative rounded-md shadow-sm w-full">
+                  <input
+                    type="text"
+                    name="email"
+                    id="email"
+                    className="block w-full pr-10 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
+                    placeholder="Enter todo here..."
+                    onChange={(e) => {
+                      setText(e.target.value);
+                    }}
+                  />
+                </div>
+                <button onClick={() => onSubmit()}>
+                  <ArrowRightIcon className="h-6 w-6 mx-auto -mr-8" />
+                </button>
+              </div>
+              <ListTodo />
             </div>
           </div>
         </div>
