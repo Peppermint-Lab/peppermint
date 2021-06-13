@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   CheckCircleIcon,
   OfficeBuildingIcon,
@@ -9,29 +9,51 @@ import ListTodo from "../todos/ListTodo";
 import { GlobalContext } from "../../Context/GlobalState";
 
 const New = () => {
-
   const { addTodo } = useContext(GlobalContext);
-
 
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || ""
   );
   const [openTickets, setOpenTickets] = useState();
   const [completedTickets, setCompletedTickets] = useState();
-  const [unissuedTickets, setUnissuedTickets] = useState();
   const [file, setFile] = useState([]);
 
   const [text, setText] = useState("");
 
-  const stats = [
-    { name: "Total Subscribers", stat: "71,897" },
-    { name: "Avg. Open Rate", stat: "58.16%" },
-    { name: "Avg. Click Rate", stat: "24.57%" },
-  ];
-
   const onSubmit = () => {
     addTodo(text);
   };
+
+  async function getOpenTickets() {
+    await fetch(`/api/v1/data/openTickets`, {
+      method: "get",
+      headers: {
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setOpenTickets(res.results);
+      });
+  }
+
+  async function getCompletedTickets() {
+    await fetch(`/api/v1/data/completedTickets`, {
+      method: "get",
+      headers: {
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setCompletedTickets(res.result);
+      });
+  }
+
+  useEffect(() => {
+    getOpenTickets();
+    getCompletedTickets();
+  }, []);
 
   return (
     <div>
@@ -86,25 +108,36 @@ const New = () => {
 
         <div>
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {stats.map((item) => (
-              <div
-                key={item.name}
-                className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
-              >
-                <dt className="text-sm font-medium text-gray-500 truncate">
-                  {item.name}
-                </dt>
-                <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                  {item.stat}
-                </dd>
-              </div>
-            ))}
+            <div className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+              <dt className="text-sm font-medium text-gray-500 truncate">
+                Open Tickets
+              </dt>
+              <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                {openTickets}
+              </dd>
+            </div>
+            <div className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+              <dt className="text-sm font-medium text-gray-500 truncate">
+                Completed Tickets
+              </dt>
+              <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                {completedTickets}
+              </dd>
+            </div>
+            <div className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+              <dt className="text-sm font-medium text-gray-500 truncate">
+                Third Option
+              </dt>
+              <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                null
+              </dd>
+            </div>
           </dl>
         </div>
 
         <div className="bg-white overflow-hidden shadow sm:rounded-lg mt-5 w-1/2 h-full">
-          <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-            <div className="px-4 py-5 sm:p-6">
+          <div className="px-2 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-4">
+            <div className="px-2 py-5 sm:p-6">
               <div>
                 <h1 className="font-bold leading-7 text-gray-900">Todo List</h1>
               </div>

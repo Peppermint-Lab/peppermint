@@ -13,7 +13,6 @@ const Main = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || '');
   const [openTickets, setOpenTickets] = useState();
   const [completedTickets, setCompletedTickets] = useState();
-  const [unissuedTickets, setUnissuedTickets] = useState();
   const [file, setFile] = useState([]);
 
   async function getOpenTickets() {

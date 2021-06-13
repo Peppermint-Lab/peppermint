@@ -16,7 +16,7 @@ const Settings = () => {
 
   return (
     <div>
-      <main className="relative -mt-20">
+      <main className="relative">
         <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8">
           <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
