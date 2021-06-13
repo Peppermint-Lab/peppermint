@@ -11,7 +11,6 @@ import "./App.css";
 import io from "socket.io-client";
 import { Spin } from "antd";
 
-
 // const LazyMain = React.lazy(() => import("./admin/Main"))
 
 // import Login from "./pages/auth/Login";
@@ -23,7 +22,6 @@ import { Spin } from "antd";
 // import SideLayout from "./components/navigation/sideLayout";
 // import CheckAuth from "./components/wrapper/CheckAuth";
 
-
 const UserDash = React.lazy(() => import("./pages/UserDash"));
 const Tickets = React.lazy(() => import("./pages/Tickets"));
 const Settings = React.lazy(() => import("./pages/Settings"));
@@ -31,7 +29,9 @@ const Login = React.lazy(() => import("./pages/auth/Login"));
 const Detail = React.lazy(() => import("./components/ticket/Detail"));
 const Admin = React.lazy(() => import("./pages/Admin"));
 const History = React.lazy(() => import("./pages/History"));
-const SideLayout = React.lazy(() => import("./components/navigation/sideLayout"));
+const SideLayout = React.lazy(() =>
+  import("./components/navigation/sideLayout")
+);
 const CheckAuth = React.lazy(() => import("./components/wrapper/CheckAuth"));
 
 const keyMap = {
@@ -40,43 +40,40 @@ const keyMap = {
 
 const Routing = () => {
   return (
-    <React.Suspense fallback={<h1>Loading...</h1>}>
-      <Router>
-      <CheckAuth>
-        <Switch>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-
-
-          <SideLayout>
-            <Route exact path="/" >
-              <UserDash />
+    <Router>
+      <React.Suspense fallback={<Spin />}>
+        <CheckAuth>
+          <Switch>
+            <Route path="/login">
+              <Login />
             </Route>
 
-            <Route>
-                <Route exact path="/settings" component={Settings} />
-                <Route exact path="/tickets" component={Tickets} />
-                <Route exact path="/history" component={History} />
+            <SideLayout>
+              <Route exact path="/">
+                <UserDash />
+              </Route>
+
+              <Route>
+                <Route path="/settings" component={Settings} />
+                <Route path="/tickets" component={Tickets} />
+                <Route path="/history" component={History} />
                 <Route
                   path="/tickets/:id"
                   component={withRouter(Detail)}
                   key={Math.random()}
                 />
-            </Route>
-
-            <Route>
-              <Route exact path="/admin/:path?">
-                  <Route exact path="/admin/dashboard" component={Admin} />
               </Route>
-            </Route>
 
-          </SideLayout>
-
-        </Switch>
-      </CheckAuth>
+              <Route>
+                <Route path="/admin/:path?">
+                  <Route path="/admin/dashboard" component={Admin} />
+                </Route>
+              </Route>
+            </SideLayout>
+          </Switch>
+        </CheckAuth>
+      </React.Suspense>
     </Router>
-    </React.Suspense>
   );
 };
 

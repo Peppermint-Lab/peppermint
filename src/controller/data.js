@@ -29,7 +29,6 @@ exports.countOpenedTickets = async (req, res) => {
 };
 
 exports.countCompletedTickets = async (req, res) => {
-
   await prisma.ticket.count({
     where: { isComplete: true, userId: Number(req.user.id) }
   }).then((result) => {

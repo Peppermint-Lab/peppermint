@@ -33,7 +33,7 @@ const New = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setOpenTickets(res.results);
+        setOpenTickets(res.result);
       });
   }
 
