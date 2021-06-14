@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Select, Modal, Button } from "antd";
+import { Select, Modal } from "antd";
 
 import { GlobalContext } from "../../Context/GlobalState";
 

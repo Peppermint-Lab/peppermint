@@ -4,23 +4,11 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  withRouter,
 } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import io from "socket.io-client";
 import { Spin } from "antd";
-
-// const LazyMain = React.lazy(() => import("./admin/Main"))
-
-// import Login from "./pages/auth/Login";
-// import Settings from "./pages/Settings";
-// import Tickets from "./pages/Tickets";
-// import Detail from "./components/ticket/Detail";
-// import Admin from "./pages/Admin";
-// import History from "./pages/History";
-// import SideLayout from "./components/navigation/sideLayout";
-// import CheckAuth from "./components/wrapper/CheckAuth";
 
 const UserDash = React.lazy(() => import("./pages/UserDash"));
 const Tickets = React.lazy(() => import("./pages/Tickets"));

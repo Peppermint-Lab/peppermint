@@ -21,6 +21,7 @@ function classNames(...classes) {
 
 export default function SideLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || ""
   );

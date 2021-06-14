@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { Input, message, Upload, Divider } from "antd";
+import { Input, message, Upload, Divider, Spin } from "antd";
 import moment from "moment";
 
 import { GlobalContext } from "../../Context/GlobalState";
@@ -20,6 +21,7 @@ const Detail = (props) => {
   const [number, setNumber] = useState(ticket.number);
   const [file, setFile] = useState([]);
   const [badge, setBadge] = useState("");
+  const [loading, setLoading] = useState(true)
 
   const history = useHistory()
 
@@ -36,9 +38,10 @@ const Detail = (props) => {
           },
         })
           .then((res) => res.json())
-          .then(async (res) => {
-            console.log(res.ticket);
-            await setTicket(res.ticket);
+          .then((res) => {
+            console.log(res)
+            setTicket(res.ticket);
+            setLoading(false)
           });
       } catch (error) {
         console.log(error);
@@ -112,7 +115,8 @@ const Detail = (props) => {
   const normal = "bg-green-100 text-green-800";
 
   return (
-    <div className="relative">
+    <Spin spinning={loading}>
+      <div className="relative">
       <div className="py-8 xl:py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 " >
           <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
@@ -145,9 +149,9 @@ const Detail = (props) => {
                           aria-hidden="true"
                         >
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                           />
                         </svg>
@@ -215,9 +219,9 @@ const Detail = (props) => {
                         className="-ml-1 mr-2 h-5 w-5 text-gray-400"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                       </svg>
                       <span>Complete</span>
@@ -238,9 +242,9 @@ const Detail = (props) => {
                         className="-ml-1 mr-2 h-5 w-5 text-gray-400"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                       </svg>
                       <span>Un-complete</span>
@@ -327,9 +331,9 @@ const Detail = (props) => {
                   aria-hidden="true"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
                 <span className="text-gray-900 text-sm font-medium">
@@ -346,9 +350,9 @@ const Detail = (props) => {
                   aria-hidden="true"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
                 <span className="text-gray-900 text-sm font-medium">
@@ -423,9 +427,9 @@ const Detail = (props) => {
                   aria-hidden="true"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
               </div>
@@ -438,13 +442,13 @@ const Detail = (props) => {
                   aria-hidden="true"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
                 <span className="text-gray-900 text-sm font-medium">
-                  Created on <time datetime="2020-12-02">Dec 2, 2020</time>
+                  Created on <time dateTime="2020-12-02">Dec 2, 2020</time>
                 </span>
               </div>
             </div>
@@ -490,6 +494,7 @@ const Detail = (props) => {
         </div>
       </div>
     </div>
+    </Spin>
   );
 };
 

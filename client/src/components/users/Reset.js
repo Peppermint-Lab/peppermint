@@ -3,6 +3,7 @@ import { Modal, Button, message } from "antd";
 
 const Reset = (props) => {
   const [visible, setVisible] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(props.user._id);
   const [password, setPassword] = useState("");
 

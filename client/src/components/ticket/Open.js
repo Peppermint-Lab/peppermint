@@ -65,7 +65,7 @@ const Table = () => {
                 }
 
                 return (
-                  <tr className="bg-white">
+                  <tr className="bg-white" key={ticket.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {ticket.name}
                     </td>
@@ -134,11 +134,11 @@ const Card = () => {
             }
 
             return (
-              <div className="flex justify-start">
-                <div class="w-full mb-2 border">
-                  <div class="px-4 py-4">
+              <div className="flex justify-start" key={ticket.id}>
+                <div className="w-full mb-2 border">
+                  <div className="px-4 py-4">
                     <div>
-                      <h1 class="font-semibold leading-tight text-2xl text-gray-800 hover:text-gray-800 ml-1">
+                      <h1 className="font-semibold leading-tight text-2xl text-gray-800 hover:text-gray-800 ml-1">
                         {ticket.name}
                       </h1>
                       <p className=" px-2">Client: {ticket.client.name}</p>
@@ -148,14 +148,14 @@ const Card = () => {
                     >
                       {ticket.priority}
                     </span>
-                    <p class="text-gray-900 m-2">{ticket.issue}</p>
-                    <div class="text-gray-700 text-sm font-bold p-2 m-2">
+                    <p className="text-gray-900 m-2">{ticket.issue}</p>
+                    <div className="text-gray-700 text-sm font-bold p-2 m-2">
                       <Link
                         to={{
                           pathname: `tickets/${ticket._id}`,
                           state: ticket,
                         }}
-                        class="float-right"
+                        className="float-right"
                       >
                         View Full Ticket
                       </Link>

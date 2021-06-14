@@ -67,9 +67,8 @@ const File = (props) => {
 
   useEffect(() => {
     getFiles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(files)
 
   return (
     <div className={files ? '' : 'hidden'}>
