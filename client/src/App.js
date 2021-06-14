@@ -32,7 +32,7 @@ const History = React.lazy(() => import("./pages/History"));
 const SideLayout = React.lazy(() =>
   import("./components/navigation/sideLayout")
 );
-const CheckAuth = React.lazy(() => import("./components/wrapper/CheckAuth"));
+const CheckAuth = React.lazy(() => import("./hoc/CheckAuth"));
 
 const keyMap = {
   CLOSE: ["escape"],

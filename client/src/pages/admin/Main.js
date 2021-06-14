@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import io from "socket.io-client";
-import { Card, Statistic, List } from "antd";
-import moment from "moment";
+import { Card, Statistic } from "antd";
 
 const Main = () => {
   const [unClaimed, setUnClaimed] = useState();
@@ -13,8 +12,6 @@ const Main = () => {
   const [data, setData] = useState([]);
 
   const history = useHistory();
-
-  // console.log(data)
 
   useEffect(() => {
     async function soc() {
@@ -120,49 +117,51 @@ const Main = () => {
         tabindex="0"
       >
         <div className="py-6">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+          <div className="max-w-7xl mx-auto sm:px-6 md:px-8">
+            <h1 className="text-2xl font-semibold text-gray-900 ml-3">
+              Dashboard
+            </h1>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="py-4">
-              <div className="flex flex-row px-2 mx-auto justify-items-center ">
-                <div className="ml-1">
+              <div className="flex flex-col px-2 py-2 m-4 justify-items-center lg:flex-row">
+                <div className="ml-1 mt-1">
                   <Card>
                     <Statistic title="Closed Tickets" value={complete} />
                   </Card>
                 </div>
-                <div className="ml-1">
+                <div className="ml-1 mt-2">
                   <Card>
                     <Statistic title="Open Tickets" value={open} />
                   </Card>
                 </div>
-                <div className="ml-1">
+                <div className="ml-1 mt-2">
                   <Card>
                     <Statistic title="Unissued Tickets" value={unClaimed} />
                   </Card>
                 </div>
-                <div className="ml-1">
+                <div className="ml-1 mt-2">
                   <Card>
                     <Statistic title="Online Users" value={online.data} />
                   </Card>
                 </div>
-                <div className="ml-1">
+                <div className="ml-1 mt-2">
                   <Card>
                     <Statistic title="System OS" value={data.system} />
                   </Card>
                 </div>
-                <div className="ml-1">
+                <div className="ml-1 mt-2">
                   <Card>
                     <Statistic title="Cpu Count" value={data.cpu} />
                   </Card>
                 </div>
               </div>
             </div>
-            <div className="flex py-1 px-3">
-              <div className="flex:1">
+            <div className="flex py-1 px-2">
+              <div className="flex">
                 <div className="flex-col">
-                  <div className="flex flex-row">
-                    <div className="ml-1">
+                  <div className="flex flex-col px-2 py-2 m-4 justify-items-center lg:flex-row">
+                    <div className="ml-1 mt-2">
                       <Card>
                         <Statistic
                           title="Cpu Load Average 5mins %"
@@ -170,20 +169,17 @@ const Main = () => {
                         />
                       </Card>
                     </div>
-                    <div className="ml-1">
+                    <div className="ml-1 mt-2">
                       <Card>
                         <Statistic title="Uptime" value={data.uptime} />
                       </Card>
                     </div>
-                  </div>
-                </div>
-                <div className="flex flex-row">
-                  <div className="ml-1">
+                    <div className="ml-1 mt-2">
                     <Card>
                       <Statistic title="Free Memory MB" value={data.freeMem} />
                     </Card>
                   </div>
-                  <div className="ml-1">
+                  <div className="ml-1 mt-2">
                     <Card>
                       <Statistic
                         title="Free Memory %"
@@ -191,7 +187,7 @@ const Main = () => {
                       />
                     </Card>
                   </div>
-                  <div className="ml-1">
+                  <div className="ml-1 mt-2">
                     <Card>
                       <Statistic
                         title="Total Memory MB"
@@ -199,23 +195,9 @@ const Main = () => {
                       />
                     </Card>
                   </div>
+                  </div>
                 </div>
               </div>
-              {/* <div className="flex:2 ml-5 h-2/4">
-                <div className="h-2/4">
-                  <List
-                    size="small"
-                    bordered
-                    dataSource={text.data}
-                    pagination={{
-                      defaultPageSize: 8,
-                      showSizeChanger: true,
-                      pageSizeOptions: ["15", "30", "40"],
-                    }}
-                    renderItem={(item) => <List.Item>{item}</List.Item>}
-                  />
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
