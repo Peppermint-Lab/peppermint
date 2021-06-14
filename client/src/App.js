@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
 import { HotKeys } from "react-hotkeys";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import io from "socket.io-client";
@@ -15,7 +11,6 @@ const Tickets = React.lazy(() => import("./pages/Tickets"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
 const Detail = React.lazy(() => import("./components/ticket/Detail"));
-const Admin = React.lazy(() => import("./pages/Admin"));
 const History = React.lazy(() => import("./pages/History"));
 const SideLayout = React.lazy(() =>
   import("./components/navigation/sideLayout")
@@ -25,7 +20,6 @@ const AdminMain = React.lazy(() => import("./pages/admin/Main"));
 const AdminNews = React.lazy(() => import("./pages/admin/Newsletters"));
 const AdminClient = React.lazy(() => import("./pages/admin/Client"));
 const AdminAuth = React.lazy(() => import("./pages/admin/Auth"));
-
 
 const keyMap = {
   CLOSE: ["escape"],
@@ -53,17 +47,17 @@ const Routing = () => {
               </Route>
 
               <Route>
-                <Route
-                  exact
-                  path="/tickets/:id"
-                  component={Detail}
-                />
+                <Route exact path="/tickets/:id" component={Detail} />
               </Route>
 
               <Route>
                 <Route exact path="/admin/:path?">
                   <Route exact path="/admin/dashboard" component={AdminMain} />
-                  <Route exact path="/admin/newsletters" component={AdminNews} />
+                  <Route
+                    exact
+                    path="/admin/newsletters"
+                    component={AdminNews}
+                  />
                   <Route exact path="/admin/clients" component={AdminClient} />
                   <Route exact path="/admin/internal" component={AdminAuth} />
                 </Route>
