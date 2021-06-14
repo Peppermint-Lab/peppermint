@@ -21,6 +21,11 @@ const SideLayout = React.lazy(() =>
   import("./components/navigation/sideLayout")
 );
 const CheckAuth = React.lazy(() => import("./hoc/CheckAuth"));
+const AdminMain = React.lazy(() => import("./pages/admin/Main"));
+const AdminNews = React.lazy(() => import("./pages/admin/Newsletters"));
+const AdminClient = React.lazy(() => import("./pages/admin/Client"));
+const AdminAuth = React.lazy(() => import("./pages/admin/Auth"));
+
 
 const keyMap = {
   CLOSE: ["escape"],
@@ -57,7 +62,10 @@ const Routing = () => {
 
               <Route>
                 <Route exact path="/admin/:path?">
-                  <Route exact path="/admin/dashboard" component={Admin} />
+                  <Route exact path="/admin/dashboard" component={AdminMain} />
+                  <Route exact path="/admin/newsletters" component={AdminNews} />
+                  <Route exact path="/admin/clients" component={AdminClient} />
+                  <Route exact path="/admin/internal" component={AdminAuth} />
                 </Route>
               </Route>
             </SideLayout>
