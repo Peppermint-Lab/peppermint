@@ -7,24 +7,51 @@ import {
   UsersIcon,
   XIcon,
 } from "@heroicons/react/outline";
+import { useLocation } from "react-router-dom";
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  { name: "Tickets", href: "/tickets", icon: UsersIcon, current: false },
-  { name: "History", href: "/History", icon: FolderIcon, current: false },
-  { name: "Admin", href: "/admin/dashboard", icon: FolderIcon, current: false },
-];
+import logo from "./pmint.svg";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function SideLayout({ children }) {
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || ""
   );
+
+  const navigation = [
+    {
+      name: "Dashboard",
+      href: "/",
+      icon: HomeIcon,
+      current: location.pathname === "/" ? true : false,
+    },
+    {
+      name: "Tickets",
+      href: "/tickets",
+      icon: UsersIcon,
+      current:
+        location.pathname === "/tickets" || "/tickets/:id" ? true : false,
+    },
+    {
+      name: "History",
+      href: "/History",
+      icon: FolderIcon,
+      current: location.pathname === "/history" ? true : false,
+    },
+    {
+      name: "Admin",
+      href: "/admin/dashboard",
+      icon: FolderIcon,
+      current: location.pathname === "/admin/dashboard" ? true : false,
+    },
+  ];
+
+  console.log(location.pathname);
 
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
@@ -78,11 +105,7 @@ export default function SideLayout({ children }) {
               </Transition.Child>
               <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div className="flex items-center flex-shrink-0 px-4">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                    alt="Workflow"
-                  />
+                  <img className="h-8 w-auto" src={logo} alt="Workflow" />
                 </div>
                 <nav className="mt-5 px-2 space-y-1">
                   {navigation.map((item) => (
@@ -143,12 +166,13 @@ export default function SideLayout({ children }) {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4">
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                  alt="Workflow"
-                />
+              <div className="flex flex-shrink-0 px-4 align-middle flex-row">
+                <img className="h-8 w-auto" src={logo} alt="Workflow" />
+                <a href="https://pmint.dev" target="_blank" rel="noreferrer">
+                  <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold">
+                    Peppermint
+                  </h1>
+                </a>
               </div>
               <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
                 {navigation.map((item) => (
