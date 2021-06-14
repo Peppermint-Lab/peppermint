@@ -44,7 +44,7 @@ const Routing = () => {
       <React.Suspense fallback={<Spin />}>
         <CheckAuth>
           <Switch>
-            <Route path="/login">
+            <Route exact path="/login">
               <Login />
             </Route>
 
@@ -54,19 +54,22 @@ const Routing = () => {
               </Route>
 
               <Route>
-                <Route path="/settings" component={Settings} />
-                <Route path="/tickets" component={Tickets} />
-                <Route path="/history" component={History} />
+                <Route exact path="/settings" component={Settings} />
+                <Route exact path="/tickets" component={Tickets} />
+                <Route exact path="/history" component={History} />
+              </Route>
+
+              <Route>
                 <Route
+                  exact
                   path="/tickets/:id"
-                  component={withRouter(Detail)}
-                  key={Math.random()}
+                  component={Detail}
                 />
               </Route>
 
               <Route>
-                <Route path="/admin/:path?">
-                  <Route path="/admin/dashboard" component={Admin} />
+                <Route exact path="/admin/:path?">
+                  <Route exact path="/admin/dashboard" component={Admin} />
                 </Route>
               </Route>
             </SideLayout>

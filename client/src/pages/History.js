@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Table = () => {
-
   const [tickets, setTickets] = useState([]);
 
   async function getHistory() {
@@ -25,8 +24,6 @@ const Table = () => {
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
-
-  console.log(tickets)
 
   return (
     <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 -mt-8">
@@ -113,15 +110,19 @@ const Table = () => {
                               {ticket.issue || ""}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.assignedTo ? ticket.assignedTo.firstName + (' ') + ticket.assignedTo.lastName : 'not assigned'}
+                              {ticket.assignedTo
+                                ? ticket.assignedTo.firstName +
+                                  " " +
+                                  ticket.assignedTo.lastName
+                                : "not assigned"}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {ticket.isComplete ? 'Completed' : 'Issued'}
+                              {ticket.isComplete ? "Completed" : "Issued"}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                               <Link
                                 to={{
-                                  pathname: `tickets/${ticket._id}`,
+                                  pathname: `tickets/${ticket.id}`,
                                   state: ticket,
                                 }}
                                 className="text-indigo-600 hover:text-indigo-900"
@@ -141,7 +142,7 @@ const Table = () => {
       </div>
     </div>
   );
-}
+};
 
 const Card = () => {
   const [tickets, setTickets] = useState([]);

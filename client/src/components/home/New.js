@@ -4,7 +4,11 @@ import {
   OfficeBuildingIcon,
   ArrowRightIcon,
 } from "@heroicons/react/solid";
+import { Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+
 import ListTodo from "../todos/ListTodo";
+import Files from "./Files";
 
 import { GlobalContext } from "../../Context/GlobalState";
 
@@ -50,6 +54,34 @@ const New = () => {
       });
   }
 
+  const propsUpload = {
+    name: "file",
+    action: `/api/v1/auth/uploadFile/upload`,
+    data: () => {
+      let data = new FormData();
+      data.append("file", file);
+      data.append("filename", file.name);
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    progress: {
+      strokeColor: {
+        "0%": "#108ee9",
+        "100%": "#87d068",
+      },
+      strokeWidth: 3,
+      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
+    },
+  };
+
   useEffect(() => {
     getOpenTickets();
     getCompletedTickets();
@@ -67,14 +99,14 @@ const New = () => {
                 <div className="flex items-center">
                   <span className="hidden sm:inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500">
                     <span className="text-lg font-medium leading-none text-white">
-                    {user.firstName[0] + user.lastName[0]}
+                      {user.firstName[0] + user.lastName[0]}
                     </span>
                   </span>
                   <div>
                     <div className="flex items-center">
                       <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500 sm:hidden">
                         <span className="text-lg font-medium leading-none text-white">
-                        {user.firstName[0] + user.lastName[0]}
+                          {user.firstName[0] + user.lastName[0]}
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
@@ -135,30 +167,58 @@ const New = () => {
           </dl>
         </div>
 
-        <div className="bg-white overflow-hidden shadow sm:rounded-lg mt-5 w-1/2 h-full">
-          <div className="px-2 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-4">
-            <div className="px-2 py-5 sm:p-6">
-              <div>
-                <h1 className="font-bold leading-7 text-gray-900">Todo List</h1>
-              </div>
-              <div className="flex flex-row items-center w-full">
-                <div className="mt-1 relative rounded-md shadow-sm w-full">
-                  <input
-                    type="text"
-                    name="email"
-                    id="email"
-                    className="block w-full pr-10 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
-                    placeholder="Enter todo here..."
-                    onChange={(e) => {
-                      setText(e.target.value);
-                    }}
-                  />
+        <div className="flex flex-col mt-5 lg:flex-row">
+          <div className="flex-1">
+            <div className="bg-white overflow-hidden shadow w-full h-full sm:rounded-lg">
+              <div className="px-2 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-4">
+                <div className="px-2 py-5 sm:p-6">
+                  <div>
+                    <h1 className="font-bold leading-7 text-gray-900">
+                      Todo List
+                    </h1>
+                  </div>
+                  <div className="flex flex-row items-center w-full">
+                    <div className="mt-1 relative rounded-md shadow-sm w-full">
+                      <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        className="block w-full pr-10 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
+                        placeholder="Enter todo here..."
+                        onChange={(e) => {
+                          setText(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <button onClick={() => onSubmit()}>
+                      <ArrowRightIcon className="h-6 w-6  sm:-mr-8" />
+                    </button>
+                  </div>
+                  <ListTodo />
                 </div>
-                <button onClick={() => onSubmit()}>
-                  <ArrowRightIcon className="h-6 w-6 mx-auto -mr-8" />
-                </button>
               </div>
-              <ListTodo />
+            </div>
+          </div>
+
+          <div className="flex-1 mt-2 sm:mt-2 lg:ml-3 lg:mt-0">
+            <div className="bg-white overflow-hidden shadow h-full sm:rounded-lg">
+              <div className="px-2 py-5 sm:p-6 flex flex-row">
+                <h2
+                  className="font-bold leading-7 text-gray-900"
+                  id="recent-hires-title"
+                >
+                  Personal Files
+                </h2>
+                <Upload
+                  {...propsUpload}
+                  className="px-4 flex flex-row align-middle items-center -mt-3"
+                >
+                  <button>
+                    <UploadOutlined />
+                  </button>
+                </Upload>
+              </div>
+              <Files />
             </div>
           </div>
         </div>
