@@ -71,7 +71,11 @@ const Create = () => {
   );
 
   const userSearch = users ? (
-    users.map((d) => <Option key={d.id}>{d.firstName} {d.lastName}</Option>)
+    users.map((d) => (
+      <Option key={d.id}>
+        {d.firstName} {d.lastName}
+      </Option>
+    ))
   ) : (
     <Option key="no_id">
       <p>Please refresh</p>
@@ -85,10 +89,23 @@ const Create = () => {
           <button
             onClick={() => setShow(true)}
             type="button"
-            className="flex-shrink-0 p-3 text-cyan-200 rounded-full hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white"
+            className="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
           >
-            <span className="sr-only">View notifications</span>
-            <span className="text-white">Create Ticket</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 mr-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+            <span className="">Create Ticket</span>
           </button>
         </div>
 
@@ -104,7 +121,11 @@ const Create = () => {
         >
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div
-              onClick={(e) => {e.preventDefault(); e.stopPropagation(); setShow(false)}}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShow(false);
+              }}
               className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
               aria-hidden="true"
             ></div>
@@ -211,7 +232,7 @@ const Create = () => {
               </div>
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <button
-                  onClick={async (e) => {                    
+                  onClick={async (e) => {
                     await createTicket(
                       name,
                       email,
@@ -222,7 +243,7 @@ const Create = () => {
                     );
                     e.stopPropagation();
                     form.resetFields();
-                    setShow(false);                    
+                    setShow(false);
                   }}
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"

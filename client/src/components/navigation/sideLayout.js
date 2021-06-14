@@ -10,6 +10,7 @@ import {
 import { useLocation } from "react-router-dom";
 
 import logo from "./pmint.svg";
+import Create from "../ticket/Create";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -112,6 +113,7 @@ export default function SideLayout({ children }) {
                   <img className="h-8 w-auto" src={logo} alt="Workflow" />
                 </div>
                 <nav className="mt-5 px-2 space-y-1">
+                  <Create />
                   {navigation.map((item) => (
                     <a
                       key={item.name}
@@ -201,6 +203,7 @@ export default function SideLayout({ children }) {
                 </a>
               </div>
               <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
+                <Create />
                 {navigation.map((item) => (
                   <a
                     key={item.name}
