@@ -1,18 +1,26 @@
 import React, { useState } from "react";
-import Profile from "../components/settings/Profile";
-import { Link,  } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-import Password from '../components/settings/Password'
+import Password from "../components/settings/Password";
+import Profile from "../components/settings/Profile";
 
 const linkStyles = {
-  active: "bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium",
-  inactive: "border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium",
-}
+  active:
+    "bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium",
+  inactive:
+    "border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium",
+};
 
 const Settings = () => {
+  const history = useHistory();
 
-  const [showProfile, setShowProfile ] = useState(true)
-  const [showPassword, setShowPassword] = useState(false)
+  const [showProfile, setShowProfile] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+
+  function logout() {
+    localStorage.clear();
+    history.push("/login");
+  }
 
   return (
     <div>
@@ -23,13 +31,13 @@ const Settings = () => {
               <aside className="py-6 lg:col-span-3">
                 <nav>
                   <Link
-                    onClick={
-                        () => {
-                            setShowProfile(true)
-                            setShowPassword(false)
-                        }
+                    onClick={() => {
+                      setShowProfile(true);
+                      setShowPassword(false);
+                    }}
+                    className={
+                      showProfile ? linkStyles.active : linkStyles.inactive
                     }
-                    className={showProfile ? linkStyles.active : linkStyles.inactive}
                     aria-current="page"
                   >
                     <svg
@@ -52,10 +60,12 @@ const Settings = () => {
 
                   <Link
                     onClick={() => {
-                        setShowProfile(false)
-                        setShowPassword(true)
+                      setShowProfile(false);
+                      setShowPassword(true);
                     }}
-                    className={showPassword ? linkStyles.active : linkStyles.inactive}           
+                    className={
+                      showPassword ? linkStyles.active : linkStyles.inactive
+                    }
                   >
                     <svg
                       className="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
@@ -74,19 +84,36 @@ const Settings = () => {
                     </svg>
                     <span className="truncate">Password</span>
                   </Link>
+                  <Link
+                    onClick={() => logout()}
+                    className={
+                      showPassword ? linkStyles.active : linkStyles.inactive
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span className="truncate">Log Out</span>
+                  </Link>
                 </nav>
               </aside>
-              <div
-                className="divide-y divide-gray-200 lg:col-span-9" >
-                <div
-                className={`${showProfile ? '' : 'hidden'}`}
-                >
-                 <Profile />
+              <div className="divide-y divide-gray-200 lg:col-span-9">
+                <div className={`${showProfile ? "" : "hidden"}`}>
+                  <Profile />
                 </div>
-                <div
-                className={`${showPassword ? '' : 'hidden'}`}
-                >
-                 <Password />
+                <div className={`${showPassword ? "" : "hidden"}`}>
+                  <Password />
                 </div>
               </div>
             </div>
