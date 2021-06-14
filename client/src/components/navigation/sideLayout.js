@@ -136,7 +136,7 @@ export default function SideLayout({ children }) {
                     </a>
                   ))}
                 </nav>
-                <div className="mt-8">
+                <div className={user.isAdmin ? 'mt-8' : 'hidden'}>
                   <h3
                     className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
                     id="projects-headline"
