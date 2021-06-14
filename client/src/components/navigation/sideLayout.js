@@ -35,7 +35,7 @@ export default function SideLayout({ children }) {
       href: "/tickets",
       icon: UsersIcon,
       current:
-        location.pathname === "/tickets" || "/tickets/:id" ? true : false,
+        location.pathname === "/tickets" ? true : false,
     },
     {
       name: "History",
