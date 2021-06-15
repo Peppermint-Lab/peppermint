@@ -57,7 +57,7 @@ const Table = () => {
                 if (p === "Low") {
                   badge = low;
                 }
-                if (p === "normal") {
+                if (p === "Normal") {
                   badge = normal;
                 }
                 if (p === "High") {
