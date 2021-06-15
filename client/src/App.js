@@ -25,10 +25,18 @@ const keyMap = {
   CLOSE: ["escape"],
 };
 
+const Loader = () => {
+  return (
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <Spin size="large" />
+    </div>
+  )
+}
+
 const Routing = () => {
   return (
     <Router>
-      <React.Suspense fallback={<Spin />}>
+      <React.Suspense fallback={<Loader />}>
         <CheckAuth>
           <Switch>
             <Route exact path="/login">
