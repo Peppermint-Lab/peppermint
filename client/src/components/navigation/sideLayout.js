@@ -1,9 +1,11 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
+  ArchiveIcon,
   FolderIcon,
   HomeIcon,
   MenuIcon,
+  TicketIcon,
   UsersIcon,
   XIcon,
 } from "@heroicons/react/outline";
@@ -34,29 +36,32 @@ export default function SideLayout({ children }) {
     {
       name: "Tickets",
       href: "/tickets",
-      icon: UsersIcon,
+      icon: TicketIcon,
       current: location.pathname === "/tickets" ? true : false,
     },
     {
       name: "History",
       href: "/history",
-      icon: FolderIcon,
+      icon: ArchiveIcon,
       current: location.pathname === "/history" ? true : false,
+    },
+    {
+      name: "Notebook",
+      href: "/notebook",
+      icon: FolderIcon,
+      current: location.pathname === "/notebook" ? true : false,
     },
   ];
 
   const secondaryNavigation = [
     {
-      name: "Dashboard",
-      href: "/admin/dashboard",
-      current: location.pathname === "/admin/dashboard" ? true : false,
-    },
+      name: "Dashboard", href: "/admin/dashboard" },
     { name: "Newsletters", href: "/admin/newsletters" },
     { name: "Clients", href: "/admin/clients" },
     { name: "Internal Users", href: "/admin/internal" },
   ];
 
-  console.log(location.pathname)
+  console.log(location.pathname);
 
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
@@ -138,7 +143,7 @@ export default function SideLayout({ children }) {
                     </a>
                   ))}
                 </nav>
-                <div className={user.isAdmin ? 'mt-8' : 'hidden'}>
+                <div className={user.isAdmin ? "mt-8" : "hidden"}>
                   <h3
                     className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
                     id="projects-headline"
