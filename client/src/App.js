@@ -5,6 +5,7 @@ import "antd/dist/antd.css";
 import "./App.css";
 import io from "socket.io-client";
 import { Spin } from "antd";
+import NotFound from "./pages/NotFound";
 
 const UserDash = React.lazy(() => import("./pages/UserDash"));
 const Tickets = React.lazy(() => import("./pages/Tickets"));
@@ -55,6 +56,7 @@ const Routing = () => {
                 <Route exact path="/tickets" component={Tickets} />
                 <Route exact path="/history" component={History} />
                 <Route exact path="/notebook" component={NoteBook} />
+                <Route component={NotFound} />
               </Route>
 
               <Route>
@@ -76,6 +78,9 @@ const Routing = () => {
                   <Route exact path="/admin/internal" component={AdminAuth} />
                 </Route>
               </Route>
+
+
+
             </SideLayout>
           </Switch>
         </CheckAuth>
