@@ -12,6 +12,7 @@ const initialState = {
   clients: [],
   user: [],
   users: [],
+  history: [],
 };
 
 // Create context
@@ -198,7 +199,7 @@ export const GlobalProvider = ({ children }) => {
           company,
           issue,
           priority,
-          engineer
+          engineer,
         }),
       }).then((res) => res.json());
       if (res.failed === true) {
@@ -396,11 +397,32 @@ export const GlobalProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-      console.log(res)
       dispatch({ type: "GET_USERS", payload: res.users });
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async function getHistory() {
+    const res = await fetch(`/api/v1/tickets/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+    console.log(res)
+    dispatch({ type: "GET_HISTORY", payload: res.tickets });
+  }
+
+  async function filter(id) {
+    const res = await fetch(`/api/v1/tickets/filter/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+    console.log(res);
+    dispatch({ type: "FILTER_HISTORY", payload: res.ticket });
   }
 
   return (
@@ -417,6 +439,7 @@ export const GlobalProvider = ({ children }) => {
         openTicket: state.openTicket,
         newsletters: state.newsletters,
         clients: state.clients,
+        history: state.history,
         getTodos,
         addTodo,
         deleteTodo,
@@ -441,6 +464,8 @@ export const GlobalProvider = ({ children }) => {
         createUser,
         getUsers,
         unCompleteTicket,
+        getHistory,
+        filter,
       }}
     >
       {children}

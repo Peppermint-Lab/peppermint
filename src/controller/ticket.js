@@ -364,3 +364,28 @@ exports.downloadFile = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.searchByID = async (req, res) => {
+  try {
+    await prisma.ticket
+      .findUnique({
+        where: {
+          id: Number(req.params.id),
+        },
+        include: {
+          client: {
+            select: { id: true, name: true, number: true },
+          },
+          assignedTo: {
+            select: { id: true, firstName: true, lastName: true },
+          },
+        },
+      })
+      .then((ticket) => {
+        res.status(200).json({sucess: true, ticket});
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+};

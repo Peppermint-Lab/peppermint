@@ -126,12 +126,15 @@ const Card = () => {
             if (p === "Low") {
               badge = low;
             }
-            if (p === "normal") {
+            if (p === "Normal") {
               badge = normal;
             }
             if (p === "High") {
               badge = high;
             }
+
+
+            console.table(ticket)
 
             return (
               <div className="flex justify-start" key={ticket.id}>
@@ -144,7 +147,7 @@ const Card = () => {
                       <p className=" px-2">Client: {ticket.client.name}</p>
                     </div>
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 m-1 rounded-full text-xs font-medium ${badge}`}
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
                     >
                       {ticket.priority}
                     </span>

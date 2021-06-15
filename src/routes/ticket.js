@@ -19,6 +19,7 @@ const {
   downloadFile,
   getTicketById,
   unComplete,
+  searchByID
 } = require("../controller/ticket");
 
 router.route("/getTicketById/:id").get(isAuth, getTicketById);
@@ -50,5 +51,7 @@ router.route("/file/listFiles/:id").get(isAuth, listFile);
 router.route("/file/del").post(isAuth, deleteFile);
 
 router.route("/file/download").post(isAuth, downloadFile);
+
+router.route("/filter/:id").get(isAuth, searchByID);
 
 module.exports = router;

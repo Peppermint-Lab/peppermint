@@ -1,24 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
-const Table = () => {
-  const [tickets, setTickets] = useState([]);
+import { GlobalContext } from "../Context/GlobalState";
 
-  async function getHistory() {
-    await fetch(`/api/v1/tickets/all`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setTickets(res.tickets);
-      });
-  }
+const Table = () => {
+
+  const { history, getHistory, filter } = useContext(GlobalContext);
+
+  // eslint-disable-next-line no-unused-vars
+  const [id, setId] = useState();
 
   useEffect(() => {
     getHistory();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const high = "bg-red-100 text-red-800";
@@ -27,6 +21,39 @@ const Table = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10">
+      <div className="flex flex-row">
+        <div className="w-44 mr-4">
+          <input
+            onChange={(e) => setId(e.target.value)}
+            type="number"
+            name="ticketid"
+            id="ticketid"
+            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+            placeholder="Search by Ticket ID"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            filter(id);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </button>
+      </div>
       <div className="flex flex-col">
         <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -34,6 +61,12 @@ const Table = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Id
+                    </th>
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -76,15 +109,15 @@ const Table = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tickets
-                    ? tickets.map((ticket) => {
+                  {history
+                    ? history.map((ticket) => {
                         let p = ticket.priority;
                         let badge;
 
                         if (p === "Low") {
                           badge = low;
                         }
-                        if (p === "normal") {
+                        if (p === "Normal") {
                           badge = normal;
                         }
                         if (p === "High") {
@@ -92,22 +125,25 @@ const Table = () => {
                         }
 
                         return (
-                          <tr className="bg-white">
+                          <tr className="bg-white" key={ticket.id}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {ticket.name || ""}
+                              {ticket.id}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                              {ticket.name}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.client.name || ""}
+                              {ticket.client.name}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                               <span
                                 className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
                               >
-                                {ticket.priority || ""}
+                                {ticket.priority}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.issue || ""}
+                              {ticket.issue}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                               {ticket.assignedTo
@@ -187,11 +223,11 @@ const Card = () => {
             }
 
             return (
-              <div className="flex justify-start">
-                <div class="w-full mb-2 border">
-                  <div class="px-4 py-4">
+              <div className="flex justify-start" key={ticket.id}>
+                <div className="w-full mb-2 border">
+                  <div className="px-4 py-4">
                     <div>
-                      <h1 class="font-semibold leading-tight text-2xl text-gray-800 hover:text-gray-800 ml-1">
+                      <h1 className="font-semibold leading-tight text-2xl text-gray-800 hover:text-gray-800 ml-1">
                         {ticket.name}
                       </h1>
                       <p className=" px-2">Client: {ticket.client.name}</p>
@@ -201,14 +237,14 @@ const Card = () => {
                     >
                       {ticket.priority}
                     </span>
-                    <p class="text-gray-900 m-2">{ticket.issue}</p>
-                    <div class="text-gray-700 text-sm font-bold p-2 m-2">
+                    <p className="text-gray-900 m-2">{ticket.issue}</p>
+                    <div className="text-gray-700 text-sm font-bold p-2 m-2">
                       <Link
                         to={{
                           pathname: `tickets/${ticket._id}`,
                           state: ticket,
                         }}
-                        class="float-right"
+                        className="float-right"
                       >
                         View Full Ticket
                       </Link>
@@ -227,8 +263,10 @@ const Card = () => {
 const History = () => {
   return (
     <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 flex flex-col">
-      <div className="max-w-7xl sm:px-6 md:px-8 ml-2">
-        <h1 className="text-2xl font-semibold text-gray-900">History</h1>
+      <div className="sm:px-6 md:px-8 ml-2">
+        <div className="flex flex-row">
+          <h1 className="text-2xl font-semibold text-gray-900 mr-4">History</h1>
+        </div>
       </div>
       <div className="hidden sm:block">
         <Table />
