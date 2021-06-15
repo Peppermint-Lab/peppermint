@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button, Divider } from "antd";
+import { Divider } from "antd";
 import { HotKeys } from "react-hotkeys";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 const ViewNote = (props) => {
   const [show, setShow] = useState(false);
@@ -11,19 +11,25 @@ const ViewNote = (props) => {
   };
 
   const createMarkup = (html) => {
-    return  {
-      __html: DOMPurify.sanitize(html)
-    }
-  }
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
 
   return (
     <div>
       <HotKeys handlers={handlers}>
-        <div className="ml-10">
-          <Button size="xs" style={{ marginRight: 10}} onClick={() => setShow(!show)}>View</Button>
+        <div className="mr-2">
+          <button
+            onClick={() => setShow(!show)}
+            type="button"
+            className="px-3 py-1 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            View
+          </button>
         </div>
         <div
-          className={`${show  ? "fixed z-10 inset-0  w-full" : "hidden"}`}
+          className={`${show ? "fixed z-10 inset-0  w-full" : "hidden"}`}
           aria-labelledby="dialog-1-title"
           role="dialog"
           aria-modal="true"
@@ -46,17 +52,19 @@ const ViewNote = (props) => {
                 <h1>{props.note.title}</h1>
               </div>
               <Divider />
-            <div className="preview" dangerouslySetInnerHTML={createMarkup(props.note.note)}></div>
-            <button
-                  onClick={() => {
-                    setShow(false);
-
-                  }}
-                  type="button"
-                  className="flex justify-center w-1/4 rounded-md border border-transparent shadow-sm px-4 py-2 mx-auto bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                >
-                  Go back to dashboard
-                </button>
+              <div
+                className="preview"
+                dangerouslySetInnerHTML={createMarkup(props.note.note)}
+              ></div>
+              <button
+                onClick={() => {
+                  setShow(false);
+                }}
+                type="button"
+                className="flex justify-center w-1/4 rounded-md border border-transparent shadow-sm px-4 py-2 mx-auto bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+              >
+                Go back to dashboard
+              </button>
             </div>
           </div>
         </div>
