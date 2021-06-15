@@ -73,7 +73,7 @@ const Create = () => {
   const userSearch = users ? (
     users.map((d) => (
       <Option key={d.id}>
-        {d.firstName} {d.lastName}
+        {d.firstName + " " + d.lastName}
       </Option>
     ))
   ) : (
@@ -173,6 +173,7 @@ const Create = () => {
                     </Form.Item>
                     <Form.Item name="Client">
                       <Select
+                        bordered={false}
                         showSearch
                         placeholder="Select a client"
                         optionFilterProp="children"
@@ -187,11 +188,12 @@ const Create = () => {
                       </Select>
                     </Form.Item>
                     <Form.Item name="Eningeer">
-                      <Select
+                    <Select
+                        bordered={false}
                         showSearch
-                        placeholder="Select a engineer"
+                        placeholder="Select a Engineer"
                         optionFilterProp="children"
-                        onChange={setEngineer}
+                        onChange={setCompany}
                         filterOption={(input, option) =>
                           option.children
                             .toLowerCase()
