@@ -40,7 +40,7 @@ const Create = () => {
 
   async function getUsers() {
     try {
-      const res = await fetch(`/api/v1/auth/getAllUsers`, {
+      await fetch(`/api/v1/auth/getAllUsers`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -193,7 +193,7 @@ const Create = () => {
                         showSearch
                         placeholder="Select a Engineer"
                         optionFilterProp="children"
-                        onChange={setCompany}
+                        onChange={setEngineer}
                         filterOption={(input, option) =>
                           option.children
                             .toLowerCase()
@@ -234,8 +234,8 @@ const Create = () => {
               </div>
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <button
-                  onClick={async (e) => {
-                    await createTicket(
+                  onClick={() => {
+                    createTicket(
                       name,
                       email,
                       company,
@@ -243,7 +243,6 @@ const Create = () => {
                       priority,
                       engineer
                     );
-                    e.stopPropagation();
                     form.resetFields();
                     setShow(false);
                   }}

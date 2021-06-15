@@ -24,7 +24,7 @@ const NoteBook = () => {
 
         <main>
           {notes.length === 0 ? (
-            <p>You have no notes :(</p>
+            <p className="mt-4">You have no notes :(</p>
           ) : (
             <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
               {notes.map((item) => (

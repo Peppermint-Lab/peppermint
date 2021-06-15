@@ -91,7 +91,6 @@ exports.completedTickets = async (req, res) => {
 
 // Create a new ticket
 exports.createTicket = async (req, res) => {
-  console.log(req.body);
   try {
     const { name, company, issue, priority, email, engineer } = req.body;
     if (!name || !company || !issue || !priority) {
@@ -99,7 +98,6 @@ exports.createTicket = async (req, res) => {
         .status(422)
         .json({ error: "Please add all the fields", failed: true });
     }
-
     await prisma.ticket
       .create({
         data: {
@@ -382,7 +380,7 @@ exports.searchByID = async (req, res) => {
         },
       })
       .then((ticket) => {
-        res.status(200).json({sucess: true, ticket});
+        res.status(200).json({ sucess: true, ticket });
       });
   } catch (error) {
     console.log(error);
