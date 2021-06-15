@@ -151,7 +151,6 @@ export const GlobalProvider = ({ children }) => {
       await fetch(`/api/v1/note/deleteNote/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           "Content-Type": "application/json",
           Accept: "application/json",
         },

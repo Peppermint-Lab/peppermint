@@ -40,6 +40,7 @@ const NoteBook = () => {
                   <div className="flex flex-row mt-2">
                     <ViewNote note={item} />
                     <button
+                      onClick={() => deleteNote(item.id)}
                       type="button"
                       className="px-3 py-1 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400"
                     >
