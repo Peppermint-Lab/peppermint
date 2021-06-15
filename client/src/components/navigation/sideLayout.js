@@ -61,8 +61,6 @@ export default function SideLayout({ children }) {
     { name: "Internal Users", href: "/admin/internal" },
   ];
 
-  console.log(location.pathname);
-
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
       <Transition.Root show={sidebarOpen} as={Fragment}>
