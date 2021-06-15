@@ -5,7 +5,8 @@ import "antd/dist/antd.css";
 import "./App.css";
 import io from "socket.io-client";
 import { Spin } from "antd";
-import NotFound from "./pages/NotFound";
+
+import error from "./assets/404.svg";
 
 const UserDash = React.lazy(() => import("./pages/UserDash"));
 const Tickets = React.lazy(() => import("./pages/Tickets"));
@@ -33,8 +34,16 @@ const Loader = () => {
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <Spin size="large" />
     </div>
-  )
-}
+  );
+};
+
+const NotFound = () => {
+  return (
+    <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+      <img src={error} className="h-1/2 w-1/2" alt="404" />
+    </div>
+  );
+};
 
 const Routing = () => {
   return (
@@ -42,45 +51,21 @@ const Routing = () => {
       <React.Suspense fallback={<Loader />}>
         <CheckAuth>
           <Switch>
-            <Route exact path="/login">
-              <Login />
-            </Route>
+            <Route exact path="/login" component={Login} />
 
             <SideLayout>
-              <Route exact path="/">
-                <UserDash />
+              <Route exact path="/" component={UserDash} />
+              <Route exact path="/settings" component={Settings} />
+              <Route exact path="/tickets" component={Tickets} />
+              <Route exact path="/history" component={History} />
+              <Route exact path="/notebook" component={NoteBook} />
+              <Route exact path="/tickets/:id" component={Detail} />
+              <Route exact path="/admin/:path?">
+                <Route exact path="/admin/dashboard" component={AdminMain} />
+                <Route exact path="/admin/newsletters" component={AdminNews} />
+                <Route exact path="/admin/clients" component={AdminClient} />
+                <Route exact path="/admin/internal" component={AdminAuth} />
               </Route>
-
-              <Route>
-                <Route exact path="/settings" component={Settings} />
-                <Route exact path="/tickets" component={Tickets} />
-                <Route exact path="/history" component={History} />
-                <Route exact path="/notebook" component={NoteBook} />
-                <Route component={NotFound} />
-              </Route>
-
-              <Route>
-                <Route exact path="/tickets/:id" component={Detail} />
-              </Route>
-              <Route>
-                <Route exact path="/notebook/:id" component={Detail} />
-              </Route>
-
-              <Route>
-                <Route exact path="/admin/:path?">
-                  <Route exact path="/admin/dashboard" component={AdminMain} />
-                  <Route
-                    exact
-                    path="/admin/newsletters"
-                    component={AdminNews}
-                  />
-                  <Route exact path="/admin/clients" component={AdminClient} />
-                  <Route exact path="/admin/internal" component={AdminAuth} />
-                </Route>
-              </Route>
-
-
-
             </SideLayout>
           </Switch>
         </CheckAuth>

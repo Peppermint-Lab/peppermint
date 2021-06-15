@@ -14,7 +14,7 @@ import Files from "../components/home/Files";
 import { GlobalContext } from "../Context/GlobalState";
 
 const UserDash = () => {
-  const { addTodo } = useContext(GlobalContext);
+  const { addTodo, todos } = useContext(GlobalContext);
 
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || ""
@@ -88,6 +88,12 @@ const UserDash = () => {
     getCompletedTickets();
   }, []);
 
+  const stats = [
+    { name: "Open Tickets", stat: openTickets },
+    { name: "Completed Tickets", stat: completedTickets },
+    { name: "Todos Outstanding", stat: todos.length },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="p-1">
@@ -141,30 +147,19 @@ const UserDash = () => {
 
         <div>
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            <div className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
-              <dt className="text-sm font-medium text-gray-500 truncate">
-                Open Tickets
-              </dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                {openTickets}
-              </dd>
-            </div>
-            <div className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
-              <dt className="text-sm font-medium text-gray-500 truncate">
-                Completed Tickets
-              </dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                {completedTickets}
-              </dd>
-            </div>
-            <div className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
-              <dt className="text-sm font-medium text-gray-500 truncate">
-                Third Option
-              </dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                null
-              </dd>
-            </div>
+            {stats.map((item) => (
+              <div
+                key={item.name}
+                className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+              >
+                <dt className="text-sm font-medium text-gray-500 truncate">
+                  {item.name}
+                </dt>
+                <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                  {item.stat}
+                </dd>
+              </div>
+            ))}
           </dl>
         </div>
 
