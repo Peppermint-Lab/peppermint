@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from "react";
+import moment from "moment";
 
 import { GlobalContext } from "../Context/GlobalState";
 
@@ -35,7 +36,7 @@ const NoteBook = () => {
                     {item.title}
                   </dt>
                   <dd className="mt-1 text-sm font-semibold text-gray-900">
-                    Created at: {item.createdAt}
+                  <span>Created On {moment(item.updatedAt).format("DD/MM/YYYY")}</span>
                   </dd>
                   <div className="flex flex-row mt-2">
                     <ViewNote note={item} />

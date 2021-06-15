@@ -357,7 +357,7 @@ const Detail = (props) => {
                 </svg>
                 <span className="text-gray-900 text-sm font-medium">
                   Last updated{" "}
-                  <spa>{moment(ticket.updatedAt).format("DD/MM/YYYY")}</spa>
+                  <span>{moment(ticket.updatedAt).format("DD/MM/YYYY")}</span>
                 </span>
               </div>
             </div>
