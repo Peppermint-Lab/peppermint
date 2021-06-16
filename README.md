@@ -58,6 +58,12 @@ services:
 
 ```
 
+### Setting up postgres on Macos in a container for local development
+
+```
+docker run --rm -P -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD="1234" --name pg postgres:alpine
+```
+
 ## One click installers
 
 - We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>

@@ -90,7 +90,7 @@ const ListTodo = () => {
         <p>None Found</p>
       )}
       <Pagination
-                className={todos.length > 7 ? "" : "hidden"}
+                className={todos.length > 7 ? "mt-2" : "hidden"}
                 defaultCurrent={1}
                 total={12}
                 onChange={handleChange}

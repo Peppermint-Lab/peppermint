@@ -70,7 +70,7 @@ const NoteBook = () => {
             </dl>
           )}
           <Pagination
-                className={notes.length > 12 ? "" : "hidden"}
+                className={notes.length > 12 ? "mt-2" : "hidden"}
                 defaultCurrent={1}
                 total={12}
                 onChange={handleChange}

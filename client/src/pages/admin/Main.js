@@ -125,7 +125,7 @@ const Main = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="py-4">
               <div className="flex flex-col px-2 py-2 m-4 justify-items-center lg:flex-row">
-                <div className="ml-1 mt-1">
+                <div className="ml-1 mt-2">
                   <Card>
                     <Statistic title="Closed Tickets" value={complete} />
                   </Card>

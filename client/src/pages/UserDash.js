@@ -171,9 +171,9 @@ const UserDash = () => {
           </dl>
         </div>
 
-        <div className="flex flex-col mt-5 lg:flex-row">
+        <div className="flex flex-col mt-5 2xl:flex-row">
           <div className="flex-1">
-            <div className="bg-white overflow-hidden shadow w-full h-full sm:rounded-lg">
+            <div className="bg-white shadow w-full h-full sm:rounded-lg">
               <div className="px-2 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-4">
                 <div className="px-2 py-5 sm:p-6">
                   <div>
@@ -208,7 +208,7 @@ const UserDash = () => {
             </div>
           </div>
 
-          <div className="flex-1 mt-2 sm:mt-2 lg:ml-3 lg:mt-0">
+          <div className="flex-1 mt-2 sm:mt-2 2lg:mt-4, w-full">
             <div className="bg-white overflow-hidden shadow h-full sm:rounded-lg">
               <div className="px-2 py-5 sm:p-6 flex flex-row">
                 <h2

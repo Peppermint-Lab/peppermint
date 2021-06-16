@@ -14,7 +14,6 @@ const Login = () => {
 
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,6 +24,7 @@ const Login = () => {
       duration: 3,
     };
     await notification.open(args);
+    setToggle(false);
   };
 
   async function signin() {
@@ -50,7 +50,6 @@ const Login = () => {
             }, 1000);
           } else {
             await setError(data.error)
-            // setLoading(false)
             await errorNotification();
 
           }
@@ -125,7 +124,7 @@ const Login = () => {
                 <div>
                   <button
                     onClick={() => {
-                      setLoading(true);
+                      setToggle(true);
                       signin();
                     }}
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
