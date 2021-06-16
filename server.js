@@ -113,7 +113,7 @@ function stats() {
     cpuUse = v
   });
   let loadAverage = osutils.loadavg(5).toFixed(2);
-  let totalMem = osutils.totalmem();
+  let totalMem = osutils.totalmem().toFixed(2);
   let freeMem = osutils.freemem().toFixed(2);
   let freeMemPercentage = osutils.freememPercentage().toFixed(2);
   let uptime = new Date(os.uptime() * 1000).toISOString().substr(11, 8)
