@@ -93,6 +93,7 @@ const UserDash = () => {
   useEffect(() => {
     getOpenTickets();
     getCompletedTickets();
+    time()
   }, []);
 
   const stats = [
