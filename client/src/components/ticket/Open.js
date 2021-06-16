@@ -24,6 +24,12 @@ const Table = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  ID
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Name
                 </th>
                 <th
@@ -66,6 +72,9 @@ const Table = () => {
 
                 return (
                   <tr className="bg-white" key={ticket.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {ticket.id}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {ticket.name}
                     </td>
@@ -133,8 +142,7 @@ const Card = () => {
               badge = high;
             }
 
-
-            console.table(ticket)
+            console.table(ticket);
 
             return (
               <div className="flex justify-start" key={ticket.id}>
