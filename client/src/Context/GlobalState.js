@@ -422,7 +422,11 @@ export const GlobalProvider = ({ children }) => {
       },
     }).then((res) => res.json());
     console.log(res);
-    dispatch({ type: "FILTER_HISTORY", payload: res.ticket });
+    if(res.success === false ) {
+      return null
+    } else {
+      dispatch({ type: "FILTER_HISTORY", payload: res.ticket });
+    }
   }
 
   return (

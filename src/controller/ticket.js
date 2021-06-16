@@ -2,6 +2,17 @@
 const { prisma } = require("../../prisma/prisma");
 const fs = require("fs");
 
+const doesTicketExist = async (id) => {
+  const exists = await prisma.ticket
+    .findUnique({
+      where: {
+        id: Number(id),
+      },
+    })
+    .then(Boolean);
+  return exists;
+};
+
 // Get by ID
 exports.getTicketById = async (req, res) => {
   try {
@@ -365,7 +376,9 @@ exports.downloadFile = async (req, res) => {
 
 exports.searchByID = async (req, res) => {
   try {
-    await prisma.ticket
+    const ticket = await doesTicketExist(Number(req.params.id));
+    if(ticket === true) {
+      await prisma.ticket
       .findUnique({
         where: {
           id: Number(req.params.id),
@@ -382,8 +395,11 @@ exports.searchByID = async (req, res) => {
       .then((ticket) => {
         res.status(200).json({ sucess: true, ticket });
       });
+    } else {
+      res.status(500).json({ success: false, message: 'Ticket does not exist' });
+    }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error });
+    res.status(500).json({ success: false, error });
   }
 };
