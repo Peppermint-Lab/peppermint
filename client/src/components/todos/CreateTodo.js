@@ -34,7 +34,7 @@ const CreateTodo = () => {
             setText(e.target.value);
           }}
         />
-        <Button onClick={onSubmit} ghost className="mx-1">
+        <Button onClick={onSubmit} ghost className="">
           <EditTwoTone />
         </Button>
       </div>

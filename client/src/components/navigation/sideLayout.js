@@ -55,7 +55,6 @@ export default function SideLayout({ children }) {
   const secondaryNavigation = [
     {
       name: "Dashboard", href: "/admin/dashboard" },
-    { name: "Newsletters", href: "/admin/newsletters" },
     { name: "Clients", href: "/admin/clients" },
     { name: "Internal Users", href: "/admin/internal" },
   ];

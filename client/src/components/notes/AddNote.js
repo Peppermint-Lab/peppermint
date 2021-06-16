@@ -50,11 +50,13 @@ const AddNote = () => {
                 <div>
                   <header className="App-header">Create new Note</header>
                   <Input
+                    required
                     style={{ marginBottom: 5 }}
                     placeholder="Enter a title here.."
                     onChange={(e) => setTitle(e.target.value)}
                   />
                   <Input.TextArea
+                    required
                     rows={15}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Enter a text here.."

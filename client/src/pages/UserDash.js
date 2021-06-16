@@ -22,12 +22,19 @@ const UserDash = () => {
   const [openTickets, setOpenTickets] = useState();
   const [completedTickets, setCompletedTickets] = useState();
   const [file, setFile] = useState([]);
+  const [hour, setHour] = useState('');
 
   const [text, setText] = useState("");
 
   const onSubmit = () => {
     addTodo(text);
   };
+
+  async function time() {
+    const date = new Date();
+    const hour = date.getHours()
+    setHour(hour)
+  }
 
   async function getOpenTickets() {
     await fetch(`/api/v1/data/openTickets`, {
@@ -117,7 +124,7 @@ const UserDash = () => {
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        Good morning, {user.firstName + " " + user.lastName}
+                        Good {hour < 12 ? 'Morning' : 'Afternoon'}, {user.firstName + " " + user.lastName}
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -179,15 +186,19 @@ const UserDash = () => {
                         type="text"
                         name="email"
                         id="email"
-                        className="block w-full pr-10 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
+                        className="w-full text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
                         placeholder="Enter todo here..."
                         onChange={(e) => {
                           setText(e.target.value);
                         }}
                       />
                     </div>
-                    <button onClick={() => onSubmit()}>
-                      <ArrowRightIcon className="h-6 w-6  sm:-mr-8" />
+                    <button
+                      type="button"
+                      onClick={() => onSubmit()}
+                      className="sm:-mr-10"
+                    >
+                      <ArrowRightIcon className="h-6 w-6" />
                     </button>
                   </div>
                   <ListTodo />
