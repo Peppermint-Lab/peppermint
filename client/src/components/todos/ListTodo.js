@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from "react";
-import { Divider, Button, Tooltip } from "antd";
+import React, { useEffect, useContext, useState } from "react";
+import { Divider, Button, Tooltip, Pagination } from "antd";
 import {
   CheckCircleTwoTone,
   DeleteTwoTone,
@@ -23,6 +23,19 @@ const ListTodo = () => {
     // eslint-disable-next-line
   }, []);
 
+  const [minValue, setMinValue] = useState(0)
+  const [maxValue, setMaxValue] = useState(7)
+
+  function handleChange(value) {
+    if(value <= 1) {
+      setMinValue(0)
+      setMaxValue(7)
+    } else {
+      setMinValue(maxValue)
+      setMaxValue(value * 7)
+    }
+  }
+
   return (
     <div>
       <div className={!todos.length ? "hidden" : ""}>
@@ -32,7 +45,7 @@ const ListTodo = () => {
       </div>
       <Divider orientation="left" className="w-full"></Divider>
       {todos ? (
-        todos.map((todo) => {
+        todos.slice(minValue, maxValue).map((todo) => {
           return (
             <div className="flex flex-col mx-auto px-1" key={todo.id}>
               <ul>
@@ -76,6 +89,12 @@ const ListTodo = () => {
       ) : (
         <p>None Found</p>
       )}
+      <Pagination
+                className={todos.length > 7 ? "" : "hidden"}
+                defaultCurrent={1}
+                total={12}
+                onChange={handleChange}
+              />
     </div>
   );
 };

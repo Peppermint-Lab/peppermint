@@ -98,7 +98,7 @@ const UserDash = () => {
   const stats = [
     { name: "Open Tickets", stat: openTickets },
     { name: "Completed Tickets", stat: completedTickets },
-    { name: "Todos Outstanding", stat: todos.length },
+    { name: "Total Todos", stat: todos.length },
   ];
 
   return (
