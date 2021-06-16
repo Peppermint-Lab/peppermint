@@ -1,0 +1,59 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "proxy": "http://localhost:5000",
+  "dependencies": {
+    "@craco/craco": "^6.1.1",
+    "@headlessui/react": "^1.2.0",
+    "@heroicons/react": "^1.0.1",
+    "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/line-clamp": "^0.2.0",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.8.3",
+    "antd": "^4.14.1",
+    "axios": "^0.21.1",
+    "craco-antd": "^1.19.0",
+    "dompurify": "^2.2.7",
+    "js-file-download": "^0.4.12",
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-draft-wysiwyg": "^1.14.5",
+    "react-hotkeys": "^2.0.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.0"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.4",
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.35",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.4"
+  }
+}

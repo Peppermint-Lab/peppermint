@@ -1,0 +1,29 @@
+# Use root/example as user/password credentials
+version: "3.1"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    volumes:
+      - ./docker-data/db:/data/db
+    environment: 
+      POSTGRES_USER: peppermint
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: peppermint
+
+  client:
+    container_name: peppermint
+    image: pepperlabs/peppermint:dev
+    ports:
+      - 5000:5000
+    restart: on-failure
+    depends_on:
+      - postgres
+    environment:
+      JWT_SECRET: 'ZwfJtS3muY65CaeZ' 
+      PORT: 5000
+      DB_USERNAME: peppermint
+      DB_PASSWORD: 1234
+      DB_HOST: 'postgres'

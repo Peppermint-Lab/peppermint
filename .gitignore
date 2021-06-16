@@ -1,0 +1,10 @@
+node_modules
+docker-data/db
+client/.eslintcache
+docker
+todo.txt
+client/.eslintcache
+binaries
+api.txt
+files
+.env
