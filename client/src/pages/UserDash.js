@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/solid";
 import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 import ListTodo from "../components/todos/ListTodo";
 import Files from "../components/home/Files";
@@ -22,7 +23,7 @@ const UserDash = () => {
   const [openTickets, setOpenTickets] = useState();
   const [completedTickets, setCompletedTickets] = useState();
   const [file, setFile] = useState([]);
-  const [hour, setHour] = useState('');
+  const [hour, setHour] = useState("");
 
   const [text, setText] = useState("");
 
@@ -32,8 +33,8 @@ const UserDash = () => {
 
   async function time() {
     const date = new Date();
-    const hour = date.getHours()
-    setHour(hour)
+    const hour = date.getHours();
+    setHour(hour);
   }
 
   async function getOpenTickets() {
@@ -93,12 +94,12 @@ const UserDash = () => {
   useEffect(() => {
     getOpenTickets();
     getCompletedTickets();
-    time()
+    time();
   }, []);
 
   const stats = [
-    { name: "Open Tickets", stat: openTickets },
-    { name: "Completed Tickets", stat: completedTickets },
+    { name: "Open Tickets", stat: openTickets, href: "/tickets" },
+    { name: "Completed Tickets", stat: completedTickets, href: "/history" },
     { name: "Total Todos", stat: todos.length },
   ];
 
@@ -125,7 +126,8 @@ const UserDash = () => {
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        Good {hour < 12 ? 'Morning' : 'Afternoon'}, {user.firstName + " " + user.lastName}
+                        Good {hour < 12 ? "Morning" : "Afternoon"},{" "}
+                        {user.firstName + " " + user.lastName}
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -208,7 +210,7 @@ const UserDash = () => {
             </div>
           </div>
 
-          <div className="flex-1 mt-2 sm:mt-2 2lg:mt-4, w-full">
+          <div className="flex-1 sm:mt-4 w-full 2xl:ml-2 2xl:mt-0">
             <div className="bg-white overflow-hidden shadow h-full sm:rounded-lg">
               <div className="px-2 py-5 sm:p-6 flex flex-row">
                 <h2

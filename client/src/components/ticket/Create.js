@@ -89,11 +89,11 @@ const Create = () => {
           <button
             onClick={() => setShow(true)}
             type="button"
-            className="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+            className="group flex items-center px-2 py-2 text-sm font-medium w-full rounded-md hover:bg-green-400 hover:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-3"
+              className="h-6 w-6 mr-3 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -105,7 +105,7 @@ const Create = () => {
                 d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
               />
             </svg>
-            <span className="">Create Ticket</span>
+            <span className="text-white ">Create Ticket</span>
           </button>
         </div>
 

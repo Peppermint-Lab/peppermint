@@ -54,7 +54,9 @@ export default function SideLayout({ children }) {
 
   const secondaryNavigation = [
     {
-      name: "Dashboard", href: "/admin/dashboard" },
+      name: "Dashboard",
+      href: "/admin/dashboard",
+    },
     { name: "Clients", href: "/admin/clients" },
     { name: "Internal Users", href: "/admin/internal" },
   ];
@@ -193,17 +195,17 @@ export default function SideLayout({ children }) {
       <div className="hidden md:flex md:flex-shrink-0">
         <div className="flex flex-col w-64">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
+          <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-gray-900">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex flex-shrink-0 px-4 align-middle flex-row">
                 <img className="h-8 w-auto" src={logo} alt="Workflow" />
                 <a href="https://pmint.dev" target="_blank" rel="noreferrer">
-                  <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold">
+                  <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
                     Peppermint
                   </h1>
                 </a>
               </div>
-              <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
+              <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
                 <Create />
                 {navigation.map((item) => (
                   <a
@@ -211,17 +213,14 @@ export default function SideLayout({ children }) {
                     href={item.href}
                     className={classNames(
                       item.current
-                        ? "bg-gray-100 text-gray-900"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                        ? "bg-green-500 text-white"
+                        : "text-white hover:bg-green-400 hover:text-white",
                       "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        item.current
-                          ? "text-gray-500"
-                          : "text-gray-400 group-hover:text-gray-500",
-                        "mr-3 flex-shrink-0 h-6 w-6"
+                        "text-white mr-3 flex-shrink-0 h-6 w-6"
                       )}
                       aria-hidden="true"
                     />
@@ -231,7 +230,7 @@ export default function SideLayout({ children }) {
               </nav>
               <div className="mt-8">
                 <h3
-                  className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                  className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
                   id="projects-headline"
                 >
                   Admin
@@ -244,7 +243,7 @@ export default function SideLayout({ children }) {
                     <a
                       key={item.name}
                       href={item.href}
-                      className="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
+                      className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white"
                     >
                       <span className="truncate">{item.name}</span>
                     </a>
@@ -252,7 +251,7 @@ export default function SideLayout({ children }) {
                 </div>
               </div>
             </div>
-            <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+            <div className="flex-shrink-0 flex border-t border-gray-900 p-4">
               <a href="/settings" className="flex-shrink-0 w-full group block">
                 <div className="flex items-center">
                   <div>
@@ -263,10 +262,10 @@ export default function SideLayout({ children }) {
                     </span>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                    <p className="text-sm font-medium text-white group-hover:text-green-400">
                       {user.firstName + " " + user.lastName}
                     </p>
-                    <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                    <p className="text-xs font-medium text-white group-hover:text-green-400">
                       View profile
                     </p>
                   </div>
