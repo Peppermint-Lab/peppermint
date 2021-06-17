@@ -6,8 +6,10 @@ import {
   EyeInvisibleOutlined,
   EyeTwoTone,
 } from "@ant-design/icons";
+import isEmail from 'validator/es/lib/isEmail';
 
 import logo from "./logo.png";
+
 
 const Login = () => {
   const history = useHistory();
@@ -51,7 +53,6 @@ const Login = () => {
           } else {
             await setError(data.error)
             await errorNotification();
-
           }
         });
     } catch (error) {
@@ -123,9 +124,16 @@ const Login = () => {
 
                 <div>
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       setToggle(true);
-                      signin();
+                      if(isEmail(email)) {
+                        signin()
+                      } else {
+                        setError('Invalid Email')
+                        await setTimeout(() => {
+                          errorNotification()
+                        }, 1000)
+                      }
                     }}
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
