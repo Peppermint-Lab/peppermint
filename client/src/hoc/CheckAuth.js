@@ -7,9 +7,7 @@ const CheckAuth = ({ children }) => {
   useEffect(() => {
     if (localStorage.getItem("user") === null) {
       history.push("/login");
-    } else {
-      return true;
-    }
+    } 
   });
 
   useEffect(() => {
@@ -27,9 +25,7 @@ const CheckAuth = ({ children }) => {
           const res = response;
           if (res.auth === false) {
             history.push("/login");
-          } else {
-            return console.log("logged in");
-          }
+          } 
         });
     }
     auth();
