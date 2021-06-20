@@ -19,10 +19,8 @@ const CheckAuth = ({ children }) => {
           Accept: "application/json",
         },
       })
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          const res = response;
+        .then((res) => res.json())
+        .then(res => {
           if (res.auth === false) {
             history.push("/login");
           } 

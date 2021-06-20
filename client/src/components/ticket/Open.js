@@ -142,8 +142,6 @@ const Card = () => {
               badge = high;
             }
 
-            console.table(ticket);
-
             return (
               <div className="flex justify-start" key={ticket.id}>
                 <div className="w-full mb-2 border">
