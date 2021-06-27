@@ -14,11 +14,10 @@ const fs = require("fs");
 const readline = require("readline");
 const fileUpload = require("express-fileupload");
 const osutils = require("os-utils");
-const os = require('os');
-const compression = require('compression')
+const os = require("os");
+const compression = require("compression");
 
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
-
 
 let url = null;
 if (process.env.NODE_ENV === "production") {
@@ -44,26 +43,45 @@ const news = require("./src/routes/news");
 
 // Express server libraries
 app.use(cors());
-app.use(compression())
+app.use(compression());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cookieParser());
-app.use(fileUpload({useTempFiles: true, tempFileDir: "/tmp/", createParentPath: true, }));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+    createParentPath: true,
+  })
+);
 
 let accessLogStream = fs.createWriteStream(path.join(__dirname, "api.txt"), {
   flags: "a",
 });
 
 // Express API Routes
-app.use("/api/v1/auth",morgan("tiny", { stream: accessLogStream }),limiter, auth);
-app.use("/api/v1/tickets",morgan("tiny", { stream: accessLogStream }),tickets);
+app.use(
+  "/api/v1/auth",
+  morgan("tiny", { stream: accessLogStream }),
+  limiter,
+  auth
+);
+app.use(
+  "/api/v1/tickets",
+  morgan("tiny", { stream: accessLogStream }),
+  tickets
+);
 app.use("/api/v1/data", morgan("tiny", { stream: accessLogStream }), data);
 app.use("/api/v1/todo", morgan("tiny", { stream: accessLogStream }), todo);
 app.use("/api/v1/note", morgan("tiny", { stream: accessLogStream }), note);
 app.use("/api/v1/client", morgan("tiny", { stream: accessLogStream }), client);
-app.use("/api/v1/newsletter", morgan("tiny", { stream: accessLogStream }), news);
+app.use(
+  "/api/v1/newsletter",
+  morgan("tiny", { stream: accessLogStream }),
+  news
+);
 // app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
 
 // Express web server PORT
@@ -109,15 +127,14 @@ function convert(file) {
 function stats() {
   let system = osutils.platform();
   let cpu = osutils.cpuCount();
-  let cpuUse = osutils.cpuUsage(function(v){
-    cpuUse = v
+  let cpuUse = osutils.cpuUsage(function (v) {
+    cpuUse = v;
   });
   let loadAverage = osutils.loadavg(5).toFixed(2);
   let totalMem = osutils.totalmem().toFixed(2);
   let freeMem = osutils.freemem().toFixed(2);
   let freeMemPercentage = osutils.freememPercentage().toFixed(2);
-  let uptime = new Date(os.uptime() * 1000).toISOString().substr(11, 8)
-
+  let uptime = new Date(os.uptime() * 1000).toISOString().substr(11, 8);
 
   io.emit("stats", {
     system,
@@ -127,7 +144,7 @@ function stats() {
     freeMem,
     freeMemPercentage,
     uptime,
-    cpuUse
+    cpuUse,
   });
 }
 
