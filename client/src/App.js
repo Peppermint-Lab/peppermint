@@ -8,7 +8,7 @@ import { Spin } from "antd";
 
 import error from "./assets/404.svg";
 
-const UserDash = React.lazy(() => import("./pages/UserDash"));
+const Home = React.lazy(() => import("./pages/Home"));
 const Tickets = React.lazy(() => import("./pages/Tickets"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
@@ -51,10 +51,10 @@ const Routing = () => {
       <React.Suspense fallback={<Loader />}>
         <CheckAuth>
           <Switch>
-            <Route exact path="/login" component={Login} />
+            <Route path="/login" component={Login} />
 
             <SideLayout>
-              <Route exact path="/" component={UserDash} />
+              <Route exact path="/" component={Home} />
               <Route exact path="/settings" component={Settings} />
               <Route exact path="/tickets" component={Tickets} />
               <Route exact path="/history" component={History} />

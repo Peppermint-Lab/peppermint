@@ -53,26 +53,63 @@ const Profile = () => {
           <div className="flex-grow space-y-6">
             <div>
               <label
-                for="username"
+                for="firstname"
                 className="block text-sm font-medium text-gray-700"
               >
-                Username
+                First Name
               </label>
               <div className="mt-1 rounded-md shadow-sm flex">
                 <input
                   type="text"
-                  name="username"
-                  id="username"
-                  autocomplete="username"
+                  name="firstname"
+                  id="firstname"
+                  autocomplete="firstname"
                   className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                  defaultValue={user.name}
+                  defaultValue={user.firstName}
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
             </div>
             <div>
               <label
-                for="username"
+                for="lastname"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Last Name
+              </label>
+              <div className="mt-1 rounded-md shadow-sm flex">
+                <input
+                  type="text"
+                  name="lastname"
+                  id="lastname"
+                  autocomplete="lastname"
+                  className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                  defaultValue={user.lastName}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                for="office"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Office
+              </label>
+              <div className="mt-1 rounded-md shadow-sm flex">
+                <input
+                  type="text"
+                  name="office"
+                  id="office"
+                  className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                  defaultValue={null}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                for="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Email

@@ -127,7 +127,7 @@ const UserDash = () => {
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                         Good {hour < 12 ? "Morning" : "Afternoon"},{" "}
-                        {user.firstName + " " + user.lastName}
+                        {user.firstName + " " + user.lastName}!
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -184,12 +184,12 @@ const UserDash = () => {
                     </h1>
                   </div>
                   <div className="flex flex-row items-center w-full">
-                    <div className="mt-1 relative rounded-md shadow-sm w-full">
+                    <div className="mt-1 relative shadow-sm w-full">
                       <input
                         type="text"
-                        name="email"
-                        id="email"
-                        className="w-full text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
+                        name="text"
+                        id="text"
+                        className="w-full text-gray-900 border-none focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                         placeholder="Enter todo here..."
                         onChange={(e) => {
                           setText(e.target.value);
