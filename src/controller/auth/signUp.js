@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { prisma } = require("../../prisma/prisma");
+const { prisma } = require("../../../prisma/prisma");
 // const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
 
 exports.Signup = async (req, res) => {

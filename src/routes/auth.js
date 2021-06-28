@@ -4,13 +4,13 @@ const router = express.Router();
 const { isAuth, isAdmin } = require("../middleware/authCheck");
 
 const { Login } = require("../controller/auth/Login");
-const { signUp } = require("../controller/auth/signUp");
+const { Signup } = require("../controller/auth/signUp");
 const {
   resetPasswordAdmin,
 } = require("../controller/auth/passwordReset/resetAdmin");
 const {
   resetPasswordUser,
-} = require("../controller/auth/passwordReset/resetAdmin");
+} = require("../controller/auth/passwordReset/resetUser");
 const { Token } = require("../controller/auth/token");
 const { getUsers } = require("../controller/auth/users/getAllUsers");
 const { getUserById } = require("../controller/auth/users/getUserById");
@@ -24,7 +24,7 @@ const { downloadFile } = require('../controller/auth/file/downloadFile')
 
 
 router.route("/Login").post(Login);
-router.route("/Signup").post(signUp);
+router.route("/Signup").post(Signup);
 router.route("/token").get(isAuth, Token);
 router.route("/getAllUsers").get(isAuth, getUsers);
 router.route("/resetPassword/:id").post(isAuth, resetPasswordAdmin);

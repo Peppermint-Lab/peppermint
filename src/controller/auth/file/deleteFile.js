@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { prisma } = require("../../../prisma/prisma");
+const { prisma } = require("../../../../prisma/prisma");
 const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
 
 exports.deleteFile = async (req, res) => {

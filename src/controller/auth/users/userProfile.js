@@ -1,4 +1,4 @@
-const { prisma } = require("../../../prisma/prisma");
+const { prisma } = require("../../../../prisma/prisma");
 const { PrismaClientKnownRequestError } = require("@prisma/client/runtime");
 
 exports.userProfile = async (req, res) => {

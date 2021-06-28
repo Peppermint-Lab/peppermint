@@ -1,4 +1,4 @@
-const { prisma } = require("../../../prisma/prisma");
+const { prisma } = require("../../../../prisma/prisma");
 
 exports.saveFile = async (req, res) => {
   const file = req.files.file;

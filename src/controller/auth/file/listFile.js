@@ -1,4 +1,4 @@
-const { prisma } = require("../../../prisma/prisma");
+const { prisma } = require("../../../../prisma/prisma");
 
 exports.listFile = async (req, res) => {
   try {
