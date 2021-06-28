@@ -1,14 +1,12 @@
-import React, { useEffect, useContext } from "react";
-import { GlobalContext } from "../../Context/GlobalState";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
 
-const Table = () => {
-  const { openTicket, getOpenTicket } = useContext(GlobalContext);
-  useEffect(() => {
-    getOpenTicket();
-    // eslint-disable-next-line
-  }, []);
+const fetchTickets = async () => {
+  const res = await fetch("/api/v1/tickets/openedTickets");
+  return res.json();
+};
 
+const Table = (props) => {
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
@@ -56,7 +54,7 @@ const Table = () => {
               </tr>
             </thead>
             <tbody>
-              {openTicket.map((ticket) => {
+              {props.tickets.map((ticket) => {
                 let p = ticket.priority;
                 let badge;
 
@@ -113,13 +111,7 @@ const Table = () => {
   );
 };
 
-const Card = () => {
-  const { openTicket, getOpenTicket } = useContext(GlobalContext);
-  useEffect(() => {
-    getOpenTicket();
-    // eslint-disable-next-line
-  }, []);
-
+const Card = (props) => {
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
@@ -128,7 +120,7 @@ const Card = () => {
     <div className="overflow-x-auto md:-mx-6 lg:-mx-8 mt-10">
       <div className="py-2 align-middle inline-block min-w-full md:px-6 lg:px-8">
         <div className="overflow-hidden md:rounded-lg">
-          {openTicket.map((ticket) => {
+          {props.tickets.map((ticket) => {
             let p = ticket.priority;
             let badge;
 
@@ -161,7 +153,7 @@ const Card = () => {
                     <div className="text-gray-700 text-sm font-bold p-2 m-2">
                       <Link
                         to={{
-                          pathname: `tickets/${ticket._id}`,
+                          pathname: `tickets/${ticket.id}`,
                           state: ticket,
                         }}
                         className="float-right"
@@ -181,14 +173,26 @@ const Card = () => {
 };
 
 const Open = () => {
+  const { data, status } = useQuery("fetchTickets", fetchTickets);
+
   return (
     <div className="flex flex-col">
-      <div className="hidden sm:block">
-        <Table />
-      </div>
-      <div className="sm:hidden">
-        <Card />
-      </div>
+      {status === "loading" && <div>Loading data ... </div>}
+
+      {status === "error" && <div>Error fetching data</div>}
+
+      {status === "success" && (
+        <div>
+          <div key={data.tickets.id}>
+            <div className="hidden sm:block">
+              <Table tickets={data.tickets} />
+            </div>
+            <div className="sm:hidden">
+              <Card tickets={data.tickets} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
