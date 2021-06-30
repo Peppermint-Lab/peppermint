@@ -11,8 +11,6 @@ import Transfer from "./Transfer";
 const TicketDetail = (props) => {
   const { completeTicket, unCompleteTicket } = useContext(GlobalContext);
 
-  console.log(props)
-
   const [ticket, setTicket] = useState(props.ticket);
   const [edit, setEdit] = useState(false);
 
@@ -70,7 +68,7 @@ const TicketDetail = (props) => {
     },
     onChange(info) {
       if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+        return 
       }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);

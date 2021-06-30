@@ -2,18 +2,17 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Ellipsis } from "react-awesome-spinners";
 
-import server from '../../assets/server_down.svg'
-import TicketDetail from '../../components/ticket/TicketDetail'
+import server from "../../assets/server_down.svg";
+import TicketDetail from "../../components/ticket/TicketDetail";
 
 const fetchTicketById = async () => {
-  const id = window.location.pathname.slice(9)
+  const id = window.location.pathname.slice(9);
   const res = await fetch(`/api/v1/tickets/getTicketById/${id}`);
   return res.json();
 };
 
 const Detail = () => {
   const { data, status } = useQuery("fetchTickets", fetchTicketById);
-  console.log(data)
 
   return (
     <div>
@@ -33,7 +32,7 @@ const Detail = () => {
 
       {status === "success" && (
         <div>
-            <TicketDetail ticket={data.tickets} />
+          <TicketDetail ticket={data.tickets} />
         </div>
       )}
     </div>

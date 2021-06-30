@@ -93,14 +93,12 @@ const Table = (props) => {
                       {ticket.issue}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Link
-                        to={{
-                          pathname: `tickets/${ticket.id}`,
-                        }}
+                      <a
+                        href={`tickets/${ticket.id}`}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         view
-                      </Link>
+                      </a>
                     </td>
                   </tr>
                 );
