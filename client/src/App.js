@@ -55,18 +55,19 @@ const Routing = () => {
 
             <SideLayout>
               <Route exact path="/" component={Home} />
-              <Route exact path="/settings" component={Settings} />
+              <Route path="/settings" component={Settings} />
+              <Route path="/history" component={History} />
+              <Route path="/notebook" component={NoteBook} />
               <Route exact path="/tickets" component={Tickets} />
-              <Route exact path="/history" component={History} />
-              <Route exact path="/notebook" component={NoteBook} />
               <Route exact path="/tickets/:id" component={Detail} />
-              <Route exact path="/admin/:path?">
-                <Route exact path="/admin/dashboard" component={AdminMain} />
-                <Route exact path="/admin/newsletters" component={AdminNews} />
-                <Route exact path="/admin/clients" component={AdminClient} />
-                <Route exact path="/admin/internal" component={AdminAuth} />
+              <Route path="/admin/:path?">
+                <Route path="/admin/dashboard" component={AdminMain} />
+                <Route path="/admin/newsletters" component={AdminNews} />
+                <Route path="/admin/clients" component={AdminClient} />
+                <Route path="/admin/internal" component={AdminAuth} />
               </Route>
             </SideLayout>
+            
           </Switch>
         </CheckAuth>
       </React.Suspense>
