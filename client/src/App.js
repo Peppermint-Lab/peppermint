@@ -6,13 +6,11 @@ import "./App.css";
 import io from "socket.io-client";
 import { Spin } from "antd";
 
-import error from "./assets/404.svg";
-
 const Home = React.lazy(() => import("./pages/Home"));
-const Tickets = React.lazy(() => import("./pages/Tickets"));
+const Tickets = React.lazy(() => import("./pages/ticket/Tickets"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
-const Detail = React.lazy(() => import("./components/ticket/Detail"));
+const Detail = React.lazy(() => import("./pages/ticket/Detail"));
 const History = React.lazy(() => import("./pages/History"));
 const SideLayout = React.lazy(() =>
   import("./components/navigation/sideLayout")
@@ -33,14 +31,6 @@ const Loader = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <Spin size="large" />
-    </div>
-  );
-};
-
-const NotFound = () => {
-  return (
-    <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-      <img src={error} className="h-1/2 w-1/2" alt="404" />
     </div>
   );
 };

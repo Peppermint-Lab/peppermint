@@ -8,51 +8,27 @@ import { GlobalContext } from "../../Context/GlobalState";
 import File from "./File";
 import Transfer from "./Transfer";
 
-const Detail = (props) => {
+const TicketDetail = (props) => {
   const { completeTicket, unCompleteTicket } = useContext(GlobalContext);
 
-  const [ticket, setTicket] = useState(props.location.state);
+  console.log(props)
+
+  const [ticket, setTicket] = useState(props.ticket);
   const [edit, setEdit] = useState(false);
 
-  const [note, setNote] = useState();
-  const [issue, setIssue] = useState();
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [number, setNumber] = useState();
+  const [note, setNote] = useState(props.ticket.note);
+  const [issue, setIssue] = useState(props.ticket.issue);
+  const [name, setName] = useState(props.ticket.name);
+  const [email, setEmail] = useState(props.ticket.email);
+  const [number, setNumber] = useState(props.ticket.number);
   const [file, setFile] = useState([]);
   const [badge, setBadge] = useState("");
-  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
-  const id = props.match.params.id;
-
-  async function getTicket() {
-    try {
-      await fetch(`/api/v1/tickets/getTicketById/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setTicket(res.ticket);
-          setIssue(res.ticket.issue);
-          setNote(res.ticket.note);
-          setName(res.ticket.name);
-          setEmail(res.ticket.email);
-          setNumber(res.ticket.number);
-          setLoading(false);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const id = window.location.pathname.slice(9)
 
   useEffect(() => {
-    getTicket();
     if (ticket.priority === "Low") {
       setBadge(low);
     }
@@ -117,7 +93,6 @@ const Detail = (props) => {
   const normal = "bg-green-100 text-green-800";
 
   return (
-    <Spin spinning={loading}>
       <div className="relative">
         <div className="py-8 xl:py-10">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 ">
@@ -530,8 +505,7 @@ const Detail = (props) => {
           </div>
         </div>
       </div>
-    </Spin>
   );
 };
 
-export default Detail;
+export default TicketDetail;

@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Ellipsis } from "react-awesome-spinners";
 
-import server from '../../assets/server_down.svg'
-
+import server from "../../assets/server_down.svg";
 
 const fetchTickets = async () => {
   const res = await fetch("/api/v1/tickets/openedTickets");
@@ -97,7 +96,6 @@ const Table = (props) => {
                       <Link
                         to={{
                           pathname: `tickets/${ticket.id}`,
-                          state: ticket,
                         }}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
@@ -158,7 +156,6 @@ const Card = (props) => {
                       <Link
                         to={{
                           pathname: `tickets/${ticket.id}`,
-                          state: ticket,
                         }}
                         className="float-right"
                       >
@@ -178,8 +175,6 @@ const Card = (props) => {
 
 const Open = () => {
   const { data, status } = useQuery("fetchTickets", fetchTickets);
-
-  console.log(data);
 
   return (
     <div className="flex flex-col">
