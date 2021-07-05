@@ -64,8 +64,8 @@ exports.deleteNote = async (req, res) => {
 };
 
 exports.updateNote = async (req, res) => {
-  console.log(req.body);
   try {
+    console.log(req.body);
     await prisma.notes.update({
       where: { id: Number(req.body.id) },
       data: { note: req.body.note },

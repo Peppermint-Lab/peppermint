@@ -45,7 +45,7 @@ export default function SideLayout({ children }) {
       current: location.pathname === "/history" ? true : false,
     },
     {
-      name: "Notebook",
+      name: "Personal Notebook",
       href: "/notebook",
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
@@ -289,7 +289,7 @@ export default function SideLayout({ children }) {
         </div>
         <main className="flex-1 relative z-0 focus:outline-none ">
           <div className="py-6">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="py-4">{children}</div>
             </div>
           </div>

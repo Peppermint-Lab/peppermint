@@ -11,7 +11,7 @@ const Table = (props) => {
   const normal = "bg-green-100 text-green-800";
 
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10">
+    <div className="mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10">
       {/* <div className="flex flex-row">
         <div className="w-44 mr-4">
           <input
@@ -278,7 +278,7 @@ const History = () => {
   const { data, status } = useQuery("fetchAllTickets", fetchAllTickets);
 
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 flex flex-col">
+    <div className=" mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 flex flex-col">
       <div className="sm:px-6 md:px-8 ml-2">
         <div className="flex flex-row">
           <h1 className="text-2xl font-semibold text-gray-900">History</h1>

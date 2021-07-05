@@ -108,8 +108,8 @@ const TicketDetail = (props) => {
                     </div>
                   </div>
 
-                  <div className="flex flex-row p-1 m-1 space-x-4">
-                    <div className="mt-4 flex space-x-3 md:mt-0">
+                  <div className="flex flex-row p-1 mt-2 space-x-4">
+                    <div className="mt-4 -ml-2 flex space-x-3 md:mt-0">
                       <Upload {...propsUpload}>
                         <button
                           type="button"
@@ -317,7 +317,7 @@ const TicketDetail = (props) => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <span
-                    class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
                   >
                     {ticket.priority}
                   </span>
