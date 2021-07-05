@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Space, Button } from "antd";
 import fileDownload from "js-file-download";
 import axios from "axios";
-import {
-  FileTwoTone,
-  MinusCircleTwoTone,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { TrashIcon, DocumentDownloadIcon } from "@heroicons/react/solid";
 
 const Files = () => {
-
   const [files, setFiles] = useState([]);
 
   async function getFiles() {
@@ -62,41 +56,45 @@ const Files = () => {
   return (
     <div>
       <div className="flow-root p-5 mx-auto -mt-5 ml-1">
-      {files ? files.map((file) => {
-        return (
-          <div className="w-full" key={file.id}>
-            <ul>
-              <li>
-                <Space>
-                  <FileTwoTone />
-                  <span>{file.filename}</span>
-                  <Button
-                    ghost
-                    style={{ float: "right" }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteFile(file);
-                    }}
-                  >
-                    <MinusCircleTwoTone twoToneColor="#FF0000	" />
-                  </Button>
-                  <Button
-                    ghost
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      download(file);
-                    }}
-                  >
-                    <UploadOutlined style={{ color: "black" }} />
-                  </Button>
-                </Space>
-              </li>
-            </ul>
-          </div>
-        );
-      }) : (
-        <p>No files found</p>
-      )}
+        {files ? (
+          files.map((file) => {
+            return (
+              <div className="w-full" key={file.id}>
+                <ul>
+                  <li>
+                    <span>{file.filename}</span>
+                    <button
+                    onClick={() => download(file)}
+                      type="button"
+                      className="float-right  border border-transparent rounded-full shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      <DocumentDownloadIcon className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <button
+                      onClick={() => deleteFile(file)}
+                      type="button"
+                      className="mr-1 float-right border border-transparent rounded-full shadow-sm text-red-600 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      <TrashIcon className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    {/* <Button
+                      ghost
+                      style={{ float: "right" }}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        download(file);
+                      }}
+                    >
+                      <UploadOutlined style={{ color: "black" }} />
+                    </Button> */}
+                  </li>
+                </ul>
+              </div>
+            );
+          })
+        ) : (
+          <p>No files found</p>
+        )}
       </div>
     </div>
   );
