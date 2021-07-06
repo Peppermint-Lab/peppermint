@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { Ellipsis } from "react-awesome-spinners";
+import { Spin } from "antd";
 
 import server from "../../assets/server_down.svg";
 import TicketDetail from "../../components/ticket/TicketDetail";
@@ -19,7 +19,7 @@ const Detail = () => {
       {status === "loading" && (
         <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
           <h2> Loading data ... </h2>
-          <Ellipsis />
+          <Spin />
         </div>
       )}
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Ellipsis } from "react-awesome-spinners";
+import { Spin } from "antd";
 
 import server from '../assets/server_down.svg'
 
@@ -158,8 +158,8 @@ const Table = (props) => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {ticket.assignedTo
                             ? ticket.assignedTo.firstName +
-                              " " +
-                              ticket.assignedTo.lastName
+                            " " +
+                            ticket.assignedTo.lastName
                             : "not assigned"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -288,7 +288,7 @@ const History = () => {
         {status === "loading" && (
           <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
             <h2> Loading data ... </h2>
-            <Ellipsis />
+            <Spin />
           </div>
         )}
 

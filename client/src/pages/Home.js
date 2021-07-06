@@ -7,7 +7,6 @@ import {
 } from "@heroicons/react/solid";
 import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 
 import ListTodo from "../components/todos/ListTodo";
 import Files from "../components/home/Files";
@@ -104,7 +103,7 @@ const UserDash = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen">
       <main className="p-1">
         {/* Page header */}
         <div className="bg-white shadow">
