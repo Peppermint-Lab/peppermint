@@ -12,6 +12,7 @@ const Settings = React.lazy(() => import("./pages/Settings"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
 const Detail = React.lazy(() => import("./pages/ticket/Detail"));
 const History = React.lazy(() => import("./pages/History"));
+const Status = React.lazy(() => import("./pages/Status"));
 const SideLayout = React.lazy(() =>
   import("./components/navigation/sideLayout")
 );
@@ -48,6 +49,7 @@ const Routing = () => {
               <Route path="/settings" component={Settings} />
               <Route path="/history" component={History} />
               <Route path="/notebook" component={NoteBook} />
+              <Route path="/status-page" component={Status} />
               <Route exact path="/tickets" component={Tickets} />
               <Route exact path="/tickets/:id" component={Detail} />
               <Route path="/admin/:path?">

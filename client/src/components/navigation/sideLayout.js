@@ -7,6 +7,7 @@ import {
   MenuIcon,
   TicketIcon,
   XIcon,
+  DesktopComputerIcon,
 } from "@heroicons/react/outline";
 import { useLocation } from "react-router-dom";
 
@@ -48,6 +49,12 @@ export default function SideLayout({ children }) {
       name: "Personal Notebook",
       href: "/notebook",
       icon: FolderIcon,
+      current: location.pathname === "/notebook" ? true : false,
+    },
+    {
+      name: "Status Page",
+      href: "/status-page",
+      icon: DesktopComputerIcon,
       current: location.pathname === "/notebook" ? true : false,
     },
   ];
@@ -129,12 +136,7 @@ export default function SideLayout({ children }) {
                       )}
                     >
                       <item.icon
-                        className={classNames(
-                          item.current
-                            ? "text-gray-500"
-                            : "text-gray-400 group-hover:text-gray-500",
-                          "mr-4 flex-shrink-0 h-6 w-6"
-                        )}
+                        className="text-white mr-3 flex-shrink-0 h-6 w-62"
                         aria-hidden="true"
                       />
                       {item.name}
@@ -292,7 +294,7 @@ export default function SideLayout({ children }) {
             <MenuIcon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <main className="flex-1 relative z-0 focus:outline-none bg-gradient-to-r from-gray-900 via-gray-800 to-gray-600" >
+        <main className="flex-1 relative z-0 focus:outline-none min-h-screen overflow-y-scroll">
           <div className="py-6">
             <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="py-4">{children}</div>
