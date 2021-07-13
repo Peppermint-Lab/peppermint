@@ -16,6 +16,7 @@ const fileUpload = require("express-fileupload");
 const osutils = require("os-utils");
 const os = require("os");
 const compression = require("compression");
+const { prisma } = require("./prisma/prisma");
 
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
@@ -39,6 +40,7 @@ const todo = require("./src/routes/todo");
 const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
+const uptime = require("./src/routes/uptime");
 // const times = require("./src/routes/time");
 
 // Express server libraries
@@ -83,6 +85,7 @@ app.use(
   news
 );
 // app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
+app.use("/api/v1/uptime", uptime);
 
 // Express web server PORT
 const PORT = process.env.PORT || 5000;
