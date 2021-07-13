@@ -16,10 +16,11 @@ const fileUpload = require("express-fileupload");
 const osutils = require("os-utils");
 const os = require("os");
 const compression = require("compression");
+const { prisma } = require("./prisma/prisma");
+const Monitor = require('ping-monitor');
 
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
-let url = null;
 if (process.env.NODE_ENV === "production") {
   url = process.env.MONGO_URI_DOCKER;
 } else {
@@ -39,6 +40,7 @@ const todo = require("./src/routes/todo");
 const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
+const uptime = require("./src/routes/uptime");
 // const times = require("./src/routes/time");
 
 // Express server libraries
@@ -83,6 +85,7 @@ app.use(
   news
 );
 // app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
+app.use("/api/v1/uptime", uptime);
 
 // Express web server PORT
 const PORT = process.env.PORT || 5000;
@@ -166,4 +169,40 @@ io.on("connection", (socket) => {
     console.log(`Online: ${online}`);
     io.emit("visitor exits", online);
   });
+});
+
+async function startAll() {
+  const monitors = await prisma.monitor.findMany()
+
+
+  monitors.forEach(function(website) {
+
+    let monitor = new Ping ({
+      website: website.url,
+      interval: 20
+    });
+
+    monitor.on('up', function (res) {
+      console.log('Yay!! ' + res.website + ' is up.');
+  });
+
+  })
+}
+
+io.on("startmonitor", async (socket, callback) => {
+  try {
+      
+      await startAll()
+
+      callback({
+          ok: true,
+          msg: "Started Successfully"
+      });
+
+  } catch (e) {
+      callback({
+          ok: false,
+          msg: e.message
+      });
+  }
 });

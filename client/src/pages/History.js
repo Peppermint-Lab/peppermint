@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
+import { Spin } from "antd";
+
+import server from '../assets/server_down.svg'
 
 const Table = (props) => {
   const high = "bg-red-100 text-red-800";
@@ -8,7 +11,7 @@ const Table = (props) => {
   const normal = "bg-green-100 text-green-800";
 
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10">
+    <div className="mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10">
       {/* <div className="flex flex-row">
         <div className="w-44 mr-4">
           <input
@@ -155,8 +158,8 @@ const Table = (props) => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {ticket.assignedTo
                             ? ticket.assignedTo.firstName +
-                              " " +
-                              ticket.assignedTo.lastName
+                            " " +
+                            ticket.assignedTo.lastName
                             : "not assigned"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -272,37 +275,46 @@ const fetchAllTickets = async () => {
 };
 
 const History = () => {
-
   const { data, status } = useQuery("fetchAllTickets", fetchAllTickets);
 
-
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 flex flex-col">
+    <div className=" mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 flex flex-col">
       <div className="sm:px-6 md:px-8 ml-2">
         <div className="flex flex-row">
           <h1 className="text-2xl font-semibold text-gray-900">History</h1>
         </div>
       </div>
       <div className="flex flex-col">
-        {status === "loading" && <div>Loading data ... </div>}
+        {status === "loading" && (
+          <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+            <h2> Loading data ... </h2>
+            <Spin />
+          </div>
+        )}
 
-        {status === "error" && <div>Error fetching data</div>}
+        {status === "error" && (
+          <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold"> Error fetching data ... </h2>
+            <img src={server} className="h-96 w-96" alt="error" />
+          </div>
+        )}
 
         {status === "success" && (
           <div>
-            <div key={data.tickets.id}>
-              <div className="hidden sm:block">
-                <Table
-                  tickets={data.tickets}
-                  fetchAllTickets={fetchAllTickets}
-                  // setId={setId}
-                  // filterTickets={filterTickets}
-                />
+            {data.tickets.length === 0 ? (
+              <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+                <p>No tickets have been created</p>
               </div>
-              <div className="sm:hidden">
-                <Card tickets={data.tickets} />
+            ) : (
+              <div key={data.tickets.id}>
+                <div className="hidden sm:block">
+                  <Table tickets={data.tickets} />
+                </div>
+                <div className="sm:hidden">
+                  <Card tickets={data.tickets} />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>

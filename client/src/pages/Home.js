@@ -7,7 +7,6 @@ import {
 } from "@heroicons/react/solid";
 import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 
 import ListTodo from "../components/todos/ListTodo";
 import Files from "../components/home/Files";
@@ -104,12 +103,11 @@ const UserDash = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
       <main className="p-1">
         {/* Page header */}
         <div className="bg-white shadow">
           <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-            <div className="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+            <div className="py-6 md:flex md:items-center md:justify-between">
               <div className="flex-1 min-w-0">
                 {/* Profile */}
                 <div className="flex items-center">
@@ -210,7 +208,7 @@ const UserDash = () => {
             </div>
           </div>
 
-          <div className="flex-1 sm:mt-4 w-full 2xl:ml-2 2xl:mt-0">
+          <div className="flex-1 sm:mt-4 w-full 2xl:ml-2 2xl:mt-0 mt-4 pb-4 mb-12">
             <div className="bg-white overflow-hidden shadow h-full sm:rounded-lg">
               <div className="px-2 py-5 sm:p-6 flex flex-row">
                 <h2
@@ -233,7 +231,6 @@ const UserDash = () => {
           </div>
         </div>
       </main>
-    </div>
   );
 };
 

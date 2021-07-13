@@ -7,6 +7,7 @@ import {
   MenuIcon,
   TicketIcon,
   XIcon,
+  DesktopComputerIcon,
 } from "@heroicons/react/outline";
 import { useLocation } from "react-router-dom";
 
@@ -45,9 +46,15 @@ export default function SideLayout({ children }) {
       current: location.pathname === "/history" ? true : false,
     },
     {
-      name: "Notebook",
+      name: "Personal Notebook",
       href: "/notebook",
       icon: FolderIcon,
+      current: location.pathname === "/notebook" ? true : false,
+    },
+    {
+      name: "Status Page",
+      href: "/status-page",
+      icon: DesktopComputerIcon,
       current: location.pathname === "/notebook" ? true : false,
     },
   ];
@@ -62,7 +69,7 @@ export default function SideLayout({ children }) {
   ];
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
+    <div className="h-screen flex overflow-hidden">
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -91,7 +98,7 @@ export default function SideLayout({ children }) {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
+            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-gray-900">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -123,18 +130,13 @@ export default function SideLayout({ children }) {
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? "bg-gray-100 text-gray-900"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                        "group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                          ? "bg-green-500 text-white"
+                          : "text-white hover:bg-green-400 hover:text-white",
+                        "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                       )}
                     >
                       <item.icon
-                        className={classNames(
-                          item.current
-                            ? "text-gray-500"
-                            : "text-gray-400 group-hover:text-gray-500",
-                          "mr-4 flex-shrink-0 h-6 w-6"
-                        )}
+                        className="text-white mr-3 flex-shrink-0 h-6 w-62"
                         aria-hidden="true"
                       />
                       {item.name}
@@ -156,7 +158,12 @@ export default function SideLayout({ children }) {
                       <a
                         key={item.name}
                         href={item.href}
-                        className="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50"
+                        className={classNames(
+                          item.current
+                            ? "bg-green-500 text-white"
+                            : "text-white hover:bg-green-400 hover:text-white",
+                          "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                        )}
                       >
                         <span className="truncate">{item.name}</span>
                       </a>
@@ -164,19 +171,19 @@ export default function SideLayout({ children }) {
                   </div>
                 </div>
               </div>
-              <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+              <div className="flex-shrink-0 flex-col flex border-t border-gray-200 p-4">
+                <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
+                  <span className="text-sm font-medium leading-none text-white">
+                    {user.firstName[0] + user.lastName[0]}
+                  </span>
+                </span>
+                <p className="text-base font-medium text-white">
+                  {user.firstName + " " + user.lastName}
+                </p>
                 <a href="/settings" className="flex-shrink-0 group block">
                   <div className="flex items-center">
-                    <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
-                      <span className="text-sm font-medium leading-none text-white">
-                        {user.firstName[0] + user.lastName[0]}
-                      </span>
-                    </span>
-                    <div className="ml-3">
-                      <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">
-                        {user.firstName + " " + user.lastName}
-                      </p>
-                      <p className="text-sm font-medium text-gray-500 group-hover:text-gray-700">
+                    <div className="">
+                      <p className="text-sm font-medium text-white">
                         View profile
                       </p>
                     </div>
@@ -195,7 +202,7 @@ export default function SideLayout({ children }) {
       <div className="hidden md:flex md:flex-shrink-0">
         <div className="flex flex-col w-64">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-gray-900">
+          <div className="flex flex-col h-0 flex-1 bg-gray-900">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex flex-shrink-0 px-4 align-middle flex-row">
                 <img className="h-8 w-auto" src={logo} alt="Workflow" />
@@ -287,9 +294,9 @@ export default function SideLayout({ children }) {
             <MenuIcon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none ">
+        <main className="flex-1 relative z-0 focus:outline-none min-h-screen overflow-y-scroll">
           <div className="py-6">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="py-4">{children}</div>
             </div>
           </div>

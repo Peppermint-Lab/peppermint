@@ -20,6 +20,6 @@ router
 
 router
     .route('/updateNote')
-    .put(isAuth, updateNote)
+    .post(isAuth, updateNote)
 
 module.exports = router;

@@ -1,5 +1,5 @@
 import React from "react";
-import Open from "../components/ticket/Open";
+import Open from "../../components/ticket/Open";
 
 const Tickets = () => {
   return (

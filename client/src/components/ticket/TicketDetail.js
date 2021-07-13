@@ -8,51 +8,25 @@ import { GlobalContext } from "../../Context/GlobalState";
 import File from "./File";
 import Transfer from "./Transfer";
 
-const Detail = (props) => {
+const TicketDetail = (props) => {
   const { completeTicket, unCompleteTicket } = useContext(GlobalContext);
 
-  const [ticket, setTicket] = useState(props.location.state);
+  const [ticket, setTicket] = useState(props.ticket);
   const [edit, setEdit] = useState(false);
 
-  const [note, setNote] = useState();
-  const [issue, setIssue] = useState();
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [number, setNumber] = useState();
+  const [note, setNote] = useState(props.ticket.note);
+  const [issue, setIssue] = useState(props.ticket.issue);
+  const [name, setName] = useState(props.ticket.name);
+  const [email, setEmail] = useState(props.ticket.email);
+  const [number, setNumber] = useState(props.ticket.number);
   const [file, setFile] = useState([]);
   const [badge, setBadge] = useState("");
-  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
-  const id = props.match.params.id;
-
-  async function getTicket() {
-    try {
-      await fetch(`/api/v1/tickets/getTicketById/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setTicket(res.ticket);
-          setIssue(res.ticket.issue);
-          setNote(res.ticket.note);
-          setName(res.ticket.name);
-          setEmail(res.ticket.email);
-          setNumber(res.ticket.number);
-          setLoading(false);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const id = window.location.pathname.slice(9)
 
   useEffect(() => {
-    getTicket();
     if (ticket.priority === "Low") {
       setBadge(low);
     }
@@ -94,7 +68,7 @@ const Detail = (props) => {
     },
     onChange(info) {
       if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+        return 
       }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
@@ -117,7 +91,6 @@ const Detail = (props) => {
   const normal = "bg-green-100 text-green-800";
 
   return (
-    <Spin spinning={loading}>
       <div className="relative">
         <div className="py-8 xl:py-10">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 ">
@@ -135,8 +108,8 @@ const Detail = (props) => {
                     </div>
                   </div>
 
-                  <div className="flex flex-row p-1 m-1 space-x-4">
-                    <div className="mt-4 flex space-x-3 md:mt-0">
+                  <div className="flex flex-row p-1 mt-2 space-x-4">
+                    <div className="mt-4 -ml-2 flex space-x-3 md:mt-0">
                       <Upload {...propsUpload}>
                         <button
                           type="button"
@@ -344,7 +317,7 @@ const Detail = (props) => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <span
-                    class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
                   >
                     {ticket.priority}
                   </span>
@@ -530,8 +503,7 @@ const Detail = (props) => {
           </div>
         </div>
       </div>
-    </Spin>
   );
 };
 
-export default Detail;
+export default TicketDetail;
