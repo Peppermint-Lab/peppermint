@@ -17,10 +17,10 @@ const osutils = require("os-utils");
 const os = require("os");
 const compression = require("compression");
 const { prisma } = require("./prisma/prisma");
+const Monitor = require('ping-monitor');
 
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
-let url = null;
 if (process.env.NODE_ENV === "production") {
   url = process.env.MONGO_URI_DOCKER;
 } else {
@@ -169,4 +169,40 @@ io.on("connection", (socket) => {
     console.log(`Online: ${online}`);
     io.emit("visitor exits", online);
   });
+});
+
+async function startAll() {
+  const monitors = await prisma.monitor.findMany()
+
+
+  monitors.forEach(function(website) {
+
+    let monitor = new Ping ({
+      website: website.url,
+      interval: 20
+    });
+
+    monitor.on('up', function (res) {
+      console.log('Yay!! ' + res.website + ' is up.');
+  });
+
+  })
+}
+
+io.on("startmonitor", async (socket, callback) => {
+  try {
+      
+      await startAll()
+
+      callback({
+          ok: true,
+          msg: "Started Successfully"
+      });
+
+  } catch (e) {
+      callback({
+          ok: false,
+          msg: e.message
+      });
+  }
 });
