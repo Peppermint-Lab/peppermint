@@ -17,7 +17,7 @@ const osutils = require("os-utils");
 const os = require("os");
 const compression = require("compression");
 const { prisma } = require("./prisma/prisma");
-const Monitor = require('ping-monitor');
+const Ping = require("ping-monitor");
 
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
@@ -153,12 +153,34 @@ function stats() {
 
 setInterval(stats, 1000);
 
-io.on("connection", (socket) => {
+async function startAll() {
+  const monitors = await prisma.monitor.findMany();
+
+  // console.log(monitors)
+
+  monitors.forEach(function (website) {
+    let monitor = new Ping({
+      website: website.url,
+      interval: 20,
+    });
+
+    monitor.on("up", function (res) {
+      console.log("Yay!! " + res.website + " is up.");
+    });
+
+    io.emit("startmonitor", "Up");
+  });
+}
+
+io.on("connection", async (socket) => {
   online++;
   console.log(`Socket ${socket.id} connected.`);
   console.log(`Online: ${online}`);
   io.emit("visitor enters", online);
+
   stats();
+  startAll();
+
   convert("./api.txt").then((res) => {
     io.emit("file", res);
   });
@@ -171,38 +193,18 @@ io.on("connection", (socket) => {
   });
 });
 
-async function startAll() {
-  const monitors = await prisma.monitor.findMany()
-
-
-  monitors.forEach(function(website) {
-
-    let monitor = new Ping ({
-      website: website.url,
-      interval: 20
-    });
-
-    monitor.on('up', function (res) {
-      console.log('Yay!! ' + res.website + ' is up.');
-  });
-
-  })
-}
-
 io.on("startmonitor", async (socket, callback) => {
   try {
-      
-      await startAll()
+    await startAll();
 
-      callback({
-          ok: true,
-          msg: "Started Successfully"
-      });
-
+    callback({
+      ok: true,
+      msg: "Started Successfully",
+    });
   } catch (e) {
-      callback({
-          ok: false,
-          msg: e.message
-      });
+    callback({
+      ok: false,
+      msg: e.message,
+    });
   }
 });
