@@ -107,7 +107,7 @@ There is currently a trello roadmap available which is updated daily - https://t
 
 ## Documentation
 
-We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://docs.pmint.dev/">here</a> to be taken directly there.
+We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://docs.peppermint.sh">here</a> to be taken directly there.
 
 ## Installing locally for development
 
