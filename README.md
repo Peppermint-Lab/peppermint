@@ -62,6 +62,16 @@ services:
 
 ```
 
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Peppermint-Lab/Peppermint/issues). 
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+
+
 ### Setting up postgres on Macos in a container for local development
 
 ```
@@ -129,12 +139,3 @@ We currently have an image for arm devices but are seeing issues with mongoDB so
 * Twitter: [@andrewsjack18 ](https://twitter.com/andrewsjack18 )
 * Github: [@potts99](https://github.com/jwandrews99)
 * LinkedIn: [@jack-andrews-146852131](https://linkedin.com/in/jack-andrews-146852131)
-
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/jwandrews99/winter/issues). 
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
