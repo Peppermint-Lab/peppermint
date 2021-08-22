@@ -15,6 +15,10 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://www.buymeacoffee.com/peppermintlabs" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee"          style="height: 15px !important;width: 75px !important;" ></a>
+</p>
+
 > Ticket Management System in order to help helpdesks & service desks manage internal staff &  customer requests
 
 ## Installation
