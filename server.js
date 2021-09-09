@@ -103,6 +103,8 @@ const server = app.listen(
   )
 );
 
+console.log(process.env.DATABASE_URL)
+
 // Set up socket.io
 const io = socket(server);
 let online = 0;
