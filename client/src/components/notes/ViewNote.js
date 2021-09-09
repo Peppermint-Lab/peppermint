@@ -5,6 +5,9 @@ import DOMPurify from "dompurify";
 
 const ViewNote = (props) => {
   const [show, setShow] = useState(false);
+  const [edit, setEdit] = useState(false);
+
+  const [text, setText] = useState(props.note.note);
 
   const handlers = {
     CLOSE: () => setShow(false),
@@ -15,6 +18,23 @@ const ViewNote = (props) => {
       __html: DOMPurify.sanitize(html),
     };
   };
+
+  async function postData() {
+    try {
+      await fetch(`/api/v1/note/updateNote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          note: text,
+          id: props.note.id,
+        }),
+      }).then((res) => res.json());
+    } catch (error) {
+      throw error;
+    }
+  }
 
   return (
     <div>
@@ -49,22 +69,64 @@ const ViewNote = (props) => {
 
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w sm:w-1/2 sm:p-6">
               <div className="text-lg">
-                <h1>{props.note.title}</h1>
+                <h1 className={edit ? "hidden" : ""}>{props.note.title}</h1>
+                <input
+                  className={edit ? "" : "hidden"}
+                  defaultValue={props.note.title}
+                />
               </div>
               <Divider />
               <div
-                className="preview"
-                dangerouslySetInnerHTML={createMarkup(props.note.note)}
+                className={edit ? "hidden" : "preview"}
+                dangerouslySetInnerHTML={createMarkup(text)}
               ></div>
-              <button
-                onClick={() => {
-                  setShow(false);
-                }}
-                type="button"
-                className="flex justify-center w-1/4 rounded-md border border-transparent shadow-sm px-4 py-2 mx-auto bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-              >
-                Go back to dashboard
-              </button>
+              <div className={edit ? "" : "hidden"}>
+                <textarea
+                  className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                  rows="16"
+                  defaultValue={text}
+                  onChange={(e) => setText(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-row mt-16">
+                <button
+                  onClick={() => {
+                    setEdit(true);
+                  }}
+                  type="button"
+                  className={
+                    edit
+                      ? "hidden"
+                      : "flex justify-center w-1/4 rounded-md border border-transparent shadow-sm px-4 py-2 mx-auto bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  }
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => {
+                    setShow(false);
+                    setEdit(false);
+                    postData();
+                  }}
+                  type="button"
+                  className={
+                    edit
+                      ? "flex justify-center w-1/4 rounded-md border border-transparent shadow-sm px-4 py-2 mx-auto bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                      : "hidden"
+                  }
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => {
+                    setShow(false);
+                  }}
+                  type="button"
+                  className="flex justify-center w-1/4 rounded-md border border-transparent shadow-sm px-4 py-2 mx-auto bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                >
+                  Go back to dashboard
+                </button>
+              </div>
             </div>
           </div>
         </div>

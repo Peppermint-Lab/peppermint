@@ -75,7 +75,7 @@ const File = (props) => {
       <h1>Files attached to job</h1>
       {files ? (files.map((file) => {
         return (
-          <div className='todo-list' key={file._id}>
+          <div className='todo-list' key={file.id}>
             <ul>
               <li>
                 <Space>

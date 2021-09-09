@@ -6,14 +6,13 @@ import "./App.css";
 import io from "socket.io-client";
 import { Spin } from "antd";
 
-import error from "./assets/404.svg";
-
-const UserDash = React.lazy(() => import("./pages/UserDash"));
-const Tickets = React.lazy(() => import("./pages/Tickets"));
+const Home = React.lazy(() => import("./pages/Home"));
+const Tickets = React.lazy(() => import("./pages/ticket/Tickets"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
-const Detail = React.lazy(() => import("./components/ticket/Detail"));
+const Detail = React.lazy(() => import("./pages/ticket/Detail"));
 const History = React.lazy(() => import("./pages/History"));
+const Status = React.lazy(() => import("./pages/Status"));
 const SideLayout = React.lazy(() =>
   import("./components/navigation/sideLayout")
 );
@@ -37,36 +36,30 @@ const Loader = () => {
   );
 };
 
-const NotFound = () => {
-  return (
-    <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-      <img src={error} className="h-1/2 w-1/2" alt="404" />
-    </div>
-  );
-};
-
 const Routing = () => {
   return (
     <Router>
       <React.Suspense fallback={<Loader />}>
         <CheckAuth>
           <Switch>
-            <Route exact path="/login" component={Login} />
+            <Route path="/login" component={Login} />
 
             <SideLayout>
-              <Route exact path="/" component={UserDash} />
-              <Route exact path="/settings" component={Settings} />
+              <Route exact path="/" component={Home} />
+              <Route path="/settings" component={Settings} />
+              <Route path="/history" component={History} />
+              <Route path="/notebook" component={NoteBook} />
+              <Route path="/status-page" component={Status} />
               <Route exact path="/tickets" component={Tickets} />
-              <Route exact path="/history" component={History} />
-              <Route exact path="/notebook" component={NoteBook} />
               <Route exact path="/tickets/:id" component={Detail} />
-              <Route exact path="/admin/:path?">
-                <Route exact path="/admin/dashboard" component={AdminMain} />
-                <Route exact path="/admin/newsletters" component={AdminNews} />
-                <Route exact path="/admin/clients" component={AdminClient} />
-                <Route exact path="/admin/internal" component={AdminAuth} />
+              <Route path="/admin/:path?">
+                <Route path="/admin/dashboard" component={AdminMain} />
+                <Route path="/admin/newsletters" component={AdminNews} />
+                <Route path="/admin/clients" component={AdminClient} />
+                <Route path="/admin/internal" component={AdminAuth} />
               </Route>
             </SideLayout>
+            
           </Switch>
         </CheckAuth>
       </React.Suspense>

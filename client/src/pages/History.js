@@ -1,29 +1,21 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import { Spin } from "antd";
 
-import { GlobalContext } from "../Context/GlobalState";
+import server from '../assets/server_down.svg'
 
-const Table = () => {
-  const { history, getHistory, filter } = useContext(GlobalContext);
-
-  // eslint-disable-next-line no-unused-vars
-  const [id, setId] = useState();
-
-  useEffect(() => {
-    getHistory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+const Table = (props) => {
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10">
-      <div className="flex flex-row">
+    <div className="mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10">
+      {/* <div className="flex flex-row">
         <div className="w-44 mr-4">
           <input
-            onChange={(e) => setId(e.target.value)}
+            onChange={(e) => props.setId(e.target.value)}
             type="number"
             name="ticketid"
             id="ticketid"
@@ -34,7 +26,7 @@ const Table = () => {
         <button
           type="button"
           onClick={() => {
-            filter(id);
+            props.filterTickets();
           }}
         >
           <svg
@@ -55,7 +47,8 @@ const Table = () => {
         <button
           type="button"
           className="ml-3"
-          onClick={() => getHistory()}        >
+          onClick={() => props.fetchAllTickets()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4"
@@ -71,7 +64,7 @@ const Table = () => {
             />
           </svg>
         </button>
-      </div>
+      </div> */}
       <div className="flex flex-col">
         <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -127,67 +120,65 @@ const Table = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {history
-                    ? history.map((ticket) => {
-                        let p = ticket.priority;
-                        let badge;
+                  {props.tickets.map((ticket) => {
+                    let p = ticket.priority;
+                    let badge;
 
-                        if (p === "Low") {
-                          badge = low;
-                        }
-                        if (p === "Normal") {
-                          badge = normal;
-                        }
-                        if (p === "High") {
-                          badge = high;
-                        }
+                    if (p === "Low") {
+                      badge = low;
+                    }
+                    if (p === "Normal") {
+                      badge = normal;
+                    }
+                    if (p === "High") {
+                      badge = high;
+                    }
 
-                        return (
-                          <tr className="bg-white" key={ticket.id}>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {ticket.id}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {ticket.name}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.client.name}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              <span
-                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-                              >
-                                {ticket.priority}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.issue}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.assignedTo
-                                ? ticket.assignedTo.firstName +
-                                  " " +
-                                  ticket.assignedTo.lastName
-                                : "not assigned"}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {ticket.isComplete ? "Completed" : "Issued"}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <Link
-                                to={{
-                                  pathname: `tickets/${ticket.id}`,
-                                  state: ticket,
-                                }}
-                                className="text-indigo-600 hover:text-indigo-900"
-                              >
-                                view
-                              </Link>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    : ""}
+                    return (
+                      <tr className="bg-white" key={ticket.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {ticket.id}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {ticket.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {ticket.client.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+                          >
+                            {ticket.priority}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {ticket.issue}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {ticket.assignedTo
+                            ? ticket.assignedTo.firstName +
+                            " " +
+                            ticket.assignedTo.lastName
+                            : "not assigned"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {ticket.isComplete ? "Completed" : "Issued"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <Link
+                            to={{
+                              pathname: `tickets/${ticket.id}`,
+                              state: ticket,
+                            }}
+                            className="text-indigo-600 hover:text-indigo-900"
+                          >
+                            view
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -278,19 +269,54 @@ const Card = () => {
   );
 };
 
+const fetchAllTickets = async () => {
+  const res = await fetch("/api/v1/tickets/all");
+  return res.json();
+};
+
 const History = () => {
+  const { data, status } = useQuery("fetchAllTickets", fetchAllTickets);
+
   return (
-    <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 flex flex-col">
+    <div className=" mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-10 flex flex-col">
       <div className="sm:px-6 md:px-8 ml-2">
         <div className="flex flex-row">
-          <h1 className="text-2xl font-semibold text-gray-900 mr-4">History</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">History</h1>
         </div>
       </div>
-      <div className="hidden sm:block">
-        <Table />
-      </div>
-      <div className="sm:hidden">
-        <Card />
+      <div className="flex flex-col">
+        {status === "loading" && (
+          <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+            <h2> Loading data ... </h2>
+            <Spin />
+          </div>
+        )}
+
+        {status === "error" && (
+          <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold"> Error fetching data ... </h2>
+            <img src={server} className="h-96 w-96" alt="error" />
+          </div>
+        )}
+
+        {status === "success" && (
+          <div>
+            {data.tickets.length === 0 ? (
+              <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+                <p>No tickets have been created</p>
+              </div>
+            ) : (
+              <div key={data.tickets.id}>
+                <div className="hidden sm:block">
+                  <Table tickets={data.tickets} />
+                </div>
+                <div className="sm:hidden">
+                  <Card tickets={data.tickets} />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

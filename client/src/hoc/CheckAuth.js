@@ -7,9 +7,7 @@ const CheckAuth = ({ children }) => {
   useEffect(() => {
     if (localStorage.getItem("user") === null) {
       history.push("/login");
-    } else {
-      return true;
-    }
+    } 
   });
 
   useEffect(() => {
@@ -21,15 +19,11 @@ const CheckAuth = ({ children }) => {
           Accept: "application/json",
         },
       })
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          const res = response;
+        .then((res) => res.json())
+        .then(res => {
           if (res.auth === false) {
             history.push("/login");
-          } else {
-            return console.log("logged in");
-          }
+          } 
         });
     }
     auth();

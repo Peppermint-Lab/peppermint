@@ -43,7 +43,7 @@ const NoteBook = () => {
             <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
               {notes.slice(minValue, maxValue).map((item) => (
                 <div
-                  key={item.name}
+                  key={item.id}
                   className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
                 >
                   <dt className="text-xl font-medium text-gray-900 truncate">

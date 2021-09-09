@@ -105,3 +105,15 @@ model Todos {
   createdBy User     @relation(fields: [userId], references: [id])
   userId    Int
 }
+
+model Monitor {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+    name String
+    type String
+    url String
+    hostname String
+    port Int
+    Active Boolean
+}

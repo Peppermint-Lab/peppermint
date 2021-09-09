@@ -1,14 +1,15 @@
-import React, { useEffect, useContext } from "react";
-import { GlobalContext } from "../../Context/GlobalState";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import { Spin } from "antd";
 
-const Table = () => {
-  const { openTicket, getOpenTicket } = useContext(GlobalContext);
-  useEffect(() => {
-    getOpenTicket();
-    // eslint-disable-next-line
-  }, []);
+import server from "../../assets/server_down.svg";
 
+const fetchTickets = async () => {
+  const res = await fetch("/api/v1/tickets/openedTickets");
+  return res.json();
+};
+
+const Table = (props) => {
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
@@ -56,7 +57,7 @@ const Table = () => {
               </tr>
             </thead>
             <tbody>
-              {openTicket.map((ticket) => {
+              {props.tickets.map((ticket) => {
                 let p = ticket.priority;
                 let badge;
 
@@ -92,15 +93,12 @@ const Table = () => {
                       {ticket.issue}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Link
-                        to={{
-                          pathname: `tickets/${ticket.id}`,
-                          state: ticket,
-                        }}
+                      <a
+                        href={`tickets/${ticket.id}`}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         view
-                      </Link>
+                      </a>
                     </td>
                   </tr>
                 );
@@ -113,13 +111,7 @@ const Table = () => {
   );
 };
 
-const Card = () => {
-  const { openTicket, getOpenTicket } = useContext(GlobalContext);
-  useEffect(() => {
-    getOpenTicket();
-    // eslint-disable-next-line
-  }, []);
-
+const Card = (props) => {
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
@@ -128,7 +120,7 @@ const Card = () => {
     <div className="overflow-x-auto md:-mx-6 lg:-mx-8 mt-10">
       <div className="py-2 align-middle inline-block min-w-full md:px-6 lg:px-8">
         <div className="overflow-hidden md:rounded-lg">
-          {openTicket.map((ticket) => {
+          {props.tickets.map((ticket) => {
             let p = ticket.priority;
             let badge;
 
@@ -141,8 +133,6 @@ const Card = () => {
             if (p === "High") {
               badge = high;
             }
-
-            console.table(ticket);
 
             return (
               <div className="flex justify-start" key={ticket.id}>
@@ -163,8 +153,7 @@ const Card = () => {
                     <div className="text-gray-700 text-sm font-bold p-2 m-2">
                       <Link
                         to={{
-                          pathname: `tickets/${ticket._id}`,
-                          state: ticket,
+                          pathname: `tickets/${ticket.id}`,
                         }}
                         className="float-right"
                       >
@@ -183,14 +172,42 @@ const Card = () => {
 };
 
 const Open = () => {
+  const { data, status } = useQuery("fetchTickets", fetchTickets);
+
   return (
     <div className="flex flex-col">
-      <div className="hidden sm:block">
-        <Table />
-      </div>
-      <div className="sm:hidden">
-        <Card />
-      </div>
+      {status === "loading" && (
+        <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+          <h2> Loading data ... </h2>
+          <Spin />
+        </div>
+      )}
+
+      {status === "error" && (
+        <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold"> Error fetching data ... </h2>
+          <img src={server} className="h-96 w-96" alt="error" />
+        </div>
+      )}
+
+      {status === "success" && (
+        <div>
+          {data.tickets.length === 0 ? (
+            <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+              <p>No tickets have been created</p>
+            </div>
+          ) : (
+            <div key={data.tickets.id}>
+              <div className="hidden sm:block">
+                <Table tickets={data.tickets} />
+              </div>
+              <div className="sm:hidden">
+                <Card tickets={data.tickets} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

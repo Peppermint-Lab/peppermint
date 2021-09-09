@@ -86,9 +86,7 @@ const Settings = () => {
                   </Link>
                   <Link
                     onClick={() => logout()}
-                    className={
-                      showPassword ? linkStyles.active : linkStyles.inactive
-                    }
+                    className={linkStyles.inactive}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

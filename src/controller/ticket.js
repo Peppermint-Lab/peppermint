@@ -30,8 +30,8 @@ exports.getTicketById = async (req, res) => {
           },
         },
       })
-      .then((ticket) => {
-        res.json({ ticket });
+      .then((tickets) => {
+        res.json({ tickets });
       });
   } catch (error) {
     console.log(error);

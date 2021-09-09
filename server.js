@@ -14,13 +14,13 @@ const fs = require("fs");
 const readline = require("readline");
 const fileUpload = require("express-fileupload");
 const osutils = require("os-utils");
-const os = require('os');
-const compression = require('compression')
+const os = require("os");
+const compression = require("compression");
+const { prisma } = require("./prisma/prisma");
+const Ping = require("ping-monitor");
 
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
-
-let url = null;
 if (process.env.NODE_ENV === "production") {
   url = process.env.MONGO_URI_DOCKER;
 } else {
@@ -40,31 +40,52 @@ const todo = require("./src/routes/todo");
 const note = require("./src/routes/notes");
 const client = require("./src/routes/client");
 const news = require("./src/routes/news");
+const uptime = require("./src/routes/uptime");
 // const times = require("./src/routes/time");
 
 // Express server libraries
 app.use(cors());
-app.use(compression())
+app.use(compression());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cookieParser());
-app.use(fileUpload({useTempFiles: true, tempFileDir: "/tmp/", createParentPath: true, }));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+    createParentPath: true,
+  })
+);
 
 let accessLogStream = fs.createWriteStream(path.join(__dirname, "api.txt"), {
   flags: "a",
 });
 
 // Express API Routes
-app.use("/api/v1/auth",morgan("tiny", { stream: accessLogStream }),limiter, auth);
-app.use("/api/v1/tickets",morgan("tiny", { stream: accessLogStream }),tickets);
+app.use(
+  "/api/v1/auth",
+  morgan("tiny", { stream: accessLogStream }),
+  limiter,
+  auth
+);
+app.use(
+  "/api/v1/tickets",
+  morgan("tiny", { stream: accessLogStream }),
+  tickets
+);
 app.use("/api/v1/data", morgan("tiny", { stream: accessLogStream }), data);
 app.use("/api/v1/todo", morgan("tiny", { stream: accessLogStream }), todo);
 app.use("/api/v1/note", morgan("tiny", { stream: accessLogStream }), note);
 app.use("/api/v1/client", morgan("tiny", { stream: accessLogStream }), client);
-app.use("/api/v1/newsletter", morgan("tiny", { stream: accessLogStream }), news);
+app.use(
+  "/api/v1/newsletter",
+  morgan("tiny", { stream: accessLogStream }),
+  news
+);
 // app.use("/api/v1/time", morgan("tiny", { stream: accessLogStream }), times);
+app.use("/api/v1/uptime", uptime);
 
 // Express web server PORT
 const PORT = process.env.PORT || 5000;
@@ -109,15 +130,14 @@ function convert(file) {
 function stats() {
   let system = osutils.platform();
   let cpu = osutils.cpuCount();
-  let cpuUse = osutils.cpuUsage(function(v){
-    cpuUse = v
+  let cpuUse = osutils.cpuUsage(function (v) {
+    cpuUse = v;
   });
   let loadAverage = osutils.loadavg(5).toFixed(2);
   let totalMem = osutils.totalmem().toFixed(2);
   let freeMem = osutils.freemem().toFixed(2);
   let freeMemPercentage = osutils.freememPercentage().toFixed(2);
-  let uptime = new Date(os.uptime() * 1000).toISOString().substr(11, 8)
-
+  let uptime = new Date(os.uptime() * 1000).toISOString().substr(11, 8);
 
   io.emit("stats", {
     system,
@@ -127,18 +147,40 @@ function stats() {
     freeMem,
     freeMemPercentage,
     uptime,
-    cpuUse
+    cpuUse,
   });
 }
 
 setInterval(stats, 1000);
 
-io.on("connection", (socket) => {
+async function startAll() {
+  const monitors = await prisma.monitor.findMany();
+
+  // console.log(monitors)
+
+  monitors.forEach(function (website) {
+    let monitor = new Ping({
+      website: website.url,
+      interval: 20,
+    });
+
+    monitor.on("up", function (res) {
+      console.log("Yay!! " + res.website + " is up.");
+    });
+
+    io.emit("startmonitor", "Up");
+  });
+}
+
+io.on("connection", async (socket) => {
   online++;
   console.log(`Socket ${socket.id} connected.`);
   console.log(`Online: ${online}`);
   io.emit("visitor enters", online);
+
   stats();
+  startAll();
+
   convert("./api.txt").then((res) => {
     io.emit("file", res);
   });
@@ -149,4 +191,20 @@ io.on("connection", (socket) => {
     console.log(`Online: ${online}`);
     io.emit("visitor exits", online);
   });
+});
+
+io.on("startmonitor", async (socket, callback) => {
+  try {
+    await startAll();
+
+    callback({
+      ok: true,
+      msg: "Started Successfully",
+    });
+  } catch (e) {
+    callback({
+      ok: false,
+      msg: e.message,
+    });
+  }
 });

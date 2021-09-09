@@ -10,8 +10,11 @@ const Main = () => {
   const [online, setOnline] = useState(0);
   const [text, setText] = useState([].reverse());
   const [data, setData] = useState([]);
+  const [test, setTest] = useState([]);
 
   const history = useHistory();
+
+  console.log(test)
 
   useEffect(() => {
     async function soc() {
@@ -37,6 +40,14 @@ const Main = () => {
     }
     soc();
   }, []);
+
+  // useEffect(() => {
+  //   async function soc() {
+  //     const socket = await io.connect("/");
+  //     socket.on("startmonitor", (data) => setTest(data));
+  //   }
+  //   soc();
+  // }, []);
 
   useEffect(() => {
     async function auth() {
