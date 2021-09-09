@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/Status.js"],"names":["Status"],"mappings":"mGAAA,uBAUeA,UARA,WACX,OACI","file":"static/js/22.4b761d0a.chunk.js","sourcesContent":["import React from 'react'\n\nconst Status = () => {\n    return (\n        <div>\n            \n        </div>\n    )\n}\n\nexport default Status\n"],"sourceRoot":""}
