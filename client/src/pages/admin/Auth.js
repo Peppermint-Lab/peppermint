@@ -1,40 +1,21 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import { Space, Table, Button, Popconfirm } from "antd";
-import { useHistory } from "react-router-dom";
+import { useQuery } from "react-query";
+import { Spin } from "antd";
 
-import { GlobalContext } from "../../Context/GlobalState";
+import server from "../../assets/server_down.svg";
 
 import Edit from "../../components/users/Edit";
 import Reset from "../../components/users/Reset";
 import Create from "../../components/users/Create";
 
-const Auth = () => {
-  const history = useHistory();
-  const { users, getUsers } = useContext(GlobalContext);
+const fetchUsers = async () => {
+  const res = await fetch("/api/v1/auth/getAllUsers");
+  return res.json();
+};
 
-  useEffect(() => {
-    async function auth() {
-      await fetch(`/api/v1/auth/token`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          const res = response;
-          if (res.auth === false) {
-            history.push("/login");
-          } else {
-            return console.log("logged in");
-          }
-        });
-    }
-    auth();
-    // eslint-disable-next-line
-  }, []);
+const Auth = () => {
+  const { data, status } = useQuery("fetchAuthUsers", fetchUsers);
 
   const deleteClient = async (client) => {
     const id = client.id;
@@ -42,7 +23,6 @@ const Auth = () => {
       await fetch(`/api/v1/auth/delete/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -51,10 +31,6 @@ const Auth = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   const columns = [
     {
@@ -72,7 +48,7 @@ const Auth = () => {
       responsive: ["md"],
       render: (text, record) => (
         <Space size="middle">
-            <Edit user={record} />
+          <Edit user={record} />
           <Popconfirm
             title="Are you sure you want to delete?"
             onConfirm={() => deleteClient(record)}
@@ -95,7 +71,7 @@ const Auth = () => {
           <div className="py-6">
             <div className="flex flex-row max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <h1 className="text-2xl font-semibold text-gray-900">
-              Internal Users
+                Internal Users
               </h1>
               <div className="ml-3">
                 <Create />
@@ -103,15 +79,36 @@ const Auth = () => {
             </div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="py-4">
-                <Table
-                  dataSource={users}
-                  columns={columns}
-                  pagination={{
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                    pageSizeOptions: ["10", "20", "30"],
-                  }}
-                />
+                {status === "loading" && (
+                  <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+                    <h2> Loading data ... </h2>
+                    <Spin />
+                  </div>
+                )}
+
+                {status === "error" && (
+                  <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+                    <h2 className="text-2xl font-bold">
+                      {" "}
+                      Error fetching data ...{" "}
+                    </h2>
+                    <img src={server} className="h-96 w-96" alt="error" />
+                  </div>
+                )}
+
+                {status === "success" && (
+                  <div>
+                    <Table
+                      dataSource={data.users}
+                      columns={columns}
+                      pagination={{
+                        defaultPageSize: 10,
+                        showSizeChanger: true,
+                        pageSizeOptions: ["10", "20", "30"],
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
