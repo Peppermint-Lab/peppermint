@@ -9,31 +9,7 @@ import Create from '../../components/client/Create'
 
 
 const Client = () => {
-  const history = useHistory();
   const { clients, getClients } = useContext(GlobalContext);
-
-  useEffect(() => {
-    async function auth() {
-      await fetch(`/api/v1/auth/token`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          const res = response;
-          if (res.auth === false) {
-            history.push("/login");
-          } else {
-            return console.log("logged in");
-          }
-        });
-    }
-    auth();
-    // eslint-disable-next-line
-  }, []);
 
   useEffect(() => {
     getClients();
@@ -41,7 +17,7 @@ const Client = () => {
   }, []);
 
   const deleteClient = async (client) => {
-    const id = client._id;
+    const id = client.id;
     try {
       await fetch(`/api/v1/client/delete/${id}`, {
         method: "DELETE",

@@ -43,8 +43,6 @@ exports.getAll = async (req, res) => {
 
 exports.updateClient = async (req, res) => {
   console.log("Update Client Api");
-  console.log(req.body);
-
   try {
     await prisma.client.update({
       where: { id: Number(req.body.id) },
@@ -52,7 +50,7 @@ exports.updateClient = async (req, res) => {
         name: req.body.clientName,
         contactName: req.body.name,
         email: req.body.email,
-        number: Number(req.body.number),
+        number: String(req.body.number),
       }
     });
   } catch (error) {

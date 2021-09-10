@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Row } from "antd";
+import { useHistory } from 'react-router'
 
 const Update = (props) => {
   const [visible, setVisible] = useState(false);
@@ -8,21 +9,25 @@ const Update = (props) => {
   const [email, setEmail] = useState(props.client.email);
   const [number, setNumber] = useState(props.client.number);
 
+  const history = useHistory()
+
   const postData = async () => {
     await fetch(`/api/v1/client/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        id: props.client._id,
+        id: props.client.id,
         clientName,
         name,
         email,
         number,
       }),
-    }).then((res) => res.json);
+    }).then((res) => res.json)
+      .then(() => {
+        history.go(0)
+      })
   };
 
   const onCreate = async (e) => {
