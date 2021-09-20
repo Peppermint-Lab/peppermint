@@ -46,19 +46,18 @@ services:
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:latest
+    image: pepperlabs/peppermint
     ports:
       - 5000:5000
     restart: on-failure
     depends_on:
       - postgres
     environment:
-      JWT_SECRET: 'ZwfJtS3muY65CaeZ' 
+      JWT_SECRET: "ZwfJtS3muY65CaeZ"
       PORT: 5000
-      DB_USERNAME: peppermint
-      DB_PASSWORD: 1234
-      DB_HOST: 'postgres'
-
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "postgres"
 
 ```
 
