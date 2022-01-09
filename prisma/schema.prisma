@@ -36,7 +36,7 @@ model Ticket {
   isIssued   Boolean
   isComplete Boolean
   priority   String
-  assignedTo User     @relation(fields: [userId], references: [id])
+  assignedTo User?    @relation(fields: [userId], references: [id])
   client     Client   @relation(fields: [clientId], references: [id])
   clientId   Int
   userId     Int
