@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useRouter } from "next/router";
 import { SessionProvider } from "next-auth/react";
+import SideLayout from '../components/Layout/SideLayout'
 
 const queryClient = new QueryClient();
 
@@ -21,7 +22,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     <>
       <SessionProvider session={pageProps.session}>
         <QueryClientProvider client={queryClient}>
+        <SideLayout>
           <Component {...pageProps} />
+          </SideLayout>
         </QueryClientProvider>
       </SessionProvider>
     </>
