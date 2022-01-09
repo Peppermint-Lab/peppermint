@@ -11,7 +11,7 @@ const options = {
       async authorize(credentials, req, res) {
         try {
           const user = await prisma.user.findUnique({
-            where: { email: emailLower },
+            where: { email: credentials.email },
           });
 
           if (!user) throw new Error("No user found");
