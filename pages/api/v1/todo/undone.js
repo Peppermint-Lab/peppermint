@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function unDone() {
+export default async function unDone(req, res) {
   try {
     prisma.todos
       .update({

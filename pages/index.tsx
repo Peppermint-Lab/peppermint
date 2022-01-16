@@ -1,20 +1,21 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   CheckCircleIcon,
   OfficeBuildingIcon,
   ArrowRightIcon,
 } from "@heroicons/react/solid";
 
+import ListTodo from '../components/ListTodo'
+
 export default function Home() {
   const [file, setFile] = useState([]);
   const [hour, setHour] = useState();
-  const [text, setText] = useState("");
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
 
   const user = {
     firstName: "Jack",
-    lastName: "Wanker",
+    lastName: "Andrews",
     isAdmin: true,
   };
 
@@ -23,10 +24,6 @@ export default function Home() {
     const hour = date.getHours();
     setHour(hour);
   }
-
-  const onSubmit = () => {
-    // addTodo(text);
-  };
 
   async function getOpenTickets() {
     await fetch(`/api/v1/data/openTickets`, {
@@ -95,13 +92,13 @@ export default function Home() {
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
                       <dt className="sr-only">Company</dt>
-                      <dd className="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6">
+                      {/* <dd className="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6">
                         <OfficeBuildingIcon
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                           aria-hidden="true"
                         />
                         Duke street studio
-                      </dd>
+                      </dd> */}
                       <dt className="sr-only">Account status</dt>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
                         <CheckCircleIcon
@@ -146,28 +143,7 @@ export default function Home() {
                       Todo List
                     </h1>
                   </div>
-                  <div className="flex flex-row items-center w-full">
-                    <div className="mt-1 relative shadow-sm w-full">
-                      <input
-                        type="text"
-                        name="text"
-                        id="text"
-                        className="w-full text-gray-900 border-none focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                        placeholder="Enter todo here..."
-                        onChange={(e) => {
-                          setText(e.target.value);
-                        }}
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => onSubmit()}
-                      className="sm:-mr-10"
-                    >
-                      <ArrowRightIcon className="h-6 w-6" />
-                    </button>
-                  </div>
-                  {/* <ListTodo /> */}
+                  <ListTodo />
                 </div>
               </div>
             </div>

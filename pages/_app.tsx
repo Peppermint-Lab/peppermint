@@ -1,4 +1,6 @@
 import "../styles/globals.css";
+import 'antd/dist/antd.css';
+
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useRouter } from "next/router";

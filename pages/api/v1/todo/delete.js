@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function delete() {
+export default async function deleteTodo(req, res) {
   try {
      const todo = await doesTodoExist(Number(req.params.id));
      

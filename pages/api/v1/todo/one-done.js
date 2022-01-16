@@ -12,7 +12,7 @@ const doesTodoExist = async (id) => {
   return exists;
 };
 
-export default async function oneDone() {
+export default async function oneDone(req, res) {
   try {
     const todo = await doesTodoExist(req.params.id);
     if (!todo) {

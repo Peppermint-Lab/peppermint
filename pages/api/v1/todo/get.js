@@ -1,10 +1,15 @@
 const { prisma } = require("../../../../prisma/prisma");
+import { getSession } from "next-auth/react"
 
-export default async function get() {
+
+export default async function getTodo(req, res) {
+  const session = await getSession({ req })
+
+  console.log(session)
+
   try {
-      
     const todos = await prisma.todos.findMany({
-      where: { userId: req.user.id },
+      where: { userId: session.id },
       select: {
         id: true,
         text: true,

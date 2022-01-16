@@ -25,7 +25,7 @@ const options = {
 
           return {
             email: user.email,
-            id: user._id,
+            id: user.id,
           };
         } catch (error) {
           throw new Error(error);
@@ -41,6 +41,20 @@ const options = {
   database: process.env.DATABASE_URL,
   pages: {
     signIn: "/auth/login",
+  },
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      // console.log(token, user)
+      user && (token.user = user)
+
+      return token
+  },
+    async session({ session, token, user }) {
+      // console.log(session, user, token)
+      session.accessToken = token.accessToken
+      session.id = token.user.id
+      return session
+    }
   },
   debug: true,
 };

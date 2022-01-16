@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function allDone() {
+export default async function allDone(req, res) {
   try {
     aprisma.todos
       .updateMany({
