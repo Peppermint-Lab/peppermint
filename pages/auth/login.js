@@ -29,7 +29,7 @@ export default function Login({ csrfToken }) {
             <form
               className="space-y-6"
               method="post"
-              action="/api/auth/callback/credentials"
+              action="/api/v1/auth/callback/credentials"
             >
               <div>
                 <input
