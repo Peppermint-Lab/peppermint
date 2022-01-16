@@ -1,6 +1,5 @@
 import { getCsrfToken } from "next-auth/react"
 
-
 export async function getServerSideProps(context) {
     return {
       props: {
@@ -29,7 +28,7 @@ export default function Login({ csrfToken }) {
             <form
               className="space-y-6"
               method="post"
-              action="/api/v1/auth/callback/credentials"
+              action="/api/auth/callback/credentials"
             >
               <div>
                 <input
