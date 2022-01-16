@@ -1,4 +1,4 @@
-const { prisma } = require("../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
 
 const doesTodoExist = async (id) => {
   const exists = await prisma.todos
@@ -13,25 +13,32 @@ const doesTodoExist = async (id) => {
 };
 
 export default async function oneDone(req, res) {
+  const { id } = req.query;
+
   try {
-    const todo = await doesTodoExist(req.params.id);
+    const todo = await doesTodoExist(id);
+
+    console.log(todo);
+
     if (!todo) {
       return res.status(404).json({
         success: false,
         error: "Todo not found.",
       });
     } else {
-      prisma.todos
-        .update({
+      try {
+        prisma.todos.update({
           where: {
-            id: Number(req.params.id),
+            id,
           },
           data: {
             done: true,
           },
-        })
-        
-      console.log("Updated record");
+        });
+        console.log("Updated record");
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     res.status(201).json({ success: true, message: "Marked as Done" });

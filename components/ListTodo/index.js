@@ -47,6 +47,12 @@ export default function ListTodo() {
     }).then(() => refetch());
   }
 
+  async function markDone(id) {
+    await fetch(`api/v1/todo/mark-done/${id}`, {
+      method: "POST",
+    }).then(() => refetch());
+  }
+
   return (
     <div>
       <div className="flex flex-row items-center w-full">
@@ -84,7 +90,7 @@ export default function ListTodo() {
                   <div className="flex flex-col" key={todo.id}>
                     <ul>
                       <li>
-                        <span className={todo.done ? "done" : ""}>
+                        <span className={todo.done ? "line-through" : ""}>
                           {todo.text}
                         </span>
                         <button

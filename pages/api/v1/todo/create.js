@@ -4,7 +4,6 @@ import { getSession } from "next-auth/react"
 
 export default async function create(req, res) {
   const session = await getSession({ req })
-  // console.log(session, JSON.parse(req.body))
 
   const { todo } = JSON.parse(req.body);
 
