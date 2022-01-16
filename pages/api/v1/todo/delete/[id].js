@@ -1,8 +1,23 @@
-const { prisma } = require("../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
+
+const doesTodoExist = async (id) => {
+  const exists = await prisma.todos
+    .findUnique({
+      where: {
+        id: Number(id),
+      },
+    })
+    .then(Boolean);
+
+  return exists;
+};
 
 export default async function deleteTodo(req, res) {
+
+  const { id } = req.query
+
   try {
-     const todo = await doesTodoExist(Number(req.params.id));
+     const todo = await doesTodoExist(Number(id));
      
     if (!todo) {
       return res.status(404).json({
@@ -13,7 +28,7 @@ export default async function deleteTodo(req, res) {
 
     await prisma.todos.delete({
       where: {
-        id: Number(req.params.id),
+        id: Number(id),
       },
     });
 
