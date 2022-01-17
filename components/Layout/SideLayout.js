@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 
+import CreateTicketModal from '../CreateTicketModal'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -114,7 +115,7 @@ export default function SideLayout({ children }) {
                     <img className="h-8 w-auto" src='/logo.svg' alt="Workflow" />
                   </div>
                   <nav className="mt-5 px-2 space-y-1">
-                    {/* <Create /> */}
+                    <CreateTicketModal />
                     {navigation.map((item) => (
                       <a
                         key={item.name}
@@ -135,12 +136,12 @@ export default function SideLayout({ children }) {
                     ))}
                   </nav>
                   <div className={user.isAdmin ? "mt-8" : "hidden"}>
-                    <h3
-                      className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                    {/* <h3
+                      className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
                       id="projects-headline"
                     >
                       Projects
-                    </h3>
+                    </h3> */}
                     <div
                       className="mt-1 space-y-1"
                       aria-labelledby="projects-headline"
@@ -197,14 +198,14 @@ export default function SideLayout({ children }) {
               <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                 <div className="flex flex-shrink-0 px-4 align-middle flex-row">
                   <img className="h-8 w-auto" src='/logo.svg' alt="Workflow" />
-                  <a href="https://pmint.dev" target="_blank" rel="noreferrer">
+                  <a href="https://peppermint.sh" target="_blank" rel="noreferrer">
                     <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
                       Peppermint
                     </h1>
                   </a>
                 </div>
                 <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
-                  {/* <Create /> */}
+                <CreateTicketModal />
                   {navigation.map((item) => (
                     <a
                       key={item.name}
