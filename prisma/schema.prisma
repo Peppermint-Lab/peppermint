@@ -15,7 +15,7 @@ model User {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
   firstName  String
-  lastName   String
+  lastName   String?
   password   String
   email      String       @unique
   isAdmin    Boolean
