@@ -1,8 +1,10 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function create() {
+export default async function create(req, res) {
+
+  const { name, company, issue, priority, email, engineer } = JSON.parse(req.body);
+  
   try {
-    const { name, company, issue, priority, email, engineer } = req.body;
     if (!name || !company || !issue || !priority) {
       return res
         .status(422)
@@ -11,7 +13,7 @@ export default async function create() {
     await prisma.ticket
       .create({
         data: {
-          name: req.body.name,
+          name,
           issue,
           priority,
           email,
@@ -21,7 +23,7 @@ export default async function create() {
           assignedTo: {
             connect: { id: Number(engineer) },
           },
-          isIssued: Boolean(true),
+          isIssued: Boolean(false),
           isComplete: Boolean(false),
         },
       })

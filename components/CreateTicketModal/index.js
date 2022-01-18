@@ -1,6 +1,12 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Select, Form, Input, Radio, Space } from "antd";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Transition, Listbox } from "@headlessui/react";
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 export default function CreateTicketModal() {
   const [open, setOpen] = useState(false);
@@ -19,7 +25,7 @@ export default function CreateTicketModal() {
   const { Option } = Select;
 
   const fetchClients = async () => {
-    await fetch(`/api/v1/client/allclients`, {
+    await fetch(`/api/v1/clients/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +41,7 @@ export default function CreateTicketModal() {
 
   async function getUsers() {
     try {
-      await fetch(`/api/v1/auth/getAllUsers`, {
+      await fetch(`/api/v1/users/all`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -50,6 +56,25 @@ export default function CreateTicketModal() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  console.log(users)
+
+  async function createTicket() {
+    await fetch("api/v1/ticket/create", {
+      method: "POST",
+      headers: {
+        "content-type": "application/sjon",
+      },
+      body: JSON.stringify({
+        name,
+        company,
+        engineer,
+        email,
+        issue,
+        priority,
+      }),
+    });
   }
 
   useEffect(() => {
@@ -162,35 +187,157 @@ export default function CreateTicketModal() {
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                       />
 
-                      <Select
-                        bordered={false}
-                        showSearch
-                        placeholder="Select a client"
-                        optionFilterProp="children"
-                        onChange={setCompany}
-                        filterOption={(input, option) =>
-                          option.children
-                            .toLowerCase()
-                            .indexOf(input.toLowerCase()) >= 0
-                        }
-                      >
-                        {search}
-                      </Select>
+                      <Listbox value={company} onChange={setCompany}>
+                        {({ open }) => (
+                          <>
+                            <div className="mt-1 relative">
+                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <span className="block truncate">
+                                  {company ? company.name : 'Please select client'}
+                                </span>
+                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                  <SelectorIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </Listbox.Button>
 
-                      <Select
-                        bordered={false}
-                        showSearch
-                        placeholder="Select a Engineer"
-                        optionFilterProp="children"
-                        onChange={setEngineer}
-                        filterOption={(input, option) =>
-                          option.children
-                            .toLowerCase()
-                            .indexOf(input.toLowerCase()) >= 0
-                        }
-                      >
-                        {userSearch}
-                      </Select>
+                              <Transition
+                                show={open}
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                  {options.map((person) => (
+                                    <Listbox.Option
+                                      key={person.id}
+                                      className={({ active }) =>
+                                        classNames(
+                                          active
+                                            ? "text-white bg-indigo-600"
+                                            : "text-gray-900",
+                                          "cursor-default select-none relative py-2 pl-3 pr-9"
+                                        )
+                                      }
+                                      value={person}
+                                    >
+                                      {({ company, active }) => (
+                                        <>
+                                          <span
+                                            className={classNames(
+                                              company
+                                                ? "font-semibold"
+                                                : "font-normal",
+                                              "block truncate"
+                                            )}
+                                          >
+                                            {person.firstName}
+                                          </span>
+
+                                          {company ? (
+                                            <span
+                                              className={classNames(
+                                                active
+                                                  ? "text-white"
+                                                  : "text-indigo-600",
+                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                              )}
+                                            >
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          </>
+                        )}
+                      </Listbox>
+
+                      <Listbox value={engineer} onChange={setEngineer}>
+                        {({ open }) => (
+                          <>
+                            <div className="mt-1 relative">
+                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <span className="block truncate">
+                                  {engineer ? engineer.name : 'Please select an engineer'}
+                                </span>
+                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                  <SelectorIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </Listbox.Button>
+
+                              <Transition
+                                show={open}
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                  {users.map((person) => (
+                                    <Listbox.Option
+                                      key={person.id}
+                                      className={({ active }) =>
+                                        classNames(
+                                          active
+                                            ? "text-white bg-indigo-600"
+                                            : "text-gray-900",
+                                          "cursor-default select-none relative py-2 pl-3 pr-9"
+                                        )
+                                      }
+                                      value={person}
+                                    >
+                                      {({ engineer, active }) => (
+                                        <>
+                                          <span
+                                            className={classNames(
+                                              engineer
+                                                ? "font-semibold"
+                                                : "font-normal",
+                                              "block truncate"
+                                            )}
+                                          >
+                                            {person.firstName}
+                                          </span>
+
+                                          {engineer ? (
+                                            <span
+                                              className={classNames(
+                                                active
+                                                  ? "text-white"
+                                                  : "text-indigo-600",
+                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                              )}
+                                            >
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          </>
+                        )}
+                      </Listbox>
 
                       <Input.TextArea
                         rows={5}
@@ -216,14 +363,7 @@ export default function CreateTicketModal() {
                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">
                       <button
                         onClick={() => {
-                          createTicket(
-                            name,
-                            email,
-                            company,
-                            issue,
-                            priority,
-                            engineer
-                          );
+                          createTicket();
                           form.resetFields();
                           setOpen(false);
                         }}
