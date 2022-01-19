@@ -1,25 +1,27 @@
 const { prisma } = require("../../../../../prisma/prisma");
+import { getSession } from "next-auth/react";
 
+export default async function userOpen(req, res) {
+  const session = await getSession({ req });
 
-export default async function userOpen() {
-    try {
-        await prisma.ticket
-          .findMany({
-            where: { isIssued: true, userId: Number(req.user.id) },
-            include: {
-              client: {
-                select: { id: true, name: true, number: true },
-              },
-              assignedTo: {
-                select: { id: true, firstName: true, lastName: true },
-              },
-            },
-          })
-          .then((tickets) => {
-            res.json({ tickets });
-          });
-      } catch (error) {
-        console.log(error);
-        return res.status(404);
-      }
+  try {
+    await prisma.ticket
+      .findMany({
+        where: { userId: Number(session.id) },
+        include: {
+          client: {
+            select: { id: true, name: true, number: true },
+          },
+          assignedTo: {
+            select: { id: true, firstName: true, lastName: true },
+          },
+        },
+      })
+      .then((tickets) => {
+        res.json({ tickets });
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
 }

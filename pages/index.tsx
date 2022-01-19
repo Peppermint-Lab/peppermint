@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   CheckCircleIcon,
-  OfficeBuildingIcon,
-  ArrowRightIcon,
 } from "@heroicons/react/solid";
 
 import ListTodo from '../components/ListTodo'
