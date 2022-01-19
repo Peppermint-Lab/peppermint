@@ -39,6 +39,8 @@ export default function CreateTicketModal() {
       });
   };
 
+  console.log(options)
+
   async function getUsers() {
     try {
       await fetch(`/api/v1/users/all`, {
@@ -57,8 +59,6 @@ export default function CreateTicketModal() {
       console.log(error);
     }
   }
-
-  console.log(users)
 
   async function createTicket() {
     await fetch("api/v1/ticket/create", {
@@ -234,7 +234,7 @@ export default function CreateTicketModal() {
                                               "block truncate"
                                             )}
                                           >
-                                            {person.firstName}
+                                            {person.name}
                                           </span>
 
                                           {company ? (
