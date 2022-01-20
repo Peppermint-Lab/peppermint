@@ -66,7 +66,7 @@ export default function SideLayout({ children }) {
           <Dialog
             as="div"
             static
-            className="fixed inset-0 flex z-40 md:hidden"
+            className="fixed inset-0 flex z-40 lg:hidden"
             open={sidebarOpen}
             onClose={setSidebarOpen}
           >
@@ -81,6 +81,7 @@ export default function SideLayout({ children }) {
             >
               <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
             </Transition.Child>
+
             <Transition.Child
               as={Fragment}
               enter="transition ease-in-out duration-300 transform"
@@ -191,7 +192,7 @@ export default function SideLayout({ children }) {
         </Transition.Root>
   
         {/* Static sidebar for desktop */}
-        <div className="hidden md:flex md:flex-shrink-0">
+        <div className="hidden lg:flex md:flex-shrink-0">
           <div className="flex flex-col w-64">
             {/* Sidebar component, swap this element with another sidebar if you like */}
             <div className="flex flex-col h-0 flex-1 bg-gray-900">
@@ -277,7 +278,7 @@ export default function SideLayout({ children }) {
           </div>
         </div>
         <div className="flex flex-col w-0 flex-1">
-          <div className="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
+          <div className="lg:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
             <button
               className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               onClick={() => setSidebarOpen(true)}
