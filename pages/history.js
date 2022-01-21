@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 
 async function getUserTickets() {
-  const res = await fetch("/api/v1/ticket/user/open");
+  const res = await fetch("/api/v1/ticket/all");
   return res.json();
 }
 
@@ -187,8 +187,10 @@ function Table({ columns, data }) {
   );
 }
 
-export default function Tickets() {
+export default function TicketHitory() {
   const { data, status, error } = useQuery("userTickets", getUserTickets);
+
+  console.log(data)
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
@@ -211,6 +213,11 @@ export default function Tickets() {
       accessor: "name",
       id: "client_name",
     },
+    {
+        Header: "Engineer",
+        accessor: "assignedTo.firstName",
+        id: "engineer",
+      },
     {
       Header: "Priority",
       accessor: "priority",
@@ -256,7 +263,6 @@ export default function Tickets() {
       Header: "",
       id: "actions",
       Cell: ({ row, value }) => {
-        console.log(row);
         return (
           <>
             <Link href={`/ticket/${row.cells[0].value}`}>View</Link>

@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function completeTicket() {
+export default async function completeTicket(req,res) {
   try {
     await prisma.ticket.update({
       where: { id: Number(req.params.id) },

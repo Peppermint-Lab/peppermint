@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function convert() {
+export default async function convert(req,res) {
     const { data } = req.body;
   const t = data._id;
 

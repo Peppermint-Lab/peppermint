@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function getUnissued() {
+export default async function getUnissued(req,res) {
   try {
     await prisma.ticket
       .findMany({

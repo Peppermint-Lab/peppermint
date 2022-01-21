@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function unCompleteTicket() {
+export default async function unCompleteTicket(req,res) {
   try {
     await prisma.ticket.update({
       where: { id: Number(req.body.id) },

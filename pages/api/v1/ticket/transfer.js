@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function transferTicket() {
+export default async function transferTicket(req,res) {
     console.log(req.body);
   try {
     await prisma.ticket.update({

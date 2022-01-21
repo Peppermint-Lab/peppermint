@@ -33,7 +33,7 @@ export default function SideLayout({ children }) {
       },
       {
         name: "Tickets",
-        href: "/tickets",
+        href: "/ticket",
         icon: TicketIcon,
         current: location.pathname === "/ticket" ? true : false,
       },
