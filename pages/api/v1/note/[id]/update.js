@@ -1,17 +1,18 @@
 const { prisma } = require("../../../../../prisma/prisma");
 
 export default async function handler(req, res) {
-  try {
-      
-    console.log(req.body);
-    await prisma.notes.update({
-      where: { id: Number(req.body.id) },
-      data: { note: req.body.note },
-    });
-    console.log("Updated Note");
-    res.status(201).json({ success: true, message: "Note Updated" });
+  const { id } = req.query;
 
-    res.status(200).json({ success: true, result });
+  try {
+    await prisma.notes.update({
+      where: { id: Number(id) },
+      data: {
+        note: req.body.note,
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({ success: true, message: "Note Updated" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
