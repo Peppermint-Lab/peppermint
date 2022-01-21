@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
-
-import rehypeSanitize from "rehype-sanitize";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -9,7 +9,14 @@ import "@uiw/react-markdown-preview/markdown.css";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function ViewNoteBook() {
-  const [value, setValue] = useState("Test");
+  const router = useRouter();
+
+  async function getMarkdown() {
+    const res = await fetch(`/api/v1/note/${router.query.id}`);
+    return res.json();
+  }
+
+  const { data, status, error } = useQuery("edit", getMarkdown);
 
   return (
     <div>
@@ -32,13 +39,11 @@ export default function ViewNoteBook() {
       </div>
 
       <div className="mt-4">
-        <MDEditor
-          value={value}
-          onChange={setValue}
-          previewOptions={{
-            rehypePlugins: [[rehypeSanitize]],
-          }}
-        />
+        {status === "success" && (
+          <div>
+            <MDEditor value={data.data.note} height="80vh" />
+          </div>
+        )}
       </div>
     </div>
   );
