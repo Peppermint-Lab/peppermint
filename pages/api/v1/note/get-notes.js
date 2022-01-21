@@ -1,18 +1,16 @@
 const { prisma } = require("../../../../prisma/prisma");
+import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
-  try {
-    const result = await prisma.notes
-    .findMany({
-      where: { userId: Number(req.user.id) },
-      include: {
-        createdBy: {
-          select: { id: true, firstName: true, lastName: true },
-        },
-      },
-    })
+  const session = await getSession({ req });
 
-    res.status(200).json({ success: true, result });
+  try {
+    const notebooks = await prisma.notes.findMany({
+      where: { userId: Number(session.id) },
+    });
+
+    res.status(200).json({ success: true, notebooks });
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
