@@ -190,7 +190,7 @@ function Table({ columns, data }) {
 export default function TicketHitory() {
   const { data, status, error } = useQuery("userTickets", getUserTickets);
 
-  console.log(data)
+  console.log(data);
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
@@ -214,10 +214,36 @@ export default function TicketHitory() {
       id: "client_name",
     },
     {
-        Header: "Engineer",
-        accessor: "assignedTo.firstName",
-        id: "engineer",
+      Header: "Engineer",
+      accessor: "assignedTo.firstName",
+      id: "engineer",
+    },
+    {
+      Header: "Status",
+      accessor: "isComplete",
+      id: "status",
+      Cell: ({  value }) => {
+        let p = value;
+        let badge;
+
+        if (p === false) {
+          badge = high;
+        }
+        if (p === true) {
+          badge = low;
+        }
+
+        return (
+          <>
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+            >
+              {value ? "Completed" : "Outstanding"}
+            </span>
+          </>
+        );
       },
+    },
     {
       Header: "Priority",
       accessor: "priority",
