@@ -43,4 +43,6 @@ ENV PORT 3000
 # Uncomment the following line in case you want to disable telemetry.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+RUN yarn run migrate && yarn run generate && yarn run seed 
+
 CMD ["node", "server.js"]
