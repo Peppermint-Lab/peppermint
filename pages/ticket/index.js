@@ -6,6 +6,7 @@ import {
   useGlobalFilter,
   usePagination,
 } from "react-table";
+import Link from "next/link";
 
 async function getUserTickets() {
   const res = await fetch("/api/v1/ticket/user/open");
@@ -270,9 +271,10 @@ export default function Tickets() {
       Header: "",
       id: "actions",
       Cell: ({ row, value }) => {
+        console.log(row)
         return (
           <>
-            <button>View</button>
+            <Link href={`/ticket/${row.cells[0].value}`}>View</Link>
           </>
         );
       },
