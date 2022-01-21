@@ -1,4 +1,4 @@
-const { prisma } = require("../../../../../prisma/prisma");
+const { prisma } = require("../../../../prisma/prisma");
 
 export default async function createClient(req, res) {
   try {

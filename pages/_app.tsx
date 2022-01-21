@@ -7,9 +7,13 @@ import { useRouter } from "next/router";
 import { SessionProvider, useSession } from "next-auth/react";
 import SideLayout from '../components/Layout/SideLayout'
 
+interface Props {
+  children: any;
+}
+
 const queryClient = new QueryClient();
 
-function Auth({ children }) {
+function Auth({ children }: Props ) {
   const { data: session, status } = useSession({required: true})
   const isUser = !!session?.user
 

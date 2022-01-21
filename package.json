@@ -8,7 +8,7 @@
     "migrate-dev": "prisma migrate dev --preview-feature",
     "migrate": "prisma migrate deploy",
     "generate": "prisma generate",
-    "docker": "npm run migrate && npm run generate && npm run seed && npm run server"
+    "docker": "yarn run migrate && yarn run generate && yarn run seed && yarn start"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.2",

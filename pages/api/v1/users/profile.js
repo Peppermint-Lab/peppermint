@@ -1,4 +1,5 @@
-const { prisma } = require("../../../../../prisma/prisma");
+const { prisma } = require("../../../../prisma/prisma");
+
 
 export default async function getAllClients(req, res) {
   const emailLower = req.body.email.toLowerCase();

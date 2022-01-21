@@ -1,4 +1,5 @@
-const { prisma } = require("../../../../../prisma/prisma");
+const { prisma } = require("../../../../prisma/prisma");
+
 import bcrypt from "bcrypt";
 
 export default async function getAllClients(req, res) {
