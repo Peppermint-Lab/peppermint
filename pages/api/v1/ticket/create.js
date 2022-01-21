@@ -3,8 +3,6 @@ const { prisma } = require("../../../../prisma/prisma");
 export default async function create(req, res) {
 
   const { name, company, issue, priority, email, engineer } = JSON.parse(req.body);
-
-  console.log(JSON.parse(req.body))
   
   try {
     if (!name || !company || !issue || !priority) {
