@@ -1,11 +1,15 @@
-const { prisma } = require("../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
 
-export default async function getById() {
+export default async function getById(req, res) {
+  const { id } = req.query;
+
+  console.log(id);
+
   try {
     await prisma.ticket
       .findUnique({
         where: {
-          id: Number(req.params.id),
+          id: Number(id),
         },
         include: {
           client: {
@@ -17,7 +21,7 @@ export default async function getById() {
         },
       })
       .then((tickets) => {
-        res.json({ tickets });
+        res.status(200).json({ tickets });
       });
   } catch (error) {
     console.log(error);
