@@ -7,6 +7,7 @@ import {
   useGlobalFilter,
   usePagination,
 } from "react-table";
+import ClientNotesModal from "../../components/ClientNotesModal";
 
 const fetchAllClients = async () => {
   const res = await fetch("/api/v1/clients/all");
@@ -188,37 +189,39 @@ function Table({ columns, data }) {
 }
 
 export default function Clients() {
-  const { data, status, refetch } = useQuery("fetchAllClients", fetchAllClients);
+  const { data, status, refetch } = useQuery(
+    "fetchAllClients",
+    fetchAllClients
+  );
 
-  async function deleteClient(client) {
-    const id = client.id;
-    try {
-      await fetch(`/api/v1/clients/${id}/delete-client`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then(() => {
-          refetch;
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //   async function deleteClient(id) {
+  //     try {
+  //       await fetch(`/api/v1/clients/${id}/delete-client`, {
+  //         method: "DELETE",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       })
+  //         .then((response) => response.json())
+  //         .then(() => {
+  //           refetch;
+  //         });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
 
   const columns = React.useMemo(() => [
     {
-      Header: "Name",
-      accessor: "firstName",
+      Header: "Client Name",
+      accessor: "name",
       width: 10,
-      id: "name",
+      id: "client_name",
     },
     {
-      Header: "Email",
-      accessor: "email",
-      id: "email",
+      Header: "Contact Name",
+      accessor: "contactName",
+      id: "contactName",
     },
     {
       Header: "",
@@ -226,18 +229,7 @@ export default function Clients() {
       Cell: ({ row, value }) => {
         return (
           <div className="space-x-4 flex flex-row">
-            <ResetPassword user={row.original} />
-            <Popconfirm
-              title="Are you sure you want to delete?"
-              onConfirm={() => deleteClient(row.cells[0].value)}
-            >
-              <button
-                type="button"
-                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Delete
-              </button>
-            </Popconfirm>
+            <ClientNotesModal notes={row.original.notes} id={row.original.id} />
           </div>
         );
       },
@@ -252,9 +244,7 @@ export default function Clients() {
       >
         <div className="py-6">
           <div className="flex flex-row max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Internal Users
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Clients</h1>
             <div className="ml-3">{/* <Create /> */}</div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
@@ -278,7 +268,7 @@ export default function Clients() {
 
               {status === "success" && (
                 <div>
-                  <Table columns={columns} data={data.users} />
+                  <Table columns={columns} data={data.clients} />
                 </div>
               )}
             </div>
