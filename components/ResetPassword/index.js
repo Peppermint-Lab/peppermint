@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { message } from "antd";
 import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationIcon, XIcon } from "@heroicons/react/outline";
+import { XIcon } from "@heroicons/react/outline";
 
 export default function ResetPassword({ user }) {
   const [open, setOpen] = useState(false);
