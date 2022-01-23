@@ -190,8 +190,6 @@ function Table({ columns, data }) {
 export default function TicketHitory() {
   const { data, status, error } = useQuery("userTickets", getUserTickets);
 
-  console.log(data);
-
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
@@ -297,8 +295,6 @@ export default function TicketHitory() {
       },
     },
   ]);
-
-  console.log(data);
 
   return (
     <div>

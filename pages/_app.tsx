@@ -17,7 +17,7 @@ function Auth({ children }: Props ) {
   const { data: session, status } = useSession({required: true})
   const isUser = !!session?.user
 
-  console.log(session)
+  // console.log(session)
 
   if (isUser) {
     return children

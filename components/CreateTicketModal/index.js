@@ -39,8 +39,6 @@ export default function CreateTicketModal() {
       });
   };
 
-  console.log(options)
-
   async function getUsers() {
     try {
       await fetch(`/api/v1/users/all`, {
