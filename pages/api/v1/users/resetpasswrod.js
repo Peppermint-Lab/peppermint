@@ -3,12 +3,12 @@ const { prisma } = require("../../../../prisma/prisma");
 import bcrypt from "bcrypt";
 
 export default async function getAllClients(req, res) {
-  const { password } = req.body;
+  const { password, id } = req.body;
 
   try {
     const hashedPass = await bcrypt.hash(password, 10);
     await prisma.user.update({
-      where: { id: Number(req.params.id) },
+      where: { id: Number(id) },
       data: {
         password: hashedPass,
       },

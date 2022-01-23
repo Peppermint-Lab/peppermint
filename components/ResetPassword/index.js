@@ -19,7 +19,7 @@ export default function ResetPassword({ user }) {
   const postData = async () => {
     const id = user.id;
     if (check === password) {
-      await fetch(`/api/v1/auth/resetPassword`, {
+      await fetch(`/api/v1/users/resetpassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

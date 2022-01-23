@@ -35,9 +35,8 @@ const options = {
   ],
   session: {
     jwt: true,
-    maxAge: 30 * 24 * 60 * 60,
   },
-  secret: "lXVsKy1aOGTyAgrqdU5JBa8J5Iu+sRdJ1e9LEH++dtM=",
+  secret: process.env.SECRET,
   database: process.env.DATABASE_URL,
   pages: {
     signIn: "/auth/login",
