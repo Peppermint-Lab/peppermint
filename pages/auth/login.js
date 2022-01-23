@@ -1,14 +1,15 @@
-import { getCsrfToken } from "next-auth/react"
+import { getCsrfToken } from "next-auth/react";
 
 export async function getServerSideProps(context) {
-    return {
-      props: {
-        csrfToken: await getCsrfToken(context),
-      },
-    }
-  }
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
+  };
+}
 
 export default function Login({ csrfToken }) {
+  console.log(csrfToken);
   return (
     <div>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -34,7 +35,7 @@ export default function Login({ csrfToken }) {
                 <input
                   name="csrfToken"
                   type="hidden"
-                  defaultValue={csrfToken || null} 
+                  defaultValue={csrfToken}
                 />
                 <label
                   htmlFor="email"

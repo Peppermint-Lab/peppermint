@@ -266,8 +266,6 @@ export default function Tickets() {
     },
   ]);
 
-  console.log(data);
-
   return (
     <div>
       {status === "success" && (

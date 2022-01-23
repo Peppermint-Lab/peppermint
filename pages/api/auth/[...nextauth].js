@@ -41,16 +41,15 @@ const options = {
   database: process.env.DATABASE_URL,
   pages: {
     signIn: "/auth/login",
+    error: "/auth/login"
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      // console.log(token, user)
       user && (token.user = user)
 
       return token
   },
     async session({ session, token, user }) {
-      // console.log(session, user, token)
       session.accessToken = token.accessToken
       session.id = token.user.id
       return session
