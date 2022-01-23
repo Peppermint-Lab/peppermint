@@ -2,7 +2,7 @@ import React from "react";
 import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from "rehype-sanitize";
 
-export default function App({ data }) {
+export default function MarkdownPreview({ data }) {
   return (
     <div className="container">
       <MDEditor.Markdown 

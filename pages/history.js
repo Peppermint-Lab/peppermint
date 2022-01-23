@@ -7,6 +7,7 @@ import {
   usePagination,
 } from "react-table";
 import Link from "next/link";
+import MarkdownPreview from "../components/MarkdownPreview";
 
 async function getUserTickets() {
   const res = await fetch("/api/v1/ticket/all");
@@ -220,7 +221,7 @@ export default function TicketHitory() {
       Header: "Status",
       accessor: "isComplete",
       id: "status",
-      Cell: ({  value }) => {
+      Cell: ({ value }) => {
         let p = value;
         let badge;
 
@@ -277,9 +278,9 @@ export default function TicketHitory() {
       id: "issue",
       Cell: ({ value }) => {
         return (
-          <>
-            <p className="truncate">{value}</p>
-          </>
+          <div className="truncate">
+            <MarkdownPreview data={value} />
+          </div>
         );
       },
     },
