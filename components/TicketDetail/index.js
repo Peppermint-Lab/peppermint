@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Input, message, Upload, Divider, Spin } from "antd";
+import React, { useState, useEffect } from "react";
+import { message, Upload, Divider } from "antd";
 import moment from "moment";
 import { useRouter } from "next/router";
+
+import rehypeSanitize from "rehype-sanitize";
+import MDEditor from "@uiw/react-md-editor";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 
 export default function TicketDetail(props) {
   const [ticket, setTicket] = useState(props.ticket);
@@ -17,7 +23,7 @@ export default function TicketDetail(props) {
 
   const history = useRouter();
 
-  const id = window.location.pathname.slice(9);
+  const { id } = history.query;
 
   useEffect(() => {
     if (ticket.priority === "Low") {
@@ -30,8 +36,6 @@ export default function TicketDetail(props) {
       setBadge(high);
     }
   }, []);
-
-  const { TextArea } = Input;
 
   const update = async () => {
     await fetch(`/api/v1/tickets/update`, {
@@ -87,7 +91,7 @@ export default function TicketDetail(props) {
     <div>
       <div className="relative">
         <div className="py-8 xl:py-10">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 ">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 2xl:max-w-full">
             <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
               <div>
                 <div>
@@ -232,13 +236,22 @@ export default function TicketDetail(props) {
                   <div className="py-3 xl:pt-6 xl:pb-0 ">
                     <h1 className="text-xl">Description</h1>
                     <div className={edit ? "hidden" : "prose max-w-none"}>
-                      {issue}
+                    {issue ? (
+                    <MDEditor.Markdown
+                      source={issue}
+                      rehypePlugins={[[rehypeSanitize]]}
+                    />
+                  ) : (
+                    <p>No issue has been entered yet ... Click edit to enter an issue</p>
+                  )}
                     </div>
                     <div className={edit ? "prose max-w-none" : "hidden"}>
-                      <TextArea
-                        rows={6}
-                        defaultValue={issue}
-                        onChange={(e) => setIssue(e.target.value)}
+                      <MDEditor
+                        value={issue}
+                        onChange={setIssue}
+                        previewOptions={{
+                          rehypePlugins: [[rehypeSanitize]],
+                        }}
                       />
                     </div>
                   </div>
@@ -258,13 +271,22 @@ export default function TicketDetail(props) {
                   <div className="flow-root -mt-4"></div>
                 </div>
                 <div className={edit ? "hidden" : "mt-3"}>
-                  {note ? note : <p>No work has been entered yet</p>}
+                  {note ? (
+                    <MDEditor.Markdown
+                      source={note}
+                      rehypePlugins={[[rehypeSanitize]]}
+                    />
+                  ) : (
+                    <p>No work has been entered yet</p>
+                  )}
                 </div>
                 <div className={edit ? "mt-3" : "hidden"}>
-                  <TextArea
-                    rows={6}
-                    defaultValue={note}
-                    onChange={(e) => setNote(e.target.value)}
+                  <MDEditor
+                    value={note}
+                    onChange={setNote}
+                    previewOptions={{
+                      rehypePlugins: [[rehypeSanitize]],
+                    }}
                   />
                 </div>
               </section>
