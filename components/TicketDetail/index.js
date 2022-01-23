@@ -38,18 +38,14 @@ export default function TicketDetail(props) {
   }, []);
 
   const update = async () => {
-    await fetch(`/api/v1/tickets/update`, {
+    await fetch(`/api/v1/ticket/${id}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: ticket.id,
         issue,
         note,
-        name,
-        email,
-        number,
       }),
     }).then((res) => res.json());
   };
