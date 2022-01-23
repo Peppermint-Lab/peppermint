@@ -1,12 +1,14 @@
-const { prisma } = require("../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
 
 
-export default async function getAllClients(req, res) {
+export default async function userProfile(req, res) {
   const emailLower = req.body.email.toLowerCase();
+
+  const { id } = req.query
 
   try {
     await prisma.user.update({
-      where: { id: Number(req.body.id) },
+      where: { id: Number(id) },
       data: {
         name: req.body.name,
         email: emailLower,
@@ -20,9 +22,7 @@ export default async function getAllClients(req, res) {
       .then((user) => {
         const { id, name, email } = user;
         res.status(200).json({
-          message: "User updated",
           user: { id, name, email },
-          fail: false,
         });
       });
 

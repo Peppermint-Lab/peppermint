@@ -1,11 +1,12 @@
-const { prisma } = require("../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
 
 export default async function getAllClients(req, res) {
+  const { id } = req.query
+
   try {
-    await prisma.user
-    .findUnique({
-      where: { id: Number(req.body.id) },
-    })
+    await prisma.client.delete({
+      where: { id: Number(id) },
+    });
 
     res.status(200).json({ success: true });
   } catch (error) {

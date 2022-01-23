@@ -1,10 +1,12 @@
-const { prisma } = require("../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
 
 
-export default async function getAllClients(req, res) {
+export default async function editUser(req, res) {
+  const { id } = req.query
+
   try {
     await prisma.user.update({
-      where: { id: Number(req.body.id) },
+      where: { id: Number(id) },
       data: {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
