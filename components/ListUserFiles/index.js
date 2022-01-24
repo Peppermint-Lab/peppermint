@@ -37,11 +37,15 @@ export default function ListUserFiles() {
   }
 
   function download(file) {
-    const url = `/api/v1/auth/file/download`;
+    console.log(file)
+    const url = `/api/v1/users/file/download?filepath=${file.path}`;
     let data = new FormData();
-    data.append("filepath", file.path);
+    // data.append("filepath", file.path);
     axios
       .post(url, data, {
+        headers: {
+            "Content-Type": 'application/json'
+        },
         responseType: "blob",
       })
       .then((res) => {
@@ -80,16 +84,6 @@ export default function ListUserFiles() {
                     >
                       <TrashIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
-                    {/* <Button
-                      ghost
-                      style={{ float: "right" }}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        download(file);
-                      }}
-                    >
-                      <UploadOutlined style={{ color: "black" }} />
-                    </Button> */}
                   </li>
                 </ul>
               </div>
