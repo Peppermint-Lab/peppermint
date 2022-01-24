@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import {
   CheckCircleIcon,
 } from "@heroicons/react/solid";
+import { Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 import ListTodo from '../components/ListTodo'
 
@@ -54,6 +56,34 @@ export default function Home() {
     { name: "Completed Tickets", stat: completedTickets, href: "/history" },
     { name: "Total Todos", stat: "0" },
   ];
+
+  const propsUpload = {
+    name: "file",
+    action: `/api/v1/users/1/file/upload`,
+    data: () => {
+      let data = new FormData();
+      data.append("file", file);
+      data.append("filename", file.name);
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    progress: {
+      strokeColor: {
+        "0%": "#108ee9",
+        "100%": "#87d068",
+      },
+      strokeWidth: 3,
+      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
+    },
+  };
 
   useEffect(() => {
     // getOpenTickets();
@@ -156,14 +186,14 @@ export default function Home() {
                 >
                   Personal Files
                 </h2>
-                {/* <Upload
+                <Upload
                   {...propsUpload}
                   className="px-4 flex flex-row align-middle items-center -mt-3"
                 >
                   <button>
                     <UploadOutlined />
                   </button>
-                </Upload> */}
+                </Upload>
               </div>
               {/* <Files /> */}
             </div>

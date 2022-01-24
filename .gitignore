@@ -37,3 +37,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 .DS_Store
+
+/storage

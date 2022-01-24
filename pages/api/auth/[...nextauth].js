@@ -52,7 +52,6 @@ const options = {
       return token
   },
     async session({ session, token, user }) {
-      console.log(token)
       session.accessToken = token.accessToken
       session.id = token.user.id
       return session
