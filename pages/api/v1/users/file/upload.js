@@ -14,7 +14,7 @@ export const config = {
 export default async function UploadFile(req, res) {
   const session = await getSession({ req });
 
-  const uploadPath = `./storage/${sessio.id}`;
+  const uploadPath = `./storage/${session.id}`;
   await createNecessaryDirectoriesSync(`${uploadPath}/x`);
 
   try {

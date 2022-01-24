@@ -60,7 +60,7 @@ export default function Home() {
 
   const propsUpload = {
     name: "file",
-    action: `/api/v1/users/1/file/upload`,
+    action: `/api/v1/users/file/upload`,
     data: () => {
       let data = new FormData();
       data.append("file", file);

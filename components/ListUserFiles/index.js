@@ -8,7 +8,7 @@ export default function ListUserFiles() {
 
   async function getFiles() {
     await fetch(`/api/v1/users/file/all`, {
-      method: "get",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,31 +20,30 @@ export default function ListUserFiles() {
   }
 
   async function deleteFile(file) {
-    await fetch(`/api/v1/auth/file/del`, {
-      method: "post",
+    await fetch(`/api/v1/users/file/delete`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        file: file.id,
+        id: file.id,
         path: file.path,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        setFiles(res.files);
+        getFiles();
       });
   }
 
   function download(file) {
-    console.log(file)
+    console.log(file);
     const url = `/api/v1/users/file/download?filepath=${file.path}`;
     let data = new FormData();
-    // data.append("filepath", file.path);
     axios
       .post(url, data, {
         headers: {
-            "Content-Type": 'application/json'
+          "Content-Type": "application/json",
         },
         responseType: "blob",
       })
