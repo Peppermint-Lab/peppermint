@@ -1,4 +1,4 @@
-const { prisma } = require("../../../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
 
 import { getSession } from "next-auth/react";
 import { IncomingForm } from "formidable";
@@ -13,9 +13,8 @@ export const config = {
 
 export default async function UploadFile(req, res) {
   const session = await getSession({ req });
-  const { id } = req.query;
 
-  const uploadPath = `./storage/${id}`;
+  const uploadPath = `./storage/${sessio.id}`;
   await createNecessaryDirectoriesSync(`${uploadPath}/x`);
 
   try {
@@ -27,22 +26,24 @@ export default async function UploadFile(req, res) {
     form.parse(req, (err, fields, files) => {
       const f = files.file;
 
-      const u = `./storage/${id}/${f.originalFilename}`;
+      const u = `./storage/${session.id}/${f.originalFilename}`;
 
       fs.rename(`./storage/${f.newFilename}`, u, async function (err) {
         if (err) throw err;
         console.log("Successfully renamed - AKA moved!");
 
         try {
-          await prisma.userFile.create({
-            data: {
-              filename: f.originalFilename,
-              userId: Number(id),
-              path: u,
-            },
-          }).then((err) => console.log(err))
+          await prisma.userFile
+            .create({
+              data: {
+                filename: f.originalFilename,
+                userId: Number(session.id),
+                path: u,
+              },
+            })
+            .then((err) => console.log(err));
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
 
         return res.status(201).json({ message: "File Uploaded", fail: false });

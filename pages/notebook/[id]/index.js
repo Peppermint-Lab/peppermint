@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 import "@uiw/react-markdown-preview/markdown.css";
 
-const MD = dynamic(() => import("../../../components/MarkdownEditor"), {
+const MD = dynamic(() => import("../../../components/MarkdownPreview"), {
   ssr: false,
 });
 
@@ -22,7 +22,6 @@ export default function ViewNoteBook() {
     <div>
       {status === "success" && (
         <div>
-          {/* <MDEditor value={data.data.note} height="80vh"   /> */}
           <MD data={data.data.note} />
         </div>
       )}

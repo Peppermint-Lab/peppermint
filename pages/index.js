@@ -6,6 +6,7 @@ import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 import ListTodo from '../components/ListTodo'
+import ListUserFiles from '../components/ListUserFiles'
 
 export default function Home() {
   const [file, setFile] = useState([]);
@@ -195,7 +196,7 @@ export default function Home() {
                   </button>
                 </Upload>
               </div>
-              {/* <Files /> */}
+              <ListUserFiles />
             </div>
           </div>
         </div>
