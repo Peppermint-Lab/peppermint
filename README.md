@@ -134,7 +134,7 @@ We currently have an image for arm devices but are seeing issues with mongoDB so
 
 👤 **Jack Andrews**
 
-* Website: [pmint.dev](https://peppermint.sh/) 
+* Website: [peppermint.sh](https://peppermint.sh/) 
 * Twitter: [@andrewsjack18 ](https://twitter.com/andrewsjack18 )
 * Github: [@potts99](https://github.com/potts99)
 * LinkedIn: [@jack-andrews-146852131](https://linkedin.com/in/jack-andrews-146852131)
