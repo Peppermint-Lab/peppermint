@@ -8,6 +8,7 @@ import {
 } from "react-table";
 import Link from "next/link";
 import MarkdownPreview from "../../components/MarkdownPreview";
+import TicketsMobileList from "../../components/TicketsMobileList";
 
 async function getUserTickets() {
   const res = await fetch("/api/v1/ticket/user/open");
@@ -269,9 +270,15 @@ export default function Tickets() {
   return (
     <div>
       {status === "success" && (
-        <div>
-          <Table columns={columns} data={data.tickets} />
-        </div>
+        <>
+          <div className="hidden sm:block">
+            <Table columns={columns} data={data.tickets} />
+          </div>
+
+          <div className="sm:hidden">
+            <TicketsMobileList tickets={data.tickets} />
+          </div>
+        </>
       )}
     </div>
   );
