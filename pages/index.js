@@ -4,21 +4,18 @@ import {
 } from "@heroicons/react/solid";
 import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { useSession } from "next-auth/react";
 
 import ListTodo from '../components/ListTodo'
 import ListUserFiles from '../components/ListUserFiles'
 
 export default function Home() {
+  const { data: session } = useSession()
+
   const [file, setFile] = useState([]);
   const [hour, setHour] = useState();
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
-
-  const user = {
-    firstName: "Jack",
-    lastName: "Andrews",
-    isAdmin: true,
-  };
 
   async function time() {
     const date = new Date();
@@ -27,7 +24,7 @@ export default function Home() {
   }
 
   async function getOpenTickets() {
-    await fetch(`/api/v1/data/openTickets`, {
+    await fetch(`/api/v1/data/count/open-tickets`, {
       method: "get",
       headers: {
         ContentType: "application/json",
@@ -39,8 +36,10 @@ export default function Home() {
       });
   }
 
+  console.log(openTickets)
+
   async function getCompletedTickets() {
-    await fetch(`/api/v1/data/completedTickets`, {
+    await fetch(`/api/v1/data/count/completed-tickets`, {
       method: "get",
       headers: {
         ContentType: "application/json",
@@ -55,7 +54,7 @@ export default function Home() {
   const stats = [
     { name: "Open Tickets", stat: openTickets, href: "/tickets" },
     { name: "Completed Tickets", stat: completedTickets, href: "/history" },
-    { name: "Total Todos", stat: "0" },
+    { name: "Total Todos", stat: '0' },
   ];
 
   const propsUpload = {
@@ -87,8 +86,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // getOpenTickets();
-    // getCompletedTickets();
+    getOpenTickets();
+    getCompletedTickets();
     time();
   }, []);
 
@@ -103,20 +102,20 @@ export default function Home() {
                 {/* Profile */}
                 <div className="flex items-center">
                   <span className="hidden sm:inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500">
-                    <span className="text-lg font-medium leading-none text-white">
-                      {user.firstName[0] + user.lastName[0]}
+                    <span className="text-lg font-medium leading-none text-white uppercase">
+                      {session.user.name[0]}
                     </span>
                   </span>
                   <div>
                     <div className="flex items-center">
                       <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500 sm:hidden">
-                        <span className="text-lg font-medium leading-none text-white">
-                          {user.firstName[0] + user.lastName[0]}
+                        <span className="text-lg font-medium leading-none text-white uppercase">
+                          {session.user.name[0]}
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                         Good {hour < 12 ? "Morning" : "Afternoon"},{" "}
-                        {user.firstName + " " + user.lastName}!
+                        {session.user.name}!
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -134,7 +133,7 @@ export default function Home() {
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                           aria-hidden="true"
                         />
-                        {user.isAdmin ? "Admin" : "Engineer"}
+                        {session.user.isAdmin ? "Admin" : "Engineer"}
                       </dd>
                     </dl>
                   </div>

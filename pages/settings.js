@@ -140,7 +140,7 @@ export default function Settings() {
               <div className="divide-y divide-gray-200 lg:col-span-9">
                 <div className={`${showProfile ? "" : "hidden"}`}>
                   <div>
-                      <UserProfile />
+                    <UserProfile />
                   </div>
                 </div>
                 <div className={`${showPassword ? "" : "hidden"}`}>
@@ -161,7 +161,7 @@ export default function Settings() {
                     <button
                       type="button"
                       className=" float-right w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-                      onClick={() => onCreate()}
+                      onClick={() => postData()}
                     >
                       Update
                     </button>

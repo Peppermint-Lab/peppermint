@@ -214,7 +214,7 @@ export default function TicketHitory() {
     },
     {
       Header: "Engineer",
-      accessor: "assignedTo.firstName",
+      accessor: "assignedTo.name",
       id: "engineer",
     },
     {
@@ -273,13 +273,13 @@ export default function TicketHitory() {
       },
     },
     {
-      Header: "Issue",
-      accessor: "issue",
-      id: "issue",
+      Header: "Title",
+      accessor: "title",
+      id: "title",
       Cell: ({ value }) => {
         return (
           <div className="truncate">
-            <MarkdownPreview data={value} />
+            {value}
           </div>
         );
       },

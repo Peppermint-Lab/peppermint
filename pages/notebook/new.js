@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 import rehypeSanitize from "rehype-sanitize";
 
@@ -12,6 +13,8 @@ export default function ViewNoteBook() {
   const [value, setValue] = useState("Test");
   const [title, setTitle] = useState("Markdown Test");
 
+  const router = useRouter()
+
   async function postMarkdown() {
     await fetch("/api/v1/note/create-note", {
       method: "POST",
@@ -22,7 +25,10 @@ export default function ViewNoteBook() {
         value,
         title
       }),
-    });
+    }).then((res) => res.json())
+    .then((res) => {
+      router.push(`/notebook/${res.id}`)
+    })
   }
 
   return (

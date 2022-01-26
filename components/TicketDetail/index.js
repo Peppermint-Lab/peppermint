@@ -8,6 +8,7 @@ import MDEditor from "@uiw/react-md-editor";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
+import TicketFiles from "../TicketFiles";
 
 export default function TicketDetail(props) {
   const [ticket, setTicket] = useState(props.ticket);
@@ -15,6 +16,7 @@ export default function TicketDetail(props) {
 
   const [note, setNote] = useState(props.ticket.note);
   const [issue, setIssue] = useState(props.ticket.issue);
+  const [title, setTitle] = useState(props.ticket.title);
   const [name, setName] = useState(props.ticket.name);
   const [email, setEmail] = useState(props.ticket.email);
   const [number, setNumber] = useState(props.ticket.number);
@@ -37,22 +39,35 @@ export default function TicketDetail(props) {
     }
   }, []);
 
-  const update = async () => {
+  async function update() {
     await fetch(`/api/v1/ticket/${id}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        issue,
+        detail: issue,
         note,
+        title,
       }),
     }).then((res) => res.json());
-  };
+  }
+
+  async function updateStatus() {
+    await fetch(`/api/v1/ticket/${id}/update-status`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: !props.ticket.isComplete,
+      }),
+    }).then((res) => res.json());
+  }
 
   const propsUpload = {
     name: "file",
-    action: `/api/v1/tickets/uploadFile/${id}`,
+    action: `/api/v1/ticket/${id}/file/upload`,
     data: () => {
       let data = new FormData();
       data.append("file", file);
@@ -92,10 +107,25 @@ export default function TicketDetail(props) {
               <div>
                 <div>
                   <div className="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
-                    <div>
-                      <h1 className="text-2xl font-bold text-gray-900">
-                        Title goes here
+                    <div className="w-1/2">
+                      <h1
+                        className={
+                          edit ? "hidden" : "text-2xl font-bold text-gray-900"
+                        }
+                      >
+                        {title}
                       </h1>
+                      <input
+                        type="text"
+                        maxLength={64}
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className={
+                          edit
+                            ? "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                            : "hidden"
+                        }
+                      />
                       <p className="mt-2 text-sm font-bold">
                         opened by {ticket.name} from {ticket.client.name}
                       </p>
@@ -179,8 +209,8 @@ export default function TicketDetail(props) {
                       {ticket.isComplete === false ? (
                         <button
                           onClick={async () => {
-                            await completeTicket(ticket.id);
-                            history.push("/tickets");
+                            await updateStatus();
+                            history.push("/ticket");
                           }}
                           type="button"
                           className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
@@ -202,8 +232,8 @@ export default function TicketDetail(props) {
                       ) : (
                         <button
                           onClick={async () => {
-                            await unCompleteTicket(ticket.id);
-                            history.push("/tickets");
+                            await updateStatus();
+                            history.reload(history.pathname);
                           }}
                           type="button"
                           className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
@@ -230,20 +260,23 @@ export default function TicketDetail(props) {
                   </div>
 
                   <div className="py-3 xl:pt-6 xl:pb-0 ">
-                    <h1 className="text-xl">Description</h1>
+                    <h1 className="text-xl">Issue</h1>
                     <div className={edit ? "hidden" : "prose max-w-none"}>
-                    {issue ? (
-                    <MDEditor.Markdown
-                      source={issue}
-                      rehypePlugins={[[rehypeSanitize]]}
-                    />
-                  ) : (
-                    <p>No issue has been entered yet ... Click edit to enter an issue</p>
-                  )}
+                      {issue ? (
+                        <MDEditor.Markdown
+                          source={issue}
+                          rehypePlugins={[[rehypeSanitize]]}
+                        />
+                      ) : (
+                        <p>
+                          No issue has been entered yet ... Click edit to enter
+                          an issue
+                        </p>
+                      )}
                     </div>
                     <div className={edit ? "prose max-w-none" : "hidden"}>
                       <MDEditor
-                        value={issue}
+                        value={issue || ""}
                         onChange={setIssue}
                         previewOptions={{
                           rehypePlugins: [[rehypeSanitize]],
@@ -278,7 +311,7 @@ export default function TicketDetail(props) {
                 </div>
                 <div className={edit ? "mt-3" : "hidden"}>
                   <MDEditor
-                    value={note}
+                    value={note || ""}
                     onChange={setNote}
                     previewOptions={{
                       rehypePlugins: [[rehypeSanitize]],
@@ -293,7 +326,7 @@ export default function TicketDetail(props) {
               <div className="space-y-5">
                 <div className="flex items-center">
                   {ticket.isComplete ? (
-                    <div className="flex flex-row">
+                    <div className="flex flex-row space-x-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 text-red-500"
@@ -306,12 +339,12 @@ export default function TicketDetail(props) {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="text-red-500 text-sm font-bold ml-2">
+                      <span className="text-red-500 text-sm font-bold">
                         Completed
                       </span>
                     </div>
                   ) : (
-                    <div>
+                    <div className="flex-row flex space-x-2">
                       <svg
                         className="h-5 w-5 text-green-500"
                         xmlns="http://www.w3.org/2000/svg"
@@ -321,7 +354,7 @@ export default function TicketDetail(props) {
                       >
                         <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
                       </svg>
-                      <span className="text-green-700 text-sm font-medium">
+                      <span className="text-green-700 text-sm font-medium ">
                         Issued
                       </span>
                     </div>
@@ -384,14 +417,11 @@ export default function TicketDetail(props) {
                         <div className="text-sm font-medium text-gray-900">
                           <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                             <span className="font-medium leading-none text-white">
-                              {ticket.assignedTo.firstName[0]}
+                              {ticket.assignedTo.name[0]}
                             </span>
                           </span>
                         </div>
-                        <span>
-                          {ticket.assignedTo.firstName}{" "}
-                          {ticket.assignedTo.lastName}
-                        </span>
+                        <span>{ticket.assignedTo.name}</span>
                       </p>
                     </li>
                   </ul>
@@ -400,7 +430,7 @@ export default function TicketDetail(props) {
               </div>
               <div className="-mt-10">
                 <div className="flex flex-col">
-                  {/* <File ticket={ticket} /> */}
+                  <TicketFiles id={id} />
                 </div>
               </div>
               <div className="mt-10">
@@ -481,13 +511,13 @@ export default function TicketDetail(props) {
                           <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                             <span className="font-medium leading-none text-white">
                               {ticket.assignedTo
-                                ? ticket.assignedTo.firstName[0]
+                                ? ticket.assignedTo.name[0]
                                 : ""}
                             </span>
                           </span>
                         </div>
                         <div className="text-sm font-medium text-gray-900">
-                          <span> {ticket.assignedTo.firstName}</span>
+                          <span> {ticket.assignedTo.name}</span>
                         </div>
                       </div>
                     </li>
@@ -496,7 +526,7 @@ export default function TicketDetail(props) {
               </div>
               <div className="mt-6">
                 <div className="flex flex-col">
-                  {/* <File ticket={ticket} /> */}
+                  <TicketFiles id={id} />
                 </div>
               </div>
               <div className="mt-6">

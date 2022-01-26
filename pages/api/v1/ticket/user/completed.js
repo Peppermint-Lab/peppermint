@@ -9,7 +9,6 @@ export default async function getUserCompleted() {
       .then((tickets) => {
         res.json({ tickets });
       });
-    return res.status(200);
   } catch (error) {
     console.log(error);
     return res.status(500);

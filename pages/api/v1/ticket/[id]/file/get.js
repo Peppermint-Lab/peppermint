@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../../../prisma/prisma");
 
-export default async function getFiles() {
+export default async function getFiles(req, res) {
   const { id } = req.query;
 
   try {

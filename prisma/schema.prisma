@@ -29,10 +29,10 @@ model Ticket {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
   name       String
-  issue      String
+  title      String
+  detail     String?
   email      String
   note       String?
-  isIssued   Boolean
   isComplete Boolean
   priority   String
   assignedTo User?    @relation(fields: [userId], references: [id])

@@ -242,9 +242,9 @@ export default function Tickets() {
       },
     },
     {
-      Header: "Issue",
-      accessor: "issue",
-      id: "issue",
+      Header: "Title",
+      accessor: "title",
+      id: "Title",
       Cell: ({ value }) => {
         return (
           <div className="truncate">

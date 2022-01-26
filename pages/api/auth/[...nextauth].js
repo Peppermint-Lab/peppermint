@@ -27,8 +27,8 @@ const options = {
           return {
             email: user.email,
             id: user.id,
-            name: user.name
-
+            name: user.name,
+            isAdmin: user.isAdmin
           };
         } catch (error) {
           throw new Error(error);
@@ -54,6 +54,8 @@ const options = {
     async session({ session, token, user }) {
       session.accessToken = token.accessToken
       session.id = token.user.id
+      session.user.isAdmin = token.user.isAdmin
+      session.user.id = token.user.id 
       return session
     }
   },

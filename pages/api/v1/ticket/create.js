@@ -2,19 +2,21 @@ const { prisma } = require("../../../../prisma/prisma");
 
 export default async function create(req, res) {
 
-  const { name, company, issue, priority, email, engineer } = JSON.parse(req.body);
+  const { name, company, detail, title, priority, email, engineer } = JSON.parse(req.body);
   
   try {
-    if (!name || !company || !issue || !priority) {
+    if (!name || !company || !title || !priority) {
       return res
         .status(422)
         .json({ error: "Please add all the fields", failed: true });
     }
+
     await prisma.ticket
       .create({
         data: {
           name,
-          issue,
+          title,
+          detail,
           priority,
           email,
           client: {
@@ -23,13 +25,13 @@ export default async function create(req, res) {
           assignedTo: {
             connect: { id: Number(engineer.id) },
           },
-          isIssued: Boolean(false),
           isComplete: Boolean(false),
         },
       })
       .then((ticket) => {
         res.status(201).json({ message: "Ticket created correctly", ticket });
       });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

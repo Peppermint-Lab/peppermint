@@ -63,9 +63,9 @@ export default function UserProfile() {
                 <div className="mt-1 rounded-md shadow-sm flex">
                   <input
                     type="text"
-                    name="firstname"
-                    id="firstname"
-                    autocomplete="firstname"
+                    name="name"
+                    id="name"
+                    autoComplete="name"
                     className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
                     defaultValue={session.user.name}
                     onChange={(e) => setName(e.target.value)}
@@ -101,7 +101,7 @@ export default function UserProfile() {
                   <input
                     type="email"
                     name="email"
-                    autocomplete="email"
+                    autoComplete="email"
                     className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
                     defaultValue={session.user.email}
                     onChange={(e) => setEmail(e.target.value)}

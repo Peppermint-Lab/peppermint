@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
-import { Select, Form } from "antd";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import dynamic from "next/dynamic";
@@ -10,10 +9,7 @@ import rehypeSanitize from "rehype-sanitize";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 
-const MDEditor = dynamic(
-  () => import("@uiw/react-md-editor"),
-  { ssr: false }
-);
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -25,15 +21,13 @@ export default function CreateTicketModal() {
   const [company, setCompany] = useState();
   const [engineer, setEngineer] = useState();
   const [email, setEmail] = useState("");
-  const [issue, setIssue] = useState("");
+  const [issue, setIssue] = useState("Enter extra details here.... markdown is supported");
+  const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
   const [users, setUsers] = useState([]);
 
   const cancelButtonRef = useRef(null);
-
-  const [form] = Form.useForm();
-  const { Option } = Select;
 
   const fetchClients = async () => {
     await fetch(`/api/v1/clients/all`, {
@@ -77,10 +71,11 @@ export default function CreateTicketModal() {
       },
       body: JSON.stringify({
         name,
+        title,
         company,
         engineer,
         email,
-        issue,
+        detail: issue,
         priority,
       }),
     });
@@ -178,6 +173,15 @@ export default function CreateTicketModal() {
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                       />
 
+                      <input
+                        type="text"
+                        name="title"
+                        placeholder="Enter title for the ticket here, keep it short...."
+                        maxLength={64}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      />
+
                       <Listbox value={company} onChange={setCompany}>
                         {({ open }) => (
                           <>
@@ -263,7 +267,7 @@ export default function CreateTicketModal() {
                               <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <span className="block truncate">
                                   {engineer
-                                    ? engineer.firstName
+                                    ? engineer.name
                                     : "Please select an engineer"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -305,7 +309,7 @@ export default function CreateTicketModal() {
                                               "block truncate"
                                             )}
                                           >
-                                            {person.firstName}
+                                            {person.name}
                                           </span>
 
                                           {engineer ? (
@@ -336,8 +340,11 @@ export default function CreateTicketModal() {
 
                       <MDEditor
                         onChange={setIssue}
-                        source={issue}
+                        value={issue}
                         rehypePlugins={[[rehypeSanitize]]}
+                        previewOptions={{
+                          rehypePlugins: [[rehypeSanitize]],
+                        }}
                         preview="edit"
                       />
 
@@ -360,9 +367,8 @@ export default function CreateTicketModal() {
                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">
                       <button
                         onClick={() => {
-                          createTicket();
-                          form.resetFields();
                           setOpen(false);
+                          createTicket();
                         }}
                         type="button"
                         className="w-1/2 mx-auto  inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"

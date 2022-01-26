@@ -27,9 +27,9 @@ export default async function handler(req, res) {
         },
       });
 
-      console.log(data)
+      const { id } = data
 
-      res.status(200).json({ success: true });
+      res.status(200).json({ success: true, id });
 
     }
     } catch (error) {
