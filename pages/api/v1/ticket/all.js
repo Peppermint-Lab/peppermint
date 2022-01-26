@@ -9,7 +9,7 @@ export default async function allTickets(req,res) {
             select: { id: true, name: true },
           },
           assignedTo: {
-            select: { id: true, firstName: true, lastName: true },
+            select: { id: true, name: true },
           },
         },
       })

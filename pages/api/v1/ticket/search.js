@@ -14,7 +14,7 @@ export default async function transferTicket(req,res) {
               select: { id: true, name: true, number: true },
             },
             assignedTo: {
-              select: { id: true, firstName: true, lastName: true },
+              select: { id: true, name: true },
             },
           },
         })
