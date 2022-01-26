@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { useRouter } from "next/router";
 import { SessionProvider, useSession } from "next-auth/react";
 import SideLayout from '../components/Layout/SideLayout'
+import Script from 'next/script'
 
 interface Props {
   children: any;
@@ -41,6 +42,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
   return (
     <>
+    <Script src="./check_update.js" />
       <SessionProvider session={pageProps.session}>
         <QueryClientProvider client={queryClient}>
         <SideLayout>

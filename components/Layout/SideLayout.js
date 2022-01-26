@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   ArchiveIcon,
@@ -16,12 +16,16 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+import version_data from "../../public/version.json";
+import Link from "next/link";
+
 export default function SideLayout({ children }) {
   const location = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = {
     firstName: "Jack",
     lastName: "Wanker",
+    isAdmin: true,
   };
 
   const navigation = [
@@ -61,6 +65,14 @@ export default function SideLayout({ children }) {
       href: "/admin/clients",
     },
   ];
+
+  async function fetchRelease() {
+    const res = await fetch(
+      "https://api.github.com/repos/Peppermint-Lab/peppermint/releases"
+    );
+    const data = await res.json();
+    return setVersion(data[0].tag_name);
+  }
 
   return (
     <div className="h-screen flex overflow-hidden">
@@ -138,13 +150,13 @@ export default function SideLayout({ children }) {
                     </a>
                   ))}
                 </nav>
-                <div className={user.isAdmin ? "mt-8" : "hidden"}>
-                  {/* <h3
-                      className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
-                      id="projects-headline"
-                    >
-                      Projects
-                    </h3> */}
+                <div className={user.isAdmin ? "mt-16" : "hidden"}>
+                  <h3
+                    className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
+                    id="projects-headline"
+                  >
+                    Admin
+                  </h3>
                   <div
                     className="mt-1 space-y-1"
                     aria-labelledby="projects-headline"
@@ -163,6 +175,35 @@ export default function SideLayout({ children }) {
                         <span className="truncate">{item.name}</span>
                       </a>
                     ))}
+                    <div className="px-2 py-2">
+                      <span className="text-white">
+                        Version - {version_data["current_version"]}
+                        {version_data["current_version"] !==
+                        version_data["github_latest_tag"] ? (
+                          <span className="inline-flex ml-4 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
+                            <svg
+                              className="-ml-0.5 mr-1.5 h-2 w-2 text-red-400"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx={4} cy={4} r={3} />
+                            </svg>
+                            Update needed
+                          </span>
+                        ) : (
+                          <span className="inline-flex ml-4 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800">
+                            <svg
+                              className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx={4} cy={4} r={3} />
+                            </svg>
+                            Up to date
+                          </span>
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -254,6 +295,23 @@ export default function SideLayout({ children }) {
                       <span className="truncate">{item.name}</span>
                     </a>
                   ))}
+                  <div className="px-3 py-2">
+                    <span className="text-white">
+                      Version -{" "}
+                      <a href="https://github.com/Peppermint-Lab/peppermint/releases">
+                        <span className="inline-flex ml-2 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800 pointer pointer-events-auto">
+                          <svg
+                            className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400"
+                            fill="currentColor"
+                            viewBox="0 0 8 8"
+                          >
+                            <circle cx={4} cy={4} r={3} />
+                          </svg>
+                          {version_data["current_version"]}
+                        </span>
+                      </a>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
