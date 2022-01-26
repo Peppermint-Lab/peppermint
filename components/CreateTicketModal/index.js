@@ -1,8 +1,19 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
-import { Select, Form, Input, Radio, Space } from "antd";
+import { Select, Form } from "antd";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import dynamic from "next/dynamic";
 
+// import MDEditor from '@uiw/react-md-editor';
+import rehypeSanitize from "rehype-sanitize";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+
+const MDEditor = dynamic(
+  () => import("@uiw/react-md-editor"),
+  { ssr: false }
+);
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -79,24 +90,6 @@ export default function CreateTicketModal() {
     fetchClients();
     getUsers();
   }, []);
-
-  const search = options ? (
-    options.map((d) => <Option key={d.id}>{d.name}</Option>)
-  ) : (
-    <Option key="no_id">
-      <p>Please refresh</p>
-    </Option>
-  );
-
-  const userSearch = users ? (
-    users.map((d) => (
-      <Option key={d.id}>{d.firstName + " " + d.lastName}</Option>
-    ))
-  ) : (
-    <Option key="no_id">
-      <p>Please refresh</p>
-    </Option>
-  );
 
   return (
     <div>
@@ -191,7 +184,9 @@ export default function CreateTicketModal() {
                             <div className="mt-1 relative">
                               <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <span className="block truncate">
-                                  {company ? company.name : 'Please select client'}
+                                  {company
+                                    ? company.name
+                                    : "Please select client"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
@@ -267,7 +262,9 @@ export default function CreateTicketModal() {
                             <div className="mt-1 relative">
                               <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <span className="block truncate">
-                                  {engineer ? engineer.firstName : 'Please select an engineer'}
+                                  {engineer
+                                    ? engineer.firstName
+                                    : "Please select an engineer"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
@@ -337,12 +334,14 @@ export default function CreateTicketModal() {
                         )}
                       </Listbox>
 
-                      <Input.TextArea
-                        rows={5}
-                        onChange={(e) => setIssue(e.target.value)}
+                      <MDEditor
+                        onChange={setIssue}
+                        source={issue}
+                        rehypePlugins={[[rehypeSanitize]]}
+                        preview="edit"
                       />
 
-                      <Radio.Group
+                      {/* <Radio.Group
                         buttonStyle="solid"
                         value={priority}
                         onChange={(e) => setPriority(e.target.value)}
@@ -355,7 +354,7 @@ export default function CreateTicketModal() {
                             High
                           </Radio.Button>
                         </Space>
-                      </Radio.Group>
+                      </Radio.Group> */}
                     </div>
 
                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">
