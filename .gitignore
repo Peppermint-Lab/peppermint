@@ -36,6 +36,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-.DS_Store
+/.DS_Store
+./.DS_Store
 
 /storage
