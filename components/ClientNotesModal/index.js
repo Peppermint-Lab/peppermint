@@ -11,7 +11,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 export default function ClientNotesModal({ notes, id }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(notes);
-
+  
   async function postMarkdown() {
     await fetch(`/api/v1/clients/${id}/create-note`, {
       method: "POST",
@@ -20,7 +20,7 @@ export default function ClientNotesModal({ notes, id }) {
       },
       body: JSON.stringify({
         note: value,
-        id
+        id,
       }),
     });
   }
@@ -109,22 +109,6 @@ export default function ClientNotesModal({ notes, id }) {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                  {/* <button
-                    type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
-                  >
-                    Deactivate
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
-                  >
-                    Cancel
-                  </button> */}
                 </div>
               </div>
             </Transition.Child>

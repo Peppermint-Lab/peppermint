@@ -9,6 +9,7 @@ import {
 } from "react-table";
 import ClientNotesModal from "../../components/ClientNotesModal";
 import CreateClient from "../../components/CreateClientModal";
+import UpdateClientModal from "../../components/UpdateClientModal";
 
 const fetchAllClients = async () => {
   const res = await fetch("/api/v1/clients/all");
@@ -230,6 +231,7 @@ export default function Clients() {
       Cell: ({ row, value }) => {
         return (
           <div className="space-x-4 flex flex-row">
+            <UpdateClientModal client={row.original} />
             <ClientNotesModal notes={row.original.notes} id={row.original.id} />
           </div>
         );

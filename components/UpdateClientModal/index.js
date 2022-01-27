@@ -2,16 +2,16 @@ import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 
-export default function CreateClient() {
+export default function UpdateClientModal({ client }) {
   const [open, setOpen] = useState(false);
 
-  const [number, setNumber] = useState("");
-  const [contactName, setContactName] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState(client.number);
+  const [contactName, setContactName] = useState(client.contactName);
+  const [name, setName] = useState(client.name);
+  const [email, setEmail] = useState(client.email);
 
-  async function createClient() {
-    await fetch("/api/v1/admin/client/create", {
+  async function updateClient() {
+    await fetch("/api/v1/admin/client/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,6 +21,7 @@ export default function CreateClient() {
         contactName,
         name,
         email,
+        id: client.id,
       }),
     });
   }
@@ -30,9 +31,9 @@ export default function CreateClient() {
       <button
         onClick={() => setOpen(true)}
         type="button"
-        className="inline-flex items-center p-1 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        className="inline-flex items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
       >
-        New Client
+        Edit
       </button>
 
       <Transition.Root show={open} as={Fragment}>
@@ -86,7 +87,7 @@ export default function CreateClient() {
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Create a new client
+                      Edit Client
                     </Dialog.Title>
                     <div className="mt-2 space-y-4">
                       <input
@@ -95,6 +96,7 @@ export default function CreateClient() {
                         placeholder="Enter client name here..."
                         name="name"
                         onChange={(e) => setName(e.target.value)}
+                        value={name}
                       />
 
                       <input
@@ -102,6 +104,7 @@ export default function CreateClient() {
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         placeholder="Enter email here...."
                         onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                       />
 
                       <input
@@ -109,6 +112,7 @@ export default function CreateClient() {
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         placeholder="Enter client primary contact name here..."
                         onChange={(e) => setContactName(e.target.value)}
+                        value={contactName}
                       />
 
                       <input
@@ -116,6 +120,7 @@ export default function CreateClient() {
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         placeholder="Enter client primary contact number here..."
                         onChange={(e) => setNumber(e.target.value)}
+                        value={number}
                       />
                     </div>
                   </div>
@@ -125,11 +130,11 @@ export default function CreateClient() {
                     type="button"
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => {
-                      createClient();
+                      updateClient();
                       setOpen(false);
                     }}
                   >
-                    Save
+                    Update
                   </button>
                 </div>
               </div>
