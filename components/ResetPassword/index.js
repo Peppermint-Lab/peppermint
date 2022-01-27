@@ -19,7 +19,7 @@ export default function ResetPassword({ user }) {
   const postData = async () => {
     const id = user.id;
     if (check === password) {
-      await fetch(`/api/v1/users/resetpassword`, {
+      await fetch(`/api/v1/admin/user/resetpassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export default function ResetPassword({ user }) {
   return (
     <div>
       <button
-        onClick={()=> setOpen(true)}
+        onClick={() => setOpen(true)}
         type="button"
         className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >

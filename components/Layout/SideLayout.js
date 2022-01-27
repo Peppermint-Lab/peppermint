@@ -28,6 +28,8 @@ export default function SideLayout({ children }) {
     location.push('/auth/login')
   }
 
+  console.log(session)
+
   const navigation = [
     {
       name: "Dashboard",
@@ -153,7 +155,7 @@ export default function SideLayout({ children }) {
                         </a>
                       ))}
                     </nav>
-                    <div className={session.user.isAdmin ? "mt-16" : "hidden"}>
+                    <div className={session.user.isAdmin === true ? "mt-32" : "hidden"}>
                       <h3
                         className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
                         id="projects-headline"
@@ -210,7 +212,7 @@ export default function SideLayout({ children }) {
                       </div>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 flex-col flex border-t border-gray-200 p-4">
+                  <div className="flex-shrink-0 flex-col flex p-4">
                     <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
                       <span className="text-sm font-medium leading-none text-white uppercase">
                         {session.user.name[0]}
@@ -282,7 +284,7 @@ export default function SideLayout({ children }) {
                       </a>
                     ))}
                   </nav>
-                  <div className="mt-8">
+                  <div className={session.user.isAdmin === true ? "mt-8" : "hidden"}>
                     <h3
                       className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
                       id="projects-headline"

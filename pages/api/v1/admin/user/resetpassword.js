@@ -1,4 +1,4 @@
-const { prisma } = require("../../../../prisma/prisma");
+const { prisma } = require("../../../../../prisma/prisma");
 import { getSession } from "next-auth/react";
 
 import bcrypt from "bcrypt";
