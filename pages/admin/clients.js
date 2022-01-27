@@ -271,7 +271,42 @@ export default function Clients() {
 
               {status === "success" && (
                 <div>
-                  <Table columns={columns} data={data.clients} />
+                  <div className="hidden sm:block">
+                    <Table columns={columns} data={data.clients} />
+                  </div>
+
+                  <div className="sm:hidden">
+                    {data.clients.map((client) => (
+                      <div
+                        key={client.id}
+                        className="flex flex-col text-center bg-white rounded-lg shadow mt-4"
+                      >
+                        <div className="flex-1 flex flex-col p-8">
+                          <h3 className=" text-gray-900 text-sm font-medium">
+                            {client.name}
+                          </h3>
+                          <dl className="mt-1 flex-grow flex flex-col justify-between">
+                            <dd className="text-gray-500 text-sm">
+                              {client.number}
+                            </dd>
+                            <dt className="sr-only">Role</dt>
+                            <dd className="mt-3">
+                              <span>
+                                Primary Contact - {client.contactName}
+                              </span>
+                            </dd>
+                          </dl>
+                        </div>
+                        <div className="space-x-4 align-middle flex flex-row justify-center -mt-8 mb-4">
+                          <UpdateClientModal client={client} />
+                          <ClientNotesModal
+                            notes={client.notes}
+                            id={client.id}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

@@ -282,7 +282,49 @@ export default function Auth() {
 
               {status === "success" && (
                 <div>
-                  <Table columns={columns} data={data.users} />
+                  <div className="hidden sm:block">
+                    <Table columns={columns} data={data.users} />
+                  </div>
+                  <div className="sm:hidden">
+                    {data.users.map((user) => (
+                      <div
+                        key={user.id}
+                        className="flex flex-col text-center bg-white rounded-lg shadow mt-4"
+                      >
+                        <div className="flex-1 flex flex-col p-8">
+                          <h3 className=" text-gray-900 text-sm font-medium">
+                            {user.name}
+                          </h3>
+                          <dl className="mt-1 flex-grow flex flex-col justify-between">
+                            <dd className="text-gray-500 text-sm">
+                              {user.email}
+                            </dd>
+                            <dt className="sr-only">Role</dt>
+                            <dd className="mt-3">
+                              <span className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
+                                {user.isAdmin ? "admin" : "user"}
+                              </span>
+                            </dd>
+                          </dl>
+                        </div>
+                        <div className="space-x-4 flex flex-row justify-center -mt-8 mb-4">
+                          <UpdateUserModal user={user} />
+                          <ResetPassword user={user} />
+                          <Popconfirm
+                            title="Are you sure you want to delete?"
+                            onConfirm={() => deleteClient(user.id)}
+                          >
+                            <button
+                              type="button"
+                              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                            >
+                              Delete
+                            </button>
+                          </Popconfirm>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
