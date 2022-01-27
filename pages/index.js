@@ -52,7 +52,7 @@ export default function Home() {
   const stats = [
     { name: "Open Tickets", stat: openTickets, href: "/tickets" },
     { name: "Completed Tickets", stat: completedTickets, href: "/history" },
-    { name: "Total Todos", stat: '0' },
+    // { name: "Total Todos", stat:  },
   ];
 
   const propsUpload = {
