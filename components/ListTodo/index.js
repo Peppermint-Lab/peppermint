@@ -7,6 +7,7 @@ import {
   ArrowRightIcon,
 } from "@heroicons/react/solid";
 import { useQuery } from "react-query";
+import SyncLoader from 'react-spinners/SyncLoader'
 
 async function getTodos() {
   const res = await fetch("/api/v1/todo/get");
@@ -72,6 +73,13 @@ export default function ListTodo() {
           <ArrowRightIcon className="h-6 w-6" />
         </button>
       </div>
+      
+      {/* {status === 'loading' && (
+        <div>
+          <SyncLoader color="green" />
+        </div>
+      )} */}
+
       {status === "success" && (
         <div>
           {/* <Divider orientation="left" className="w-full" /> */}

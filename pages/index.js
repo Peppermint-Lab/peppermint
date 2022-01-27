@@ -36,8 +36,6 @@ export default function Home() {
       });
   }
 
-  console.log(openTickets)
-
   async function getCompletedTickets() {
     await fetch(`/api/v1/data/count/completed-tickets`, {
       method: "get",
