@@ -7,8 +7,6 @@ export default async function create(req, res) {
 
   const { todo } = JSON.parse(req.body);
 
-  console.log(todo)
-
   try {
 
     if (!todo) {

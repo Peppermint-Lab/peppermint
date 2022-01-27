@@ -8,6 +8,7 @@ import {
   usePagination,
 } from "react-table";
 import ResetPassword from "../../components/ResetPassword";
+import CreateUser from "../../components/CreateUserModal";
 
 const fetchUsers = async () => {
   const res = await fetch("/api/v1/users/all");
@@ -256,14 +257,13 @@ export default function Auth() {
             <h1 className="text-2xl font-semibold text-gray-900">
               Internal Users
             </h1>
-            <div className="ml-3">{/* <Create /> */}</div>
+            <div className="ml-4"><CreateUser /></div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="py-4">
               {status === "loading" && (
                 <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
                   <h2> Loading data ... </h2>
-                  {/* <Spin /> */}
                 </div>
               )}
 
@@ -273,7 +273,6 @@ export default function Auth() {
                     {" "}
                     Error fetching data ...{" "}
                   </h2>
-                  {/* <img src={server} className="h-96 w-96" alt="error" /> */}
                 </div>
               )}
 

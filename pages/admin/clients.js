@@ -8,6 +8,7 @@ import {
   usePagination,
 } from "react-table";
 import ClientNotesModal from "../../components/ClientNotesModal";
+import CreateClient from "../../components/CreateClientModal";
 
 const fetchAllClients = async () => {
   const res = await fetch("/api/v1/clients/all");
@@ -245,14 +246,15 @@ export default function Clients() {
         <div className="py-6">
           <div className="flex flex-row max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <h1 className="text-2xl font-semibold text-gray-900">Clients</h1>
-            <div className="ml-3">{/* <Create /> */}</div>
+            <div className="ml-3">
+              <CreateClient />
+            </div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="py-4">
               {status === "loading" && (
                 <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
                   <h2> Loading data ... </h2>
-                  {/* <Spin /> */}
                 </div>
               )}
 
@@ -262,7 +264,6 @@ export default function Clients() {
                     {" "}
                     Error fetching data ...{" "}
                   </h2>
-                  {/* <img src={server} className="h-96 w-96" alt="error" /> */}
                 </div>
               )}
 
