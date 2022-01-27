@@ -2,16 +2,20 @@ import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 
-export default function CreateUser() {
+export default function UpdateUserModal({ user }) {
   const [open, setOpen] = useState(false);
 
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [admin, setAdmin] = useState(false);
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [admin, setAdmin] = useState(user.isAdmin);
 
-  async function createUser() {
-    await fetch("/api/v1/admin/user/create", {
+  const notificationMethods = [
+    { id: "user", title: "user" },
+    { id: "admin", title: "admin" },
+  ];
+
+  async function updateUser() {
+    await fetch("/api/v1/admin/user/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,23 +25,19 @@ export default function CreateUser() {
         email,
         name,
         admin,
+        id: user.id,
       }),
     });
   }
-
-  const notificationMethods = [
-    { id: "user", title: "user" },
-    { id: "admin", title: "admin" },
-  ];
 
   return (
     <div>
       <button
         onClick={() => setOpen(true)}
         type="button"
-        className="inline-flex items-center p-1 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        className="inline-flex items-center py-1 px-4 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
       >
-        New User
+        Edit
       </button>
 
       <Transition.Root show={open} as={Fragment}>
@@ -91,32 +91,27 @@ export default function CreateUser() {
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Create a new user
+                      Edit Client
                     </Dialog.Title>
                     <div className="mt-2 space-y-4">
                       <input
                         type="text"
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 sm:text-sm border-gray-300 rounded-md"
-                        placeholder="Enter first name here..."
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-3/4 sm:text-sm border-gray-300 rounded-md"
+                        placeholder="Enter client name here..."
                         name="name"
                         onChange={(e) => setName(e.target.value)}
+                        value={name}
                       />
 
                       <input
-                        type="text"
+                        type="email"
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         placeholder="Enter email here...."
                         onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                       />
 
-                      <input
-                        type="password"
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                        placeholder="Enter password here..."
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-
-                      <label className="text-base font-medium text-gray-900 mt-2">
+                      <label className="text-base font-medium text-gray-900 mt-4">
                         User Type
                       </label>
                       <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
@@ -129,10 +124,14 @@ export default function CreateUser() {
                               id={notificationMethod.id}
                               name="notification-method"
                               type="radio"
-                              defaultChecked={notificationMethod.id === "user"}
+                              // defaultChecked={admin === true ? "admin" : "user"}
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
                               value={notificationMethod.id}
-                              onChange={(e) => e.target.value === 'admin' ? setAdmin(true) : setAdmin(false)}
+                              onChange={(e) =>
+                                e.target.value === "admin"
+                                  ? setAdmin(true)
+                                  : setAdmin(false)
+                              }
                             />
                             <label
                               htmlFor={notificationMethod.id}
@@ -151,11 +150,11 @@ export default function CreateUser() {
                     type="button"
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => {
-                      createUser();
+                      updateUser();
                       setOpen(false);
                     }}
                   >
-                    Save
+                    Update
                   </button>
                 </div>
               </div>

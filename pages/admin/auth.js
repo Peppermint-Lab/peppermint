@@ -9,6 +9,7 @@ import {
 } from "react-table";
 import ResetPassword from "../../components/ResetPassword";
 import CreateUser from "../../components/CreateUserModal";
+import UpdateUserModal from "../../components/UpdateUserModal";
 
 const fetchUsers = async () => {
   const res = await fetch("/api/v1/users/all");
@@ -228,6 +229,7 @@ export default function Auth() {
       Cell: ({ row, value }) => {
         return (
           <div className="space-x-4 flex flex-row">
+            <UpdateUserModal user={row.original} />
             <ResetPassword user={row.original} />
             <Popconfirm
               title="Are you sure you want to delete?"
@@ -257,7 +259,9 @@ export default function Auth() {
             <h1 className="text-2xl font-semibold text-gray-900">
               Internal Users
             </h1>
-            <div className="ml-4"><CreateUser /></div>
+            <div className="ml-4">
+              <CreateUser />
+            </div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="py-4">
