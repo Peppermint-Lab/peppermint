@@ -7,7 +7,6 @@ import {
   ArrowRightIcon,
 } from "@heroicons/react/solid";
 import { useQuery } from "react-query";
-import SyncLoader from 'react-spinners/SyncLoader'
 
 async function getTodos() {
   const res = await fetch("/api/v1/todo/get");
@@ -39,6 +38,7 @@ export default function ListTodo() {
       }),
     }).then(() => {
       refetch();
+      setText('')
     });
   }
 
@@ -54,6 +54,12 @@ export default function ListTodo() {
     }).then(() => refetch());
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      onSubmit()
+    }
+  }
+
   return (
     <div>
       <div className="flex flex-row items-center w-full">
@@ -67,18 +73,14 @@ export default function ListTodo() {
             onChange={(e) => {
               setText(e.target.value);
             }}
+            onKeyDown={handleKeyDown}
+            value={text}
           />
         </div>
         <button type="button" onClick={() => onSubmit()} className="sm:-mr-10">
           <ArrowRightIcon className="h-6 w-6" />
         </button>
       </div>
-      
-      {/* {status === 'loading' && (
-        <div>
-          <SyncLoader color="green" />
-        </div>
-      )} */}
 
       {status === "success" && (
         <div>
