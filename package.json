@@ -24,6 +24,7 @@
     "filesac": "^13.0.0",
     "formidable": "^2.0.1",
     "js-file-download": "^0.4.12",
+    "match-sorter": "^6.3.1",
     "moment": "^2.29.1",
     "next": "latest",
     "next-auth": "^4.0.6",

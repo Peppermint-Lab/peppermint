@@ -21,7 +21,9 @@ export default function CreateTicketModal() {
   const [company, setCompany] = useState();
   const [engineer, setEngineer] = useState();
   const [email, setEmail] = useState("");
-  const [issue, setIssue] = useState("Enter extra details here.... markdown is supported");
+  const [issue, setIssue] = useState(
+    "Enter extra details here.... markdown is supported"
+  );
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
@@ -341,13 +343,11 @@ export default function CreateTicketModal() {
                       <MDEditor
                         onChange={setIssue}
                         value={issue}
-                        rehypePlugins={[[rehypeSanitize]]}
                         previewOptions={{
                           rehypePlugins: [[rehypeSanitize]],
                         }}
                         preview="edit"
                       />
-
                     </div>
 
                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">

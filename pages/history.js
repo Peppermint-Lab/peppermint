@@ -28,13 +28,14 @@ function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
     />
   );
 }
+
 function Table({ columns, data }) {
   const filterTypes = React.useMemo(
     () => ({
-      // Add a new fuzzyTextFilterFn filter type.
+      // // Add a new fuzzyTextFilterFn filter type.
       // fuzzyText: fuzzyTextFilterFn,
-      // Or, override the default text filter to use
-      // "startWith"
+      // // Or, override the default text filter to use
+      // // "startWith"
       text: (rows, id, filterValue) =>
         rows.filter((row) => {
           const rowValue = row.values[id];
@@ -220,16 +221,17 @@ export default function TicketHitory() {
     },
     {
       Header: "Status",
-      accessor: "isComplete",
+      accessor: (data) => (data.isComplete ? "Completed" : "Outstanding"),
       id: "status",
+
       Cell: ({ value }) => {
         let p = value;
         let badge;
 
-        if (p === false) {
+        if (p === "Outstanding") {
           badge = high;
         }
-        if (p === true) {
+        if (p === "Completed") {
           badge = low;
         }
 
@@ -238,7 +240,7 @@ export default function TicketHitory() {
             <span
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
             >
-              {value ? "Completed" : "Outstanding"}
+              {value}
             </span>
           </>
         );

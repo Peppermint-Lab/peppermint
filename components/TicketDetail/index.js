@@ -17,7 +17,7 @@ export default function TicketDetail(props) {
   const [edit, setEdit] = useState(false);
 
   const [note, setNote] = useState(props.ticket.note);
-  const [issue, setIssue] = useState(props.ticket.issue);
+  const [issue, setIssue] = useState(props.ticket.detail);
   const [title, setTitle] = useState(props.ticket.title);
   const [name, setName] = useState(props.ticket.name);
   const [email, setEmail] = useState(props.ticket.email);
@@ -129,7 +129,7 @@ export default function TicketDetail(props) {
                         }
                       />
                       <p className="mt-2 text-sm font-bold">
-                        opened by {ticket.name} from {ticket.client.name}
+                        opened by user: {ticket.name} from client: {ticket.client.name}
                       </p>
                     </div>
                   </div>
@@ -276,10 +276,10 @@ export default function TicketDetail(props) {
                           rehypePlugins={[[rehypeSanitize]]}
                         />
                       ) : (
-                        <p>
+                        <span>
                           No issue has been entered yet ... Click edit to enter
                           an issue
-                        </p>
+                        </span>
                       )}
                     </div>
                     <div className={edit ? "prose max-w-none" : "hidden"}>
@@ -327,7 +327,7 @@ export default function TicketDetail(props) {
                       rehypePlugins={[[rehypeSanitize]]}
                     />
                   ) : (
-                    <p>No work has been entered yet</p>
+                    <span>No work has been entered yet</span>
                   )}
                 </div>
                 <div className={edit ? "mt-3" : "hidden"}>
