@@ -43,7 +43,7 @@ export default function ResetPassword({ user }) {
   };
 
   const onCreate = async () => {
-    setVisible(false);
+    setOpen(false);
     await postData();
   };
 

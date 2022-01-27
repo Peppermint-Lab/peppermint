@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import dynamic from "next/dynamic";
+import { Select, Form, Input, Radio, Space } from "antd";
 
 // import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from "rehype-sanitize";
@@ -348,6 +349,21 @@ export default function CreateTicketModal() {
                         }}
                         preview="edit"
                       />
+
+                      <div className="flex justify-center mx-auto">
+                        <Radio.Group
+                          buttonStyle="solid"
+                          value={priority}
+                          onChange={(e) => setPriority(e.target.value)}
+                          className="mx-auto justify-center space-x-4"
+                        >
+                          <Radio.Button value="Low">Low</Radio.Button>
+                          <Radio.Button value="Normal">Normal</Radio.Button>
+                          <Radio.Button value="High" className="bg-red">
+                            High
+                          </Radio.Button>
+                        </Radio.Group>
+                      </div>
                     </div>
 
                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">
