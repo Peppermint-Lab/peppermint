@@ -1,9 +1,9 @@
 const { prisma } = require("../../../../prisma/prisma");
 
 export default async function create(req, res) {
+  const { name, company, detail, title, priority, email, engineer, issue } =
+    JSON.parse(req.body);
 
-  const { name, company, detail, title, priority, email, engineer } = JSON.parse(req.body);
-  
   try {
     if (!name || !company || !title || !priority) {
       return res
@@ -18,6 +18,7 @@ export default async function create(req, res) {
           title,
           detail,
           priority,
+          issue,
           email,
           client: {
             connect: { id: Number(company.id) },
@@ -31,7 +32,6 @@ export default async function create(req, res) {
       .then((ticket) => {
         res.status(201).json({ message: "Ticket created correctly", ticket });
       });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

@@ -348,20 +348,6 @@ export default function CreateTicketModal() {
                         preview="edit"
                       />
 
-                      {/* <Radio.Group
-                        buttonStyle="solid"
-                        value={priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                        className="mx-auto"
-                      >
-                        <Space>
-                          <Radio.Button value="Low">Low</Radio.Button>
-                          <Radio.Button value="Normal">Normal</Radio.Button>
-                          <Radio.Button value="High" className="bg-red">
-                            High
-                          </Radio.Button>
-                        </Space>
-                      </Radio.Group> */}
                     </div>
 
                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">
