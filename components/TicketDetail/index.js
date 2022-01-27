@@ -10,6 +10,7 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
+import TransferTicket from "../TransferTicket";
 
 export default function TicketDetail(props) {
   const [ticket, setTicket] = useState(props.ticket);
@@ -262,7 +263,7 @@ export default function TicketDetail(props) {
                       />
                     </div>
                     <div className="mt-4 flex space-x-3 md:mt-0">
-                      {/* <Transfer ticket={ticket} /> */}
+                      <TransferTicket id={props.ticket.id} />
                     </div>
                   </div>
 
