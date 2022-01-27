@@ -3,12 +3,14 @@ const { prisma } = require("../../../../../prisma/prisma");
 export default async function handler(req, res) {
   const { id } = req.query;
 
+  const { note, title } = req.body;
+
   try {
     await prisma.notes.update({
       where: { id: Number(id) },
       data: {
-        note: req.body.note,
-        title: req.body.title,
+        note: note,
+        title: title,
       },
     });
 
