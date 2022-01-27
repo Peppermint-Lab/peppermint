@@ -9,6 +9,7 @@ import MDEditor from "@uiw/react-md-editor";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import TicketFiles from "../TicketFiles";
+import ClientNotesModal from "../ClientNotesModal";
 
 export default function TicketDetail(props) {
   const [ticket, setTicket] = useState(props.ticket);
@@ -253,6 +254,12 @@ export default function TicketDetail(props) {
                           <span>Un-complete</span>
                         </button>
                       )}
+                    </div>
+                    <div className="mt-4 flex space-x-3 md:mt-0">
+                      <ClientNotesModal
+                        notes={props.ticket.client.notes}
+                        id={props.ticket.client.id}
+                      />
                     </div>
                     <div className="mt-4 flex space-x-3 md:mt-0">
                       {/* <Transfer ticket={ticket} /> */}

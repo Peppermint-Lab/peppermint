@@ -13,7 +13,7 @@ export default async function getById(req, res) {
         },
         include: {
           client: {
-            select: { id: true, name: true, number: true },
+            select: { id: true, name: true, number: true, notes: true },
           },
           assignedTo: {
             select: { id: true, name: true },
