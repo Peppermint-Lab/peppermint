@@ -7,7 +7,8 @@ import {
   usePagination,
 } from "react-table";
 import Link from "next/link";
-import MarkdownPreview from "../components/MarkdownPreview";
+
+import TicketsMobileList from "../components/TicketsMobileList";
 
 async function getUserTickets() {
   const res = await fetch("/api/v1/ticket/all");
@@ -277,11 +278,7 @@ export default function TicketHitory() {
       accessor: "title",
       id: "title",
       Cell: ({ value }) => {
-        return (
-          <div className="truncate">
-            {value}
-          </div>
-        );
+        return <div className="truncate">{value}</div>;
       },
     },
     {
@@ -301,7 +298,12 @@ export default function TicketHitory() {
     <div>
       {status === "success" && (
         <div>
-          <Table columns={columns} data={data.tickets} />
+          <div className="hidden sm:block">
+            <Table columns={columns} data={data.tickets} />
+          </div>
+          <div className="sm:hidden">
+            <TicketsMobileList tickets={data.tickets} />
+          </div>
         </div>
       )}
     </div>
