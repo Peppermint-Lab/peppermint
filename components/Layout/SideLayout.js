@@ -24,7 +24,9 @@ export default function SideLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: session, status } = useSession();
 
-  console.log(session);
+  if(status === 'unauthenticated') {
+    location.push('/auth/login')
+  }
 
   const navigation = [
     {

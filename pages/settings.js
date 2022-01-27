@@ -116,7 +116,7 @@ export default function Settings() {
                     <span className="truncate">Password</span>
                   </button>
                   <button
-                    onClick={() => signOut()}
+                    onClick={() => signOut({redirect: true, callbackUrl: "/"})}
                     className={linkStyles.inactive}
                   >
                     <svg

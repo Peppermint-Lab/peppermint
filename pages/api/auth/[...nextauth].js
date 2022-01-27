@@ -9,7 +9,6 @@ const options = {
     Providers({
       name: "Credentials",
       async authorize(credentials, req, res) {
-
         try {
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
@@ -28,36 +27,38 @@ const options = {
             email: user.email,
             id: user.id,
             name: user.name,
-            isAdmin: user.isAdmin
-          };
+            isAdmin: user.isAdmin,
+          }
         } catch (error) {
           throw new Error(error);
         }
       },
     }),
   ],
+  secret: "yudjXHbqE5VH4LkwZ4srgsdL2EZrjp",
   session: {
     jwt: true,
+    maxAge: 30 * 24 * 60 * 60,
   },
-  secret: process.env.SECRET,
+
   database: process.env.DATABASE_URL,
   pages: {
     signIn: "/auth/login",
-    error: "/auth/login"
+    error: "/auth/login",
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      user && (token.user = user)
+      user && (token.user = user);
 
-      return token
-  },
+      return token;
+    },
     async session({ session, token, user }) {
-      session.accessToken = token.accessToken
-      session.id = token.user.id
-      session.user.isAdmin = token.user.isAdmin
-      session.user.id = token.user.id 
-      return session
-    }
+      session.accessToken = token.accessToken;
+      session.id = token.user.id;
+      session.user.isAdmin = token.user.isAdmin;
+      session.user.id = token.user.id;
+      return session;
+    },
   },
   debug: true,
 };

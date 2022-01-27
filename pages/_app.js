@@ -1,23 +1,36 @@
 import "../styles/globals.css";
 import "antd/dist/antd.css";
 
-import type { AppProps } from "next/app";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useRouter } from "next/router";
 import { SessionProvider, useSession } from "next-auth/react";
 import SideLayout from "../components/Layout/SideLayout";
 
-interface Props {
-  children: any;
-}
-
 const queryClient = new QueryClient();
 
-function Auth({ children }: Props) {
+// function Auth({ children }: Props) {
+//   const { data: session, status } = useSession({ required: true });
+//   const isUser = !!session?.user;
+
+//   // console.log(session)
+
+//   if (isUser) {
+//     return children;
+//   }
+
+//   // Session is being fetched, or no user.
+//   // If no user, useEffect() will redirect.
+//   return <div>Loading...</div>;
+// }
+
+function Auth({ children }) {
   const { data: session, status } = useSession({ required: true });
   const isUser = !!session?.user;
-
-  // console.log(session)
+  React.useEffect(() => {
+    if (status) return; // Do nothing while loading
+    if (!isUser) signIn(); // If not authenticated, force log in
+  }, [isUser, status]);
 
   if (isUser) {
     return children;
@@ -28,12 +41,12 @@ function Auth({ children }: Props) {
   return <div>Loading...</div>;
 }
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
 
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
-      <SessionProvider session={pageProps.session}>
+      <SessionProvider session={session}>
         <Component {...pageProps} />
       </SessionProvider>
     );
@@ -41,13 +54,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
   return (
     <>
-      <SessionProvider session={pageProps.session}>
+      <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
-          <SideLayout>
-            <Auth>
+          <Auth>
+            <SideLayout>
               <Component {...pageProps} />
-            </Auth>
-          </SideLayout>
+            </SideLayout>
+          </Auth>
         </QueryClientProvider>
       </SessionProvider>
     </>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { Space, Button, Popconfirm } from "antd";
+import { Popconfirm } from "antd";
 import {
   useTable,
   useFilters,
@@ -212,7 +212,7 @@ export default function Auth() {
   const columns = React.useMemo(() => [
     {
       Header: "Name",
-      accessor: "firstName",
+      accessor: "name",
       width: 10,
       id: "name",
     },
