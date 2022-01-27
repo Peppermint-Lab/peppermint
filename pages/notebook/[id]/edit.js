@@ -41,7 +41,7 @@ export default function ViewNoteBook() {
       <div className="mt-4">
         {status === "success" && (
           <div>
-            <MDEditor value={data.data.note} height="80vh" />
+            <MDEditor value={data.data.note} height="75vh" />
           </div>
         )}
       </div>

@@ -356,10 +356,10 @@ export default function SideLayout({ children }) {
                 <MenuIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
-            <main className="flex-1 relative z-0 focus:outline-none min-h-screen overflow-y-scroll">
+            <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto">
               <div className="py-6">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
-                  <div className="py-4">{children}</div>
+                  <div className="py-4o ">{children}</div>
                 </div>
               </div>
             </main>
