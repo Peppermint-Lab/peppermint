@@ -1,8 +1,8 @@
 <h1 align="center">Welcome to Peppermint Ticket Management 🍵</h1>
 <p align="center">
-    <img src="./images/logo.png" alt="Logo" >
+    <img src="./public/logo.svg" alt="Logo" >
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.1.7.5-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.2-blue.svg?cacheSeconds=2592000" />
   <a target="_blank">
     <img alt="Github Stars: " src="https://img.shields.io/github/stars/jwandrews99/winter?style=social" />
   </a>
