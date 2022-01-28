@@ -11,15 +11,17 @@ export default async function handler(req, res) {
     if ((!markdown, !title)) {
       return res.status(422).json({ error: "Please add some text" });
     } else {
-      await prisma.notes.upsert({
+      const data = await prisma.notes.create({
         data: {
           title,
           note: markdown,
-          userId: Number(session.id), // unsure if can be replaced by a connect statement
+          userId: Number(session.user.id), // unsure if can be replaced by a connect statement
         },
       });
 
-      res.status(200).json({ success: true });
+      const { id } = data;
+
+      res.status(200).json({ success: true, id });
     }
   } catch (error) {
     console.log(error);

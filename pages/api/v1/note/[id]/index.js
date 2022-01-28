@@ -13,8 +13,6 @@ export default async function handler(req, res) {
       where: { id: Number(id) },
     });
 
-    console.log(data);
-
     res.status(200).json({ success: true, data });
   } catch (error) {
     console.log(error);
