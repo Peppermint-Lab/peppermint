@@ -126,10 +126,6 @@ We have started working on creating documentation for peppermint which covers de
 
 If you're interested in developing for Peppermint, wether that be a bug fix or locally we have a guide on our <a href="https://docs.pmint.dev/contributions/">wiki</a>
 
-## Notes for ARM devices
-
-We currently have an image for arm devices but are seeing issues with mongoDB so we do not offically support 32 bit or 64 bit as of this time. 
-
 ## Author
 
 👤 **Jack Andrews**
