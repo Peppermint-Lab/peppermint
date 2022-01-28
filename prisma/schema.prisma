@@ -1,29 +1,26 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native"]
 }
 
 model User {
   id         Int          @id @default(autoincrement())
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
-  firstName  String
-  lastName   String
+  name       String
   password   String
   email      String       @unique
   isAdmin    Boolean
   todos      Todos[]
   tickets    Ticket[]
-  file       File[]
-  newsletter Newsletter[]
+  file       UserFile[]
   notes      Notes[]
 }
 
@@ -32,13 +29,13 @@ model Ticket {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
   name       String
-  issue      String
+  title      String
+  detail     String?
   email      String
   note       String?
-  isIssued   Boolean
   isComplete Boolean
   priority   String
-  assignedTo User     @relation(fields: [userId], references: [id])
+  assignedTo User?    @relation(fields: [userId], references: [id])
   client     Client   @relation(fields: [clientId], references: [id])
   clientId   Int
   userId     Int
@@ -57,7 +54,7 @@ model Client {
   tickets     Ticket[]
 }
 
-model File {
+model UserFile {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   filename  String
@@ -73,17 +70,6 @@ model TicketFile {
   path      String
   ticketId  Int
   ticket    Ticket   @relation(fields: [ticketId], references: [id])
-}
-
-model Newsletter {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  title     String
-  text      String
-  createdBy User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  active    Boolean
 }
 
 model Notes {
@@ -106,14 +92,3 @@ model Todos {
   userId    Int
 }
 
-model Monitor {
-    id        Int      @id @default(autoincrement())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
-    name String
-    type String
-    url String
-    hostname String
-    port Int
-    Active Boolean
-}

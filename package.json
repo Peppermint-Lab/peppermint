@@ -1,68 +1,55 @@
 {
-  "name": "project",
-  "version": "0.1.5",
-  "description": "Ticket system",
-  "main": "server.js",
-  "bin": {
-    "project": "server.js"
-  },
-  "pkg": {
-    "assets": [
-      "build/**/*",
-      "data/*",
-      "src/**/*",
-      "images/*",
-      "config/*",
-      "node_modules/**/*"
-    ],
-    "targets": [
-      "node12-macos-x64",
-      "node10-win-x64"
-    ]
-  },
+  "private": true,
   "scripts": {
-    "seed": "prisma db seed --preview-feature",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "seed": "prisma db seed",
     "migrate-dev": "prisma migrate dev --preview-feature",
     "migrate": "prisma migrate deploy",
     "generate": "prisma generate",
-    "start": "node server",
-    "server": "nodemon server",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\" --ignore client",
-    "docker": "npm run migrate && npm run generate && npm run seed && npm run server"
+    "docker": "yarn run migrate && yarn run generate && yarn run seed && yarn start"
   },
-  "keywords": [],
-  "author": "Jack Andrews",
-  "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^2.21.2",
-    "bcrypt": "^5.0.0",
-    "body-parser": "^1.19.0",
-    "colors": "^1.4.0",
-    "compression": "^1.7.4",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "dayjs": "^1.10.6",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "@headlessui/react": "^1.4.2",
+    "@heroicons/react": "^1.0.5",
+    "@prisma/client": "3.7.0",
+    "@tailwindcss/forms": "^0.4.0",
+    "@uiw/react-md-editor": "^3.9.3",
+    "add": "^2.0.6",
+    "antd": "^4.18.3",
+    "axios": "^0.25.0",
+    "bcrypt": "^5.0.1",
     "express-fileupload": "^1.2.1",
-    "express-rate-limit": "^5.2.6",
-    "generate": "^0.14.0",
-    "helmet": "^4.2.0",
-    "http-proxy-middleware": "^2.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.2",
-    "multer-gridfs-storage": "^4.2.0",
-    "os-utils": "0.0.14",
-    "ping-monitor": "^0.6.1",
-    "socket.io": "^3.1.2",
-    "tcp-ping": "^0.1.1"
+    "filesac": "^13.0.0",
+    "formidable": "^2.0.1",
+    "js-file-download": "^0.4.12",
+    "match-sorter": "^6.3.1",
+    "moment": "^2.29.1",
+    "next": "latest",
+    "next-auth": "^4.0.6",
+    "next-remove-imports": "^1.0.6",
+    "node": "^17.4.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-query": "^3.34.7",
+    "react-spinners": "^0.11.0",
+    "react-table": "^7.7.0",
+    "rehype-sanitize": "^5.0.1",
+    "request": "^2.88.2",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
-    "concurrently": "^5.3.0",
-    "nodemon": "^2.0.6",
-    "prisma": "^2.21.2"
+    "@types/node": "17.0.4",
+    "@types/react": "17.0.38",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.5",
+    "prisma": "^3.7.0",
+    "tailwindcss": "^3.0.7",
+    "typescript": "4.5.4"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js",
+    "schema": "./prisma/schema.prisma"
   }
 }

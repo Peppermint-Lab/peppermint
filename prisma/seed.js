@@ -7,36 +7,11 @@ async function main() {
     update: {},
     create: {
       email: `admin@admin.com`,
-      firstName: "admin",
-      lastName: "admin",
+      name: "admin",
       isAdmin: true,
       password: "$2b$10$BFmibvOW7FtY0soAAwujoO9y2tIyB7WEJ2HNq9O7zh9aeejMvRsKu",
     },
   });
-  
-  const unkownClient = await prisma.client.upsert({
-    where: { email: "unkown" },
-    update: {},
-    create: {
-      name: "unknown",
-      email: "unknown",
-      contactName: "unknown",
-      number: "12345678"
-    }
-  })
-
-  const unkownUser = await prisma.user.upsert({
-    where: { email: "unkown" },
-    update: {},
-    create: {
-      firstName: "unknown",
-      lastName: "unknown",
-      password: "unknown",
-      email: "unknown",
-      isAdmin: false,
-      password: String(Math.floor(Math.random() * 1000))
-    }
-  })
 
   const internal = await prisma.client.upsert({
     where: { email: `internal@admin.com` },
@@ -49,7 +24,7 @@ async function main() {
     },
   })
 
-  console.log({ admin, internal, unkownClient, unkownUser });
+  console.log({ admin, internal });
 }
 
 main()

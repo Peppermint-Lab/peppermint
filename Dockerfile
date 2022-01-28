@@ -1,30 +1,24 @@
-FROM node:lts-alpine
+FROM node:lts-alpine AS deps
 
-# Create app directory
+RUN mkdir -p /usr/src/app
+ENV PORT 5001
+
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+COPY package.json /usr/src/app
+COPY yarn.lock /usr/src/app
 
-RUN apk add --no-cache make gcc g++ python && \
-  npm install && \
-  npm rebuild bcrypt --build-from-source && \
-  apk del make gcc g++ python
-  
-RUN apk --no-cache add --virtual builds-deps build-base python
+# Production use node instead of root
+# USER node
 
-RUN npm ci --production && npm cache clean --force
-RUN npm install -g mongo-seeding-cli
-RUN npm uninstall bcrypt
-RUN npm install bcrypt
-RUN npm install -g prisma
+# ENV YARN_CACHE_FOLDER=/dev/shm/yarn_cache
+RUN yarn install --production
+RUN yarn add --dev typescript @types/node && yarn add prisma -g
 
-# Bundle app source
-COPY . .
+COPY . /usr/src/app
 
-ENV NODE_ENV=production
+RUN yarn build
 
-EXPOSE 5000
-CMD ["npm", "run", "docker"]  
+EXPOSE 5001
+
+CMD [ "yarn", "run", "docker" ]
