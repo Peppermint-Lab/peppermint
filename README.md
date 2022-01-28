@@ -53,7 +53,6 @@ services:
     depends_on:
       - postgres
     environment:
-      JWT_SECRET: "ZwfJtS3muY65CaeZ"
       PORT: 5000
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
@@ -68,8 +67,6 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 ## Show your support
 
 Give a ⭐️ if this project helped you!
-
-
 
 ### Setting up postgres on Macos in a container for local development
 
@@ -89,20 +86,10 @@ You can utilize the following environment variables in Peppermint. None of them 
 | ------------- | ------------- |
 | PUID | Set userid that the container will run as. |
 | PGID | Set groupid that the container will run as. |
-| JWT_SECRET  | Keep your passwords and user logins secure with a JWT SECRET  |
 | DB_USERNAME | Enter database username here |
 | DB_PASSWORD | Enter database password here |
 | PORT | Choose a custom port to run the app on rather than the default 5000 |
 
-##  💻 Demo
-
-If you're interested in trying out Peppermint we currently have a demo working <a href="https://demo.pmint.dev/">here.</a>
-
-The credentials are 
-```
-email: admin@admin.com
-password: 1234
-```
 
 ## ✨ Features
 
@@ -124,7 +111,7 @@ We have started working on creating documentation for peppermint which covers de
 
 ## Installing locally for development
 
-If you're interested in developing for Peppermint, wether that be a bug fix or locally we have a guide on our <a href="https://docs.pmint.dev/contributions/">wiki</a>
+If you're interested in developing for Peppermint, wether that be a bug fix or locally we have a guide on our <a href="https://docs.peppermint.sh/contributions/">wiki</a>
 
 ## Author
 
