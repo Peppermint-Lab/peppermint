@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev ",
     "build": "next build",
     "start": "next start",
     "seed": "prisma db seed",
@@ -9,7 +9,7 @@
     "migrate": "prisma migrate deploy",
     "generate": "prisma generate",
     "docker": "yarn run migrate && yarn run generate && yarn run seed && yarn start",
-    "pm2-prod": "yarn run build && pm2 start npm --name \"next\" -- start"
+    "pm2-prod": "yarn run migrate && yarn run generate && yarn run seed && yarn run build && pm2 start npm --name \"next\" -- start"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.2",
