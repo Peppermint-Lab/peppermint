@@ -1,3 +1,4 @@
+# Use root/example as user/password credentials
 version: "3.1"
 
 services:
@@ -14,9 +15,9 @@ services:
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint
+    image: pepperlabs/peppermint:dev
     ports:
-      - 5001:5001
+      - 5000:5000
     restart: on-failure
     depends_on:
       - postgres
