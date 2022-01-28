@@ -57,6 +57,7 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
+      BASE_URL: "http://localhost"
 
 ```
 
