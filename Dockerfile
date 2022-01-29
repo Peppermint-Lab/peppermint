@@ -12,7 +12,7 @@ COPY yarn.lock /usr/src/app
 # USER node
 
 # ENV YARN_CACHE_FOLDER=/dev/shm/yarn_cache
-RUN yarn install --production
+RUN yarn install --production --network-timeout 1000000
 RUN yarn add --dev typescript @types/node && yarn add prisma -g
 
 COPY . /usr/src/app
