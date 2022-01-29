@@ -21,7 +21,6 @@ export default function UpdateUserModal({ user }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        password,
         email,
         name,
         admin,
@@ -91,7 +90,7 @@ export default function UpdateUserModal({ user }) {
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Edit Client
+                      Edit User
                     </Dialog.Title>
                     <div className="mt-2 space-y-4">
                       <input
