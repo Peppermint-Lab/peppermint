@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import Link from 'next/link'
 
 import CreateTicketModal from "../CreateTicketModal";
 import version_data from "../../public/version.json";
@@ -137,9 +138,8 @@ export default function SideLayout({ children }) {
                     <nav className="mt-5 px-2 space-y-1">
                       <CreateTicketModal />
                       {navigation.map((item) => (
+                       <Link key={item.name} href={item.href}>
                         <a
-                          key={item.name}
-                          href={item.href}
                           className={classNames(
                             item.current
                               ? "bg-green-500 text-white"
@@ -153,6 +153,7 @@ export default function SideLayout({ children }) {
                           />
                           {item.name}
                         </a>
+                       </Link>
                       ))}
                     </nav>
                     <div className={session.user.isAdmin === true ? "mt-32" : "hidden"}>
@@ -167,9 +168,8 @@ export default function SideLayout({ children }) {
                         aria-labelledby="projects-headline"
                       >
                         {secondaryNavigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
+                          <Link key={item.name} href={item.href}>
+                           <a
                             className={classNames(
                               item.current
                                 ? "bg-green-500 text-white"
@@ -179,6 +179,7 @@ export default function SideLayout({ children }) {
                           >
                             <span className="truncate">{item.name}</span>
                           </a>
+                         </Link>
                         ))}
                         <div className="px-2 py-2">
                           <span className="text-white">
@@ -221,7 +222,8 @@ export default function SideLayout({ children }) {
                     <p className="text-base font-medium text-white">
                       {session.user.name}
                     </p>
-                    <a href="/settings" className="flex-shrink-0 group block">
+                   <Link href="/settings">
+                    <a className="flex-shrink-0 group block">
                       <div className="flex items-center">
                         <div className="">
                           <p className="text-sm font-medium text-white">
@@ -230,6 +232,7 @@ export default function SideLayout({ children }) {
                         </div>
                       </div>
                     </a>
+                   </Link>
                   </div>
                 </div>
               </Transition.Child>
@@ -251,8 +254,8 @@ export default function SideLayout({ children }) {
                       src="/logo.svg"
                       alt="Workflow"
                     />
+                    <Link href="https://peppermint.sh">
                     <a
-                      href="https://peppermint.sh"
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -260,13 +263,13 @@ export default function SideLayout({ children }) {
                         Peppermint
                       </h1>
                     </a>
+                   </Link>
                   </div>
                   <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
                     <CreateTicketModal />
                     {navigation.map((item) => (
+                     <Link key={item.name} href={item.href}>
                       <a
-                        key={item.name}
-                        href={item.href}
                         className={classNames(
                           item.current
                             ? "bg-green-500 text-white"
@@ -282,6 +285,7 @@ export default function SideLayout({ children }) {
                         />
                         {item.name}
                       </a>
+                     </Link>
                     ))}
                   </nav>
                   <div className={session.user.isAdmin === true ? "mt-8" : "hidden"}>
@@ -296,18 +300,19 @@ export default function SideLayout({ children }) {
                       aria-labelledby="projects-headline"
                     >
                       {secondaryNavigation.map((item) => (
+                        <Link key={item.name} href={item.href}>
                         <a
-                          key={item.name}
-                          href={item.href}
                           className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white"
                         >
                           <span className="truncate">{item.name}</span>
                         </a>
+                       </Link>
                       ))}
                       <div className="px-3 py-2">
                         <span className="text-white">
                           Version -{" "}
-                          <a href="https://github.com/Peppermint-Lab/peppermint/releases">
+                          <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+                            <a>
                             <span className="inline-flex ml-2 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800 pointer pointer-events-auto">
                               <svg
                                 className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400"
@@ -319,6 +324,7 @@ export default function SideLayout({ children }) {
                               {version_data["current_version"]}
                             </span>
                           </a>
+                         </Link>
                         </span>
                       </div>
                     </div>
@@ -338,11 +344,13 @@ export default function SideLayout({ children }) {
                         <p className="text-sm font-medium text-white">
                           {session.user.name}
                         </p>
+                       <Link href="/settings">
                         <a href="/settings">
                           <p className="text-xs font-medium text-white group-hover:text-green-400">
                             View profile
                           </p>
                         </a>
+                       </Link>
                       </div>
                     </div>
                   </div>
