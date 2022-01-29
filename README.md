@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to Peppermint Ticket Management 🍵</h1>
 <p align="center">
-    <img src="./public/logo.svg" alt="Logo" >
+<!--     <img src="./public/logo.svg" alt="Logo" > -->
 <p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.2-blue.svg?cacheSeconds=2592000" />
   <a target="_blank">
@@ -15,10 +15,10 @@
   </a>
 </p>
 
-<p align="center">
+<!-- <p align="center">
   <a href="https://www.buymeacoffee.com/peppermintlabs" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee"          style="height: 15px !important;width: 75px !important;" ></a>
 </p>
-
+ -->
 > Ticket Management System in order to help helpdesks & service desks manage internal staff &  customer requests
 
 ## Installation
