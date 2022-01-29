@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import {
-  CheckCircleIcon,
-} from "@heroicons/react/solid";
+import { CheckCircleIcon } from "@heroicons/react/solid";
 import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 
-import ListTodo from '../components/ListTodo'
-import ListUserFiles from '../components/ListUserFiles'
+import ListTodo from "../components/ListTodo";
+import ListUserFiles from "../components/ListUserFiles";
 
 export default function Home() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   const [file, setFile] = useState([]);
   const [hour, setHour] = useState();
