@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Hook" AS ENUM ('ticket_created', 'ticket_status_changed');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -87,6 +90,18 @@ CREATE TABLE "Todos" (
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Todos_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Webhooks" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "type" "Hook" NOT NULL,
+
+    CONSTRAINT "Webhooks_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

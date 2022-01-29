@@ -11,23 +11,23 @@ datasource db {
 }
 
 model User {
-  id         Int          @id @default(autoincrement())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @default(now())
-  name       String
-  password   String
-  email      String       @unique
-  isAdmin    Boolean
-  todos      Todos[]
-  tickets    Ticket[]
-  file       UserFile[]
-  notes      Notes[]
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  name      String
+  password  String
+  email     String     @unique
+  isAdmin   Boolean
+  todos     Todos[]
+  tickets   Ticket[]
+  file      UserFile[]
+  notes     Notes[]
 }
 
 model Ticket {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
   name       String
   title      String
   detail     String?
@@ -35,8 +35,8 @@ model Ticket {
   note       String?
   isComplete Boolean
   priority   String
-  assignedTo User?    @relation(fields: [userId], references: [id])
-  client     Client   @relation(fields: [clientId], references: [id])
+  assignedTo User?        @relation(fields: [userId], references: [id])
+  client     Client       @relation(fields: [clientId], references: [id])
   clientId   Int
   userId     Int
   TicketFile TicketFile[]
@@ -92,3 +92,16 @@ model Todos {
   userId    Int
 }
 
+model Webhooks {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  url       String
+  type      Hook
+}
+
+enum Hook {
+  ticket_created
+  ticket_status_changed
+}
