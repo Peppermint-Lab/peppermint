@@ -6,11 +6,13 @@ ENV PORT 5001
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app
-COPY yarn.lock /usr/src/app
+# COPY yarn.lock /usr/src/app
+
+RUN apk add --update --no-cache curl py-pip
 
 # ENV YARN_CACHE_FOLDER=/dev/shm/yarn_cache
 RUN yarn install --production --network-timeout 1000000 --ignore-scripts && yarn cache clean --force
-# RUN yarn unistall bcrypt && yarn add bcrypt
+RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
 COPY . /usr/src/app
