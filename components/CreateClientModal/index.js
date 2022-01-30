@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
 
 export default function CreateClient() {
   const [open, setOpen] = useState(false);
@@ -9,6 +10,8 @@ export default function CreateClient() {
   const [contactName, setContactName] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  const router = useRouter();
 
   async function createClient() {
     await fetch("/api/v1/admin/client/create", {
@@ -126,7 +129,7 @@ export default function CreateClient() {
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => {
                       createClient();
-                      setOpen(false);
+                      router.reload(router.pathname);
                     }}
                   >
                     Save

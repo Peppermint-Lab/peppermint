@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
 
 export default function CreateUser() {
   const [open, setOpen] = useState(false);
@@ -9,6 +10,8 @@ export default function CreateUser() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [admin, setAdmin] = useState(false);
+
+  const router = useRouter();
 
   async function createUser() {
     await fetch("/api/v1/admin/user/create", {
@@ -132,7 +135,11 @@ export default function CreateUser() {
                               defaultChecked={notificationMethod.id === "user"}
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
                               value={notificationMethod.id}
-                              onChange={(e) => e.target.value === 'admin' ? setAdmin(true) : setAdmin(false)}
+                              onChange={(e) =>
+                                e.target.value === "admin"
+                                  ? setAdmin(true)
+                                  : setAdmin(false)
+                              }
                             />
                             <label
                               htmlFor={notificationMethod.id}
@@ -152,7 +159,7 @@ export default function CreateUser() {
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => {
                       createUser();
-                      setOpen(false);
+                      router.reload(router.pathname);
                     }}
                   >
                     Save

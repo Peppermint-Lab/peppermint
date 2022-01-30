@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
 
 export default function UpdateUserModal({ user }) {
   const [open, setOpen] = useState(false);
@@ -8,6 +9,8 @@ export default function UpdateUserModal({ user }) {
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [admin, setAdmin] = useState(user.isAdmin);
+
+  const router = useRouter();
 
   const notificationMethods = [
     { id: "user", title: "user" },
@@ -148,9 +151,9 @@ export default function UpdateUserModal({ user }) {
                   <button
                     type="button"
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => {
-                      updateUser();
-                      setOpen(false);
+                    onClick={async () => {
+                      await updateUser();
+                      router.reload(router.pathname);
                     }}
                   >
                     Update

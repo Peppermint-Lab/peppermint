@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
 
 export default function UpdateClientModal({ client }) {
   const [open, setOpen] = useState(false);
@@ -9,6 +10,8 @@ export default function UpdateClientModal({ client }) {
   const [contactName, setContactName] = useState(client.contactName);
   const [name, setName] = useState(client.name);
   const [email, setEmail] = useState(client.email);
+
+  const router = useRouter();
 
   async function updateClient() {
     await fetch("/api/v1/admin/client/update", {
@@ -131,7 +134,7 @@ export default function UpdateClientModal({ client }) {
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => {
                       updateClient();
-                      setOpen(false);
+                      router.reload(router.pathname);
                     }}
                   >
                     Update

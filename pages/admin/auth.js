@@ -308,7 +308,10 @@ export default function Auth() {
                           </dl>
                         </div>
                         <div className="space-x-4 flex flex-row justify-center -mt-8 mb-4">
-                          <UpdateUserModal user={user} />
+                          <UpdateUserModal
+                            user={user}
+                            refetch={() => handleRefresh}
+                          />
                           <ResetPassword user={user} />
                           <Popconfirm
                             title="Are you sure you want to delete?"
