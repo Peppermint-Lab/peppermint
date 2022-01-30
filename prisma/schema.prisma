@@ -100,7 +100,7 @@ model Webhooks {
   url       String
   type      Hook
   active    Boolean
-  secret    String
+  secret    String?
 }
 
 enum Hook {

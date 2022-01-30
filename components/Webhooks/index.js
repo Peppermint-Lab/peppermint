@@ -13,11 +13,31 @@ function classNames(...classes) {
 
 export default function Webhooks() {
   const [show, setShow] = useState("main");
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
+  const [url, setUrl] = useState("");
+  const [type, setType] = useState("ticket_created");
 
   const { data, status, error, refetch } = useQuery("gethooks", getHooks);
 
   console.log(data, status);
+
+  async function addHook() {
+    await fetch("/api/v1/admin/webhooks/create", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        active: enabled,
+        url,
+        type,
+      }),
+    })
+    .then((res) => res.json())
+    .then((res) => {
+        refetch()
+    })
+  }
 
   return (
     <div>
@@ -98,7 +118,7 @@ export default function Webhooks() {
                   >
                     <option value="ticket_created">Ticket created</option>
                     <option value="ticket_status_changed">
-                      Ticket_Status_Change
+                      Ticket Status Change
                     </option>
                   </select>
                 </div>
@@ -138,6 +158,7 @@ export default function Webhooks() {
               </div>
 
               <button
+                onClick={() => addHook()}
                 type="button"
                 className="mt-8 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
