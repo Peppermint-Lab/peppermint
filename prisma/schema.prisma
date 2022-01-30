@@ -101,6 +101,7 @@ model Webhooks {
   type      Hook
   active    Boolean
   secret    String?
+  createdBy String
 }
 
 enum Hook {

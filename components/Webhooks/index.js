@@ -16,6 +16,8 @@ export default function Webhooks() {
   const [enabled, setEnabled] = useState(true);
   const [url, setUrl] = useState("");
   const [type, setType] = useState("ticket_created");
+  const [secret, setSecret] = useState();
+  const [name, setName] = useState("");
 
   const { data, status, error, refetch } = useQuery("gethooks", getHooks);
 
@@ -28,15 +30,17 @@ export default function Webhooks() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        name,
         active: enabled,
         url,
         type,
+        secret,
       }),
     })
-    .then((res) => res.json())
-    .then((res) => {
-        refetch()
-    })
+      .then((res) => res.json())
+      .then((res) => {
+        refetch();
+      });
   }
 
   return (
@@ -69,10 +73,27 @@ export default function Webhooks() {
       <div className={show === "create" ? "" : "hidden"}>
         <div className="flex flex-col">
           <div className="">
-            <div>
+            <div className="space-y-4">
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
+              >
+                Webhook Name
+              </label>
+              <div className="mt-1">
+                <input
+                  type="text"
+                  name="url"
+                  id="url"
+                  className="shadow-sm focus:ring-green\-500 focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
+                  required
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 PT-4"
               >
                 Payload Url
               </label>
@@ -82,8 +103,8 @@ export default function Webhooks() {
                   name="url"
                   id="url"
                   className="shadow-sm focus:ring-green\-500 focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder="url"
                   required
+                  onChange={(e) => setUrl(e.target.value)}
                 />
               </div>
               <label
@@ -99,29 +120,29 @@ export default function Webhooks() {
                   id="url"
                   className="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
                   placeholder=""
+                  onChange={(e) => setSecret(e.target.value)}
                 />
               </div>
 
-              <div>
-                <div>
-                  <label
-                    htmlFor="location"
-                    className="mt-4 block text-sm font-medium text-gray-700"
-                  >
-                    Type
-                  </label>
-                  <select
-                    id="location"
-                    name="location"
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                    defaultValue="ticket_created"
-                  >
-                    <option value="ticket_created">Ticket created</option>
-                    <option value="ticket_status_changed">
-                      Ticket Status Change
-                    </option>
-                  </select>
-                </div>
+              <div className="w-3/4">
+                <label
+                  htmlFor="location"
+                  className="mt-4 block text-sm font-medium text-gray-700"
+                >
+                  Type
+                </label>
+                <select
+                  id="location"
+                  name="location"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  defaultValue="ticket_created"
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <option value="ticket_created">Ticket created</option>
+                  <option value="ticket_status_changed">
+                    Ticket Status Change
+                  </option>
+                </select>
               </div>
 
               <div className="pt-8">

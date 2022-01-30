@@ -15,8 +15,11 @@ export default async function createWebhook(req, res) {
           type,
           active,
           secret,
+          createdBy: session.user.email
         },
       });
+
+      res.status(200).json({ message: 'Hook created!', success: true })
     } else {
       res
         .status(401)
