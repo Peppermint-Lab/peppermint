@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 export default async function createWebhook(req, res) {
   const session = await getSession({ req });
 
-  const { name, url, type } = req.body;
+  const { name, url, type, active, secret } = req.body;
 
   try {
     if (session.user.isAdmin) {
@@ -13,6 +13,8 @@ export default async function createWebhook(req, res) {
           name,
           url,
           type,
+          active,
+          secret,
         },
       });
     } else {

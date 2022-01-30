@@ -99,6 +99,8 @@ model Webhooks {
   name      String
   url       String
   type      Hook
+  active    Boolean
+  secret    String
 }
 
 enum Hook {
