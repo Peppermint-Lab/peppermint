@@ -217,7 +217,10 @@ export default function Webhooks() {
               </div>
 
               <button
-                onClick={() => addHook()}
+                onClick={() => {
+                  addHook()
+                  setShow('main')
+                }}
                 type="button"
                 className="mt-8 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
