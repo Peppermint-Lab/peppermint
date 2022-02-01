@@ -57,6 +57,17 @@ export default function Webhooks() {
         >
           Add Webhook
         </button>
+        <button
+          onClick={() => setShow("main")}
+          type="button"
+          className={
+            show === "main"
+              ? "hidden"
+              : "inline-flex float-right -mt-8 items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          }
+        >
+          Cancel
+        </button>
       </div>
       <div className={show === "main" ? "pt-8 sm:pt-4" : ""}>
         <p>
