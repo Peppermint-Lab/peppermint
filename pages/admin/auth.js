@@ -313,7 +313,7 @@ export default function Auth() {
                             refetch={() => handleRefresh}
                           />
                           <ResetPassword user={user} />
-                          <Popconfirm
+                          {/* <Popconfirm
                             title="Are you sure you want to delete?"
                             onConfirm={() => deleteClient(user.id)}
                           >
@@ -323,7 +323,7 @@ export default function Auth() {
                             >
                               Delete
                             </button>
-                          </Popconfirm>
+                          </Popconfirm> */}
                         </div>
                       </div>
                     ))}
