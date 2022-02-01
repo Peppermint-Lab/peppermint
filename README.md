@@ -1,5 +1,8 @@
 <h1 align="center">Welcome to Peppermint Ticket Management 🍵</h1>
 <p align="center">
+  <a href='https://ko-fi.com/peppermintsh' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+ </p>
+<p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.2-blue.svg?cacheSeconds=2592000" />
   <a target="_blank">
     <img alt="Github Stars: " src="https://img.shields.io/github/stars/jwandrews99/winter?style=social" />
