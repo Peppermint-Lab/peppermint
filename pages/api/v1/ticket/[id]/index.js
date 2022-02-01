@@ -3,8 +3,6 @@ const { prisma } = require("../../../../../prisma/prisma");
 export default async function getById(req, res) {
   const { id } = req.query;
 
-  console.log(id);
-
   try {
     await prisma.ticket
       .findUnique({
