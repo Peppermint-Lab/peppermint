@@ -1,5 +1,5 @@
 const { prisma } = require("../../../../prisma/prisma");
-import { sendTicketCreate } from "../../../../lib/nodemailer/ticket/status";
+import { sendTicketCreate } from "../../../../lib/nodemailer/ticket/create";
 
 export default async function create(req, res) {
   const { name, company, detail, title, priority, email, engineer, issue } =
