@@ -43,9 +43,7 @@ export default async function create(req, res) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            data: `Ticket ${data.id} created by ${data.name} / ${data.email}. Priority -> ${data.priority}`,
-          }),
+          body: `Ticket ${data.id} created by ${data.name} -> ${data.email}. Priority -> ${data.priority}`,
           redirect: "follow",
         });
       }
