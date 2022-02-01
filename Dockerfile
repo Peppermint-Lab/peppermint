@@ -1,26 +1,74 @@
-FROM node:lts-alpine AS deps
+# Double-container Dockerfile for separated build process.
+# If you're just copy-pasting this, don't forget a .dockerignore!
 
-RUN mkdir -p /usr/src/app
-ENV PORT 5001
+# We're starting with the same base image, but we're declaring
+# that this block outputs an image called DEPS that we
+# won't be deploying - it just installs our Yarn deps
+FROM node:14-alpine AS deps
 
-WORKDIR /usr/src/app
+# If you need libc for any of your deps, uncomment this line:
+RUN apk add --no-cache libc6-compat
 
-COPY package.json /usr/src/app
-# COPY yarn.lock /usr/src/app
+# Copy over ONLY the package.json and yarn.lock
+# so that this `yarn install` layer is only recomputed
+# if these dependency files change. Nice speed hack!
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-RUN apk add --update --no-cache curl py-pip
+# END DEPS IMAGE
 
-# ENV YARN_CACHE_FOLDER=/dev/shm/yarn_cache
-RUN yarn install --production --network-timeout 1000000 --ignore-scripts && yarn cache clean --force
+# Now we make a container to handle our Build
+FROM node:14-alpine AS BUILD_IMAGE
+
+# Set up our work directory again
+WORKDIR /app
+
+# Bring over the deps we installed and now also
+# the rest of the source code to build the Next
+# server for production
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN yarn build
+
+# Remove all the development dependencies since we don't
+# need them to run the actual server.
+RUN rm -rf node_modules
+RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
 RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
-COPY . /usr/src/app
+# END OF BUILD_IMAGE
 
-ENV NODE_ENV=production
+# This starts our application's run image - the final output of build.
+FROM node:14-alpine
 
-RUN yarn build
+ENV NODE_ENV production
+ENV PORT 5001
+
+RUN apk update
+RUN apk add --no-cache bash
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# Pull the built files out of BUILD_IMAGE - we need:
+# 1. the package.json and yarn.lock
+# 2. the Next build output and static files
+# 3. the node_modules.
+WORKDIR /app
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/package.json /app/yarn.lock ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/public ./public
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/start.sh ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.env ./
+
+# 4. OPTIONALLY the next.config.js, if your app has one
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/next.config.js  ./
 
 EXPOSE 5001
 
-CMD [ "yarn", "run", "docker" ]
+# CMD ls
+CMD bash -C './start.sh';'bash'
