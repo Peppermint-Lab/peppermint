@@ -67,6 +67,10 @@ export default function SideLayout({ children }) {
       name: "Clients",
       href: "/admin/clients",
     },
+    {
+      name: "Settings",
+      href: "/admin/settings",
+    },
   ];
 
   return (

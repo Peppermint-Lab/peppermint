@@ -67,7 +67,7 @@ export default function CreateTicketModal() {
   }
 
   async function createTicket() {
-    await fetch("api/v1/ticket/create", {
+    await fetch("/api/v1/ticket/create", {
       method: "POST",
       headers: {
         "content-type": "application/sjon",
