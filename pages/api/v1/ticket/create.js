@@ -1,4 +1,5 @@
 const { prisma } = require("../../../../prisma/prisma");
+import { sendTicketCreate } from "../../../../lib/nodemailer/ticket/status";
 
 export default async function create(req, res) {
   const { name, company, detail, title, priority, email, engineer, issue } =
@@ -30,6 +31,7 @@ export default async function create(req, res) {
         },
       })
       .then((ticket) => {
+        sendTicketCreate(ticket);
         res.status(201).json({ message: "Ticket created correctly", ticket });
       });
   } catch (error) {
