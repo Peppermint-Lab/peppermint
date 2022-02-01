@@ -110,7 +110,7 @@ export default function ListTodo() {
                         >
                           <TrashIcon className="h-5 w-5" aria-hidden="true" />
                         </button>
-                        {todo.done ? (
+                        {/* {todo.done ? (
                           <button
                             onClick={() => markUndone(todo.id)}
                             type="button"
@@ -129,7 +129,7 @@ export default function ListTodo() {
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
                           </button>
-                        )}
+                        )} */}
                       </li>
                     </ul>
                   </div>
