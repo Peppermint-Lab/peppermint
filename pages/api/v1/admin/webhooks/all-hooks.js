@@ -7,9 +7,7 @@ export default async function getAllHooks(req, res) {
   try {
     if (session.user.isAdmin) {
       const hooks = await prisma.webhooks.findMany({});
-
-      console.log(hooks);
-
+      
       res.status(200).json({ hooks, success: true });
     } else {
       res
