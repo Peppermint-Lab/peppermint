@@ -15,14 +15,14 @@ services:
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:dev
+    image: pepperlabs/peppermint:next
     ports:
-      - 5000:5000
+      - 5001:5001
     restart: on-failure
     depends_on:
       - postgres
     environment:
-      PORT: 5000 ## This is the port of the internal application there is no need to change this
+      PORT: 5001 ## This is the port of the internal application there is no need to change this
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
