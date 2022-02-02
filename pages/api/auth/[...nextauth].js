@@ -44,7 +44,7 @@ const options = {
   database: process.env.DATABASE_URL,
   pages: {
     signIn: "/auth/login",
-    error: "/auth/login",
+    error: "/auth/error",
   },
   callbacks: {
     jwt: async ({ token, user }) => {
