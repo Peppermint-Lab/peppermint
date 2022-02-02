@@ -15,7 +15,7 @@ services:
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:next
+    image: pepperlabs/peppermint:dev
     ports:
       - 5001:5001
     restart: on-failure
@@ -26,4 +26,4 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
-      BASE_URL: "http://localhost"
+      BASE_URL: "http://localhost:5001"

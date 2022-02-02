@@ -1,12 +1,5 @@
-# Double-container Dockerfile for separated build process.
-# If you're just copy-pasting this, don't forget a .dockerignore!
-
-# We're starting with the same base image, but we're declaring
-# that this block outputs an image called DEPS that we
-# won't be deploying - it just installs our Yarn deps
 FROM node:14-alpine AS deps
 
-# If you need libc for any of your deps, uncomment this line:
 RUN apk add --no-cache libc6-compat
 
 # Copy over ONLY the package.json and yarn.lock
@@ -15,8 +8,6 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-
-# END DEPS IMAGE
 
 # Now we make a container to handle our Build
 FROM node:14-alpine AS BUILD_IMAGE
@@ -38,13 +29,8 @@ RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offlin
 RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
-# END OF BUILD_IMAGE
 
-# This starts our application's run image - the final output of build.
 FROM node:14-alpine
-
-ENV NODE_ENV production
-ENV PORT 5001
 
 RUN apk update
 RUN apk add --no-cache bash
@@ -52,10 +38,6 @@ RUN apk add --no-cache bash
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-# Pull the built files out of BUILD_IMAGE - we need:
-# 1. the package.json and yarn.lock
-# 2. the Next build output and static files
-# 3. the node_modules.
 WORKDIR /app
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/package.json /app/yarn.lock ./
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/node_modules ./node_modules
@@ -65,10 +47,10 @@ COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/start.sh ./
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.env ./
 
-# 4. OPTIONALLY the next.config.js, if your app has one
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/next.config.js  ./
 
+ENV NODE_ENV production
+ENV PORT 5001
 EXPOSE 5001
 
-# CMD ls
 CMD bash -C './start.sh';'bash'
