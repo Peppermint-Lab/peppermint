@@ -14,6 +14,7 @@ export default function Home() {
   const [hour, setHour] = useState();
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
+  const [uploaded, setUploaded] = useState(false);
 
   let file = [];
 
@@ -52,7 +53,6 @@ export default function Home() {
   const stats = [
     { name: "Open Tickets", stat: openTickets, href: "/ticket" },
     { name: "Completed Tickets", stat: completedTickets, href: "/history" },
-    // { name: "Total Todos", stat:  },
   ];
 
   const propsUpload = {
@@ -69,6 +69,8 @@ export default function Home() {
       }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
+        setUploaded(true);
+        
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -190,14 +192,14 @@ export default function Home() {
                 </h2>
                 <Upload
                   {...propsUpload}
-                  className="px-4 flex flex-row align-middle items-center -mt-3"
+                  className="px-4 flex align-middle items-center -mt-3"
                 >
                   <button>
                     <UploadOutlined />
                   </button>
                 </Upload>
               </div>
-              <ListUserFiles />
+              <ListUserFiles uploaded={uploaded} setUploaded={() => setUploaded()} />
             </div>
           </div>
         </div>
