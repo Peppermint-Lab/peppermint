@@ -76,6 +76,12 @@ services:
 
 ```
 
+The default login credentials are
+```
+admin@admin.com
+1234
+```
+
 ## One click installers
 
 - We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>
