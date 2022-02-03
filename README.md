@@ -86,10 +86,6 @@ admin@admin.com
 
 - We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>
 
-## Roadmap for new features
-
-There is currently a trello roadmap available which is updated daily - https://trello.com/b/tOMsptar/peppermint
-
 ## Documentation
 
 We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://docs.peppermint.sh">here</a> to be taken directly there.
