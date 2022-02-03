@@ -72,26 +72,8 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
-      BASE_URL: "http://localhost"
+      BASE_URL: "http://localhost:5000"
 
-```
-
-## Supported Environment Variables
-
-You can utilize the following environment variables in Peppermint. None of them are manditory.
-
-| Variable    | Description                                                         |
-| ----------- | ------------------------------------------------------------------- |
-| PUID        | Set userid that the container will run as.                          |
-| PGID        | Set groupid that the container will run as.                         |
-| DB_USERNAME | Enter database username here                                        |
-| DB_PASSWORD | Enter database password here                                        |
-| PORT        | Choose a custom port to run the app on rather than the default 5000 |
-
-### Setting up postgres on Macos in a container for local development
-
-```
-docker run --rm -P -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD="1234" --name pg postgres:alpine
 ```
 
 ## One click installers
