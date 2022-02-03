@@ -34,7 +34,7 @@ export default function ListUserFiles({ uploaded, setUploaded }) {
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then(() => {
         getFiles();
       });
   }

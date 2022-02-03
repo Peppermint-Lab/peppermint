@@ -44,11 +44,13 @@ export default async function UploadFile(req, res) {
               },
             })
             .then((err) => console.log(err));
+          return res
+            .status(200)
+            .json({ message: "File Uploaded", success: true });
         } catch (error) {
           console.log(error);
+          return res.status(500).json({ message: error, success: false });
         }
-
-        return res.status(201).json({ message: "File Uploaded", fail: false });
       });
     });
   } catch (error) {
