@@ -38,9 +38,7 @@ It's a self hosted alternative to popular services such as zendesk
 
 ## 🐳 Installation with docker
 
-Currently only linux has been verified as working but we are open to the idea of supporting windows eventually as well.
-
-Keep in mind, this is an alpha so the risk of data loss is real and it may not be stable, we do not recommend anyone runs this in a production enviroment.
+Keep in mind, this is currently in alpha and has lots of moving parts, with no long term test in place, so the risk of data loss is real if we ever make a breaking change due to the infancy of the current project, we do not recommend anyone runs this in a production enviroment at this moment in time.
 
 Check out the getting started guide if this is the first time you've used Peppermint:
 
