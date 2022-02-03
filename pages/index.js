@@ -3,6 +3,7 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 import ListTodo from "../components/ListTodo";
 import ListUserFiles from "../components/ListUserFiles";
@@ -10,10 +11,11 @@ import ListUserFiles from "../components/ListUserFiles";
 export default function Home() {
   const { data: session } = useSession();
 
-  const [file, setFile] = useState([]);
   const [hour, setHour] = useState();
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
+
+  let file = [];
 
   async function time() {
     const date = new Date();
@@ -48,7 +50,7 @@ export default function Home() {
   }
 
   const stats = [
-    { name: "Open Tickets", stat: openTickets, href: "/tickets" },
+    { name: "Open Tickets", stat: openTickets, href: "/ticket" },
     { name: "Completed Tickets", stat: completedTickets, href: "/history" },
     // { name: "Total Todos", stat:  },
   ];
@@ -129,7 +131,7 @@ export default function Home() {
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                           aria-hidden="true"
                         />
-                        {session.user.isAdmin ? "Admin" : "Engineer"}
+                        {session.user.isAdmin ? "Admin" : "user"}
                       </dd>
                     </dl>
                   </div>
@@ -142,17 +144,21 @@ export default function Home() {
         <div>
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
             {stats.map((item) => (
-              <div
-                key={item.name}
-                className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
-              >
-                <dt className="text-sm font-medium text-gray-500 truncate">
-                  {item.name}
-                </dt>
-                <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                  {item.stat}
-                </dd>
-              </div>
+              <Link href={item.href}>
+                <a>
+                  <div
+                    key={item.name}
+                    className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+                  >
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      {item.name}
+                    </dt>
+                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                      {item.stat}
+                    </dd>
+                  </div>
+                </a>
+              </Link>
             ))}
           </dl>
         </div>
