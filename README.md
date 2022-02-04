@@ -74,6 +74,8 @@ services:
 
 ```
 
+Once this is completed then you can go to your base_url which was added to the compose file and login.
+
 The default login credentials are
 ```
 admin@admin.com
