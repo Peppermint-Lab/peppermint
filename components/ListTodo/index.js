@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Pagination } from "antd";
-import {
-  TrashIcon,
-  CheckIcon,
-  MinusCircleIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/solid";
+import { TrashIcon, ArrowRightIcon } from "@heroicons/react/solid";
 import { useQuery } from "react-query";
 
 async function getTodos() {
@@ -38,7 +33,7 @@ export default function ListTodo() {
       }),
     }).then(() => {
       refetch();
-      setText('')
+      setText("");
     });
   }
 
@@ -55,10 +50,10 @@ export default function ListTodo() {
   }
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      onSubmit()
+    if (event.key === "Enter") {
+      onSubmit();
     }
-  }
+  };
 
   return (
     <div>
@@ -84,16 +79,15 @@ export default function ListTodo() {
 
       {status === "success" && (
         <div>
-          {/* <Divider orientation="left" className="w-full" /> */}
-          <div className={data.todos.length <= 2 ? "hidden" : ""}>
+          {/* <div className={data.todos.length <= 2 ? "hidden" : ""}>
             <button
               type="button"
               className="inline-flex items-center mt-2 px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-white bg-green-400 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Mark All Done
             </button>
-          </div>
-          <div className="mt-2">
+          </div> */}
+          <div className="mt-4">
             {data.todos ? (
               data.todos.slice(minValue, maxValue).map((todo) => {
                 return (
@@ -110,7 +104,7 @@ export default function ListTodo() {
                         >
                           <TrashIcon className="h-5 w-5" aria-hidden="true" />
                         </button>
-                        {todo.done ? (
+                        {/* {todo.done ? (
                           <button
                             onClick={() => markUndone(todo.id)}
                             type="button"
@@ -129,7 +123,7 @@ export default function ListTodo() {
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
                           </button>
-                        )}
+                        )} */}
                       </li>
                     </ul>
                   </div>

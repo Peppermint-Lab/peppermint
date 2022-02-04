@@ -6,8 +6,6 @@ import { TrashIcon, DocumentDownloadIcon } from "@heroicons/react/solid";
 export default function ListUserFiles({ uploaded, setUploaded }) {
   const [files, setFiles] = useState([]);
 
-  console.log(setUploaded);
-
   async function getFiles() {
     await fetch(`/api/v1/users/file/all`, {
       method: "GET",
@@ -40,7 +38,6 @@ export default function ListUserFiles({ uploaded, setUploaded }) {
   }
 
   function download(file) {
-    console.log(file);
     const url = `/api/v1/users/file/download?filepath=${file.path}`;
     let data = new FormData();
     axios

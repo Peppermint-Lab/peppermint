@@ -28,7 +28,10 @@ export default function SideLayout({ children }) {
     location.push("/auth/login");
   }
 
-  console.log(session);
+  if (location.pathname.includes("/admin") && session.isAdmin === false) {
+    location.push("/");
+    alert("You do not have the correct perms for that action.");
+  }
 
   const navigation = [
     {

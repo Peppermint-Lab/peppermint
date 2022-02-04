@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useQuery } from "react-query";
 import moment from "moment";
+import Loader from "react-spinners/ClipLoader";
 
 async function notebooks() {
   const res = await fetch("/api/v1/note/get-notes");
@@ -20,6 +21,12 @@ export default function GetNoteBook() {
           New NoteBook
         </button>
       </Link>
+
+      {status === "loading" && (
+        <div className="flex flex-col justify-center items-center h-screen">
+          <Loader color="green" size={100} />
+        </div>
+      )}
 
       {status === "success" && (
         <div className="mt-4">
