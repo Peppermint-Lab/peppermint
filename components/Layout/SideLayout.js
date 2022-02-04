@@ -262,7 +262,7 @@ export default function SideLayout({ children }) {
                         <a
                           className={classNames(
                             item.current
-                              ? "bg-green-500 text-white"
+                              ? "bg-green-500 text-white hover:text-white"
                               : "text-white hover:bg-green-400 hover:text-white",
                             "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                           )}
