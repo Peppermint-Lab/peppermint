@@ -231,7 +231,7 @@ export default function Auth() {
           <div className="space-x-4 flex flex-row">
             <UpdateUserModal user={row.original} />
             <ResetPassword user={row.original} />
-            <Popconfirm
+            {/* <Popconfirm
               title="Are you sure you want to delete?"
               onConfirm={() => deleteClient(row.cells[0].value)}
             >
@@ -241,7 +241,7 @@ export default function Auth() {
               >
                 Delete
               </button>
-            </Popconfirm>
+            </Popconfirm> */}
           </div>
         );
       },

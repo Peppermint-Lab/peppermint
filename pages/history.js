@@ -316,7 +316,7 @@ export default function TicketHitory() {
             <TicketsMobileList tickets={data.tickets} />
           </div>
         </div>
-      )}\
+      )}
     </div>
   );
 }

@@ -57,13 +57,13 @@ export default function ListTodo() {
 
   return (
     <div>
-      <div className="flex flex-row items-center w-full">
-        <div className="mt-1 relative shadow-sm w-full">
+      <div className="flex flex-row w-full">
+        <div className="mt-1 relative shadow-sm w-full space-x-2">
           <input
             type="text"
             name="text"
             id="text"
-            className="w-full text-gray-900 border-none focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+            className="w-full text-gray-900 border-none focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm "
             placeholder="Enter todo here..."
             onChange={(e) => {
               setText(e.target.value);
@@ -72,21 +72,13 @@ export default function ListTodo() {
             value={text}
           />
         </div>
-        <button type="button" onClick={() => onSubmit()} className="sm:-mr-10">
+        <button type="button" onClick={() => onSubmit()} className="ml-4">
           <ArrowRightIcon className="h-6 w-6" />
         </button>
       </div>
 
       {status === "success" && (
         <div>
-          {/* <div className={data.todos.length <= 2 ? "hidden" : ""}>
-            <button
-              type="button"
-              className="inline-flex items-center mt-2 px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-white bg-green-400 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Mark All Done
-            </button>
-          </div> */}
           <div className="mt-4">
             {data.todos ? (
               data.todos.slice(minValue, maxValue).map((todo) => {
@@ -100,30 +92,10 @@ export default function ListTodo() {
                         <button
                           onClick={() => deleteTodo(todo.id)}
                           type="button"
-                          className="float-right  border border-transparent rounded-full shadow-sm text-red-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          className="float-right border border-transparent rounded-full shadow-sm text-red-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                           <TrashIcon className="h-5 w-5" aria-hidden="true" />
                         </button>
-                        {/* {todo.done ? (
-                          <button
-                            onClick={() => markUndone(todo.id)}
-                            type="button"
-                            className="float-right mr-3 border border-transparent rounded-full shadow-sm text-blue-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          >
-                            <MinusCircleIcon
-                              className="h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => markDone(todo.id)}
-                            type="button"
-                            className="float-right mr-3 border border-transparent rounded-full shadow-sm text-green-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </button>
-                        )} */}
                       </li>
                     </ul>
                   </div>
