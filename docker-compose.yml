@@ -21,8 +21,8 @@ services:
     depends_on:
       - postgres
     environment:
-      PORT: 5001 ## This is the port of the internal application there is no need to change this
+      PORT: 5001
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
-      BASE_URL: "http://localhost"
+      BASE_URL: "http://localhost:5001"

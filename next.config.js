@@ -2,5 +2,6 @@
 const removeImports = require('next-remove-imports')();
 
 module.exports = removeImports({
-  reactStrictMode: false,
+  reactStrictMode: true,
+  swcMinify: true,
 });
