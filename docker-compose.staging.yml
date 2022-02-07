@@ -16,13 +16,13 @@ services:
     container_name: peppermint
     build: . 
     ports:
-      - 8000:8000
+      - 5001:5001
     restart: on-failure
     depends_on:
       - postgres
     environment:
-      PORT: 8000 ## This should follow your ports above, and the port in your base url 
+      PORT: 5001 ## This should follow your ports above, and the port in your base url 
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
-      BASE_URL: "http://localhost:8000"
+      BASE_URL: "http://localhost:5001"
