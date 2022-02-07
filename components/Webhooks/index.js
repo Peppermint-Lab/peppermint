@@ -145,7 +145,7 @@ export default function Webhooks() {
                   onChange={(e) => setUrl(e.target.value)}
                 />
               </div>
-              <label
+              {/* <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mt-2"
               >
@@ -160,7 +160,7 @@ export default function Webhooks() {
                   placeholder=""
                   onChange={(e) => setSecret(e.target.value)}
                 />
-              </div>
+              </div> */}
 
               <div className="w-3/4">
                 <label
