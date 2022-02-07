@@ -59,7 +59,7 @@ services:
     container_name: peppermint
     image: pepperlabs/peppermint
     ports:
-      - 5000:5000
+      - 5001:5001
     restart: on-failure
     depends_on:
       - postgres
@@ -68,7 +68,7 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
-      BASE_URL: "http://localhost:5000"
+      BASE_URL: "http://localhost:5001"
 
 ```
 
