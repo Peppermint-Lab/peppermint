@@ -316,10 +316,10 @@ export default function SideLayout({ children }) {
                           alt="Buy Me a Coffee at ko-fi.com"
                         />
                       </a>
-                      {/* <div className="px-3 py-2">
+                      <div className="px-3 py-2">
                         <span className="text-white">
                           Version -{" "}
-                          <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+                          <a target='_blank' href="https://github.com/Peppermint-Lab/peppermint/releases">
                             <a>
                               <span className="inline-flex ml-2 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800 pointer pointer-events-auto">
                                 <svg
@@ -329,12 +329,12 @@ export default function SideLayout({ children }) {
                                 >
                                   <circle cx={4} cy={4} r={3} />
                                 </svg>
-                                {version_data["current_version"]}
+                                {process.env.NEXT_PUBLIC_VERSION}
                               </span>
                             </a>
-                          </Link>
+                          </a>
                         </span>
-                      </div> */}
+                      </div>
                     </div>
                   </div>
                 </div>
