@@ -113,36 +113,35 @@ export default function UpdateUserModal({ user }) {
                         value={email}
                       />
 
-                      <label className="text-base font-medium text-gray-900 mt-4">
-                        User Type
-                      </label>
-                      <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
-                        {notificationMethods.map((notificationMethod) => (
-                          <div
-                            key={notificationMethod.id}
-                            className="flex items-center"
-                          >
-                            <input
-                              id={notificationMethod.id}
-                              name="notification-method"
-                              type="radio"
-                              // defaultChecked={admin === true ? "admin" : "user"}
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                              value={notificationMethod.id}
-                              onChange={(e) =>
-                                e.target.value === "admin"
-                                  ? setAdmin(true)
-                                  : setAdmin(false)
+                      <div className="">
+                        <label className="text-base font-medium text-gray-900">
+                          User Type
+                        </label>
+                        <div className="space-y-2 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                          <span className="relative z-0 inline-flex shadow-sm rounded-md space-x-4">
+                            <button
+                              onClick={() => setAdmin(false)}
+                              type="button"
+                              className={
+                                admin === false
+                                  ? "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-green-500 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
+                                  : "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
                               }
-                            />
-                            <label
-                              htmlFor={notificationMethod.id}
-                              className="ml-3 block text-sm font-medium text-gray-700"
                             >
-                              {notificationMethod.title}
-                            </label>
-                          </div>
-                        ))}
+                              User
+                            </button>
+                            <button
+                              onClick={() => setAdmin(true)}
+                              type="button"
+                              className={
+                                admin === true
+                                  ? "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-green-500 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
+                                  : "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
+                              }                            >
+                              Admin
+                            </button>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -18,7 +18,6 @@ function Auth({ children }) {
   const isUser = !!session?.user;
   React.useEffect(() => {
     if (status) return; // Do nothing while loading
-    // if (!isUser) signIn(); // If not authenticated, force log in
   }, [isUser, status]);
 
   if (isUser) {
@@ -58,15 +57,20 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <meta name="keywords" content="Keywords" />
         <title>Peppermint</title>
 
-        <link rel="manifest" href="/manifest.json" />
+        {/* <link rel="manifest" href="/manifest.json" /> */}
+        
         <link
-          href="/icons/favicon-16x16.png"
+          href="/favicon/favicon.ico"
+          rel="icon"
+        />
+        <link
+          href="/favicon/favicon-16x16.png"
           rel="icon"
           type="image/png"
           sizes="16x16"
         />
         <link
-          href="/icons/favicon-32x32.png"
+          href="/favicon/favicon-32x32.png"
           rel="icon"
           type="image/png"
           sizes="32x32"

@@ -3,6 +3,7 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 import { Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 import ListTodo from "../components/ListTodo";
 import ListUserFiles from "../components/ListUserFiles";
@@ -10,10 +11,12 @@ import ListUserFiles from "../components/ListUserFiles";
 export default function Home() {
   const { data: session } = useSession();
 
-  const [file, setFile] = useState([]);
   const [hour, setHour] = useState();
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
+  const [uploaded, setUploaded] = useState(false);
+
+  let file = [];
 
   async function time() {
     const date = new Date();
@@ -48,9 +51,8 @@ export default function Home() {
   }
 
   const stats = [
-    { name: "Open Tickets", stat: openTickets, href: "/tickets" },
+    { name: "Open Tickets", stat: openTickets, href: "/ticket" },
     { name: "Completed Tickets", stat: completedTickets, href: "/history" },
-    // { name: "Total Todos", stat:  },
   ];
 
   const propsUpload = {
@@ -67,6 +69,7 @@ export default function Home() {
       }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
+        setUploaded(true);      
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -115,21 +118,13 @@ export default function Home() {
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                      <dt className="sr-only">Company</dt>
-                      {/* <dd className="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6">
-                        <OfficeBuildingIcon
-                          className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        Duke street studio
-                      </dd> */}
                       <dt className="sr-only">Account status</dt>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
                         <CheckCircleIcon
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                           aria-hidden="true"
                         />
-                        {session.user.isAdmin ? "Admin" : "Engineer"}
+                        {session.user.isAdmin ? "Admin" : "user"}
                       </dd>
                     </dl>
                   </div>
@@ -142,17 +137,21 @@ export default function Home() {
         <div>
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
             {stats.map((item) => (
-              <div
-                key={item.name}
-                className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
-              >
-                <dt className="text-sm font-medium text-gray-500 truncate">
-                  {item.name}
-                </dt>
-                <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                  {item.stat}
-                </dd>
-              </div>
+              <Link href={item.href}>
+                <a>
+                  <div
+                    key={item.name}
+                    className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+                  >
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      {item.name}
+                    </dt>
+                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                      {item.stat}
+                    </dd>
+                  </div>
+                </a>
+              </Link>
             ))}
           </dl>
         </div>
@@ -184,14 +183,14 @@ export default function Home() {
                 </h2>
                 <Upload
                   {...propsUpload}
-                  className="px-4 flex flex-row align-middle items-center -mt-3"
+                  className="px-4 flex align-middle items-center -mt-3"
                 >
                   <button>
                     <UploadOutlined />
                   </button>
                 </Upload>
               </div>
-              <ListUserFiles />
+              <ListUserFiles uploaded={uploaded} setUploaded={() => setUploaded()} />
             </div>
           </div>
         </div>

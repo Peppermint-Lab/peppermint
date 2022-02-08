@@ -7,6 +7,8 @@ import {
   usePagination,
 } from "react-table";
 import Link from "next/link";
+import Loader from "react-spinners/ClipLoader";
+
 
 import TicketsMobileList from "../components/TicketsMobileList";
 
@@ -298,6 +300,13 @@ export default function TicketHitory() {
 
   return (
     <div>
+
+      {status === 'loading' && (
+        <div className="flex flex-col justify-center items-center h-screen">
+          <Loader color="green" size={100} />
+        </div>
+      )}
+
       {status === "success" && (
         <div>
           <div className="hidden sm:block">

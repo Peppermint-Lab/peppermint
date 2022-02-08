@@ -12,7 +12,7 @@ services:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
-  client:
+  peppermint:
     container_name: peppermint
     build: . 
     ports:

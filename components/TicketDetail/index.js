@@ -22,12 +22,14 @@ export default function TicketDetail(props) {
   const [name, setName] = useState(props.ticket.name);
   const [email, setEmail] = useState(props.ticket.email);
   const [number, setNumber] = useState(props.ticket.number);
-  const [file, setFile] = useState([]);
   const [badge, setBadge] = useState("");
+  const [uploaded, setUploaded] = useState();
 
   const history = useRouter();
 
   const { id } = history.query;
+
+  let file = [];
 
   useEffect(() => {
     if (ticket.priority === "Low") {
@@ -69,6 +71,7 @@ export default function TicketDetail(props) {
 
   const propsUpload = {
     name: "file",
+    showUploadList: false,
     action: `/api/v1/ticket/${id}/file/upload`,
     data: () => {
       let data = new FormData();
@@ -78,10 +81,11 @@ export default function TicketDetail(props) {
     },
     onChange(info) {
       if (info.file.status !== "uploading") {
-        return;
+        console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
+        setUploaded(true);
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -129,7 +133,8 @@ export default function TicketDetail(props) {
                         }
                       />
                       <p className="mt-2 text-sm font-bold">
-                        opened by user: {ticket.name} from client: {ticket.client.name}
+                        opened by user: {ticket.name} from client:{" "}
+                        {ticket.client.name}
                       </p>
                     </div>
                   </div>
@@ -464,7 +469,11 @@ export default function TicketDetail(props) {
               </div>
               <div className="-mt-10">
                 <div className="flex flex-col">
-                  <TicketFiles id={id} />
+                  <TicketFiles
+                    id={id}
+                    uploaded={uploaded}
+                    setUploaded={setUploaded}
+                  />
                 </div>
               </div>
               <div className="mt-10">
@@ -581,7 +590,11 @@ export default function TicketDetail(props) {
               </div>
               <div className="mt-6">
                 <div className="flex flex-col">
-                  <TicketFiles id={id} />
+                  <TicketFiles
+                    id={id}
+                    uploaded={uploaded}
+                    setUploaded={setUploaded}
+                  />
                 </div>
               </div>
               <div className="mt-6">

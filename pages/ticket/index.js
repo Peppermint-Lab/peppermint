@@ -7,6 +7,8 @@ import {
   usePagination,
 } from "react-table";
 import Link from "next/link";
+import Loader from "react-spinners/ClipLoader";
+
 import MarkdownPreview from "../../components/MarkdownPreview";
 import TicketsMobileList from "../../components/TicketsMobileList";
 
@@ -106,7 +108,6 @@ function Table({ columns, data }) {
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         {column.render("Header")}
-                        {/* Render the columns filter UI */}
                         <div>
                           {column.canFilter ? column.render("Filter") : null}
                         </div>
@@ -269,6 +270,12 @@ export default function Tickets() {
 
   return (
     <div>
+      {status === "loading" && (
+        <div className="flex flex-col justify-center items-center h-screen">
+          <Loader color="green" size={100} />
+        </div>
+      )}
+
       {status === "success" && (
         <>
           <div className="hidden sm:block">

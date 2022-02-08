@@ -21,8 +21,6 @@ export default function Webhooks() {
 
   const { data, status, error, refetch } = useQuery("gethooks", getHooks);
 
-  console.log(data, status);
-
   async function addHook() {
     await fetch("/api/v1/admin/webhooks/create", {
       method: "post",
@@ -40,6 +38,22 @@ export default function Webhooks() {
       .then((res) => res.json())
       .then((res) => {
         refetch();
+      });
+  }
+
+  async function deleteHook(id) {
+    await fetch(`/api/v1/admin/webhooks/${id}/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        refetch();
+        if (res.error) {
+          alert(res.error);
+        }
       });
   }
 
@@ -84,19 +98,25 @@ export default function Webhooks() {
               <div>
                 {data.hooks.map((hook) => (
                   <div
-                    key={hook.name}
-                    className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                    key={hook.id}
+                    className="rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3"
                   >
                     <div className="flex-1 min-w-0">
-                      <a href="#" className="focus:outline-none">
-                        <span className="absolute inset-0" aria-hidden="true" />
-                        <p className="text-sm font-medium text-gray-900">
-                          {hook.name}
-                        </p>
-                        <p className="text-sm text-gray-500 truncate">
-                          {hook.url} | {hook.type}
-                        </p>
-                      </a>
+                      <p className="text-sm font-medium text-gray-900">
+                        {hook.name}
+                      </p>
+                      <p className="text-sm text-gray-500 truncate">
+                        {hook.url} | {hook.type}
+                      </p>
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => deleteHook(hook.id)}
+                        type="button"
+                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      >
+                        Button text
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -145,7 +165,7 @@ export default function Webhooks() {
                   onChange={(e) => setUrl(e.target.value)}
                 />
               </div>
-              <label
+              {/* <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mt-2"
               >
@@ -160,7 +180,7 @@ export default function Webhooks() {
                   placeholder=""
                   onChange={(e) => setSecret(e.target.value)}
                 />
-              </div>
+              </div> */}
 
               <div className="w-3/4">
                 <label
@@ -218,8 +238,8 @@ export default function Webhooks() {
 
               <button
                 onClick={() => {
-                  addHook()
-                  setShow('main')
+                  addHook();
+                  setShow("main");
                 }}
                 type="button"
                 className="mt-8 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

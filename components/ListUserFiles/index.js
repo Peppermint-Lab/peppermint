@@ -3,7 +3,7 @@ import fileDownload from "js-file-download";
 import axios from "axios";
 import { TrashIcon, DocumentDownloadIcon } from "@heroicons/react/solid";
 
-export default function ListUserFiles() {
+export default function ListUserFiles({ uploaded, setUploaded }) {
   const [files, setFiles] = useState([]);
 
   async function getFiles() {
@@ -16,6 +16,7 @@ export default function ListUserFiles() {
       .then((res) => res.json())
       .then((res) => {
         setFiles(res.files);
+        setUploaded(false);
       });
   }
 
@@ -31,13 +32,12 @@ export default function ListUserFiles() {
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then(() => {
         getFiles();
       });
   }
 
   function download(file) {
-    console.log(file);
     const url = `/api/v1/users/file/download?filepath=${file.path}`;
     let data = new FormData();
     axios
@@ -54,7 +54,7 @@ export default function ListUserFiles() {
 
   useEffect(() => {
     getFiles();
-  }, []);
+  }, [uploaded]);
 
   return (
     <div>

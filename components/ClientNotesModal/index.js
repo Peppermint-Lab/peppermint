@@ -22,7 +22,15 @@ export default function ClientNotesModal({ notes, id }) {
         note: value,
         id,
       }),
-    });
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      if(res.success === true) {
+        setOpen(false)
+      } else {
+        alert(res.error)
+      }
+    })
   }
 
   return (

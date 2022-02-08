@@ -10,10 +10,9 @@ import {
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Link from 'next/link'
+import Link from "next/link";
 
 import CreateTicketModal from "../CreateTicketModal";
-import version_data from "../../public/version.json";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -25,11 +24,14 @@ export default function SideLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: session, status } = useSession();
 
-  if(status === 'unauthenticated') {
-    location.push('/auth/login')
+  if (status === "unauthenticated") {
+    location.push("/auth/login");
   }
 
-  console.log(session)
+  if (location.pathname.includes("/admin") && session.isAdmin === false) {
+    location.push("/");
+    alert("You do not have the correct perms for that action.");
+  }
 
   const navigation = [
     {
@@ -142,27 +144,33 @@ export default function SideLayout({ children }) {
                     <nav className="mt-5 px-2 space-y-1">
                       <CreateTicketModal />
                       {navigation.map((item) => (
-                       <Link key={item.name} href={item.href}>
-                        <a
-                          className={classNames(
-                            item.current
-                              ? "bg-green-500 text-white"
-                              : "text-white hover:bg-green-400 hover:text-white",
-                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                          )}
-                        >
-                          <item.icon
-                            className="text-white mr-3 flex-shrink-0 h-6 w-62"
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </a>
-                       </Link>
+                        <Link key={item.name} href={item.href}>
+                          <a
+                            className={classNames(
+                              item.current
+                                ? "bg-green-500 text-white"
+                                : "text-white hover:bg-green-400 hover:text-white",
+                              "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                            )}
+                          >
+                            <item.icon
+                              className="text-white mr-3 flex-shrink-0 h-6 w-62"
+                              aria-hidden="true"
+                            />
+                            {item.name}
+                          </a>
+                        </Link>
                       ))}
                     </nav>
-                    <div className={session.user.isAdmin === true ? "mt-32" : "hidden"}>
+                    <div
+                      className={
+                        session.user.isAdmin === true
+                          ? "flex flex-col mt-8 px-3 "
+                          : "hidden"
+                      }
+                    >
                       <h3
-                        className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
+                        className="px-2 text-xs font-semibold text-white uppercase tracking-wider"
                         id="projects-headline"
                       >
                         Admin
@@ -173,47 +181,31 @@ export default function SideLayout({ children }) {
                       >
                         {secondaryNavigation.map((item) => (
                           <Link key={item.name} href={item.href}>
-                           <a
-                            className={classNames(
-                              item.current
-                                ? "bg-green-500 text-white"
-                                : "text-white hover:bg-green-400 hover:text-white",
-                              "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                            )}
-                          >
-                            <span className="truncate">{item.name}</span>
-                          </a>
-                         </Link>
+                            <a
+                              className={classNames(
+                                item.current
+                                  ? "bg-green-500 text-white"
+                                  : "text-white hover:bg-green-400 hover:text-white",
+                                "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                              )}
+                            >
+                              <span className="truncate">{item.name}</span>
+                            </a>
+                          </Link>
                         ))}
-                        <div className="px-2 py-2">
-                          <span className="text-white">
-                            Version - {version_data["current_version"]}
-                            {version_data["current_version"] !==
-                            version_data["github_latest_tag"] ? (
-                              <span className="inline-flex ml-4 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
-                                <svg
-                                  className="-ml-0.5 mr-1.5 h-2 w-2 text-red-400"
-                                  fill="currentColor"
-                                  viewBox="0 0 8 8"
-                                >
-                                  <circle cx={4} cy={4} r={3} />
-                                </svg>
-                                Update needed
-                              </span>
-                            ) : (
-                              <span className="inline-flex ml-4 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800">
-                                <svg
-                                  className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400"
-                                  fill="currentColor"
-                                  viewBox="0 0 8 8"
-                                >
-                                  <circle cx={4} cy={4} r={3} />
-                                </svg>
-                                Up to date
-                              </span>
-                            )}
-                          </span>
-                        </div>
+                        <a
+                          href="https://ko-fi.com/L3L0AA4YE"
+                          target="_blank"
+                          passHref
+                        >
+                          <img
+                            className="px-3 py-2 h-12"
+                            height="36"
+                            src="/kofi-white.png"
+                            border="0"
+                            alt="Buy Me a Coffee at ko-fi.com"
+                          />
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -226,17 +218,17 @@ export default function SideLayout({ children }) {
                     <p className="text-base font-medium text-white">
                       {session.user.name}
                     </p>
-                   <Link href="/settings">
-                    <a className="flex-shrink-0 group block">
-                      <div className="flex items-center">
-                        <div className="">
-                          <p className="text-sm font-medium text-white">
-                            View profile
-                          </p>
+                    <Link href="/settings">
+                      <a className="flex-shrink-0 group block">
+                        <div className="flex items-center">
+                          <div className="">
+                            <p className="text-sm font-medium text-white">
+                              View profile
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </a>
-                   </Link>
+                      </a>
+                    </Link>
                   </div>
                 </div>
               </Transition.Child>
@@ -259,40 +251,41 @@ export default function SideLayout({ children }) {
                       alt="Workflow"
                     />
                     <Link href="https://peppermint.sh">
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
-                        Peppermint
-                      </h1>
-                    </a>
-                   </Link>
+                      <a target="_blank" rel="noreferrer">
+                        <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
+                          Peppermint
+                        </h1>
+                      </a>
+                    </Link>
                   </div>
                   <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
                     <CreateTicketModal />
                     {navigation.map((item) => (
-                     <Link key={item.name} href={item.href}>
-                      <a
-                        className={classNames(
-                          item.current
-                            ? "bg-green-500 text-white"
-                            : "text-white hover:bg-green-400 hover:text-white",
-                          "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                        )}
-                      >
-                        <item.icon
+                      <Link key={item.name} href={item.href}>
+                        <a
                           className={classNames(
-                            "text-white mr-3 flex-shrink-0 h-6 w-6"
+                            item.current
+                              ? "bg-green-500 text-white hover:text-white"
+                              : "text-white hover:bg-green-400 hover:text-white",
+                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                           )}
-                          aria-hidden="true"
-                        />
-                        {item.name}
-                      </a>
-                     </Link>
+                        >
+                          <item.icon
+                            className={classNames(
+                              "text-white mr-3 flex-shrink-0 h-6 w-6"
+                            )}
+                            aria-hidden="true"
+                          />
+                          {item.name}
+                        </a>
+                      </Link>
                     ))}
                   </nav>
-                  <div className={session.user.isAdmin === true ? "mt-8" : "hidden"}>
+                  <div
+                    className={
+                      session.user.isAdmin === true ? "mt-8" : "hidden"
+                    }
+                  >
                     <h3
                       className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
                       id="projects-headline"
@@ -305,30 +298,41 @@ export default function SideLayout({ children }) {
                     >
                       {secondaryNavigation.map((item) => (
                         <Link key={item.name} href={item.href}>
-                        <a
-                          className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white"
-                        >
-                          <span className="truncate">{item.name}</span>
-                        </a>
-                       </Link>
+                          <a className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white">
+                            <span className="truncate">{item.name}</span>
+                          </a>
+                        </Link>
                       ))}
+                      <a
+                        href="https://ko-fi.com/L3L0AA4YE"
+                        target="_blank"
+                        passHref
+                      >
+                        <img
+                          className="px-3 py-2 h-12"
+                          height="36"
+                          src="/kofi-white.png"
+                          border="0"
+                          alt="Buy Me a Coffee at ko-fi.com"
+                        />
+                      </a>
                       <div className="px-3 py-2">
                         <span className="text-white">
                           Version -{" "}
-                          <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+                          <a target='_blank' href="https://github.com/Peppermint-Lab/peppermint/releases">
                             <a>
-                            <span className="inline-flex ml-2 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800 pointer pointer-events-auto">
-                              <svg
-                                className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400"
-                                fill="currentColor"
-                                viewBox="0 0 8 8"
-                              >
-                                <circle cx={4} cy={4} r={3} />
-                              </svg>
-                              {version_data["current_version"]}
-                            </span>
+                              <span className="inline-flex ml-2 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800 pointer pointer-events-auto">
+                                <svg
+                                  className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400"
+                                  fill="currentColor"
+                                  viewBox="0 0 8 8"
+                                >
+                                  <circle cx={4} cy={4} r={3} />
+                                </svg>
+                                {process.env.NEXT_PUBLIC_VERSION}
+                              </span>
+                            </a>
                           </a>
-                         </Link>
                         </span>
                       </div>
                     </div>
@@ -348,13 +352,13 @@ export default function SideLayout({ children }) {
                         <p className="text-sm font-medium text-white">
                           {session.user.name}
                         </p>
-                       <Link href="/settings">
-                        <a href="/settings">
-                          <p className="text-xs font-medium text-white group-hover:text-green-400">
-                            View profile
-                          </p>
-                        </a>
-                       </Link>
+                        <Link href="/settings">
+                          <a href="/settings">
+                            <p className="text-xs font-medium text-white group-hover:text-green-400">
+                              View profile
+                            </p>
+                          </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
