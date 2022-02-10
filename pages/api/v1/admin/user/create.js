@@ -15,7 +15,7 @@ export default async function createUser(req, res) {
         data: {
           name,
           email: e,
-          password: String(hash),
+          password: hash,
           isAdmin: admin,
         },
       });
