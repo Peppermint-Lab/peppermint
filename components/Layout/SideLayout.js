@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
+import useTranslation from 'next-translate/useTranslation';
+
 import CreateTicketModal from "../CreateTicketModal";
 
 function classNames(...classes) {
@@ -20,6 +22,8 @@ function classNames(...classes) {
 
 export default function SideLayout({ children }) {
   const location = useRouter();
+
+  const { t,lang } = useTranslation('peppermint');
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: session, status } = useSession();
@@ -35,25 +39,25 @@ export default function SideLayout({ children }) {
 
   const navigation = [
     {
-      name: "Dashboard",
+      name: t('sl_dashboard'),
       href: "/",
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
     },
     {
-      name: "Tickets",
+      name: t('sl_tickets'),
       href: "/ticket",
       icon: TicketIcon,
       current: location.pathname === "/ticket" ? true : false,
     },
     {
-      name: "History",
+      name: t('sl_history'),
       href: "/history",
       icon: ArchiveIcon,
       current: location.pathname === "/history" ? true : false,
     },
     {
-      name: "Personal Notebook",
+      name: t('sl_notebook'),
       href: "/notebook",
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
@@ -62,15 +66,15 @@ export default function SideLayout({ children }) {
 
   const secondaryNavigation = [
     {
-      name: "Users",
+      name: t('sl_users'),
       href: "/admin/auth",
     },
     {
-      name: "Clients",
+      name: t('sl_clients'),
       href: "/admin/clients",
     },
     {
-      name: "Settings",
+      name: t('sl_settings'),
       href: "/admin/settings",
     },
   ];
@@ -357,6 +361,19 @@ export default function SideLayout({ children }) {
                             <p className="text-xs font-medium text-white group-hover:text-green-400">
                               View profile
                             </p>
+                          </a>
+                        </Link>
+                      </div>
+                      <div className="ml-3">
+                        {lang}
+                        <Link href="/" locale="en">
+                          <a href="/" locale="en">
+                            <p className="text-xs font-medium text-white group-hover:text-green-400">en</p>
+                          </a>
+                        </Link>
+                        <Link href="/" locale="de">
+                          <a href="/" locale="de">
+                            <p className="text-xs font-medium text-white group-hover:text-green-400">de</p>
                           </a>
                         </Link>
                       </div>

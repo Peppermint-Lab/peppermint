@@ -5,6 +5,8 @@ import { UploadOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
+import useTranslation from 'next-translate/useTranslation';
+
 import ListTodo from "../components/ListTodo";
 import ListUserFiles from "../components/ListUserFiles";
 
@@ -15,6 +17,8 @@ export default function Home() {
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
   const [uploaded, setUploaded] = useState(false);
+
+  const { t } = useTranslation('peppermint');
 
   let file = [];
 
@@ -69,7 +73,7 @@ export default function Home() {
       }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
-        setUploaded(true);      
+        setUploaded(true);
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -113,7 +117,7 @@ export default function Home() {
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        Good {hour < 12 ? "Morning" : "Afternoon"},{" "}
+                        {t('hello_good')} {hour < 12 ? t('hello_morning') : t('hello_afternoon')},{" "}
                         {session.user.name}!
                       </h1>
                     </div>
