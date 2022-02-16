@@ -8,7 +8,8 @@ export default async function getAllClients(req, res) {
         email: true,
         name: true,
         id: true,
-        isAdmin: true
+        isAdmin: true,
+        language: true
       }
     });
 
