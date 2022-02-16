@@ -6,8 +6,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { useRouter } from "next/router";
 import { SessionProvider, useSession } from "next-auth/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import Head from 'next/head'
+import Head from 'next/head';
 
+import { ThemeProvider } from 'next-themes';
 
 import SideLayout from "../components/Layout/SideLayout";
 
@@ -58,7 +59,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <title>Peppermint</title>
 
         {/* <link rel="manifest" href="/manifest.json" /> */}
-        
+
         <link
           href="/favicon/favicon.ico"
           rel="icon"
@@ -80,11 +81,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       </Head>
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
-          <Auth>
-            <SideLayout>
-              <Component {...pageProps} />
-            </SideLayout>
-          </Auth>
+          <ThemeProvider attribute="class">
+            <Auth>
+              <SideLayout>
+                <Component {...pageProps} />
+              </SideLayout>
+            </Auth>
+          </ThemeProvider>
         </QueryClientProvider>
       </SessionProvider>
     </>

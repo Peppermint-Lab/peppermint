@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
+import {useTheme} from 'next-themes';
+
 import useTranslation from 'next-translate/useTranslation';
 
 import CreateTicketModal from "../CreateTicketModal";
@@ -78,6 +80,8 @@ export default function SideLayout({ children }) {
       href: "/admin/settings",
     },
   ];
+
+  const {theme, setTheme} = useTheme();
 
   return (
     <div>
@@ -339,6 +343,15 @@ export default function SideLayout({ children }) {
                           </a>
                         </span>
                       </div>
+
+                      <button
+                        aria-label="Toggle Dark Mode"
+                        type="button"
+                        className="ml-3 px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 dark:text-slate-400 bg-white dark:bg-black hover:bg-gray-50"
+                        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                        >{theme}</button>
+
+
                     </div>
                   </div>
                 </div>
@@ -354,26 +367,13 @@ export default function SideLayout({ children }) {
                       </div>
                       <div className="ml-3">
                         <p className="text-sm font-medium text-white">
-                          {session.user.name}
+                          {session.user.name}  [{lang}/{session.user.language}]
                         </p>
                         <Link href="/settings">
                           <a href="/settings">
                             <p className="text-xs font-medium text-white group-hover:text-green-400">
                               View profile
                             </p>
-                          </a>
-                        </Link>
-                      </div>
-                      <div className="ml-3">
-                        {lang}
-                        <Link href="/" locale="en">
-                          <a href="/" locale="en">
-                            <p className="text-xs font-medium text-white group-hover:text-green-400">en</p>
-                          </a>
-                        </Link>
-                        <Link href="/" locale="de">
-                          <a href="/" locale="de">
-                            <p className="text-xs font-medium text-white group-hover:text-green-400">de</p>
                           </a>
                         </Link>
                       </div>
@@ -393,7 +393,7 @@ export default function SideLayout({ children }) {
                 <MenuIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
-            <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto">
+            <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-bg-slate-100 dark:bg-gray-800">
               <div className="py-6">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
                   <div className="py-4o ">{children}</div>
