@@ -18,6 +18,7 @@ model User {
   password  String
   email     String     @unique
   isAdmin   Boolean
+  language  String?
   todos     Todos[]
   tickets   Ticket[]
   file      UserFile[]

@@ -10,6 +10,7 @@ async function main() {
       name: "admin",
       isAdmin: true,
       password: "$2b$10$BFmibvOW7FtY0soAAwujoO9y2tIyB7WEJ2HNq9O7zh9aeejMvRsKu",
+      language: "en",
     },
   });
 
