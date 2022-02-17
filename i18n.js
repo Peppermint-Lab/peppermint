@@ -4,4 +4,5 @@ module.exports = {
   pages: {
     '*': ['peppermint'],
   },
+  localeDetection: false,
 };
