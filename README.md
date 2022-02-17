@@ -38,10 +38,6 @@ It's a self hosted alternative to popular services such as zendesk
 
 ## 🐳 Installation with docker
 
-Currently only linux has been verified as working but we are open to the idea of supporting windows eventually as well.
-
-Keep in mind, this is an alpha so the risk of data loss is real and it may not be stable, we do not recommend anyone runs this in a production enviroment.
-
 Check out the getting started guide if this is the first time you've used Peppermint:
 
 ```
@@ -63,7 +59,7 @@ services:
     container_name: peppermint
     image: pepperlabs/peppermint
     ports:
-      - 5000:5000
+      - 5001:5001
     restart: on-failure
     depends_on:
       - postgres
@@ -72,35 +68,21 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
-      BASE_URL: "http://localhost"
+      BASE_URL: "http://localhost:5001"
 
 ```
 
-## Supported Environment Variables
+Once this is completed then you can go to your base_url which was added to the compose file and login.
 
-You can utilize the following environment variables in Peppermint. None of them are manditory.
-
-| Variable    | Description                                                         |
-| ----------- | ------------------------------------------------------------------- |
-| PUID        | Set userid that the container will run as.                          |
-| PGID        | Set groupid that the container will run as.                         |
-| DB_USERNAME | Enter database username here                                        |
-| DB_PASSWORD | Enter database password here                                        |
-| PORT        | Choose a custom port to run the app on rather than the default 5000 |
-
-### Setting up postgres on Macos in a container for local development
-
+The default login credentials are
 ```
-docker run --rm -P -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD="1234" --name pg postgres:alpine
+admin@admin.com
+1234
 ```
 
 ## One click installers
 
 - We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>
-
-## Roadmap for new features
-
-There is currently a trello roadmap available which is updated daily - https://trello.com/b/tOMsptar/peppermint
 
 ## Documentation
 

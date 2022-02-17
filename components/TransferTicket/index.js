@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { useRouter } from "next/router";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -10,7 +11,9 @@ function classNames(...classes) {
 export default function TransferTicket({ id }) {
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState();
-  const [n, setN] = useState()
+  const [n, setN] = useState();
+
+  const router = useRouter();
 
   const fetchUsers = async () => {
     await fetch(`/api/v1/users/all`, {
@@ -26,6 +29,20 @@ export default function TransferTicket({ id }) {
         }
       });
   };
+
+  console.log(users);
+
+  async function postData() {
+    await fetch(`/api/v1/ticket/${id}/transfer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: n,
+      }),
+    });
+  }
 
   useEffect(() => {
     fetchUsers();
@@ -97,7 +114,7 @@ export default function TransferTicket({ id }) {
                       Transfer Ticket
                     </Dialog.Title>
                     <div className="mt-2 pb-16">
-                      <Listbox value={n} onChange={setN} className='z-50'>
+                      <Listbox value={n} onChange={setN} className="z-50">
                         {({ open }) => (
                           <>
                             <Listbox.Label className="block text-sm font-medium text-gray-700">
@@ -106,9 +123,7 @@ export default function TransferTicket({ id }) {
                             <div className="mt-1 relative">
                               <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <span className="block truncate">
-                                {n
-                                    ? n.name
-                                    : "Please select new user"}
+                                  {n ? n.name : "Please select new user"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
@@ -178,8 +193,15 @@ export default function TransferTicket({ id }) {
                         )}
                       </Listbox>
 
-                      <button type="button" className="float-right mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                          save
+                      <button
+                        onClick={() => {
+                          postData();
+                          router.reload(router.pathname);
+                        }}
+                        type="button"
+                        className="float-right mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      >
+                        save
                       </button>
                     </div>
                   </div>

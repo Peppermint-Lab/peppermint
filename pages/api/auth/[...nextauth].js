@@ -28,6 +28,7 @@ const options = {
             id: user.id,
             name: user.name,
             isAdmin: user.isAdmin,
+            language: user.language,
           }
         } catch (error) {
           throw new Error(error);
@@ -57,6 +58,7 @@ const options = {
       session.id = token.user.id;
       session.user.isAdmin = token.user.isAdmin;
       session.user.id = token.user.id;
+      session.user.language = token.user.language;
       return session;
     },
   },

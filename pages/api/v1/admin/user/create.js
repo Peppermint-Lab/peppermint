@@ -9,13 +9,13 @@ export default async function createUser(req, res) {
 
   try {
     if (session.user.isAdmin) {
-      const hash = bcrypt.hash(password, 10);
+      const hash = await bcrypt.hash(password, 10);
 
       await prisma.user.create({
         data: {
           name,
           email: e,
-          password: String(hash),
+          password: hash,
           isAdmin: admin,
         },
       });
