@@ -8,5 +8,10 @@
   "sl_notebook": "Personal Notebook",
   "sl_users": "Users",
   "sl_clients": "Clients",
-  "sl_settings": "Settings"
+  "sl_settings": "Settings",
+  "open_tickets": "Open Tickets",
+  "completed_tickets" : "Completed Tickets",
+  "account_status": "Account status",
+  "todo_list" : "Todo List",
+  "personal_files" : "Personal Files"
 }
