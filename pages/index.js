@@ -55,8 +55,8 @@ export default function Home() {
   }
 
   const stats = [
-    { name: "Open Tickets", stat: openTickets, href: "/ticket" },
-    { name: "Completed Tickets", stat: completedTickets, href: "/history" },
+    { name: t('open_tickets'), stat: openTickets, href: "/ticket" },
+    { name: t('completed_tickets'), stat: completedTickets, href: "/history" },
   ];
 
   const propsUpload = {
@@ -122,7 +122,7 @@ export default function Home() {
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                      <dt className="sr-only">Account status</dt>
+                      <dt className="sr-only">{t('account_status')}</dt>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
                         <CheckCircleIcon
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
@@ -167,7 +167,7 @@ export default function Home() {
                 <div className="px-2 py-5 sm:p-6">
                   <div>
                     <h1 className="font-bold leading-7 text-gray-900">
-                      Todo List
+                      {t('todo_list')}
                     </h1>
                   </div>
                   <ListTodo />
@@ -183,7 +183,7 @@ export default function Home() {
                   className="font-bold leading-7 text-gray-900"
                   id="recent-hires-title"
                 >
-                  Personal Files
+                  {t('personal_files')}
                 </h2>
                 <Upload
                   {...propsUpload}
