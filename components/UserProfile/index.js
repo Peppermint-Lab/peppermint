@@ -23,6 +23,7 @@ export function UserProfile() {
     };
 
     function changeLanguage(locale) {
+      setLanguage(locale)
       router.push(router.pathname, router.asPath, {
         locale,
       });
@@ -61,7 +62,7 @@ export function UserProfile() {
                   for="firstname"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Name <span class="float-right px-1 bg-gray-300 rounded-md">{session.user.id}</span>
+                  Name
                 </label>
                 <div className="mt-1 rounded-md shadow-sm flex">
                   <input
@@ -75,24 +76,7 @@ export function UserProfile() {
                   />
                 </div>
               </div>
-              {/* <div>
-                <label
-                  for="office"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Office
-                </label>
-                <div className="mt-1 rounded-md shadow-sm flex">
-                  <input
-                    type="text"
-                    name="office"
-                    id="office"
-                    className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    defaultValue={null}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-              </div> */}
+
               <div>
                 <label
                   for="email"

@@ -58,8 +58,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <meta name="keywords" content="Keywords" />
         <title>Peppermint</title>
 
-        {/* <link rel="manifest" href="/manifest.json" /> */}
-
         <link
           href="/favicon/favicon.ico"
           rel="icon"
