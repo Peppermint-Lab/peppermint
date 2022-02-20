@@ -18,7 +18,7 @@ model User {
   password  String
   email     String     @unique
   isAdmin   Boolean
-  language  String?
+  language  String?    @default("en")
   todos     Todos[]
   tickets   Ticket[]
   file      UserFile[]
