@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 
-export default function UserProfile() {
+export function UserProfile() {
 
     const { data: session } = useSession();
 

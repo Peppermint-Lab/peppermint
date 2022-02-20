@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { message } from "antd";
 import { useSession, signOut } from "next-auth/react";
 
-import UserProfile from "../components/UserProfile";
+import { UserProfile } from "../components/UserProfile";
 
 export default function Settings() {
   const { data: session } = useSession();
@@ -116,7 +116,9 @@ export default function Settings() {
                     <span className="truncate">Password</span>
                   </button>
                   <button
-                    onClick={() => signOut({redirect: true, callbackUrl: "/"})}
+                    onClick={() =>
+                      signOut({ redirect: true, callbackUrl: "/" })
+                    }
                     className={linkStyles.inactive}
                   >
                     <svg
