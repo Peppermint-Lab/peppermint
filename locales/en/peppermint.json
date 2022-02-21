@@ -1,5 +1,5 @@
 {
-  "hello_good": "Wonderfull",
+  "hello_good": "Wonderful",
   "hello_morning": "Morning",
   "hello_afternoon": "Afternoon",
   "sl_dashboard": "Dashboard",
@@ -11,7 +11,7 @@
   "sl_settings": "Settings",
   "open_tickets": "Open Tickets",
   "completed_tickets" : "Completed Tickets",
-  "account_status": "Account status",
+  "account_status": "Account Status",
   "todo_list" : "Todo List",
   "personal_files" : "Personal Files"
 }
