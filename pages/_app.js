@@ -77,6 +77,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <meta name="theme-color" content="#317EFB" />
       </Head>
+
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider attribute="class">
@@ -88,6 +89,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           </ThemeProvider>
         </QueryClientProvider>
       </SessionProvider>
+      
     </>
   );
 }
