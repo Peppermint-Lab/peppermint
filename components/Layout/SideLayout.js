@@ -344,12 +344,12 @@ export default function SideLayout({ children }) {
                         </span>
                       </div>
 
-                      <button
+                      {/* <button
                         aria-label="Toggle Dark Mode"
                         type="button"
                         className="ml-3 px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 dark:text-slate-400 bg-white dark:bg-black hover:bg-gray-50"
                         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                        >{theme}</button>
+                        >{theme}</button> */}
 
 
                     </div>

@@ -2,7 +2,8 @@ import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import dynamic from "next/dynamic";
-import { Select, Form, Input, Radio, Space } from "antd";
+import { Radio } from "antd";
+import useTranslation from "next-translate/useTranslation";
 
 // import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from "rehype-sanitize";
@@ -17,14 +18,14 @@ function classNames(...classes) {
 }
 
 export default function CreateTicketModal() {
+  const { t, lang } = useTranslation("peppermint");
+
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [company, setCompany] = useState();
   const [engineer, setEngineer] = useState();
   const [email, setEmail] = useState("");
-  const [issue, setIssue] = useState(
-    "Enter extra details here.... markdown is supported"
-  );
+  const [issue, setIssue] = useState(t("ticket_extra_details"));
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
@@ -111,7 +112,7 @@ export default function CreateTicketModal() {
               d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
             />
           </svg>
-          <span className="text-white ">Create Ticket</span>
+          <span className="text-white ">{t("create_ticket")}</span>
         </button>
       </div>
 
@@ -155,14 +156,14 @@ export default function CreateTicketModal() {
                 <div>
                   <div>
                     <h1 className="text-xl text-center m2 p2 font-bold">
-                      New Ticket
+                      {t("ticket_new")}
                     </h1>
 
                     <div className="mt-4 space-y-4">
                       <input
                         type="text"
                         id="name"
-                        placeholder="Enter name here..."
+                        placeholder={t("ticket_name_here")}
                         name="name"
                         onChange={(e) => setName(e.target.value)}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -171,7 +172,7 @@ export default function CreateTicketModal() {
                       <input
                         type="text"
                         name="email"
-                        placeholder="Enter email here...."
+                        placeholder={t("ticket_email_here")}
                         onChange={(e) => setEmail(e.target.value)}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                       />
@@ -179,7 +180,7 @@ export default function CreateTicketModal() {
                       <input
                         type="text"
                         name="title"
-                        placeholder="Enter title for the ticket here, keep it short...."
+                        placeholder={t("ticket_details")}
                         maxLength={64}
                         onChange={(e) => setTitle(e.target.value)}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -193,7 +194,7 @@ export default function CreateTicketModal() {
                                 <span className="block truncate">
                                   {company
                                     ? company.name
-                                    : "Please select client"}
+                                    : t("ticket_select_clients")}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
@@ -271,7 +272,7 @@ export default function CreateTicketModal() {
                                 <span className="block truncate">
                                   {engineer
                                     ? engineer.name
-                                    : "Please select an engineer"}
+                                    : t("ticket_select_eng")}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
