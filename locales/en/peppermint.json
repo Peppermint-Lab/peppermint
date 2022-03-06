@@ -26,5 +26,20 @@
   "create": "create",
   "low": "low",
   "normal": "normal",
-  "high": "high"
+  "high": "high",
+  "edit": "edit",
+  "reset_password": "reset password",
+  "internal_users": "Internal Users",
+  "clients": "Clients",
+  "new_user": "new user",
+  "new_client": "new client",
+  "previous": "previous",
+  "next": "next",
+  "show": "Show",
+  "name": "name",
+  "email": "email",
+  "settings": "Settings",
+  "webhooks": "Webhooks",
+  "version": "Version",
+  "v_profile": "View Profile"
 }

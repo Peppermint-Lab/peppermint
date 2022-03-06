@@ -194,7 +194,7 @@ export default function CreateTicketModal() {
                                 <span className="block truncate">
                                   {company
                                     ? company.name
-                                    : t("ticket_select_clients")}
+                                    : t("ticket_select_client")}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
