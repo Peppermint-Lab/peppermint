@@ -22,7 +22,7 @@ services:
     depends_on:
       - postgres
     healthcheck:
-      test: ["CMD", "wget", "--spider", "$BASE_URL"]
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
       interval: 30s
       timeout: 10s
       retries: 3
