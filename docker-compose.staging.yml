@@ -7,21 +7,26 @@ services:
     restart: always
     volumes:
       - ./peppermint/db:/data/db
-    environment: 
+    environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
   peppermint:
     container_name: peppermint
-    build: . 
+    build: .
     ports:
       - 5001:5001
-    restart: on-failure
+    restart: always
     depends_on:
       - postgres
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
-      PORT: 5001 ## This should follow your ports above, and the port in your base url 
+      PORT: 5001 ## This should follow your ports above, and the port in your base url
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "postgres"
