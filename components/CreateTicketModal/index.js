@@ -70,7 +70,7 @@ export default function CreateTicketModal() {
     await fetch("/api/v1/ticket/create", {
       method: "POST",
       headers: {
-        "content-type": "application/sjon",
+        "content-type": "application/json",
       },
       body: JSON.stringify({
         name,
