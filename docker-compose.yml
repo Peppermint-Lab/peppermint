@@ -23,9 +23,14 @@ services:
     image: pepperlabs/peppermint:latest
     ports:
       - 5001:5001
-    restart: on-failure
+    restart: always
     depends_on:
       - postgres
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
       PORT: 5001
       DB_USERNAME: peppermint

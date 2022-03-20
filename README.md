@@ -88,7 +88,7 @@ admin@admin.com
 
 We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://docs.peppermint.sh">here</a> to be taken directly there.
 
-## Motiviation
+## Motivation
 
 - This was initially a project to tie together my react and nodeJS skills and show something for my portfolio
 - It looked terrible! But it worked and showed functionaility, which got me a job.

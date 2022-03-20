@@ -8,7 +8,7 @@ services:
     restart: always
     volumes:
       - ./peppermint/db:/data/db
-    environment: 
+    environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
@@ -18,9 +18,14 @@ services:
     image: pepperlabs/peppermint:dev
     ports:
       - 5001:5001
-    restart: on-failure
+    restart: always
     depends_on:
       - postgres
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
       PORT: 5001 ## This is the port of the internal application there is no need to change this
       DB_USERNAME: "peppermint"
