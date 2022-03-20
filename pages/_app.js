@@ -16,7 +16,9 @@ const queryClient = new QueryClient();
 
 function Auth({ children }) {
   const { data: session, status } = useSession({ required: true });
+
   const isUser = !!session?.user;
+
   React.useEffect(() => {
     if (status) return; // Do nothing while loading
   }, [isUser, status]);
@@ -80,13 +82,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
 
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider attribute="class">
+          {/* <ThemeProvider attribute="class"> */}
             <Auth>
               <SideLayout>
                 <Component {...pageProps} />
               </SideLayout>
             </Auth>
-          </ThemeProvider>
+          {/* </ThemeProvider> */}
         </QueryClientProvider>
       </SessionProvider>
       

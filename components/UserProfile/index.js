@@ -112,6 +112,7 @@ export function UserProfile() {
                   >
                     <option value="de">DE</option>
                     <option value="en">EN</option>
+                    <option value="se">SE</option>
                   </select>
                 </div>
               </div>

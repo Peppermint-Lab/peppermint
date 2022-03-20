@@ -39,28 +39,30 @@ export default function SideLayout({ children }) {
     alert("You do not have the correct perms for that action.");
   }
 
+  const locale = session.user.language || 'en'
+
   const navigation = [
     {
       name: t('sl_dashboard'),
-      href: "/",
+      href: `/${locale}/`,
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
     },
     {
       name: t('sl_tickets'),
-      href: "/ticket",
+      href: `/${locale}/ticket`,
       icon: TicketIcon,
       current: location.pathname === "/ticket" ? true : false,
     },
     {
       name: t('sl_history'),
-      href: "/history",
+      href: `/${locale}/history`,
       icon: ArchiveIcon,
       current: location.pathname === "/history" ? true : false,
     },
     {
       name: t('sl_notebook'),
-      href: "/notebook",
+      href: `/${locale}/notebook`,
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
     },
@@ -393,7 +395,7 @@ export default function SideLayout({ children }) {
                 <MenuIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
-            <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-bg-slate-100 dark:bg-gray-800">
+            <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-bg-slate-100 ">
               <div className="py-6">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
                   <div className="py-4o ">{children}</div>
