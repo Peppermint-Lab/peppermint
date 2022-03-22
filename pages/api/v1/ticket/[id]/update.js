@@ -1,19 +1,23 @@
 const { prisma } = require("../../../../../prisma/prisma");
 
-export default async function updateTicket(req,res) {
+export default async function updateTicket(req, res) {
+  const { id } = req.query;
 
-  const { id } = req.query
-
-  const  { note, detail } = req.body
+  const { note, detail, title, priority } = req.body;
 
   try {
+    
     await prisma.ticket.update({
       where: { id: Number(id) },
       data: {
         detail,
-        note
+        note,
+        title,
+        priority,
       },
     });
+
+
     res.status(201).json({ success: true, message: "Ticket saved" });
   } catch (error) {
     console.log(error);

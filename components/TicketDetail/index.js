@@ -24,6 +24,7 @@ export default function TicketDetail(props) {
   const [number, setNumber] = useState(props.ticket.number);
   const [badge, setBadge] = useState("");
   const [uploaded, setUploaded] = useState();
+  const [priority, setPriority] = useState(props.ticket.priority)
 
   const history = useRouter();
 
@@ -53,8 +54,10 @@ export default function TicketDetail(props) {
         detail: issue,
         note,
         title,
+        priority
       }),
-    }).then((res) => res.json());
+    }).then((res) => res.json())
+    .then(()=> history.reload())
   }
 
   async function updateStatus() {
@@ -400,11 +403,28 @@ export default function TicketDetail(props) {
                   )}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-                  >
-                    {ticket.priority}
-                  </span>
+                  {!edit && (
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+                    >
+                      {ticket.priority}
+                    </span>
+                  )}
+                  {edit && (
+                    <div>
+                      <select
+                        id="location"
+                        name="location"
+                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        defaultValue={ticket.priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                      >
+                        <option value="Low">Low</option>
+                        <option value="Normal">Normal</option>
+                        <option value="High">High</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center space-x-2">
                   <svg
