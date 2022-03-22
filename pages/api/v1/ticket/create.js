@@ -34,6 +34,8 @@ export default async function create(req, res) {
         sendTicketCreate(ticket);
         res.status(201).json({ message: "Ticket created correctly", ticket });
       });
+
+      
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
