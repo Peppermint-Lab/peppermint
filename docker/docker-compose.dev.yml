@@ -7,10 +7,12 @@ services:
     restart: always
     volumes:
       - ./peppermint/db:/data/db
-    environment: 
-      POSTGRES_USER: peppermint
+    environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
+    ports:
+      - 5432:5432
 
   mailhog:
     container_name: mailhog
@@ -23,7 +25,6 @@ services:
       - 8025
     ports:
       - 8025:8025
+      - 1025:1025
     healthcheck:
       test: echo | telnet 127.0.0.1 1025
-
-  

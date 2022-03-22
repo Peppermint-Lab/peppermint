@@ -1,4 +1,5 @@
 const { prisma } = require("../../../../prisma/prisma");
+import { sendTicketCreate } from "../../../../lib/nodemailer/ticket/create";
 
 export default async function create(req, res) {
   const { name, company, detail, title, priority, email, engineer, issue } =
@@ -27,7 +28,12 @@ export default async function create(req, res) {
         },
         isComplete: Boolean(false),
       },
-    });
+    })
+    .then((ticket) => {
+      sendTicketCreate(ticket);
+      // res.status(201).json({ message: "Ticket created correctly", ticket });
+    })
+    
 
     const webhook = await prisma.webhooks.findMany({
       where: {
@@ -51,7 +57,9 @@ export default async function create(req, res) {
       }
     }
 
-    res.status(200).json({ message: "Ticket created correctly" });
+      
+      res.status(200).json({ message: "Ticket created correctly" });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

@@ -1,4 +1,5 @@
 const { prisma } = require("../../../../../prisma/prisma");
+import { sendTicketStatus } from "../../../../../lib/nodemailer/ticket/status";
 
 export default async function completeTicket(req, res) {
   const { id } = req.query;
@@ -6,12 +7,16 @@ export default async function completeTicket(req, res) {
   const { status } = req.body;
 
   try {
-    await prisma.ticket.update({
-      where: { id: Number(id) },
-      data: {
-        isComplete: status,
-      },
-    });
+    await prisma.ticket
+      .update({
+        where: { id: Number(id) },
+        data: {
+          isComplete: status,
+        },
+      })
+      .then(async (ticket) => {
+        await sendTicketStatus(ticket);
+      });
 
     const webhook = await prisma.webhooks.findMany({
       where: {
