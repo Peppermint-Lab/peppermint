@@ -1,39 +1,41 @@
 const { prisma } = require("../../../../prisma/prisma");
 import { sendTicketCreate } from "../../../../lib/nodemailer/ticket/create";
 
-export default async function create(req, res) {
-  const { name, company, detail, title, priority, email, engineer, issue } =
-    JSON.parse(req.body);
+export default async function createTicket(req, res) {
+  const { name, company, detail, title, priority, email, engineer, issue } = req.body;
 
   try {
-    if (!name || !company || !title || !priority) {
-      return res
-        .status(422)
-        .json({ error: "Please add all the fields", failed: true });
-    }
+    // if (!name || !company || !title || !priority) {
+    //   return res
+    //     .status(422)
+    //     .json({ error: "Please add all the fields", failed: true });
+    // }
 
-    const data = await prisma.ticket.create({
-      data: {
-        name,
-        title,
-        detail,
-        priority,
-        issue,
-        email,
-        client: {
-          connect: { id: Number(company.id) },
+    console.log(req.body);
+
+    await prisma.ticket
+      .create({
+        data: {
+          name,
+          title,
+          detail,
+          priority,
+          issue,
+          email,
+          client: {
+            connect: { id: Number(company.id) },
+          },
+          assignedTo: {
+            connect: { id: Number(engineer.id) },
+          },
+          isComplete: Boolean(false),
         },
-        assignedTo: {
-          connect: { id: Number(engineer.id) },
-        },
-        isComplete: Boolean(false),
-      },
-    })
-    .then((ticket) => {
-      sendTicketCreate(ticket);
-      // res.status(201).json({ message: "Ticket created correctly", ticket });
-    })
-    
+      })
+      .then((ticket) => {
+        // console.log('completed')
+        sendTicketCreate(ticket);
+        // res.status(201).json({ message: "Ticket created correctly", ticket });
+      });
 
     const webhook = await prisma.webhooks.findMany({
       where: {
@@ -50,16 +52,14 @@ export default async function create(req, res) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            data: `Ticket ${data.id} created by ${data.name} -> ${data.email}. Priority -> ${data.priority}`
+            data: `Ticket ${data.id} created by ${data.name} -> ${data.email}. Priority -> ${data.priority}`,
           }),
           redirect: "follow",
         });
       }
     }
 
-      
-      res.status(200).json({ message: "Ticket created correctly" });
-
+    res.status(200).json({ message: "Ticket created correctly" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
