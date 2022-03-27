@@ -49,26 +49,26 @@ services:
     image: postgres:latest
     restart: always
     volumes:
-      - peppermint/db:/data/db
-    environment:
+      - ./docker-data/db:/data/db
+    environment: 
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint
+    image: pepperlabs/peppermint:latest
     ports:
-      - 5001:5001
+      - 5000:5000
     restart: on-failure
     depends_on:
       - postgres
     environment:
       PORT: 5000
-      DB_USERNAME: "peppermint"
-      DB_PASSWORD: "1234"
-      DB_HOST: "postgres"
-      BASE_URL: "http://localhost:5001"
+      DB_USERNAME: peppermint
+      DB_PASSWORD: 1234
+      DB_HOST: 'postgres'
+      BASE_URL: "http://localhost"
 
 ```
 
