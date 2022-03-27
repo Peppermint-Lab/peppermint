@@ -208,12 +208,12 @@ export default function TicketHitory() {
     },
     {
       Header: "Name",
-      accessor: "client.name",
+      accessor: "name",
       id: "name",
     },
     {
       Header: "Client",
-      accessor: "name",
+      accessor: "client.name",
       id: "client_name",
     },
     {
