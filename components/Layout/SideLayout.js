@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   ArchiveIcon,
@@ -40,6 +40,12 @@ export default function SideLayout({ children }) {
   }
 
   const locale = session.user.language || 'en'
+
+  useEffect(()=> {
+    location.push(location.pathname, location.asPath, {
+      locale,
+    });
+  }, [])
 
   const navigation = [
     {

@@ -14,10 +14,11 @@ export default function Settings() {
       "w-full border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium",
   };
 
-  const [showProfile, setShowProfile] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
+  
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState("");
+
+  const [show, setShow]  = useState('profile')
 
   const success = () => {
     message.success("Password updated");
@@ -63,11 +64,10 @@ export default function Settings() {
                 <nav>
                   <button
                     onClick={() => {
-                      setShowProfile(true);
-                      setShowPassword(false);
+                      setShow('profile')
                     }}
                     className={
-                      showProfile ? linkStyles.active : linkStyles.inactive
+                      show === "profile" ? linkStyles.active : linkStyles.inactive
                     }
                     aria-current="page"
                   >
@@ -91,11 +91,10 @@ export default function Settings() {
 
                   <button
                     onClick={() => {
-                      setShowProfile(false);
-                      setShowPassword(true);
+                      setShow('password')
                     }}
                     className={
-                      showPassword ? linkStyles.active : linkStyles.inactive
+                      show === 'password' ? linkStyles.active : linkStyles.inactive
                     }
                   >
                     <svg
@@ -139,13 +138,14 @@ export default function Settings() {
                   </button>
                 </nav>
               </aside>
+
               <div className="divide-y divide-gray-200 lg:col-span-9">
-                <div className={`${showProfile ? "" : "hidden"}`}>
-                  <div>
-                    <UserProfile />
-                  </div>
+
+                <div className={`${show === "profile" ? "" : "hidden"}`}>
+                  <UserProfile />
                 </div>
-                <div className={`${showPassword ? "" : "hidden"}`}>
+
+                <div className={`${show === "password" ? "" : "hidden"}`}>
                   <div className="m-2 space-y-4 p-4">
                     <input
                       type="password"
@@ -169,6 +169,11 @@ export default function Settings() {
                     </button>
                   </div>
                 </div>
+
+                <div className={`${show === "notifications" ? "" : "hidden"}`}>
+
+                </div>
+
               </div>
             </div>
           </div>
