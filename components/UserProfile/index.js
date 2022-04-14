@@ -45,7 +45,7 @@ export function UserProfile() {
       }
 
     return (
-        <div>
+        <>
         <div className="py-6 px-4 sm:p-6 lg:pb-8">
           <div>
             <h2 className="text-lg leading-6 font-medium text-gray-900">Profile</h2>
@@ -133,6 +133,6 @@ export function UserProfile() {
             Save & Reload
           </button>
         </div>
-      </div>
+      </>
     )
 }

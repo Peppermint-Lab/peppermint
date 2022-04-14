@@ -8,22 +8,22 @@ datasource db {
 }
 
 model User {
-  id                    Int      @id @default(autoincrement())
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @default(now())
+  id                    Int        @id @default(autoincrement())
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @default(now())
   name                  String
   password              String
-  email                 String   @unique
+  email                 String     @unique
   isAdmin               Boolean
-  language              String?  @default("en")
-  ticket_created        Boolean
-  ticket_status_changed Boolean
-  ticket_comments       Boolean
-  ticket_assigned       Boolean
-  todos   Todos[]
-  tickets Ticket[]
-  file    UserFile[]
-  notes   Notes[]
+  language              String?    @default("en")
+  ticket_created        Boolean    @default(true)
+  ticket_status_changed Boolean    @default(true)
+  ticket_comments       Boolean    @default(true)
+  ticket_assigned       Boolean    @default(true)
+  todos                 Todos[]
+  tickets               Ticket[]
+  file                  UserFile[]
+  notes                 Notes[]
 }
 
 model Ticket {
