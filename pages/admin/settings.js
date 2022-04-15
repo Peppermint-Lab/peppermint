@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Switch } from '@headlessui/react'
+
 import Webhooks from "../../components/Webhooks";
 
 function classNames(...classes) {
@@ -9,7 +11,10 @@ export default function Settings() {
   const [show, setShow] = useState("webhooks");
   const tabs = [
     { name: "webhooks", current: show === "webhooks" ? true : false },
+    { name: "notifications", current: show === "notifications" ? true : false },
   ];
+
+  const [emails, setEmails] = useState(true);
 
   return (
     <div>
@@ -18,12 +23,11 @@ export default function Settings() {
           <div className="pt-10 pb-16">
             <div className="px-4 sm:px-6 md:px-0">
               <h1 className="text-3xl font-extrabold text-gray-900">
-                Settings
+                Admin Settings
               </h1>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="py-6">
-                {/* Tabs */}
                 <div className="lg:hidden">
                   <label htmlFor="selected-tab" className="sr-only">
                     Select a tab
@@ -43,9 +47,9 @@ export default function Settings() {
                   <div className="border-b border-gray-200">
                     <nav className="-mb-px flex space-x-8">
                       {tabs.map((tab) => (
-                        <a
+                        <button
                           key={tab.name}
-                          href={tab.href}
+                          onClick={() => setShow(tab.name)}
                           className={classNames(
                             tab.current
                               ? "border-purple-500 text-purple-600"
@@ -54,16 +58,130 @@ export default function Settings() {
                           )}
                         >
                           {tab.name}
-                        </a>
+                        </button>
                       ))}
                     </nav>
                   </div>
                 </div>
 
-                {/* Description list with inline editing */}
-                <div className="mt-10 divide-y divide-gray-200">
+                <div className="mt-10">
                   <div className={show === "webhooks" ? "" : "hidden"}>
                     <Webhooks />
+                  </div>
+
+                  <div className={show === "notifications" ? "" : "hidden"}>
+                    <div className="space-y-4">
+                      <Switch.Group
+                        as="div"
+                        className="flex items-center justify-between"
+                      >
+                        <span className="flex-grow flex flex-col">
+                          <Switch.Label
+                            as="span"
+                            className="text-sm font-medium text-gray-900"
+                            passive
+                          >
+                            Email notifications
+                          </Switch.Label>
+                          <Switch.Description
+                            as="span"
+                            className="text-sm text-gray-500"
+                          >
+                            Get notified when a handful events run, can be individually turned off by a user.
+                          </Switch.Description>
+                        </span>
+                        <Switch
+                          checked={emails}
+                          onChange={setEmails}
+                          className={classNames(
+                            emails ? "bg-indigo-600" : "bg-gray-200",
+                            "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          )}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={classNames(
+                              emails ? "translate-x-5" : "translate-x-0",
+                              "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                            )}
+                          />
+                        </Switch>
+                      </Switch.Group>
+
+                      <Switch.Group
+                        as="div"
+                        className="flex items-center justify-between"
+                      >
+                        <span className="flex-grow flex flex-col">
+                          <Switch.Label
+                            as="span"
+                            className="text-sm font-medium text-gray-900"
+                            passive
+                          >
+                            Discord notifications
+                          </Switch.Label>
+                          <Switch.Description
+                            as="span"
+                            className="text-sm text-gray-500"
+                          >
+                            Use discord webhooks to get sent an update everytime a new ticket is created. 
+                          </Switch.Description>
+                        </span>
+                        <Switch
+                          checked={emails}
+                          onChange={setEmails}
+                          className={classNames(
+                            emails ? "bg-indigo-600" : "bg-gray-200",
+                            "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          )}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={classNames(
+                              emails ? "translate-x-5" : "translate-x-0",
+                              "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                            )}
+                          />
+                        </Switch>
+                      </Switch.Group>
+
+                      <Switch.Group
+                        as="div"
+                        className="flex items-center justify-between"
+                      >
+                        <span className="flex-grow flex flex-col">
+                          <Switch.Label
+                            as="span"
+                            className="text-sm font-medium text-gray-900"
+                            passive
+                          >
+                            Telegram notifications
+                          </Switch.Label>
+                          <Switch.Description
+                            as="span"
+                            className="text-sm text-gray-500"
+                          >
+                            Use telegram webhooks to get sent an update everytime a new ticket is created. 
+                          </Switch.Description>
+                        </span>
+                        <Switch
+                          checked={emails}
+                          onChange={setEmails}
+                          className={classNames(
+                            emails ? "bg-indigo-600" : "bg-gray-200",
+                            "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          )}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={classNames(
+                              emails ? "translate-x-5" : "translate-x-0",
+                              "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                            )}
+                          />
+                        </Switch>
+                      </Switch.Group>
+                    </div>
                   </div>
                 </div>
               </div>
