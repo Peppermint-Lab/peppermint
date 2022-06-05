@@ -10,6 +10,7 @@ export default function CreateClient() {
   const [contactName, setContactName] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const isEnabled = number.length > 0 && contactName.length > 0 && name.length > 0 && email.length > 0;
 
   const router = useRouter();
 
@@ -91,6 +92,12 @@ export default function CreateClient() {
                     >
                       Create a new client
                     </Dialog.Title>
+                    <Dialog.Description
+                      as="h3"
+                      className="text-xs font-normal text-gray-900"
+                    >
+                      All fields are required!
+                    </Dialog.Description>
                     <div className="mt-2 space-y-4">
                       <input
                         type="text"
@@ -125,8 +132,9 @@ export default function CreateClient() {
                 </div>
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
+                  disabled={!isEnabled}
                     type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 hover:bg-green-600 cursor-not-allowed"
                     onClick={() => {
                       createClient();
                       router.reload(router.pathname);

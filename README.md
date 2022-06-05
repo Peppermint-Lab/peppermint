@@ -49,26 +49,26 @@ services:
     image: postgres:latest
     restart: always
     volumes:
-      - peppermint/db:/data/db
-    environment:
+      - ./docker-data/db:/data/db
+    environment: 
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint
+    image: pepperlabs/peppermint:latest
     ports:
-      - 5001:5001
+      - 5000:5000
     restart: on-failure
     depends_on:
       - postgres
     environment:
       PORT: 5000
-      DB_USERNAME: "peppermint"
-      DB_PASSWORD: "1234"
-      DB_HOST: "postgres"
-      BASE_URL: "http://localhost:5001"
+      DB_USERNAME: peppermint
+      DB_PASSWORD: 1234
+      DB_HOST: 'postgres'
+      BASE_URL: "http://localhost"
 
 ```
 
@@ -88,7 +88,7 @@ admin@admin.com
 
 We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://docs.peppermint.sh">here</a> to be taken directly there.
 
-## Motiviation
+## Motivation
 
 - This was initially a project to tie together my react and nodeJS skills and show something for my portfolio
 - It looked terrible! But it worked and showed functionaility, which got me a job.

@@ -83,6 +83,7 @@ export default function CreateTicketModal() {
       }),
     });
   }
+  const isEnabled = name.length > 0 && title.length > 0 && email.length > 0 && issue.length > 0 && typeof company !== 'undefined' && typeof engineer !== 'undefined';
 
   useEffect(() => {
     fetchClients();
@@ -157,6 +158,9 @@ export default function CreateTicketModal() {
                     <h1 className="text-xl text-center m2 p2 font-bold">
                       New Ticket
                     </h1>
+                    <h6 className="text-xs font-normal text-gray-900">
+                    All fields are required!
+                    </h6>
 
                     <div className="mt-4 space-y-4">
                       <input
@@ -368,12 +372,13 @@ export default function CreateTicketModal() {
 
                     <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">
                       <button
+                      disabled={!isEnabled}
                         onClick={() => {
                           setOpen(false);
                           createTicket();
                         }}
                         type="button"
-                        className="w-1/2 mx-auto  inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
+                        className="w-1/2 mx-auto  inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm disabled:opacity-50 hover:bg-indigo-600 cursor-not-allowed"
                       >
                         Create Ticket
                       </button>
