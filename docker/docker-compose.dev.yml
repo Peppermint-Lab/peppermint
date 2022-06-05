@@ -4,13 +4,16 @@ services:
   postgres:
     container_name: postgres
     image: postgres:latest
+    ports:
+      - 5432:5432
     restart: always
     volumes:
-      - ./peppermint/db:/data/db
+      - pgdata:/var/lib/postgresql/data
     environment: 
-      POSTGRES_USER: peppermint
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
+
 
   mailhog:
     container_name: mailhog
@@ -27,3 +30,5 @@ services:
       test: echo | telnet 127.0.0.1 1025
 
   
+volumes: 
+  pgdata:

@@ -283,7 +283,7 @@ export default function SideLayout({ children }) {
                   </nav>
                   <div
                     className={
-                      session.user.isAdmin === true ? "mt-8" : "hidden"
+                      session.user.isAdmin ? "mt-8" : "hidden"
                     }
                   >
                     <h3
