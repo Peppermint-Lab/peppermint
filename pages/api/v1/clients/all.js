@@ -1,5 +1,16 @@
 const { prisma } = require("../../../../prisma/prisma");
 
+/**
+ * @swagger
+ * /api/v1/clients/all:
+ *   get:
+ *     tags: [clients]
+ *     description: Gets all clients 
+ *     responses:
+ *       200:
+ *         description: returns array of clients
+ */
+
 export default async function getAllClients(req, res) {
   try {
     

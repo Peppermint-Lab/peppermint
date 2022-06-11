@@ -4,6 +4,7 @@ const { prisma } = require("../../../../prisma/prisma");
  * @swagger
  * /api/v1/users/all:
  *   get:
+ *     tags: [users]
  *     description: Returns all users
  *     responses:
  *       200:

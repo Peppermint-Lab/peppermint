@@ -53,7 +53,6 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      console.log(token);
       user && (token.user = user);
       return token;
     },
