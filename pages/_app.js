@@ -6,9 +6,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { useRouter } from "next/router";
 import { SessionProvider, useSession } from "next-auth/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import Head from 'next/head';
+import Head from "next/head";
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from "next-themes";
 
 import SideLayout from "../components/Layout/SideLayout";
 
@@ -47,23 +47,27 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     );
   }
 
+  if (router.pathname === "/swagger") {
+    return <Component {...pageProps} />;
+  }
+
   return (
     <>
-     <Head>
+      <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
         />
-        <meta name="description" content="Ticket management system selfhosted open source" />
+        <meta
+          name="description"
+          content="Ticket management system selfhosted open source"
+        />
         <meta name="keywords" content="Keywords" />
         <title>Peppermint</title>
 
-        <link
-          href="/favicon/favicon.ico"
-          rel="icon"
-        />
+        <link href="/favicon/favicon.ico" rel="icon" />
         <link
           href="/favicon/favicon-16x16.png"
           rel="icon"
@@ -83,15 +87,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
           {/* <ThemeProvider attribute="class"> */}
-            <Auth>
-              <SideLayout>
-                <Component {...pageProps} />
-              </SideLayout>
-            </Auth>
+          <Auth>
+            <SideLayout>
+              <Component {...pageProps} />
+            </SideLayout>
+          </Auth>
           {/* </ThemeProvider> */}
         </QueryClientProvider>
       </SessionProvider>
-      
     </>
   );
 }

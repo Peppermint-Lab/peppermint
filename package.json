@@ -32,6 +32,7 @@
     "next": "latest",
     "next-auth": "^4.0.6",
     "next-remove-imports": "^1.0.6",
+    "next-swagger-doc": "^0.3.4",
     "next-themes": "^0.0.15",
     "next-translate": "^1.3.4",
     "node": "^17.4.0",
@@ -44,6 +45,7 @@
     "react-table": "^7.7.0",
     "rehype-sanitize": "^5.0.1",
     "request": "^2.88.2",
+    "swagger-ui-react": "^4.12.0",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

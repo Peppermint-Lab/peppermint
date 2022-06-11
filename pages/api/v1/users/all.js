@@ -1,5 +1,15 @@
 const { prisma } = require("../../../../prisma/prisma");
 
+/**
+ * @swagger
+ * /api/v1/users/all:
+ *   get:
+ *     description: Returns all users
+ *     responses:
+ *       200:
+ *         description: Array of all users
+ */
+
 export default async function getAllClients(req, res) {
   try {
     const users = await prisma.user.findMany({
