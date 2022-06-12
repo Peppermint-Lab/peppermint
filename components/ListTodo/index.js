@@ -9,7 +9,7 @@ async function getTodos() {
 }
 
 export default function ListTodo() {
-  const { status, error, data, refetch } = useQuery("repoData", getTodos);
+  const { status, data, refetch } = useQuery("repoData", getTodos);
 
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(7);
@@ -43,11 +43,11 @@ export default function ListTodo() {
     }).then(() => refetch());
   }
 
-  async function markDone(id) {
-    await fetch(`api/v1/todo/mark-done/${id}`, {
-      method: "POST",
-    }).then(() => refetch());
-  }
+  // async function markDone(id) {
+  //   await fetch(`api/v1/todo/mark-done/${id}`, {
+  //     method: "POST",
+  //   }).then(() => refetch());
+  // }
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -92,7 +92,7 @@ export default function ListTodo() {
                         <button
                           onClick={() => deleteTodo(todo.id)}
                           type="button"
-                          className="float-right border border-transparent rounded-full shadow-sm text-red-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          className="float-right border border-transparent rounded-full shadow-sm text-red-600 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                           <TrashIcon className="h-5 w-5" aria-hidden="true" />
                         </button>
