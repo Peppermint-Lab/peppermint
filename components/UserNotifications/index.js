@@ -10,13 +10,13 @@ export default function UserNotifications() {
   const { data: session } = useSession();
 
   const [ticket_creation, setTicket_creation] = useState(
-    session.user.ticket_created
+    session.user.notify_ticket_created
   );
   const [ticket_status, setTicket_status] = useState(
-    session.user.ticket_status_changed
+    session.user.notify_ticket_status_changed
   );
   const [ticket_assigned, setTicket_assigned] = useState(
-    session.user.ticket_assigned
+    session.user.notify_ticket_assigned
   );
 
   async function updateNotifications() {

@@ -10,9 +10,6 @@ export default async function createTicket(req, res) {
     //     .status(422)
     //     .json({ error: "Please add all the fields", failed: true });
     // }
-
-    console.log(req.body);
-
     await prisma.ticket
       .create({
         data: {
@@ -32,7 +29,6 @@ export default async function createTicket(req, res) {
         },
       })
       .then((ticket) => {
-        // console.log('completed')
         sendTicketCreate(ticket);
         // res.status(201).json({ message: "Ticket created correctly", ticket });
       });

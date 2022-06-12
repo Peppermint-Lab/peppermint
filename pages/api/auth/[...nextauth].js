@@ -29,10 +29,10 @@ const options = {
             name: user.name,
             isAdmin: user.isAdmin,
             language: user.language,
-            ticket_created: user.ticket_created,
-            ticket_status_changed: user.ticket_status_changed,
-            ticket_comments: user.ticket_comments,
-            ticket_assigned: user.ticket_assigned,
+            ticket_created: user.notify_ticket_created,
+            ticket_status_changed: user.notify_ticket_status_changed,
+            ticket_comments: user.notify_ticket_comments,
+            ticket_assigned: user.notify_ticket_assigned,
           };
         } catch (error) {
           throw new Error(error);
@@ -66,22 +66,6 @@ const options = {
 
       session.id = token.user.id;
       session.user = token.user
-
-      // session.accessToken = token.accessToken;
-      // session.user.isAdmin = token.user.isAdmin;
-      // session.user.id = token.user.id;
-      // session.user.language =
-      //   token.user.language !== check_user.language
-      //     ? check_user.language
-      //     : token.user.language;
-      // session.user.name =
-      //   token.name.language !== check_user.name
-      //     ? check_user.name
-      //     : token.user.name;
-      // session.user.email =
-      //   token.user.email !== check_user.email
-      //     ? check_user.email
-      //     : token.user.email;
       return Promise.resolve(session);
     },
   },
