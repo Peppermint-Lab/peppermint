@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Transition, Disclosure } from "@headlessui/react";
 import {
   ArchiveIcon,
   FolderIcon,
@@ -12,9 +12,9 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-import {useTheme} from 'next-themes';
+import { useTheme } from "next-themes";
 
-import useTranslation from 'next-translate/useTranslation';
+import useTranslation from "next-translate/useTranslation";
 
 import CreateTicketModal from "../CreateTicketModal";
 
@@ -25,7 +25,7 @@ function classNames(...classes) {
 export default function SideLayout({ children }) {
   const location = useRouter();
 
-  const { t,lang } = useTranslation('peppermint');
+  const { t, lang } = useTranslation("peppermint");
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: session, status } = useSession();
@@ -39,57 +39,57 @@ export default function SideLayout({ children }) {
     alert("You do not have the correct perms for that action.");
   }
 
-  const locale = session.user.language || 'en'
+  const locale = session.user.language || "en";
 
-  useEffect(()=> {
+  useEffect(() => {
     location.push(location.pathname, location.asPath, {
       locale,
     });
-  }, [])
+  }, []);
+
+  console.log(location.pathname.includes("/ticket"));
 
   const navigation = [
     {
-      name: t('sl_dashboard'),
+      name: t("sl_dashboard"),
       href: `/${locale}/`,
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
     },
     {
-      name: t('sl_tickets'),
-      href: `/${locale}/ticket`,
+      name: t("sl_tickets"),
+      current: location.pathname.includes("/ticket") ? true : false,
       icon: TicketIcon,
-      current: location.pathname === "/ticket" ? true : false,
+      children: [
+        { name: "Open", href: `/${locale}/tickets` },
+        { name: "Closed", href: `/${locale}/tickets/closed` },
+        { name: "Unissued", href: `/${locale}/tickets/unissued` },
+      ],
     },
     {
-      name: t('sl_history'),
-      href: `/${locale}/history`,
-      icon: ArchiveIcon,
-      current: location.pathname === "/history" ? true : false,
-    },
-    {
-      name: t('sl_notebook'),
+      name: t("sl_notebook"),
       href: `/${locale}/notebook`,
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
     },
   ];
 
-  const secondaryNavigation = [
+  const adminNavigation = [
     {
-      name: t('sl_users'),
+      name: t("sl_users"),
       href: "/admin/auth",
     },
     {
-      name: t('sl_clients'),
+      name: t("sl_clients"),
       href: "/admin/clients",
     },
     {
-      name: t('sl_settings'),
+      name: t("sl_settings"),
       href: "/admin/settings",
     },
   ];
 
-  const {theme, setTheme} = useTheme();
+  const { theme, setTheme } = useTheme();
 
   return (
     <div>
@@ -159,24 +159,71 @@ export default function SideLayout({ children }) {
                     </div>
                     <nav className="mt-5 px-2 space-y-1">
                       <CreateTicketModal />
-                      {navigation.map((item) => (
-                        <Link key={item.name} href={item.href}>
-                          <a
-                            className={classNames(
-                              item.current
-                                ? "bg-green-500 text-white"
-                                : "text-white hover:bg-green-400 hover:text-white",
-                              "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                            )}
+                      {navigation.map((item) =>
+                        !item.children ? (
+                          <div key={item.name}>
+                            <a
+                              href={item.href}
+                              className={classNames(
+                                item.current
+                                  ? "bg-green-400 text-white"
+                                  : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
+                                "group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md"
+                              )}
+                            >
+                              {item.name}
+                            </a>
+                          </div>
+                        ) : (
+                          <Disclosure
+                            as="div"
+                            key={item.name}
+                            className="space-y-1"
                           >
-                            <item.icon
-                              className="text-white mr-3 flex-shrink-0 h-6 w-62"
-                              aria-hidden="true"
-                            />
-                            {item.name}
-                          </a>
-                        </Link>
-                      ))}
+                            {({ open }) => (
+                              <>
+                                <Disclosure.Button
+                                  className={classNames(
+                                    item.current
+                                      ? "bg-green-400 text-white"
+                                      : "text-white bg-gray-900 hover:bg-green-400 hover:text-white",
+                                    "group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
+                                  )}
+                                >
+                                  <svg
+                                    className={classNames(
+                                      open
+                                        ? "text-white rotate-90"
+                                        : "text-white",
+                                      "mr-2 flex-shrink-0 h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150"
+                                    )}
+                                    viewBox="0 0 20 20"
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      d="M6 6L14 10L6 14V6Z"
+                                      fill="currentColor"
+                                    />
+                                  </svg>
+                                  {item.name}
+                                </Disclosure.Button>
+                                <Disclosure.Panel className="space-y-1">
+                                  {item.children.map((subItem) => (
+                                    <Disclosure.Button
+                                      key={subItem.name}
+                                      as="a"
+                                      href={subItem.href}
+                                      className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400"
+                                    >
+                                      {subItem.name}
+                                    </Disclosure.Button>
+                                  ))}
+                                </Disclosure.Panel>
+                              </>
+                            )}
+                          </Disclosure>
+                        )
+                      )}
                     </nav>
                     <div
                       className={
@@ -195,7 +242,7 @@ export default function SideLayout({ children }) {
                         className="mt-1 space-y-1"
                         aria-labelledby="projects-headline"
                       >
-                        {secondaryNavigation.map((item) => (
+                        {adminNavigation.map((item) => (
                           <Link key={item.name} href={item.href}>
                             <a
                               className={classNames(
@@ -276,26 +323,71 @@ export default function SideLayout({ children }) {
                   </div>
                   <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
                     <CreateTicketModal />
-                    {navigation.map((item) => (
-                      <Link key={item.name} href={item.href}>
-                        <a
-                          className={classNames(
-                            item.current
-                              ? "bg-green-500 text-white hover:text-white"
-                              : "text-white hover:bg-green-400 hover:text-white",
-                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                          )}
-                        >
-                          <item.icon
+                    {navigation.map((item) =>
+                      !item.children ? (
+                        <div key={item.name}>
+                          <a
+                            href={item.href}
                             className={classNames(
-                              "text-white mr-3 flex-shrink-0 h-6 w-6"
+                              item.current
+                                ? "bg-green-400 text-white"
+                                : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
+                              "group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md"
                             )}
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </a>
-                      </Link>
-                    ))}
+                          >
+                            {item.name}
+                          </a>
+                        </div>
+                      ) : (
+                        <Disclosure
+                          as="div"
+                          key={item.name}
+                          className="space-y-1"
+                        >
+                          {({ open }) => (
+                            <>
+                              <Disclosure.Button
+                                className={classNames(
+                                  item.current
+                                    ? "bg-green-400 text-white"
+                                    : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
+                                  "group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
+                                )}
+                              >
+                                <svg
+                                  className={classNames(
+                                    open
+                                      ? "text-white rotate-90"
+                                      : "text-white",
+                                    "mr-2 flex-shrink-0 h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150"
+                                  )}
+                                  viewBox="0 0 20 20"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    d="M6 6L14 10L6 14V6Z"
+                                    fill="currentColor"
+                                  />
+                                </svg>
+                                {item.name}
+                              </Disclosure.Button>
+                              <Disclosure.Panel className="space-y-1">
+                                {item.children.map((subItem) => (
+                                  <Disclosure.Button
+                                    key={subItem.name}
+                                    as="a"
+                                    href={subItem.href}
+                                    className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400 focus:outline-none"
+                                  >
+                                    {subItem.name}
+                                  </Disclosure.Button>
+                                ))}
+                              </Disclosure.Panel>
+                            </>
+                          )}
+                        </Disclosure>
+                      )
+                    )}
                   </nav>
                   <div
                     className={
@@ -312,7 +404,7 @@ export default function SideLayout({ children }) {
                       className="mt-1 space-y-1"
                       aria-labelledby="projects-headline"
                     >
-                      {secondaryNavigation.map((item) => (
+                      {adminNavigation.map((item) => (
                         <Link key={item.name} href={item.href}>
                           <a className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white">
                             <span className="truncate">{item.name}</span>
@@ -335,7 +427,10 @@ export default function SideLayout({ children }) {
                       <div className="px-3 py-2">
                         <span className="text-white">
                           Version -{" "}
-                          <a target='_blank' href="https://github.com/Peppermint-Lab/peppermint/releases">
+                          <a
+                            target="_blank"
+                            href="https://github.com/Peppermint-Lab/peppermint/releases"
+                          >
                             <a>
                               <span className="inline-flex ml-2 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800 pointer pointer-events-auto">
                                 <svg
@@ -358,8 +453,6 @@ export default function SideLayout({ children }) {
                         className="ml-3 px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 dark:text-slate-400 bg-white dark:bg-black hover:bg-gray-50"
                         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                         >{theme}</button> */}
-
-
                     </div>
                   </div>
                 </div>
@@ -375,7 +468,7 @@ export default function SideLayout({ children }) {
                       </div>
                       <div className="ml-3">
                         <p className="text-sm font-medium text-white">
-                          {session.user.name}  [{lang}/{session.user.language}]
+                          {session.user.name} [{lang}/{session.user.language}]
                         </p>
                         <Link href="/settings">
                           <a href="/settings">

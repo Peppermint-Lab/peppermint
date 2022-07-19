@@ -10,7 +10,7 @@ import Link from "next/link";
 import Loader from "react-spinners/ClipLoader";
 
 
-import TicketsMobileList from "../components/TicketsMobileList";
+import TicketsMobileList from "../../components/TicketsMobileList";
 
 async function getUserTickets() {
   const res = await fetch("/api/v1/ticket/all");
