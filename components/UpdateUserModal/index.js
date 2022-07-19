@@ -9,6 +9,7 @@ export default function UpdateUserModal({ user }) {
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [admin, setAdmin] = useState(user.isAdmin);
+  const [error, setError] = useState(null);
 
   const router = useRouter();
 
@@ -17,19 +18,24 @@ export default function UpdateUserModal({ user }) {
     { id: "admin", title: "admin" },
   ];
 
+  console.log(name.length, email);
+
   async function updateUser() {
-    await fetch("/api/v1/admin/user/update", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        name,
-        admin,
-        id: user.id,
-      }),
-    });
+    if (name.length > 0 && email.length > 0) {
+      await fetch("/api/v1/admin/user/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          admin,
+          id: user.id,
+        }),
+      }).then(() => router.reload(router.pathname));
+    }
+    setError("Length needs to be more than zero");
   }
 
   return (
@@ -96,22 +102,46 @@ export default function UpdateUserModal({ user }) {
                       Edit User
                     </Dialog.Title>
                     <div className="mt-2 space-y-4">
-                      <input
-                        type="text"
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-3/4 sm:text-sm border-gray-300 rounded-md"
-                        placeholder="Enter client name here..."
-                        name="name"
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
-                      />
+                      <>
+                        <input
+                          type="text"
+                          className={
+                            error !== null && name.length === 0
+                              ? "shadow-sm focus:ring-red-500 focus:border-red-500 block w-3/4 sm:text-sm border-red-600 rounded-md"
+                              : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-3/4 sm:text-sm border-gray-300 rounded-md"
+                          }
+                          placeholder="Enter client name here..."
+                          name="name"
+                          onChange={(e) => setName(e.target.value)}
+                          value={name}
+                          focus={
+                            error !== null && name.length > 0 ? true : false
+                          }
+                        />
+                        {error !== null && name.length === 0 && (
+                          <p className="text-red-500 text-xs italic">{error}</p>
+                        )}
+                      </>
 
-                      <input
-                        type="email"
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                        placeholder="Enter email here...."
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                      />
+                      <>
+                        <input
+                          type="email"
+                          className={
+                            error !== null && email.length === 0
+                              ? "shadow-sm focus:ring-red-500 focus:border-red-500 block w-3/4 sm:text-sm border-red-600 rounded-md"
+                              : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-3/4 sm:text-sm border-gray-300 rounded-md"
+                          }
+                          placeholder="Enter email here...."
+                          onChange={(e) => setEmail(e.target.value)}
+                          value={email}
+                          focus={
+                            error !== null && email.length > 0 ? true : false
+                          }
+                        />
+                        {error !== null && email.length === 0 && (
+                          <p className="text-red-500 text-xs italic">{error}</p>
+                        )}
+                      </>
 
                       <div className="">
                         <label className="text-base font-medium text-gray-900">
@@ -137,7 +167,8 @@ export default function UpdateUserModal({ user }) {
                                 admin === true
                                   ? "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-green-500 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
                                   : "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
-                              }                            >
+                              }
+                            >
                               Admin
                             </button>
                           </span>
@@ -152,7 +183,6 @@ export default function UpdateUserModal({ user }) {
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={async () => {
                       await updateUser();
-                      router.reload(router.pathname);
                     }}
                   >
                     Update
