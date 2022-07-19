@@ -335,6 +335,10 @@ export default function SideLayout({ children }) {
                               "group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md"
                             )}
                           >
+                            <item.icon
+                              className="text-white mr-3 flex-shrink-0 h-6 w-62"
+                              aria-hidden="true"
+                            />
                             {item.name}
                           </a>
                         </div>

@@ -1,17 +1,15 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import dynamic from "next/dynamic";
-import { Radio } from "antd";
+import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/solid";
 import useTranslation from "next-translate/useTranslation";
 
-// import MDEditor from '@uiw/react-md-editor';
+import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+// const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -96,7 +94,7 @@ export default function CreateTicketModal() {
         <button
           onClick={() => setOpen(true)}
           type="button"
-          className="group flex items-center px-2 py-2 text-sm font-medium w-full rounded-md hover:bg-green-400 hover:text-white"
+          className="group flex items-center pl-7 pr-2 py-2 text-sm font-medium w-full rounded-md hover:bg-green-400 hover:text-white"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +117,7 @@ export default function CreateTicketModal() {
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed z-50 inset-0 overflow-y-auto"
+          className="fixed z-10 inset-0"
           initialFocus={cancelButtonRef}
           onClose={setOpen}
         >
@@ -152,206 +150,232 @@ export default function CreateTicketModal() {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full sm:p-6">
-                <div>
-                  <div>
-                    <h1 className="text-xl text-center m2 p2 font-bold">
-                      {t("ticket_new")}
-                    </h1>
+              <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full sm:p-6">
+                <div className="flex flex-row w-full">
+                  <span className="text-md pb-2 font-bold">
+                    {t("ticket_new")}
+                  </span>
 
-                    <div className="mt-4 space-y-4">
-                      <input
-                        type="text"
-                        id="name"
-                        placeholder={t("ticket_name_here")}
-                        name="name"
-                        onChange={(e) => setName(e.target.value)}
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      />
+                  <button
+                    type="button"
+                    className="ml-auto mb-1.5 bg-white text-xs rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={() => setOpen(false)}
+                  >
+                    <span className="sr-only">Close</span>
+                    <XIcon className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </div>
 
-                      <input
-                        type="text"
-                        name="email"
-                        placeholder={t("ticket_email_here")}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      />
+                <input
+                  type="text"
+                  name="title"
+                  placeholder={t("ticket_details")}
+                  maxLength={64}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full pl-0 pr-0 sm:text-xl border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                />
 
-                      <input
-                        type="text"
-                        name="title"
-                        placeholder={t("ticket_details")}
-                        maxLength={64}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      />
+                <div className="">
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder={t("ticket_name_here")}
+                    name="name"
+                    onChange={(e) => setName(e.target.value)}
+                    className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                  />
 
-                      <Listbox value={company} onChange={setCompany}>
-                        {({ open }) => (
-                          <>
-                            <div className="mt-1 relative">
-                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <span className="block truncate">
-                                  {company
-                                    ? company.name
-                                    : t("ticket_select_client")}
-                                </span>
-                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                  <SelectorIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Listbox.Button>
+                  <input
+                    type="text"
+                    name="email"
+                    placeholder={t("ticket_email_here")}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                  />
 
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                  {options.map((person) => (
-                                    <Listbox.Option
-                                      key={person.id}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active
-                                            ? "text-white bg-indigo-600"
-                                            : "text-gray-900",
-                                          "cursor-default select-none relative py-2 pl-3 pr-9"
-                                        )
-                                      }
-                                      value={person}
-                                    >
-                                      {({ company, active }) => (
-                                        <>
+                  <MDEditor
+                    onChange={setIssue}
+                    value={issue}
+                    previewOptions={{
+                      rehypePlugins: [[rehypeSanitize]],
+                    }}
+                    preview="edit"
+                  />
+
+                  <div className="flex flex-row space-x-4 pb-2 mt-2">
+                    <Listbox value={company} onChange={setCompany}>
+                      {({ open }) => (
+                        <>
+                          <div className="mt-1 relative">
+                            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                              <span className="block truncate">
+                                {company
+                                  ? company.name
+                                  : t("ticket_select_client")}
+                              </span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <SelectorIcon
+                                  className="h-5 w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
+
+                            <Transition
+                              show={open}
+                              as={Fragment}
+                              leave="transition ease-in duration-100"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <Listbox.Options className="absolute z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                {options.map((person) => (
+                                  <Listbox.Option
+                                    key={person.id}
+                                    className={({ active }) =>
+                                      classNames(
+                                        active
+                                          ? "text-white bg-indigo-600"
+                                          : "text-gray-900",
+                                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                                      )
+                                    }
+                                    value={person}
+                                  >
+                                    {({ company, active }) => (
+                                      <>
+                                        <span
+                                          className={classNames(
+                                            company
+                                              ? "font-semibold"
+                                              : "font-normal",
+                                            "block truncate"
+                                          )}
+                                        >
+                                          {person.name}
+                                        </span>
+
+                                        {company ? (
                                           <span
                                             className={classNames(
-                                              company
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "block truncate"
+                                              active
+                                                ? "text-white"
+                                                : "text-indigo-600",
+                                              "absolute inset-y-0 right-0 flex items-center pr-4"
                                             )}
                                           >
-                                            {person.name}
+                                            <CheckIcon
+                                              className="h-5 w-5"
+                                              aria-hidden="true"
+                                            />
                                           </span>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          </div>
+                        </>
+                      )}
+                    </Listbox>
 
-                                          {company ? (
-                                            <span
-                                              className={classNames(
-                                                active
-                                                  ? "text-white"
-                                                  : "text-indigo-600",
-                                                "absolute inset-y-0 right-0 flex items-center pr-4"
-                                              )}
-                                            >
-                                              <CheckIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                              />
-                                            </span>
-                                          ) : null}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
+                    <Listbox value={engineer} onChange={setEngineer}>
+                      {({ open }) => (
+                        <>
+                          <div className="mt-1 relative">
+                            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ">
+                              <span className="block truncate">
+                                {engineer
+                                  ? engineer.name
+                                  : t("ticket_select_eng")}
+                              </span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <SelectorIcon
+                                  className="h-5 w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
 
-                      <Listbox value={engineer} onChange={setEngineer}>
-                        {({ open }) => (
-                          <>
-                            <div className="mt-1 relative">
-                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <span className="block truncate">
-                                  {engineer
-                                    ? engineer.name
-                                    : t("ticket_select_eng")}
-                                </span>
-                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                  <SelectorIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Listbox.Button>
+                            <Transition
+                              show={open}
+                              as={Fragment}
+                              leave="transition ease-in duration-100"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <Listbox.Options className="absolute z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                {users.map((person) => (
+                                  <Listbox.Option
+                                    key={person.id}
+                                    className={({ active }) =>
+                                      classNames(
+                                        active
+                                          ? "text-white bg-indigo-600"
+                                          : "text-gray-900",
+                                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                                      )
+                                    }
+                                    value={person}
+                                  >
+                                    {({ engineer, active }) => (
+                                      <>
+                                        <span
+                                          className={classNames(
+                                            engineer
+                                              ? "font-semibold"
+                                              : "font-normal",
+                                            "block truncate"
+                                          )}
+                                        >
+                                          {person.name}
+                                        </span>
 
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                  {users.map((person) => (
-                                    <Listbox.Option
-                                      key={person.id}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active
-                                            ? "text-white bg-indigo-600"
-                                            : "text-gray-900",
-                                          "cursor-default select-none relative py-2 pl-3 pr-9"
-                                        )
-                                      }
-                                      value={person}
-                                    >
-                                      {({ engineer, active }) => (
-                                        <>
+                                        {engineer ? (
                                           <span
                                             className={classNames(
-                                              engineer
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "block truncate"
+                                              active
+                                                ? "text-white"
+                                                : "text-indigo-600",
+                                              "absolute inset-y-0 right-0 flex items-center pr-4"
                                             )}
                                           >
-                                            {person.name}
+                                            <CheckIcon
+                                              className="h-5 w-5"
+                                              aria-hidden="true"
+                                            />
                                           </span>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          </div>
+                        </>
+                      )}
+                    </Listbox>
+                  </div>
 
-                                          {engineer ? (
-                                            <span
-                                              className={classNames(
-                                                active
-                                                  ? "text-white"
-                                                  : "text-indigo-600",
-                                                "absolute inset-y-0 right-0 flex items-center pr-4"
-                                              )}
-                                            >
-                                              <CheckIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                              />
-                                            </span>
-                                          ) : null}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
-
-                      <MDEditor
-                        onChange={setIssue}
-                        value={issue}
-                        previewOptions={{
-                          rehypePlugins: [[rehypeSanitize]],
+                  <div className="border-t border-gray-300 ">
+                    <div className="mt-2 float-right">
+                      <button
+                        onClick={() => {
+                          setOpen(false);
+                          createTicket();
                         }}
-                        preview="edit"
-                      />
+                        type="button"
+                        className="inline-flex justify-center rounded-md shadow-sm px-2.5 py-1.5 border border-transparent text-xs bg-green-600 font-medium text-white hover:bg-green-700 focus:outline-none "
+                      >
+                        Create Ticket
+                      </button>
+                    </div>
+                  </div>
 
-                      <div className="flex justify-center mx-auto">
+                  {/* <div className="flex justify-center mx-auto">
                         <Radio.Group
                           buttonStyle="solid"
                           value={priority}
@@ -364,31 +388,7 @@ export default function CreateTicketModal() {
                             High
                           </Radio.Button>
                         </Radio.Group>
-                      </div>
-                    </div>
-
-                    <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense mx-auto ">
-                      <button
-                        onClick={() => {
-                          setOpen(false);
-                          createTicket();
-                        }}
-                        type="button"
-                        className="w-1/2 mx-auto  inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
-                      >
-                        Create Ticket
-                      </button>
-                      <button
-                        onClick={() => {
-                          setOpen(false);
-                        }}
-                        type="button"
-                        className="mt-3 w-1/2  mx-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
+                      </div> */}
                 </div>
               </div>
             </Transition.Child>
