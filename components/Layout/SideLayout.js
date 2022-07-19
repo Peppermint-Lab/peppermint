@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition, Disclosure } from "@headlessui/react";
 import {
-  ArchiveIcon,
   FolderIcon,
   HomeIcon,
   MenuIcon,
@@ -47,7 +46,6 @@ export default function SideLayout({ children }) {
     });
   }, []);
 
-  console.log(location.pathname.includes("/ticket"));
 
   const navigation = [
     {

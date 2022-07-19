@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { SessionProvider, useSession } from "next-auth/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import Head from "next/head";
+import { HotKeys } from "react-hotkeys";
 
 import { ThemeProvider } from "next-themes";
 
@@ -38,6 +39,11 @@ function Auth({ children }) {
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
+
+  const keyMap = {
+    NEW_TICKET: ["c"],
+    // CLOSE: ["esc"],
+  };
 
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
@@ -94,10 +100,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <QueryClientProvider client={queryClient}>
           {/* <ThemeProvider attribute="class"> */}
           <Auth>
-            <SideLayout>
-              <Component {...pageProps} />
-            </SideLayout>
+            <HotKeys keyMap={keyMap}>
+              <SideLayout>
+                <Component {...pageProps} />
+              </SideLayout>
+            </HotKeys>
           </Auth>
+
           {/* </ThemeProvider> */}
         </QueryClientProvider>
       </SessionProvider>
