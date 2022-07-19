@@ -18,7 +18,7 @@ export default function ResetPassword({ user }) {
 
   const postData = async () => {
     const id = user.id;
-    if (check === password) {
+    if (check === password && password.length > 0) {
       await fetch(`/api/v1/admin/user/resetpassword`, {
         method: "POST",
         headers: {
@@ -38,7 +38,7 @@ export default function ResetPassword({ user }) {
           }
         });
     } else {
-      fail("Passwords are not the same");
+      fail("Passwords are not the same or empty");
     }
   };
 
