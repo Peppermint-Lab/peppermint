@@ -48,7 +48,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   }
 
   if (router.pathname === "/swagger") {
-    return <Component {...pageProps} />;
+    return (
+      <SessionProvider session={session}>
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
+      </SessionProvider>
+    );
   }
 
   return (
