@@ -22,6 +22,7 @@ async function main() {
       name: "internal",
       contactName: "admin",
       number: '123456789',
+      active: true
     },
   })
 

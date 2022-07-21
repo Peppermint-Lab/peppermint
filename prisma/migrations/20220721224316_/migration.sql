@@ -10,6 +10,11 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL,
+    "language" TEXT DEFAULT E'en',
+    "notify_ticket_created" BOOLEAN NOT NULL DEFAULT true,
+    "notify_ticket_status_changed" BOOLEAN NOT NULL DEFAULT true,
+    "notify_ticket_comments" BOOLEAN NOT NULL DEFAULT true,
+    "notify_ticket_assigned" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -27,7 +32,7 @@ CREATE TABLE "Ticket" (
     "isComplete" BOOLEAN NOT NULL,
     "priority" TEXT NOT NULL,
     "clientId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" INTEGER,
 
     CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")
 );
@@ -42,6 +47,7 @@ CREATE TABLE "Client" (
     "contactName" TEXT NOT NULL,
     "number" TEXT,
     "notes" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Client_pkey" PRIMARY KEY ("id")
 );
@@ -100,8 +106,50 @@ CREATE TABLE "Webhooks" (
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "type" "Hook" NOT NULL,
+    "active" BOOLEAN NOT NULL,
+    "secret" TEXT,
+    "createdBy" TEXT NOT NULL,
 
     CONSTRAINT "Webhooks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Discord" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" TEXT NOT NULL,
+    "secret" TEXT,
+    "url" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Discord_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Slack" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" TEXT NOT NULL,
+    "secret" TEXT,
+    "url" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Slack_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Email" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "active" BOOLEAN NOT NULL DEFAULT false,
+    "user" TEXT NOT NULL,
+    "pass" TEXT NOT NULL,
+    "secure" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Email_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -111,7 +159,7 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "Client_email_key" ON "Client"("email");
 
 -- AddForeignKey
-ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
