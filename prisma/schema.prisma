@@ -8,23 +8,22 @@ datasource db {
 }
 
 model User {
-  id                    Int        @id @default(autoincrement())
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @default(now())
-  name                  String
-  password              String
-  email                 String     @unique
-  isAdmin               Boolean
-  language              String?    @default("en")
+  id                           Int        @id @default(autoincrement())
+  createdAt                    DateTime   @default(now())
+  updatedAt                    DateTime   @default(now())
+  name                         String
+  password                     String
+  email                        String     @unique
+  isAdmin                      Boolean
+  language                     String?    @default("en")
   notify_ticket_created        Boolean    @default(true)
   notify_ticket_status_changed Boolean    @default(true)
   notify_ticket_comments       Boolean    @default(true)
   notify_ticket_assigned       Boolean    @default(true)
-  todos                 Todos[]
-  tickets               Ticket[]
-  file                  UserFile[]
-  notes                 Notes[]
-
+  todos                        Todos[]
+  tickets                      Ticket[]
+  file                         UserFile[]
+  notes                        Notes[]
 }
 
 model Ticket {
@@ -55,6 +54,7 @@ model Client {
   number      String?
   notes       String?
   tickets     Ticket[]
+  active      Boolean  @default(true)
 }
 
 model UserFile {
@@ -114,7 +114,7 @@ model Discord {
   name      String
   secret    String?
   url       String
-  active    Boolean @default(false)
+  active    Boolean  @default(false)
 }
 
 model Slack {
@@ -124,8 +124,7 @@ model Slack {
   name      String
   secret    String?
   url       String
-  active    Boolean @default(false)
-
+  active    Boolean  @default(false)
 }
 
 model Email {
