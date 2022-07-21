@@ -291,7 +291,7 @@ export default function TicketHitory() {
       Cell: ({ row, value }) => {
         return (
           <>
-            <Link href={`/ticket/${row.cells[0].value}`}>View</Link>
+            <Link href={`/tickets/${row.cells[0].value}`}>View</Link>
           </>
         );
       },

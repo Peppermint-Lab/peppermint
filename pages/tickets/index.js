@@ -207,12 +207,12 @@ export default function Tickets() {
         },
         {
             Header: "Name",
-            accessor: "client.name",
+            accessor: "name",
             id: "name",
         },
         {
             Header: "Client",
-            accessor: "name",
+            accessor: "client.name",
             id: "client_name",
         },
         {
@@ -262,7 +262,7 @@ export default function Tickets() {
             Cell: ({row, value}) => {
                 return (
                     <>
-                        <Link href={`/ticket/${row.cells[0].value}`}>View</Link>
+                        <Link href={`/tickets/${row.cells[0].value}`}>View</Link>
                     </>
                 );
             },
@@ -279,7 +279,7 @@ export default function Tickets() {
 
             {status === "success" && (
                 <>
-                    {data.tickets.legnth > 0 && (
+                    {data.tickets && (
                         <>
                             <div className="hidden sm:block">
                                 <Table columns={columns} data={data.tickets}/>

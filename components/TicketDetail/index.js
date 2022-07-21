@@ -122,7 +122,7 @@ export default function TicketDetail(props) {
                           edit ? "hidden" : "text-2xl font-bold text-gray-900"
                         }
                       >
-                        {title}
+                        {title ? title : "No Title"}
                       </h1>
                       <input
                         type="text"
@@ -136,8 +136,7 @@ export default function TicketDetail(props) {
                         }
                       />
                       <p className="mt-2 text-sm font-bold">
-                        opened by user: {ticket.name} from client:{" "}
-                        {ticket.client.name}
+                        opened by user: {ticket.name} from client: {ticket.client.name}
                       </p>
                     </div>
                   </div>
@@ -476,11 +475,11 @@ export default function TicketDetail(props) {
                         <div className="text-sm font-medium text-gray-900">
                           <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                             <span className="font-medium leading-none text-white">
-                              {ticket.assignedTo.name[0]}
+                              {ticket.assignedTo ? ticket.assignedTo.name[0] : ""}
                             </span>
                           </span>
                         </div>
-                        <span>{ticket.assignedTo.name}</span>
+                        <span>{ticket.assignedTo ? ticket.assignedTo.name : "Not currently assigned" }</span>
                       </p>
                     </li>
                   </ul>
@@ -542,7 +541,7 @@ export default function TicketDetail(props) {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span>{ticket.assignedTo.name}</span>
+                  <span>{ticket.assignedTo ? ticket.assignedTo.name : "Not currently assigned" }</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <svg
@@ -601,7 +600,9 @@ export default function TicketDetail(props) {
                           </span>
                         </div>
                         <div className="text-sm font-medium text-gray-900">
-                          <span> {ticket.assignedTo.name}</span>
+                          <span> {ticket.assignedTo
+                                ? ticket.assignedTo.name
+                                : ""}</span>
                         </div>
                       </div>
                     </li>

@@ -216,7 +216,7 @@ export default function CreateTicketModal() {
                         {({ open }) => (
                           <>
                             <div className="mt-1 relative">
-                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-sm">
                                 <span className="block truncate">
                                   {company
                                     ? company.name
@@ -244,7 +244,7 @@ export default function CreateTicketModal() {
                                       className={({ active }) =>
                                         classNames(
                                           active
-                                            ? "text-white bg-indigo-600"
+                                            ? "text-gray-900 bg-gray-100"
                                             : "text-gray-900",
                                           "cursor-default select-none relative py-2 pl-3 pr-9"
                                         )
@@ -294,7 +294,7 @@ export default function CreateTicketModal() {
                         {({ open }) => (
                           <>
                             <div className="mt-1 relative">
-                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ">
+                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ">
                                 <span className="block truncate">
                                   {engineer
                                     ? engineer.name
@@ -322,7 +322,7 @@ export default function CreateTicketModal() {
                                       className={({ active }) =>
                                         classNames(
                                           active
-                                            ? "text-white bg-indigo-600"
+                                            ? "text-gray-900 bg-gray-100"
                                             : "text-gray-900",
                                           "cursor-default select-none relative py-2 pl-3 pr-9"
                                         )
