@@ -74,7 +74,7 @@ export default function CreateTicketModal() {
         name,
         title,
         company,
-        engineer,
+        engineer: engineer.name !== "Unassigned" ? engineer : undefined,
         email,
         detail: issue,
         priority,
@@ -316,6 +316,34 @@ export default function CreateTicketModal() {
                                 leaveTo="opacity-0"
                               >
                                 <Listbox.Options className="absolute z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                  <Listbox.Option
+                                    className={({ active }) =>
+                                      classNames(
+                                        active
+                                          ? "text-gray-900 bg-gray-100"
+                                          : "text-gray-900",
+                                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                                      )
+                                    }
+                                    value={{
+                                      name: "Unassigned",
+                                    }}
+                                  >
+                                    {({ company, active }) => (
+                                      <>
+                                        <span
+                                          className={classNames(
+                                            company
+                                              ? "font-semibold"
+                                              : "font-normal",
+                                            "block truncate"
+                                          )}
+                                        >
+                                          Unassigned
+                                        </span>
+                                      </>
+                                    )}
+                                  </Listbox.Option>
                                   {users.map((person) => (
                                     <Listbox.Option
                                       key={person.id}
