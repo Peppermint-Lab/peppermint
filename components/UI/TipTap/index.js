@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import classNames from "classnames";
 
 import * as Icons from "./Icons";
 
-export default function TipTap() {
+export default function TipTap({ setContent, value }) {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: "Hello World! 🌎️",
+    content: value,
   });
 
   const toggleBold = useCallback(() => {
@@ -34,6 +34,8 @@ export default function TipTap() {
   if (!editor) {
     return null;
   }
+
+  setContent = editor.getHTML();
 
   return (
     <div className="editor">

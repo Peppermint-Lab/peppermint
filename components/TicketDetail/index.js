@@ -3,11 +3,6 @@ import { message, Upload, Divider } from "antd";
 import moment from "moment";
 import { useRouter } from "next/router";
 
-import rehypeSanitize from "rehype-sanitize";
-import MDEditor from "@uiw/react-md-editor";
-
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
 import TransferTicket from "../TransferTicket";
@@ -25,6 +20,8 @@ export default function TicketDetail(props) {
   const [badge, setBadge] = useState("");
   const [uploaded, setUploaded] = useState();
   const [priority, setPriority] = useState(props.ticket.priority)
+
+  console.log(props)
 
   const history = useRouter();
 
@@ -106,6 +103,7 @@ export default function TicketDetail(props) {
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
+
 
   return (
     <div>
@@ -278,10 +276,7 @@ export default function TicketDetail(props) {
                     <h1 className="text-xl">Issue</h1>
                     <div className={edit ? "hidden" : "prose max-w-none"}>
                       {issue ? (
-                        <MDEditor.Markdown
-                          source={issue}
-                          rehypePlugins={[[rehypeSanitize]]}
-                        />
+                       issue
                       ) : (
                         <span>
                           No issue has been entered yet ... Click edit to enter
@@ -291,16 +286,16 @@ export default function TicketDetail(props) {
                     </div>
                     <div className={edit ? "prose max-w-none" : "hidden"}>
                       <div className="hidden sm:block">
-                        <MDEditor
+                        {/* <MDEditor
                           value={issue || ""}
                           onChange={setIssue}
                           previewOptions={{
                             rehypePlugins: [[rehypeSanitize]],
                           }}
-                        />
+                        /> */}
                       </div>
                       <div className="sm:hidden">
-                        <MDEditor
+                        {/* <MDEditor
                           value={issue || ""}
                           onChange={setIssue}
                           previewOptions={{
@@ -308,7 +303,7 @@ export default function TicketDetail(props) {
                           }}
                           preview="edit"
                           hideToolbar={true}
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>
@@ -329,26 +324,23 @@ export default function TicketDetail(props) {
                 </div>
                 <div className={edit ? "hidden" : "mt-3"}>
                   {note ? (
-                    <MDEditor.Markdown
-                      source={note}
-                      rehypePlugins={[[rehypeSanitize]]}
-                    />
+                    {note}
                   ) : (
                     <span>No work has been entered yet</span>
                   )}
                 </div>
                 <div className={edit ? "mt-3" : "hidden"}>
                   <div className="hidden sm:block">
-                    <MDEditor
+                    {/* <MDEditor
                       value={note || ""}
                       onChange={setNote}
                       previewOptions={{
                         rehypePlugins: [[rehypeSanitize]],
                       }}
-                    />
+                    /> */}
                   </div>
                   <div className="sm:hidden">
-                    <MDEditor
+                    {/* <MDEditor
                       value={note || ""}
                       onChange={setNote}
                       previewOptions={{
@@ -356,7 +348,7 @@ export default function TicketDetail(props) {
                       }}
                       preview="edit"
                       hideToolbar={true}
-                    />
+                    /> */}
                   </div>
                 </div>
               </section>

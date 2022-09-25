@@ -2,12 +2,6 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 
-import rehypeSanitize from "rehype-sanitize";
-import MDEditor from "@uiw/react-md-editor";
-
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-
 export default function ClientNotesModal({ notes, id }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(notes);
@@ -97,14 +91,14 @@ export default function ClientNotesModal({ notes, id }) {
                       Client Notes
                     </Dialog.Title>
                     <div className="mt-2">
-                      <MDEditor
+                      {/* <MDEditor
                         value={value}
                         onChange={setValue}
                         previewOptions={{
                           rehypePlugins: [[rehypeSanitize]],
                         }}
                         height="80vh"
-                      />
+                      /> */}
 
                       <div className="mt-4 float-right">
                         <button

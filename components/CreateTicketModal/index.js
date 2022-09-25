@@ -92,6 +92,8 @@ export default function CreateTicketModal() {
     // CLOSE: () => setOpen(false),
   };
 
+  console.log(issue)
+
   return (
     <HotKeys handlers={handlers}>
       <div>
@@ -207,7 +209,7 @@ export default function CreateTicketModal() {
                       preview="edit"
                     /> */}
 
-                    <TipTap />
+                    <TipTap value={issue} setContent={setIssue} />
 
                     <div className="flex flex-row space-x-4 pb-2 mt-2">
                       <Listbox value={company} onChange={setCompany}>
