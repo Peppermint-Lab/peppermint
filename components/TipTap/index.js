@@ -7,8 +7,15 @@ import * as Icons from "./Icons";
 
 export default function TipTap({ setContent, value }) {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      
+    ],
     content: value,
+    onUpdate({ editor }) {
+      setContent(editor.getHTML());
+    },
+    
   });
 
   const toggleBold = useCallback(() => {
@@ -34,8 +41,6 @@ export default function TipTap({ setContent, value }) {
   if (!editor) {
     return null;
   }
-
-  setContent = editor.getHTML();
 
   return (
     <div className="editor">

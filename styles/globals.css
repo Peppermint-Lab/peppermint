@@ -3,267 +3,190 @@
 @tailwind utilities;
 
 :root {
-    --color-pink: #ee415f;
-    --color-green: #58ce97;
-    --color-orange: #fc7d4a;
-    --color-red: #d14758;
-    --color-pale-pink: #ef6e85;
-    --color-coral: #f3907e;
-    --color-peach: #ecb38d;
-    --color-aqua: #a0ded0;
-    --color-pale-aqua: #c0ebe1;
-    --color-lightest-blue: #f8fcff;
-    --color-blue: #4c88e9;
-    --color-black: #242e39;
-    --color-gray-1: #3b424b;
-    --color-gray-2: #68707d;
-    --color-gray-3: #949fab;
-    --color-gray-4: #c7cdd4;
-    --color-gray-5: #edf1f6;
-    --color-gray-6: #f7f9fb;
-    --color-white: #fff;
-  }
-  
-  html {
-    box-sizing: border-box;
-  }
-  
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-  
-  body {
-    color: var(--color-black);
-  
-    font-size: 16px;
-    line-height: 1.5;
-  
-    font-family: sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-  
-  a {
-    color: var(--color-pink);
-  }
-  
-  p {
-    margin: 0;
-  }
-  
-  p + p {
-    margin-top: 16px;
-  }
-  
-  kbd,
-  code {
-    padding: 4px;
-  
-    border-radius: 4px;
-    background-color: var(--color-gray-6);
-    color: var(--color-gray-1);
-  
-    box-decoration-break: clone;
-  
-    font-size: 14px;
-  }
-  
-  .app {
-    width: 720px;
-    margin: 0 auto 48px;
-  }
-  
-  .editor {
-    position: relative;
-  
-    width: 100%;
-    margin-bottom: 48px;
-  }
-  
-  .menu {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    z-index: 1;
-  
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  
-    width: calc(100% - 4px);
-    height: 40px;
-    margin: 0;
-    padding: 0 8px;
-  
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom: 1px solid var(--color-gray-5);
-    background-color: var(--color-white);
-    color: var(--color-gray-2);
-  }
-  
-  .bubble-menu-dark,
-  .bubble-menu-light {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  
-    padding: 8px;
-  
-    border-radius: 4px;
-  }
-  
-  .bubble-menu-dark {
-    background-color: var(--color-gray-1);
-    color: var(--color-white);
-  }
-  
-  .bubble-menu-light {
-    border: 2px solid var(--color-gray-4);
-    background-color: var(--color-white);
-    color: var(--color-gray-2);
-  }
-  
-  .link-menu {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  
-    /* height: 40px; */
-    padding: 8px;
-  
-    border: 2px solid var(--color-gray-5);
-    border-radius: 4px;
-    background-color: var(--color-white);
-  }
-  
-  .button,
-  .button-save,
-  .button-remove,
-  .menu-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    height: 32px;
-  
-    margin: 0;
-    padding: 0 8px;
-  
-    border: 0;
-    border-radius: 4px;
-    background: transparent;
-    color: currentColor;
-  
-    font-family: inherit;
-    font-size: inherit;
-    line-height: 1;
-    font-weight: inherit;
-  
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  
-  .menu-button {
-    width: 32px;
-    padding: 0;
-  }
-  
-  .button:hover,
-  .button.is-active,
-  .menu-button:hover,
-  .menu-button.is-active {
-    background-color: var(--color-gray-5);
-    color: var(--color-black);
-  }
-  
-  .button:disabled,
-  .menu-button:disabled {
-    color: var(--color-gray-4);
-  }
-  
-  .button-save {
-    background-color: var(--color-green);
-    color: var(--color-white);
-  }
-  
-  .button-remove {
-    background-color: var(--color-red);
-    color: var(--color-white);
-  }
-  
-  .button-remove:disabled {
-    background-color: var(--color-pale-pink);
-  }
-  
-  /* Basic editor styles */
-  .ProseMirror {
-    margin-top: 4px;
-    padding: 48px 8px 8px;
-  
-    border: 2px solid var(--color-gray-4);
-    border-radius: 4px;
-  }
-  
-  .editor-mini .ProseMirror {
-    padding-top: 8px;
-  }
-  
-  .ProseMirror-focused {
-    border-color: var(--color-black);
-    outline: none;
-  }
-  
-  .ProseMirror > * + * {
-    margin-top: 16px;
-  }
-  
-  .modal-title {
-    margin: 0 0 24px;
-    font-size: 20px;
-    line-height: 1;
-  }
-  
-  .modal-close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    width: 32px;
-    height: 32px;
-  
-    border: 0;
-    border-radius: 4px;
-    background-color: transparent;
-    cursor: pointer;
-  }
-  
-  .modal-close:hover {
-    background-color: var(--color-gray-5);
-    color: var(--color-black);
-  }
-  
-  .modal-input {
-    width: 100%;
-    height: 40px;
-  
-    margin-bottom: 16px;
-  
-    border: 2px solid var(--color-gray-5);
-    border-radius: 4px;
-  
-    font-size: inherit;
-  }
-  
-  .modal-buttons {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-  
+  --color-pink: #ee415f;
+  --color-green: #58ce97;
+  --color-orange: #fc7d4a;
+  --color-red: #d14758;
+  --color-pale-pink: #ef6e85;
+  --color-coral: #f3907e;
+  --color-peach: #ecb38d;
+  --color-aqua: #a0ded0;
+  --color-pale-aqua: #c0ebe1;
+  --color-lightest-blue: #f8fcff;
+  --color-blue: #4c88e9;
+  --color-black: #242e39;
+  --color-gray-1: #3b424b;
+  --color-gray-2: #68707d;
+  --color-gray-3: #949fab;
+  --color-gray-4: #c7cdd4;
+  --color-gray-5: #edf1f6;
+  --color-gray-6: #f7f9fb;
+  --color-white: #fff;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  color: var(--color-black);
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-pink);
+}
+
+p {
+  margin: 0;
+}
+
+p+p {
+  margin-top: 16px;
+}
+
+kbd,
+code {
+  padding: 4px;
+
+  border-radius: 4px;
+  background-color: var(--color-gray-6);
+  color: var(--color-gray-1);
+
+  box-decoration-break: clone;
+
+  font-size: 14px;
+}
+
+.app {
+  width: 720px;
+  margin: 0 auto 48px;
+}
+
+.editor {
+  position: relative;
+
+  width: 100%;
+  margin-bottom: 48px;
+}
+
+.menu {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  width: calc(100% - 4px);
+  height: 40px;
+  margin: 0;
+  padding: 0 8px;
+
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom: 1px solid var(--color-gray-5);
+  background-color: var(--color-white);
+  color: var(--color-gray-2);
+}
+
+
+.button,
+.button-save,
+.button-remove,
+.menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 32px;
+
+  margin: 0;
+  padding: 0 8px;
+
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: currentColor;
+
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1;
+  font-weight: inherit;
+
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-button {
+  width: 32px;
+  padding: 0;
+}
+
+.button:hover,
+.button.is-active,
+.menu-button:hover,
+.menu-button.is-active {
+  background-color: var(--color-gray-5);
+  color: var(--color-black);
+}
+
+.button:disabled,
+.menu-button:disabled {
+  color: var(--color-gray-4);
+}
+
+.button-save {
+  background-color: var(--color-green);
+  color: var(--color-white);
+}
+
+.button-remove {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.button-remove:disabled {
+  background-color: var(--color-pale-pink);
+}
+
+/* Basic editor styles */
+.ProseMirror {
+  margin-top: 4px;
+  padding: 48px 8px 8px;
+
+  border: 2px solid var(--color-gray-4);
+  border-radius: 4px;
+  background-color: white;
+}
+
+.editor-mini .ProseMirror {
+  padding-top: 8px;
+}
+
+.ProseMirror-focused {
+  border-color: var(--color-black);
+  outline: none;
+}
+
+.ProseMirror>*+* {
+  margin-top: 16px;
+}
+
+.viewer {
+  border: none !important;
+}

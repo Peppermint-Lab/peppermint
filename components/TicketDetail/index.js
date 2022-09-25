@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { message, Upload, Divider } from "antd";
 import moment from "moment";
 import { useRouter } from "next/router";
+import * as DOMPurify from "dompurify";
 
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
 import TransferTicket from "../TransferTicket";
+import TipTap from "../TipTap";
+import renderHTML from "react-render-html";
 
 export default function TicketDetail(props) {
   const [ticket, setTicket] = useState(props.ticket);
@@ -19,9 +22,9 @@ export default function TicketDetail(props) {
   const [number, setNumber] = useState(props.ticket.number);
   const [badge, setBadge] = useState("");
   const [uploaded, setUploaded] = useState();
-  const [priority, setPriority] = useState(props.ticket.priority)
+  const [priority, setPriority] = useState(props.ticket.priority);
 
-  console.log(props)
+  console.log(props);
 
   const history = useRouter();
 
@@ -51,10 +54,11 @@ export default function TicketDetail(props) {
         detail: issue,
         note,
         title,
-        priority
+        priority,
       }),
-    }).then((res) => res.json())
-    .then(()=> history.reload())
+    })
+      .then((res) => res.json())
+      .then(() => history.reload());
   }
 
   async function updateStatus() {
@@ -104,7 +108,6 @@ export default function TicketDetail(props) {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-
   return (
     <div>
       <div className="relative">
@@ -134,7 +137,8 @@ export default function TicketDetail(props) {
                         }
                       />
                       <p className="mt-2 text-sm font-bold">
-                        opened by user: {ticket.name} from client: {ticket.client.name}
+                        opened by user: {ticket.name} from client:{" "}
+                        {ticket.client.name}
                       </p>
                     </div>
                   </div>
@@ -276,7 +280,7 @@ export default function TicketDetail(props) {
                     <h1 className="text-xl">Issue</h1>
                     <div className={edit ? "hidden" : "prose max-w-none"}>
                       {issue ? (
-                       issue
+                        renderHTML(issue)
                       ) : (
                         <span>
                           No issue has been entered yet ... Click edit to enter
@@ -285,26 +289,7 @@ export default function TicketDetail(props) {
                       )}
                     </div>
                     <div className={edit ? "prose max-w-none" : "hidden"}>
-                      <div className="hidden sm:block">
-                        {/* <MDEditor
-                          value={issue || ""}
-                          onChange={setIssue}
-                          previewOptions={{
-                            rehypePlugins: [[rehypeSanitize]],
-                          }}
-                        /> */}
-                      </div>
-                      <div className="sm:hidden">
-                        {/* <MDEditor
-                          value={issue || ""}
-                          onChange={setIssue}
-                          previewOptions={{
-                            rehypePlugins: [[rehypeSanitize]],
-                          }}
-                          preview="edit"
-                          hideToolbar={true}
-                        /> */}
-                      </div>
+                      <TipTap value={issue} setContent={setIssue} />
                     </div>
                   </div>
                 </div>
@@ -324,32 +309,13 @@ export default function TicketDetail(props) {
                 </div>
                 <div className={edit ? "hidden" : "mt-3"}>
                   {note ? (
-                    {note}
+                    renderHTML(note)
                   ) : (
                     <span>No work has been entered yet</span>
                   )}
                 </div>
                 <div className={edit ? "mt-3" : "hidden"}>
-                  <div className="hidden sm:block">
-                    {/* <MDEditor
-                      value={note || ""}
-                      onChange={setNote}
-                      previewOptions={{
-                        rehypePlugins: [[rehypeSanitize]],
-                      }}
-                    /> */}
-                  </div>
-                  <div className="sm:hidden">
-                    {/* <MDEditor
-                      value={note || ""}
-                      onChange={setNote}
-                      previewOptions={{
-                        rehypePlugins: [[rehypeSanitize]],
-                      }}
-                      preview="edit"
-                      hideToolbar={true}
-                    /> */}
-                  </div>
+                  <TipTap value={note} setContent={setNote} />
                 </div>
               </section>
             </div>
@@ -467,11 +433,17 @@ export default function TicketDetail(props) {
                         <div className="text-sm font-medium text-gray-900">
                           <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
                             <span className="font-medium leading-none text-white">
-                              {ticket.assignedTo ? ticket.assignedTo.name[0] : ""}
+                              {ticket.assignedTo
+                                ? ticket.assignedTo.name[0]
+                                : ""}
                             </span>
                           </span>
                         </div>
-                        <span>{ticket.assignedTo ? ticket.assignedTo.name : "Not currently assigned" }</span>
+                        <span>
+                          {ticket.assignedTo
+                            ? ticket.assignedTo.name
+                            : "Not currently assigned"}
+                        </span>
                       </p>
                     </li>
                   </ul>
@@ -533,7 +505,11 @@ export default function TicketDetail(props) {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span>{ticket.assignedTo ? ticket.assignedTo.name : "Not currently assigned" }</span>
+                  <span>
+                    {ticket.assignedTo
+                      ? ticket.assignedTo.name
+                      : "Not currently assigned"}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <svg
@@ -592,9 +568,10 @@ export default function TicketDetail(props) {
                           </span>
                         </div>
                         <div className="text-sm font-medium text-gray-900">
-                          <span> {ticket.assignedTo
-                                ? ticket.assignedTo.name
-                                : ""}</span>
+                          <span>
+                            {" "}
+                            {ticket.assignedTo ? ticket.assignedTo.name : ""}
+                          </span>
                         </div>
                       </div>
                     </li>

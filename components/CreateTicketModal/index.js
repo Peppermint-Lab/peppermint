@@ -4,7 +4,7 @@ import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/solid";
 import useTranslation from "next-translate/useTranslation";
 import { HotKeys } from "react-hotkeys";
 
-import TipTap from "../UI/TipTap";
+import TipTap from "../TipTap";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -199,15 +199,6 @@ export default function CreateTicketModal() {
                       onChange={(e) => setEmail(e.target.value)}
                       className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                     />
-
-                    {/* <MDEditor
-                      onChange={setIssue}
-                      value={issue}
-                      previewOptions={{
-                        rehypePlugins: [[rehypeSanitize]],
-                      }}
-                      preview="edit"
-                    /> */}
 
                     <TipTap value={issue} setContent={setIssue} />
 
