@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = removeImports({
   reactStrictMode: true,
-  swcMinify: true,
+  swcMinify: false,
   ...nextTranslate(),
 
   // webpack: (config, options) => {
