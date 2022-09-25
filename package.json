@@ -17,6 +17,8 @@
     "@heroicons/react": "^1.0.5",
     "@prisma/client": "3.7.0",
     "@tailwindcss/forms": "^0.4.0",
+    "@tiptap/react": "^2.0.0-beta.196",
+    "@tiptap/starter-kit": "^2.0.0-beta.196",
     "@uiw/react-md-editor": "^3.9.3",
     "add": "^2.0.6",
     "antd": "^4.18.3",
