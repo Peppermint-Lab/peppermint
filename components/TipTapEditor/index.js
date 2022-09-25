@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback
+ } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import classNames from "classnames";
 
 import * as Icons from "./Icons";
 
-export default function TipTap({ setContent, value }) {
+export default function TipTapEditor({ setContent, value }) {
   const editor = useEditor({
     extensions: [
       StarterKit,

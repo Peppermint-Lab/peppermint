@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 
+import TipTapEditor from "../../../components/TipTapEditor";
+
 export default function ViewNoteBook() {
   const router = useRouter();
 
@@ -61,7 +63,10 @@ export default function ViewNoteBook() {
                 />
               </div>
             </div>
-            {/* <MDEditor value={note} onChange={setNote} height="75vh" /> */}
+            <TipTapEditor
+              value={note}
+              setContent={setNote}
+            />
             <button
               onClick={async () => {
                 await save();

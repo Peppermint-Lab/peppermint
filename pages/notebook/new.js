@@ -1,13 +1,13 @@
-import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
+import TipTap from "../../components/TipTap";
 
 export default function ViewNoteBook() {
   const [value, setValue] = useState("Test");
   const [title, setTitle] = useState("Markdown Test");
 
-  const router = useRouter()
+  const router = useRouter();
 
   async function postMarkdown() {
     await fetch("/api/v1/note/create-note", {
@@ -17,12 +17,13 @@ export default function ViewNoteBook() {
       },
       body: JSON.stringify({
         value,
-        title
+        title,
       }),
-    }).then((res) => res.json())
-    .then((res) => {
-      router.push(`/notebook/${res.id}`)
     })
+      .then((res) => res.json())
+      .then((res) => {
+        router.push(`/notebook/${res.id}`);
+      });
   }
 
   return (
@@ -48,14 +49,10 @@ export default function ViewNoteBook() {
       </div>
 
       <div className="mt-4 h-full">
-        {/* <MDEditor
-          value={value}
-          onChange={setValue}
-          previewOptions={{
-            rehypePlugins: [[rehypeSanitize]],
-          }}
-          height="80vh"
-        /> */}
+
+        <div className="h-64">
+        <TipTap value={value} setContent={setValue} />
+        </div>
 
         <div className="mt-4 float-right">
           <button

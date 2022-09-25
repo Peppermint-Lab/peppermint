@@ -4,7 +4,7 @@ import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/solid";
 import useTranslation from "next-translate/useTranslation";
 import { HotKeys } from "react-hotkeys";
 
-import TipTap from "../TipTap";
+import TipTapEditor from "../TipTapEditor";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -200,7 +200,7 @@ export default function CreateTicketModal() {
                       className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                     />
 
-                    <TipTap value={issue} setContent={setIssue} />
+                    <TipTapEditor value={issue} setContent={setIssue} />
 
                     <div className="flex flex-row space-x-4 pb-2 mt-2">
                       <Listbox value={company} onChange={setCompany}>

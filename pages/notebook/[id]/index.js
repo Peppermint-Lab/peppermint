@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Link from "next/link";
+import renderHTML from "react-render-html";
 
 
 
@@ -13,6 +14,8 @@ export default function ViewNoteBook() {
   }
 
   const { data, status, error } = useQuery("viewMarkdown", getMarkdown);
+
+  console.log(data)
 
   return (
     <div>
@@ -28,7 +31,7 @@ export default function ViewNoteBook() {
           </Link>
 
           <div className="mt-4">
-           
+           {renderHTML(data.data.note)}
           </div>
         </>
       )}

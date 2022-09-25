@@ -172,6 +172,7 @@ code {
   border: 2px solid var(--color-gray-4);
   border-radius: 4px;
   background-color: white;
+  min-height: 240px;
 }
 
 .editor-mini .ProseMirror {

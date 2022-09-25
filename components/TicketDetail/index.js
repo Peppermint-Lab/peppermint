@@ -7,7 +7,7 @@ import * as DOMPurify from "dompurify";
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
 import TransferTicket from "../TransferTicket";
-import TipTap from "../TipTap";
+import TipTapEditor from "../TipTapEditor";
 import renderHTML from "react-render-html";
 
 export default function TicketDetail(props) {
@@ -289,7 +289,7 @@ export default function TicketDetail(props) {
                       )}
                     </div>
                     <div className={edit ? "prose max-w-none" : "hidden"}>
-                      <TipTap value={issue} setContent={setIssue} />
+                      <TipTapEditor value={issue} setContent={setIssue} />
                     </div>
                   </div>
                 </div>
@@ -315,7 +315,7 @@ export default function TicketDetail(props) {
                   )}
                 </div>
                 <div className={edit ? "mt-3" : "hidden"}>
-                  <TipTap value={note} setContent={setNote} />
+                  <TipTapEditor value={note} setContent={setNote} />
                 </div>
               </section>
             </div>
