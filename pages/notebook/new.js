@@ -2,12 +2,6 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-import rehypeSanitize from "rehype-sanitize";
-
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function ViewNoteBook() {
   const [value, setValue] = useState("Test");
@@ -54,14 +48,14 @@ export default function ViewNoteBook() {
       </div>
 
       <div className="mt-4 h-full">
-        <MDEditor
+        {/* <MDEditor
           value={value}
           onChange={setValue}
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],
           }}
           height="80vh"
-        />
+        /> */}
 
         <div className="mt-4 float-right">
           <button

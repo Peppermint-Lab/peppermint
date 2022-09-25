@@ -3,11 +3,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
-
 export default function ViewNoteBook() {
   const router = useRouter();
 
@@ -66,7 +61,7 @@ export default function ViewNoteBook() {
                 />
               </div>
             </div>
-            <MDEditor value={note} onChange={setNote} height="75vh" />
+            {/* <MDEditor value={note} onChange={setNote} height="75vh" /> */}
             <button
               onClick={async () => {
                 await save();
