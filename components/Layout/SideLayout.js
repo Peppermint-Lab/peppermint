@@ -46,13 +46,18 @@ export default function SideLayout({ children }) {
     });
   }, []);
 
-
   const navigation = [
     {
       name: t("sl_dashboard"),
       href: `/${locale}/`,
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
+    },
+    {
+      name: t("sl_notebook"),
+      href: `/${locale}/notebook`,
+      icon: FolderIcon,
+      current: location.pathname === "/notebook" ? true : false,
     },
     {
       name: t("sl_tickets"),
@@ -63,12 +68,6 @@ export default function SideLayout({ children }) {
         { name: "Closed", href: `/${locale}/tickets/closed` },
         { name: "Unissued", href: `/${locale}/tickets/unissued` },
       ],
-    },
-    {
-      name: t("sl_notebook"),
-      href: `/${locale}/notebook`,
-      icon: FolderIcon,
-      current: location.pathname === "/notebook" ? true : false,
     },
   ];
 

@@ -4,11 +4,7 @@ import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/solid";
 import useTranslation from "next-translate/useTranslation";
 import { HotKeys } from "react-hotkeys";
 
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
-
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
+import TipTap from "../UI/TipTap";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -202,14 +198,16 @@ export default function CreateTicketModal() {
                       className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                     />
 
-                    <MDEditor
+                    {/* <MDEditor
                       onChange={setIssue}
                       value={issue}
                       previewOptions={{
                         rehypePlugins: [[rehypeSanitize]],
                       }}
                       preview="edit"
-                    />
+                    /> */}
+
+                    <TipTap />
 
                     <div className="flex flex-row space-x-4 pb-2 mt-2">
                       <Listbox value={company} onChange={setCompany}>
@@ -238,51 +236,52 @@ export default function CreateTicketModal() {
                                 leaveTo="opacity-0"
                               >
                                 <Listbox.Options className="absolute z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                  {options.map((person) => (
-                                    <Listbox.Option
-                                      key={person.id}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active
-                                            ? "text-gray-900 bg-gray-100"
-                                            : "text-gray-900",
-                                          "cursor-default select-none relative py-2 pl-3 pr-9"
-                                        )
-                                      }
-                                      value={person}
-                                    >
-                                      {({ company, active }) => (
-                                        <>
-                                          <span
-                                            className={classNames(
-                                              company
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "block truncate"
-                                            )}
-                                          >
-                                            {person.name}
-                                          </span>
-
-                                          {company ? (
+                                  {options !== undefined &&
+                                    options.map((person) => (
+                                      <Listbox.Option
+                                        key={person.id}
+                                        className={({ active }) =>
+                                          classNames(
+                                            active
+                                              ? "text-gray-900 bg-gray-100"
+                                              : "text-gray-900",
+                                            "cursor-default select-none relative py-2 pl-3 pr-9"
+                                          )
+                                        }
+                                        value={person}
+                                      >
+                                        {({ company, active }) => (
+                                          <>
                                             <span
                                               className={classNames(
-                                                active
-                                                  ? "text-white"
-                                                  : "text-indigo-600",
-                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                company
+                                                  ? "font-semibold"
+                                                  : "font-normal",
+                                                "block truncate"
                                               )}
                                             >
-                                              <CheckIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                              />
+                                              {person.name}
                                             </span>
-                                          ) : null}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
+
+                                            {company ? (
+                                              <span
+                                                className={classNames(
+                                                  active
+                                                    ? "text-white"
+                                                    : "text-indigo-600",
+                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                )}
+                                              >
+                                                <CheckIcon
+                                                  className="h-5 w-5"
+                                                  aria-hidden="true"
+                                                />
+                                              </span>
+                                            ) : null}
+                                          </>
+                                        )}
+                                      </Listbox.Option>
+                                    ))}
                                 </Listbox.Options>
                               </Transition>
                             </div>
@@ -344,51 +343,52 @@ export default function CreateTicketModal() {
                                       </>
                                     )}
                                   </Listbox.Option>
-                                  {users.map((person) => (
-                                    <Listbox.Option
-                                      key={person.id}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active
-                                            ? "text-gray-900 bg-gray-100"
-                                            : "text-gray-900",
-                                          "cursor-default select-none relative py-2 pl-3 pr-9"
-                                        )
-                                      }
-                                      value={person}
-                                    >
-                                      {({ engineer, active }) => (
-                                        <>
-                                          <span
-                                            className={classNames(
-                                              engineer
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "block truncate"
-                                            )}
-                                          >
-                                            {person.name}
-                                          </span>
-
-                                          {engineer ? (
+                                  {users !== undefined &&
+                                    users.map((person) => (
+                                      <Listbox.Option
+                                        key={person.id}
+                                        className={({ active }) =>
+                                          classNames(
+                                            active
+                                              ? "text-gray-900 bg-gray-100"
+                                              : "text-gray-900",
+                                            "cursor-default select-none relative py-2 pl-3 pr-9"
+                                          )
+                                        }
+                                        value={person}
+                                      >
+                                        {({ engineer, active }) => (
+                                          <>
                                             <span
                                               className={classNames(
-                                                active
-                                                  ? "text-white"
-                                                  : "text-indigo-600",
-                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                engineer
+                                                  ? "font-semibold"
+                                                  : "font-normal",
+                                                "block truncate"
                                               )}
                                             >
-                                              <CheckIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                              />
+                                              {person.name}
                                             </span>
-                                          ) : null}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
+
+                                            {engineer ? (
+                                              <span
+                                                className={classNames(
+                                                  active
+                                                    ? "text-white"
+                                                    : "text-indigo-600",
+                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                )}
+                                              >
+                                                <CheckIcon
+                                                  className="h-5 w-5"
+                                                  aria-hidden="true"
+                                                />
+                                              </span>
+                                            ) : null}
+                                          </>
+                                        )}
+                                      </Listbox.Option>
+                                    ))}
                                 </Listbox.Options>
                               </Transition>
                             </div>
