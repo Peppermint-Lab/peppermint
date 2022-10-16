@@ -71,7 +71,7 @@ export default function TicketsMobileList({ tickets }) {
                     </span>
                     <p className="text-gray-900 m-2">{ticket.issue}</p>
                     <div className="text-gray-700 text-sm font-bold mt-2">
-                      <Link href={`ticket/${ticket.id}`} className="">
+                      <Link href={`/tickets/${ticket.id}`} className="">
                         View Full Ticket
                       </Link>
                     </div>

@@ -46,7 +46,7 @@ export default function SideLayout({ children }) {
     });
   }, []);
 
-  console.log(location)
+  console.log(location);
 
   const navigation = [
     {
@@ -65,11 +65,7 @@ export default function SideLayout({ children }) {
       name: t("sl_tickets"),
       current: location.pathname.includes("/ticket") ? true : false,
       icon: TicketIcon,
-      children: [
-        { name: "Open", href: `/${locale}/tickets` },
-        { name: "Closed", href: `/${locale}/tickets/closed` },
-        { name: "Unissued", href: `/${locale}/tickets/unissued` },
-      ],
+      href: `/${locale}/tickets`,
     },
   ];
 
@@ -178,7 +174,6 @@ export default function SideLayout({ children }) {
                             as="div"
                             key={item.name}
                             className="space-y-1"
-                            
                           >
                             {({ open }) => (
                               <>

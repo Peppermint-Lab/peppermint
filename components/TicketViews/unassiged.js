@@ -8,14 +8,10 @@ import {
 } from "react-table";
 import Link from "next/link";
 import Loader from "react-spinners/ClipLoader";
+import { useRouter } from "next/router";
 
-
+import MarkdownPreview from "../MarkdownPreview";
 import TicketsMobileList from "../../components/TicketsMobileList";
-
-async function getUserTickets() {
-  const res = await fetch("/api/v1/ticket/all");
-  return res.json();
-}
 
 function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
   return (
@@ -34,10 +30,10 @@ function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
 function Table({ columns, data }) {
   const filterTypes = React.useMemo(
     () => ({
-      // // Add a new fuzzyTextFilterFn filter type.
+      // Add a new fuzzyTextFilterFn filter type.
       // fuzzyText: fuzzyTextFilterFn,
-      // // Or, override the default text filter to use
-      // // "startWith"
+      // Or, override the default text filter to use
+      // "startWith"
       text: (rows, id, filterValue) =>
         rows.filter((row) => {
           const rowValue = row.values[id];
@@ -109,7 +105,6 @@ function Table({ columns, data }) {
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         {column.render("Header")}
-                        {/* Render the columns filter UI */}
                         <div>
                           {column.canFilter ? column.render("Filter") : null}
                         </div>
@@ -192,8 +187,16 @@ function Table({ columns, data }) {
   );
 }
 
-export default function TicketHitory() {
-  const { data, status, error } = useQuery("userTickets", getUserTickets);
+async function unassignedTickets() {
+  const res = await fetch("/api/v1/ticket/unissued");
+  return res.json();
+}
+
+export default function UnassignedTickets() {
+  const { data, status, error } = useQuery(
+    "unassignedTickets",
+    unassignedTickets
+  );
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
@@ -208,45 +211,13 @@ export default function TicketHitory() {
     },
     {
       Header: "Name",
-      accessor: "client.name",
+      accessor: "name",
       id: "name",
     },
     {
       Header: "Client",
-      accessor: "name",
+      accessor: "client.name",
       id: "client_name",
-    },
-    {
-      Header: "Engineer",
-      accessor: "assignedTo.name",
-      id: "engineer",
-    },
-    {
-      Header: "Status",
-      accessor: (data) => (data.isComplete ? "Completed" : "Outstanding"),
-      id: "status",
-
-      Cell: ({ value }) => {
-        let p = value;
-        let badge;
-
-        if (p === "Outstanding") {
-          badge = high;
-        }
-        if (p === "Completed") {
-          badge = low;
-        }
-
-        return (
-          <>
-            <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-            >
-              {value}
-            </span>
-          </>
-        );
-      },
     },
     {
       Header: "Priority",
@@ -280,9 +251,13 @@ export default function TicketHitory() {
     {
       Header: "Title",
       accessor: "title",
-      id: "title",
+      id: "Title",
       Cell: ({ value }) => {
-        return <div className="truncate">{value}</div>;
+        return (
+          <div className="truncate">
+            <MarkdownPreview data={value} />
+          </div>
+        );
       },
     },
     {
@@ -299,42 +274,48 @@ export default function TicketHitory() {
   ]);
 
   return (
-    <div>
-
+    <>
       {status === "success" && (
-          <>
-            {data.tickets.legnth > 0 && (
-                <>
-                  <div className="hidden sm:block">
-                    <Table columns={columns} data={data.tickets}/>
-                  </div>
+        <>
+          {data.tickets && (
+            <>
+              <div className="hidden sm:block">
+                <Table columns={columns} data={data.tickets} />
+              </div>
 
-                  <div className="sm:hidden">
-                    <TicketsMobileList tickets={data.tickets}/>
-                  </div>
-                </>
-            )}
+              <div className="sm:hidden">
+                <TicketsMobileList tickets={data.tickets} />
+              </div>
+            </>
+          )}
 
-            {data.tickets.length === 0 && (
-                <>
-                  <div className="text-center mt-72">
+          {data.tickets.length === 0 && (
+            <>
+              <div className="text-center mt-72">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
 
-                    <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 text-gray-400"
-                         fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-
-
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No tickets have been created yet
-                      :)</h3>
-                    <p className="mt-1 text-sm text-gray-500">Get started by creating a new project.</p>
-                  </div>
-                </>
-            )}
-          </>
+                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                  There are currently no unassiged tickets :) 
+                </h3>
+                
+              </div>
+            </>
+          )}
+        </>
       )}
-    </div>
+    </>
   );
 }

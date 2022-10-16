@@ -57,6 +57,7 @@ export default function Home() {
   const stats = [
     { name: t('open_tickets'), stat: openTickets, href: "/tickes" },
     { name: t('completed_tickets'), stat: completedTickets, href: "/tickets/closed" },
+    { name: 'Unassigned Tickets', stat: completedTickets, href: "/tickets/unassigned" },
   ];
 
   const propsUpload = {
