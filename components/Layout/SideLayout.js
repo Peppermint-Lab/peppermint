@@ -46,6 +46,8 @@ export default function SideLayout({ children }) {
     });
   }, []);
 
+  console.log(location)
+
   const navigation = [
     {
       name: t("sl_dashboard"),
@@ -176,6 +178,7 @@ export default function SideLayout({ children }) {
                             as="div"
                             key={item.name}
                             className="space-y-1"
+                            
                           >
                             {({ open }) => (
                               <>

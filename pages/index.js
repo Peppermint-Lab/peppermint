@@ -55,8 +55,8 @@ export default function Home() {
   }
 
   const stats = [
-    { name: t('open_tickets'), stat: openTickets, href: "/ticket" },
-    { name: t('completed_tickets'), stat: completedTickets, href: "/history" },
+    { name: t('open_tickets'), stat: openTickets, href: "/tickes" },
+    { name: t('completed_tickets'), stat: completedTickets, href: "/tickets/closed" },
   ];
 
   const propsUpload = {
