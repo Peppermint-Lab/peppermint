@@ -45,7 +45,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     // CLOSE: ["esc"],
   };
 
-  if (router.asPath.slice(0, 5) === "/auth") {
+  if (router.asPath.slice(0, 5) === "/auth" || router.pathname === '/tickets/new/[id]' || router.pathname === '/tickets/new/[id]/submitted') {
     return (
       <SessionProvider session={session}>
         <Component {...pageProps} />
@@ -62,6 +62,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       </SessionProvider>
     );
   }
+
+  console.log(router)
 
   return (
     <>
