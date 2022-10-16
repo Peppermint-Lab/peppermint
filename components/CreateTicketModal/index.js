@@ -159,7 +159,7 @@ export default function CreateTicketModal() {
               >
                 <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full sm:p-6">
                   <div className="flex flex-row w-full">
-                    <span className="text-md pb-2 font-bold">
+                    <span className="text-md pb-2 font-bold text-xl">
                       {t("ticket_new")}
                     </span>
 

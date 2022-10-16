@@ -18,7 +18,7 @@
     "ticket_new": "Nytt ärende",
     "ticket_name_here": "Ange namn här...",
     "ticket_email_here": "Ange e-post här...",
-    "ticket_details": "Ärendenamn, håll det kort...",
+    "ticket_details": "Biljetttitel",
     "ticket_select_client": "Välj kund",
     "ticket_select_eng": "Välj tekniker",
     "ticket_extra_details": "Ange extra detaljer här, markdown är möjligt...",

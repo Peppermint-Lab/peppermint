@@ -19,7 +19,7 @@
   "ticket_new": "Neues Ticket",
   "ticket_name_here": "Namen hier eingeben",
   "ticket_email_here": "E-Mail hier eingeben",
-  "ticket_details": "Geben Sie hier den Titel für das Ticket ein, halten Sie es kurz",
+  "ticket_details": "Tickettitel",
   "ticket_select_client": "Bitte Auftraggeber auswählen",
   "ticket_select_eng": "Bitte Ingenieur auswählen",
   "ticket_extra_details": "Geben Sie hier zusätzliche Details ein.... Markdown wird unterstützt",
