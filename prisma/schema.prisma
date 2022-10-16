@@ -137,6 +137,14 @@ model Email {
   secure    Boolean  @default(false)
 }
 
+model Config {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  notifications Json // Array of service names and an active field of TRUE OR FALSE
+}
+
 enum Hook {
   ticket_created
   ticket_status_changed
