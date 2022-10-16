@@ -207,7 +207,7 @@ export default function CreateTicketModal() {
                         {({ open }) => (
                           <>
                             <div className="mt-1 relative">
-                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-sm">
+                              <Listbox.Button className="bg-white relative w-full min-w-[164px] border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-sm">
                                 <span className="block truncate">
                                   {company
                                     ? company.name
@@ -286,7 +286,7 @@ export default function CreateTicketModal() {
                         {({ open }) => (
                           <>
                             <div className="mt-1 relative">
-                              <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ">
+                              <Listbox.Button className="bg-white relative min-w-[164px] w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ">
                                 <span className="block truncate">
                                   {engineer
                                     ? engineer.name
