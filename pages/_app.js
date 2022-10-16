@@ -45,7 +45,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     // CLOSE: ["esc"],
   };
 
-  if (router.asPath.slice(0, 5) === "/auth" || router.pathname === '/tickets/new/[id]' || router.pathname === '/tickets/new/[id]/submitted') {
+  if (
+    router.asPath.slice(0, 5) === "/auth" ||
+    router.pathname === "/tickets/new/[id]" ||
+    router.pathname === "/tickets/new/[id]/submitted"
+  ) {
     return (
       <SessionProvider session={session}>
         <Component {...pageProps} />
@@ -63,41 +67,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     );
   }
 
-  console.log(router)
-
   return (
     <>
-      <Head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-        />
-        <meta
-          name="description"
-          content="Ticket management system selfhosted open source"
-        />
-        <meta name="keywords" content="Keywords" />
-        <title>Peppermint</title>
-
-        <link href="/favicon/favicon.ico" rel="icon" />
-        <link
-          href="/favicon/favicon-16x16.png"
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-        />
-        <link
-          href="/favicon/favicon-32x32.png"
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-        />
-        <link rel="apple-touch-icon" href="/apple-icon.png"></link>
-        <meta name="theme-color" content="#317EFB" />
-      </Head>
-
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
           {/* <ThemeProvider attribute="class"> */}
