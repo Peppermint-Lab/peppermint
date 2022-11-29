@@ -15,7 +15,7 @@ import { useTheme } from "next-themes";
 
 import useTranslation from "next-translate/useTranslation";
 
-import CreateTicketModal from "../CreateTicketModal";
+import CreateTicketModal from "../components/CreateTicketModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -496,7 +496,7 @@ export default function SideLayout({ children }) {
             <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-bg-slate-100 ">
               <div className="py-6">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
-                  <div className="py-4o ">{children}</div>
+                  <div className="py-4">{children}</div>
                 </div>
               </div>
             </main>

@@ -11,7 +11,7 @@ import { HotKeys } from "react-hotkeys";
 
 import { ThemeProvider } from "next-themes";
 
-import SideLayout from "../components/Layout/SideLayout";
+import SideLayout from "../layouts/SideLayout";
 
 const queryClient = new QueryClient();
 
