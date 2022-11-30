@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-import TipTap from "../../components/TipTap";
+import TipTap from "../../components/TipTapEditor";
 
 export default function ViewNoteBook() {
   const [value, setValue] = useState("Test");
@@ -22,7 +22,7 @@ export default function ViewNoteBook() {
     })
       .then((res) => res.json())
       .then((res) => {
-        router.push(`/notebook/${res.id}`);
+        router.push(`/notebook`);
       });
   }
 

@@ -13,9 +13,7 @@ export default function Notebooks() {
         New NoteBook
       </a>
 
-      <NoteBookLayout>
-        <ViewNoteBook id="1" />
-      </NoteBookLayout>
+      <NoteBookLayout />
     </>
   );
 }
