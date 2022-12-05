@@ -46,8 +46,6 @@ export default function SideLayout({ children }) {
     });
   }, []);
 
-  console.log(location);
-
   const navigation = [
     {
       name: t("sl_dashboard"),

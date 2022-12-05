@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch } from "@headlessui/react";
 
 import Webhooks from "../../components/Webhooks";
@@ -20,7 +20,19 @@ export default function Settings() {
   const [telegram, setTelegram] = useState(false);
   const [slack, setSlack] = useState(false);
 
-  console.log(discord);
+  async function checkActive() {
+    const res = await fetch("/api/v1/admin/notifications/active");
+    const data = await res.json();
+
+    setEmails(data.emails);
+    setDiscord(data.discord);
+    setTelegram(data.telegram);
+    setSlack(data.slack);
+  }
+
+  useEffect(() => {
+    checkActive();
+  }, []);
 
   return (
     <div>
@@ -98,10 +110,10 @@ export default function Settings() {
                           </Switch.Description>
                         </span>
                         <Switch
-                          checked={emails}
-                          onChange={setEmails}
+                          checked={emails.active}
+                          onChange={() => null()}
                           className={classNames(
-                            emails ? "bg-indigo-600" : "bg-gray-200",
+                            emails ? "bg-green-600" : "bg-gray-200",
                             "mr-4 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                           )}
                         >
@@ -113,9 +125,7 @@ export default function Settings() {
                             )}
                           />
                         </Switch>
-                        {emails && (
-                          <NotificationsSettingsModal />
-                        )}
+                        {emails && <NotificationsSettingsModal />}
                       </Switch.Group>
 
                       <Switch.Group

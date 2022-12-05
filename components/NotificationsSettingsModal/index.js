@@ -12,6 +12,32 @@ export default function NotificationsSettingsModal() {
 
   const [open, setOpen] = useState(false);
 
+  const [host, setHost] = useState();
+  const [reply, setReply] = useState();
+  const [port, setPort] = useState();
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+
+  async function postData() {
+    await fetch("/api/v1/admin/notifications/emails/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        host: host,
+        reply: reply,
+        port: port,
+        username: username,
+        password: password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  }
+
   const cancelButtonRef = useRef(null);
 
   return (
@@ -78,9 +104,7 @@ export default function NotificationsSettingsModal() {
             >
               <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full sm:p-6">
                 <div className="flex flex-row w-full border-b border-gray-300">
-                  <span className="text-md pb-2 font-bold">
-                    Email Settings
-                  </span>
+                  <span className="text-md pb-2 font-bold">Email Settings</span>
 
                   <button
                     type="button"
@@ -106,6 +130,7 @@ export default function NotificationsSettingsModal() {
                       id="smtp"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       placeholder=""
+                      onChange={(e) => setHost(e.target.value)}
                     />
                   </div>
                   <label
@@ -121,6 +146,7 @@ export default function NotificationsSettingsModal() {
                       id="reply"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       placeholder="noreply@peppermint.sh"
+                      onChange={(e) => setReply(e.target.value)}
                     />
                   </div>
                   <label
@@ -136,6 +162,7 @@ export default function NotificationsSettingsModal() {
                       id="port"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       placeholder="403"
+                      onChange={(e) => setPort(e.target.value)}
                     />
                   </div>
                   <label
@@ -151,6 +178,7 @@ export default function NotificationsSettingsModal() {
                       id="email"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       placeholder=""
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </div>
                   <label
@@ -166,6 +194,7 @@ export default function NotificationsSettingsModal() {
                       id="password"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       placeholder=""
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                 </div>
@@ -175,7 +204,7 @@ export default function NotificationsSettingsModal() {
                     <div className="mt-2 float-right">
                       <button
                         onClick={() => {
-                          setOpen(false);
+                          postData();
                         }}
                         type="button"
                         className="inline-flex justify-center rounded-md shadow-sm px-2.5 py-1.5 border border-transparent text-xs bg-green-600 font-medium text-white hover:bg-green-700 focus:outline-none "

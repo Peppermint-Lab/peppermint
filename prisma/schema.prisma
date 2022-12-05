@@ -137,6 +137,9 @@ model Email {
   user      String
   pass      String
   secure    Boolean  @default(false)
+  host      String
+  reply     String
+  port      String
 }
 
 model Config {
