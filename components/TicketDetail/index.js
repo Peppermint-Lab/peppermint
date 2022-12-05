@@ -24,8 +24,6 @@ export default function TicketDetail(props) {
   const [uploaded, setUploaded] = useState();
   const [priority, setPriority] = useState(props.ticket.priority);
 
-  console.log(props);
-
   const history = useRouter();
 
   const { id } = history.query;
@@ -56,9 +54,7 @@ export default function TicketDetail(props) {
         title,
         priority,
       }),
-    })
-      .then((res) => res.json())
-      .then(() => history.reload());
+    }).then((res) => res.json());
   }
 
   async function updateStatus() {
@@ -469,6 +465,17 @@ export default function TicketDetail(props) {
                     <span>Name - {ticket.name}</span>
                     <span>Email - {ticket.email} </span>
                     <span>Number - {ticket.client.number} </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-10">
+                <div>
+                  <Divider className="bg-gray-200" />
+                  <h2 className="text-sm font-medium text-gray-500">
+                    Linked Tickets
+                  </h2>
+                  <div className="flex flex-col">
+                    
                   </div>
                 </div>
               </div>

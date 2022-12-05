@@ -42,6 +42,7 @@ model Ticket {
   clientId   Int
   userId     Int?
   TicketFile TicketFile[]
+  linked     Json?
 }
 
 model Client {
