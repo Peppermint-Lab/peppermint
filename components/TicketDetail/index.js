@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { message, Upload, Divider } from "antd";
 import moment from "moment";
-import { useRouter } from "next/router";
-import * as DOMPurify from "dompurify";
+import Router, { useRouter } from "next/router";
 
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
 import TransferTicket from "../TransferTicket";
 import TipTapEditor from "../TipTapEditor";
 import renderHTML from "react-render-html";
+import LinkTicket from "../LinkTicketModal";
 
 export default function TicketDetail(props) {
   const [ticket, setTicket] = useState(props.ticket);
@@ -29,6 +29,8 @@ export default function TicketDetail(props) {
   const { id } = history.query;
 
   let file = [];
+
+  console.log(Object.entries(ticket.linked))
 
   useEffect(() => {
     if (ticket.priority === "Low") {
@@ -54,7 +56,9 @@ export default function TicketDetail(props) {
         title,
         priority,
       }),
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .then(() => history.reload());
   }
 
   async function updateStatus() {
@@ -66,7 +70,9 @@ export default function TicketDetail(props) {
       body: JSON.stringify({
         status: !props.ticket.isComplete,
       }),
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .then(() => history.reload());
   }
 
   const propsUpload = {
@@ -269,6 +275,9 @@ export default function TicketDetail(props) {
                     </div>
                     <div className="mt-4 flex space-x-3 md:mt-0">
                       <TransferTicket id={props.ticket.id} />
+                    </div>
+                    <div className="mt-4 flex space-x-3 md:mt-0">
+                      <LinkTicket id={props.ticket.id} />
                     </div>
                   </div>
 
@@ -475,7 +484,11 @@ export default function TicketDetail(props) {
                     Linked Tickets
                   </h2>
                   <div className="flex flex-col">
-                    
+                    {Object.entries(ticket.linked).length > 0 && (
+                      Object.entries(ticket.linked).map((ticket) => (
+                        <span>{ticket[1].title} - #{ticket[1].id}</span>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>

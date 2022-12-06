@@ -11,7 +11,7 @@ export default function Ticket() {
     return res.json();
   };
 
-  const { data, status } = useQuery("fetchTickets", fetchTicketById);
+  const { data, status, refetch } = useQuery("fetchTickets", fetchTicketById);
 
   return (
     <div>
@@ -31,7 +31,7 @@ export default function Ticket() {
 
       {status === "success" && (
         <div>
-          <TicketDetail ticket={data.tickets} />
+          <TicketDetail ticket={data.tickets} refetchData={() => refetch} />
         </div>
       )}
     </div>
