@@ -30,8 +30,6 @@ export default function TicketDetail(props) {
 
   let file = [];
 
-  console.log(Object.entries(ticket.linked))
-
   useEffect(() => {
     if (ticket.priority === "Low") {
       setBadge(low);
@@ -484,11 +482,14 @@ export default function TicketDetail(props) {
                     Linked Tickets
                   </h2>
                   <div className="flex flex-col">
-                    {Object.entries(ticket.linked).length > 0 && (
+                    {ticket.linked &&
+                      Object.entries(ticket.linked).length > 0 &&
                       Object.entries(ticket.linked).map((ticket) => (
-                        <span>{ticket[1].title} - #{ticket[1].id}</span>
-                      ))
-                    )}
+                        <span>
+                          {ticket[1].title} - #{ticket[1].id}
+                        </span>
+                      ))}
+                    {ticket.linked === null && <span>No linked tickets</span>}
                   </div>
                 </div>
               </div>
