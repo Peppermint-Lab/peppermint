@@ -12,7 +12,7 @@ export const config = {
 };
 
 export default async function UploadFile(req, res) {
-  //   const session = await getSession({ req });
+  const session = await getSession({ req });
 
   const { id } = req.query;
 
@@ -20,39 +20,54 @@ export default async function UploadFile(req, res) {
   await createNecessaryDirectoriesSync(`${uploadPath}/x`);
 
   try {
-    const form = new IncomingForm({
-      uploadDir: `./storage`,
-      keepExtensions: true,
-    });
+    if (session.user) {
+      const form = new IncomingForm({
+        uploadDir: `./storage`,
+        keepExtensions: true,
+      });
 
-    form.parse(req, (err, fields, files) => {
-      const f = files.file;
+      const filesystem = fs;
 
-      const u = `${uploadPath}/${f.originalFilename}`;
+      form.parse(req, (err, fields, files) => {
+        const f = files.file;
 
-      fs.rename(`./storage/${f.newFilename}`, u, async function (err) {
-        if (err) throw err;
-        console.log("Successfully renamed - AKA moved!");
+        const u = `${uploadPath}/${f.originalFilename}`;
 
-        try {
-          await prisma.ticketFile
-            .create({
-              data: {
-                filename: f.originalFilename,
-                ticketId: Number(id),
-                path: u,
-              },
-            })
-            .then((err) => console.log(err));
-          return res
-            .status(200)
-            .json({ message: "File Uploaded", success: true });
-        } catch (error) {
-          console.log(error);
-          return res.status(500).json({ message: error, success: false });
+        if(filesystem === 's3') {
+          // upload to s3
+
+          
+        
+        } else {
+          fs.rename(`./storage/${f.newFilename}`, u, async function (err) {
+            if (err) throw err;
+            console.log("Successfully renamed - AKA moved!");
+  
+            try {
+              await prisma.ticketFile
+                .create({
+                  data: {
+                    filename: f.originalFilename,
+                    ticketId: Number(id),
+                    path: u,
+                  },
+                })
+                .then((err) => console.log(err));
+              return res
+                .status(200)
+                .json({ message: "File Uploaded", success: true });
+            } catch (error) {
+              console.log(error);
+              return res.status(500).json({ message: error, success: false });
+            }
+          });
         }
       });
-    });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Not authorized", success: false });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

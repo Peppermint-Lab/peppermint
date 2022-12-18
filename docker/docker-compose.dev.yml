@@ -28,3 +28,19 @@ services:
       - 1025:1025
     healthcheck:
       test: echo | telnet 127.0.0.1 1025
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_storage:/data
+    environment:
+      MINIO_ROOT_USER: peppermint
+      MINIO_ROOT_PASSWORD: peppermint#Strong#Password
+    command: server --console-address ":9001" /data
+
+volumes:
+  minio_storage: {}
+    

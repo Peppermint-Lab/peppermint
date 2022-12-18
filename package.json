@@ -13,6 +13,7 @@
     "pm2-prod": "yarn run migrate && yarn run generate && yarn run seed && yarn run build && pm2 start npm --name \"next\" -- start"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.231.0",
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.5",
     "@prisma/client": "3.7.0",
