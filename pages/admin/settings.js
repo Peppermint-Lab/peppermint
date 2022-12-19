@@ -24,10 +24,10 @@ export default function Settings() {
     const res = await fetch("/api/v1/admin/notifications/active");
     const data = await res.json();
 
-    setEmails(data.emails);
-    setDiscord(data.discord);
-    setTelegram(data.telegram);
-    setSlack(data.slack);
+    data.emails ? setEmails(data.emails) : null
+    data.discord ? setDiscord(data.discord) : null
+    // setTelegram(data.telegram);
+    // setSlack(data.slack);
   }
 
   useEffect(() => {
