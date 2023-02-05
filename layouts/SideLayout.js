@@ -236,17 +236,15 @@ export default function SideLayout({ children }) {
                         aria-labelledby="projects-headline"
                       >
                         {adminNavigation.map((item) => (
-                          <Link key={item.name} href={item.href}>
-                            <a
-                              className={classNames(
-                                item.current
-                                  ? "bg-green-500 text-white"
-                                  : "text-white hover:bg-green-400 hover:text-white",
-                                "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                              )}
-                            >
+                          <Link key={item.name} href={item.href} className={classNames(
+                            item.current
+                              ? "bg-green-500 text-white"
+                              : "text-white hover:bg-green-400 hover:text-white",
+                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                          )}>
+                           
                               <span className="truncate">{item.name}</span>
-                            </a>
+                           
                           </Link>
                         ))}
                         <a
@@ -274,8 +272,8 @@ export default function SideLayout({ children }) {
                     <p className="text-base font-medium text-white">
                       {session.user.name}
                     </p>
-                    <Link href="/settings">
-                      <a className="flex-shrink-0 group block">
+                    <Link href="/settings" className="flex-shrink-0 group block">
+                    
                         <div className="flex items-center">
                           <div className="">
                             <p className="text-sm font-medium text-white">
@@ -283,7 +281,7 @@ export default function SideLayout({ children }) {
                             </p>
                           </div>
                         </div>
-                      </a>
+                      
                     </Link>
                   </div>
                 </div>
@@ -307,11 +305,11 @@ export default function SideLayout({ children }) {
                       alt="Workflow"
                     />
                     <Link href="https://peppermint.sh">
-                      <a target="_blank" rel="noreferrer">
+                     
                         <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
                           Peppermint
                         </h1>
-                      </a>
+                    
                     </Link>
                   </div>
                   <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
@@ -402,10 +400,8 @@ export default function SideLayout({ children }) {
                       aria-labelledby="projects-headline"
                     >
                       {adminNavigation.map((item) => (
-                        <Link key={item.name} href={item.href}>
-                          <a className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white">
+                        <Link key={item.name} href={item.href}  className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white">
                             <span className="truncate">{item.name}</span>
-                          </a>
                         </Link>
                       ))}
                       <a
@@ -468,11 +464,10 @@ export default function SideLayout({ children }) {
                           {session.user.name} [{lang}/{session.user.language}]
                         </p>
                         <Link href="/settings">
-                          <a href="/settings">
+                        
                             <p className="text-xs font-medium text-white group-hover:text-green-400">
                               View profile
                             </p>
-                          </a>
                         </Link>
                       </div>
                     </div>
