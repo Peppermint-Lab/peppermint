@@ -73,11 +73,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <QueryClientProvider client={queryClient}>
           {/* <ThemeProvider attribute="class"> */}
           <Auth>
-            <HotKeys keyMap={keyMap}>
+            {/* <HotKeys keyMap={keyMap}> */}
               <SideLayout>
                 <Component {...pageProps} />
               </SideLayout>
-            </HotKeys>
+            {/* </HotKeys> */}
           </Auth>
 
           {/* </ThemeProvider> */}

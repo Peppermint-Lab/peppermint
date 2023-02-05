@@ -143,7 +143,6 @@ export default function Home() {
           <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
             {stats.map((item) => (
               <Link href={item.href}>
-                <a>
                   <div
                     key={item.name}
                     className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
@@ -155,7 +154,6 @@ export default function Home() {
                       {item.stat}
                     </dd>
                   </div>
-                </a>
               </Link>
             ))}
           </dl>
