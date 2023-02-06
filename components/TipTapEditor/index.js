@@ -45,12 +45,12 @@ export default function TipTapEditor({ setContent, value }) {
 
   return (
     <div className="editor">
-      <div className="menu">
+      {/* <div className="menu">
         <button
           className="menu-button"
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
-        >
+        >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
           <Icons.RotateLeft />
         </button>
         <button
@@ -102,7 +102,7 @@ export default function TipTapEditor({ setContent, value }) {
         </button>
       </div>
 
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} /> */}
     </div>
   );
 }
