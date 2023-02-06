@@ -15,7 +15,7 @@ import { useTheme } from "next-themes";
 
 import useTranslation from "next-translate/useTranslation";
 
-import CreateTicketModal from "../components/CreateTicketModal";
+// import CreateTicketModal from "../components/CreateTicketModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -151,7 +151,7 @@ export default function SideLayout({ children }) {
                       />
                     </div>
                     <nav className="mt-5 px-2 space-y-1">
-                      <CreateTicketModal />
+                      {/* <CreateTicketModal /> */}
                       {navigation.map((item) =>
                         !item.children ? (
                           <div key={item.name}>
@@ -313,7 +313,7 @@ export default function SideLayout({ children }) {
                     </Link>
                   </div>
                   <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
-                    <CreateTicketModal />
+                    {/* <CreateTicketModal /> */}
                     {navigation.map((item) =>
                       !item.children ? (
                         <div key={item.name}>
