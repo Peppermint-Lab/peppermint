@@ -4,7 +4,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import classNames from "classnames";
 
-import * as Icons from "./Icons";
+import * as Icons from "./icons";
 
 export default function TipTapEditor({ setContent, value }) {
   const editor = useEditor({
