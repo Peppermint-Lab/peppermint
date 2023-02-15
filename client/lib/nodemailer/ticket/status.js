@@ -1,5 +1,5 @@
 import nodeMailer from "nodemailer";
-import { prisma } from "../../../prisma/prisma";
+import { prisma } from "../../../../prisma/prisma";
 
 export async function sendTicketStatus(ticket) {
   let mail;
