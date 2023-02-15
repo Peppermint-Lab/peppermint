@@ -9,6 +9,9 @@ export default async function getUnissued(req, res) {
           client: {
             select: { id: true, name: true },
           },
+          team: {
+            select: { id: true, name: true },
+          },
         },
       })
       .then((tickets) => {

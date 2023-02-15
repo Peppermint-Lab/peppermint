@@ -1,6 +1,6 @@
 const { prisma } = require("../../../../prisma/prisma");
 
-export default async function allTickets(req,res) {
+export default async function allTickets(req, res) {
   try {
     await prisma.ticket
       .findMany({
@@ -9,6 +9,9 @@ export default async function allTickets(req,res) {
             select: { id: true, name: true },
           },
           assignedTo: {
+            select: { id: true, name: true },
+          },
+          team: {
             select: { id: true, name: true },
           },
         },

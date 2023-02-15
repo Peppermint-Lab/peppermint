@@ -246,6 +246,11 @@ export default function OpenTickets() {
       },
     },
     {
+      Header: "Team",
+      accessor: "team.name",
+      id: "team_name",
+    },
+    {
       Header: "Title",
       accessor: "title",
       id: "Title",

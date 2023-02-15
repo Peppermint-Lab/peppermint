@@ -249,6 +249,11 @@ export default function ClosedTickets() {
       },
     },
     {
+      Header: "Team",
+      accessor: "team.name",
+      id: "team_name",
+    },
+    {
       Header: "Title",
       accessor: "title",
       id: "Title",

@@ -249,6 +249,11 @@ export default function UnassignedTickets() {
       },
     },
     {
+      Header: "Team",
+      accessor: "team.name",
+      id: "team_name",
+    },
+    {
       Header: "Title",
       accessor: "title",
       id: "Title",
@@ -308,9 +313,8 @@ export default function UnassignedTickets() {
                 </svg>
 
                 <h3 className="mt-2 text-sm font-medium text-gray-900">
-                  There are currently no unassiged tickets :) 
+                  There are currently no unassiged tickets :)
                 </h3>
-                
               </div>
             </>
           )}

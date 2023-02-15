@@ -246,6 +246,11 @@ export default function AssignedTickets() {
       },
     },
     {
+      Header: "Team",
+      accessor: "team.name",
+      id: "team_name",
+    },
+    {
       Header: "Title",
       accessor: "title",
       id: "Title",

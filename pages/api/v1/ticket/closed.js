@@ -5,6 +5,11 @@ export default async function handler(req, res) {
     await prisma.ticket
       .findMany({
         where: { isComplete: true },
+        include: {
+          team: {
+            select: { id: true, name: true },
+          },
+        },
       })
       .then((tickets) => {
         res.json({ tickets });

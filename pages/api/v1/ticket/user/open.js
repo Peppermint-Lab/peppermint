@@ -15,6 +15,9 @@ export default async function userOpen(req, res) {
           assignedTo: {
             select: { id: true, name: true },
           },
+          team: {
+            select: { id: true, name: true },
+          },
         },
       })
       .then((tickets) => {
