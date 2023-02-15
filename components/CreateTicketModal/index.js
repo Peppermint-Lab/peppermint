@@ -22,7 +22,7 @@ export default function CreateTicketModal() {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [teams, setTeams] = useState([]);
 
   const cancelButtonRef = useRef(null);
 
@@ -41,9 +41,9 @@ export default function CreateTicketModal() {
       });
   };
 
-  async function getUsers() {
+  async function getTeams() {
     try {
-      await fetch(`/api/v1/users/all`, {
+      await fetch(`/api/v1/admin/team/all`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export default function CreateTicketModal() {
         .then((res) => res.json())
         .then((res) => {
           if (res) {
-            setUsers(res.users);
+            setTeams(res.users);
           }
         });
     } catch (error) {
@@ -70,17 +70,17 @@ export default function CreateTicketModal() {
         name,
         title,
         company,
-        engineer: engineer.name !== "Unassigned" ? engineer : undefined,
         email,
         detail: issue,
         priority,
+        team: '2'
       }),
     });
   }
 
   useEffect(() => {
     fetchClients();
-    getUsers();
+    getTeams();
   }, []);
 
   const newTicketKey = React.useCallback(() => {
@@ -92,7 +92,7 @@ export default function CreateTicketModal() {
     // CLOSE: () => setOpen(false),
   };
 
-  console.log(issue)
+  console.log(issue);
 
   return (
     <HotKeys handlers={handlers}>
@@ -288,9 +288,7 @@ export default function CreateTicketModal() {
                             <div className="mt-1 relative">
                               <Listbox.Button className="bg-white relative min-w-[164px] w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ">
                                 <span className="block truncate">
-                                  {engineer
-                                    ? engineer.name
-                                    : t("ticket_select_eng")}
+                                  {engineer ? engineer.name : "Select a Team"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
@@ -336,10 +334,10 @@ export default function CreateTicketModal() {
                                       </>
                                     )}
                                   </Listbox.Option>
-                                  {users !== undefined &&
-                                    users.map((person) => (
+                                  {teams !== undefined &&
+                                    teams.map((team) => (
                                       <Listbox.Option
-                                        key={person.id}
+                                        key={team.id}
                                         className={({ active }) =>
                                           classNames(
                                             active
@@ -348,7 +346,7 @@ export default function CreateTicketModal() {
                                             "cursor-default select-none relative py-2 pl-3 pr-9"
                                           )
                                         }
-                                        value={person}
+                                        value={team}
                                       >
                                         {({ engineer, active }) => (
                                           <>
@@ -360,7 +358,7 @@ export default function CreateTicketModal() {
                                                 "block truncate"
                                               )}
                                             >
-                                              {person.name}
+                                              {team.name}
                                             </span>
 
                                             {engineer ? (

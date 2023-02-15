@@ -2,7 +2,7 @@ const { prisma } = require("../../../../prisma/prisma");
 import { sendTicketCreate } from "../../../../lib/nodemailer/ticket/create";
 
 export default async function createTicket(req, res) {
-  const { name, company, detail, title, priority, email, engineer, issue } = req.body;
+  const { name, company, detail, title, priority, email, issue } = req.body;
 
   try {
     await prisma.ticket
@@ -11,17 +11,23 @@ export default async function createTicket(req, res) {
           name,
           title,
           detail,
-          priority: priority ? priority : 'low',
+          priority: priority ? priority : "low",
           issue,
           email,
-          client: company ? {
-            connect: { id: Number(company.id) },
-          } : undefined,
-          assignedTo: engineer ? {
-            connect: { id: Number(engineer.id) },
-          } : undefined,
+          client: company
+            ? {
+                connect: { id: Number(company.id) },
+              }
+            : undefined,
+          // assignedTo: engineer
+          //   ? {
+          //       connect: { id: Number(engineer.id) },
+          //     }
+          //   : undefined,
           isComplete: Boolean(false),
-
+          team: {
+            connect: { id: 2 },
+          },
         },
       })
       .then((ticket) => {

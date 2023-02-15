@@ -35,6 +35,7 @@ model Team {
   name      String
   levels    Json?
   members   User[]
+  Ticket    Ticket[]
 }
 
 model Ticket {
@@ -54,6 +55,9 @@ model Ticket {
   userId     Int?
   TicketFile TicketFile[]
   linked     Json?
+
+  team   Team? @relation(fields: [teamId], references: [id])
+  teamId Int?
 }
 
 model Client {
