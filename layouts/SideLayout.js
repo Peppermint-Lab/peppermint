@@ -15,7 +15,7 @@ import { useTheme } from "next-themes";
 
 import useTranslation from "next-translate/useTranslation";
 
-// import CreateTicketModal from "../components/CreateTicketModal";
+import CreateTicketModal from "../components/CreateTicketModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -151,7 +151,7 @@ export default function SideLayout({ children }) {
                       />
                     </div>
                     <nav className="mt-5 px-2 space-y-1">
-                      {/* <CreateTicketModal /> */}
+                      <CreateTicketModal />
                       {navigation.map((item) =>
                         !item.children ? (
                           <div key={item.name}>
@@ -236,15 +236,17 @@ export default function SideLayout({ children }) {
                         aria-labelledby="projects-headline"
                       >
                         {adminNavigation.map((item) => (
-                          <Link key={item.name} href={item.href} className={classNames(
-                            item.current
-                              ? "bg-green-500 text-white"
-                              : "text-white hover:bg-green-400 hover:text-white",
-                            "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                          )}>
-                           
-                              <span className="truncate">{item.name}</span>
-                           
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? "bg-green-500 text-white"
+                                : "text-white hover:bg-green-400 hover:text-white",
+                              "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                            )}
+                          >
+                            <span className="truncate">{item.name}</span>
                           </Link>
                         ))}
                         <a
@@ -272,16 +274,17 @@ export default function SideLayout({ children }) {
                     <p className="text-base font-medium text-white">
                       {session.user.name}
                     </p>
-                    <Link href="/settings" className="flex-shrink-0 group block">
-                    
-                        <div className="flex items-center">
-                          <div className="">
-                            <p className="text-sm font-medium text-white">
-                              View profile
-                            </p>
-                          </div>
+                    <Link
+                      href="/settings"
+                      className="flex-shrink-0 group block"
+                    >
+                      <div className="flex items-center">
+                        <div className="">
+                          <p className="text-sm font-medium text-white">
+                            View profile
+                          </p>
                         </div>
-                      
+                      </div>
                     </Link>
                   </div>
                 </div>
@@ -305,15 +308,13 @@ export default function SideLayout({ children }) {
                       alt="Workflow"
                     />
                     <Link href="https://peppermint.sh">
-                     
-                        <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
-                          Peppermint
-                        </h1>
-                    
+                      <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
+                        Peppermint
+                      </h1>
                     </Link>
                   </div>
                   <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
-                    {/* <CreateTicketModal /> */}
+                    <CreateTicketModal />
                     {navigation.map((item) =>
                       !item.children ? (
                         <div key={item.name}>
@@ -400,8 +401,12 @@ export default function SideLayout({ children }) {
                       aria-labelledby="projects-headline"
                     >
                       {adminNavigation.map((item) => (
-                        <Link key={item.name} href={item.href}  className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white">
-                            <span className="truncate">{item.name}</span>
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white"
+                        >
+                          <span className="truncate">{item.name}</span>
                         </Link>
                       ))}
                       <a
@@ -464,10 +469,9 @@ export default function SideLayout({ children }) {
                           {session.user.name} [{lang}/{session.user.language}]
                         </p>
                         <Link href="/settings">
-                        
-                            <p className="text-xs font-medium text-white group-hover:text-green-400">
-                              View profile
-                            </p>
+                          <p className="text-xs font-medium text-white group-hover:text-green-400">
+                            View profile
+                          </p>
                         </Link>
                       </div>
                     </div>
