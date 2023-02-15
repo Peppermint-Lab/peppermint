@@ -3,8 +3,6 @@
 const { prisma } = require("../../../../../prisma/prisma");
 import { getSession } from "next-auth/react";
 
-// Send back notifcation status's to the client
-
 export default async function handler(req, res) {
   const session = await getSession({ req });
 
@@ -12,22 +10,31 @@ export default async function handler(req, res) {
 
   const new_data = [];
 
-  for (let i = 0; i < members.length; i++) {
-    new_data.push({
-      name: req.body.name,
-      members: {
-        connect: {
-          id: req.body.members[i].id,
+  if (members !== undefined) {
+    for (let i = 0; i < members.length; i++) {
+      new_data.push({
+        name: name,
+        members: {
+          connect: {
+            id: members[i].id,
+          },
         },
-      },
-    });
+      });
+    }
   }
 
   try {
     if (session.user) {
       if (session.user.isAdmin) {
         const team = await prisma.team.createMany({
-          data: [...new_data],
+          data: {
+            name: name,
+            levels: {
+              low: true,
+              medium: true,
+              high: true,
+            },
+          },
         });
 
         res.status(200).json({ success: true, team: team });

@@ -8,14 +8,9 @@ import {
   usePagination,
 } from "react-table";
 import ClientNotesModal from "../../components/ClientNotesModal";
-import CreateClient from "../../components/CreateClientModal";
+import CreateTeamModal from "../../components/CreateTeamModal";
 import UpdateClientModal from "../../components/UpdateClientModal";
 import Link from "next/link";
-
-const fetchAllClients = async () => {
-  const res = await fetch("/api/v1/clients/all");
-  return res.json();
-};
 
 function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
   return (
@@ -191,11 +186,13 @@ function Table({ columns, data }) {
   );
 }
 
+const fetchAllTeams = async () => {
+  const res = await fetch("/api/v1/admin/team/all");
+  return res.json();
+};
+
 export default function Teams() {
-  const { data, status, refetch } = useQuery(
-    "fetchAllClients",
-    fetchAllClients
-  );
+  const { data, status, refetch } = useQuery("fetchAllTeams", fetchAllTeams);
 
   //   async function deleteClient(id) {
   //     try {
@@ -250,7 +247,9 @@ export default function Teams() {
         <div className="py-6">
           <div className="flex flex-row max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <h1 className="text-2xl font-semibold text-gray-900">Teams</h1>
-            <div className="ml-3">{/* <CreateClient /> */}</div>
+            <div className="ml-3">
+              <CreateTeamModal />
+            </div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="py-4">
@@ -272,10 +271,10 @@ export default function Teams() {
               {status === "success" && (
                 <div>
                   <div className="hidden sm:block">
-                    <Table columns={columns} data={data.clients} />
+                    <Table columns={columns} data={data.teams} />
                   </div>
 
-                  <div className="sm:hidden">
+                  {/* <div className="sm:hidden">
                     {data.clients.map((client) => (
                       <div
                         key={client.id}
@@ -313,7 +312,7 @@ export default function Teams() {
                         </div>
                       </div>
                     ))}
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
