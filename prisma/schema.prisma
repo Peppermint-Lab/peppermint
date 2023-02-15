@@ -24,6 +24,17 @@ model User {
   tickets                      Ticket[]
   file                         UserFile[]
   notes                        Notes[]
+  Team                         Team?      @relation(fields: [teamId], references: [id])
+  teamId                       Int?
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  levels    Json?
+  members   User[]
 }
 
 model Ticket {
