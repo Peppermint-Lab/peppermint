@@ -11,7 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "imap": "^0.8.19",
+    "mail-listener5": "^2.1.2",
+    "mailparser": "^3.6.3"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
