@@ -166,6 +166,18 @@ model Config {
   notifications Json // Array of service names and an active field of TRUE OR FALSE
 }
 
+model Imap_Email {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  from    String
+  subject String
+  body    String
+  text    String
+  html    String
+}
+
 enum Hook {
   ticket_created
   ticket_status_changed

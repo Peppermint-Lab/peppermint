@@ -24,7 +24,6 @@
     "nodemon": "^2.0.20"
   },
   "prisma": {
-    "seed": "node prisma/seed.js",
     "schema": "./prisma/schema.prisma"
   }
 }

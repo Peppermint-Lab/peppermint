@@ -2,6 +2,8 @@ const express = require("express");
 const Imap = require("imap");
 const { simpleParser } = require("mailparser");
 
+const { prisma } = require("./prisma/prisma");
+
 require("dotenv").config();
 
 const app = express();
@@ -62,17 +64,27 @@ const getEmails = () => {
                 // Link Email to ticket
                 // Create a new ticket using subject as title & text as description
 
+                const imap = await prisma.imap_Email.create({
+                  data: {
+                    from: from.text,
+                    subject: subject ? subject : "No Subject",
+                    body: text ? text : "No Body",
+                    html: html,
+                    text: textAsHtml,
+                  },
+                });
 
-                
+                console.log(imap);
+                parsed;
               });
             });
-            msg.once("attributes", (attrs) => {
-              const { uid } = attrs;
-              imap.addFlags(uid, ["\\Seen"], () => {
-                // Mark the email as read after reading it
-                console.log("Marked as read!");
-              });
-            });
+            // msg.once("attributes", (attrs) => {
+            //   const { uid } = attrs;
+            //   imap.addFlags(uid, ["\\Seen"], () => {
+            //     // Mark the email as read after reading it
+            //     console.log("Marked as read!");
+            //   });
+            // });
           });
           f.once("error", (ex) => {
             return Promise.reject(ex);
