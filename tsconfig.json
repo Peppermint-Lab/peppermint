@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "client/pages/index.js", "client/pages/_app.js", "client/pages/swagger.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "app/client/pages/index.js", "app/client/pages/_app.js", "app/client/pages/swagger.js"],
   "exclude": ["node_modules"]
 }
