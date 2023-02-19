@@ -1,8 +1,15 @@
+// import express from "express";
+// import Imap from "imap";
+// import { simpleParser } from "mailparser";
+// import { PrismaClient } from "database";
+
 const express = require("express");
 const Imap = require("imap");
 const { simpleParser } = require("mailparser");
 
-const { prisma } = require("./prisma/prisma");
+const { PrismaClient } = require('database')
+
+const client = new PrismaClient();
 
 require("dotenv").config();
 
@@ -16,10 +23,6 @@ app.listen(
   PORT,
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
-
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-
-// Check mailbox every 5 minutes for new emails, and mark them as read when dealt with
 
 const date = new Date(["2023", "02", "16"]);
 
@@ -56,7 +59,6 @@ const getEmails = () => {
           f.on("message", (msg) => {
             msg.on("body", (stream) => {
               simpleParser(stream, async (err, parsed) => {
-                console.log(parsed);
                 const { from, subject, textAsHtml, text, html } = parsed;
                 console.log(from, subject, textAsHtml, text, html);
 
@@ -64,7 +66,7 @@ const getEmails = () => {
                 // Link Email to ticket
                 // Create a new ticket using subject as title & text as description
 
-                const imap = await prisma.imap_Email.create({
+                const imap = await client.imap_Email.create({
                   data: {
                     from: from.text,
                     subject: subject ? subject : "No Subject",
@@ -75,7 +77,6 @@ const getEmails = () => {
                 });
 
                 console.log(imap);
-                parsed;
               });
             });
             // msg.once("attributes", (attrs) => {

@@ -23,7 +23,7 @@
     "predev": "npm run generate"
   },
   "dependencies": {
-    "@prisma/client": "4.10.1"
+    "@prisma/client": "latest"
   },
   "devDependencies": {
     "config": "*",
