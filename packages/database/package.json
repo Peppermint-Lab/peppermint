@@ -1,0 +1,24 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push --skip-generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "4.10.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
+    "prisma": "^4.10.1"
+  },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  }
+}
