@@ -79,13 +79,13 @@ const getEmails = () => {
                 console.log(imap);
               });
             });
-            // msg.once("attributes", (attrs) => {
-            //   const { uid } = attrs;
-            //   imap.addFlags(uid, ["\\Seen"], () => {
-            //     // Mark the email as read after reading it
-            //     console.log("Marked as read!");
-            //   });
-            // });
+            msg.once("attributes", (attrs) => {
+              const { uid } = attrs;
+              imap.addFlags(uid, ["\\Seen"], () => {
+                // Mark the email as read after reading it
+                console.log("Marked as read!");
+              });
+            });
           });
           f.once("error", (ex) => {
             return Promise.reject(ex);
