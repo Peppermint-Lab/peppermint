@@ -7,8 +7,8 @@ import Link from "next/link";
 
 import useTranslation from 'next-translate/useTranslation';
 
-import ListTodo from "../client/components/ListTodo";
-import ListUserFiles from "../client/components/ListUserFiles";
+import ListTodo from "../components/ListTodo";
+import ListUserFiles from "../components/ListUserFiles";
 
 export default function Home() {
   const { data: session } = useSession();
