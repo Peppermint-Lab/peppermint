@@ -33,9 +33,9 @@ model Team {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   name      String
-  levels    Json?
-  members   User[]
-  Ticket    Ticket[]
+
+  members User[]
+  Ticket  Ticket[]
 }
 
 model Ticket {
@@ -55,6 +55,7 @@ model Ticket {
   userId     Int?
   TicketFile TicketFile[]
   linked     Json?
+  fromImap   Boolean
 
   team   Team? @relation(fields: [teamId], references: [id])
   teamId Int?
@@ -176,6 +177,24 @@ model Imap_Email {
   body    String?
   text    String?
   html    String?
+
+  EmailQueue   EmailQueue? @relation(fields: [emailQueueId], references: [id])
+  emailQueueId Int?
+}
+
+model EmailQueue {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  name     String
+  username String
+  password String
+  hostname String
+  tls      Boolean @default(true)
+  teams    Json?
+
+  imap Imap_Email[]
 }
 
 enum Hook {
