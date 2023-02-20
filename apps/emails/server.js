@@ -13,31 +13,30 @@ app.use(express.json());
 
 app.listen(PORT, console.log(`Server running on port ${PORT}`));
 
-const date = new Date(["2023", "02", "19"]);
+const date = new Date();
 const today = date.getDate();
 const month = date.getMonth();
 const year = date.getFullYear();
 const d = new Date([year, month, today]);
 
-var imapConfig = {
-  user: process.env.username,
-  password: process.env.password,
-  host: "imap.gmail.com",
-  port: 993,
-  tls: true,
-  tlsOptions: { servername: "imap.gmail.com" },
-};
-
-console.log(date, d);
-
 const getEmails = () => {
+  console.log(date, d);
   try {
+    var imapConfig = {
+      user: process.env.username,
+      password: process.env.password,
+      host: "imap.gmail.com",
+      port: 993,
+      tls: true,
+      tlsOptions: { servername: "imap.gmail.com" },
+    };
+
     const imap = new Imap(imapConfig);
     imap.connect();
 
     imap.once("ready", () => {
       imap.openBox("INBOX", false, () => {
-        imap.search(["UNSEEN", ["ON", [d]]], (err, results) => {
+        imap.search(["UNSEEN", ["ON", [date]]], (err, results) => {
           if (err) {
             console.log(err);
             return;
@@ -58,10 +57,6 @@ const getEmails = () => {
                 const { from, subject, textAsHtml, text, html } = parsed;
                 // console.log(from, subject, textAsHtml, text, html);
 
-                // Connect to primary database and insert the email into the database
-                // Link Email to ticket
-                // Create a new ticket using subject as title & text as description
-
                 const imap = await client.imap_Email.create({
                   data: {
                     from: from.text,
@@ -69,6 +64,7 @@ const getEmails = () => {
                     body: text ? text : "No Body",
                     html: html,
                     text: textAsHtml,
+                    emailQueueId: Number(1),
                   },
                 });
 
@@ -80,6 +76,7 @@ const getEmails = () => {
                     isComplete: Boolean(false),
                     priority: "low",
                     fromImap: Boolean(true),
+                    detail: text,
                   },
                 });
 
@@ -112,8 +109,8 @@ const getEmails = () => {
     imap.once("end", () => {
       console.log("Connection ended");
     });
-  } catch (ex) {
-    console.log("an error occurred");
+  } catch (error) {
+    console.log("an error occurred ", error);
   }
 };
 

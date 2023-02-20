@@ -390,14 +390,14 @@ export default function SideLayout({ children }) {
                               </Disclosure.Button>
                               <Disclosure.Panel className="space-y-1">
                                 {item.children.map((subItem) => (
-                                  <Disclosure.Button
-                                    key={subItem.name}
-                                    as="a"
-                                    href={subItem.href}
-                                    className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400 focus:outline-none"
-                                  >
-                                    {subItem.name}
-                                  </Disclosure.Button>
+                                  <Link href={`/queue/${subItem.name}`}>
+                                    <Disclosure.Button
+                                      key={subItem.name}
+                                      className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400 focus:outline-none"
+                                    >
+                                      {subItem.name}
+                                    </Disclosure.Button>
+                                  </Link>
                                 ))}
                               </Disclosure.Panel>
                             </>
