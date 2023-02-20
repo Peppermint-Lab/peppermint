@@ -28,12 +28,7 @@ export default async function handler(req, res) {
       if (session.user.isAdmin) {
         const team = await prisma.team.createMany({
           data: {
-            name: name,
-            levels: {
-              low: true,
-              medium: true,
-              high: true,
-            },
+            name: name
           },
         });
 

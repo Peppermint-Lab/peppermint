@@ -101,7 +101,7 @@ export default function CreateTicketModal() {
           <button
             onClick={() => setOpen(true)}
             type="button"
-            className="group flex items-center pl-7 pr-2 py-2 text-sm font-medium w-full rounded-md hover:bg-green-400 hover:text-white"
+            className="group flex items-center pl-2 pr-2 py-2 text-sm font-medium w-full rounded-md hover:bg-green-400 hover:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

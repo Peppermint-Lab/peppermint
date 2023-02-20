@@ -14,7 +14,6 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 
 import useTranslation from "next-translate/useTranslation";
-
 import CreateTicketModal from "../components/CreateTicketModal";
 
 function classNames(...classes) {
@@ -23,6 +22,8 @@ function classNames(...classes) {
 
 export default function SideLayout({ children }) {
   const location = useRouter();
+
+  const [queues, setQueues] = useState([]);
 
   const { t, lang } = useTranslation("peppermint");
 
@@ -39,12 +40,6 @@ export default function SideLayout({ children }) {
   }
 
   const locale = session.user.language || "en";
-
-  useEffect(() => {
-    location.push(location.pathname, location.asPath, {
-      locale,
-    });
-  }, []);
 
   const navigation = [
     {
@@ -64,6 +59,13 @@ export default function SideLayout({ children }) {
       current: location.pathname.includes("/ticket") ? true : false,
       icon: TicketIcon,
       href: `/${locale}/tickets`,
+    },
+    {
+      name: "Email Queue",
+      current: false,
+      icon: TicketIcon,
+      href: `/${locale}/tickets`,
+      children: queues,
     },
   ];
 
@@ -87,6 +89,20 @@ export default function SideLayout({ children }) {
   ];
 
   const { theme, setTheme } = useTheme();
+
+  async function getQueues() {
+    const res = await fetch("/api/v1/admin/email-queue/check").then((res) =>
+      res.json()
+    );
+    setQueues(res.queues);
+  }
+
+  useEffect(() => {
+    location.push(location.pathname, location.asPath, {
+      locale,
+    });
+    getQueues();
+  }, []);
 
   return (
     <div>
@@ -165,7 +181,7 @@ export default function SideLayout({ children }) {
                                 item.current
                                   ? "bg-green-400 text-white"
                                   : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
-                                "group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md"
+                                "group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
                               )}
                             >
                               {item.name}
@@ -205,16 +221,17 @@ export default function SideLayout({ children }) {
                                   {item.name}
                                 </Disclosure.Button>
                                 <Disclosure.Panel className="space-y-1">
-                                  {item.children.map((subItem) => (
-                                    <Disclosure.Button
-                                      key={subItem.name}
-                                      as="a"
-                                      href={subItem.href}
-                                      className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400"
-                                    >
-                                      {subItem.name}
-                                    </Disclosure.Button>
-                                  ))}
+                                  {item.children.length > 0 &&
+                                    item.children.map((subItem) => (
+                                      <Disclosure.Button
+                                        key={subItem.name}
+                                        as="a"
+                                        href={subItem.href}
+                                        className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400"
+                                      >
+                                        {subItem.name}
+                                      </Disclosure.Button>
+                                    ))}
                                 </Disclosure.Panel>
                               </>
                             )}
@@ -328,7 +345,7 @@ export default function SideLayout({ children }) {
                               item.current
                                 ? "bg-green-400 text-white"
                                 : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
-                              "group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md"
+                              "group w-full flex items-center pl-2 pr-2 py-2 text-sm font-medium rounded-md"
                             )}
                           >
                             <item.icon
@@ -351,7 +368,7 @@ export default function SideLayout({ children }) {
                                   item.current
                                     ? "bg-green-400 text-white"
                                     : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
-                                  "group w-full flex items-center pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
+                                  "group w-full flex items-center pl-2 pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
                                 )}
                               >
                                 <svg
