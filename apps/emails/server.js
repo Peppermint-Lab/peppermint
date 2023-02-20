@@ -1,30 +1,23 @@
-// import express from "express";
-// import Imap from "imap";
-// import { simpleParser } from "mailparser";
-// import { PrismaClient } from "database";
-
 const express = require("express");
 const Imap = require("imap");
 const { simpleParser } = require("mailparser");
-
-const { PrismaClient } = require('database')
-
-const client = new PrismaClient();
+const { PrismaClient } = require("database");
 
 require("dotenv").config();
 
+const client = new PrismaClient();
 const app = express();
+const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
 
-const PORT = process.env.PORT || 5001;
+app.listen(PORT, console.log(`Server running on port ${PORT}`));
 
-app.listen(
-  PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-);
-
-const date = new Date(["2023", "02", "16"]);
+const date = new Date(["2023", "02", "19"]);
+const today = date.getDate();
+const month = date.getMonth();
+const year = date.getFullYear();
+const d = new Date([year, month, today]);
 
 var imapConfig = {
   user: process.env.username,
@@ -35,15 +28,16 @@ var imapConfig = {
   tlsOptions: { servername: "imap.gmail.com" },
 };
 
+console.log(date, d);
+
 const getEmails = () => {
   try {
-    console.log(date);
     const imap = new Imap(imapConfig);
     imap.connect();
 
     imap.once("ready", () => {
       imap.openBox("INBOX", false, () => {
-        imap.search(["UNSEEN", ["ON", date]], (err, results) => {
+        imap.search(["UNSEEN", ["ON", [d]]], (err, results) => {
           if (err) {
             console.log(err);
             return;
@@ -55,12 +49,14 @@ const getEmails = () => {
             return;
           }
 
+          console.log(results.length + " num of emails");
+
           const f = imap.fetch(results, { bodies: "" });
           f.on("message", (msg) => {
             msg.on("body", (stream) => {
               simpleParser(stream, async (err, parsed) => {
                 const { from, subject, textAsHtml, text, html } = parsed;
-                console.log(from, subject, textAsHtml, text, html);
+                // console.log(from, subject, textAsHtml, text, html);
 
                 // Connect to primary database and insert the email into the database
                 // Link Email to ticket
@@ -76,7 +72,18 @@ const getEmails = () => {
                   },
                 });
 
-                console.log(imap);
+                const ticket = await client.ticket.create({
+                  data: {
+                    email: imap.from,
+                    name: imap.from,
+                    title: imap.subject ? imap.subject : "-",
+                    isComplete: Boolean(false),
+                    priority: "low",
+                    fromImap: Boolean(true),
+                  },
+                });
+
+                console.log(imap, ticket);
               });
             });
             msg.once("attributes", (attrs) => {
