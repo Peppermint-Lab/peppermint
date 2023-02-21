@@ -19,96 +19,102 @@ const month = date.getMonth();
 const year = date.getFullYear();
 const d = new Date([year, month, today]);
 
-const getEmails = () => {
+const getEmails = async () => {
   console.log(date, d);
   try {
-    var imapConfig = {
-      user: process.env.username,
-      password: process.env.password,
-      host: "imap.gmail.com",
-      port: 993,
-      tls: true,
-      tlsOptions: { servername: "imap.gmail.com" },
-    };
+    const queues = await client.emailQueue.findMany({});
 
-    const imap = new Imap(imapConfig);
-    imap.connect();
+    for (let i = 0; i < queues.length; i++) {
+      var imapConfig = {
+        user: process.env.username,
+        password: process.env.password,
+        host: "imap.gmail.com",
+        port: 993,
+        tls: true,
+        tlsOptions: { servername: "imap.gmail.com" },
+      };
 
-    imap.once("ready", () => {
-      imap.openBox("INBOX", false, () => {
-        imap.search(["UNSEEN", ["ON", [date]]], (err, results) => {
-          if (err) {
-            console.log(err);
-            return;
-          }
+      const imap = new Imap(imapConfig);
+      imap.connect();
 
-          if (!results || !results.length) {
-            console.log("No new messages");
-            imap.end();
-            return;
-          }
+      imap.once("ready", () => {
+        imap.openBox("INBOX", false, () => {
+          imap.search(["UNSEEN", ["ON", [date]]], (err, results) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
 
-          console.log(results.length + " num of emails");
+            if (!results || !results.length) {
+              console.log("No new messages");
+              imap.end();
+              return;
+            }
 
-          const f = imap.fetch(results, { bodies: "" });
-          f.on("message", (msg) => {
-            msg.on("body", (stream) => {
-              simpleParser(stream, async (err, parsed) => {
-                const { from, subject, textAsHtml, text, html } = parsed;
-                // console.log(from, subject, textAsHtml, text, html);
+            console.log(results.length + " num of emails");
 
-                const imap = await client.imap_Email.create({
-                  data: {
-                    from: from.text,
-                    subject: subject ? subject : "No Subject",
-                    body: text ? text : "No Body",
-                    html: html,
-                    text: textAsHtml,
-                    emailQueueId: Number(1),
-                  },
+            const f = imap.fetch(results, { bodies: "" });
+            f.on("message", (msg) => {
+              msg.on("body", (stream) => {
+                simpleParser(stream, async (err, parsed) => {
+                  const { from, subject, textAsHtml, text, html } = parsed;
+                  // console.log(from, subject, textAsHtml, text, html);
+
+                  const imap = await client.imap_Email.create({
+                    data: {
+                      from: from.text,
+                      subject: subject ? subject : "No Subject",
+                      body: text ? text : "No Body",
+                      html: html,
+                      text: textAsHtml,
+                      emailQueueId: Number(1),
+                    },
+                  });
+
+                  const ticket = await client.ticket.create({
+                    data: {
+                      email: imap.from,
+                      name: imap.from,
+                      title: imap.subject ? imap.subject : "-",
+                      isComplete: Boolean(false),
+                      priority: "Low",
+                      fromImap: Boolean(true),
+                      detail: text,
+                    },
+                  });
+
+                  console.log(imap, ticket);
                 });
-
-                const ticket = await client.ticket.create({
-                  data: {
-                    email: imap.from,
-                    name: imap.from,
-                    title: imap.subject ? imap.subject : "-",
-                    isComplete: Boolean(false),
-                    priority: "low",
-                    fromImap: Boolean(true),
-                    detail: text,
-                  },
+              });
+              msg.once("attributes", (attrs) => {
+                const { uid } = attrs;
+                imap.addFlags(uid, ["\\Seen"], () => {
+                  // Mark the email as read after reading it
+                  console.log("Marked as read!");
                 });
-
-                console.log(imap, ticket);
               });
             });
-            msg.once("attributes", (attrs) => {
-              const { uid } = attrs;
-              imap.addFlags(uid, ["\\Seen"], () => {
-                // Mark the email as read after reading it
-                console.log("Marked as read!");
-              });
+            f.once("error", (ex) => {
+              return Promise.reject(ex);
             });
-          });
-          f.once("error", (ex) => {
-            return Promise.reject(ex);
-          });
-          f.once("end", () => {
-            console.log("Done fetching all messages!");
-            imap.end();
+            f.once("end", () => {
+              console.log("Done fetching all messages!");
+              imap.end();
+            });
           });
         });
       });
-    });
 
-    imap.once("error", (err) => {
-      console.log(err);
-    });
+      imap.once("error", (err) => {
+        console.log(err);
+      });
 
-    imap.once("end", () => {
-      console.log("Connection ended");
-    });
+      imap.once("end", () => {
+        console.log("Connection ended");
+      });
+    }
+
+    console.log('loop completed')
   } catch (error) {
     console.log("an error occurred ", error);
   }

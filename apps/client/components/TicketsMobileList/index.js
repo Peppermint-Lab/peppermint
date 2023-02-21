@@ -61,7 +61,9 @@ export default function TicketsMobileList({ tickets }) {
                       <h1 className="font-semibold leading-tight text-2xl text-gray-800 hover:text-gray-800 ml-1">
                         {ticket.title}
                       </h1>
-                      <p className="px-2">Client: {ticket.client.name}</p>
+                      <p className="px-2">
+                        Client: {ticket.client ? ticket.client.name : "n/a"}
+                      </p>
                       <p className="px-2">Name of caller: {ticket.name}</p>
                     </div>
                     <span

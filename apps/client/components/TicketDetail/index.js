@@ -138,7 +138,7 @@ export default function TicketDetail(props) {
                       />
                       <p className="mt-2 text-sm font-bold">
                         opened by user: {ticket.name} from client:{" "}
-                        {ticket.client.name}
+                        {ticket.client ? ticket.client.name : ""}
                       </p>
                     </div>
                   </div>
@@ -266,10 +266,12 @@ export default function TicketDetail(props) {
                       )}
                     </div>
                     <div className="mt-4 flex space-x-3 md:mt-0">
-                      <ClientNotesModal
-                        notes={props.ticket.client.notes}
-                        id={props.ticket.client.id}
-                      />
+                      {ticket.client ? (
+                        <ClientNotesModal
+                          notes={props.ticket.client.notes}
+                          id={props.ticket.client.id}
+                        />
+                      ) : null}
                     </div>
                     <div className="mt-4 flex space-x-3 md:mt-0">
                       <TransferTicket id={props.ticket.id} />
@@ -469,9 +471,15 @@ export default function TicketDetail(props) {
                     Contact Details
                   </h2>
                   <div className="flex flex-col">
-                    <span>Name - {ticket.name}</span>
-                    <span>Email - {ticket.email} </span>
-                    <span>Number - {ticket.client.number} </span>
+                    {ticket.client ? (
+                      <>
+                        <span>Name - {ticket.name}</span>
+                        <span>Email - {ticket.email} </span>
+                        <span>
+                          Number - {ticket.client ? ticket.client.number : ""}{" "}
+                        </span>
+                      </>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -614,9 +622,15 @@ export default function TicketDetail(props) {
                     Contact Details
                   </h2>
                   <div className="flex flex-col">
-                    <span>Name - {ticket.name}</span>
-                    <span>Email - {ticket.email} </span>
-                    <span>Number - {ticket.client.number} </span>
+                  {ticket.client ? (
+                      <>
+                        <span>Name - {ticket.name}</span>
+                        <span>Email - {ticket.email} </span>
+                        <span>
+                          Number - {ticket.client ? ticket.client.number : ""}{" "}
+                        </span>
+                      </>
+                    ) : null}
                   </div>
                 </div>
               </div>
