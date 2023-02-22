@@ -1,11 +1,17 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers/credentials";
+import KeycloakProvider from "next-auth/providers/keycloak";
 import bcrypt from "bcrypt";
 import { prisma } from "../../../prisma/prisma";
 
 const options = {
   site: process.env.NEXTAUTH_URL,
   providers: [
+    KeycloakProvider({
+      clientId: "peppermint-keycloak",
+      clientSecret: "fwsPHsJ6S6YpVmfUep9X7wcT0hgJBOUm",
+      issuer: "http://localhost:8080/realms/peppermint",
+    }),
     Providers({
       name: "Credentials",
       async authorize(credentials, req, res) {
@@ -58,14 +64,15 @@ const options = {
     },
     async session({ session, token, user }) {
       // checking for user changes on: language, email & name
+      console.log(token);
       const check_user = await prisma.user.findUnique({
-        where: { id: token.user.id },
+        where: { email: token.email },
       });
 
       if (!check_user) throw new Error("No user found");
 
-      session.id = token.user.id;
-      session.user = token.user
+      session.id = check_user.id;
+      session.user = token.user;
       return Promise.resolve(session);
     },
   },

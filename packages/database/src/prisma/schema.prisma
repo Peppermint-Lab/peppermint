@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id                           Int        @id @default(autoincrement())
+  id                           String     @id @default(uuid())
   createdAt                    DateTime   @default(now())
   updatedAt                    DateTime   @default(now())
   name                         String
@@ -25,11 +25,11 @@ model User {
   file                         UserFile[]
   notes                        Notes[]
   Team                         Team?      @relation(fields: [teamId], references: [id])
-  teamId                       Int?
+  teamId                       String?
 }
 
 model Team {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   name      String
@@ -39,9 +39,9 @@ model Team {
 }
 
 model Ticket {
-  id         Int          @id @default(autoincrement())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @default(now())
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
   name       String
   title      String
   detail     String?
@@ -49,20 +49,21 @@ model Ticket {
   note       String?
   isComplete Boolean
   priority   String
-  assignedTo User?        @relation(fields: [userId], references: [id])
-  client     Client?      @relation(fields: [clientId], references: [id])
-  clientId   Int?
-  userId     Int?
-  TicketFile TicketFile[]
   linked     Json?
   fromImap   Boolean
 
-  team   Team? @relation(fields: [teamId], references: [id])
-  teamId Int?
+  TicketFile TicketFile[]
+
+  team       Team?   @relation(fields: [teamId], references: [id])
+  teamId     String?
+  assignedTo User?   @relation(fields: [userId], references: [id])
+  client     Client? @relation(fields: [clientId], references: [id])
+  clientId   String?
+  userId     String?
 }
 
 model Client {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
   name        String
@@ -75,25 +76,27 @@ model Client {
 }
 
 model UserFile {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   filename  String
   path      String
-  userId    Int
+  
   user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model TicketFile {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   filename  String
   path      String
-  ticketId  Int
-  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
 }
 
 model Notes {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
   title      String
@@ -101,21 +104,22 @@ model Notes {
   Favourited Boolean  @default(false)
 
   createdBy User @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
 }
 
 model Todos {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   text      String
   done      Boolean  @default(false)
+  
   createdBy User     @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
 }
 
 model Webhooks {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   name      String
@@ -127,7 +131,7 @@ model Webhooks {
 }
 
 model Discord {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   name      String
@@ -137,7 +141,7 @@ model Discord {
 }
 
 model Slack {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   name      String
@@ -147,7 +151,7 @@ model Slack {
 }
 
 model Email {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   active    Boolean  @default(false)
@@ -160,7 +164,7 @@ model Email {
 }
 
 model Config {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -168,7 +172,7 @@ model Config {
 }
 
 model Imap_Email {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -179,11 +183,11 @@ model Imap_Email {
   html    String?
 
   EmailQueue   EmailQueue? @relation(fields: [emailQueueId], references: [id])
-  emailQueueId Int?
+  emailQueueId String?
 }
 
 model EmailQueue {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 

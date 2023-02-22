@@ -1,25 +1,27 @@
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken, getProviders, signIn } from "next-auth/react";
 import Link from "next/link";
 
 export async function getServerSideProps(context) {
+  const providers = await getProviders();
   return {
     props: {
       csrfToken: await getCsrfToken(context),
+      providers,
     },
   };
 }
 
-export default function Login({ csrfToken }) {
+export default function Login({ csrfToken, providers }) {
   return (
     <div>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="https://peppermint.sh/">
-              <img
-                className="mx-auto h-36 w-auto"
-                src="/login.svg"
-                alt="peppermint.sh logo"
-              />
+            <img
+              className="mx-auto h-36 w-auto"
+              src="/login.svg"
+              alt="peppermint.sh logo"
+            />
           </Link>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
@@ -100,6 +102,16 @@ export default function Login({ csrfToken }) {
                     Forgot your password?
                   </a>
                 </div> */}
+              </div>
+
+              <div>
+                {Object.values(providers).map((provider) => (
+                  <div key={provider.name}>
+                    <button onClick={() => signIn(provider.id)}>
+                      Sign in with {provider.name}
+                    </button>
+                  </div>
+                ))}
               </div>
 
               <div>

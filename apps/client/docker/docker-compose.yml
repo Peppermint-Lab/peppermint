@@ -29,6 +29,26 @@ services:
     healthcheck:
       test: echo | telnet 127.0.0.1 1025
 
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:20.0.5
+  #   command: sh -c "echo "kc.sh start-dev""
+  #   environment:
+  #     DB_VENDOR: POSTGRES
+  #     DB_ADDR: postgres
+  #     DB_DATABASE: keycloak
+  #     DB_USER: peppermin
+  #     DB_SCHEMA: public
+  #     DB_PASSWORD: 1234
+  #     KEYCLOAK_USER: admin
+  #     KEYCLOAK_PASSWORD: Pa55w0rd
+  #     # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+  #     #JDBC_PARAMS: "ssl=true"
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - postgres
+  #   restart: unless-stopped
+
   minio:
     image: minio/minio
     ports:
@@ -43,4 +63,3 @@ services:
 
 volumes:
   minio_storage: {}
-    

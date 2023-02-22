@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("database");
+
 const prisma = new PrismaClient();
 
 async function main() {
