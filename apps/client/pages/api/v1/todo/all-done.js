@@ -5,7 +5,7 @@ export default async function allDone(req, res) {
     aprisma.todos
       .updateMany({
         where: {
-          userId: Number(req.user.id),
+          userId: req.user.id,
         },
         data: {
           done: true,

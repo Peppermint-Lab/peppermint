@@ -6,7 +6,7 @@ export default async function editUser(req, res) {
 
   try {
     await prisma.user.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         firstName: req.body.firstName,
         lastName: req.body.lastName,

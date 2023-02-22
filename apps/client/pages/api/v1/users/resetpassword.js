@@ -18,7 +18,7 @@ export default async function getAllClients(req, res) {
   try {
     const hashedPass = await bcrypt.hash(password, 10);
     await prisma.user.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         password: hashedPass,
       },

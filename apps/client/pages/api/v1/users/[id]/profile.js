@@ -8,7 +8,7 @@ export default async function userProfile(req, res) {
 
   try {
     await prisma.user.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         name: req.body.name,
         email: emailLower,

@@ -6,7 +6,7 @@ export default async function deleteUser(req, res) {
 
   try {
     await prisma.user.delete({
-      where: { id: Number(id) },
+      where: { id: id },
     });
     return res.status(201).json({ message: "User deleted", fail: false });
   } catch (error) {

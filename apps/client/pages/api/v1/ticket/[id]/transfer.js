@@ -6,7 +6,7 @@ export default async function transferTicket(req, res) {
 
   try {
     await prisma.ticket.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         assignedTo: {
           connect: { id: Number(user.id) },

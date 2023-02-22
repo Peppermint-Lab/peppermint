@@ -9,7 +9,7 @@ export default async function getAllClients(req, res) {
   try {
     if (session.user.isAdmin) {
       await prisma.client.update({
-        where: { id: Number(id) },
+        where: { id: id },
         data: {
           name,
           contactName,

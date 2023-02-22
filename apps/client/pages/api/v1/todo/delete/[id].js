@@ -4,7 +4,7 @@ const doesTodoExist = async (id) => {
   const exists = await prisma.todos
     .findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
     })
     .then(Boolean);
@@ -17,7 +17,7 @@ export default async function deleteTodo(req, res) {
   const { id } = req.query
 
   try {
-     const todo = await doesTodoExist(Number(id));
+     const todo = await doesTodoExist(id);
      
     if (!todo) {
       return res.status(404).json({
@@ -28,7 +28,7 @@ export default async function deleteTodo(req, res) {
 
     await prisma.todos.delete({
       where: {
-        id: Number(id),
+        id: id,
       },
     });
 

@@ -60,7 +60,7 @@ export default async function UploadFile(req, res) {
                   .create({
                     data: {
                       filename: f.originalFilename,
-                      ticketId: Number(id),
+                      ticketId: id,
                       path: `peppermint/${f.newFilename}`,
                     },
                   })
@@ -89,7 +89,7 @@ export default async function UploadFile(req, res) {
                 .create({
                   data: {
                     filename: f.originalFilename,
-                    ticketId: Number(id),
+                    ticketId: id,
                     path: u,
                   },
                 })

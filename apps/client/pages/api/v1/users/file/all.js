@@ -7,7 +7,7 @@ export default async function listFiles(req, res) {
   try {
 
     const files = await prisma.userFile.findMany({
-      where: { userId: Number(session.id) },
+      where: { userId: session.id },
     });
     res.status(200).json({ sucess: true, files });
 

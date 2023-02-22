@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         data: {
           title,
           note: markdown,
-          userId: Number(session.user.id), // unsure if can be replaced by a connect statement
+          userId: session.user.id, // unsure if can be replaced by a connect statement
         },
       });
 

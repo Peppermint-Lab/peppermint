@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
   try {
     const notebooks = await prisma.notes.findMany({
-      where: { userId: Number(session.id) },
+      where: { userId: session.id },
     });
 
     res.status(200).json({ success: true, notebooks });

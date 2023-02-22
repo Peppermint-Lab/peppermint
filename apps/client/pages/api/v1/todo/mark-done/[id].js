@@ -4,7 +4,7 @@ const doesTodoExist = async (id) => {
   const exists = await prisma.todos
     .findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
     })
     .then(Boolean);

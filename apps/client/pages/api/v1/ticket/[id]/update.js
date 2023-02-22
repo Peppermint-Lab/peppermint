@@ -8,7 +8,7 @@ export default async function updateTicket(req, res) {
   try {
     
     await prisma.ticket.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         detail,
         note,

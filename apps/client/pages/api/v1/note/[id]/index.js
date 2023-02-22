@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const data = await prisma.notes.findUnique({
-      where: { id: Number(id) },
+      where: { id: id },
     });
 
     res.status(200).json({ success: true, data });

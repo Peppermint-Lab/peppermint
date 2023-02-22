@@ -7,7 +7,7 @@ export default async function getById(req, res) {
     await prisma.ticket
       .findUnique({
         where: {
-          id: Number(id),
+          id: id,
         },
         include: {
           client: {

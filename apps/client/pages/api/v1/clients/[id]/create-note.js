@@ -7,7 +7,7 @@ export default async function SaveNote(req, res) {
 
   try {
     await prisma.client.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: { notes: note },
     });
 

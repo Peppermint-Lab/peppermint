@@ -10,7 +10,7 @@ export default async function notifications(req, res) {
 
   try {
     await prisma.user.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         ticket_assigned: ticket_assigned,
         ticket_comments: true,

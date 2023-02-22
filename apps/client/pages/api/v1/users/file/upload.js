@@ -37,7 +37,7 @@ export default async function UploadFile(req, res) {
             .create({
               data: {
                 filename: f.originalFilename,
-                userId: Number(session.id),
+                userId: session.id,
                 path: u,
               },
             })

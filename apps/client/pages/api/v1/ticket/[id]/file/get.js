@@ -5,7 +5,7 @@ export default async function getFiles(req, res) {
 
   try {
     const files = await prisma.ticketFile.findMany({
-      where: { ticketId: Number(id) },
+      where: { ticketId: id },
     });
     res.status(200).json({ sucess: true, files });
   } catch (error) {

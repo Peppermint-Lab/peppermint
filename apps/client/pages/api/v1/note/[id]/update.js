@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   try {
     await prisma.notes.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         note: note,
         title: title,

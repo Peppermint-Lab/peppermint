@@ -10,7 +10,7 @@ export default async function getAllHooks(req, res) {
     if (session.user.isAdmin) {
       await prisma.webhooks.delete({
         where: {
-          id: Number(id),
+          id: id,
         },
       });
 

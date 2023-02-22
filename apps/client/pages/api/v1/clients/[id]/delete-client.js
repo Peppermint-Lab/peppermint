@@ -5,7 +5,7 @@ export default async function getAllClients(req, res) {
 
   try {
     await prisma.client.delete({
-      where: { id: Number(id) },
+      where: { id: id },
     });
 
     res.status(200).json({ success: true });

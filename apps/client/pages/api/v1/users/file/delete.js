@@ -7,7 +7,7 @@ export default async function deleteFile(req, res) {
   try {
     await prisma.userFile
       .delete({
-        where: { id: Number(id) },
+        where: { id: id },
       })
       .then(() => {
         fs.unlink(path, (err) => {

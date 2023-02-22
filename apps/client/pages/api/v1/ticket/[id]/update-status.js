@@ -9,7 +9,7 @@ export default async function completeTicket(req, res) {
   try {
     await prisma.ticket
       .update({
-        where: { id: Number(id) },
+        where: { id: id },
         data: {
           isComplete: status,
         },

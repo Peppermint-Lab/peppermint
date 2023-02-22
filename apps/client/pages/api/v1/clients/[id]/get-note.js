@@ -5,7 +5,7 @@ export default async function getNote(req, res) {
   const { id } = req.query
   try {
     const find = await prisma.client.findUnique({
-      where: { id: Number(id) },
+      where: { id: id },
     });
     return res.status(200).json({ find });
   } catch (error) {
