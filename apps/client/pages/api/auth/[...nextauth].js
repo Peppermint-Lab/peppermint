@@ -62,6 +62,9 @@ const options = {
       user && (token.user = user);
       return token;
     },
+    async redirect({ url, baseUrl }) {
+      return baseUrl
+    },
     async session({ session, token, user }) {
       // checking for user changes on: language, email & name
       console.log(token);

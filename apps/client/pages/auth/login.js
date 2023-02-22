@@ -105,13 +105,12 @@ export default function Login({ csrfToken, providers }) {
               </div>
 
               <div>
-                {Object.values(providers).map((provider) => (
-                  <div key={provider.name}>
-                    <button onClick={() => signIn(provider.id)}>
-                      Sign in with {provider.name}
-                    </button>
-                  </div>
-                ))}
+                <button
+                  onClick={() => signIn("keycloak")}
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  Sign in with KeyCloak
+                </button>
               </div>
 
               <div>
