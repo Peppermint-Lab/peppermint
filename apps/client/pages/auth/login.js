@@ -106,19 +106,19 @@ export default function Login({ csrfToken, providers }) {
 
               <div>
                 <button
-                  onClick={() => signIn("keycloak")}
+                  type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
-                  Sign in with KeyCloak
+                  Sign In
                 </button>
               </div>
 
               <div>
                 <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  onClick={() => signIn("keycloak")}
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#212529] hover:bg-[#4d4d4d]"
                 >
-                  Sign in
+                  KeyCloak SSO
                 </button>
               </div>
             </form>
