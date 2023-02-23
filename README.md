@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/docker/pulls/pepperlabs/peppermint" />
 </p>
 <p align="center">
-    <img src="https://peppermint.sh/images/logo_green.svg" alt="Logo" width="350px" >
+    <img src="./static/logo.svg" alt="Logo" height="80px" >
 </p>
 <p align="center">This project is supported by:</p>
 <p align="center">
@@ -23,9 +23,10 @@
 
 ## Introduction
 
+<p align="center">
 It's a self hosted alternative to popular services such as zendesk
-
-<img src="./static/homepage.png" width="50%" >
+<img src="./static/homepage.png" width="50%"  >
+</p>
 
 ## ✨ Features
 
