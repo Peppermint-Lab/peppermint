@@ -175,7 +175,7 @@ export default function SideLayout({ children }) {
                       {navigation.map((item) =>
                         !item.children ? (
                           <div key={item.name}>
-                            <a
+                            <Link
                               href={item.href}
                               className={classNames(
                                 item.current
@@ -185,7 +185,7 @@ export default function SideLayout({ children }) {
                               )}
                             >
                               {item.name}
-                            </a>
+                            </Link>
                           </div>
                         ) : (
                           <Disclosure
@@ -339,7 +339,7 @@ export default function SideLayout({ children }) {
                     {navigation.map((item) =>
                       !item.children ? (
                         <div key={item.name}>
-                          <a
+                          <Link
                             href={item.href}
                             className={classNames(
                               item.current
@@ -353,7 +353,7 @@ export default function SideLayout({ children }) {
                               aria-hidden="true"
                             />
                             {item.name}
-                          </a>
+                          </Link>
                         </div>
                       ) : (
                         <Disclosure
