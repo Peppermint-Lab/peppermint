@@ -19,15 +19,16 @@ export default async function createTicket(req, res) {
                 connect: { id: Number(company.id) },
               }
             : undefined,
+          fromImap: false,
           // assignedTo: engineer
           //   ? {
           //       connect: { id: Number(engineer.id) },
           //     }
           //   : undefined,
           isComplete: Boolean(false),
-          team: {
-            connect: { id: 2 },
-          },
+          // team: {
+          //   connect: { id: 2 },
+          // },
         },
       })
       .then((ticket) => {
