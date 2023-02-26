@@ -329,12 +329,12 @@ export default function SideLayout({ children }) {
                       alt="Workflow"
                     />
                     <Link href="https://peppermint.sh">
-                      <h1 className="text-2xl ml-2 hover:text-green-600 font-extrabold text-white">
+                      <h1 className="text-2xl ml-2 mt-1 hover:text-green-600 font-extrabold text-white">
                         Peppermint
                       </h1>
                     </Link>
                   </div>
-                  <nav className="mt-5 flex-1 px-2 bg-gray-900 space-y-1">
+                  <nav className="mt-1 flex-1 px-2 bg-gray-900 space-y-1">
                     <CreateTicketModal />
                     {navigation.map((item) =>
                       !item.children ? (
