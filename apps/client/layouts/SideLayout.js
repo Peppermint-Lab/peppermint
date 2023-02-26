@@ -343,7 +343,7 @@ export default function SideLayout({ children }) {
                             href={item.href}
                             className={classNames(
                               item.current
-                                ? "bg-green-400 text-white"
+                                ? "bg-green-400 text-white hover:text-white"
                                 : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
                               "group w-full flex items-center pl-2 pr-2 py-2 text-sm font-medium rounded-md"
                             )}
@@ -411,25 +411,16 @@ export default function SideLayout({ children }) {
                       session.user.isAdmin === true ? "mt-8" : "hidden"
                     }
                   >
-                    <h3
-                      className="px-3 text-xs font-semibold text-white uppercase tracking-wider"
-                      id="projects-headline"
-                    >
-                      Admin
-                    </h3>
                     <div
-                      className="mt-1 space-y-1"
+                      className="mt-1 space-y-1 px-2"
                       aria-labelledby="projects-headline"
                     >
-                      {adminNavigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="group flex items-center px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-green-400 hover:text-white"
-                        >
-                          <span className="truncate">{item.name}</span>
-                        </Link>
-                      ))}
+                      <Link
+                        href="/admin"
+                        className="group flex items-center px-2 py-2 text-xs font-semibold text-white rounded-md hover:bg-green-400 hover:text-white uppercase tracking-wider"
+                      >
+                        <span className="truncate">ADMIN</span>
+                      </Link>
                       <a
                         href="https://ko-fi.com/L3L0AA4YE"
                         target="_blank"

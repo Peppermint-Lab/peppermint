@@ -44,7 +44,7 @@ export default function NoteBookLayout({ children }) {
                   <h1 className="text-3xl ml-2 font-bold">
                     Notebooks{" "}
                     <Link
-                      className="inline-flex float-right items-center px-4 py-2 text-sm font-medium text-green-600 "
+                      className="inline-flex float-right items-center px-4 py-2 text-sm font-medium text-green-600 mt-1"
                       href="/notebook/new"
                     >
                       <PlusIconMini className="h-5 w-5" aria-hidden="true" />

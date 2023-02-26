@@ -13,6 +13,7 @@ import { ThemeProvider } from "next-themes";
 
 import SideLayout from "../layouts/SideLayout";
 import NoteBookLayout from "../layouts/notebook";
+import AdminLayout from "../layouts/adminLayout";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,22 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <Auth>
           <Component {...pageProps} />
         </Auth>
+      </SessionProvider>
+    );
+  }
+
+  if (router.pathname.includes("/admin")) {
+    return (
+      <SessionProvider session={session}>
+        <QueryClientProvider client={queryClient}>
+          <Auth>
+            <SideLayout>
+              <AdminLayout>
+                <Component {...pageProps} />
+              </AdminLayout>
+            </SideLayout>
+          </Auth>
+        </QueryClientProvider>
       </SessionProvider>
     );
   }
