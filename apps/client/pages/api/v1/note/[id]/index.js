@@ -6,8 +6,6 @@ export default async function handler(req, res) {
 
   const id = req.query.id;
 
-  console.log(id);
-
   try {
     const data = await prisma.notes.findUnique({
       where: { id: id },

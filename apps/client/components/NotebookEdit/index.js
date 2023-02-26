@@ -24,21 +24,24 @@ export default function ViewNoteBook({ data }) {
     setNote(data.note)
   }, [data])
 
+  console.log(note)
 
   return (
-    <div className="mt-8">
-      <div className="mt-1 mb-4">
+    <>
+      <div className="mb-4 -mt-2">
         <input
           type="text"
           name="title"
           id="title"
-          className="block w-full sm:text-4xl font-bold border-none bg-transparent focus:none focus:border-transparent focus:ring-0"
+          className="block w-full sm:text-3xl font-bold border-none bg-transparent focus:none focus:border-transparent focus:ring-0"
           placeholder="Untitled"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-      <TipTapEditor value={note} setContent={setNote} />
+      {note !== undefined && (
+        <TipTapEditor value={note} setContent={setNote} />
+      )}
       <button
         onClick={() =>save()}
         type="button"
@@ -46,6 +49,6 @@ export default function ViewNoteBook({ data }) {
       >
         Save Note
       </button>
-    </div>
+    </>
   );
 }

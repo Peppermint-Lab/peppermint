@@ -12,6 +12,7 @@ import { HotKeys } from "react-hotkeys";
 import { ThemeProvider } from "next-themes";
 
 import SideLayout from "../layouts/SideLayout";
+import NoteBookLayout from "../layouts/notebook";
 
 const queryClient = new QueryClient();
 
@@ -67,23 +68,37 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     );
   }
 
-  return (
-    <>
+  if (router.pathname.includes("/notebook")) {
+    return (
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
-          {/* <ThemeProvider attribute="class"> */}
           <Auth>
-            {/* <HotKeys keyMap={keyMap}> */}
-              <SideLayout>
+            <SideLayout>
+              <NoteBookLayout>
                 <Component {...pageProps} />
-              </SideLayout>
-            {/* </HotKeys> */}
+              </NoteBookLayout>
+            </SideLayout>
           </Auth>
-
-          {/* </ThemeProvider> */}
         </QueryClientProvider>
       </SessionProvider>
-    </>
+    );
+  }
+
+  return (
+    <SessionProvider session={session}>
+      <QueryClientProvider client={queryClient}>
+        {/* <ThemeProvider attribute="class"> */}
+        <Auth>
+          {/* <HotKeys keyMap={keyMap}> */}
+          <SideLayout>
+            <Component {...pageProps} />
+          </SideLayout>
+          {/* </HotKeys> */}
+        </Auth>
+
+        {/* </ThemeProvider> */}
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }
 
