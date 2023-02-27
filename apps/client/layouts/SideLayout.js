@@ -69,25 +69,6 @@ export default function SideLayout({ children }) {
     },
   ];
 
-  const adminNavigation = [
-    {
-      name: t("sl_users"),
-      href: "/admin/auth",
-    },
-    {
-      name: t("sl_clients"),
-      href: "/admin/clients",
-    },
-    {
-      name: t("sl_settings"),
-      href: "/admin/settings",
-    },
-    {
-      name: "Teams",
-      href: "/admin/teams",
-    },
-  ];
-
   const { theme, setTheme } = useTheme();
 
   async function getQueues() {
@@ -256,7 +237,7 @@ export default function SideLayout({ children }) {
                         className="mt-1 space-y-1"
                         aria-labelledby="projects-headline"
                       >
-                        {adminNavigation.map((item) => (
+                        {/* {adminNavigation.map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
@@ -269,20 +250,7 @@ export default function SideLayout({ children }) {
                           >
                             <span className="truncate">{item.name}</span>
                           </Link>
-                        ))}
-                        <a
-                          href="https://ko-fi.com/L3L0AA4YE"
-                          target="_blank"
-                          passHref
-                        >
-                          <img
-                            className="px-3 py-2 h-12"
-                            height="36"
-                            src="/kofi-white.png"
-                            border="0"
-                            alt="Buy Me a Coffee at ko-fi.com"
-                          />
-                        </a>
+                        ))} */}
                       </div>
                     </div>
                   </div>
@@ -421,7 +389,7 @@ export default function SideLayout({ children }) {
                       >
                         <span className="truncate">ADMIN</span>
                       </Link>
-                      <a
+                      {/* <a
                         href="https://ko-fi.com/L3L0AA4YE"
                         target="_blank"
                         passHref
@@ -433,8 +401,8 @@ export default function SideLayout({ children }) {
                           border="0"
                           alt="Buy Me a Coffee at ko-fi.com"
                         />
-                      </a>
-                      <div className="px-3 py-2">
+                      </a> */}
+                      {/* <div className="px-3 py-2">
                         <span className="text-white">
                           Version -{" "}
                           <a
@@ -455,7 +423,7 @@ export default function SideLayout({ children }) {
                             </a>
                           </a>
                         </span>
-                      </div>
+                      </div> */}
 
                       {/* <button
                         aria-label="Toggle Dark Mode"
