@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Loader from "react-spinners/ClipLoader";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import OpenTickets from "../../components/TicketViews/open";
 import AssignedTickets from "../../components/TicketViews/assigned";
@@ -76,7 +77,7 @@ export default function Tickets() {
               <div className="border-b border-gray-200">
                 <nav className="-mb-px flex space-x-8" aria-label="Tabs">
                   {tabs.map((tab) => (
-                    <a
+                    <Link
                       key={tab.name}
                       href={tab.href}
                       className={classNames(
@@ -100,7 +101,7 @@ export default function Tickets() {
                           {tab.count}
                         </span>
                       ) : null}
-                    </a>
+                    </Link>
                   ))}
                 </nav>
               </div>

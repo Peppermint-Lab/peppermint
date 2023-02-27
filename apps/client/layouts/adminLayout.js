@@ -20,11 +20,7 @@ export default function AdminLayout({ children }) {
     {
       name: t("sl_settings"),
       href: "/admin/settings",
-    },
-    {
-      name: "Teams",
-      href: "/admin/teams",
-    },
+    }
   ];
 
   return (
