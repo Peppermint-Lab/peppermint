@@ -205,9 +205,9 @@ export default function AssignedTickets() {
   const columns = React.useMemo(() => [
     {
       Header: "No.",
-      accessor: "id",
+      accessor: "Number",
       width: 10,
-      id: "id",
+      id: "number",
     },
     {
       Header: "Name",
@@ -249,11 +249,6 @@ export default function AssignedTickets() {
       },
     },
     {
-      Header: "Team",
-      accessor: "team.name",
-      id: "team_name",
-    },
-    {
       Header: "Title",
       accessor: "title",
       id: "Title",
@@ -267,7 +262,7 @@ export default function AssignedTickets() {
       Cell: ({ row, value }) => {
         return (
           <>
-            <Link href={`/tickets/${row.cells[0].value}`}>View</Link>
+            <Link href={`/tickets/${row.original.id}`}>View</Link>
           </>
         );
       },

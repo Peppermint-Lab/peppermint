@@ -4,14 +4,15 @@ export default async function allTickets(req, res) {
   try {
     await prisma.ticket
       .findMany({
+        where: {
+          fromImap: true,
+
+        },
         include: {
           client: {
             select: { id: true, name: true },
           },
           assignedTo: {
-            select: { id: true, name: true },
-          },
-          team: {
             select: { id: true, name: true },
           },
         },

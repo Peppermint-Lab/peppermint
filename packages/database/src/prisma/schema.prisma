@@ -51,6 +51,7 @@ model Ticket {
   priority   String
   linked     Json?
   fromImap   Boolean
+  Number     Int      @default(autoincrement())
 
   TicketFile TicketFile[]
 
@@ -80,9 +81,9 @@ model UserFile {
   createdAt DateTime @default(now())
   filename  String
   path      String
-  
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
 model TicketFile {
@@ -103,7 +104,7 @@ model Notes {
   note       String
   Favourited Boolean  @default(false)
 
-  createdBy User @relation(fields: [userId], references: [id])
+  createdBy User   @relation(fields: [userId], references: [id])
   userId    String
 }
 
@@ -113,8 +114,8 @@ model Todos {
   updatedAt DateTime @default(now())
   text      String
   done      Boolean  @default(false)
-  
-  createdBy User     @relation(fields: [userId], references: [id])
+
+  createdBy User   @relation(fields: [userId], references: [id])
   userId    String
 }
 

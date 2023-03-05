@@ -13,6 +13,20 @@ export default function EmailQueues() {
     setQueues(res.queues);
   }
 
+  async function deleteItem(id) {
+    await fetch("/api/v1/admin/email-queue/delete", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => fetchQueues());
+  }
+
   useEffect(() => {
     fetchQueues();
   });
@@ -46,7 +60,7 @@ export default function EmailQueues() {
                 </div>
               </div>
               <div className="-mx-4 mt-8 sm:-mx-0">
-                {queues !== undefined && (
+                {queues !== undefined && queues.length > 0 && (
                   <table className="min-w-full divide-y divide-gray-300">
                     <thead>
                       <tr>
@@ -103,13 +117,13 @@ export default function EmailQueues() {
                           </td>
                           <td className="px-3 py-4 text-sm ">{item.port}</td>
                           <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
+                            <button
+                              type="button"
+                              onClick={() => deleteItem(item.id)}
+                              className="rounded bg-red-600 py-1 px-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                             >
-                              Edit
-                              <span className="sr-only">, {item.name}</span>
-                            </a>
+                              Delete
+                            </button>
                           </td>
                         </tr>
                       ))}

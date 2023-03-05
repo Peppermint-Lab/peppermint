@@ -65,9 +65,9 @@ const getEmails = async () => {
                       from: from.text,
                       subject: subject ? subject : "No Subject",
                       body: text ? text : "No Body",
-                      html: html,
+                      html: html ? html : '',
                       text: textAsHtml,
-                      emailQueueId: Number(1),
+                      emailQueueId: "1",
                     },
                   });
 
@@ -114,7 +114,7 @@ const getEmails = async () => {
       });
     }
 
-    console.log('loop completed')
+    console.log("loop completed");
   } catch (error) {
     console.log("an error occurred ", error);
   }
