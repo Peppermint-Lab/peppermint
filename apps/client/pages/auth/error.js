@@ -16,11 +16,11 @@ export default function Login({ csrfToken }) {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="https://peppermint.sh/">
-              <img
-                className="mx-auto h-36 w-auto"
-                src="/login.svg"
-                alt="peppermint.sh logo"
-              />
+            <img
+              className="mx-auto h-36 w-auto"
+              src="/login.svg"
+              alt="peppermint.sh logo"
+            />
           </Link>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
@@ -115,6 +115,10 @@ export default function Login({ csrfToken }) {
                 </button>
               </div>
             </form>
+          </div>
+
+          <div className="mt-8 text-center">
+            <span className="font-bold">Built with 💚 by Peppermint Labs</span>
           </div>
 
           {/* <div className="mt-6">

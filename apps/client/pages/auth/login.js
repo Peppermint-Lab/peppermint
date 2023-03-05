@@ -124,6 +124,10 @@ export default function Login({ csrfToken, providers }) {
             </form>
           </div>
 
+          <div className="mt-8 text-center">
+            <span className="font-bold">Built with 💚 by Peppermint Labs</span>
+          </div>
+
           {/* <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
