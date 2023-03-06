@@ -280,9 +280,9 @@ export default function ClosedTickets() {
 
   return (
     <>
-      {status === "success" && (
+     {status === "success" && (
         <>
-          {data.tickets.legnth > 0 && (
+          {data.tickets && data.tickets.length > 0 && (
             <>
               <div className="hidden sm:block">
                 <Table columns={columns} data={data.tickets} />
@@ -313,9 +313,8 @@ export default function ClosedTickets() {
                 </svg>
 
                 <h3 className="mt-2 text-sm font-medium text-gray-900">
-                  No tickets have been closed yet :)
+                  You currently don't have any assigned tickets. :)
                 </h3>
-                
               </div>
             </>
           )}

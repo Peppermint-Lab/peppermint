@@ -188,7 +188,7 @@ function Table({ columns, data }) {
 }
 
 async function getUserTickets() {
-  const res = await fetch("/api/v1/ticket/all");
+  const res = await fetch("/api/v1/ticket/open");
   return res.json();
 }
 
@@ -279,45 +279,42 @@ export default function OpenTickets() {
     <>
       {status === "success" && (
         <>
-          {/* {data.tickets.legnth > 0 && ( */}
-          <>
-            <div className="hidden sm:block">
-              <Table columns={columns} data={data.tickets} />
-            </div>
+          {data.tickets && data.tickets.length > 0 && (
+            <>
+              <div className="hidden sm:block">
+                <Table columns={columns} data={data.tickets} />
+              </div>
 
-            {/* <div className="sm:hidden">
-            <TicketsMobileList tickets={data.tickets} />
-          </div> */}
-          </>
-          {/* )} */}
+              <div className="sm:hidden">
+                <TicketsMobileList tickets={data.tickets} />
+              </div>
+            </>
+          )}
 
-          {/* {data.tickets.length === 0 && (
-        <>
-          <div className="text-center mt-72">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+          {data.tickets.length === 0 && (
+            <>
+              <div className="text-center mt-72">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
 
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
-              No tickets have been created yet :)
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by creating a new project.
-            </p>
-          </div>
-        </>
-      )} */}
+                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                  You currently don't have any assigned tickets. :)
+                </h3>
+              </div>
+            </>
+          )}
         </>
       )}
     </>

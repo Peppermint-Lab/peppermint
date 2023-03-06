@@ -5,7 +5,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-import useTranslation from 'next-translate/useTranslation';
+import useTranslation from "next-translate/useTranslation";
 
 import ListTodo from "../components/ListTodo";
 import ListUserFiles from "../components/ListUserFiles";
@@ -16,9 +16,11 @@ export default function Home() {
   const [hour, setHour] = useState();
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
+  const [unassigned, setUnassigned] = useState(0);
   const [uploaded, setUploaded] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const { t } = useTranslation('peppermint');
+  const { t } = useTranslation("peppermint");
 
   let file = [];
 
@@ -54,10 +56,31 @@ export default function Home() {
       });
   }
 
+  async function getUnassginedTickets() {
+    await fetch(`/api/v1/data/count/all/unissued`, {
+      method: "get",
+      headers: {
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setUnassigned(res.result);
+      });
+  }
+
   const stats = [
-    { name: t('open_tickets'), stat: openTickets, href: "/tickes" },
-    { name: t('completed_tickets'), stat: completedTickets, href: "/tickets/closed" },
-    { name: 'Unassigned Tickets', stat: completedTickets, href: "/tickets/unassigned" },
+    { name: t("open_tickets"), stat: openTickets, href: "/tickes" },
+    {
+      name: t("completed_tickets"),
+      stat: completedTickets,
+      href: "/tickets/closed",
+    },
+    {
+      name: "Unassigned Tickets",
+      stat: unassigned,
+      href: "/tickets/unassigned",
+    },
   ];
 
   const propsUpload = {
@@ -89,10 +112,16 @@ export default function Home() {
     },
   };
 
-  useEffect(() => {
+  async function datafetch() {
     getOpenTickets();
     getCompletedTickets();
+    getUnassginedTickets();
+    await setLoading(false);
+  }
+
+  useEffect(() => {
     time();
+    datafetch();
   }, []);
 
   return (
@@ -118,12 +147,13 @@ export default function Home() {
                         </span>
                       </span>
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        {t('hello_good')} {hour < 12 ? t('hello_morning') : t('hello_afternoon')},{" "}
+                        {t("hello_good")}{" "}
+                        {hour < 12 ? t("hello_morning") : t("hello_afternoon")},{" "}
                         {session.user.name}!
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                      <dt className="sr-only">{t('account_status')}</dt>
+                      <dt className="sr-only">{t("account_status")}</dt>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
                         <CheckCircleIcon
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
@@ -139,64 +169,71 @@ export default function Home() {
           </div>
         </div>
 
-        <div>
-          <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {stats.map((item) => (
-              <Link href={item.href}>
-                  <div
-                    key={item.name}
-                    className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
-                  >
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      {item.name}
-                    </dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                      {item.stat}
-                    </dd>
-                  </div>
-              </Link>
-            ))}
-          </dl>
-        </div>
+        {!loading && (
+          <>
+            <div>
+              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                {stats.map((item) => (
+                  <Link href={item.href}>
+                    <div
+                      key={item.name}
+                      className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+                    >
+                      <dt className="text-sm font-medium text-gray-500 truncate">
+                        {item.name}
+                      </dt>
+                      <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                        {item.stat}
+                      </dd>
+                    </div>
+                  </Link>
+                ))}
+              </dl>
+            </div>
 
-        <div className="flex sm:flex-row mt-5 flex-nowrap flex-col gap-4">
-          <div className="flex w-full sm:w-3/5">
-            <div className="bg-white shadow w-full h-full sm:rounded-lg">
-              <div className="px-2 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-4">
-                <div className="px-2 py-5 sm:p-6">
-                  <div>
-                    <h1 className="font-bold leading-7 text-gray-900">
-                      {t('todo_list')}
-                    </h1>
+            <div className="flex sm:flex-row mt-5 flex-nowrap flex-col gap-4">
+              <div className="flex w-full sm:w-3/5">
+                <div className="bg-white shadow w-full h-full sm:rounded-lg">
+                  <div className="px-2 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-4">
+                    <div className="px-2 py-5 sm:p-6">
+                      <div>
+                        <h1 className="font-bold leading-7 text-gray-900">
+                          {t("todo_list")}
+                        </h1>
+                      </div>
+                      <ListTodo />
+                    </div>
                   </div>
-                  <ListTodo />
+                </div>
+              </div>
+
+              <div className="flex w-full sm:w-2/5">
+                <div className="bg-white shadow w-full h-full sm:rounded-lg">
+                  <div className="px-2 py-5 sm:p-6 flex flex-row">
+                    <h2
+                      className="font-bold leading-7 text-gray-900"
+                      id="recent-hires-title"
+                    >
+                      {t("personal_files")}
+                    </h2>
+                    <Upload
+                      {...propsUpload}
+                      className="px-4 flex align-middle items-center -mt-3"
+                    >
+                      <button>
+                        <UploadOutlined />
+                      </button>
+                    </Upload>
+                  </div>
+                  <ListUserFiles
+                    uploaded={uploaded}
+                    setUploaded={() => setUploaded()}
+                  />
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="flex w-full sm:w-2/5">
-            <div className="bg-white shadow w-full h-full sm:rounded-lg">
-              <div className="px-2 py-5 sm:p-6 flex flex-row">
-                <h2
-                  className="font-bold leading-7 text-gray-900"
-                  id="recent-hires-title"
-                >
-                  {t('personal_files')}
-                </h2>
-                <Upload
-                  {...propsUpload}
-                  className="px-4 flex align-middle items-center -mt-3"
-                >
-                  <button>
-                    <UploadOutlined />
-                  </button>
-                </Upload>
-              </div>
-              <ListUserFiles uploaded={uploaded} setUploaded={() => setUploaded()} />
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </main>
     </div>
   );

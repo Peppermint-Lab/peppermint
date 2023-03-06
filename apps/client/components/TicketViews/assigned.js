@@ -279,7 +279,7 @@ export default function AssignedTickets() {
     <>
       {status === "success" && (
         <>
-          {data.tickets && (
+          {data.tickets && data.tickets.length > 0 && (
             <>
               <div className="hidden sm:block">
                 <Table columns={columns} data={data.tickets} />

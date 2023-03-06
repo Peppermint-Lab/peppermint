@@ -282,7 +282,7 @@ export default function UnassignedTickets() {
     <>
       {status === "success" && (
         <>
-          {data.tickets && (
+          {data.tickets && data.tickets.length > 0 && (
             <>
               <div className="hidden sm:block">
                 <Table columns={columns} data={data.tickets} />
@@ -313,7 +313,7 @@ export default function UnassignedTickets() {
                 </svg>
 
                 <h3 className="mt-2 text-sm font-medium text-gray-900">
-                  There are currently no unassiged tickets :)
+                  You currently don't have any assigned tickets. :)
                 </h3>
               </div>
             </>
