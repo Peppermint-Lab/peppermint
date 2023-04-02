@@ -22,7 +22,7 @@ export default function CreateTicketModal() {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
-  const [teams, setTeams] = useState([]);
+  const [users, setUsers] = useState();
 
   const cancelButtonRef = useRef(null);
 
@@ -41,9 +41,9 @@ export default function CreateTicketModal() {
       });
   };
 
-  async function getTeams() {
+  async function fetchUsers() {
     try {
-      await fetch(`/api/v1/admin/team/all`, {
+      await fetch(`/api/v1/users/all`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export default function CreateTicketModal() {
         .then((res) => res.json())
         .then((res) => {
           if (res) {
-            setTeams(res.users);
+            setUsers(res.users);
           }
         });
     } catch (error) {
@@ -73,14 +73,14 @@ export default function CreateTicketModal() {
         email,
         detail: issue,
         priority,
-        team: '2'
+        engineer,
       }),
     });
   }
 
   useEffect(() => {
     fetchClients();
-    getTeams();
+    fetchUsers();
   }, []);
 
   const newTicketKey = React.useCallback(() => {
@@ -91,8 +91,6 @@ export default function CreateTicketModal() {
     NEW_TICKET: () => setOpen(true),
     // CLOSE: () => setOpen(false),
   };
-
-  console.log(issue);
 
   return (
     <HotKeys handlers={handlers}>
@@ -288,7 +286,7 @@ export default function CreateTicketModal() {
                             <div className="mt-1 relative">
                               <Listbox.Button className="bg-white relative min-w-[164px] w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ">
                                 <span className="block truncate">
-                                  {engineer ? engineer.name : "Select a Team"}
+                                  {engineer ? engineer.name : "Select an Engineer"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
@@ -334,8 +332,8 @@ export default function CreateTicketModal() {
                                       </>
                                     )}
                                   </Listbox.Option>
-                                  {teams !== undefined &&
-                                    teams.map((team) => (
+                                  {users !== undefined &&
+                                    users.map((team) => (
                                       <Listbox.Option
                                         key={team.id}
                                         className={({ active }) =>

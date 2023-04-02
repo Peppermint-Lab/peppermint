@@ -20,11 +20,19 @@ export default function AdminLayout({ children }) {
     {
       name: t("sl_settings"),
       href: "/admin/settings",
-    }, 
+    },
     {
-      name: 'Email Queues', 
-      href: "/admin/email-queues"
-    }
+      name: "Email Queues",
+      href: "/admin/email-queues",
+    },
+    {
+      name: "Webhooks",
+      href: "/admin/webhooks",
+    },
+    {
+      name: "Notifications",
+      href: "/admin/notifications",
+    },
   ];
 
   return (
