@@ -107,6 +107,13 @@ Give a ⭐️ if this project helped you!
     <img src="./static/detail.png" alt="Logo" width="350px" >
 </p>
 
+## Star History
+
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Peppermint-Lab/peppermint&type=Date)](https://star-history.com/#Peppermint-Lab/peppermint&Date)
+
+
+
 ## Author
 
 👤 **Jack Andrews**
