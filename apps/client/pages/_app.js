@@ -69,6 +69,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     );
   }
 
+  if (router.pathname.includes("/public")) {
+    return (
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+    );
+  }
+
   if (router.pathname.includes("/admin")) {
     return (
       <SessionProvider session={session}>
