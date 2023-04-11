@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
       const prev = await prisma.ticket.findUnique({
         where: {
-          id: parseInt(id),
+          id: id,
         },
       });
 
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
       const data = await prisma.ticket.update({
         where: {
-          id: parseInt(id),
+          id: id,
         },
         data: {
           linked: {

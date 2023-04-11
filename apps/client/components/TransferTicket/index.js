@@ -30,18 +30,23 @@ export default function TransferTicket({ id }) {
       });
   };
 
-  console.log(users);
-
   async function postData() {
+    console.log(n.id);
     await fetch(`/api/v1/ticket/${id}/transfer`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user: n,
+        user: n.id,
       }),
-    });
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          router.reload();
+        }
+      });
   }
 
   useEffect(() => {
@@ -196,7 +201,6 @@ export default function TransferTicket({ id }) {
                       <button
                         onClick={() => {
                           postData();
-                          router.reload(router.pathname);
                         }}
                         type="button"
                         className="float-right mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
