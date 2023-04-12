@@ -28,7 +28,6 @@ export default function ListUserFiles({ uploaded, setUploaded }) {
       },
       body: JSON.stringify({
         id: file.id,
-        path: file.path,
       }),
     })
       .then((res) => res.json())
@@ -38,7 +37,7 @@ export default function ListUserFiles({ uploaded, setUploaded }) {
   }
 
   function download(file) {
-    const url = `/api/v1/users/file/download?filepath=${file.path}`;
+    const url = `/api/v1/users/file/download?id=${file.id}`;
     let data = new FormData();
     axios
       .post(url, data, {
