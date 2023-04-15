@@ -7,14 +7,14 @@ services:
     restart: always
     volumes:
       - ./peppermint/db:/data/db
-    environment: 
+    environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:latest
+    image: tim0n3/peppermint-arm64:v1
     ports:
       - 5001:5001
     restart: on-failure
