@@ -57,7 +57,7 @@ services:
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:latest
+    image: tim0n3/peppermint-arm64:v1
     ports:
       - 5000:5000
     restart: on-failure
