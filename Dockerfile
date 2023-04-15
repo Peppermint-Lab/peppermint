@@ -1,6 +1,6 @@
-FROM node:14-alpine AS deps
+FROM node:14 AS deps
 
-RUN apk add --no-cache libc6-compat
+RUN apt-get update && apt-get install -y libc6-dev
 
 # Copy over ONLY the package.json and yarn.lock
 # so that this `yarn install` layer is only recomputed
@@ -10,7 +10,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # Now we make a container to handle our Build
-FROM node:14-alpine AS BUILD_IMAGE
+FROM node:14 AS BUILD_IMAGE
 
 # Set up our work directory again
 WORKDIR /app
@@ -30,13 +30,12 @@ RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
 
-FROM node:14-alpine
+FROM node:14
 
-RUN apk update
-RUN apk add --no-cache bash
+RUN apt-get update && apt-get install -y bash
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+RUN addgroup --gid 1001 nodejs
+RUN adduser --disabled-password --gecos '' --uid 1001 --gid 1001 nextjs
 
 WORKDIR /app
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/package.json /app/yarn.lock ./
