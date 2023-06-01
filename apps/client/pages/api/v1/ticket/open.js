@@ -6,7 +6,6 @@ export default async function allTickets(req, res) {
       .findMany({
         where: {
           isComplete: false,
-          assignedTo: !null,
         },
         include: {
           client: {

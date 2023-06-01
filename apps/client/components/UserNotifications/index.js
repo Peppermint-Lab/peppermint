@@ -9,15 +9,26 @@ function classNames(...classes) {
 export default function UserNotifications() {
   const { data: session } = useSession();
 
-  const [ticket_creation, setTicket_creation] = useState(
-    session.user.notify_ticket_created
-  );
-  const [ticket_status, setTicket_status] = useState(
-    session.user.notify_ticket_status_changed
-  );
-  const [ticket_assigned, setTicket_assigned] = useState(
-    session.user.notify_ticket_assigned
-  );
+  const [ticket_creation, setTicket_creation] = useState();
+  const [ticket_status, setTicket_status] = useState();
+  const [ticket_assigned, setTicket_assigned] = useState();
+  const [loading, setLoading] = useState();
+
+  async function fetchNotificationOptions() {
+    await fetch(`/api/v1/users/${session.id}/config`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json())
+      .then((res) => {
+        if(res.user) {
+          setTicket_creation(res.user.notify_ticket_created)
+          setTicket_status(res.user.notify_ticket_status_changed)
+          setTicket_assigned(res.user.notify_ticket_assigned)
+        }
+      })
+  }
 
   async function updateNotifications() {
     await fetch(`/api/v1/users/${session.id}/notifications`, {
@@ -30,15 +41,17 @@ export default function UserNotifications() {
         ticket_assigned,
         ticket_status,
       }),
-    }).then(() => {
-        signOut()
-    })
+    }).then(() => fetchNotificationOptions())
   }
+
+  useEffect(() => {
+    fetchNotificationOptions()
+  }, [])
 
   return (
     <div className="py-6 px-4 sm:p-6 lg:pb-8">
       <div className="space-y-4">
-        <Switch.Group as="div" className="flex items-center justify-between">
+        <Switch.Group as="div" className="flex items-center justify-between" >
           <span className="flex-grow flex flex-col">
             <Switch.Label
               as="span"
@@ -134,13 +147,13 @@ export default function UserNotifications() {
       </div>
 
       <div className="m-4 float-right">
-      <button
-        onClick={() => updateNotifications()}
-        type="button"
-        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        save and reload
-      </button>
+        <button
+          onClick={() => updateNotifications()}
+          type="button"
+          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          save
+        </button>
       </div>
     </div>
   );
