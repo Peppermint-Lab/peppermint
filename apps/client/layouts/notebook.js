@@ -52,7 +52,7 @@ export default function NoteBookLayout({ children }) {
                   </h1>
                   {notebooks &&
                     notebooks.map((item, index) => (
-                      <a
+                      <Link
                         key={item.id}
                         href={`/notebook/${item.id}`}
                         className={classNames(
@@ -63,7 +63,7 @@ export default function NoteBookLayout({ children }) {
                         )}
                       >
                         <span className="flex-1">{item.title}</span>
-                      </a>
+                      </Link>
                     ))}
                 </nav>
               </div>
