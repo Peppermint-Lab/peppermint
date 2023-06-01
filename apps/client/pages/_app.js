@@ -8,6 +8,8 @@ import { SessionProvider, useSession } from "next-auth/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import Head from "next/head";
 import { HotKeys } from "react-hotkeys";
+import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 
 import { ThemeProvider } from "next-themes";
 
@@ -111,18 +113,21 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
 
   return (
     <SessionProvider session={session}>
-      <QueryClientProvider client={queryClient}>
-        {/* <ThemeProvider attribute="class"> */}
-        <Auth>
-          {/* <HotKeys keyMap={keyMap}> */}
-          <SideLayout>
-            <Component {...pageProps} />
-          </SideLayout>
-          {/* </HotKeys> */}
-        </Auth>
+      <MantineProvider withNormalizeCSS withGlobalStyles>
+        <QueryClientProvider client={queryClient}>
+          {/* <ThemeProvider attribute="class"> */}
+          <Auth>
+            {/* <HotKeys keyMap={keyMap}> */}
+            <SideLayout>
+              <Notifications />
+              <Component {...pageProps} />
+            </SideLayout>
+            {/* </HotKeys> */}
+          </Auth>
 
-        {/* </ThemeProvider> */}
-      </QueryClientProvider>
+          {/* </ThemeProvider> */}
+        </QueryClientProvider>
+      </MantineProvider>
     </SessionProvider>
   );
 }
