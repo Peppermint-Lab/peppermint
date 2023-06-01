@@ -3,8 +3,15 @@ import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/solid";
 import useTranslation from "next-translate/useTranslation";
 import { HotKeys } from "react-hotkeys";
+import { RichTextEditor, Link } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+import Highlight from "@tiptap/extension-highlight";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+// import TextAlign from '@tiptap/extension-text-align';
+import Superscript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
 
-import TipTapEditor from "../TipTapEditor";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -25,6 +32,22 @@ export default function CreateTicketModal() {
   const [users, setUsers] = useState();
 
   const cancelButtonRef = useRef(null);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      // TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    ],
+    content: issue,
+    onUpdate({ editor }) {
+      setValue(editor.getHTML());
+    },
+  });
 
   const fetchClients = async () => {
     await fetch(`/api/v1/clients/all`, {
@@ -126,7 +149,7 @@ export default function CreateTicketModal() {
             initialFocus={cancelButtonRef}
             onClose={setOpen}
           >
-            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="flex items-end justify-center min-h-screen align-middle pt-4 mx-4 md:mx-12 text-center -mt-[50%] sm:-mt-0 sm:block sm:p-0">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -155,7 +178,7 @@ export default function CreateTicketModal() {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full sm:p-6">
+                <div className="inline-block bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 align-middle md:max-w-6xl w-full ">
                   <div className="flex flex-row w-full">
                     <span className="text-md pb-2 font-bold text-xl">
                       {t("ticket_new")}
@@ -198,7 +221,50 @@ export default function CreateTicketModal() {
                       className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                     />
 
-                    <TipTapEditor value={issue} setContent={setIssue} />
+
+                    <RichTextEditor editor={editor}>
+                      <RichTextEditor.Toolbar>
+                        <RichTextEditor.ControlsGroup>
+                          <RichTextEditor.Bold />
+                          <RichTextEditor.Italic />
+                          <RichTextEditor.Underline />
+                          <RichTextEditor.Strikethrough />
+                          <RichTextEditor.ClearFormatting />
+                          <RichTextEditor.Highlight />
+                          <RichTextEditor.Code />
+                        </RichTextEditor.ControlsGroup>
+
+                        <RichTextEditor.ControlsGroup>
+                          <RichTextEditor.H1 />
+                          <RichTextEditor.H2 />
+                          <RichTextEditor.H3 />
+                          <RichTextEditor.H4 />
+                        </RichTextEditor.ControlsGroup>
+
+                        <RichTextEditor.ControlsGroup>
+                          <RichTextEditor.Blockquote />
+                          <RichTextEditor.Hr />
+                          <RichTextEditor.BulletList />
+                          <RichTextEditor.OrderedList />
+                          <RichTextEditor.Subscript />
+                          <RichTextEditor.Superscript />
+                        </RichTextEditor.ControlsGroup>
+
+                        <RichTextEditor.ControlsGroup>
+                          <RichTextEditor.Link />
+                          <RichTextEditor.Unlink />
+                        </RichTextEditor.ControlsGroup>
+
+                        <RichTextEditor.ControlsGroup>
+                          <RichTextEditor.AlignLeft />
+                          <RichTextEditor.AlignCenter />
+                          <RichTextEditor.AlignJustify />
+                          <RichTextEditor.AlignRight />
+                        </RichTextEditor.ControlsGroup>
+                      </RichTextEditor.Toolbar>
+
+                      <RichTextEditor.Content style={{ minHeight: 320 }} />
+                    </RichTextEditor>
 
                     <div className="flex flex-row space-x-4 pb-2 mt-2">
                       <Listbox value={company} onChange={setCompany}>
@@ -286,7 +352,9 @@ export default function CreateTicketModal() {
                             <div className="mt-1 relative">
                               <Listbox.Button className="bg-white relative min-w-[164px] w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ">
                                 <span className="block truncate">
-                                  {engineer ? engineer.name : "Select an Engineer"}
+                                  {engineer
+                                    ? engineer.name
+                                    : "Select an Engineer"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <SelectorIcon
