@@ -135,7 +135,7 @@ export default function CreateTicketModal() {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 mr-3 text-white"
+            className="text-white mr-3 flex-shrink-0 h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -147,7 +147,14 @@ export default function CreateTicketModal() {
               d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
             />
           </svg>
-          <span className="text-white ">{t("create_ticket")}</span>
+          <span className="text-white whitespace-nowrap">
+            {t("create_ticket")}
+          </span>
+          <div className="flex w-full justify-end float-right">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+              c
+            </span>
+          </div>
         </button>
       </>
 

@@ -47,21 +47,21 @@ export default function SideLayout({ children }) {
       href: `/${locale}/`,
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
-      initial: 'h'
+      initial: "h",
     },
     {
       name: t("sl_notebook"),
       href: `/${locale}/notebook`,
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
-      initial: 'n'
+      initial: "n",
     },
     {
       name: t("sl_tickets"),
       current: location.pathname.includes("/ticket") ? true : false,
       icon: TicketIcon,
       href: `/${locale}/tickets`,
-      initial: 't'
+      initial: "t",
     },
     {
       name: "Email Queues",
@@ -88,8 +88,11 @@ export default function SideLayout({ children }) {
 
   const handleKeyPress = useCallback((event) => {
     console.log(`Key pressed: ${event.key}`);
-    console.log(document.activeElement.tagName)
-    if(document.activeElement.tagName !== 'INPUT' && !document.activeElement.className.includes("ProseMirror")) {
+    console.log(document.activeElement.tagName);
+    if (
+      document.activeElement.tagName !== "INPUT" &&
+      !document.activeElement.className.includes("ProseMirror")
+    ) {
       switch (event.key) {
         case "c":
           var btn = document.getElementById("ticket_create");
@@ -99,10 +102,13 @@ export default function SideLayout({ children }) {
           location.push("/");
           break;
         case "n":
-          location.push("notebook");
+          location.push("/notebook");
           break;
         case "t":
-          location.push("tickets");
+          location.push("/tickets");
+          break;
+        case "a":
+          location.push("/admin");
           break;
         default:
           break;
@@ -357,10 +363,12 @@ export default function SideLayout({ children }) {
                             )}
                           >
                             <item.icon
-                              className="text-white mr-3 flex-shrink-0 h-6 w-62"
+                              className="text-white mr-3 flex-shrink-0 h-6 w-6"
                               aria-hidden="true"
                             />
-                            <span className="whitespace-nowrap">{item.name}</span>
+                            <span className="whitespace-nowrap">
+                              {item.name}
+                            </span>
                             <div className="flex w-full justify-end float-right">
                               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                                 {item.initial}
@@ -424,9 +432,7 @@ export default function SideLayout({ children }) {
                     )}
                   </nav>
                   <div
-                    className={
-                      session.user.isAdmin === true ? "mt-8" : "hidden"
-                    }
+                    className={session.user.isAdmin === true ? "" : "hidden"}
                   >
                     <div
                       className="mt-1 space-y-1 px-2"
@@ -436,50 +442,26 @@ export default function SideLayout({ children }) {
                         href="/admin"
                         className="group flex items-center px-2 py-2 text-xs font-semibold text-white rounded-md hover:bg-green-400 hover:text-white uppercase tracking-wider"
                       >
-                        <span className="truncate">ADMIN</span>
+                        <span className="">ADMIN</span>
+                        <div className="flex w-full justify-end float-right">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                            a
+                          </span>
+                        </div>
                       </Link>
-                      {/* <a
+                      <a
                         href="https://ko-fi.com/L3L0AA4YE"
                         target="_blank"
                         passHref
                       >
                         <img
-                          className="px-3 py-2 h-12"
+                          className="px-2 py-2 h-12"
                           height="36"
                           src="/kofi-white.png"
                           border="0"
                           alt="Buy Me a Coffee at ko-fi.com"
                         />
-                      </a> */}
-                      {/* <div className="px-3 py-2">
-                        <span className="text-white">
-                          Version -{" "}
-                          <a
-                            target="_blank"
-                            href="https://github.com/Peppermint-Lab/peppermint/releases"
-                          >
-                            <a>
-                              <span className="inline-flex ml-2 items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-white text-green-800 pointer pointer-events-auto">
-                                <svg
-                                  className="-ml-0.5 mr-1.5 h-2 w-2 text-green-400"
-                                  fill="currentColor"
-                                  viewBox="0 0 8 8"
-                                >
-                                  <circle cx={4} cy={4} r={3} />
-                                </svg>
-                                {process.env.NEXT_PUBLIC_VERSION}
-                              </span>
-                            </a>
-                          </a>
-                        </span>
-                      </div> */}
-
-                      {/* <button
-                        aria-label="Toggle Dark Mode"
-                        type="button"
-                        className="ml-3 px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 dark:text-slate-400 bg-white dark:bg-black hover:bg-gray-50"
-                        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                        >{theme}</button> */}
+                      </a>
                     </div>
                   </div>
                 </div>
