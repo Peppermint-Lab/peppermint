@@ -7,9 +7,16 @@ import { useRouter } from "next/router";
 import { SessionProvider, useSession } from "next-auth/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import Head from "next/head";
-import { HotKeys } from "react-hotkeys";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { SpotlightProvider } from "@mantine/spotlight";
+import {
+  FolderIcon,
+  HomeIcon,
+  MenuIcon,
+  TicketIcon,
+  XIcon,
+} from "@heroicons/react/outline";
 
 import { ThemeProvider } from "next-themes";
 
@@ -44,10 +51,45 @@ function Auth({ children }) {
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
 
-  const keyMap = {
-    NEW_TICKET: ["c"],
-    // CLOSE: ["esc"],
-  };
+  const actions = [
+    {
+      title: "Home",
+      description: "Get to home page",
+      onTrigger: () => console.log("Home"),
+      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+    },
+    {
+      title: "Notebook",
+      description: "Personal User Notes",
+      onTrigger: () => console.log("Dashboard"),
+      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+    },
+    {
+      title: "Tickets",
+      description:
+        "Central store for all company & user tickets, open or closed",
+      onTrigger: () => console.log("Documentation"),
+      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+    },
+    {
+      title: "Documentation",
+      description: "Documentation for peppermint.sh",
+      onTrigger: () => console.log("Documentation"),
+      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+    },
+    {
+      title: "Github",
+      description: "OSS codebase for peppermint",
+      onTrigger: () => console.log("Documentation"),
+      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+    },
+    {
+      title: "Peppermint.sh",
+      description: "",
+      onTrigger: () => console.log("Documentation"),
+      icon: <img className="h-7 ml-1 w-auto" src="/logo.svg" alt="Workflow" />,
+    },
+  ];
 
   if (
     router.asPath.slice(0, 5) === "/auth" ||
@@ -82,15 +124,22 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   if (router.pathname.includes("/admin")) {
     return (
       <SessionProvider session={session}>
-        <QueryClientProvider client={queryClient}>
-          <Auth>
-            <SideLayout>
-              <AdminLayout>
-                <Component {...pageProps} />
-              </AdminLayout>
-            </SideLayout>
-          </Auth>
-        </QueryClientProvider>
+        <MantineProvider withNormalizeCSS withGlobalStyles>
+          <SpotlightProvider
+            shortcut={["mod + P", "mod + K", "/"]}
+            actions={actions}
+          >
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <SideLayout>
+                  <AdminLayout>
+                    <Component {...pageProps} />
+                  </AdminLayout>
+                </SideLayout>
+              </Auth>
+            </QueryClientProvider>
+          </SpotlightProvider>
+        </MantineProvider>
       </SessionProvider>
     );
   }
@@ -114,19 +163,23 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
       <MantineProvider withNormalizeCSS withGlobalStyles>
-        <QueryClientProvider client={queryClient}>
-          {/* <ThemeProvider attribute="class"> */}
-          <Auth>
-            {/* <HotKeys keyMap={keyMap}> */}
-            <SideLayout>
-              <Notifications />
-              <Component {...pageProps} />
-            </SideLayout>
-            {/* </HotKeys> */}
-          </Auth>
+        <SpotlightProvider
+          shortcut={["mod + P", "mod + K", "/"]}
+          actions={actions}
+          searchPlaceholder="Search ..."
+        >
+          <QueryClientProvider client={queryClient}>
+            {/* <ThemeProvider attribute="class"> */}
+            <Auth>
+              <SideLayout>
+                <Notifications position="top-right" />
+                <Component {...pageProps} />
+              </SideLayout>
+            </Auth>
 
-          {/* </ThemeProvider> */}
-        </QueryClientProvider>
+            {/* </ThemeProvider> */}
+          </QueryClientProvider>
+        </SpotlightProvider>
       </MantineProvider>
     </SessionProvider>
   );

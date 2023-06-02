@@ -1667,6 +1667,13 @@
     "@mantine/utils" "6.0.13"
     react-transition-group "4.4.2"
 
+"@mantine/spotlight@^6.0.13":
+  version "6.0.13"
+  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-6.0.13.tgz#0b438ea41c7ce2f4cbdf6de263120a274653db75"
+  integrity sha512-HVpQRmE7pZxK9JWnX8G24KsrE2U/mgn5NF0MPbHNGbI5fbDjzW5rVDL7GvsgEHsWHXAhPeXci20sY+2v6573SA==
+  dependencies:
+    "@mantine/utils" "6.0.13"
+
 "@mantine/styles@6.0.13":
   version "6.0.13"
   resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-6.0.13.tgz#a3dc542e1613e7cc461dd8b11c6069b5dd8143d7"

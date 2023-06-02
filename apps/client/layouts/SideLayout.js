@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useCallback } from "react";
 import { Dialog, Transition, Disclosure } from "@headlessui/react";
 import {
   FolderIcon,
@@ -47,18 +47,21 @@ export default function SideLayout({ children }) {
       href: `/${locale}/`,
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
+      initial: 'h'
     },
     {
       name: t("sl_notebook"),
       href: `/${locale}/notebook`,
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
+      initial: 'n'
     },
     {
       name: t("sl_tickets"),
       current: location.pathname.includes("/ticket") ? true : false,
       icon: TicketIcon,
       href: `/${locale}/tickets`,
+      initial: 't'
     },
     {
       name: "Email Queues",
@@ -82,6 +85,40 @@ export default function SideLayout({ children }) {
     });
     getQueues();
   }, []);
+
+  const handleKeyPress = useCallback((event) => {
+    console.log(`Key pressed: ${event.key}`);
+    console.log(document.activeElement.tagName)
+    if(document.activeElement.tagName !== 'INPUT' && !document.activeElement.className.includes("ProseMirror")) {
+      switch (event.key) {
+        case "c":
+          var btn = document.getElementById("ticket_create");
+          btn.click();
+          break;
+        case "h":
+          location.push("/");
+          break;
+        case "n":
+          location.push("notebook");
+          break;
+        case "t":
+          location.push("tickets");
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener("keydown", handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   return (
     <div>
@@ -323,7 +360,12 @@ export default function SideLayout({ children }) {
                               className="text-white mr-3 flex-shrink-0 h-6 w-62"
                               aria-hidden="true"
                             />
-                            {item.name}
+                            <span className="whitespace-nowrap">{item.name}</span>
+                            <div className="flex w-full justify-end float-right">
+                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                {item.initial}
+                              </span>
+                            </div>
                           </Link>
                         </div>
                       ) : (

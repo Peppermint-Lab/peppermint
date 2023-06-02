@@ -18,10 +18,6 @@ export default function AdminLayout({ children }) {
       href: "/admin/clients",
     },
     {
-      name: t("sl_settings"),
-      href: "/admin/settings",
-    },
-    {
       name: "Email Queues",
       href: "/admin/email-queues",
     },
