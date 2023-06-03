@@ -19,6 +19,7 @@ export default async function createUser(req, res) {
           isAdmin: admin,
         },
       });
+
       res
         .status(200)
         .json({ message: "User saved successfully", failed: false });
@@ -27,5 +28,6 @@ export default async function createUser(req, res) {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error, success: false });
   }
 }

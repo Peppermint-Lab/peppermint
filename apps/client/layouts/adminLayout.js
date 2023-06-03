@@ -11,7 +11,7 @@ export default function AdminLayout({ children }) {
   const navigation = [
     {
       name: t("sl_users"),
-      href: "/admin/auth",
+      href: "/admin/users/internal",
     },
     {
       name: t("sl_clients"),

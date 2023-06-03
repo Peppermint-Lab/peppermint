@@ -1,15 +1,14 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { Popconfirm } from "antd";
 import {
   useTable,
   useFilters,
   useGlobalFilter,
   usePagination,
 } from "react-table";
-import ResetPassword from "../../components/ResetPassword";
-import CreateUser from "../../components/CreateUserModal";
-import UpdateUserModal from "../../components/UpdateUserModal";
+import ResetPassword from "../../../../components/ResetPassword";
+import UpdateUserModal from "../../../../components/UpdateUserModal";
+import Link from "next/link";
 
 const fetchUsers = async () => {
   const res = await fetch("/api/v1/users/all");
@@ -262,7 +261,12 @@ export default function Auth() {
               Internal Users
             </h1>
             <div className="ml-4">
-              <CreateUser />
+              <Link
+                href="/admin/users/internal/new"
+                className="inline-flex items-center p-1 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >
+                New User
+              </Link>
             </div>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">

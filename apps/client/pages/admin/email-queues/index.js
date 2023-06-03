@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function EmailQueues() {
@@ -51,12 +52,12 @@ export default function EmailQueues() {
                   </p>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                  <button
-                    type="button"
+                  <Link
+                    href='/admin/email-queues/new'
                     className="block rounded-md bg-indigo-600 py-1.5 px-3 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     New Queue
-                  </button>
+                  </Link>
                 </div>
               </div>
               <div className="-mx-4 mt-8 sm:-mx-0">

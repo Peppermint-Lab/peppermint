@@ -335,7 +335,7 @@ export default function SideLayout({ children }) {
             <div className="flex flex-col w-64">
               {/* Sidebar component, swap this element with another sidebar if you like */}
               <div className="flex flex-col h-0 flex-1 bg-gray-900">
-                <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                <div className="flex-1 flex flex-col pt-5 overflow-y-auto">
                   <div className="flex flex-shrink-0 px-4 align-middle flex-row">
                     <img
                       className="h-8 w-auto"
@@ -455,7 +455,7 @@ export default function SideLayout({ children }) {
                         passHref
                       >
                         <img
-                          className="px-2 py-2 h-12"
+                          className="px-2 py-2 h-12 w-full"
                           height="36"
                           src="/kofi-white.png"
                           border="0"

@@ -51,7 +51,6 @@ const options = {
     jwt: true,
     maxAge: 30 * 24 * 60 * 60,
   },
-
   database: process.env.DATABASE_URL,
   pages: {
     signIn: "/auth/login",
@@ -79,7 +78,7 @@ const options = {
       return Promise.resolve(session);
     },
   },
-  debug: true,
+  debug: false,
 };
 
 export default (req, res) => NextAuth(req, res, options);
