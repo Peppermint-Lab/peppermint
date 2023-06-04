@@ -108,7 +108,7 @@ export default function OpenTickets() {
                       <div className="flex flex-row justify-between items-center">
                         <Link
                           href={`/tickets/${item.id}`}
-                          className="hover:underline text-gray-900 uppercase capitalize"
+                          className="hover:underline text-gray-900 capitalize"
                         >
                           <span className="text-lg font-bold">
                             {item.title}

@@ -1,7 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/24/outline";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/20/solid";
+// import { XIcon } from "@heroicons/react/24/outline";
+import {
+  CheckIcon,
+  // SelectorIcon,
+  UserPlusIcon,
+} from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 
 function classNames(...classes) {
@@ -54,15 +58,14 @@ export default function TransferTicket({ id }) {
   }, []);
 
   return (
-    <div>
-      <button
-        className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        Transfer
-      </button>
+    <div
+      className="flex flex-row px-4 py-2 w-full group text-gray-400 hover:text-gray-500 hover:bg-gray-100 hover:cursor-pointer"
+      onClick={() => {
+        setOpen(true);
+      }}
+    >
+      <UserPlusIcon className="mr-3 h-5 w-5 " aria-hidden="true" />
+      <span className="text-sm font-medium text-gray-700">Transfer</span>
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog
@@ -107,7 +110,7 @@ export default function TransferTicket({ id }) {
                     onClick={() => setOpen(false)}
                   >
                     <span className="sr-only">Close</span>
-                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                    {/* <XIcon className="h-6 w-6" aria-hidden="true" /> */}
                   </button>
                 </div>
                 <div className="sm:flex sm:items-start w-full">
@@ -131,10 +134,10 @@ export default function TransferTicket({ id }) {
                                   {n ? n.name : "Please select new user"}
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                  <SelectorIcon
+                                  {/* <SelectorIcon
                                     className="h-5 w-5 text-gray-400"
                                     aria-hidden="true"
-                                  />
+                                  /> */}
                                 </span>
                               </Listbox.Button>
 

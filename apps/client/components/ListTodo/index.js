@@ -63,18 +63,16 @@ export default function ListTodo() {
             type="text"
             name="text"
             id="text"
-            className="w-full text-gray-900 border-none focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm "
+            className="w-full shadow-xl text-gray-900 border-none focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm "
             placeholder="Enter todo here..."
             onChange={(e) => {
               setText(e.target.value);
             }}
             onKeyDown={handleKeyDown}
             value={text}
+            onSubmit={() => onSubmit()}
           />
         </div>
-        <button type="button" onClick={() => onSubmit()} className="ml-4">
-          <ArrowRightIcon className="h-6 w-6" />
-        </button>
       </div>
 
       {status === "success" && (
@@ -83,21 +81,17 @@ export default function ListTodo() {
             {data.todos ? (
               data.todos.slice(minValue, maxValue).map((todo) => {
                 return (
-                  <div className="flex flex-col" key={todo.id}>
-                    <ul>
-                      <li>
-                        <span className={todo.done ? "line-through" : ""}>
-                          {todo.text}
-                        </span>
-                        <button
-                          onClick={() => deleteTodo(todo.id)}
-                          type="button"
-                          className="float-right border border-transparent rounded-full shadow-sm text-red-600 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        >
-                          <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                        </button>
-                      </li>
-                    </ul>
+                  <div className="flex row justify-between mt-1" key={todo.id}>
+                    <span className={todo.done ? "line-through text-sm" : "text-sm"}>
+                      {todo.text}
+                    </span>
+                    <button
+                      onClick={() => deleteTodo(todo.id)}
+                      type="button"
+                      className="float-right border border-transparent rounded-full shadow-sm text-red-600 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    >
+                      <TrashIcon className="h-4 w-4" aria-hidden="true" />
+                    </button>
                   </div>
                 );
               })

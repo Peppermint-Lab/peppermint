@@ -480,7 +480,7 @@ export default function Home() {
         )}
       </div>
       <div className="flex-1 p-2 bg-white shadow rounded-lg xl:ml-4">
-        {/* <span className="font-bold text-2xl">Todo's</span> */}
+        <span className="font-bold text-2xl">Reminders</span>
         <ListTodo />
       </div>
     </div>

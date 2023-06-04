@@ -1,7 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { message, Upload, Divider } from "antd";
 import moment from "moment";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
+import { Menu, Transition } from "@headlessui/react";
+import {
+  ArchiveBoxIcon,
+  ArrowRightCircleIcon,
+  ChevronDownIcon,
+  DocumentDuplicateIcon,
+  HeartIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  UserPlusIcon,
+} from "@heroicons/react/20/solid";
 
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
@@ -9,6 +20,10 @@ import TransferTicket from "../TransferTicket";
 import TipTapEditor from "../TipTapEditor";
 import renderHTML from "react-render-html";
 import LinkTicket from "../LinkTicketModal";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 export default function TicketDetail(props) {
   const [ticket, setTicket] = useState(props.ticket);
@@ -116,15 +131,15 @@ export default function TicketDetail(props) {
             <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
               <div>
                 <div>
-                  <div className="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
-                    <div className="w-1/2">
-                      <h1
+                  <div className="flex flex-row md:items-center justify-between md:space-x-4 xl:border-b xl:pb-6">
+                    <div className="">
+                      <span
                         className={
                           edit ? "hidden" : "text-2xl font-bold text-gray-900"
                         }
                       >
                         {title ? title : "No Title"}
-                      </h1>
+                      </span>
                       <input
                         type="text"
                         maxLength={64}
@@ -136,148 +151,170 @@ export default function TicketDetail(props) {
                             : "hidden"
                         }
                       />
-                      <p className="mt-2 text-sm font-bold">
-                        opened by user: {ticket.name} from client:{" "}
-                        {ticket.client ? ticket.client.name : ""}
-                      </p>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-bold">
+                          opened by user: {ticket.name}
+                        </span>
+                        <span className="text-sm font-bold">
+                          client: {ticket.client ? ticket.client.name : ""}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                    <div>
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
+                        <div>
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                            Actions
+                            <ChevronDownIcon
+                              className="-mr-1 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          </Menu.Button>
+                        </div>
 
-                  <div className="flex flex-row p-1 mt-2 space-x-4">
-                    <div className="mt-4 -ml-2 flex space-x-3 md:mt-0">
-                      <Upload {...propsUpload}>
-                        <button
-                          type="button"
-                          className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
                         >
-                          <svg
-                            className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 20"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                            />
-                          </svg>
-                          <span>Upload</span>
-                        </button>
-                      </Upload>
-                    </div>
-                    <div
-                      className={
-                        edit ? "hidden" : "mt-4 flex space-x-3 md:mt-0"
-                      }
-                    >
-                      <button
-                        onClick={() => setEdit(true)}
-                        type="button"
-                        className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                      >
-                        <svg
-                          className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                        </svg>
-                        <span>Edit</span>
-                      </button>
-                    </div>
-                    <div
-                      className={
-                        edit ? "mt-4 flex space-x-3 md:mt-0" : "hidden"
-                      }
-                    >
-                      <button
-                        onClick={async () => {
-                          setEdit(false);
-                          await update();
-                        }}
-                        type="button"
-                        className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                      >
-                        <svg
-                          className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                        </svg>
-                        <span>Save</span>
-                      </button>
-                    </div>
-                    <div className="mt-4 flex space-x-3 md:mt-0">
-                      {ticket.isComplete === false ? (
-                        <button
-                          onClick={async () => {
-                            await updateStatus();
-                            history.push("/ticket");
-                          }}
-                          type="button"
-                          className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span>Complete</span>
-                        </button>
-                      ) : (
-                        <button
-                          onClick={async () => {
-                            await updateStatus();
-                            history.reload(history.pathname);
-                          }}
-                          type="button"
-                          className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span>Un-complete</span>
-                        </button>
-                      )}
-                    </div>
-                    <div className="mt-4 flex space-x-3 md:mt-0">
-                      {ticket.client ? (
-                        <ClientNotesModal
-                          notes={props.ticket.client.notes}
-                          id={props.ticket.client.id}
-                        />
-                      ) : null}
-                    </div>
-                    <div className="mt-4 flex space-x-3 md:mt-0">
-                      <TransferTicket id={props.ticket.id} />
-                    </div>
-                    <div className="mt-4 flex space-x-3 md:mt-0">
-                      <LinkTicket id={props.ticket.id} />
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="py-1">
+                              {/* <Menu.Item>
+                                {({ active }) => (
+                                  <Upload {...propsUpload}>
+                                    <button
+                                      href="#"
+                                      className={classNames(
+                                        active
+                                          ? "bg-gray-100 text-gray-900"
+                                          : "text-gray-700",
+                                        "group flex items-center px-4 py-2 text-sm"
+                                      )}
+                                    >
+                                      <svg
+                                        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 20 20"
+                                        stroke="currentColor"
+                                        aria-hidden="true"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                                        />
+                                      </svg>
+                                      Upload
+                                    </button>
+                                  </Upload>
+                                )}
+                              </Menu.Item> */}
+                            </div>
+                            <div className="py-1">
+                              <Menu.Item>
+                                {({ active }) =>
+                                  ticket.isComplete === false ? (
+                                    <button
+                                      onClick={async () => {
+                                        await updateStatus();
+                                        history.reload(history.pathname);
+                                      }}
+                                      type="button"
+                                      className="group flex items-center px-4 py-2 text-sm group-hover:text-gray-500 hover:bg-gray-100 w-full"
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                        className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                      >
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                          clipRule="evenodd"
+                                        />
+                                      </svg>
+                                      <span className="text-gray-500">
+                                        Close
+                                      </span>
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={async () => {
+                                        await updateStatus();
+                                        history.reload(history.pathname);
+                                      }}
+                                      type="button"
+                                      className="group flex items-center px-4 py-2 text-sm group-hover:text-gray-500 hover:bg-gray-100 w-full"
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                        className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                      >
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                          clipRule="evenodd"
+                                        />
+                                      </svg>
+                                      <span className="text-gray-500">
+                                        Open
+                                      </span>
+                                    </button>
+                                  )
+                                }
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) =>
+                                  ticket.client ? (
+                                    <ClientNotesModal
+                                      notes={props.ticket.client.notes}
+                                      id={props.ticket.client.id}
+                                    />
+                                  ) : null
+                                }
+                              </Menu.Item>
+                            </div>
+                            <div className="py-1">
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <TransferTicket id={props.ticket.id} />
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <a
+                                    href="#"
+                                    className={classNames(
+                                      active
+                                        ? "bg-gray-100 text-gray-900"
+                                        : "text-gray-700",
+                                      "group flex items-center px-4 py-2 text-sm"
+                                    )}
+                                  >
+                                    <HeartIcon
+                                      className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      aria-hidden="true"
+                                    />
+                                    Link
+                                  </a>
+                                )}
+                              </Menu.Item>
+                            </div>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
                     </div>
                   </div>
 
@@ -622,7 +659,7 @@ export default function TicketDetail(props) {
                     Contact Details
                   </h2>
                   <div className="flex flex-col">
-                  {ticket.client ? (
+                    {ticket.client ? (
                       <>
                         <span>Name - {ticket.name}</span>
                         <span>Email - {ticket.email} </span>

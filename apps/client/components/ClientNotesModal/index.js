@@ -5,7 +5,7 @@ import { XIcon } from "@heroicons/react/24/outline";
 export default function ClientNotesModal({ notes, id }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(notes);
-  
+
   async function postMarkdown() {
     await fetch(`/api/v1/clients/${id}/create-note`, {
       method: "POST",
@@ -17,21 +17,21 @@ export default function ClientNotesModal({ notes, id }) {
         id,
       }),
     })
-    .then((res) => res.json())
-    .then((res) => {
-      if(res.success === true) {
-        setOpen(false)
-      } else {
-        alert(res.error)
-      }
-    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success === true) {
+          setOpen(false);
+        } else {
+          alert(res.error);
+        }
+      });
   }
 
   return (
     <div>
       <button
         type="button"
-        className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+        className="w-full flex  px-4 py-2  text-sm group-hover:text-gray-500 hover:bg-gray-100 "
         onClick={() => setOpen(true)}
       >
         Notes
