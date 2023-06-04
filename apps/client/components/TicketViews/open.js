@@ -1,191 +1,11 @@
 import React from "react";
 import { useQuery } from "react-query";
-import {
-  useTable,
-  useFilters,
-  useGlobalFilter,
-  usePagination,
-} from "react-table";
 import Link from "next/link";
 import Loader from "react-spinners/ClipLoader";
 import { useRouter } from "next/router";
 
 import MarkdownPreview from "../MarkdownPreview";
 import TicketsMobileList from "../../components/TicketsMobileList";
-
-function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
-  return (
-    <input
-      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-      type="text"
-      value={filterValue || ""}
-      onChange={(e) => {
-        setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-      }}
-      placeholder="Type to filter"
-    />
-  );
-}
-
-function Table({ columns, data }) {
-  const filterTypes = React.useMemo(
-    () => ({
-      // Add a new fuzzyTextFilterFn filter type.
-      // fuzzyText: fuzzyTextFilterFn,
-      // Or, override the default text filter to use
-      // "startWith"
-      text: (rows, id, filterValue) =>
-        rows.filter((row) => {
-          const rowValue = row.values[id];
-          return rowValue !== undefined
-            ? String(rowValue)
-                .toLowerCase()
-                .startsWith(String(filterValue).toLowerCase())
-            : true;
-        }),
-    }),
-    []
-  );
-
-  const defaultColumn = React.useMemo(
-    () => ({
-      // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter,
-    }),
-    []
-  );
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    prepareRow,
-    canPreviousPage,
-    canNextPage,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize },
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultColumn, // Be sure to pass the defaultColumn option
-      filterTypes,
-      initialState: {
-        pageIndex: 0,
-      },
-    },
-    useFilters, // useFilters!
-    useGlobalFilter,
-    usePagination
-  );
-
-  return (
-    <div className="overflow-x-auto md:-mx-6 lg:-mx-8">
-      <div className="py-2 align-middle inline-block min-w-full md:px-6 lg:px-8">
-        <div className="shadow overflow-hidden border-b border-gray-200 md:rounded-lg">
-          <table
-            {...getTableProps()}
-            className="min-w-full divide-y divide-gray-200"
-          >
-            <thead className="bg-gray-50">
-              {headerGroups.map((headerGroup) => (
-                <tr
-                  {...headerGroup.getHeaderGroupProps()}
-                  key={headerGroup.headers.map((header) => header.id)}
-                >
-                  {headerGroup.headers.map((column) =>
-                    column.hideHeader === false ? null : (
-                      <th
-                        {...column.getHeaderProps()}
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        {column.render("Header")}
-                        <div>
-                          {column.canFilter ? column.render("Filter") : null}
-                        </div>
-                      </th>
-                    )
-                  )}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row, i) => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()} className="bg-white">
-                    {row.cells.map((cell) => (
-                      <td
-                        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                        {...cell.getCellProps()}
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-
-          <nav
-            className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
-            aria-label="Pagination"
-          >
-            <div className="hidden sm:block">
-              <div className="flex flex-row flex-nowrap w-full space-x-2">
-                <p
-                  htmlFor="location"
-                  className="block text-sm font-medium text-gray-700 mt-4"
-                >
-                  Show
-                </p>
-                <select
-                  id="location"
-                  name="location"
-                  className="block w-full pl-3 pr-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                  }}
-                >
-                  {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                      {pageSize}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="flex-1 flex justify-between sm:justify-end">
-              <button
-                className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                type="button"
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-              >
-                Previous
-              </button>
-              <button
-                className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                type="button"
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-              >
-                Next
-              </button>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 async function getUserTickets() {
   const res = await fetch("/api/v1/ticket/open");
@@ -282,7 +102,28 @@ export default function OpenTickets() {
           {data.tickets && data.tickets.length > 0 && (
             <>
               <div className="hidden sm:block">
-                <Table columns={columns} data={data.tickets} />
+                {data.tickets.map((item) => (
+                  <div className="bg-white shadow-md rounded-lg mt-4">
+                    <div className="p-4 flex flex-col">
+                      <div className="flex flex-row justify-between items-center">
+                        <span className="text-lg font-bold">{item.title}</span>
+                        <span className="text-xs font-bold">3h ago</span>
+                      </div>
+                      <div className="">
+                        <span className="text-xs">{item.id}</span>
+                      </div>
+                      <div className="mt-2">
+                        <span className="text-sm">{item.detail}</span>
+                      </div>
+                      <div className="mt-2">
+                        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                          Low
+                        </span>
+                        <span className="ml-2">{item.client.name}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="sm:hidden">
