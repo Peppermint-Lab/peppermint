@@ -158,6 +158,18 @@ export default function TicketDetail(props) {
                         <span className="text-sm font-bold">
                           client: {ticket.client ? ticket.client.name : ""}
                         </span>
+                        <div className="flex flex-col text-sm font-bold">
+                          {ticket.client ? (
+                            <>
+                              <span>Name - {ticket.name}</span>
+                              <span>Email - {ticket.email} </span>
+                              <span>
+                                Number -{" "}
+                                {ticket.client ? ticket.client.number : ""}{" "}
+                              </span>
+                            </>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                     <div>
@@ -505,25 +517,6 @@ export default function TicketDetail(props) {
                 <div>
                   <Divider className="bg-gray-200" />
                   <h2 className="text-sm font-medium text-gray-500">
-                    Contact Details
-                  </h2>
-                  <div className="flex flex-col">
-                    {ticket.client ? (
-                      <>
-                        <span>Name - {ticket.name}</span>
-                        <span>Email - {ticket.email} </span>
-                        <span>
-                          Number - {ticket.client ? ticket.client.number : ""}{" "}
-                        </span>
-                      </>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-              <div className="mt-10">
-                <div>
-                  <Divider className="bg-gray-200" />
-                  <h2 className="text-sm font-medium text-gray-500">
                     Linked Tickets
                   </h2>
                   <div className="flex flex-col">
@@ -651,24 +644,6 @@ export default function TicketDetail(props) {
                     uploaded={uploaded}
                     setUploaded={setUploaded}
                   />
-                </div>
-              </div>
-              <div className="mt-6">
-                <div>
-                  <h2 className="text-sm font-medium text-gray-500">
-                    Contact Details
-                  </h2>
-                  <div className="flex flex-col">
-                    {ticket.client ? (
-                      <>
-                        <span>Name - {ticket.name}</span>
-                        <span>Email - {ticket.email} </span>
-                        <span>
-                          Number - {ticket.client ? ticket.client.number : ""}{" "}
-                        </span>
-                      </>
-                    ) : null}
-                  </div>
                 </div>
               </div>
             </aside>
