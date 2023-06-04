@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/solid";
+import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/20/solid";
 import useTranslation from "next-translate/useTranslation";
 import { HotKeys } from "react-hotkeys";
 import { RichTextEditor, Link } from "@mantine/tiptap";

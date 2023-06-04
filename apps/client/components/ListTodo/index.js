@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Pagination } from "antd";
-import { TrashIcon, ArrowRightIcon } from "@heroicons/react/solid";
+import { TrashIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "react-query";
 
 async function getTodos() {

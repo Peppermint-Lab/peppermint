@@ -3,10 +3,9 @@ import { Dialog, Transition, Disclosure } from "@headlessui/react";
 import {
   FolderIcon,
   HomeIcon,
-  MenuIcon,
   TicketIcon,
   XIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -15,6 +14,7 @@ import { useTheme } from "next-themes";
 
 import useTranslation from "next-translate/useTranslation";
 import CreateTicketModal from "../components/CreateTicketModal";
+import { Bars3Icon } from "@heroicons/react/20/solid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -177,10 +177,10 @@ export default function SideLayout({ children }) {
                         onClick={() => setSidebarOpen(false)}
                       >
                         <span className="sr-only">Close sidebar</span>
-                        <XIcon
+                        {/* <XIcon
                           className="h-6 w-6 text-white"
                           aria-hidden="true"
-                        />
+                        /> */}
                       </button>
                     </div>
                   </Transition.Child>
@@ -498,7 +498,10 @@ export default function SideLayout({ children }) {
                 onClick={() => setSidebarOpen(true)}
               >
                 <span className="sr-only">Open sidebar</span>
-                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                <Bars3Icon
+                  className="h-6 w-6"
+                  aria-hidden="true"
+                />
               </button>
             </div>
             <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-bg-slate-100 ">

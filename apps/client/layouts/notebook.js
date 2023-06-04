@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import Loader from "react-spinners/ClipLoader";
-import { PlusIcon as PlusIconMini } from "@heroicons/react/solid";
+import { PlusIcon as PlusIconMini } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import Link from "next/link";
 

@@ -16,7 +16,7 @@ import {
   MenuIcon,
   TicketIcon,
   XIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/24/outline";
 
 import { ThemeProvider } from "next-themes";
 
