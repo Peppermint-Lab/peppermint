@@ -70,17 +70,27 @@ export default function Home() {
   }
 
   const stats = [
-    { name: t("open_tickets"), stat: openTickets, href: "/tickes" },
+    { name: t("open_tickets"), stat: openTickets, href: "/tickets" },
     {
       name: t("completed_tickets"),
       stat: completedTickets,
-      href: "/tickets/closed",
+      href: "/tickets?filter=closed",
     },
     {
       name: "Unassigned Tickets",
       stat: unassigned,
-      href: "/tickets/unassigned",
+      href: "/tickets?filter=unassigned",
     },
+  ];
+
+  const people = [
+    {
+      name: "Lindsay Walton",
+      title: "Front-end Developer",
+      email: "lindsay.walton@example.com",
+      role: "Member",
+    },
+    // More people...
   ];
 
   const propsUpload = {
@@ -125,12 +135,11 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      <main className="p-1">
-        {/* Page header */}
+    <div className="flex flex-row min-h-[85vh]">
+      <div className="w-[70%]">
         <div className="bg-white shadow">
-          <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-            <div className="py-6 md:flex md:items-center md:justify-between">
+          <div className="px-4 sm:px-6 lg:w-full lg:mx-auto lg:px-8">
+            <div className="py-1 md:flex md:items-center md:justify-between">
               <div className="flex-1 min-w-0">
                 {/* Profile */}
                 <div className="flex items-center">
@@ -146,13 +155,14 @@ export default function Home() {
                           {session.user.name[0]}
                         </span>
                       </span>
-                      <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        {t("hello_good")}{" "}
-                        {hour < 12 ? t("hello_morning") : t("hello_afternoon")},{" "}
-                        {session.user.name}!
-                      </h1>
+                      <span className="ml-3 pt-4 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
+                        {t("hello_good")}
+                        {hour < 12
+                          ? t("hello_morning")
+                          : t("hello_afternoon")}, {session.user.name}!
+                      </span>
                     </div>
-                    <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
+                    <dl className="flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
                       <dt className="sr-only">{t("account_status")}</dt>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
                         <CheckCircleIcon
@@ -191,50 +201,83 @@ export default function Home() {
               </dl>
             </div>
 
-            <div className="flex sm:flex-row mt-5 flex-nowrap flex-col gap-4">
-              <div className="flex w-full sm:w-3/5">
-                <div className="bg-white shadow w-full h-full sm:rounded-lg">
-                  <div className="px-2 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-4">
-                    <div className="px-2 py-5 sm:p-6">
-                      <div>
-                        <h1 className="font-bold leading-7 text-gray-900">
-                          {t("todo_list")}
-                        </h1>
-                      </div>
-                      <ListTodo />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex w-full sm:w-2/5">
-                <div className="bg-white shadow w-full h-full sm:rounded-lg">
-                  <div className="px-2 py-5 sm:p-6 flex flex-row">
-                    <h2
-                      className="font-bold leading-7 text-gray-900"
-                      id="recent-hires-title"
-                    >
-                      {t("personal_files")}
-                    </h2>
-                    <Upload
-                      {...propsUpload}
-                      className="px-4 flex align-middle items-center -mt-3"
-                    >
-                      <button>
-                        <UploadOutlined />
-                      </button>
-                    </Upload>
-                  </div>
-                  <ListUserFiles
-                    uploaded={uploaded}
-                    setUploaded={() => setUploaded()}
-                  />
-                </div>
+            <div className="flex w-full flex-col ">
+              <span className="font-bold text-2xl">Recent Tickets</span>
+              <div className="-mx-4 sm:-mx-0 w-full">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      >
+                        Title
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                      >
+                        Priority
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                      >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Type
+                      </th>
+                      <th
+                        scope="col"
+                        className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                      >
+                        <span className="sr-only">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 ">
+                    {people.map((person) => (
+                      <tr key={person.email}>
+                        <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                          {person.name}
+                          <dl className="font-normal lg:hidden">
+                            <dt className="sr-only">Title</dt>
+                            <dd className="mt-1 truncate text-gray-700">
+                              {person.title}
+                            </dd>
+                            <dt className="sr-only sm:hidden">Email</dt>
+                            <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                              {person.email}
+                            </dd>
+                          </dl>
+                        </td>
+                        <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                          {person.title}
+                        </td>
+                        <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                          {person.email}
+                        </td>
+                        <td className="px-3 py-4 text-sm text-gray-500">
+                          {person.role}
+                        </td>
+                        <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </>
         )}
-      </main>
+      </div>
+      <div className="flex-1 p-2">
+        <span className="font-bold text-2xl">Todo's</span>
+        <ListTodo />
+      </div>
     </div>
   );
 }

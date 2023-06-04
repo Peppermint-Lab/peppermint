@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat
 # if these dependency files change. Nice speed hack!
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install 
 
 # Now we make a container to handle our Build
 FROM node:14-alpine AS BUILD_IMAGE
@@ -25,7 +25,7 @@ RUN yarn build
 # Remove all the development dependencies since we don't
 # need them to run the actual server.
 RUN rm -rf node_modules
-RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
+RUN yarn install --production --ignore-scripts --prefer-offline
 RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
