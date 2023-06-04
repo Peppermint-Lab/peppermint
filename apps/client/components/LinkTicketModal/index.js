@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { XIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, SelectorIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 
 function classNames(...classes) {

@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
+import { XIcon } from "@heroicons/react/24/outline";
 
 export default function ClientNotesModal({ notes, id }) {
   const [open, setOpen] = useState(false);
