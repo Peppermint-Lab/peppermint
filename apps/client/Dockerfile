@@ -1,4 +1,4 @@
-FROM node:14-alpine AS deps
+FROM node:18-alpine AS deps
 
 RUN apk add --no-cache libc6-compat
 
@@ -6,11 +6,11 @@ RUN apk add --no-cache libc6-compat
 # so that this `yarn install` layer is only recomputed
 # if these dependency files change. Nice speed hack!
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY package.json ./
 RUN yarn install 
 
 # Now we make a container to handle our Build
-FROM node:14-alpine AS BUILD_IMAGE
+FROM node:18-alpine AS BUILD_IMAGE
 
 # Set up our work directory again
 WORKDIR /app
@@ -30,7 +30,7 @@ RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
 
-FROM node:14-alpine
+FROM node:18-alpine
 
 RUN apk update
 RUN apk add --no-cache bash
