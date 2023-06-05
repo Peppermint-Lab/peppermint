@@ -1,10 +1,19 @@
 import fs from "fs";
+const { prisma } = require("../../../../../prisma/prisma");
 
 export default async function listFiles(req, res) {
   const { filepath } = req.query;
 
   try {
-    const Buffer = fs.createReadStream(filepath);
+    const Buffer = fs.createReadStream(userFile.path);
+
+    const { id } = req.query;
+
+    const userFile = await prisma.userFile.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
 
     await new Promise(function (resolve) {
       Buffer.pipe(res);
