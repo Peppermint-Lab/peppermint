@@ -26,12 +26,12 @@ const getEmails = async () => {
 
     for (let i = 0; i < queues.length; i++) {
       var imapConfig = {
-        user: process.env.username,
-        password: process.env.password,
-        host: "imap.gmail.com",
+        user: queues[i].username,
+        password: queues[i].password,
+        host: queues[i].hostname,
         port: 993,
         tls: true,
-        tlsOptions: { servername: "imap.gmail.com" },
+        tlsOptions: { servername: queues[i].hostname },
       };
 
       const imap = new Imap(imapConfig);
@@ -67,7 +67,6 @@ const getEmails = async () => {
                       body: text ? text : "No Body",
                       html: html ? html : '',
                       text: textAsHtml,
-                      emailQueueId: "1",
                     },
                   });
 

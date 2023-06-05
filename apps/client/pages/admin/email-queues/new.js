@@ -1,35 +1,34 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function EmailQueues() {
-  const [queues, setQueues] = useState();
+  const router = useRouter();
 
-  // fetch queues / display them
-  // create a new queue
+  const [name, setName] = useState();
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [hostname, setHostname] = useState();
+  const [tls, setTls] = useState();
 
-  async function fetchQueues() {
-    const res = await fetch("/api/v1/admin/email-queue/check").then((res) =>
-      res.json()
-    );
-    setQueues(res.queues);
-  }
-
-  async function deleteItem(id) {
-    await fetch("/api/v1/admin/email-queue/delete", {
+  async function newQueue() {
+    await fetch("/api/v1/admin/email-queue/new", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id,
+        name,
+        username,
+        password,
+        hostname,
+        tls,
       }),
     })
       .then((res) => res.json())
-      .then(() => fetchQueues());
+      .then(() => {
+        // router.back();
+      });
   }
-
-  useEffect(() => {
-    fetchQueues();
-  });
 
   return (
     <div>
@@ -41,7 +40,101 @@ export default function EmailQueues() {
                 New Email Queue
               </h1>
             </div>
-            <div className="px-4 sm:px-6 md:px-0"></div>
+            <div className="">
+              <div className="mt-4">
+                <div className="space-y-4 flex  justify-center flex-col w-full">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Queue name
+                    </label>
+                    <input
+                      type="text"
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="Enter first name here..."
+                      name="name"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Username (email)
+                    </label>
+                    <input
+                      type="email"
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
+                      placeholder="Enter first name here..."
+                      name="name"
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
+                      placeholder="Enter first name here..."
+                      name="name"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Hostname
+                    </label>
+                    <input
+                      type="text"
+                      className="shadow-sm w-1/2  focus:ring-indigo-500 focus:border-indigo-500 block  sm:text-sm border-gray-300 rounded-md"
+                      placeholder="Enter first name here..."
+                      name="name"
+                      onChange={(e) => setHostname(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      TLS
+                    </label>
+                    <select
+                      id="location"
+                      name="location"
+                      className="mt-2 block w-1/2 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      defaultValue="True"
+                      onChange={(e) => setTls(e.target.value)}
+                    >
+                      <option>True</option>
+                      <option>False</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    onClick={() => {
+                      newQueue();
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
