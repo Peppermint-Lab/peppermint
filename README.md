@@ -25,7 +25,6 @@
 
 <p align="center">
 It's a self hosted alternative to popular services such as zendesk
-<img src="./static/homepage.png" width="50%"  >
 </p>
 
 ## ✨ Features
