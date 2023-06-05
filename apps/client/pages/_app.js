@@ -21,6 +21,7 @@ import {
 import { ThemeProvider } from "next-themes";
 
 import SideLayout from "../layouts/SideLayout";
+import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
 import AdminLayout from "../layouts/adminLayout";
 
@@ -131,11 +132,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           >
             <QueryClientProvider client={queryClient}>
               <Auth>
-                <SideLayout>
+                <NewLayout>
                   <AdminLayout>
                     <Component {...pageProps} />
                   </AdminLayout>
-                </SideLayout>
+                </NewLayout>
               </Auth>
             </QueryClientProvider>
           </SpotlightProvider>
@@ -149,11 +150,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
           <Auth>
-            <SideLayout>
+            <NewLayout>
               <NoteBookLayout>
                 <Component {...pageProps} />
               </NoteBookLayout>
-            </SideLayout>
+            </NewLayout>
           </Auth>
         </QueryClientProvider>
       </SessionProvider>
@@ -171,10 +172,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           <QueryClientProvider client={queryClient}>
             {/* <ThemeProvider attribute="class"> */}
             <Auth>
-              <SideLayout>
+              <NewLayout>
+                {/* <SideLayout> */}
                 <Notifications position="top-right" />
                 <Component {...pageProps} />
-              </SideLayout>
+                {/* </SideLayout> */}
+              </NewLayout>
             </Auth>
 
             {/* </ThemeProvider> */}

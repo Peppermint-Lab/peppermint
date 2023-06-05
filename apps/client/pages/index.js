@@ -12,7 +12,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
   UserPlusIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
 
@@ -22,7 +22,7 @@ import ListTodo from "../components/ListTodo";
 import ListUserFiles from "../components/ListUserFiles";
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Home() {
@@ -34,6 +34,7 @@ export default function Home() {
   const [unassigned, setUnassigned] = useState(0);
   const [uploaded, setUploaded] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [tickets, setTickets] = useState();
 
   const { t } = useTranslation("peppermint");
 
@@ -81,6 +82,19 @@ export default function Home() {
       .then((res) => res.json())
       .then((res) => {
         setUnassigned(res.result);
+      });
+  }
+
+  async function fetchTickets() {
+    await fetch(`/api/v1/ticket/open`, {
+      method: "get",
+      headers: {
+        ContentType: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setTickets(res.tickets);
       });
   }
 
@@ -138,6 +152,7 @@ export default function Home() {
   };
 
   async function datafetch() {
+    fetchTickets();
     getOpenTickets();
     getCompletedTickets();
     getUnassginedTickets();
@@ -262,45 +277,48 @@ export default function Home() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {people.map((person) => (
-                      <tr key={person.email}>
-                        <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                          Printer not connecting
-                          <dl className="font-normal lg:hidden">
-                            <dt className="sr-only">Title</dt>
-                            <dd className="mt-1 truncate text-gray-700">
-                              {person.title}
-                            </dd>
-                            <dt className="sr-only sm:hidden">Email</dt>
-                            <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                              {person.email}
-                            </dd>
-                          </dl>
-                        </td>
-                        <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            Low
-                          </span>
-                        </td>
-                        <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                          <span className="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700">
-                            <svg
-                              className="h-1.5 w-1.5 fill-red-500"
-                              viewBox="0 0 6 6"
-                              aria-hidden="true"
-                            >
-                              <circle cx={3} cy={3} r={3} />
-                            </svg>
-                            Open
-                          </span>
-                        </td>
-                        <td className="px-3 py-4 text-sm text-gray-500">
-                          4 hours
-                        </td>
-                        <td className="px-3 py-4 text-sm text-gray-500">
-                          Admin
-                        </td>
-                        {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    {tickets !== undefined &&
+                      tickets.map((item) => (
+                        <tr key={item.id}>
+                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium truncate text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                            {item.title}
+                            <dl className="font-normal lg:hidden">
+                              <dt className="sr-only">Title</dt>
+                              <dd className="mt-1 truncate text-gray-700">
+                                {item.title}
+                              </dd>
+                              <dt className="sr-only sm:hidden">Email</dt>
+                              <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                {item.email}
+                              </dd>
+                            </dl>
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell w-[64px]">
+                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                              {item.priority}
+                            </span>
+                          </td>
+                          <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell w-[64px]">
+                            <span className="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
+                              <svg
+                                className="h-1.5 w-1.5 fill-red-500"
+                                viewBox="0 0 6 6"
+                                aria-hidden="true"
+                              >
+                                <circle cx={3} cy={3} r={3} />
+                              </svg>
+                              {item.isComplete === true ? "Open" : "Closed"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-4 text-sm text-gray-500 w-[160px]">
+                            4 hours
+                          </td>
+                          <td className="px-3 py-4 text-sm text-gray-500 w-[64px]">
+                            {item.assignedTo
+                              ? item.assignedTo.name
+                              : "Not Assigned"}
+                          </td>
+                          {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                           <Menu
                             as="div"
                             className="relative inline-block text-left"
@@ -470,8 +488,8 @@ export default function Home() {
                             </Transition>
                           </Menu>
                         </td> */}
-                      </tr>
-                    ))}
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
