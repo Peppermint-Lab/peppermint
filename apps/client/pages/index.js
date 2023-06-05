@@ -278,7 +278,7 @@ export default function Home() {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {tickets !== undefined &&
-                      tickets.map((item) => (
+                      tickets.slice(0,10).map((item) => (
                         <tr key={item.id}>
                           <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium truncate text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
                             {item.title}
