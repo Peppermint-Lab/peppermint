@@ -9,10 +9,20 @@ import {
   ChevronDownIcon,
   DocumentDuplicateIcon,
   HeartIcon,
+  PencilIcon,
   PencilSquareIcon,
   TrashIcon,
   UserPlusIcon,
 } from "@heroicons/react/20/solid";
+import { RichTextEditor, Link } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+import Highlight from "@tiptap/extension-highlight";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+// import TextAlign from '@tiptap/extension-text-align';
+import Superscript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
+import { notifications } from "@mantine/notifications";
 
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
@@ -38,6 +48,38 @@ export default function TicketDetail(props) {
   const [badge, setBadge] = useState("");
   const [uploaded, setUploaded] = useState();
   const [priority, setPriority] = useState(props.ticket.priority);
+
+  const IssueEditor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      // TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    ],
+    content: issue,
+    onUpdate({ editor }) {
+      setIssue(editor.getHTML());
+    },
+  });
+
+  const ActivityEditor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      // TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    ],
+    content: note,
+    onUpdate({ editor }) {
+      setNote(editor.getHTML());
+    },
+  });
 
   const history = useRouter();
 
@@ -172,7 +214,24 @@ export default function TicketDetail(props) {
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div className="flex flex-col gap-y-4">
+                      {!edit ? (
+                        <button
+                          type="button"
+                          onClick={() => setEdit(true)}
+                          className="inline-flex justify-center items-center gap-x-8 bg-white rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        >
+                          Edit
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => update()}
+                          className="inline-flex justify-center items-center gap-x-8 bg-white rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        >
+                          Save
+                        </button>
+                      )}
                       <Menu
                         as="div"
                         className="relative inline-block text-left"
@@ -343,7 +402,49 @@ export default function TicketDetail(props) {
                       )}
                     </div>
                     <div className={edit ? "prose max-w-none" : "hidden"}>
-                      <TipTapEditor value={issue} setContent={setIssue} />
+                      <RichTextEditor editor={IssueEditor}>
+                        <RichTextEditor.Toolbar>
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.Bold />
+                            <RichTextEditor.Italic />
+                            <RichTextEditor.Underline />
+                            <RichTextEditor.Strikethrough />
+                            <RichTextEditor.ClearFormatting />
+                            <RichTextEditor.Highlight />
+                            <RichTextEditor.Code />
+                          </RichTextEditor.ControlsGroup>
+
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.H1 />
+                            <RichTextEditor.H2 />
+                            <RichTextEditor.H3 />
+                            <RichTextEditor.H4 />
+                          </RichTextEditor.ControlsGroup>
+
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.Blockquote />
+                            <RichTextEditor.Hr />
+                            <RichTextEditor.BulletList />
+                            <RichTextEditor.OrderedList />
+                            <RichTextEditor.Subscript />
+                            <RichTextEditor.Superscript />
+                          </RichTextEditor.ControlsGroup>
+
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.Link />
+                            <RichTextEditor.Unlink />
+                          </RichTextEditor.ControlsGroup>
+
+                          <RichTextEditor.ControlsGroup>
+                            <RichTextEditor.AlignLeft />
+                            <RichTextEditor.AlignCenter />
+                            <RichTextEditor.AlignJustify />
+                            <RichTextEditor.AlignRight />
+                          </RichTextEditor.ControlsGroup>
+                        </RichTextEditor.Toolbar>
+
+                        <RichTextEditor.Content style={{ minHeight: 240 }} />
+                      </RichTextEditor>
                     </div>
                   </div>
                 </div>
@@ -369,7 +470,49 @@ export default function TicketDetail(props) {
                   )}
                 </div>
                 <div className={edit ? "mt-3" : "hidden"}>
-                  <TipTapEditor value={note} setContent={setNote} />
+                  <RichTextEditor editor={ActivityEditor}>
+                    <RichTextEditor.Toolbar>
+                      <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Bold />
+                        <RichTextEditor.Italic />
+                        <RichTextEditor.Underline />
+                        <RichTextEditor.Strikethrough />
+                        <RichTextEditor.ClearFormatting />
+                        <RichTextEditor.Highlight />
+                        <RichTextEditor.Code />
+                      </RichTextEditor.ControlsGroup>
+
+                      <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.H1 />
+                        <RichTextEditor.H2 />
+                        <RichTextEditor.H3 />
+                        <RichTextEditor.H4 />
+                      </RichTextEditor.ControlsGroup>
+
+                      <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Blockquote />
+                        <RichTextEditor.Hr />
+                        <RichTextEditor.BulletList />
+                        <RichTextEditor.OrderedList />
+                        <RichTextEditor.Subscript />
+                        <RichTextEditor.Superscript />
+                      </RichTextEditor.ControlsGroup>
+
+                      <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Link />
+                        <RichTextEditor.Unlink />
+                      </RichTextEditor.ControlsGroup>
+
+                      <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.AlignLeft />
+                        <RichTextEditor.AlignCenter />
+                        <RichTextEditor.AlignJustify />
+                        <RichTextEditor.AlignRight />
+                      </RichTextEditor.ControlsGroup>
+                    </RichTextEditor.Toolbar>
+
+                    <RichTextEditor.Content style={{ minHeight: 240 }} />
+                  </RichTextEditor>
                 </div>
               </section>
             </div>
