@@ -1,57 +1,18 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "next dev ",
-    "build": "next build",
-    "start": "next start",
-    "seed": "prisma db seed",
-    "migrate-dev": "prisma migrate dev --preview-feature",
-    "migrate": "prisma migrate deploy",
-    "generate": "prisma generate",
-    "docker": "yarn run migrate && yarn run generate && yarn run seed && yarn start",
-    "pm2-prod": "yarn run migrate && yarn run generate && yarn run seed && yarn run build && pm2 start npm --name \"next\" -- start"
-  },
-  "dependencies": {
-    "@headlessui/react": "^1.4.2",
-    "@heroicons/react": "^1.0.5",
-    "@prisma/client": "3.7.0",
-    "@tailwindcss/forms": "^0.4.0",
-    "@uiw/react-md-editor": "^3.9.3",
-    "add": "^2.0.6",
-    "antd": "^4.18.3",
-    "axios": "^0.25.0",
-    "bcrypt": "^5.0.1",
-    "express-fileupload": "^1.2.1",
-    "filesac": "^13.0.0",
-    "formidable": "^2.0.1",
-    "js-file-download": "^0.4.12",
-    "match-sorter": "^6.3.1",
-    "moment": "^2.29.1",
-    "next": "latest",
-    "next-auth": "^4.0.6",
-    "next-remove-imports": "^1.0.6",
-    "node": "^17.4.0",
-    "nodemailer": "^6.7.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-query": "^3.34.7",
-    "react-spinners": "^0.11.0",
-    "react-table": "^7.7.0",
-    "rehype-sanitize": "^5.0.1",
-    "request": "^2.88.2",
-    "yarn": "^1.22.17"
-  },
-  "devDependencies": {
-    "@types/node": "17.0.4",
-    "@types/react": "17.0.38",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.5",
-    "prisma": "^3.7.0",
-    "tailwindcss": "^3.0.7",
-    "typescript": "4.5.4"
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js",
-    "schema": "./prisma/schema.prisma"
+    "private": true,
+    "scripts": {
+      "build": "turbo run build",
+      "dev": "turbo run dev --parallel",
+      "lint": "turbo run lint",
+      "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    },
+    "devDependencies": {
+      "prettier": "^2.5.1",
+      "turbo": "latest"
+    },
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+      ],
+    "packageManager": "yarn@1.22.17"
   }
-}

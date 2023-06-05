@@ -1,0 +1,11 @@
+{
+    "apiFolder": "pages/api",
+    "schemaFolders": ["models"],
+    "definition": {
+      "openapi": "3.0.0",
+      "info": {
+        "title": "Peppermint Swagger api docs",
+        "version": "1.0"
+      }
+    }
+  }

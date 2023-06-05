@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                           String     @id @default(uuid())
+  createdAt                    DateTime   @default(now())
+  updatedAt                    DateTime   @default(now())
+  name                         String
+  password                     String
+  email                        String     @unique
+  isAdmin                      Boolean
+  language                     String?    @default("en")
+  notify_ticket_created        Boolean    @default(true)
+  notify_ticket_status_changed Boolean    @default(true)
+  notify_ticket_comments       Boolean    @default(true)
+  notify_ticket_assigned       Boolean    @default(true)
+  todos                        Todos[]
+  tickets                      Ticket[]
+  file                         UserFile[]
+  notes                        Notes[]
+  Team                         Team?      @relation(fields: [teamId], references: [id])
+  teamId                       String?
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+
+  members User[]
+  Ticket  Ticket[]
+}
+
+model Ticket {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  name       String
+  title      String
+  detail     String?
+  email      String
+  note       String?
+  isComplete Boolean
+  priority   String
+  linked     Json?
+  fromImap   Boolean
+  Number     Int      @default(autoincrement())
+
+  TicketFile TicketFile[]
+
+  team       Team?   @relation(fields: [teamId], references: [id])
+  teamId     String?
+  assignedTo User?   @relation(fields: [userId], references: [id])
+  client     Client? @relation(fields: [clientId], references: [id])
+  clientId   String?
+  userId     String?
+}
+
+model Client {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  name        String
+  email       String   @unique
+  contactName String
+  number      String?
+  notes       String?
+  tickets     Ticket[]
+  active      Boolean  @default(true)
+}
+
+model UserFile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  filename  String
+  path      String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model TicketFile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  filename  String
+  path      String
+
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+}
+
+model Notes {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  title      String
+  note       String
+  Favourited Boolean  @default(false)
+
+  createdBy User   @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model Todos {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  text      String
+  done      Boolean  @default(false)
+
+  createdBy User   @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model Webhooks {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  url       String
+  type      Hook
+  active    Boolean
+  secret    String?
+  createdBy String
+}
+
+model Discord {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  secret    String?
+  url       String
+  active    Boolean  @default(false)
+}
+
+model Slack {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  secret    String?
+  url       String
+  active    Boolean  @default(false)
+}
+
+model Email {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  active    Boolean  @default(false)
+  user      String
+  pass      String
+  secure    Boolean  @default(false)
+  host      String
+  reply     String
+  port      String
+}
+
+model Config {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  notifications Json // Array of service names and an active field of TRUE OR FALSE
+}
+
+model Imap_Email {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  from    String?
+  subject String?
+  body    String?
+  text    String?
+  html    String?
+
+  EmailQueue   EmailQueue? @relation(fields: [emailQueueId], references: [id])
+  emailQueueId String?
+}
+
+model EmailQueue {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  name     String
+  username String
+  password String
+  hostname String
+  tls      Boolean @default(true)
+  teams    Json?
+
+  imap Imap_Email[]
+}
+
+enum Hook {
+  ticket_created
+  ticket_status_changed
+}

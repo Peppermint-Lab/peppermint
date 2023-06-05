@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Next Swagger API Example",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/hello": {
+      "get": {
+        "description": "Returns all users",
+        "responses": {
+          "200": {
+            "description": "Array of all users"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}

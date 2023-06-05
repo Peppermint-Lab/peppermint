@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-pink: #ee415f;
+  --color-green: #58ce97;
+  --color-orange: #fc7d4a;
+  --color-red: #d14758;
+  --color-pale-pink: #ef6e85;
+  --color-coral: #f3907e;
+  --color-peach: #ecb38d;
+  --color-aqua: #a0ded0;
+  --color-pale-aqua: #c0ebe1;
+  --color-lightest-blue: #f8fcff;
+  --color-blue: #4c88e9;
+  --color-black: #242e39;
+  --color-gray-1: #3b424b;
+  --color-gray-2: #68707d;
+  --color-gray-3: #949fab;
+  --color-gray-4: #c7cdd4;
+  --color-gray-5: #edf1f6;
+  --color-gray-6: #f7f9fb;
+  --color-white: #fff;
+}
+
+.ProseMirror {
+  overflow-y: auto;
+  max-height: 70vh;
+}
