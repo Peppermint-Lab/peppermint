@@ -121,14 +121,14 @@ export default function OpenTickets() {
                       </div>
                       <div className="">
                         <span className="text-sm">
-                          Assigned To: {item.assignedTo.name}
+                          Assigned To: {item.assignedTo ? item.assignedTo.name : 'N/A'}
                         </span>
                       </div>
                       <div className="">
                         <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                           Low
                         </span>
-                        <span className="ml-2">{item.client.name}</span>
+                        <span className="ml-2">{item.client ? item.client.name : "No Client Assigned"}</span>
                       </div>
                     </div>
                   </div>

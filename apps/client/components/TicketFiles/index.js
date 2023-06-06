@@ -37,8 +37,6 @@ export default function TicketFiles({ id, uploaded, setUploaded }) {
       });
   }
 
-  console.log(uploaded);
-
   function download(file) {
     const url = `/api/v1/ticket/${id}/file/download?filepath=${file.path}`;
     let data = new FormData();
