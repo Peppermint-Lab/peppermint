@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { CheckIcon, SelectorIcon, XIcon } from "@heroicons/react/20/solid";
+import { CheckIcon } from "@heroicons/react/20/solid";
 import useTranslation from "next-translate/useTranslation";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
@@ -205,7 +205,7 @@ export default function CreateTicketModal() {
                     onClick={() => setOpen(false)}
                   >
                     <span className="sr-only">Close</span>
-                    <XIcon className="h-4 w-4" aria-hidden="true" />
+                    {/* <XIcon className="h-4 w-4" aria-hidden="true" /> */}
                   </button>
                 </div>
 
@@ -294,10 +294,10 @@ export default function CreateTicketModal() {
                                   : t("ticket_select_client")}
                               </span>
                               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                <SelectorIcon
+                                {/* <SelectorIcon
                                   className="h-5 w-5 text-gray-400"
                                   aria-hidden="true"
-                                />
+                                /> */}
                               </span>
                             </Listbox.Button>
 
@@ -373,10 +373,10 @@ export default function CreateTicketModal() {
                                   : "Select an Engineer"}
                               </span>
                               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                <SelectorIcon
+                                {/* <SelectorIcon
                                   className="h-5 w-5 text-gray-400"
                                   aria-hidden="true"
-                                />
+                                /> */}
                               </span>
                             </Listbox.Button>
 

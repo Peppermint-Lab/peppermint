@@ -567,8 +567,8 @@ export default function NewLayout({ children }) {
             </div>
           </div>
 
-          <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+          <main className="py-2">
+            <div className="px-2 sm:px-4">{children}</div>
           </main>
         </div>
       </div>

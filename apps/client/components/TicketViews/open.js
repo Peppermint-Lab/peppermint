@@ -106,14 +106,14 @@ export default function OpenTickets() {
                   <div className="bg-white shadow-md rounded-lg mt-4">
                     <div className="px-4 py-2 flex flex-col">
                       <div className="flex flex-row justify-between items-center">
-                        <Link
+                        <a
                           href={`/tickets/${item.id}`}
                           className="hover:underline text-gray-900 capitalize"
                         >
                           <span className="text-lg font-bold">
                             {item.title}
                           </span>
-                        </Link>
+                        </a>
                         <span className="text-xs font-bold">
                           {" "}
                           Created: 3h ago

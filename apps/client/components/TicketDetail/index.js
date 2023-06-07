@@ -13,6 +13,16 @@ import {
   PencilSquareIcon,
   TrashIcon,
   UserPlusIcon,
+  HomeIcon,
+  Bars4Icon,
+  UserCircleIcon,
+  BellIcon,
+  LockOpenIcon,
+  ChatBubbleLeftEllipsisIcon,
+  CalendarIcon,
+  TagIcon,
+  CheckCircleIcon,
+  LockClosedIcon,
 } from "@heroicons/react/20/solid";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
@@ -23,6 +33,46 @@ import Underline from "@tiptap/extension-underline";
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { notifications } from "@mantine/notifications";
+
+const activity = [
+  {
+    id: 1,
+    type: "comment",
+    person: { name: "Eduardo Benz", href: "#" },
+    imageUrl:
+      "https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt nunc ipsum tempor purus vitae id. Morbi in vestibulum nec varius. Et diam cursus quis sed purus nam. ",
+    date: "6d ago",
+  },
+  {
+    id: 2,
+    type: "assignment",
+    person: { name: "Hilary Mahy", href: "#" },
+    assigned: { name: "Kristin Watson", href: "#" },
+    date: "2d ago",
+  },
+  {
+    id: 3,
+    type: "tags",
+    person: { name: "Hilary Mahy", href: "#" },
+    tags: [
+      { name: "Bug", href: "#", color: "bg-rose-500" },
+      { name: "Accessibility", href: "#", color: "bg-indigo-500" },
+    ],
+    date: "6h ago",
+  },
+  {
+    id: 4,
+    type: "comment",
+    person: { name: "Jason Meyers", href: "#" },
+    imageUrl:
+      "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tincidunt nunc ipsum tempor purus vitae id. Morbi in vestibulum nec varius. Et diam cursus quis sed purus nam. Scelerisque amet elit non sit ut tincidunt condimentum. Nisl ultrices eu venenatis diam.",
+    date: "2h ago",
+  },
+];
 
 import TicketFiles from "../TicketFiles";
 import ClientNotesModal from "../ClientNotesModal";
@@ -167,131 +217,186 @@ export default function TicketDetail(props) {
 
   return (
     <div>
-      <div className="relative">
+      <main className="flex-1">
         <div className="py-8 xl:py-10">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 xl:max-w-5xl xl:grid xl:grid-cols-3 2xl:max-w-full">
-            <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 xl:grid xl:max-w-5xl xl:grid-cols-3">
+            <div className="xl:col-span-2 xl:border-r xl:border-gray-200 xl:pr-8">
               <div>
                 <div>
-                  <div className="flex flex-row md:items-center justify-between md:space-x-4 xl:border-b xl:pb-6">
-                    <div className="">
-                      <span
-                        className={
-                          edit ? "hidden" : "text-2xl font-bold text-gray-900"
-                        }
-                      >
-                        {title ? title : "No Title"}
-                      </span>
-                      <input
-                        type="text"
-                        maxLength={64}
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className={
-                          edit
-                            ? "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                            : "hidden"
-                        }
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-sm font-bold">
-                          opened by user: {ticket.name}
-                        </span>
-                        <span className="text-sm font-bold">
-                          client: {ticket.client ? ticket.client.name : ""}
-                        </span>
-                        <div className="flex flex-col text-sm font-bold">
-                          {ticket.client ? (
-                            <>
-                              <span>Name - {ticket.name}</span>
-                              <span>Email - {ticket.email} </span>
-                              <span>
-                                Number -{" "}
-                                {ticket.client ? ticket.client.number : ""}{" "}
-                              </span>
-                            </>
-                          ) : null}
-                        </div>
-                      </div>
+                  <div className="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
+                    <div>
+                      <h1 className="text-2xl font-bold text-gray-900">
+                        {title}
+                      </h1>
+                      <p className="mt-2 text-sm text-gray-500">
+                        {/* #400 opened by */}
+                        <span className="font-medium text-gray-900">
+                          {email}
+                        </span>{" "}
+                        via
+                        <a href="#" className="font-medium text-gray-900">
+                          {ticket.fromImap === true
+                            ? " Email"
+                            : " Ticket Creation"}
+                        </a>
+                      </p>
                     </div>
-                    <div className="flex flex-col gap-y-4">
-                      {!edit ? (
-                        <button
-                          type="button"
-                          onClick={() => setEdit(true)}
-                          className="inline-flex justify-center items-center gap-x-8 bg-white rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                        >
-                          Edit
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => update()}
-                          className="inline-flex justify-center items-center gap-x-8 bg-white rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                        >
-                          Save
-                        </button>
-                      )}
-                      
+                    <div className="mt-4 flex space-x-3 md:mt-0">
+                      <button
+                        type="button"
+                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      >
+                        <PencilIcon
+                          className="-ml-0.5 h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      >
+                        <BellIcon
+                          className="-ml-0.5 h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        Subscribe
+                      </button>
                     </div>
                   </div>
-
-                  <div className="py-3 xl:pt-6 xl:pb-0 ">
-                    <h1 className="text-xl">Issue</h1>
-                    <div className={edit ? "hidden" : "prose max-w-none"}>
-                      {issue ? (
-                        renderHTML(issue)
+                  <aside className="mt-8 xl:hidden">
+                    <h2 className="sr-only">Details</h2>
+                    <div className="space-y-5">
+                      {ticket.isComplete ? (
+                        <div className="flex items-center space-x-2">
+                          <LockOpenIcon
+                            className="h-5 w-5 text-green-500"
+                            aria-hidden="true"
+                          />
+                          <span className="text-sm font-medium text-green-700">
+                            Open Issue
+                          </span>
+                        </div>
                       ) : (
-                        <span>
-                          No issue has been entered yet ... Click edit to enter
-                          an issue
-                        </span>
+                        <div className="flex items-center space-x-2">
+                          <LockClosedIcon
+                            className="h-5 w-5 text-red-500"
+                            aria-hidden="true"
+                          />
+                          <span className="text-sm font-medium text-green-700">
+                            Closed Issue
+                          </span>
+                        </div>
                       )}
+                      {/* <div className="flex items-center space-x-2">
+                        <ChatBubbleLeftEllipsisIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          4 comments
+                        </span>
+                      </div> */}
+                      <div className="flex items-center space-x-2">
+                        <CalendarIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          Created on{" "}
+                          <time dateTime="2020-12-02">Dec 2, 2020</time>
+                        </span>
+                      </div>
                     </div>
-                    <div className={edit ? "prose max-w-none" : "hidden"}>
-                      <RichTextEditor editor={IssueEditor}>
-                        <RichTextEditor.Toolbar>
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Bold />
-                            <RichTextEditor.Italic />
-                            <RichTextEditor.Underline />
-                            <RichTextEditor.Strikethrough />
-                            <RichTextEditor.ClearFormatting />
-                            <RichTextEditor.Highlight />
-                            <RichTextEditor.Code />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.H1 />
-                            <RichTextEditor.H2 />
-                            <RichTextEditor.H3 />
-                            <RichTextEditor.H4 />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Blockquote />
-                            <RichTextEditor.Hr />
-                            <RichTextEditor.BulletList />
-                            <RichTextEditor.OrderedList />
-                            <RichTextEditor.Subscript />
-                            <RichTextEditor.Superscript />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Link />
-                            <RichTextEditor.Unlink />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.AlignLeft />
-                            <RichTextEditor.AlignCenter />
-                            <RichTextEditor.AlignJustify />
-                            <RichTextEditor.AlignRight />
-                          </RichTextEditor.ControlsGroup>
-                        </RichTextEditor.Toolbar>
-
-                        <RichTextEditor.Content style={{ minHeight: 240 }} />
-                      </RichTextEditor>
+                    <div className="mt-6 space-y-8 border-b border-t border-gray-200 py-6">
+                      <div>
+                        <h2 className="text-sm font-medium text-gray-500">
+                          Assignees
+                        </h2>
+                        <ul role="list" className="mt-3 space-y-3">
+                          <li className="flex justify-start">
+                            <a href="#" className="flex items-center space-x-3">
+                              <div className="flex-shrink-0">
+                                <img
+                                  className="h-5 w-5 rounded-full"
+                                  src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="text-sm font-medium text-gray-900">
+                                Eduardo Benz
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h2 className="text-sm font-medium text-gray-500">
+                          Tags
+                        </h2>
+                        <ul role="list" className="mt-2 leading-8">
+                          <li className="inline">
+                            <a
+                              href="#"
+                              className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            >
+                              <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div className="ml-3 text-xs font-semibold text-gray-900">
+                                Bug
+                              </div>
+                            </a>{" "}
+                          </li>
+                          <li className="inline">
+                            <a
+                              href="#"
+                              className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            >
+                              <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full bg-indigo-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div className="ml-3 text-xs font-semibold text-gray-900">
+                                Accessibility
+                              </div>
+                            </a>{" "}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </aside>
+                  <div className="py-3 xl:pb-0 xl:pt-6">
+                    <h2 className="sr-only">Description</h2>
+                    <div className="prose max-w-none">
+                      <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Expedita, hic? Commodi cumque similique id tempora
+                        molestiae deserunt at suscipit, dolor voluptatem,
+                        numquam, harum consequatur laboriosam voluptas tempore
+                        aut voluptatum alias?
+                      </p>
+                      <ul role="list">
+                        <li>
+                          Tempor ultrices proin nunc fames nunc ut auctor vitae
+                          sed. Eget massa parturient vulputate fermentum id
+                          facilisis nam pharetra. Aliquet leo tellus.
+                        </li>
+                        <li>
+                          Turpis ac nunc adipiscing adipiscing metus tincidunt
+                          senectus tellus.
+                        </li>
+                        <li>
+                          Semper interdum porta sit tincidunt. Dui suspendisse
+                          scelerisque amet metus eget sed. Ut tellus in sed
+                          dignissim.
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -300,346 +405,312 @@ export default function TicketDetail(props) {
                 aria-labelledby="activity-title"
                 className="mt-8 xl:mt-10"
               >
-                <div className="pb-4">
-                  <h2
-                    id="activity-title"
-                    className="text-lg font-medium text-gray-900"
-                  >
-                    Activity
-                  </h2>
-                  <div className="flow-root -mt-4"></div>
-                </div>
-                <div className={edit ? "hidden" : "mt-3"}>
-                  {note ? (
-                    renderHTML(note)
-                  ) : (
-                    <span>No work has been entered yet</span>
-                  )}
-                </div>
-                <div className={edit ? "mt-3" : "hidden"}>
-                  <RichTextEditor editor={ActivityEditor}>
-                    <RichTextEditor.Toolbar>
-                      <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.Bold />
-                        <RichTextEditor.Italic />
-                        <RichTextEditor.Underline />
-                        <RichTextEditor.Strikethrough />
-                        <RichTextEditor.ClearFormatting />
-                        <RichTextEditor.Highlight />
-                        <RichTextEditor.Code />
-                      </RichTextEditor.ControlsGroup>
+                <div>
+                  <div className="divide-y divide-gray-200">
+                    <div className="pb-4">
+                      <h2
+                        id="activity-title"
+                        className="text-lg font-medium text-gray-900"
+                      >
+                        Activity
+                      </h2>
+                    </div>
+                    <div className="pt-6">
+                      {/* Activity feed*/}
+                      <div className="flow-root">
+                        <ul role="list" className="-mb-8">
+                          {activity.map((item, itemIdx) => (
+                            <li key={item.id}>
+                              <div className="relative pb-8">
+                                {itemIdx !== activity.length - 1 ? (
+                                  <span
+                                    className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
+                                    aria-hidden="true"
+                                  />
+                                ) : null}
+                                <div className="relative flex items-start space-x-3">
+                                  {item.type === "comment" ? (
+                                    <>
+                                      <div className="relative">
+                                        <img
+                                          className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
+                                          src={item.imageUrl}
+                                          alt=""
+                                        />
 
-                      <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.H1 />
-                        <RichTextEditor.H2 />
-                        <RichTextEditor.H3 />
-                        <RichTextEditor.H4 />
-                      </RichTextEditor.ControlsGroup>
+                                        <span className="absolute -bottom-0.5 -right-1 rounded-tl bg-white px-0.5 py-px">
+                                          <ChatBubbleLeftEllipsisIcon
+                                            className="h-5 w-5 text-gray-400"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      </div>
+                                      <div className="min-w-0 flex-1">
+                                        <div>
+                                          <div className="text-sm">
+                                            <a
+                                              href={item.person.href}
+                                              className="font-medium text-gray-900"
+                                            >
+                                              {item.person.name}
+                                            </a>
+                                          </div>
+                                          <p className="mt-0.5 text-sm text-gray-500">
+                                            Commented {item.date}
+                                          </p>
+                                        </div>
+                                        <div className="mt-2 text-sm text-gray-700">
+                                          <p>{item.comment}</p>
+                                        </div>
+                                      </div>
+                                    </>
+                                  ) : item.type === "assignment" ? (
+                                    <>
+                                      <div>
+                                        <div className="relative px-1">
+                                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
+                                            <UserCircleIcon
+                                              className="h-5 w-5 text-gray-500"
+                                              aria-hidden="true"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="min-w-0 flex-1 py-1.5">
+                                        <div className="text-sm text-gray-500">
+                                          <a
+                                            href={item.person.href}
+                                            className="font-medium text-gray-900"
+                                          >
+                                            {item.person.name}
+                                          </a>{" "}
+                                          assigned{" "}
+                                          <a
+                                            href={item.assigned.href}
+                                            className="font-medium text-gray-900"
+                                          >
+                                            {item.assigned.name}
+                                          </a>{" "}
+                                          <span className="whitespace-nowrap">
+                                            {item.date}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div>
+                                        <div className="relative px-1">
+                                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
+                                            <TagIcon
+                                              className="h-5 w-5 text-gray-500"
+                                              aria-hidden="true"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="min-w-0 flex-1 py-0">
+                                        <div className="text-sm leading-8 text-gray-500">
+                                          <span className="mr-0.5">
+                                            <a
+                                              href={item.person.href}
+                                              className="font-medium text-gray-900"
+                                            >
+                                              {item.person.name}
+                                            </a>{" "}
+                                            added tags
+                                          </span>{" "}
+                                          <span className="mr-0.5">
+                                            {item.tags.map((tag) => (
+                                              <Fragment key={tag.name}>
+                                                <a
+                                                  href={tag.href}
+                                                  className="relative inline-flex items-center rounded-full px-2.5 py-1 text-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                                >
+                                                  <span className="absolute flex flex-shrink-0 items-center justify-center">
+                                                    <span
+                                                      className={classNames(
+                                                        tag.color,
+                                                        "h-1.5 w-1.5 rounded-full"
+                                                      )}
+                                                      aria-hidden="true"
+                                                    />
+                                                  </span>
+                                                  <span className="ml-3 font-semibold text-gray-900">
+                                                    {tag.name}
+                                                  </span>
+                                                </a>{" "}
+                                              </Fragment>
+                                            ))}
+                                          </span>
+                                          <span className="whitespace-nowrap">
+                                            {item.date}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="mt-6">
+                        <div className="flex space-x-3">
+                          <div className="flex-shrink-0">
+                            <div className="relative">
+                              <img
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
+                                src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                                alt=""
+                              />
 
-                      <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.Blockquote />
-                        <RichTextEditor.Hr />
-                        <RichTextEditor.BulletList />
-                        <RichTextEditor.OrderedList />
-                        <RichTextEditor.Subscript />
-                        <RichTextEditor.Superscript />
-                      </RichTextEditor.ControlsGroup>
-
-                      <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.Link />
-                        <RichTextEditor.Unlink />
-                      </RichTextEditor.ControlsGroup>
-
-                      <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.AlignLeft />
-                        <RichTextEditor.AlignCenter />
-                        <RichTextEditor.AlignJustify />
-                        <RichTextEditor.AlignRight />
-                      </RichTextEditor.ControlsGroup>
-                    </RichTextEditor.Toolbar>
-
-                    <RichTextEditor.Content style={{ minHeight: 240 }} />
-                  </RichTextEditor>
+                              <span className="absolute -bottom-0.5 -right-1 rounded-tl bg-white px-0.5 py-px">
+                                <ChatBubbleLeftEllipsisIcon
+                                  className="h-5 w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </div>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <form action="#">
+                              <div>
+                                <label htmlFor="comment" className="sr-only">
+                                  Comment
+                                </label>
+                                <textarea
+                                  id="comment"
+                                  name="comment"
+                                  rows={3}
+                                  className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                  placeholder="Leave a comment"
+                                  defaultValue={""}
+                                />
+                              </div>
+                              <div className="mt-6 flex items-center justify-end space-x-4">
+                                <button
+                                  type="button"
+                                  className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                >
+                                  <CheckCircleIcon
+                                    className="-ml-0.5 h-5 w-5 text-green-500"
+                                    aria-hidden="true"
+                                  />
+                                  Close issue
+                                </button>
+                                <button
+                                  type="submit"
+                                  className="inline-flex items-center justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                                >
+                                  Comment
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </section>
             </div>
-
             <aside className="hidden xl:block xl:pl-8">
               <h2 className="sr-only">Details</h2>
               <div className="space-y-5">
-                <div className="flex items-center">
-                  {ticket.isComplete ? (
-                    <div className="flex flex-row space-x-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-red-500"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-red-500 text-sm font-bold">
-                        Completed
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex-row flex space-x-2">
-                      <svg
-                        className="h-5 w-5 text-green-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
-                      </svg>
-                      <span className="text-green-700 text-sm font-medium ">
-                        Issued
-                      </span>
-                    </div>
-                  )}
-                </div>
                 <div className="flex items-center space-x-2">
-                  {!edit && (
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-                    >
-                      {ticket.priority}
-                    </span>
-                  )}
-                  {edit && (
-                    <div>
-                      <select
-                        id="location"
-                        name="location"
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                        defaultValue={ticket.priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                      >
-                        <option value="Low">Low</option>
-                        <option value="Normal">Normal</option>
-                        <option value="High">High</option>
-                      </select>
-                    </div>
-                  )}
-                </div>
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-900 text-sm font-medium">
-                    Created on{" "}
-                    <span>{moment(ticket.createdAt).format("DD/MM/YYYY")}</span>
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-900 text-sm font-medium">
-                    Last updated{" "}
-                    <span>{moment(ticket.updatedAt).format("DD/MM/YYYY")}</span>
-                  </span>
-                </div>
-              </div>
-              <div className="mt-6 border-t border-gray-200 py-6 space-y-8">
-                <div>
-                  <h2 className="text-sm font-medium text-gray-500">
-                    Assignees
-                  </h2>
-                  <ul className="mt-3 space-y-3">
-                    <li className="flex justify-start">
-                      <p href="#" className="flex items-center space-x-3">
-                        <div className="text-sm font-medium text-gray-900">
-                          <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
-                            <span className="font-medium leading-none text-white">
-                              {ticket.assignedTo
-                                ? ticket.assignedTo.name[0]
-                                : ""}
-                            </span>
-                          </span>
-                        </div>
-                        <span>
-                          {ticket.assignedTo
-                            ? ticket.assignedTo.name
-                            : "Not currently assigned"}
-                        </span>
-                      </p>
-                    </li>
-                  </ul>
-                  <Divider className="bg-gray-200" />
-                </div>
-              </div>
-              <div className="-mt-10">
-                <div className="flex flex-col">
-                  <TicketFiles
-                    id={id}
-                    uploaded={uploaded}
-                    setUploaded={setUploaded}
-                  />
-                </div>
-              </div>
-              <div className="mt-10">
-                <div>
-                  <Divider className="bg-gray-200" />
-                  <h2 className="text-sm font-medium text-gray-500">
-                    Linked Tickets
-                  </h2>
-                  <div className="flex flex-col">
-                    {ticket.linked &&
-                      Object.entries(ticket.linked).length > 0 &&
-                      Object.entries(ticket.linked).map((ticket) => (
-                        <span>
-                          {ticket[1].title} - #{ticket[1].id}
-                        </span>
-                      ))}
-                    {ticket.linked === null && <span>No linked tickets</span>}
-                  </div>
-                </div>
-              </div>
-            </aside>
-
-            <aside className="mt-8 xl:hidden">
-              <h2 className="sr-only">Details</h2>
-              <div className="space-y-5">
-                <div className="flex items-center space-x-2">
-                  <svg
+                  <LockOpenIcon
                     className="h-5 w-5 text-green-500"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
                     aria-hidden="true"
-                  >
-                    <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
-                  </svg>
-                  <span className="text-green-700 text-sm font-medium">
-                    {ticket.isComplete ? "Completed" : "Issued"}
+                  />
+                  <span className="text-sm font-medium text-green-700">
+                    Open Issue
                   </span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <svg
+                {/* <div className="flex items-center space-x-2">
+                  <ChatBubbleLeftEllipsisIcon
                     className="h-5 w-5 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
                     aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>
-                    {ticket.assignedTo
-                      ? ticket.assignedTo.name
-                      : "Not currently assigned"}
+                  />
+                  <span className="text-sm font-medium text-gray-900">
+                    4 comments
                   </span>
-                </div>
+                </div> */}
                 <div className="flex items-center space-x-2">
-                  <svg
+                  <CalendarIcon
                     className="h-5 w-5 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
                     aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-900 text-sm font-medium">
-                    Created on{" "}
-                    <span>{moment(ticket.createdAt).format("DD/MM/YYYY")}</span>
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-900 text-sm font-medium">
-                    Last updated{" "}
-                    <span>{moment(ticket.updatedAt).format("DD/MM/YYYY")}</span>
+                  />
+                  <span className="text-sm font-medium text-gray-900">
+                    Created on <time dateTime="2020-12-02">Dec 2, 2020</time>
                   </span>
                 </div>
               </div>
-              <div className="mt-6 border-t border-b border-gray-200 py-6 space-y-8">
+              <div className="mt-6 space-y-8 border-t border-gray-200 py-6">
                 <div>
                   <h2 className="text-sm font-medium text-gray-500">
                     Assignees
                   </h2>
-                  <ul className="mt-3 space-y-3">
+                  <ul role="list" className="mt-3 space-y-3">
                     <li className="flex justify-start">
-                      <div className="flex items-center space-x-3">
+                      <a href="#" className="flex items-center space-x-3">
                         <div className="flex-shrink-0">
-                          <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500">
-                            <span className="font-medium leading-none text-white">
-                              {ticket.assignedTo
-                                ? ticket.assignedTo.name[0]
-                                : ""}
-                            </span>
-                          </span>
+                          <img
+                            className="h-5 w-5 rounded-full"
+                            src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                            alt=""
+                          />
                         </div>
                         <div className="text-sm font-medium text-gray-900">
-                          <span>
-                            {" "}
-                            {ticket.assignedTo ? ticket.assignedTo.name : ""}
-                          </span>
+                          Eduardo Benz
                         </div>
-                      </div>
+                      </a>
                     </li>
                   </ul>
                 </div>
-              </div>
-              <div className="mt-6">
-                <div className="flex flex-col">
-                  <TicketFiles
-                    id={id}
-                    uploaded={uploaded}
-                    setUploaded={setUploaded}
-                  />
+                <div>
+                  <h2 className="text-sm font-medium text-gray-500">Tags</h2>
+                  <ul role="list" className="mt-2 leading-8">
+                    <li className="inline">
+                      <a
+                        href="#"
+                        className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      >
+                        <div className="absolute flex flex-shrink-0 items-center justify-center">
+                          <span
+                            className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <div className="ml-3 text-xs font-semibold text-gray-900">
+                          Bug
+                        </div>
+                      </a>{" "}
+                    </li>
+                    <li className="inline">
+                      <a
+                        href="#"
+                        className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      >
+                        <div className="absolute flex flex-shrink-0 items-center justify-center">
+                          <span
+                            className="h-1.5 w-1.5 rounded-full bg-indigo-500"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <div className="ml-3 text-xs font-semibold text-gray-900">
+                          Accessibility
+                        </div>
+                      </a>{" "}
+                    </li>
+                  </ul>
                 </div>
               </div>
             </aside>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

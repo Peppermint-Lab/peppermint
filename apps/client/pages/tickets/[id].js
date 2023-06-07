@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import TicketDetail from "../../components/TicketDetail";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Ticket() {
   const router = useRouter();
@@ -12,6 +13,11 @@ export default function Ticket() {
   };
 
   const { data, status, refetch } = useQuery("fetchTickets", fetchTicketById);
+
+
+  useEffect(() => {
+    refetch()
+  }, [router])
 
   return (
     <div>
