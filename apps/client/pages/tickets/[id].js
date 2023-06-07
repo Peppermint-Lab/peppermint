@@ -429,15 +429,15 @@ export default function Ticket() {
                               </span>
                             </div>
                           )}
-                          {/* <div className="flex items-center space-x-2">
-                          <ChatBubbleLeftEllipsisIcon
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span className="text-sm font-medium text-gray-900">
-                            4 comments
-                          </span>
-                        </div> */}
+                          <div className="flex items-center space-x-2">
+                            <ChatBubbleLeftEllipsisIcon
+                              className="h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                            <span className="text-sm font-medium text-gray-900">
+                              {data.ticket.Comment.length} comments
+                            </span>
+                          </div>
                           <div className="flex items-center space-x-2">
                             <CalendarIcon
                               className="h-5 w-5 text-gray-400"
@@ -588,148 +588,48 @@ export default function Ticket() {
                         <div className="pt-2">
                           {/* Activity feed*/}
                           <div className="flow-root">
-                            {data.ticket.Comment.lemgth > 0 && (
-                              <ul role="list" className="-mb-8">
-                                {comments !== undefined &&
-                                  comments.map((item, itemIdx) => (
-                                    <li key={item.id}>
-                                      <div className="relative pb-8">
-                                        {itemIdx !== activity.length - 1 ? (
-                                          <span
-                                            className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
-                                            aria-hidden="true"
-                                          />
-                                        ) : null}
-                                        <div className="relative flex items-start space-x-3">
-                                          {item.type === "comment" ? (
-                                            <>
-                                              <div className="relative">
-                                                <img
-                                                  className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
-                                                  src={item.imageUrl}
-                                                  alt=""
-                                                />
-
-                                                <span className="absolute -bottom-0.5 -right-1 rounded-tl bg-white px-0.5 py-px">
-                                                  <ChatBubbleLeftEllipsisIcon
-                                                    className="h-5 w-5 text-gray-400"
-                                                    aria-hidden="true"
-                                                  />
-                                                </span>
-                                              </div>
-                                              <div className="min-w-0 flex-1">
-                                                <div>
-                                                  <div className="text-sm">
-                                                    <a
-                                                      href={item.person.href}
-                                                      className="font-medium text-gray-900"
-                                                    >
-                                                      {item.person.name}
-                                                    </a>
-                                                  </div>
-                                                  <p className="mt-0.5 text-sm text-gray-500">
-                                                    Commented {item.date}
-                                                  </p>
-                                                </div>
-                                                <div className="mt-2 text-sm text-gray-700">
-                                                  <p>{item.comment}</p>
-                                                </div>
-                                              </div>
-                                            </>
-                                          ) : item.type === "assignment" ? (
-                                            <>
-                                              <div>
-                                                <div className="relative px-1">
-                                                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
-                                                    <UserCircleIcon
-                                                      className="h-5 w-5 text-gray-500"
-                                                      aria-hidden="true"
-                                                    />
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div className="min-w-0 flex-1 py-1.5">
-                                                <div className="text-sm text-gray-500">
-                                                  <a
-                                                    href={item.person.href}
-                                                    className="font-medium text-gray-900"
-                                                  >
-                                                    {item.person.name}
-                                                  </a>{" "}
-                                                  assigned{" "}
-                                                  <a
-                                                    href={item.assigned.href}
-                                                    className="font-medium text-gray-900"
-                                                  >
-                                                    {item.assigned.name}
-                                                  </a>{" "}
-                                                  <span className="whitespace-nowrap">
-                                                    {item.date}
-                                                  </span>
-                                                </div>
-                                              </div>
-                                            </>
-                                          ) : (
-                                            <>
-                                              <div>
-                                                <div className="relative px-1">
-                                                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
-                                                    <TagIcon
-                                                      className="h-5 w-5 text-gray-500"
-                                                      aria-hidden="true"
-                                                    />
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div className="min-w-0 flex-1 py-0">
-                                                <div className="text-sm leading-8 text-gray-500">
-                                                  <span className="mr-0.5">
-                                                    <a
-                                                      href={item.person.href}
-                                                      className="font-medium text-gray-900"
-                                                    >
-                                                      {item.person.name}
-                                                    </a>{" "}
-                                                    added tags
-                                                  </span>{" "}
-                                                  <span className="mr-0.5">
-                                                    {item.tags.map((tag) => (
-                                                      <Fragment key={tag.name}>
-                                                        <a
-                                                          href={tag.href}
-                                                          className="relative inline-flex items-center rounded-full px-2.5 py-1 text-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                                        >
-                                                          <span className="absolute flex flex-shrink-0 items-center justify-center">
-                                                            <span
-                                                              className={classNames(
-                                                                tag.color,
-                                                                "h-1.5 w-1.5 rounded-full"
-                                                              )}
-                                                              aria-hidden="true"
-                                                            />
-                                                          </span>
-                                                          <span className="ml-3 font-semibold text-gray-900">
-                                                            {tag.name}
-                                                          </span>
-                                                        </a>{" "}
-                                                      </Fragment>
-                                                    ))}
-                                                  </span>
-                                                  <span className="whitespace-nowrap">
-                                                    {item.date}
-                                                  </span>
-                                                </div>
-                                              </div>
-                                            </>
-                                          )}
+                            <ul role="list" className="-mb-8">
+                              {data.ticket.Comment.length > 0 &&
+                                data.ticket.Comment.map((item, itemIdx) => (
+                                  <li key={item.id}>
+                                    <div className="relative pb-8">
+                                      {itemIdx !==
+                                      data.ticket.Comment.length - 1 ? (
+                                        <span
+                                          className="absolute left-3 top-5 -ml-px h-full w-0.5 bg-gray-200"
+                                          aria-hidden="true"
+                                        />
+                                      ) : null}
+                                      <div className="relative flex items-start space-x-3">
+                                        <div className="relative">
+                                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                            <span className="font-medium leading-none text-xs text-white">
+                                              A
+                                            </span>
+                                          </span>
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <div>
+                                            <div className="text-sm">
+                                              <span className="font-medium text-gray-900">
+                                                Admin
+                                              </span>
+                                            </div>
+                                            <p className="text-xs text-gray-500">
+                                              Commented 4 hours ago
+                                            </p>
+                                          </div>
+                                          <div className="text-sm  text-gray-900">
+                                            <span>{item.text}</span>
+                                          </div>
                                         </div>
                                       </div>
-                                    </li>
-                                  ))}
-                              </ul>
-                            )}
+                                    </div>
+                                  </li>
+                                ))}
+                            </ul>
                           </div>
-                          <div className="mt-4">
+                          <div className="mt-12">
                             <div className="flex space-x-3">
                               <div className="flex-shrink-0">
                                 <div className="relative">
@@ -742,7 +642,7 @@ export default function Ticket() {
                                 </div>
                               </div>
                               <div className="min-w-0 flex-1">
-                                <form action="#">
+                                <div>
                                   <div>
                                     <label
                                       htmlFor="comment"
@@ -781,7 +681,7 @@ export default function Ticket() {
                                       Comment
                                     </button>
                                   </div>
-                                </form>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -831,14 +731,14 @@ export default function Ticket() {
                         <li className="flex justify-start">
                           <a href="#" className="flex items-center space-x-3">
                             <div className="flex-shrink-0">
-                              <img
-                                className="h-5 w-5 rounded-full"
-                                src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
-                                alt=""
-                              />
+                              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                <span className="text-xs font-medium leading-none text-white uppercase">
+                                  {data.ticket.assignedTo.name[0]}
+                                </span>
+                              </span>
                             </div>
                             <div className="text-sm font-medium text-gray-900">
-                              Eduardo Benz
+                              {data.ticket.assignedTo.name}
                             </div>
                           </a>
                         </li>

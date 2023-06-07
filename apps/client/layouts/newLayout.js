@@ -109,10 +109,9 @@ export default function NewLayout({ children }) {
   }, []);
 
   const handleKeyPress = useCallback((event) => {
-    console.log(`Key pressed: ${event.key}`);
-    console.log(document.activeElement.tagName);
     if (
       document.activeElement.tagName !== "INPUT" &&
+      document.activeElement.tagName !== "TEXTAREA" &&
       !document.activeElement.className.includes("ProseMirror")
     ) {
       switch (event.key) {
