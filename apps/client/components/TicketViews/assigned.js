@@ -50,7 +50,7 @@ function Table({ columns, data }) {
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter,
+      // Filter: DefaultColumnFilter,
     }),
     []
   );
@@ -105,9 +105,9 @@ function Table({ columns, data }) {
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         {column.render("Header")}
-                        <div>
+                        {/* <div>
                           {column.canFilter ? column.render("Filter") : null}
-                        </div>
+                        </div> */}
                       </th>
                     )
                   )}
@@ -200,12 +200,12 @@ export default function AssignedTickets() {
   const normal = "bg-green-100 text-green-800";
 
   const columns = React.useMemo(() => [
-    {
-      Header: "No.",
-      accessor: "id",
-      width: 10,
-      id: "id",
-    },
+    // {
+    //   Header: "No.",
+    //   accessor: "id",
+    //   width: 10,
+    //   id: "id",
+    // },
     {
       Header: "Name",
       accessor: "name",
@@ -245,11 +245,11 @@ export default function AssignedTickets() {
         );
       },
     },
-    {
-      Header: "Team",
-      accessor: "team.name",
-      id: "team_name",
-    },
+    // {
+    //   Header: "Team",
+    //   accessor: "team.name",
+    //   id: "team_name",
+    // },
     {
       Header: "Title",
       accessor: "title",

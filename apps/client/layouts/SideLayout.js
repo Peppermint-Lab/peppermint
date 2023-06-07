@@ -504,7 +504,7 @@ export default function SideLayout({ children }) {
                 />
               </button>
             </div>
-            <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-bg-slate-100 ">
+            <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-slate-100">
               <div className="py-6">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
                   <div className="py-4">{children}</div>
