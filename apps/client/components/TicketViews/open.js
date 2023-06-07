@@ -19,6 +19,9 @@ async function getUserTickets() {
 }
 
 function Table({ columns, data }) {
+
+  const router = useRouter()
+
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -110,7 +113,13 @@ function Table({ columns, data }) {
               {page.map((row, i) => {
                 prepareRow(row);
                 return (
-                  <tr {...row.getRowProps()} className="bg-white">
+                  <tr
+                    {...row.getRowProps()}
+                    className="bg-white hover:bg-gray-100 hover:cursor-pointer"
+                    onClick={() => {
+                      router.push(`/tickets/${row.original.id}`);
+                    }}
+                  >
                     {row.cells.map((cell) => (
                       <td
                         style={{ maxWidth: 240 }}

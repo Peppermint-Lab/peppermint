@@ -1,3 +1,5 @@
+import { ArrowTrendingUpIcon } from "@heroicons/react/20/solid";
+
 const { prisma } = require("../../../../../prisma/prisma");
 
 export default async function getById(req, res) {
@@ -16,10 +18,11 @@ export default async function getById(req, res) {
           assignedTo: {
             select: { id: true, name: true },
           },
+          Comment: true
         },
       })
       .then((tickets) => {
-        res.status(200).json({ tickets });
+        res.status(200).json({ ticket: tickets });
       });
   } catch (error) {
     console.log(error);
