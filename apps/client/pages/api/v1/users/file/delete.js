@@ -9,7 +9,7 @@ export default async function deleteFile(req, res) {
       .delete({
         where: { id: id },
       })
-      .then((userFile => {
+      .then((userFile) => {
         fs.unlink(userFile, (err) => {
           if (err) {
             console.error(err);
@@ -20,7 +20,7 @@ export default async function deleteFile(req, res) {
 
     res.status(200).json({ sucess: true, message: "File Deleted" });
   } catch (error) {
-      console.log(error)
-      res.status(500).json({})
+    console.log(error);
+    res.status(500).json({});
   }
 }

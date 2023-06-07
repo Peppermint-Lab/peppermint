@@ -16,7 +16,8 @@
     "imap": "^0.8.19",
     "mail-listener5": "^2.1.2",
     "mailparser": "^3.6.3",
-    "database": "*"
+    "prisma": "^4.15.0",
+    "@prisma/client": "^4.15.0"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",

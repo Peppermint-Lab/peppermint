@@ -46,11 +46,16 @@ COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/start.sh ./
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.env ./
-
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/next.config.js  ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/i18n.js ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/pages ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/components  ./components
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/layouts  ./layouts
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/styles  ./styles
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/lib  ./lib
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/locales  ./locales
 
 ENV NODE_ENV production
-ENV PORT 5001
-EXPOSE 5001
+ENV PORT 8223
+EXPOSE 8223
 
 CMD bash -C './start.sh';'bash'

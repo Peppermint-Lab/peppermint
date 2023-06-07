@@ -2,8 +2,8 @@
 version: "3.1"
 
 services:
-  postgres:
-    container_name: postgres
+  peppermint_postgres:
+    container_name: peppermint_postgres
     image: postgres:latest
     restart: always
     volumes:
@@ -13,22 +13,41 @@ services:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
-  # client:
-  #   container_name: peppermint
-  #   image: pepperlabs/peppermint:dev
-  #   ports:
-  #     - 5001:5001
-  #   restart: always
-  #   depends_on:
-  #     - postgres
-  #   healthcheck:
-  #     test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
-  #   environment:
-  #     PORT: 5001 ## This is the port of the internal application there is no need to change this
-  #     DB_USERNAME: "peppermint"
-  #     DB_PASSWORD: "1234"
-  #     DB_HOST: "postgres"
-  #     BASE_URL: "http://localhost:5001"
+  peppermint:
+    container_name: peppermint_client
+    image: pepperlabs/peppermint:dev
+    ports:
+      - 8223:8223
+    restart: always
+    depends_on:
+      - peppermint_postgres
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      PORT: 5001 ## This is the port of the internal application there is no need to change this
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "peppermint_postgres"
+      BASE_URL: "http://localhost:8223"
+
+  peppermint_server:
+    container_name: peppermint_server
+    image: pepperlabs/peppermint_server:dev
+    ports:
+      - 8224:8224
+    restart: always
+    depends_on:
+      - peppermint_postgres
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      PORT: 8224
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "peppermint_postgres"

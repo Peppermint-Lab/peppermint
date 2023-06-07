@@ -102,9 +102,9 @@ export default function NewLayout({ children }) {
   }
 
   useEffect(() => {
-    location.push(location.pathname, location.asPath, {
-      locale,
-    });
+    // location.push(location.pathname, location.asPath, {
+    //   locale,
+    // });
     getQueues();
   }, []);
 

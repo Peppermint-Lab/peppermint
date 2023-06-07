@@ -1,8 +1,8 @@
 version: "3.1"
 
 services:
-  postgres:
-    container_name: postgres
+  peppermint_postgres:
+    container_name: peppermint_postgres
     image: postgres:latest
     restart: always
     volumes:
@@ -13,21 +13,41 @@ services:
       POSTGRES_DB: peppermint
 
   peppermint:
-    container_name: peppermint
-    build: .
+    container_name: peppermint_client
+    build: './apps/client/'
     ports:
-      - 5001:5001
+      - 8223:8223
     restart: always
     depends_on:
-      - postgres
+      - peppermint_postgres
     healthcheck:
       test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
       interval: 30s
       timeout: 10s
       retries: 3
     environment:
-      PORT: 5001 ## This should follow your ports above, and the port in your base url
+      PORT: 8223 ## This is the port of the internal application there is no need to change this
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
-      DB_HOST: "postgres"
-      BASE_URL: "http://localhost:5001"
+      DB_HOST: "peppermint_postgres"
+      BASE_URL: "http://localhost:8223"
+
+  peppermint_server:
+    container_name: peppermint_server
+    build: './apps/emails/'
+    ports:
+      - 8224:8224
+    restart: always
+    depends_on:
+      - peppermint_postgres
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      PORT: 8224
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "peppermint_postgres"
+
