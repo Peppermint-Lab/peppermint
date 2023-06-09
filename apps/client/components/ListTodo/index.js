@@ -58,12 +58,12 @@ export default function ListTodo() {
   return (
     <div>
       <div className="flex flex-row w-full">
-        <div className="mt-1 relative shadow-sm w-full space-x-2">
+        <div className="mt-1 relative w-full space-x-2">
           <input
             type="text"
             name="text"
             id="text"
-            className="w-full shadow-xl text-gray-900 border-none focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm "
+            className="w-full shadow-sm text-gray-900 bg-gray-100 rounded-lg font-semibold border-none focus:outline-none "
             placeholder="Enter todo here..."
             onChange={(e) => {
               setText(e.target.value);
@@ -81,8 +81,8 @@ export default function ListTodo() {
             {data.todos ? (
               data.todos.slice(minValue, maxValue).map((todo) => {
                 return (
-                  <div className="flex row justify-between mt-1" key={todo.id}>
-                    <span className={todo.done ? "line-through text-sm" : "text-sm"}>
+                  <div className="flex row justify-between mt-1 bg-gray-100 p-2 rounded-lg" key={todo.id}>
+                    <span className={todo.done ? "line-through text-sm truncate" : "text-sm font-semibold capitalize truncate"}>
                       {todo.text}
                     </span>
                     <button

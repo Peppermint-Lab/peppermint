@@ -44,8 +44,6 @@ export default function Tickets() {
     },
   ];
 
-  console.log(router);
-
   return (
     <div>
       {loading && (

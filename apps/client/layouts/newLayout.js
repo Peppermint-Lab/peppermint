@@ -455,7 +455,7 @@ export default function NewLayout({ children }) {
       </div>
 
       <div className="lg:pl-72">
-        <div className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-gray-900 px-4 shadow-sm sm:gap-x-6">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-white lg:hidden"
@@ -470,7 +470,7 @@ export default function NewLayout({ children }) {
 
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 pb-2">
             <div
-              className="relative mt-2 hidden sm:flex items-center w-full hover:cursor-pointer"
+              className="relative mt-2 hidden sm:flex items-center w-full min-w-[320px] max-w-[360px] hover:cursor-pointer"
               onClick={() => {
                 spotlight.open();
               }}
@@ -526,22 +526,19 @@ export default function NewLayout({ children }) {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 z-50 mt-2.5 w-32 origin-top-right rounded-md  py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                    {/* {userNavigation.map((item) => (
-                    <Menu.Item key={item.name}>
+                  <Menu.Items className="bg-white absolute right-0 z-50 w-40 origin-top-right rounded-md  shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                    <Menu.Item>
                       {({ active }) => (
-                        <a
-                          href={item.href}
+                        <button
                           className={classNames(
-                            active ? "bg-gray-50" : "",
-                            "block px-3 py-1 text-sm leading-6 text-gray-900"
+                            active ? "bg-gray-100" : "",
+                            "block px-3 text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
                           )}
                         >
-                          {item.name}
-                        </a>
+                          Sign Out
+                        </button>
                       )}
                     </Menu.Item>
-                  ))} */}
                   </Menu.Items>
                 </Transition>
               </Menu>

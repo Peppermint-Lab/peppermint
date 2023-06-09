@@ -20,6 +20,7 @@ import useTranslation from "next-translate/useTranslation";
 
 import ListTodo from "../components/ListTodo";
 import ListUserFiles from "../components/ListUserFiles";
+import { useRouter } from "next/router";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,6 +28,8 @@ function classNames(...classes) {
 
 export default function Home() {
   const { data: session } = useSession();
+
+  const router = useRouter();
 
   const [hour, setHour] = useState();
   const [openTickets, setOpenTickets] = useState(0);
@@ -112,16 +115,6 @@ export default function Home() {
     },
   ];
 
-  const people = [
-    {
-      name: "Lindsay Walton",
-      title: "Front-end Developer",
-      email: "lindsay.walton@example.com",
-      role: "Member",
-    },
-    // More people...
-  ];
-
   const propsUpload = {
     name: "file",
     action: `/api/v1/users/file/upload`,
@@ -180,12 +173,7 @@ export default function Home() {
                   </span>
                   <div>
                     <div className="flex items-center">
-                      <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500 sm:hidden">
-                        <span className="text-lg font-medium leading-none text-white uppercase">
-                          {session.user.name[0]}
-                        </span>
-                      </span>
-                      <span className="ml-3 pt-4 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
+                      <span className="pt-4 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                         {t("hello_good")}
                         {hour < 12
                           ? t("hello_morning")
@@ -259,7 +247,7 @@ export default function Home() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Time since opened
+                        opened
                       </th>
 
                       <th
@@ -278,45 +266,72 @@ export default function Home() {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {tickets !== undefined &&
-                      tickets.slice(0,5).map((item) => (
-                        <tr key={item.id}>
-                          <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium truncate text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                      tickets.slice(0, 10).map((item) => (
+                        <tr
+                          key={item.id}
+                          className="hover:bg-gray-300 hover:cursor-pointer"
+                          onClick={() => router.push(`/tickets/${item.id}`)}
+                        >
+                          <td className="w-full sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                             {item.title}
                             <dl className="font-normal lg:hidden">
-                              <dt className="sr-only">Title</dt>
-                              <dd className="mt-1 truncate text-gray-700">
-                                {item.title}
-                              </dd>
                               <dt className="sr-only sm:hidden">Email</dt>
                               <dd className="mt-1 truncate text-gray-500 sm:hidden">
                                 {item.email}
                               </dd>
                             </dl>
                           </td>
-                          <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell w-[64px]">
-                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                              {item.priority}
-                            </span>
+                          <td className="hidden px-3 py-1 text-sm text-gray-500 lg:table-cell w-[64px]">
+                            {item.priority === "Low" && (
+                              <span className="inline-flex w-full justify-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                                {item.priority}
+                              </span>
+                            )}
+                            {item.priority === "Normal" && (
+                              <span className="inline-flex items-center w-full justify-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                {item.priority}
+                              </span>
+                            )}
+                            {item.priority === "High" && (
+                              <span className="inline-flex items-center w-full justify-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                                {item.priority}
+                              </span>
+                            )}
                           </td>
-                          <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell w-[64px]">
-                            <span className="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
-                              <svg
-                                className="h-1.5 w-1.5 fill-red-500"
-                                viewBox="0 0 6 6"
-                                aria-hidden="true"
-                              >
-                                <circle cx={3} cy={3} r={3} />
-                              </svg>
-                              {item.isComplete === true ? "Open" : "Closed"}
-                            </span>
+                          <td className="hidden px-3 py-1 text-sm text-gray-500 sm:table-cell w-[64px]">
+                            {item.isComplete === true ? (
+                              <div>
+                                <span className="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
+                                  <svg
+                                    className="h-1.5 w-1.5 fill-red-500"
+                                    viewBox="0 0 6 6"
+                                    aria-hidden="true"
+                                  >
+                                    <circle cx={3} cy={3} r={3} />
+                                  </svg>
+                                  Closed
+                                </span>
+                              </div>
+                            ) : (
+                              <>
+                                <span className="inline-flex items-center gap-x-1.5 rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                                  <svg
+                                    className="h-1.5 w-1.5 fill-green-500"
+                                    viewBox="0 0 6 6"
+                                    aria-hidden="true"
+                                  >
+                                    <circle cx={3} cy={3} r={3} />
+                                  </svg>
+                                  Open
+                                </span>
+                              </>
+                            )}
                           </td>
-                          <td className="px-3 py-4 text-sm text-gray-500 w-[160px]">
-                            4 hours
+                          <td className="px-3 py-1 text-sm text-gray-500 w-[160px]">
+                            01/02/22
                           </td>
-                          <td className="px-3 py-4 text-sm text-gray-500 w-[64px]">
-                            {item.assignedTo
-                              ? item.assignedTo.name
-                              : "Not Assigned"}
+                          <td className="px-3 py-1 text-sm text-gray-500 w-[64px]">
+                            {item.assignedTo ? item.assignedTo.name : "-"}
                           </td>
                           {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                           <Menu
@@ -497,7 +512,7 @@ export default function Home() {
           </>
         )}
       </div>
-      <div className="flex-1 p-2 xl:ml-4">
+      <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 max-h-[53vh]">
         <span className="font-bold text-2xl">Reminders</span>
         <ListTodo />
       </div>

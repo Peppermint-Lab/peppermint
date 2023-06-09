@@ -16,7 +16,7 @@ export default async function create(req, res) {
       await prisma.todos.create({
         data: {
           text: todo,
-          userId: session.id,
+          userId: session.user.id,
         },
       });
       res.status(201).json({ success: true, message: "Ticket saved" });
