@@ -32,8 +32,8 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="flex divide-x-2 h-[85vh]">
-      <div className="flex w-64 mt-6 ">
+    <div className="flex md:divide-x-2 h-[85vh]">
+      <div className="hidden md:flex w-64 mt-6 ">
         <nav className="space-y-1 ml-8" aria-label="Sidebar">
           {navigation.map((item) => (
             <Link
@@ -52,7 +52,7 @@ export default function AdminLayout({ children }) {
           ))}
         </nav>
       </div>
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 px-2">{children}</div>
     </div>
   );
 }
