@@ -7,7 +7,7 @@ export default async function userOpen(req, res) {
   try {
     await prisma.ticket
       .findMany({
-        where: { isComplete: false },
+        where: { userId: session.user.id, isComplete: false },
         include: {
           client: {
             select: { id: true, name: true, number: true },

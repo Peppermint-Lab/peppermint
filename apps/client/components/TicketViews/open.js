@@ -9,8 +9,8 @@ import {
   useGlobalFilter,
   usePagination,
 } from "react-table";
+import moment from "moment";
 
-import MarkdownPreview from "../MarkdownPreview";
 import TicketsMobileList from "../../components/TicketsMobileList";
 
 async function getUserTickets() {
@@ -19,8 +19,7 @@ async function getUserTickets() {
 }
 
 function Table({ columns, data }) {
-
-  const router = useRouter()
+  const router = useRouter();
 
   const filterTypes = React.useMemo(
     () => ({
@@ -293,6 +292,14 @@ export default function OpenTickets() {
       Header: "Created",
       accessor: "createdAt",
       id: "created",
+      Cell: ({ row, value }) => {
+        const now = moment(value).format("DD/MM/YYYY");
+        return (
+          <>
+            <span className="">{now}</span>
+          </>
+        );
+      },
     },
     // {
     //   Header: "",

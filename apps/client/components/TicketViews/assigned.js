@@ -9,25 +9,13 @@ import {
 import Link from "next/link";
 import Loader from "react-spinners/ClipLoader";
 import { useRouter } from "next/router";
+import moment from "moment";
 
-import MarkdownPreview from "../MarkdownPreview";
 import TicketsMobileList from "../../components/TicketsMobileList";
 
-function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
-  return (
-    <input
-      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-      type="text"
-      value={filterValue || ""}
-      onChange={(e) => {
-        setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-      }}
-      placeholder="Type to filter"
-    />
-  );
-}
-
 function Table({ columns, data }) {
+  const router = useRouter();
+
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -102,6 +90,7 @@ function Table({ columns, data }) {
                     column.hideHeader === false ? null : (
                       <th
                         {...column.getHeaderProps()}
+                        style={{ maxWidth: 10, overflow: "hidden" }}
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         {column.render("Header")}
@@ -118,10 +107,17 @@ function Table({ columns, data }) {
               {page.map((row, i) => {
                 prepareRow(row);
                 return (
-                  <tr {...row.getRowProps()} className="bg-white">
+                  <tr
+                    {...row.getRowProps()}
+                    className="bg-white hover:bg-gray-100 hover:cursor-pointer"
+                    onClick={() => {
+                      router.push(`/tickets/${row.original.id}`);
+                    }}
+                  >
                     {row.cells.map((cell) => (
                       <td
-                        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                        style={{ maxWidth: 240 }}
+                        className="px-6 py-4 whitespace-nowrap truncate text-sm font-medium text-gray-900"
                         {...cell.getCellProps()}
                       >
                         {cell.render("Cell")}
@@ -138,28 +134,30 @@ function Table({ columns, data }) {
             aria-label="Pagination"
           >
             <div className="hidden sm:block">
-              <div className="flex flex-row flex-nowrap w-full space-x-2">
-                <p
+              <div className="flex flex-row items-center flex-nowrap w-full space-x-2">
+                <span
                   htmlFor="location"
-                  className="block text-sm font-medium text-gray-700 mt-4"
+                  className="block text-sm font-medium text-gray-700 "
                 >
                   Show
-                </p>
-                <select
-                  id="location"
-                  name="location"
-                  className="block w-full pl-3 pr-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                  }}
-                >
-                  {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                      {pageSize}
-                    </option>
-                  ))}
-                </select>
+                </span>
+                <div className="pl-4">
+                  <select
+                    id="location"
+                    name="location"
+                    className="block w-full h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    value={pageSize}
+                    onChange={(e) => {
+                      setPageSize(Number(e.target.value));
+                    }}
+                  >
+                    {[10, 20, 30, 40, 50].map((pageSize) => (
+                      <option key={pageSize} value={pageSize}>
+                        {pageSize}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
             <div className="flex-1 flex justify-between sm:justify-end">
@@ -188,7 +186,7 @@ function Table({ columns, data }) {
 }
 
 async function getUserTickets() {
-  const res = await fetch("/api/v1/ticket/user/open");
+  const res = await fetch("/api/v1/ticket/user/assigned");
   return res.json();
 }
 
@@ -200,21 +198,35 @@ export default function AssignedTickets() {
   const normal = "bg-green-100 text-green-800";
 
   const columns = React.useMemo(() => [
-    // {
-    //   Header: "No.",
-    //   accessor: "id",
-    //   width: 10,
-    //   id: "id",
-    // },
     {
-      Header: "Name",
-      accessor: "name",
-      id: "name",
+      Header: "Type",
+      accessor: "type",
+      id: "type",
+      width: 50,
     },
     {
-      Header: "Client",
-      accessor: "client.name",
-      id: "client_name",
+      Header: "Summary",
+      accessor: "title",
+      id: "summary",
+      Cell: ({ row, value }) => {
+        return (
+          <>
+            <span className="max-w-[240px] truncate">{value}</span>
+          </>
+        );
+      },
+    },
+    {
+      Header: "Assignee",
+      accessor: "assignedTo.name",
+      id: "assignee",
+      Cell: ({ row, value }) => {
+        return (
+          <>
+            <span className="w-[80px] truncate">{value ? value : "n/a"}</span>
+          </>
+        );
+      },
     },
     {
       Header: "Priority",
@@ -245,34 +257,60 @@ export default function AssignedTickets() {
         );
       },
     },
-    // {
-    //   Header: "Team",
-    //   accessor: "team.name",
-    //   id: "team_name",
-    // },
     {
-      Header: "Title",
-      accessor: "title",
-      id: "Title",
-      Cell: ({ value }) => {
-        return (
-          <div className="truncate">
-            <MarkdownPreview data={value} />
-          </div>
-        );
-      },
-    },
-    {
-      Header: "",
-      id: "actions",
+      Header: "Status",
+      accessor: "priority",
+      id: "status",
       Cell: ({ row, value }) => {
+        let p = value;
+        let badge;
+
+        if (p === "Low") {
+          badge = low;
+        }
+        if (p === "Normal") {
+          badge = normal;
+        }
+        if (p === "High") {
+          badge = high;
+        }
+
         return (
           <>
-            <Link href={`/tickets/${row.cells[0].value}`}>View</Link>
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+            >
+              {value}
+            </span>
           </>
         );
       },
     },
+    {
+      Header: "Created",
+      accessor: "createdAt",
+      id: "created",
+      Cell: ({ row, value }) => {
+        const now = moment(value).format("DD/MM/YYYY");
+        return (
+          <>
+            <span className="">{now}</span>
+          </>
+        );
+      },
+    },
+    // {
+    //   Header: "",
+    //   id: "actions",
+    //   Cell: ({ row, value }) => {
+    //     console.log(row)
+    //     return (
+    //       <>
+    //         <Link href={`/tickets/${row.original.id}`}>View</Link>
+    //       </>
+    //     );
+    //   },
+    // },
   ]);
 
   return (
