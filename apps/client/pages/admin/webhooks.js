@@ -103,7 +103,7 @@ export default function Notifications() {
                 <div className={show === "main" ? "" : "hidden"}>
                   {status === "success" && (
                     <div>
-                      {data.hooks.length > 0 ? (
+                      {data !== undefined && data.hooks.length > 0 ? (
                         <div>
                           {data.hooks.map((hook) => (
                             <div

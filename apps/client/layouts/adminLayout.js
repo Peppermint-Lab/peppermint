@@ -33,8 +33,8 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="flex divide-x-2 h-[85vh]">
-      <div className="flex w-32 mt-6 ">
-        <nav className="space-y-1" aria-label="Sidebar">
+      <div className="flex w-64 mt-6 ">
+        <nav className="space-y-1 ml-8" aria-label="Sidebar">
           {navigation.map((item) => (
             <Link
               key={item.name}

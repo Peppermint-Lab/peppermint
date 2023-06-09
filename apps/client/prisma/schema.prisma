@@ -8,13 +8,13 @@ datasource db {
 }
 
 model Provider {
-  id          String  @id @default(uuid())
-  name        String
-  clientId    String
-  clientSecre String
-  active      Boolean
-  issuer      String?
-  tenantId    String?
+  id           String  @id @default(uuid())
+  name         String
+  clientId     String
+  clientSecret String
+  active       Boolean
+  issuer       String?
+  tenantId     String?
 }
 
 model Account {

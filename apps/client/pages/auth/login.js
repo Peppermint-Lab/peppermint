@@ -22,6 +22,7 @@ export default function Login({ csrfToken, providers }) {
     required: false,
   });
 
+  console.log(providers);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -91,8 +92,8 @@ export default function Login({ csrfToken, providers }) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                {/* <div className="flex items-center">
+              {/* <div className="flex items-center justify-between">
+                <div className="flex items-center">
                   <input
                     id="remember-me"
                     name="remember-me"
@@ -105,17 +106,17 @@ export default function Login({ csrfToken, providers }) {
                   >
                     Remember me
                   </label>
-                </div> */}
+                </div> 
 
-                {/* <div className="text-sm">
+                 <div className="text-sm">
                   <a
                     href="#"
                     className="font-medium text-indigo-600 hover:text-indigo-500"
                   >
                     Forgot your password?
                   </a>
-                </div> */}
-              </div>
+                </div>
+              </div> */}
 
               <div>
                 <button
@@ -126,14 +127,50 @@ export default function Login({ csrfToken, providers }) {
                 </button>
               </div>
 
-              <div>
-                <button
-                  onClick={() => signIn("github")}
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#212529] hover:bg-[#4d4d4d]"
-                >
-                  Github
-                </button>
-              </div>
+              {providers.github &&
+                process.env.NEXT_PUBLIC_SSO_PROVIDER === "github" && (
+                  <div>
+                    <button
+                      onClick={() => signIn("github")}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#212529] hover:bg-[#4d4d4d]"
+                    >
+                      Github
+                    </button>
+                  </div>
+                )}
+              {providers.gitlab &&
+                process.env.NEXT_PUBLIC_SSO_PROVIDER === "gitlab" && (
+                  <div>
+                    <button
+                      onClick={() => signIn("github")}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#212529] hover:bg-[#4d4d4d]"
+                    >
+                      Gitlab
+                    </button>
+                  </div>
+                )}
+              {providers["azure-ad"] &&
+                process.env.NEXT_PUBLIC_SSO_PROVIDER === "azure-ad" && (
+                  <div>
+                    <button
+                      onClick={() => signIn("github")}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#00a4ef] hover:bg-[#4d4d4d]"
+                    >
+                      Azure AD
+                    </button>
+                  </div>
+                )}
+              {providers.auth0 &&
+                process.env.NEXT_PUBLIC_SSO_PROVIDER === "auth0" && (
+                  <div>
+                    <button
+                      onClick={() => signIn("github")}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#ee5b6f] hover:bg-[#4d4d4d]"
+                    >
+                      Auth0
+                    </button>
+                  </div>
+                )}
             </form>
           </div>
         )}
