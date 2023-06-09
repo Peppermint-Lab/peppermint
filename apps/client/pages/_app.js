@@ -20,7 +20,6 @@ import {
 
 import { ThemeProvider } from "next-themes";
 
-import SideLayout from "../layouts/SideLayout";
 import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
 import AdminLayout from "../layouts/adminLayout";
@@ -29,6 +28,8 @@ const queryClient = new QueryClient();
 
 function Auth({ children }) {
   const { data: session, status } = useSession({ required: true });
+
+  console.log(session);
 
   const isUser = !!session?.user;
 
@@ -92,11 +93,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     },
   ];
 
-  if (
-    router.asPath.slice(0, 5) === "/auth" ||
-    router.pathname === "/tickets/new/[id]" ||
-    router.pathname === "/tickets/new/[id]/submitted"
-  ) {
+  if (router.asPath.slice(0, 5) === "/auth") {
     return (
       <SessionProvider session={session}>
         <Component {...pageProps} />

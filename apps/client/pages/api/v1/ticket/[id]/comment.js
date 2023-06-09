@@ -7,6 +7,8 @@ export default async function handler(req, res) {
   const { id } = req.query;
   const { text } = req.body;
 
+  console.log(session)
+
   try {
     if (session.user) {
       const comment = await prisma.comment.create({

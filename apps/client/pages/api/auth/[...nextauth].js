@@ -1,21 +1,24 @@
+import bcrypt from "bcrypt";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers/credentials";
-import KeycloakProvider from "next-auth/providers/keycloak";
-import bcrypt from "bcrypt";
+import GithubProvider from "next-auth/providers/github";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "../../../prisma/prisma";
 
 const options = {
   site: process.env.NEXTAUTH_URL,
+  adapter: PrismaAdapter(prisma),
   providers: [
-    KeycloakProvider({
-      clientId: "peppermint-keycloak",
-      clientSecret: "fwsPHsJ6S6YpVmfUep9X7wcT0hgJBOUm",
-      issuer: "http://localhost:8080/realms/peppermint",
+    GithubProvider({
+      clientId: "6b0c6bf8f44a4e0fa153",
+      clientSecret: "b4eeb58f22a41db22c7a693dca81c4c5925db20f",
+      allowDangerousEmailAccountLinking: true,
     }),
     Providers({
       name: "Credentials",
       async authorize(credentials, req, res) {
         try {
+          console.log("hit");
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
@@ -41,6 +44,7 @@ const options = {
             ticket_assigned: user.notify_ticket_assigned,
           };
         } catch (error) {
+          console.log(error);
           throw new Error(error);
         }
       },
@@ -48,6 +52,7 @@ const options = {
   ],
   secret: "yudjXHbqE5VH4LkwZ4srgsdL2EZrjp",
   session: {
+    strategy: "jwt",
     jwt: true,
     maxAge: 30 * 24 * 60 * 60,
   },
@@ -58,24 +63,35 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
+      console.log(token, user);
       user && (token.user = user);
       return token;
     },
     async redirect({ url, baseUrl }) {
-      return baseUrl
+      return baseUrl;
     },
     async session({ session, token, user }) {
       // checking for user changes on: language, email & name
-      console.log(token);
+      console.log(token, session, user);
       const check_user = await prisma.user.findUnique({
-        where: { email: token.email },
+        where: { email: user !== undefined ? user.email : token.email },
       });
 
       if (!check_user) throw new Error("No user found");
 
-      session.id = check_user.id;
-      session.user = token.user;
-      return Promise.resolve(session);
+      console.log("TOKEN: ", token);
+      console.log("SESSION: ", session);
+      console.log("USER: ", user);
+
+      if (!user) {
+        session.user = token;
+        session.user.id = check_user.id;
+        return Promise.resolve(session);
+      } else {
+        session.user = user;
+        session.user.id = check_user.id;
+        return Promise.resolve(session);
+      }
     },
   },
   debug: false,

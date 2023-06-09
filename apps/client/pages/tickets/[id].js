@@ -733,12 +733,12 @@ export default function Ticket() {
                             <div className="flex-shrink-0">
                               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                                 <span className="text-xs font-medium leading-none text-white uppercase">
-                                  {data.ticket.assignedTo.name[0]}
+                                  {data.ticket.assignedTo ? data.ticket.assignedTo.name[0] : '-'}
                                 </span>
                               </span>
                             </div>
                             <div className="text-sm font-medium text-gray-900">
-                              {data.ticket.assignedTo.name}
+                              {data.ticket.assignedTo ? data.ticket.assignedTo.name : '-'}
                             </div>
                           </a>
                         </li>
