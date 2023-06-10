@@ -21,7 +21,7 @@ import {
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import useTranslation from "next-translate/useTranslation";
 import CreateTicketModal from "../components/CreateTicketModal";
@@ -543,6 +543,9 @@ export default function NewLayout({ children }) {
                     <Menu.Item>
                       {({ active }) => (
                         <button
+                          onClick={() => {
+                            signOut()
+                          }}
                           className={classNames(
                             active ? "bg-gray-100" : "",
                             "block px-3 text-left text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"

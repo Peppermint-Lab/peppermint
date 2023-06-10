@@ -12,6 +12,8 @@ RUN npm install
 # If you are building your code for production
 # RUN npm ci --omit=dev
 
+RUN npm i -g prisma
+
 # Bundle app source
 COPY . .
 

@@ -7,8 +7,7 @@ require("dotenv").config();
 
 const client = new PrismaClient();
 const app = express();
-// const PORT = process.env.PORT || 5001;
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
 
@@ -66,7 +65,7 @@ const getEmails = async () => {
                       from: from.text,
                       subject: subject ? subject : "No Subject",
                       body: text ? text : "No Body",
-                      html: html ? html : '',
+                      html: html ? html : "",
                       text: textAsHtml,
                     },
                   });

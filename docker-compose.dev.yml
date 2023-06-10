@@ -15,7 +15,7 @@ services:
 
   peppermint:
     container_name: peppermint_client
-    image: pepperlabs/peppermint:dev
+    image: pepperlabs/peppermint_client:dev
     ports:
       - 8223:8223
     restart: always
