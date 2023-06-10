@@ -115,8 +115,7 @@ export default function NewLayout({ children }) {
     ) {
       switch (event.key) {
         case "c":
-          var btn = document.getElementById("ticket_create");
-          btn.click();
+          location.push("/new");
           break;
         case "h":
           location.push("/");

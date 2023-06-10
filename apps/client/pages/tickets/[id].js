@@ -177,23 +177,24 @@ export default function Ticket() {
   };
 
   async function postData() {
-    console.log(n.id);
-    await fetch(`/api/v1/ticket/${id}/transfer`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user: n.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          setAssignedEdit(false);
-          refetch();
-        }
-      });
+    if (n !== undefined) {
+      await fetch(`/api/v1/ticket/${id}/transfer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: n.id,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            setAssignedEdit(false);
+            refetch();
+          }
+        });
+    }
   }
 
   useEffect(() => {
