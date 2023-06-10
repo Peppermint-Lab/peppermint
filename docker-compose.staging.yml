@@ -6,7 +6,7 @@ services:
     image: postgres:latest
     restart: always
     volumes:
-      - ./peppermint/db:/data/db
+      - /postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
@@ -14,7 +14,7 @@ services:
 
   peppermint:
     container_name: peppermint_client
-    build: './apps/client/'
+    build: "./apps/client/"
     ports:
       - 8223:8223
     restart: always
@@ -34,7 +34,7 @@ services:
 
   peppermint_server:
     container_name: peppermint_server
-    build: './apps/emails/'
+    build: "./apps/emails/"
     ports:
       - 8224:8224
     restart: always
@@ -50,4 +50,3 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
-
