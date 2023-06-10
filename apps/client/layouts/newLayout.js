@@ -17,6 +17,7 @@ import {
   InboxIcon,
   InboxStackIcon,
   MagnifyingGlassIcon,
+  PlusIcon,
   TicketIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
@@ -53,6 +54,13 @@ export default function NewLayout({ children }) {
   const locale = session.user.language || "en";
 
   const navigation = [
+    {
+      name: "Create a ticket",
+      href: `/new`,
+      icon: PlusIcon,
+      current: location.pathname === "/new" ? true : false,
+      initial: "c",
+    },
     {
       name: t("sl_dashboard"),
       href: `/`,
@@ -205,7 +213,6 @@ export default function NewLayout({ children }) {
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
-                          <CreateTicketModal />
                           {navigation.map((item) =>
                             !item.children ? (
                               <li key={item.name}>
@@ -333,7 +340,6 @@ export default function NewLayout({ children }) {
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
                 <ul role="list" className="-mx-2 space-y-1">
-                  <CreateTicketModal />
                   {navigation.map((item) =>
                     !item.children ? (
                       <li key={item.name}>

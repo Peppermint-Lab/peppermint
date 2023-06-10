@@ -308,7 +308,7 @@ export default function CreateTicketModal() {
                               leaveFrom="opacity-100"
                               leaveTo="opacity-0"
                             >
-                              <Listbox.Options className="absolute z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                              <Listbox.Options className="absolute bottom-6 2xl:top-0 z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                                 {options !== undefined &&
                                   options.map((person) => (
                                     <Listbox.Option
@@ -387,7 +387,7 @@ export default function CreateTicketModal() {
                               leaveFrom="opacity-100"
                               leaveTo="opacity-0"
                             >
-                              <Listbox.Options className="absolute z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                              <Listbox.Options className="absolute bottom-6 2xl:top-0 z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                 <Listbox.Option
                                   className={({ active }) =>
                                     classNames(

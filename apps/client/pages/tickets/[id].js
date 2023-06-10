@@ -190,17 +190,15 @@ export default function Ticket() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          setAssignedEdit(false)
-          refetch()
+          setAssignedEdit(false);
+          refetch();
         }
       });
   }
 
   useEffect(() => {
-    if (assignedEdit) {
-      fetchUsers();
-    }
-  }, [edit]);
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     if (status === "success") {
@@ -666,32 +664,32 @@ export default function Ticket() {
                           </li>
                         </ul>
                       ) : (
-                        <Listbox value={n} onChange={setN} className="z-50">
-                          {({ open }) => (
-                            <>
-                              <div className="mt-1 relative">
-                                <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                  <span className="block truncate">
-                                    {n ? n.name : "Please select new user"}
-                                  </span>
-                                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                    {/* <SelectorIcon
+                        users && (
+                          <Listbox value={n} onChange={setN} className="z-50">
+                            {({ open }) => (
+                              <>
+                                <div className="mt-1 relative">
+                                  <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <span className="block truncate">
+                                      {n ? n.name : "Please select new user"}
+                                    </span>
+                                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                      {/* <SelectorIcon
                                     className="h-5 w-5 text-gray-400"
                                     aria-hidden="true"
                                   /> */}
-                                  </span>
-                                </Listbox.Button>
+                                    </span>
+                                  </Listbox.Button>
 
-                                <Transition
-                                  show={open}
-                                  as={Fragment}
-                                  leave="transition ease-in duration-100"
-                                  leaveFrom="opacity-100"
-                                  leaveTo="opacity-0"
-                                >
-                                  <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                    {users &&
-                                      users.map((user) => (
+                                  <Transition
+                                    show={open}
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                  >
+                                    <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                      {users.map((user) => (
                                         <Listbox.Option
                                           key={user.id}
                                           className={({ active }) =>
@@ -736,12 +734,13 @@ export default function Ticket() {
                                           )}
                                         </Listbox.Option>
                                       ))}
-                                  </Listbox.Options>
-                                </Transition>
-                              </div>
-                            </>
-                          )}
-                        </Listbox>
+                                    </Listbox.Options>
+                                  </Transition>
+                                </div>
+                              </>
+                            )}
+                          </Listbox>
+                        )
                       )}
                     </div>
                     <div className="border-t border-gray-200">
