@@ -12,16 +12,16 @@ export default function ListTodo() {
   const { status, data, refetch } = useQuery("repoData", getTodos);
 
   const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(7);
+  const [maxValue, setMaxValue] = useState(12);
   const [text, setText] = useState("");
 
   function handleChange(value) {
     if (value <= 1) {
       setMinValue(0);
-      setMaxValue(7);
+      setMaxValue(12);
     } else {
       setMinValue(maxValue);
-      setMaxValue(value * 7);
+      setMaxValue(value * 12);
     }
   }
 
@@ -81,8 +81,17 @@ export default function ListTodo() {
             {data.todos ? (
               data.todos.slice(minValue, maxValue).map((todo) => {
                 return (
-                  <div className="flex row justify-between mt-1 bg-gray-100 p-2 rounded-lg" key={todo.id}>
-                    <span className={todo.done ? "line-through text-sm truncate" : "text-sm font-semibold capitalize truncate"}>
+                  <div
+                    className="flex row justify-between mt-1 bg-gray-100 p-2 rounded-lg"
+                    key={todo.id}
+                  >
+                    <span
+                      className={
+                        todo.done
+                          ? "line-through text-sm truncate"
+                          : "text-sm font-semibold capitalize truncate"
+                      }
+                    >
                       {todo.text}
                     </span>
                     <button
@@ -99,12 +108,13 @@ export default function ListTodo() {
               <p>None Found</p>
             )}
           </div>
-          <Pagination
-            className={data.todos.length > 7 ? "mt-2" : "hidden"}
-            defaultCurrent={1}
-            total={12}
-            onChange={handleChange}
-          />
+          <div  className={data.todos.length > 12 ? "mt-4" : "hidden"}>
+            <Pagination
+              defaultCurrent={1}
+              total={12}
+              onChange={handleChange}
+            />
+          </div>
         </div>
       )}
     </div>

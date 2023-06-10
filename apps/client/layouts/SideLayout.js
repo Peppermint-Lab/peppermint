@@ -80,9 +80,9 @@ export default function SideLayout({ children }) {
   }
 
   useEffect(() => {
-    location.push(location.pathname, location.asPath, {
-      locale,
-    });
+    // location.push(location.pathname, location.asPath, {
+    //   locale,
+    // });
     getQueues();
   }, []);
 
