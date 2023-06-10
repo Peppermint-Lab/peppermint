@@ -486,8 +486,8 @@ export default function NewLayout({ children }) {
                 }}
                 className="block w-full hover:cursor-pointer rounded-md border-0 py-1.5 pr-14 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-              <div className="absolute inset-y-0 right-0 flex py-4 pr-1.5">
-                <kbd className="inline-flex items-center rounded border border-gray-200 px-1 font-sans text-xs text-gray-400">
+              <div className="absolute inset-y-0 right-0 flex py-2.5 pr-1">
+                <kbd className="inline-flex items-center rounded border border-gray-200 px-1.5 font-sans text-xs text-gray-400">
                   /
                 </kbd>
               </div>
@@ -529,10 +529,23 @@ export default function NewLayout({ children }) {
                   <Menu.Items className="bg-white absolute right-0 z-50 w-40 origin-top-right rounded-md  shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                     <Menu.Item>
                       {({ active }) => (
-                        <button
+                        <Link
+                          href="/settings"
                           className={classNames(
                             active ? "bg-gray-100" : "",
                             "block px-3 text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
+                          )}
+                        >
+                          Profile
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          className={classNames(
+                            active ? "bg-gray-100" : "",
+                            "block px-3 text-left text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
                           )}
                         >
                           Sign Out

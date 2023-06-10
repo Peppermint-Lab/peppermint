@@ -21,6 +21,7 @@ import useTranslation from "next-translate/useTranslation";
 import ListTodo from "../components/ListTodo";
 import ListUserFiles from "../components/ListUserFiles";
 import { useRouter } from "next/router";
+import moment from "moment";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -247,7 +248,7 @@ export default function Home() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        opened
+                        Opened
                       </th>
 
                       <th
@@ -328,7 +329,7 @@ export default function Home() {
                             )}
                           </td>
                           <td className="px-3 py-1 text-sm text-gray-500 w-[160px]">
-                            01/02/22
+                            {moment(item.createdAt).format('DD/MM/YYYY')}
                           </td>
                           <td className="px-3 py-1 text-sm text-gray-500 w-[64px]">
                             {item.assignedTo ? item.assignedTo.name : "-"}

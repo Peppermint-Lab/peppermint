@@ -36,6 +36,10 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { notifications } from "@mantine/notifications";
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
 export default function Ticket() {
   const router = useRouter();
 
@@ -56,13 +60,7 @@ export default function Ticket() {
   const [note, setNote] = useState();
   const [issue, setIssue] = useState();
   const [title, setTitle] = useState();
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [number, setNumber] = useState();
-  const [badge, setBadge] = useState("");
   const [uploaded, setUploaded] = useState();
-  const [priority, setPriority] = useState();
-  const [comments, setComments] = useState();
   const [comment, setComment] = useState();
 
   const IssueEditor = useEditor({
@@ -86,20 +84,6 @@ export default function Ticket() {
   const { id } = history.query;
 
   let file = [];
-
-  useEffect(() => {
-    if (status === "success") {
-      if (data.ticket.priority === "Low") {
-        setBadge(low);
-      }
-      if (data.ticket.priority === "Normal") {
-        setBadge(normal);
-      }
-      if (data.ticket.priority === "High") {
-        setBadge(high);
-      }
-    }
-  }, [data]);
 
   async function update() {
     await fetch(`/api/v1/ticket/${id}/update`, {
@@ -565,7 +549,7 @@ export default function Ticket() {
                               />
                             </RichTextEditor>
                           ) : (
-                            data.ticket.detail
+                            <span className="break-words">{data.ticket.detail}</span>
                           )}
                         </div>
                       </div>
@@ -733,12 +717,16 @@ export default function Ticket() {
                             <div className="flex-shrink-0">
                               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                                 <span className="text-xs font-medium leading-none text-white uppercase">
-                                  {data.ticket.assignedTo ? data.ticket.assignedTo.name[0] : '-'}
+                                  {data.ticket.assignedTo
+                                    ? data.ticket.assignedTo.name[0]
+                                    : "-"}
                                 </span>
                               </span>
                             </div>
                             <div className="text-sm font-medium text-gray-900">
-                              {data.ticket.assignedTo ? data.ticket.assignedTo.name : '-'}
+                              {data.ticket.assignedTo
+                                ? data.ticket.assignedTo.name
+                                : "-"}
                             </div>
                           </a>
                         </li>
@@ -761,23 +749,7 @@ export default function Ticket() {
                               />
                             </div>
                             <div className="ml-3 text-xs font-semibold text-gray-900">
-                              Bug
-                            </div>
-                          </a>{" "}
-                        </li>
-                        <li className="inline">
-                          <a
-                            href="#"
-                            className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                          >
-                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                              <span
-                                className="h-1.5 w-1.5 rounded-full bg-indigo-500"
-                                aria-hidden="true"
-                              />
-                            </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900">
-                              Accessibility
+                              {data.ticket.priority}
                             </div>
                           </a>{" "}
                         </li>
