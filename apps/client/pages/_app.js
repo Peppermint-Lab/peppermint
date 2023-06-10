@@ -11,6 +11,7 @@ import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { SpotlightProvider } from "@mantine/spotlight";
 import {
+  DocumentCheckIcon,
   FolderIcon,
   HomeIcon,
   MenuIcon,
@@ -23,6 +24,7 @@ import { ThemeProvider } from "next-themes";
 import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
 import AdminLayout from "../layouts/adminLayout";
+import { DocumentArrowDownIcon } from "@heroicons/react/20/solid";
 
 const queryClient = new QueryClient();
 
@@ -57,38 +59,38 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     {
       title: "Home",
       description: "Get to home page",
-      onTrigger: () => console.log("Home"),
+      onTrigger: () => router.push('/'),
       icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Notebook",
       description: "Personal User Notes",
-      onTrigger: () => console.log("Dashboard"),
-      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+      onTrigger: () => router.push('/notebook'),
+      icon: <FolderIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Tickets",
       description:
         "Central store for all company & user tickets, open or closed",
-      onTrigger: () => console.log("Documentation"),
-      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+      onTrigger: () => router.push('/tickets'),
+      icon: <TicketIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Documentation",
       description: "Documentation for peppermint.sh",
-      onTrigger: () => console.log("Documentation"),
-      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+      onTrigger: () => router.push('https://docs.peppermint.sh'),
+      icon: <DocumentCheckIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Github",
       description: "OSS codebase for peppermint",
-      onTrigger: () => console.log("Documentation"),
-      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
+      onTrigger: () => router.push('https://github.com/Peppermint-Lab/peppermint'),
+      icon: <img className="h-7 ml-1 w-auto" src="/github.svg" alt="Workflow" />,
     },
     {
       title: "Peppermint.sh",
       description: "",
-      onTrigger: () => console.log("Documentation"),
+      onTrigger: () => router.push('https://peppermint.sh'),
       icon: <img className="h-7 ml-1 w-auto" src="/logo.svg" alt="Workflow" />,
     },
   ];
@@ -145,6 +147,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   if (router.pathname.includes("/notebook")) {
     return (
       <SessionProvider session={session}>
+        <MantineProvider withNormalizeCSS withGlobalStyles>
+        <SpotlightProvider
+          shortcut={["mod + P", "mod + K", "/"]}
+          actions={actions}
+          searchPlaceholder="Search ..."
+        >
         <QueryClientProvider client={queryClient}>
           <Auth>
             <NewLayout>
@@ -154,6 +162,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             </NewLayout>
           </Auth>
         </QueryClientProvider>
+        </SpotlightProvider>
+        </MantineProvider>
       </SessionProvider>
     );
   }
@@ -167,17 +177,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           searchPlaceholder="Search ..."
         >
           <QueryClientProvider client={queryClient}>
-            {/* <ThemeProvider attribute="class"> */}
             <Auth>
               <NewLayout>
-                {/* <SideLayout> */}
                 <Notifications position="top-right" />
                 <Component {...pageProps} />
-                {/* </SideLayout> */}
               </NewLayout>
             </Auth>
 
-            {/* </ThemeProvider> */}
           </QueryClientProvider>
         </SpotlightProvider>
       </MantineProvider>
