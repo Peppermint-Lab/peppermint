@@ -251,7 +251,7 @@ export default function OpenTickets() {
         return (
           <>
             <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+              className={`inline-flex items-center rounded-md justify-center w-1/2 px-2 py-1 text-xs font-medium ring-1 ring-inset ${badge}`}
             >
               {value}
             </span>
@@ -261,28 +261,19 @@ export default function OpenTickets() {
     },
     {
       Header: "Status",
-      accessor: "priority",
+      accessor: "status",
       id: "status",
       Cell: ({ row, value }) => {
         let p = value;
         let badge;
 
-        if (p === "Low") {
-          badge = low;
-        }
-        if (p === "Normal") {
-          badge = normal;
-        }
-        if (p === "High") {
-          badge = high;
-        }
-
         return (
           <>
-            <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-            >
-              {value}
+            <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+              {value === "needs_support" && <span>Needs Support</span>}
+              {value === "in_progress" && <span>In Progress</span>}
+              {value === "in_review" && <span>In Review</span>}
+              {value === "done" && <span>Done</span>}
             </span>
           </>
         );

@@ -55,14 +55,14 @@ export default function NewLayout({ children }) {
   const navigation = [
     {
       name: t("sl_dashboard"),
-      href: `/${locale}/`,
+      href: `/`,
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
       initial: "h",
     },
     {
       name: t("sl_notebook"),
-      href: `/${locale}/notebook`,
+      href: `/notebook`,
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
       initial: "n",
@@ -71,17 +71,18 @@ export default function NewLayout({ children }) {
       name: t("sl_tickets"),
       current: location.pathname.includes("/ticket") ? true : false,
       icon: TicketIcon,
-      href: `/${locale}/tickets`,
+      // href: `/${locale}/tickets`,
+      href: "/tickets",
       initial: "t",
     },
-    {
-      name: "Email Queues",
-      current: false,
-      icon: InboxStackIcon,
-      href: `/${locale}/tickets`,
-      children: queues,
-      inital: null,
-    },
+    // {
+    //   name: "Email Queues",
+    //   current: false,
+    //   icon: InboxStackIcon,
+    //   href: `/${locale}/tickets`,
+    //   children: queues,
+    //   inital: null,
+    // },
   ];
 
   async function getQueues() {
@@ -544,7 +545,7 @@ export default function NewLayout({ children }) {
                       {({ active }) => (
                         <button
                           onClick={() => {
-                            signOut()
+                            signOut();
                           }}
                           className={classNames(
                             active ? "bg-gray-100" : "",
@@ -563,7 +564,7 @@ export default function NewLayout({ children }) {
         </div>
 
         <main className="py-2">
-          <div className="px-2 sm:px-4">{children}</div>
+          <div className="px-2 py-2 sm:px-4">{children}</div>
         </main>
       </div>
     </div>

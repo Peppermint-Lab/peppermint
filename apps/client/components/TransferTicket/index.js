@@ -3,6 +3,7 @@ import { Dialog, Transition, Listbox } from "@headlessui/react";
 // import { XIcon } from "@heroicons/react/24/outline";
 import {
   CheckIcon,
+  DocumentDuplicateIcon,
   // SelectorIcon,
   UserPlusIcon,
 } from "@heroicons/react/20/solid";
@@ -58,14 +59,19 @@ export default function TransferTicket({ id }) {
   }, []);
 
   return (
-    <div
-      className="flex flex-row px-4 py-2 w-full group text-gray-400 hover:text-gray-500 hover:bg-gray-100 hover:cursor-pointer"
-      onClick={() => {
-        setOpen(true);
-      }}
-    >
-      <UserPlusIcon className="mr-3 h-5 w-5 " aria-hidden="true" />
-      <span className="text-sm font-medium text-gray-700">Transfer</span>
+    <>
+      <div
+        className="flex flex-row px-4 py-2 w-full group text-gray-400 hover:text-gray-500 hover:bg-gray-100 hover:cursor-pointer"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        <DocumentDuplicateIcon
+          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+          aria-hidden="true"
+        />
+        <span className="text-sm font-medium text-gray-700">Transfer</span>
+      </div>
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog
@@ -218,6 +224,6 @@ export default function TransferTicket({ id }) {
           </div>
         </Dialog>
       </Transition.Root>
-    </div>
+    </>
   );
 }

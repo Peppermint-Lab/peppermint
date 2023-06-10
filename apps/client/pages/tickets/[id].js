@@ -3,25 +3,17 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect, Fragment } from "react";
 import { message, Upload, Divider } from "antd";
 import moment from "moment";
-import { Menu, Transition } from "@headlessui/react";
+import { Menu, Transition, Listbox } from "@headlessui/react";
 import {
   ArchiveBoxIcon,
   ArrowRightCircleIcon,
   ChevronDownIcon,
   DocumentDuplicateIcon,
-  HeartIcon,
   PencilIcon,
   PencilSquareIcon,
-  TrashIcon,
-  UserPlusIcon,
-  HomeIcon,
-  Bars4Icon,
-  UserCircleIcon,
-  BellIcon,
   LockOpenIcon,
   ChatBubbleLeftEllipsisIcon,
   CalendarIcon,
-  TagIcon,
   CheckCircleIcon,
   LockClosedIcon,
   CheckIcon,
@@ -35,6 +27,7 @@ import Underline from "@tiptap/extension-underline";
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { notifications } from "@mantine/notifications";
+import TransferTicket from "../../components/TransferTicket";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -57,11 +50,15 @@ export default function Ticket() {
 
   const [edit, setEdit] = useState(false);
 
+  const [users, setUsers] = useState();
+  const [n, setN] = useState();
+
   const [note, setNote] = useState();
   const [issue, setIssue] = useState();
   const [title, setTitle] = useState();
   const [uploaded, setUploaded] = useState();
   const [comment, setComment] = useState();
+  const [assignedEdit, setAssignedEdit] = useState(false);
 
   const IssueEditor = useEditor({
     extensions: [
@@ -164,6 +161,47 @@ export default function Ticket() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
+  const fetchUsers = async () => {
+    await fetch(`/api/v1/users/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res) {
+          setUsers(res.users);
+        }
+      });
+  };
+
+  async function postData() {
+    console.log(n.id);
+    await fetch(`/api/v1/ticket/${id}/transfer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: n.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          setAssignedEdit(false)
+          refetch()
+        }
+      });
+  }
+
+  useEffect(() => {
+    if (assignedEdit) {
+      fetchUsers();
+    }
+  }, [edit]);
+
   useEffect(() => {
     if (status === "success") {
       if (IssueEditor) {
@@ -240,153 +278,6 @@ export default function Ticket() {
                               Save
                             </button>
                           )}
-                          <Menu
-                            as="div"
-                            className="relative inline-block text-left"
-                          >
-                            <div>
-                              <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                Actions
-                                <ChevronDownIcon
-                                  className="-mr-1 h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                              </Menu.Button>
-                            </div>
-
-                            <Transition
-                              as={Fragment}
-                              enter="transition ease-out duration-100"
-                              enterFrom="transform opacity-0 scale-95"
-                              enterTo="transform opacity-100 scale-100"
-                              leave="transition ease-in duration-75"
-                              leaveFrom="transform opacity-100 scale-100"
-                              leaveTo="transform opacity-0 scale-95"
-                            >
-                              <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <div className="py-1">
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <PencilSquareIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Link Issue
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <DocumentDuplicateIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Transfer Ticket
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                </div>
-                                <div className="py-1">
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <ArchiveBoxIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Change Priority
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <ArrowRightCircleIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Upload File
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                </div>
-                                {/* <div className="py-1">
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <a
-                                      href="#"
-                                      className={classNames(
-                                        active
-                                          ? "bg-gray-100 text-gray-900"
-                                          : "text-gray-700",
-                                        "group flex items-center px-4 py-2 text-sm"
-                                      )}
-                                    >
-                                      <UserPlusIcon
-                                        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                        aria-hidden="true"
-                                      />
-                                      Share
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <a
-                                      href="#"
-                                      className={classNames(
-                                        active
-                                          ? "bg-gray-100 text-gray-900"
-                                          : "text-gray-700",
-                                        "group flex items-center px-4 py-2 text-sm"
-                                      )}
-                                    >
-                                      <HeartIcon
-                                        className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                        aria-hidden="true"
-                                      />
-                                      Add to favorites
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                              </div> */}
-                              </Menu.Items>
-                            </Transition>
-                          </Menu>
                         </div>
                       </div>
                       <aside className="mt-8 xl:hidden">
@@ -588,7 +479,10 @@ export default function Ticket() {
                                               </span>
                                             </div>
                                             <p className="text-xs text-gray-500">
-                                              Commented at{" "}
+                                              {item.public
+                                                ? "Publicly"
+                                                : "Internally"}{" "}
+                                              commented at{" "}
                                               {moment(item.createdAt).format(
                                                 "hh:mm DD-MM-YYYY"
                                               )}
@@ -668,7 +562,7 @@ export default function Ticket() {
                                     <button
                                       onClick={() => addComment()}
                                       type="submit"
-                                      className="inline-flex items-center justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                                      className="inline-flex items-center justify-center rounded-md bg-gray-900 px-3 py-[7px] text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
                                     >
                                       Comment
                                     </button>
@@ -721,42 +615,140 @@ export default function Ticket() {
                         aria-hidden="true"
                       />
                       <span className="text-sm font-medium text-gray-900">
-                        Created on{" "}
+                        Created created on{" "}
                         {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
                       </span>
                     </div>
                   </div>
-                  <div className="mt-6 space-y-8 border-t border-gray-200 py-6">
+                  <div className="mt-2 space-y-8 border-t border-gray-200 py-2">
                     <div>
-                      <h2 className="text-sm font-medium text-gray-500">
-                        Assignees
-                      </h2>
-                      <ul role="list" className="mt-3 space-y-3">
-                        <li className="flex justify-start">
-                          <a href="#" className="flex items-center space-x-3">
-                            <div className="flex-shrink-0">
-                              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                                <span className="text-xs font-medium leading-none text-white uppercase">
-                                  {data.ticket.assignedTo
-                                    ? data.ticket.assignedTo.name[0]
-                                    : "-"}
+                      <div className="flex flex-row justify-between items-center">
+                        <span className="text-sm font-medium text-gray-500">
+                          Assignees
+                        </span>
+                        {!assignedEdit ? (
+                          <button
+                            onClick={() => setAssignedEdit(true)}
+                            className="text-sm font-medium text-gray-500 hover:underline"
+                          >
+                            edit
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              postData();
+                            }}
+                            className="text-sm font-medium text-gray-500 hover:underline"
+                          >
+                            save
+                          </button>
+                        )}
+                      </div>
+                      {!assignedEdit ? (
+                        <ul role="list" className="mt-3 space-y-3">
+                          <li className="flex justify-start">
+                            <a href="#" className="flex items-center space-x-3">
+                              <div className="flex-shrink-0">
+                                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                  <span className="text-xs font-medium leading-none text-white uppercase">
+                                    {data.ticket.assignedTo
+                                      ? data.ticket.assignedTo.name[0]
+                                      : "-"}
+                                  </span>
                                 </span>
-                              </span>
-                            </div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {data.ticket.assignedTo
-                                ? data.ticket.assignedTo.name
-                                : "-"}
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
+                              </div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {data.ticket.assignedTo
+                                  ? data.ticket.assignedTo.name
+                                  : "-"}
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      ) : (
+                        <Listbox value={n} onChange={setN} className="z-50">
+                          {({ open }) => (
+                            <>
+                              <div className="mt-1 relative">
+                                <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                  <span className="block truncate">
+                                    {n ? n.name : "Please select new user"}
+                                  </span>
+                                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                    {/* <SelectorIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  /> */}
+                                  </span>
+                                </Listbox.Button>
+
+                                <Transition
+                                  show={open}
+                                  as={Fragment}
+                                  leave="transition ease-in duration-100"
+                                  leaveFrom="opacity-100"
+                                  leaveTo="opacity-0"
+                                >
+                                  <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                    {users &&
+                                      users.map((user) => (
+                                        <Listbox.Option
+                                          key={user.id}
+                                          className={({ active }) =>
+                                            classNames(
+                                              active
+                                                ? "text-white bg-indigo-600"
+                                                : "text-gray-900",
+                                              "cursor-default select-none relative py-2 pl-3 pr-9"
+                                            )
+                                          }
+                                          value={user}
+                                        >
+                                          {({ n, active }) => (
+                                            <>
+                                              <span
+                                                className={classNames(
+                                                  n
+                                                    ? "font-semibold"
+                                                    : "font-normal",
+                                                  "block truncate"
+                                                )}
+                                              >
+                                                {user.name}
+                                              </span>
+
+                                              {n ? (
+                                                <span
+                                                  className={classNames(
+                                                    active
+                                                      ? "text-white"
+                                                      : "text-indigo-600",
+                                                    "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                  )}
+                                                >
+                                                  <CheckIcon
+                                                    className="h-5 w-5"
+                                                    aria-hidden="true"
+                                                  />
+                                                </span>
+                                              ) : null}
+                                            </>
+                                          )}
+                                        </Listbox.Option>
+                                      ))}
+                                  </Listbox.Options>
+                                </Transition>
+                              </div>
+                            </>
+                          )}
+                        </Listbox>
+                      )}
                     </div>
-                    <div>
-                      <h2 className="text-sm font-medium text-gray-500">
+                    <div className="border-t border-gray-200">
+                      <h2 className="text-sm font-medium text-gray-500 mt-2">
                         Labels
                       </h2>
-                      <ul role="list" className="mt-2 leading-8">
+                      <ul role="list" className="mt-2 leading-8 space-x-2">
                         {data.ticket.priority === "Low" && (
                           <li className="inline">
                             <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
@@ -798,6 +790,32 @@ export default function Ticket() {
                               </div>
                               <div className="ml-3 text-xs font-semibold text-gray-900">
                                 {data.ticket.priority} Priority
+                              </div>
+                            </div>
+                          </li>
+                        )}
+                        {data.ticket.status && (
+                          <li className="inline">
+                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                              <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div className="ml-3 text-xs font-semibold text-gray-900">
+                                {data.ticket.status === "needs_support" && (
+                                  <span>Needs Support</span>
+                                )}
+                                {data.ticket.status === "in_progress" && (
+                                  <span>In Progress</span>
+                                )}
+                                {data.ticket.status === "in_review" && (
+                                  <span>In Review</span>
+                                )}
+                                {data.ticket.status === "done" && (
+                                  <span>Done</span>
+                                )}
                               </div>
                             </div>
                           </li>
