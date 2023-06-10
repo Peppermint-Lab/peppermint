@@ -109,7 +109,7 @@ export default function Ticket() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        status: !props.ticket.isComplete,
+        status: !data.ticket.isComplete,
       }),
     })
       .then((res) => res.json())
@@ -392,7 +392,7 @@ export default function Ticket() {
                       <aside className="mt-8 xl:hidden">
                         <h2 className="sr-only">Details</h2>
                         <div className="space-y-5">
-                          {data.ticket.isComplete ? (
+                          {!data.ticket.isComplete ? (
                             <div className="flex items-center space-x-2">
                               <LockOpenIcon
                                 className="h-5 w-5 text-green-500"
@@ -408,7 +408,7 @@ export default function Ticket() {
                                 className="h-5 w-5 text-red-500"
                                 aria-hidden="true"
                               />
-                              <span className="text-sm font-medium text-green-700">
+                              <span className="text-sm font-medium text-red-700">
                                 Closed Issue
                               </span>
                             </div>
@@ -419,7 +419,7 @@ export default function Ticket() {
                               aria-hidden="true"
                             />
                             <span className="text-sm font-medium text-gray-900">
-                              {data.ticket.Comment.length} comments
+                              {data.ticket.comments.length} comments
                             </span>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -429,7 +429,9 @@ export default function Ticket() {
                             />
                             <span className="text-sm font-medium text-gray-900">
                               Created on{" "}
-                              <time dateTime="2020-12-02">Dec 2, 2020</time>
+                              {moment(data.ticket.createdAt).format(
+                                "DD/MM/YYYY"
+                              )}
                             </span>
                           </div>
                         </div>
@@ -476,22 +478,6 @@ export default function Ticket() {
                                   </div>
                                   <div className="ml-3 text-xs font-semibold text-gray-900">
                                     Bug
-                                  </div>
-                                </a>{" "}
-                              </li>
-                              <li className="inline">
-                                <a
-                                  href="#"
-                                  className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                >
-                                  <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                    <span
-                                      className="h-1.5 w-1.5 rounded-full bg-indigo-500"
-                                      aria-hidden="true"
-                                    />
-                                  </div>
-                                  <div className="ml-3 text-xs font-semibold text-gray-900">
-                                    Accessibility
                                   </div>
                                 </a>{" "}
                               </li>
@@ -549,7 +535,9 @@ export default function Ticket() {
                               />
                             </RichTextEditor>
                           ) : (
-                            <span className="break-words">{data.ticket.detail}</span>
+                            <span className="break-words">
+                              {data.ticket.detail}
+                            </span>
                           )}
                         </div>
                       </div>
@@ -573,12 +561,12 @@ export default function Ticket() {
                           {/* Activity feed*/}
                           <div className="flow-root">
                             <ul role="list" className="-mb-8">
-                              {data.ticket.Comment.length > 0 &&
-                                data.ticket.Comment.map((item, itemIdx) => (
+                              {data.ticket.comments.length > 0 &&
+                                data.ticket.comments.map((item, itemIdx) => (
                                   <li key={item.id}>
                                     <div className="relative pb-8">
                                       {itemIdx !==
-                                      data.ticket.Comment.length - 1 ? (
+                                      data.ticket.comments.length - 1 ? (
                                         <span
                                           className="absolute left-3 top-5 -ml-px h-full w-0.5 bg-gray-200"
                                           aria-hidden="true"
@@ -587,20 +575,23 @@ export default function Ticket() {
                                       <div className="relative flex items-start space-x-3">
                                         <div className="relative">
                                           <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                                            <span className="font-medium leading-none text-xs text-white">
-                                              A
+                                            <span className="font-medium leading-none text-xs text-white uppercase">
+                                              {item.user.name[0]}
                                             </span>
                                           </span>
                                         </div>
                                         <div className="min-w-0 flex-1">
                                           <div>
                                             <div className="text-sm">
-                                              <span className="font-medium text-gray-900">
-                                                Admin
+                                              <span className="font-medium text-gray-900 ">
+                                                {item.user.name}
                                               </span>
                                             </div>
                                             <p className="text-xs text-gray-500">
-                                              Commented 4 hours ago
+                                              Commented at{" "}
+                                              {moment(item.createdAt).format(
+                                                "hh:mm DD-MM-YYYY"
+                                              )}
                                             </p>
                                           </div>
                                           <div className="text-sm  text-gray-900">
@@ -647,16 +638,33 @@ export default function Ticket() {
                                     />
                                   </div>
                                   <div className="mt-6 flex items-center justify-end space-x-4">
-                                    <button
-                                      type="button"
-                                      className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                    >
-                                      <CheckCircleIcon
-                                        className="-ml-0.5 h-5 w-5 text-green-500"
-                                        aria-hidden="true"
-                                      />
-                                      Close issue
-                                    </button>
+                                    {data.ticket.isComplete ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => updateStatus()}
+                                        className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                      >
+                                        <CheckCircleIcon
+                                          className="-ml-0.5 h-5 w-5 text-red-500"
+                                          aria-hidden="true"
+                                        />
+                                        <span className="pt-1">
+                                          Re-Open issue
+                                        </span>
+                                      </button>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() => updateStatus()}
+                                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                      >
+                                        <CheckCircleIcon
+                                          className="-ml-0.5 h-5 w-5 text-green-500"
+                                          aria-hidden="true"
+                                        />
+                                        Close issue
+                                      </button>
+                                    )}
                                     <button
                                       onClick={() => addComment()}
                                       type="submit"
@@ -677,22 +685,34 @@ export default function Ticket() {
                 <aside className="hidden xl:block xl:pl-8">
                   <h2 className="sr-only">Details</h2>
                   <div className="space-y-5">
-                    <div className="flex items-center space-x-2">
-                      <LockOpenIcon
-                        className="h-5 w-5 text-green-500"
-                        aria-hidden="true"
-                      />
-                      <span className="text-sm font-medium text-green-700">
-                        Open Issue
-                      </span>
-                    </div>
+                    {!data.ticket.isComplete ? (
+                      <div className="flex items-center space-x-2">
+                        <LockOpenIcon
+                          className="h-5 w-5 text-green-500"
+                          aria-hidden="true"
+                        />
+                        <span className="text-sm font-medium text-green-700">
+                          Open Issue
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <LockClosedIcon
+                          className="h-5 w-5 text-red-500"
+                          aria-hidden="true"
+                        />
+                        <span className="text-sm font-medium text-red-700">
+                          Closed Issue
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center space-x-2">
                       <ChatBubbleLeftEllipsisIcon
                         className="h-5 w-5 text-gray-400"
                         aria-hidden="true"
                       />
                       <span className="text-sm font-medium text-gray-900">
-                        {data.ticket.Comment.length} comments
+                        {data.ticket.comments.length} comments
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -702,7 +722,7 @@ export default function Ticket() {
                       />
                       <span className="text-sm font-medium text-gray-900">
                         Created on{" "}
-                        <time dateTime="2020-12-02">Dec 2, 2020</time>
+                        {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
                       </span>
                     </div>
                   </div>
@@ -734,25 +754,54 @@ export default function Ticket() {
                     </div>
                     <div>
                       <h2 className="text-sm font-medium text-gray-500">
-                        Tags
+                        Labels
                       </h2>
                       <ul role="list" className="mt-2 leading-8">
-                        <li className="inline">
-                          <a
-                            href="#"
-                            className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                          >
-                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                              <span
-                                className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                aria-hidden="true"
-                              />
+                        {data.ticket.priority === "Low" && (
+                          <li className="inline">
+                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                              <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full bg-blue-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div className="ml-3 text-xs font-semibold text-gray-900">
+                                {data.ticket.priority} Priority
+                              </div>
                             </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900">
-                              {data.ticket.priority}
+                          </li>
+                        )}
+                        {data.ticket.priority === "Normal" && (
+                          <li className="inline">
+                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                              <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full bg-green-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div className="ml-3 text-xs font-semibold text-gray-900">
+                                {data.ticket.priority} Priority
+                              </div>
                             </div>
-                          </a>{" "}
-                        </li>
+                          </li>
+                        )}
+                        {data.ticket.priority === "High" && (
+                          <li className="inline">
+                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                              <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div className="ml-3 text-xs font-semibold text-gray-900">
+                                {data.ticket.priority} Priority
+                              </div>
+                            </div>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </div>

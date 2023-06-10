@@ -88,7 +88,7 @@ export default function ListTodo() {
                     <button
                       onClick={() => deleteTodo(todo.id)}
                       type="button"
-                      className="float-right border border-transparent rounded-full shadow-sm text-red-600 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      className="float-right   text-red-600 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
                       <TrashIcon className="h-4 w-4" aria-hidden="true" />
                     </button>

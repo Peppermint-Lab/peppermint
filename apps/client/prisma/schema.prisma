@@ -105,14 +105,14 @@ model Ticket {
   Number     Int      @default(autoincrement())
 
   TicketFile TicketFile[]
+  Comment    Comment[]
 
-  team       Team?     @relation(fields: [teamId], references: [id])
+  team       Team?   @relation(fields: [teamId], references: [id])
   teamId     String?
-  assignedTo User?     @relation(fields: [userId], references: [id])
-  client     Client?   @relation(fields: [clientId], references: [id])
+  assignedTo User?   @relation(fields: [userId], references: [id])
+  client     Client? @relation(fields: [clientId], references: [id])
   clientId   String?
   userId     String?
-  Comment    Comment[]
 }
 
 model Comment {
