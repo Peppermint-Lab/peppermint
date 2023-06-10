@@ -296,6 +296,14 @@ export default function ClosedTickets() {
       Header: "Created",
       accessor: "createdAt",
       id: "created",
+      Cell: ({ row, value }) => {
+        const now = moment(value).format("DD/MM/YYYY");
+        return (
+          <>
+            <span className="">{now}</span>
+          </>
+        );
+      },
     },
     // {
     //   Header: "",

@@ -90,9 +90,9 @@ model Team {
 }
 
 model Ticket {
-  id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  id         String       @id @default(uuid())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
   name       String?
   title      String
   detail     String?
@@ -102,7 +102,8 @@ model Ticket {
   priority   String
   linked     Json?
   fromImap   Boolean
-  Number     Int      @default(autoincrement())
+  Number     Int          @default(autoincrement())
+  status     TicketStatus @default(needs_support)
 
   TicketFile TicketFile[]
   Comment    Comment[]
@@ -270,4 +271,11 @@ model EmailQueue {
 enum Hook {
   ticket_created
   ticket_status_changed
+}
+
+enum TicketStatus {
+  needs_support
+  in_progress
+  in_review
+  done
 }
