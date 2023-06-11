@@ -45,7 +45,7 @@ COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/public ./public
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/start.sh ./
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/prisma ./prisma
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.env ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.example ./.env
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/i18n.js ./
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/pages ./
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/components  ./components
