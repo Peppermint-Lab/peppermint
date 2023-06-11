@@ -1,4 +1,4 @@
-name: Build Master
+name: Dev Client Build
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./apps/client
+        working-directory: /apps/client
     steps:
       - name: Get current time
         uses: 1466587594/get-current-time@v2
