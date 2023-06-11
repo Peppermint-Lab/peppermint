@@ -5,6 +5,9 @@ export default async function getUnissued(req, res) {
     await prisma.ticket
       .findMany({
         where: { userId: null },
+        orderBy: [{
+          createdAt: 'desc'
+        }],
         include: {
           client: {
             select: { id: true, name: true },

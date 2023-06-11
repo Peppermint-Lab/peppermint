@@ -7,6 +7,9 @@ export default async function allTickets(req, res) {
         where: {
           isComplete: false,
         },
+        orderBy: [{
+          createdAt: 'desc'
+        }],
         include: {
           client: {
             select: { id: true, name: true },

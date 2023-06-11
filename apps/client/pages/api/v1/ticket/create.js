@@ -6,7 +6,7 @@ export default async function createTicket(req, res) {
     req.body;
 
   try {
-    await prisma.ticket
+    const ticket = await prisma.ticket
       .create({
         data: {
           name,
@@ -32,6 +32,7 @@ export default async function createTicket(req, res) {
         },
       })
       .then((ticket) => {
+        console.log(ticket)
         sendTicketCreate(ticket);
       });
 
@@ -59,7 +60,7 @@ export default async function createTicket(req, res) {
 
     res
       .status(200)
-      .json({ message: "Ticket created correctly", success: true });
+      .json({ message: "Ticket created correctly", success: true, ticket: ticket });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error, success: false });

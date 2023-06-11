@@ -7,35 +7,36 @@ export async function sendTicketCreate(ticket) {
 
     const emails = await prisma.email.findMany();
 
-    if (process.env.NODE_ENV === "development") {
-      let testAccount = await nodeMailer.createTestAccount();
-      mail = nodeMailer.createTransport({
-        port: 1025,
-        secure: false, // true for 465, false for other ports
-        auth: {
-          user: testAccount.user, // generated ethereal user
-          pass: testAccount.pass, // generated ethereal password
-        },
-      });
-    } else {
-      const email = emails[0];
-      mail = nodeMailer.createTransport({
-        host: email.host,
-        port: email.port,
-        secure: email.secure, // true for 465, false for other ports
-        auth: {
-          user: email.user, // generated ethereal user
-          pass: email.pass, // generated ethereal password
-        },
-      });
-    }
+    if (emails.length > 0) {
+      if (process.env.NODE_ENV === "development") {
+        let testAccount = await nodeMailer.createTestAccount();
+        mail = nodeMailer.createTransport({
+          port: 1025,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: testAccount.user, // generated ethereal user
+            pass: testAccount.pass, // generated ethereal password
+          },
+        });
+      } else {
+        const email = emails[0];
+        mail = nodeMailer.createTransport({
+          host: email.host,
+          port: email.port,
+          secure: email.secure, // true for 465, false for other ports
+          auth: {
+            user: email.user, // generated ethereal user
+            pass: email.pass, // generated ethereal password
+          },
+        });
+      }
 
-    let info = await mail.sendMail({
-      from: '"No reply 👻" noreply@peppermint.sh', // sender address
-      to: ticket.email,
-      subject: `Ticket ${ticket.id} has just been created & logged`, // Subject line
-      text: `Hello there, Ticket ${ticket.id}, which you reported on ${ticket.createdAt}, has now been created and logged`, // plain text body
-      html: `
+      let info = await mail.sendMail({
+        from: '"No reply 👻" noreply@peppermint.sh', // sender address
+        to: ticket.email,
+        subject: `Ticket ${ticket.id} has just been created & logged`, // Subject line
+        text: `Hello there, Ticket ${ticket.id}, which you reported on ${ticket.createdAt}, has now been created and logged`, // plain text body
+        html: `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
 
@@ -83,12 +84,13 @@ export async function sendTicketCreate(ticket) {
 
 </html>
       `,
-    });
+      });
 
-    console.log("Message sent: %s", info.messageId);
+      console.log("Message sent: %s", info.messageId);
 
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
+      // Preview only available when sending through an Ethereal account
+      console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
+    }
   } catch (error) {
     console.log(error);
   }

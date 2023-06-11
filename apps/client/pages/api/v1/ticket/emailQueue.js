@@ -6,7 +6,6 @@ export default async function allTickets(req, res) {
       .findMany({
         where: {
           fromImap: true,
-
         },
         include: {
           client: {
