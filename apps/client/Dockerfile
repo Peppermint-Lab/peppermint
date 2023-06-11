@@ -1,13 +1,13 @@
 FROM node:18-alpine AS deps
 
-RUN apk add --no-cache libc6-compat
+RUN apk --no-cache --virtual build-dependencies add make g++ libc6-compat
 
 # Copy over ONLY the package.json and yarn.lock
 # so that this `yarn install` layer is only recomputed
 # if these dependency files change. Nice speed hack!
 WORKDIR /app
 COPY package.json ./
-RUN yarn install 
+RUN yarn install --network-timeout 1000000
 
 # Now we make a container to handle our Build
 FROM node:18-alpine AS BUILD_IMAGE
@@ -25,7 +25,7 @@ RUN yarn build
 # Remove all the development dependencies since we don't
 # need them to run the actual server.
 RUN rm -rf node_modules
-RUN yarn install --production --ignore-scripts --prefer-offline
+RUN yarn install --production --ignore-scripts --prefer-offline --network-timeout 1000000
 RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
