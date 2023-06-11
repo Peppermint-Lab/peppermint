@@ -1,4 +1,4 @@
-FROM node:18 AS deps
+FROM node:18-alpine AS deps
 
 RUN apk add --no-cache libc6-compat
 
@@ -10,7 +10,7 @@ COPY package.json ./
 RUN yarn install 
 
 # Now we make a container to handle our Build
-FROM node:18 AS BUILD_IMAGE
+FROM node:18-alpine AS BUILD_IMAGE
 
 # Set up our work directory again
 WORKDIR /app
@@ -30,7 +30,7 @@ RUN yarn remove bcrypt && yarn add bcrypt
 RUN yarn add --dev typescript @types/node --network-timeout 1000000 && yarn add prisma -g --network-timeout 1000000
 
 
-FROM node:18
+FROM node:18-alpine
 
 RUN apk update
 RUN apk add --no-cache bash
