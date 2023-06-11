@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.1"
 
 services:
   postgres:
@@ -10,7 +10,7 @@ services:
     image: postgres:latest
     restart: always
     volumes:
-      - /postgres-data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
@@ -37,3 +37,6 @@ services:
       DB_PASSWORD: 1234
       DB_HOST: postgres
       BASE_URL: http://localhost:5001
+
+volumes:
+ pgdata:
