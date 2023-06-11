@@ -1,6 +1,6 @@
 FROM node:18-alpine AS deps
 
-RUN apk --no-cache --virtual build-dependencies add make g++ libc6-compat
+RUN apk --no-cache --virtual build-dependencies add make g++ libc6-compat python3
 
 # Copy over ONLY the package.json and yarn.lock
 # so that this `yarn install` layer is only recomputed
