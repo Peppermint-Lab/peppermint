@@ -18,6 +18,7 @@ import {
   LockClosedIcon,
   CheckIcon,
 } from "@heroicons/react/20/solid";
+import renderHTML from 'react-render-html';
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import Highlight from "@tiptap/extension-highlight";
@@ -27,7 +28,6 @@ import Underline from "@tiptap/extension-underline";
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { notifications } from "@mantine/notifications";
-import TransferTicket from "../../components/TransferTicket";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -59,6 +59,7 @@ export default function Ticket() {
   const [uploaded, setUploaded] = useState();
   const [comment, setComment] = useState();
   const [assignedEdit, setAssignedEdit] = useState(false);
+  const [labelEdit, setLabelEdit] = useState(false);
 
   const IssueEditor = useEditor({
     extensions: [
@@ -92,7 +93,7 @@ export default function Ticket() {
         detail: issue,
         note,
         title,
-        priority,
+        // priority,
       }),
     })
       .then((res) => res.json())
@@ -156,10 +157,6 @@ export default function Ticket() {
       format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
     },
   };
-
-  const high = "bg-red-100 text-red-800";
-  const low = "bg-blue-100 text-blue-800";
-  const normal = "bg-green-100 text-green-800";
 
   const fetchUsers = async () => {
     await fetch(`/api/v1/users/all`, {
@@ -267,7 +264,10 @@ export default function Ticket() {
                           ) : (
                             <button
                               type="button"
-                              onClick={() => setEdit(false)}
+                              onClick={() => {
+                                update()
+                                setEdit(false)
+                              }}
                               className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             >
                               <CheckIcon
@@ -327,50 +327,223 @@ export default function Ticket() {
                         </div>
                         <div className="mt-6 space-y-8 border-b border-t border-gray-200 py-6">
                           <div>
-                            <h2 className="text-sm font-medium text-gray-500">
-                              Assignees
-                            </h2>
-                            <ul role="list" className="mt-3 space-y-3">
-                              <li className="flex justify-start">
-                                <a
-                                  href="#"
-                                  className="flex items-center space-x-3"
+                            <div className="flex flex-row justify-between items-center">
+                              <span className="text-sm font-medium text-gray-500">
+                                Assignees
+                              </span>
+                              {!assignedEdit ? (
+                                <button
+                                  onClick={() => setAssignedEdit(true)}
+                                  className="text-sm font-medium text-gray-500 hover:underline"
                                 >
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      className="h-5 w-5 rounded-full"
-                                      src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="text-sm font-medium text-gray-900">
-                                    Eduardo Benz
-                                  </div>
-                                </a>
-                              </li>
-                            </ul>
+                                  edit
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    postData();
+                                  }}
+                                  className="text-sm font-medium text-gray-500 hover:underline"
+                                >
+                                  save
+                                </button>
+                              )}
+                            </div>
+                            {!assignedEdit ? (
+                              <ul role="list" className="mt-3 space-y-3">
+                                <li className="flex justify-start">
+                                  <a
+                                    href="#"
+                                    className="flex items-center space-x-3"
+                                  >
+                                    <div className="flex-shrink-0">
+                                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                        <span className="text-xs font-medium leading-none text-white uppercase">
+                                          {data.ticket.assignedTo
+                                            ? data.ticket.assignedTo.name[0]
+                                            : "-"}
+                                        </span>
+                                      </span>
+                                    </div>
+                                    <div className="text-sm font-medium text-gray-900">
+                                      {data.ticket.assignedTo
+                                        ? data.ticket.assignedTo.name
+                                        : "-"}
+                                    </div>
+                                  </a>
+                                </li>
+                              </ul>
+                            ) : (
+                              users && (
+                                <Listbox
+                                  value={n}
+                                  onChange={setN}
+                                  className="z-50"
+                                >
+                                  {({ open }) => (
+                                    <>
+                                      <div className="mt-1 relative">
+                                        <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                          <span className="block truncate">
+                                            {n
+                                              ? n.name
+                                              : "Please select new user"}
+                                          </span>
+                                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                            {/* <SelectorIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  /> */}
+                                          </span>
+                                        </Listbox.Button>
+
+                                        <Transition
+                                          show={open}
+                                          as={Fragment}
+                                          leave="transition ease-in duration-100"
+                                          leaveFrom="opacity-100"
+                                          leaveTo="opacity-0"
+                                        >
+                                          <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                            {users.map((user) => (
+                                              <Listbox.Option
+                                                key={user.id}
+                                                className={({ active }) =>
+                                                  classNames(
+                                                    active
+                                                      ? "text-white bg-indigo-600"
+                                                      : "text-gray-900",
+                                                    "cursor-default select-none relative py-2 pl-3 pr-9"
+                                                  )
+                                                }
+                                                value={user}
+                                              >
+                                                {({ n, active }) => (
+                                                  <>
+                                                    <span
+                                                      className={classNames(
+                                                        n
+                                                          ? "font-semibold"
+                                                          : "font-normal",
+                                                        "block truncate"
+                                                      )}
+                                                    >
+                                                      {user.name}
+                                                    </span>
+
+                                                    {n ? (
+                                                      <span
+                                                        className={classNames(
+                                                          active
+                                                            ? "text-white"
+                                                            : "text-indigo-600",
+                                                          "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                        )}
+                                                      >
+                                                        <CheckIcon
+                                                          className="h-5 w-5"
+                                                          aria-hidden="true"
+                                                        />
+                                                      </span>
+                                                    ) : null}
+                                                  </>
+                                                )}
+                                              </Listbox.Option>
+                                            ))}
+                                          </Listbox.Options>
+                                        </Transition>
+                                      </div>
+                                    </>
+                                  )}
+                                </Listbox>
+                              )
+                            )}
                           </div>
-                          <div>
-                            <h2 className="text-sm font-medium text-gray-500">
-                              Tags
-                            </h2>
-                            <ul role="list" className="mt-2 leading-8">
-                              <li className="inline">
-                                <a
-                                  href="#"
-                                  className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                >
-                                  <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                    <span
-                                      className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                      aria-hidden="true"
-                                    />
+                          <div className="border-t border-gray-200">
+                            <div className="flex flex-row items-center">
+                              <span className="text-sm font-medium text-gray-500 mt-2">
+                                Labels
+                              </span>
+                              <span className="text-sm font-medium text-gray-500 mt-2">
+                                edit
+                              </span>
+                            </div>
+                            <ul
+                              role="list"
+                              className="mt-2 leading-8 space-x-2"
+                            >
+                              {data.ticket.priority === "Low" && (
+                                <li className="inline">
+                                  <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                    <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                      <span
+                                        className="h-1.5 w-1.5 rounded-full bg-blue-500"
+                                        aria-hidden="true"
+                                      />
+                                    </div>
+                                    <div className="ml-3 text-xs font-semibold text-gray-900">
+                                      {data.ticket.priority} Priority
+                                    </div>
                                   </div>
-                                  <div className="ml-3 text-xs font-semibold text-gray-900">
-                                    Bug
+                                </li>
+                              )}
+                              {data.ticket.priority === "Normal" && (
+                                <li className="inline">
+                                  <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                    <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                      <span
+                                        className="h-1.5 w-1.5 rounded-full bg-green-500"
+                                        aria-hidden="true"
+                                      />
+                                    </div>
+                                    <div className="ml-3 text-xs font-semibold text-gray-900">
+                                      {data.ticket.priority} Priority
+                                    </div>
                                   </div>
-                                </a>{" "}
-                              </li>
+                                </li>
+                              )}
+                              {data.ticket.priority === "High" && (
+                                <li className="inline">
+                                  <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                    <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                      <span
+                                        className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                                        aria-hidden="true"
+                                      />
+                                    </div>
+                                    <div className="ml-3 text-xs font-semibold text-gray-900">
+                                      {data.ticket.priority} Priority
+                                    </div>
+                                  </div>
+                                </li>
+                              )}
+                              {data.ticket.status && (
+                                <li className="inline">
+                                  <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                    <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                      <span
+                                        className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                                        aria-hidden="true"
+                                      />
+                                    </div>
+                                    <div className="ml-3 text-xs font-semibold text-gray-900">
+                                      {data.ticket.status ===
+                                        "needs_support" && (
+                                        <span>Needs Support</span>
+                                      )}
+                                      {data.ticket.status === "in_progress" && (
+                                        <span>In Progress</span>
+                                      )}
+                                      {data.ticket.status === "in_review" && (
+                                        <span>In Review</span>
+                                      )}
+                                      {data.ticket.status === "done" && (
+                                        <span>Done</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </li>
+                              )}
                             </ul>
                           </div>
                         </div>
@@ -426,7 +599,7 @@ export default function Ticket() {
                             </RichTextEditor>
                           ) : (
                             <span className="break-words">
-                              {data.ticket.detail}
+                              {renderHTML(data.ticket.detail)}
                             </span>
                           )}
                         </div>
@@ -745,82 +918,106 @@ export default function Ticket() {
                       )}
                     </div>
                     <div className="border-t border-gray-200">
-                      <h2 className="text-sm font-medium text-gray-500 mt-2">
-                        Labels
-                      </h2>
-                      <ul role="list" className="mt-2 leading-8 space-x-2">
-                        {data.ticket.priority === "Low" && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-blue-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {data.ticket.priority} Priority
-                              </div>
-                            </div>
-                          </li>
+                      <div className="flex flex-row items-center justify-between">
+                        <span className="text-sm font-medium text-gray-500 mt-2">
+                          Labels
+                        </span>
+                        {!labelEdit ? (
+                          <button
+                            onClick={() => setLabelEdit(true)}
+                            className="text-sm font-medium text-gray-500 hover:underline"
+                          >
+                            edit
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setLabelEdit(false)
+                              // postData();
+                            }}
+                            className="text-sm font-medium text-gray-500 hover:underline"
+                          >
+                            save
+                          </button>
                         )}
-                        {data.ticket.priority === "Normal" && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-green-500"
-                                  aria-hidden="true"
-                                />
+                      </div>
+                      {!labelEdit ? (
+                        <ul role="list" className="mt-2 leading-8 space-x-2">
+                          {data.ticket.priority === "Low" && (
+                            <li className="inline">
+                              <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                  <span
+                                    className="h-1.5 w-1.5 rounded-full bg-blue-500"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <div className="ml-3 text-xs font-semibold text-gray-900">
+                                  {data.ticket.priority} Priority
+                                </div>
                               </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {data.ticket.priority} Priority
+                            </li>
+                          )}
+                          {data.ticket.priority === "Normal" && (
+                            <li className="inline">
+                              <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                  <span
+                                    className="h-1.5 w-1.5 rounded-full bg-green-500"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <div className="ml-3 text-xs font-semibold text-gray-900">
+                                  {data.ticket.priority} Priority
+                                </div>
                               </div>
-                            </div>
-                          </li>
-                        )}
-                        {data.ticket.priority === "High" && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                  aria-hidden="true"
-                                />
+                            </li>
+                          )}
+                          {data.ticket.priority === "High" && (
+                            <li className="inline">
+                              <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                  <span
+                                    className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <div className="ml-3 text-xs font-semibold text-gray-900">
+                                  {data.ticket.priority} Priority
+                                </div>
                               </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {data.ticket.priority} Priority
+                            </li>
+                          )}
+                          {data.ticket.status && (
+                            <li className="inline">
+                              <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                  <span
+                                    className="h-1.5 w-1.5 rounded-full bg-rose-500"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <div className="ml-3 text-xs font-semibold text-gray-900">
+                                  {data.ticket.status === "needs_support" && (
+                                    <span>Needs Support</span>
+                                  )}
+                                  {data.ticket.status === "in_progress" && (
+                                    <span>In Progress</span>
+                                  )}
+                                  {data.ticket.status === "in_review" && (
+                                    <span>In Review</span>
+                                  )}
+                                  {data.ticket.status === "done" && (
+                                    <span>Done</span>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </li>
-                        )}
-                        {data.ticket.status && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {data.ticket.status === "needs_support" && (
-                                  <span>Needs Support</span>
-                                )}
-                                {data.ticket.status === "in_progress" && (
-                                  <span>In Progress</span>
-                                )}
-                                {data.ticket.status === "in_review" && (
-                                  <span>In Review</span>
-                                )}
-                                {data.ticket.status === "done" && (
-                                  <span>Done</span>
-                                )}
-                              </div>
-                            </div>
-                          </li>
-                        )}
-                      </ul>
+                            </li>
+                          )}
+                        </ul>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                 </aside>

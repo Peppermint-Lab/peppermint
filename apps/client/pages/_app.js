@@ -55,6 +55,8 @@ function Auth({ children }) {
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
 
+  console.log(router)
+
   const actions = [
     {
       title: "Home",
@@ -144,7 +146,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     );
   }
 
-  if (router.pathname.includes("/notebook")) {
+  if (router.pathname === ("/notebook/[id]")) {
     return (
       <SessionProvider session={session}>
         <MantineProvider withNormalizeCSS withGlobalStyles>

@@ -8,12 +8,19 @@ import Underline from "@tiptap/extension-underline";
 // import TextAlign from '@tiptap/extension-text-align';
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
+import { useDebounce } from "use-debounce";
+import moment from "moment";
 
 export default function Notebooks() {
   const router = useRouter();
 
   const [notebook, setNoteBook] = useState("");
+  const [title, setTitle] = useState();
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState();
+
+  const [value] = useDebounce(notebook, 2000);
 
   const editor = useEditor({
     extensions: [
@@ -27,7 +34,7 @@ export default function Notebooks() {
     ],
     content: notebook,
     onUpdate({ editor }) {
-      setValue(editor.getHTML());
+      setNoteBook(editor.getHTML());
     },
   });
 
@@ -36,20 +43,52 @@ export default function Notebooks() {
       const res = await fetch(`/api/v1/note/${router.query.id}`).then((res) =>
         res.json()
       );
-      // setNoteBook(res.data.note);
       editor.commands.setContent(res.data.note);
+      setTitle(res.data.title);
       setLoading(false);
     }
+  }
+
+  async function updateNoteBook() {
+    setSaving(true);
+    const res = await fetch(`/api/v1/note/${router.query.id}/update`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        note: notebook,
+      }),
+    });
+    setSaving(false);
+    let date = new Date();
+    setLastSaved(new Date(date).getTime());
   }
 
   useEffect(() => {
     fetchNotebook();
   }, [editor, router]);
 
-  console.log(notebook);
+  useEffect(() => {
+    if (notebook !== undefined) {
+      updateNoteBook();
+    }
+  }, [value]);
 
   return (
     <>
+      <div className="flex flex-row items-center justify-between">
+        <h2 className="text-xl font-bold">{title}</h2>
+        {saving ? (
+          <span className="text-xs">
+            saving .... 
+          </span>
+        ) : (
+          <span className="text-xs">
+            last saved: {moment(lastSaved).format("hh:mm:ss")}
+          </span>
+        )}
+      </div>
       <RichTextEditor editor={editor}>
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>

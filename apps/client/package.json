@@ -71,6 +71,7 @@
     "rehype-sanitize": "^5.0.1",
     "request": "^2.88.2",
     "swagger-ui-react": "^4.12.0",
+    "use-debounce": "^9.0.4",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

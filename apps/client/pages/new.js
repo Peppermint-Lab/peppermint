@@ -124,7 +124,7 @@ export default function CreateTicketModal() {
   }, []);
 
   return (
-    <div className="inline-block bg-white rounded-lg p-8 text-left shadow-xl align-middle 2xl:max-w-6xl w-full ">
+    <div className="inline-block bg-white rounded-lg px-8 py-4 text-left shadow-xl align-middle 2xl:max-w-6xl w-full ">
       <div className="flex flex-row w-full">
         <span className="text-md pb-2 font-bold text-xl">
           {t("ticket_new")}
