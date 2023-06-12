@@ -16,7 +16,7 @@ services:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
-  client-prod:
+  peppermint:
     profiles:
       - prod
     container_name: peppermint

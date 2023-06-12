@@ -1,4 +1,5 @@
 const { prisma } = require("../../../../prisma/prisma");
+import { getSession } from "next-auth/react";
 
 /**
  * @swagger
@@ -12,19 +13,24 @@ const { prisma } = require("../../../../prisma/prisma");
  */
 
 export default async function getAllClients(req, res) {
+  const session = await getSession({ req });
   try {
-    const users = await prisma.user.findMany({
-      where: {},
-      select: {
-        email: true,
-        name: true,
-        id: true,
-        isAdmin: true,
-        language: true
-      }
-    });
+    if (session) {
+      const users = await prisma.user.findMany({
+        where: {},
+        select: {
+          email: true,
+          name: true,
+          id: true,
+          isAdmin: true,
+          language: true,
+        },
+      });
 
-    res.json({ users, failed: false });
+      res.json({ users, failed: false });
+    } else {
+      res.status(403).json({ message: "unauthenticated", failed: true });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

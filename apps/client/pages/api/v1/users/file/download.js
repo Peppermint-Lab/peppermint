@@ -1,11 +1,13 @@
 import fs from "fs";
 const { prisma } = require("../../../../../prisma/prisma");
+import { getSession } from "next-auth/react";
 
 export default async function listFiles(req, res) {
-  const { filepath } = req.query;
+  const session = await getSession({ req });
 
   try {
-    const Buffer = fs.createReadStream(userFile.path);
+    if(session) {
+      const Buffer = fs.createReadStream(userFile.path);
 
     const { id } = req.query;
 
@@ -33,6 +35,9 @@ export default async function listFiles(req, res) {
         }
       });
     });
+    } else {
+      res.status(403).json({ message: "unauthenticated", failed: true });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error, failed: true });
