@@ -3,7 +3,7 @@ const { prisma } = require("../../../../../prisma/prisma");
 export default async function updateTicket(req, res) {
   const { id } = req.query;
 
-  const { note, detail, title, priority } = req.body;
+  const { note, detail, title, priority, status } = req.body;
 
   try {
     
@@ -14,6 +14,7 @@ export default async function updateTicket(req, res) {
         note,
         title,
         priority,
+        status
       },
     });
 
