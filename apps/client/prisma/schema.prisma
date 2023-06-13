@@ -119,14 +119,12 @@ model Ticket {
 }
 
 model TimeTracking {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  title       String
-  comment     String?
-  startTime   DateTime
-  endTime     DateTime
-  minutesDiff Int
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  title     String
+  comment   String?
+  time      Int
 
   user     User?   @relation(fields: [userId], references: [id])
   client   Client? @relation(fields: [clientId], references: [id])
