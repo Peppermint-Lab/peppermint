@@ -46,29 +46,30 @@ model Session {
 }
 
 model User {
-  id                           String     @id @default(uuid())
-  createdAt                    DateTime   @default(now())
-  updatedAt                    DateTime   @default(now())
+  id                           String         @id @default(uuid())
+  createdAt                    DateTime       @default(now())
+  updatedAt                    DateTime       @default(now())
   name                         String
   password                     String?
-  email                        String     @unique
+  email                        String         @unique
   image                        String?
   emailVerified                Boolean?
-  isAdmin                      Boolean    @default(false)
-  language                     String?    @default("en")
-  notify_ticket_created        Boolean    @default(true)
-  notify_ticket_status_changed Boolean    @default(true)
-  notify_ticket_comments       Boolean    @default(true)
-  notify_ticket_assigned       Boolean    @default(true)
+  isAdmin                      Boolean        @default(false)
+  language                     String?        @default("en")
+  notify_ticket_created        Boolean        @default(true)
+  notify_ticket_status_changed Boolean        @default(true)
+  notify_ticket_comments       Boolean        @default(true)
+  notify_ticket_assigned       Boolean        @default(true)
   todos                        Todos[]
   tickets                      Ticket[]
   file                         UserFile[]
   notes                        Notes[]
-  Team                         Team?      @relation(fields: [teamId], references: [id])
+  Team                         Team?          @relation(fields: [teamId], references: [id])
   teamId                       String?
   Comment                      Comment[]
   Account                      Account[]
   Session                      Session[]
+  TimeTracking                 TimeTracking[]
 }
 
 model VerificationToken {
@@ -105,8 +106,9 @@ model Ticket {
   Number     Int          @default(autoincrement())
   status     TicketStatus @default(needs_support)
 
-  TicketFile TicketFile[]
-  Comment    Comment[]
+  TicketFile   TicketFile[]
+  Comment      Comment[]
+  TimeTracking TimeTracking[]
 
   team       Team?   @relation(fields: [teamId], references: [id])
   teamId     String?
@@ -114,6 +116,24 @@ model Ticket {
   client     Client? @relation(fields: [clientId], references: [id])
   clientId   String?
   userId     String?
+}
+
+model TimeTracking {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  title       String
+  comment     String?
+  startTime   DateTime
+  endTime     DateTime
+  minutesDiff Int
+
+  user     User?   @relation(fields: [userId], references: [id])
+  client   Client? @relation(fields: [clientId], references: [id])
+  clientId String?
+  userId   String?
+  ticketId String?
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
 }
 
 model Comment {
@@ -130,16 +150,17 @@ model Comment {
 }
 
 model Client {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  name        String
-  email       String   @unique
-  contactName String
-  number      String?
-  notes       String?
-  tickets     Ticket[]
-  active      Boolean  @default(true)
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
+  name         String
+  email        String         @unique
+  contactName  String
+  number       String?
+  notes        String?
+  tickets      Ticket[]
+  active       Boolean        @default(true)
+  TimeTracking TimeTracking[]
 }
 
 model UserFile {
