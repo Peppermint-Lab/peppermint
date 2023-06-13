@@ -5,12 +5,7 @@ import { message, Upload, Divider } from "antd";
 import moment from "moment";
 import { Menu, Transition, Listbox } from "@headlessui/react";
 import {
-  ArchiveBoxIcon,
-  ArrowRightCircleIcon,
-  ChevronDownIcon,
-  DocumentDuplicateIcon,
   PencilIcon,
-  PencilSquareIcon,
   LockOpenIcon,
   ChatBubbleLeftEllipsisIcon,
   CalendarIcon,
@@ -50,6 +45,9 @@ export default function Ticket() {
   }, [router]);
 
   const [edit, setEdit] = useState(false);
+  const [editTime, setTimeEdit] = useState(false);
+  const [assignedEdit, setAssignedEdit] = useState(false);
+  const [labelEdit, setLabelEdit] = useState(false);
 
   const [users, setUsers] = useState();
   const [n, setN] = useState();
@@ -61,8 +59,7 @@ export default function Ticket() {
   const [priority, setPriority] = useState();
   const [ticketStatus, setTicketStatus] = useState();
   const [comment, setComment] = useState();
-  const [assignedEdit, setAssignedEdit] = useState(false);
-  const [labelEdit, setLabelEdit] = useState(false);
+  const [timeSpent, setTimeSpent] = useState();
 
   const IssueEditor = useEditor({
     extensions: [
@@ -129,6 +126,26 @@ export default function Ticket() {
     })
       .then((res) => res.json())
       .then(() => refetch());
+  }
+
+  async function addTime() {
+    console.log("hit");
+    await fetch(`/api/v1/time/new`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        time: timeSpent,
+        id: data.ticket.id,
+        title: data.ticket.title,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setTimeEdit(false);
+        refetch();
+      });
   }
 
   const propsUpload = {
@@ -936,8 +953,8 @@ export default function Ticket() {
                       )}
                     </div>
                     <div className="border-t border-gray-200">
-                      <div className="flex flex-row items-center justify-between">
-                        <span className="text-sm font-medium text-gray-500 mt-2">
+                      <div className="flex flex-row items-center justify-between mt-2">
+                        <span className="text-sm font-medium text-gray-500 ">
                           Labels
                         </span>
                         {!labelEdit ? (
@@ -1397,6 +1414,60 @@ export default function Ticket() {
                             )}
                           </Listbox>
                         </>
+                      )}
+                    </div>
+                    <div className="border-t border-gray-200">
+                      <div className="flex flex-row items-center justify-between mt-2">
+                        <span className="text-sm font-medium text-gray-500 ">
+                          Time Tracking
+                        </span>
+                        {!editTime ? (
+                          <button
+                            onClick={() => setTimeEdit(true)}
+                            className="text-sm font-medium text-gray-500 hover:underline"
+                          >
+                            add
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setTimeEdit(false);
+                              addTime();
+                            }}
+                            className="text-sm font-medium text-gray-500 hover:underline"
+                          >
+                            save
+                          </button>
+                        )}
+                      </div>
+                      {data.ticket.TimeTracking.length > 0 ? (
+                        data.ticket.TimeTracking.map((i) => (
+                          <div key={i.id} className="text-xs">
+                            <div className="flex flex-row space-x-1.5 items-center">
+                              <span>{i.user.name} / </span>
+                              <span>{i.time} minutes</span>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div>
+                          <span className="text-xs">No Time added</span>
+                        </div>
+                      )}
+                      {editTime && (
+                        <div>
+                          <div className="mt-2">
+                            <input
+                              type="number"
+                              name="number"
+                              id="timespent"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="30"
+                              value={timeSpent}
+                              onChange={(e) => setTimeSpent(e.target.value)}
+                            />
+                          </div>
+                        </div>
                       )}
                     </div>
                   </div>

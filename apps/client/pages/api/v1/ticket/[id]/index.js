@@ -1,5 +1,3 @@
-import { ArrowTrendingUpIcon } from "@heroicons/react/20/solid";
-
 const { prisma } = require("../../../../../prisma/prisma");
 
 export default async function getById(req, res) {
@@ -20,6 +18,19 @@ export default async function getById(req, res) {
       },
     });
 
+    const timeTracking = await prisma.timeTracking.findMany({
+      where: {
+        ticketId: id,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
     const comments = await prisma.comment.findMany({
       where: {
         ticketId: ticket.id,
@@ -36,6 +47,7 @@ export default async function getById(req, res) {
     var t = {
       ...ticket,
       comments: [...comments],
+      TimeTracking: [...timeTracking],
     };
 
     res.status(200).json({ ticket: t });

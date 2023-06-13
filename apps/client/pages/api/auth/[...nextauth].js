@@ -31,7 +31,6 @@ const options = {
       name: "Credentials",
       async authorize(credentials, req, res) {
         try {
-          console.log("hit");
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
@@ -76,7 +75,6 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      console.log(token, user);
       user && (token.user = user);
       return token;
     },
@@ -85,16 +83,15 @@ const options = {
     },
     async session({ session, token, user }) {
       // checking for user changes on: language, email & name
-      console.log(token, session, user);
       const check_user = await prisma.user.findUnique({
         where: { email: user !== undefined ? user.email : token.email },
       });
 
       if (!check_user) throw new Error("No user found");
 
-      console.log("TOKEN: ", token);
-      console.log("SESSION: ", session);
-      console.log("USER: ", user);
+      // console.log("TOKEN: ", token);
+      // console.log("SESSION: ", session);
+      // console.log("USER: ", user);
 
       if (!user) {
         session.user = token;
