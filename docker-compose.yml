@@ -2,41 +2,27 @@ version: "3.1"
 
 services:
   postgres:
-    profiles:
-      - prod
-      - dev
-      - test
     container_name: postgres
     image: postgres:latest
     restart: always
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    environment:
+      - ./peppermint/db:/data/db
+    environment: 
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
-  peppermint:
-    profiles:
-      - prod
+  client:
     container_name: peppermint
     image: pepperlabs/peppermint:latest
     ports:
       - 5001:5001
-    restart: always
+    restart: on-failure
     depends_on:
       - postgres
-    healthcheck:
-      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     environment:
       PORT: 5001
-      DB_USERNAME: peppermint
-      DB_PASSWORD: 1234
-      DB_HOST: postgres
-      BASE_URL: http://localhost:5001
-
-volumes:
- pgdata:
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "postgres"
+      BASE_URL: "http://localhost:5001"
