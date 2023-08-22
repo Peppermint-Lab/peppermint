@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/docker/pulls/pepperlabs/peppermint" />
 </p>
 <p align="center">
-    <img src="./static/logo.svg" alt="Logo" height="80px" >
+    <img src="https://peppermint.sh/images/logo_green.svg" alt="Logo" width="350px" >
 </p>
 <p align="center">This project is supported by:</p>
 <p align="center">
@@ -23,9 +23,9 @@
 
 ## Introduction
 
-<p align="center">
 It's a self hosted alternative to popular services such as zendesk
-</p>
+
+<img src="./static/homepage.png" width="50%" >
 
 ## ✨ Features
 
@@ -49,26 +49,26 @@ services:
     image: postgres:latest
     restart: always
     volumes:
-      - ./docker-data/db:/data/db
-    environment: 
+      - peppermint/db:/data/db
+    environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
   client:
     container_name: peppermint
-    image: pepperlabs/peppermint:latest
+    image: pepperlabs/peppermint
     ports:
-      - 5000:5000
+      - 5001:5001
     restart: on-failure
     depends_on:
       - postgres
     environment:
       PORT: 5000
-      DB_USERNAME: peppermint
-      DB_PASSWORD: 1234
-      DB_HOST: 'postgres'
-      BASE_URL: "http://localhost:5000"
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "postgres"
+      BASE_URL: "http://localhost:5001"
 
 ```
 
@@ -88,7 +88,7 @@ admin@admin.com
 
 We have started working on creating documentation for peppermint which covers development to general usage. Click <a href="https://docs.peppermint.sh">here</a> to be taken directly there.
 
-## Motivation
+## Motiviation
 
 - This was initially a project to tie together my react and nodeJS skills and show something for my portfolio
 - It looked terrible! But it worked and showed functionaility, which got me a job.
@@ -106,13 +106,6 @@ Give a ⭐️ if this project helped you!
     <img src="./static/tickets.png" alt="Logo" width="350px" >
     <img src="./static/detail.png" alt="Logo" width="350px" >
 </p>
-
-## Star History
-
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Peppermint-Lab/peppermint&type=Date)](https://star-history.com/#Peppermint-Lab/peppermint&Date)
-
-
 
 ## Author
 
