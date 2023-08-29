@@ -1,3 +1,4 @@
+
 import { getCsrfToken } from "next-auth/react";
 import Link from "next/link";
 import { signIn } from 'next-auth/react';
@@ -14,7 +15,7 @@ export default function Login({ csrfToken }) {
   const handleMicrosoftLogin = () => {
     signIn('azure-ad');
   };
-  console.log(csrfToken);
+
   return (
     <div>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

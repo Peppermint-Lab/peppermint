@@ -53,36 +53,41 @@ const options = {
     error: "/auth/error",
   },
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user, account }) => {
       if (user) {
         token.user = {
           id: user.id,
           isAdmin: user.isAdmin,
           // Add other user properties if needed
         };
+        token.accessToken = account.access_token
+        if(account.provider === 'azure-ad') {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: user.email },
+          });
+
+          if (!dbUser) {
+
+            await prisma.user.create({
+              data: {
+                password: "TESTPASSWORD",
+                email: user.email,
+                name: user.name,
+                isAdmin: false,
+              },
+            });
+          }
+        }
       }
       return token;
     },
-
-  ///token returned example AD
-// email:'mmoufakkir@spartanappsolutions.com'
-// exp:1695908902
-// iat:1693316902
-// jti:'27260b84-332a-4dcf-9730-56d847ebe324'
-// name:'Mohammed Moufakkir'
-// picture:null
-// sub:'4bcvecl40Sh_2v5OfnaaS173PbgxY_kQIgO-6Y6_zwk'
-// user:{id: '4bcvecl40Sh_2v5OfnaaS173PbgxY_kQIgO-6Y6_zwk'}
-
-
     async session({ session, token }) {
       session.accessToken = token.accessToken;
-      session.user = {
-        id: token.user.id,
-        isAdmin: token.user.isAdmin,
-        // Add other user properties if needed
-      };
+      session.id = token.user.id;
+      session.user.isAdmin = token.user.isAdmin;
+      session.user.id = token.user.id;
       return session;
+      
     },
   },
   
@@ -90,3 +95,9 @@ const options = {
 };
 
 export default (req, res) => NextAuth(req, res, options);
+
+
+import { useEffect } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+
