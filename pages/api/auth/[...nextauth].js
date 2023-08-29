@@ -8,7 +8,8 @@ const options = {
   site: process.env.NEXTAUTH_URL,
   providers: [
     Providers({
-      async authorize(credentials) {
+      name: "Credentials",
+      async authorize(credentials, req, res) {
         try {
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
@@ -28,7 +29,7 @@ const options = {
             id: user.id,
             name: user.name,
             isAdmin: user.isAdmin,
-          };
+          }
         } catch (error) {
           throw new Error(error);
         }
@@ -40,11 +41,12 @@ const options = {
       tenantId: process.env.AZURE_AD_TENANT_ID,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET, 
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     jwt: true,
     maxAge: 30 * 24 * 60 * 60,
   },
+
   database: process.env.DATABASE_URL,
   pages: {
     signIn: "/auth/login",
@@ -52,23 +54,15 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      if (user) {
-        token.user = user;
-      }
+      user && (token.user = user);
+
       return token;
     },
-    async session({ session, token }) { 
+    async session({ session, token, user }) {
       session.accessToken = token.accessToken;
       session.id = token.user.id;
-      session.user = {
-        ...token.user,
-        id: token.user.id,
-        isAdmin: token.user.isAdmin,
-        // Add additional properties from Azure AD to the session
-        azureAD: {
-          // ... add properties like email, name, etc. from Azure AD
-        },
-      };
+      session.user.isAdmin = token.user.isAdmin;
+      session.user.id = token.user.id;
       return session;
     },
   },
