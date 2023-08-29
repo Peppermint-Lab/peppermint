@@ -54,18 +54,38 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      user && (token.user = user);
-
+      if (user) {
+        token.user = {
+          id: user.id,
+          isAdmin: user.isAdmin,
+          // Add other user properties if needed
+        };
+      }
       return token;
     },
-    async session({ session, token, user }) {
+
+  ///token returned example AD
+// email:'mmoufakkir@spartanappsolutions.com'
+// exp:1695908902
+// iat:1693316902
+// jti:'27260b84-332a-4dcf-9730-56d847ebe324'
+// name:'Mohammed Moufakkir'
+// picture:null
+// sub:'4bcvecl40Sh_2v5OfnaaS173PbgxY_kQIgO-6Y6_zwk'
+// user:{id: '4bcvecl40Sh_2v5OfnaaS173PbgxY_kQIgO-6Y6_zwk'}
+
+
+    async session({ session, token }) {
       session.accessToken = token.accessToken;
-      session.id = token.user.id;
-      session.user.isAdmin = token.user.isAdmin;
-      session.user.id = token.user.id;
+      session.user = {
+        id: token.user.id,
+        isAdmin: token.user.isAdmin,
+        // Add other user properties if needed
+      };
       return session;
     },
   },
+  
   debug: true,
 };
 
