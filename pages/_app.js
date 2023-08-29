@@ -36,7 +36,7 @@ function Auth({ children }) {
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const router = useRouter();
 
-  if (router.asPath.slice(0, 5) === "/auth") {
+  if (router.asPath.startsWith("/auth" )) {
     return (
       <SessionProvider session={session}>
         <Component {...pageProps} />

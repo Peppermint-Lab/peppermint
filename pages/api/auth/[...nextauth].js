@@ -54,32 +54,47 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user, account }) => {
-      if (user) {
-        token.user = {
-          id: user.id,
-          isAdmin: user.isAdmin,
-          // Add other user properties if needed
+      if (!user) {
+        return token;
+      }
+    
+      token.user = {
+        id: user.id,
+        isAdmin: user.isAdmin,
+      };
+    
+      token.accessToken = account.access_token;
+    
+      if (account.provider === 'azure-ad') {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+        
+        const hash = await bcrypt.hash("PASS_THE_HASH", 10);
+        const userToCreate = {
+          password: hash,
+          email: user.email,
+          name: user.name,
+          isAdmin: false,
         };
-        token.accessToken = account.access_token
-        if(account.provider === 'azure-ad') {
-          const dbUser = await prisma.user.findUnique({
-            where: { email: user.email },
+    
+        if (!dbUser) {
+          const newUser = await prisma.user.create({
+            data: userToCreate,
+            select: { id: true }
           });
-
-          if (!dbUser) {
-
-            await prisma.user.create({
-              data: {
-                password: "TESTPASSWORD",
-                email: user.email,
-                name: user.name,
-                isAdmin: false,
-              },
-            });
-          }
+          token.user.id = newUser.id;
+          token.user.isAdmin = false;
+        } else {
+          token.user.id = dbUser.id;
+          token.user.isAdmin = dbUser.isAdmin;
         }
       }
+    
       return token;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
@@ -95,9 +110,4 @@ const options = {
 };
 
 export default (req, res) => NextAuth(req, res, options);
-
-
-import { useEffect } from 'react';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 

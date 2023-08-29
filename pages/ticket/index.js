@@ -31,6 +31,7 @@ function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
   );
 }
 function Table({ columns, data }) {
+  console.log(columns, data)
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -75,7 +76,7 @@ function Table({ columns, data }) {
   } = useTable(
     {
       columns,
-      data,
+      data: data || [],
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
       initialState: {
@@ -279,11 +280,11 @@ export default function Tickets() {
       {status === "success" && (
         <>
           <div className="hidden sm:block">
-            <Table columns={columns} data={data.tickets} />
+            <Table columns={columns} data={data.tickets || []} />
           </div>
 
           <div className="sm:hidden">
-            <TicketsMobileList tickets={data.tickets} />
+            <TicketsMobileList tickets={data.tickets || []} />
           </div>
         </>
       )}
