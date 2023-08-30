@@ -7,25 +7,77 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Provider {
+  id           String  @id @default(uuid())
+  name         String
+  clientId     String
+  clientSecret String
+  active       Boolean
+  issuer       String?
+  tenantId     String?
+}
+
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
+  refresh_token_expires_in Int?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model User {
-  id                           String     @id @default(uuid())
-  createdAt                    DateTime   @default(now())
-  updatedAt                    DateTime   @default(now())
+  id                           String         @id @default(uuid())
+  createdAt                    DateTime       @default(now())
+  updatedAt                    DateTime       @default(now())
   name                         String
-  password                     String
-  email                        String     @unique
-  isAdmin                      Boolean
-  language                     String?    @default("en")
-  notify_ticket_created        Boolean    @default(true)
-  notify_ticket_status_changed Boolean    @default(true)
-  notify_ticket_comments       Boolean    @default(true)
-  notify_ticket_assigned       Boolean    @default(true)
+  password                     String?
+  email                        String         @unique
+  image                        String?
+  emailVerified                Boolean?
+  isAdmin                      Boolean        @default(false)
+  language                     String?        @default("en")
+  notify_ticket_created        Boolean        @default(true)
+  notify_ticket_status_changed Boolean        @default(true)
+  notify_ticket_comments       Boolean        @default(true)
+  notify_ticket_assigned       Boolean        @default(true)
   todos                        Todos[]
   tickets                      Ticket[]
   file                         UserFile[]
   notes                        Notes[]
-  Team                         Team?      @relation(fields: [teamId], references: [id])
+  Team                         Team?          @relation(fields: [teamId], references: [id])
   teamId                       String?
+  Comment                      Comment[]
+  Account                      Account[]
+  Session                      Session[]
+  TimeTracking                 TimeTracking[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model Team {
@@ -39,21 +91,24 @@ model Team {
 }
 
 model Ticket {
-  id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
-  name       String
+  id         String       @id @default(uuid())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+  name       String?
   title      String
   detail     String?
-  email      String
+  email      String?
   note       String?
   isComplete Boolean
   priority   String
   linked     Json?
   fromImap   Boolean
-  Number     Int      @default(autoincrement())
+  Number     Int          @default(autoincrement())
+  status     TicketStatus @default(needs_support)
 
-  TicketFile TicketFile[]
+  TicketFile   TicketFile[]
+  Comment      Comment[]
+  TimeTracking TimeTracking[]
 
   team       Team?   @relation(fields: [teamId], references: [id])
   teamId     String?
@@ -63,17 +118,47 @@ model Ticket {
   userId     String?
 }
 
+model TimeTracking {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  title     String
+  comment   String?
+  time      Int
+
+  user     User?   @relation(fields: [userId], references: [id])
+  client   Client? @relation(fields: [clientId], references: [id])
+  clientId String?
+  userId   String?
+  ticketId String?
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  text   String
+  public Boolean @default(false)
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+}
+
 model Client {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  name        String
-  email       String   @unique
-  contactName String
-  number      String?
-  notes       String?
-  tickets     Ticket[]
-  active      Boolean  @default(true)
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
+  name         String
+  email        String         @unique
+  contactName  String
+  number       String?
+  notes        String?
+  tickets      Ticket[]
+  active       Boolean        @default(true)
+  TimeTracking TimeTracking[]
 }
 
 model UserFile {
@@ -205,4 +290,11 @@ model EmailQueue {
 enum Hook {
   ticket_created
   ticket_status_changed
+}
+
+enum TicketStatus {
+  needs_support
+  in_progress
+  in_review
+  done
 }
