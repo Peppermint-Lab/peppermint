@@ -1,37 +1,28 @@
-import "../styles/globals.css";
 import "antd/dist/antd.css";
+import "../styles/globals.css";
 
-import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { useRouter } from "next/router";
-import { SessionProvider, useSession } from "next-auth/react";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import Head from "next/head";
-import { MantineProvider } from "@mantine/core";
-import { Notifications } from "@mantine/notifications";
-import { SpotlightProvider } from "@mantine/spotlight";
 import {
   DocumentCheckIcon,
   FolderIcon,
   HomeIcon,
-  MenuIcon,
   TicketIcon,
-  XIcon,
 } from "@heroicons/react/24/outline";
+import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import { SpotlightProvider } from "@mantine/spotlight";
+import { SessionProvider, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-import { ThemeProvider } from "next-themes";
-
+import AdminLayout from "../layouts/adminLayout";
 import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
-import AdminLayout from "../layouts/adminLayout";
-import { DocumentArrowDownIcon } from "@heroicons/react/20/solid";
 
 const queryClient = new QueryClient();
 
-function Auth({ children }) {
+function Auth({ children }: any) {
   const { data: session, status } = useSession({ required: true });
-
-  console.log(session);
 
   const isUser = !!session?.user;
 
@@ -45,54 +36,60 @@ function Auth({ children }) {
 
   // Session is being fetched, or no user.
   // If no user, useEffect() will redirect.
+
   return (
     <div className="flex h-screen justify-center items-center text-green-600">
-      <ScaleLoader color="green" loading={status} size={100} />
+      {/* <ScaleLoader color="green" loading={status} size={100} /> */}
     </div>
   );
 }
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   const router = useRouter();
-
-  console.log(router)
 
   const actions = [
     {
       title: "Home",
       description: "Get to home page",
-      onTrigger: () => router.push('/'),
+      onTrigger: () => router.push("/"),
+      //@ts-expect-error
       icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Notebook",
       description: "Personal User Notes",
-      onTrigger: () => router.push('/notebook'),
+      onTrigger: () => router.push("/notebook"),
+      //@ts-expect-error
       icon: <FolderIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Tickets",
       description:
         "Central store for all company & user tickets, open or closed",
-      onTrigger: () => router.push('/tickets'),
+      onTrigger: () => router.push("/tickets"),
+      //@ts-expect-error
       icon: <TicketIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Documentation",
       description: "Documentation for peppermint.sh",
-      onTrigger: () => router.push('https://docs.peppermint.sh'),
+      onTrigger: () => router.push("https://docs.peppermint.sh"),
+      //@ts-expect-error
       icon: <DocumentCheckIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Github",
       description: "OSS codebase for peppermint",
-      onTrigger: () => router.push('https://github.com/Peppermint-Lab/peppermint'),
-      icon: <img className="h-7 ml-1 w-auto" src="/github.svg" alt="Workflow" />,
+      onTrigger: () =>
+        router.push("https://github.com/Peppermint-Lab/peppermint"),
+      icon: (
+        <img className="h-7 ml-1 w-auto" src="/github.svg" alt="Workflow" />
+      ),
     },
     {
       title: "Peppermint.sh",
       description: "",
-      onTrigger: () => router.push('https://peppermint.sh'),
+      onTrigger: () => router.push("https://peppermint.sh"),
       icon: <img className="h-7 ml-1 w-auto" src="/logo.svg" alt="Workflow" />,
     },
   ];
@@ -146,25 +143,25 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     );
   }
 
-  if (router.pathname === ("/notebook/[id]")) {
+  if (router.pathname === "/notebook/[id]") {
     return (
       <SessionProvider session={session}>
         <MantineProvider withNormalizeCSS withGlobalStyles>
-        <SpotlightProvider
-          shortcut={["mod + P", "mod + K", "/"]}
-          actions={actions}
-          searchPlaceholder="Search ..."
-        >
-        <QueryClientProvider client={queryClient}>
-          <Auth>
-            <NewLayout>
-              <NoteBookLayout>
-                <Component {...pageProps} />
-              </NoteBookLayout>
-            </NewLayout>
-          </Auth>
-        </QueryClientProvider>
-        </SpotlightProvider>
+          <SpotlightProvider
+            shortcut={["mod + P", "mod + K", "/"]}
+            actions={actions}
+            searchPlaceholder="Search ..."
+          >
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <NewLayout>
+                  <NoteBookLayout>
+                    <Component {...pageProps} />
+                  </NoteBookLayout>
+                </NewLayout>
+              </Auth>
+            </QueryClientProvider>
+          </SpotlightProvider>
         </MantineProvider>
       </SessionProvider>
     );
@@ -185,7 +182,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
                 <Component {...pageProps} />
               </NewLayout>
             </Auth>
-
           </QueryClientProvider>
         </SpotlightProvider>
       </MantineProvider>
