@@ -52,7 +52,7 @@ export default function AdminLayout({ children }) {
           ))}
         </nav>
       </div>
-      <div className="flex-1 px-2">{children}</div>
+      <div className="flex-1 px-4">{children}</div>
     </div>
   );
 }

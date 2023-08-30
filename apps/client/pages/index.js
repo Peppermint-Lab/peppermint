@@ -1,31 +1,18 @@
-import { useState, useEffect, Fragment } from "react";
-import { Upload, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  CheckCircleIcon
+} from "@heroicons/react/20/solid";
+import { message } from "antd";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import {
-  ArchiveBoxIcon,
-  ArrowRightCircleIcon,
-  ChevronDownIcon,
-  DocumentDuplicateIcon,
-  HeartIcon,
-  PencilSquareIcon,
-  TrashIcon,
-  UserPlusIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/20/solid";
-import { Menu, Transition } from "@headlessui/react";
+import { useEffect, useState } from "react";
 
 import useTranslation from "next-translate/useTranslation";
 
 import ListTodo from "../components/ListTodo";
-import ListUserFiles from "../components/ListUserFiles";
-import { useRouter } from "next/router";
+// import ListUserFiles from "../components/ListUserFiles";
 import moment from "moment";
+import { useRouter } from "next/router";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function Home() {
   const { data: session } = useSession();
@@ -167,21 +154,21 @@ export default function Home() {
               <div className="flex-1 min-w-0">
                 {/* Profile */}
                 <div className="flex items-center">
-                  <span className="hidden sm:inline-flex items-center justify-center h-12 w-12 rounded-full bg-gray-500">
-                    <span className="text-lg font-medium leading-none text-white uppercase">
+                  <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
+                    <span className="text-sm font-medium leading-none text-white uppercase">
                       {session.user.name[0]}
                     </span>
                   </span>
-                  <div>
+                  <div className="flex flex-col  pl-4 py-2 justify-start">
                     <div className="flex items-center">
-                      <span className="pt-4 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        {t("hello_good")}
+                      <span className="text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
+                        {t("hello_good")}{" "}
                         {hour < 12
                           ? t("hello_morning")
                           : t("hello_afternoon")}, {session.user.name}!
                       </span>
                     </div>
-                    <dl className="flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
+                    <dl className="flex flex-col sm:flex-row sm:flex-wrap">
                       <dt className="sr-only">{t("account_status")}</dt>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
                         <CheckCircleIcon
@@ -220,7 +207,7 @@ export default function Home() {
               </dl>
             </div>
 
-            <div className="flex w-full flex-col ">
+            <div className="flex w-full flex-col mt-4 px-1 mb-4">
               <span className="font-bold text-2xl">Recent Tickets</span>
               <div className="-mx-4 sm:-mx-0 w-full">
                 <table className="min-w-full divide-y divide-gray-300">
@@ -514,7 +501,7 @@ export default function Home() {
         )}
       </div>
       <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 2xl:max-h-[53vh]">
-        <span className="font-bold text-2xl">Reminders</span>
+        <span className="font-bold text-2xl ml-1">Reminders</span>
         <ListTodo />
       </div>
     </div>
