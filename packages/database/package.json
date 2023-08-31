@@ -17,27 +17,30 @@
     "db:seed": "tsx src/prisma/seed.ts",
     "dev": "tsup --watch",
     "format": "prisma format",
-    "generate": "prisma generate",
+    "db:generate": "prisma generate",
     "lint": "eslint \"src/**/*.ts\"",
     "prebuild": "npm run generate",
-    "predev": "npm run generate"
+    "predev": "npm run generate",
+    "db:migrate:reset": "prisma migrate reset",
+    "generate": "prisma generate",
+    "studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "latest"
+    "@prisma/client": "^5.2.0"
   },
   "devDependencies": {
+    "@types/node": "latest",
     "config": "*",
     "eslint": "^8.12.0",
-    "prisma": "4.10.1",
+    "prisma": "5.2.0",
     "rimraf": "^3.0.2",
     "tsconfig": "*",
     "tsup": "^5.11.13",
     "tsx": "^3.7.1",
-    "typescript": "^4.5.5",
-    "@types/node": "latest"
+    "typescript": "^4.5.5"
   },
   "prisma": {
-    "schema": "./src/prisma/schema.prisma",
-    "seed": "node ./src/prisma/seed.js"
+    "schema": "./prisma/schema.prisma",
+    "seed": "node ./prisma/seed.js"
   }
 }

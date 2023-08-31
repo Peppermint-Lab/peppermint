@@ -10,14 +10,11 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^db:generate"],
       "outputs": ["dist/**", ".next/**"]
     },
-    "lint": {},
-    "generate": {
-      "dependsOn": ["^generate"]
-    },
     "dev": {
+      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
     }

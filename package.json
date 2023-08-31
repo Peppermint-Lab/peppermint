@@ -1,18 +1,18 @@
 {
     "private": true,
     "scripts": {
-      "build": "turbo run build",
-      "dev": "turbo run dev --parallel",
-      "lint": "turbo run lint",
-      "format": "prettier --write \"**/*.{ts,tsx,md}\""
+        "build": "turbo run build",
+        "dev": "turbo run dev --parallel",
+        "lint": "turbo run lint",
+        "format": "prettier --write \"**/*.{ts,tsx,md}\""
     },
     "devDependencies": {
-      "prettier": "^2.5.1",
-      "turbo": "latest"
+        "prettier": "^2.5.1",
+        "turbo": "1.10.4"
     },
     "workspaces": [
         "apps/*",
         "packages/*"
-      ],
-    "packageManager": "yarn@1.22.17"
-  }
+    ],
+    "packageManager": "yarn@1.22.19"
+}
