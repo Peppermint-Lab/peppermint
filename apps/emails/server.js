@@ -1,7 +1,7 @@
 const express = require("express");
 const Imap = require("imap");
 const { simpleParser } = require("mailparser");
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require("database");
 
 require("dotenv").config();
 
