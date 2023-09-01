@@ -1,0 +1,38 @@
+version: "3.3"
+services:
+  pg:
+    image: "postgres:11"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    container_name: "pg"
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  api:   
+    build: .
+    container_name: api
+    restart: always
+    depends_on:
+      - pg
+    ports:
+      - "8090:8090"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@pg:5432/postgres
+      - JWT_SECRET=secret
+      - PORT=8090
+    networks:
+      - internal
+
+volumes:
+  postgres_data:
+
+networks:
+  internal:
+    driver: bridge
