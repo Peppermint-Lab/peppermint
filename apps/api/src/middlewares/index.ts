@@ -1,5 +1,5 @@
-import { Role, User } from "@prisma/client";
-import { FastifyRequest, FastifyReply, FastifyContext } from "fastify";
+import { User } from "database";
+import { FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 
 // middleware to check if user is authenticated
@@ -48,11 +48,11 @@ export function isAdmin(
     });
   }
 
-  if (user!.role !== Role.ADMIN) {
-    reply.code(403).send({
-      message: "Forbidden",
-    });
-  }
+  // if (user!.role !== Role.ADMIN) {
+  //   reply.code(403).send({
+  //     message: "Forbidden",
+  //   });
+  // }
 
   return done();
 }

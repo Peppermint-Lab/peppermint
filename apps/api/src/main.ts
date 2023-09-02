@@ -1,9 +1,9 @@
+import { randomBytes } from "crypto";
 import "dotenv/config";
 import Fastify from "fastify";
-import cors from "fastify-cors";
-import { randomBytes } from "crypto";
-import { registerRoutes } from "./routes";
+// import cors from "fastify-cors";
 import { prisma } from "./prisma";
+import { registerRoutes } from "./routes";
 
 const main = async () => {
   const server = Fastify({
@@ -11,7 +11,7 @@ const main = async () => {
     logger: true,
   });
 
-  server.register(cors, {
+  server.register( {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
@@ -25,7 +25,7 @@ const main = async () => {
   registerRoutes(server);
 
   try {
-    await server.listen(process.env.PORT || 8080, "0.0.0.0");
+    await server.listen(process.env.PORT || 5002, "0.0.0.0");
   } catch (err) {
     server.log.error(err);
     await prisma.$disconnect();

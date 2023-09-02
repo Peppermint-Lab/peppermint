@@ -1,3 +1,2 @@
-import { PrismaClient } from "@prisma/client";
-
+import { PrismaClient } from 'database';
 export const prisma = new PrismaClient();
