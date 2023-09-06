@@ -50,7 +50,7 @@ model User {
   createdAt                    DateTime       @default(now())
   updatedAt                    DateTime       @default(now())
   name                         String
-  password                     String?
+  password                     String
   email                        String         @unique
   image                        String?
   emailVerified                Boolean?

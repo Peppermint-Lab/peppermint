@@ -10,10 +10,11 @@ import {
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { SpotlightProvider } from "@mantine/spotlight";
-import { SessionProvider, useSession } from "next-auth/react";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+
+import { SessionProvider } from "../store/session";
 
 import AdminLayout from "../layouts/adminLayout";
 import NewLayout from "../layouts/newLayout";
@@ -22,13 +23,13 @@ import NoteBookLayout from "../layouts/notebook";
 const queryClient = new QueryClient();
 
 function Auth({ children }: any) {
-  const { data: session, status } = useSession({ required: true });
+  const cookie = getCookie("session");
 
-  const isUser = !!session?.user;
+  const isUser = cookie;
 
-  React.useEffect(() => {
-    if (status) return; // Do nothing while loading
-  }, [isUser, status]);
+  // React.useEffect(() => {
+  //   if (status) return; // Do nothing while loading
+  // }, [isUser, status]);
 
   if (isUser) {
     return children;
@@ -96,25 +97,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
-      <SessionProvider session={session}>
+      <SessionProvider>
         <Component {...pageProps} />
-      </SessionProvider>
-    );
-  }
-
-  if (router.pathname === "/swagger") {
-    return (
-      <SessionProvider session={session}>
-        <Auth>
-          <Component {...pageProps} />
-        </Auth>
       </SessionProvider>
     );
   }
 
   if (router.pathname.includes("/public")) {
     return (
-      <SessionProvider session={session}>
+      <SessionProvider>
         <Component {...pageProps} />
       </SessionProvider>
     );
@@ -122,7 +113,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.pathname.includes("/admin")) {
     return (
-      <SessionProvider session={session}>
+      <SessionProvider>
         <MantineProvider withNormalizeCSS withGlobalStyles>
           <SpotlightProvider
             shortcut={["mod + P", "mod + K", "/"]}
@@ -145,7 +136,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.pathname === "/notebook/[id]") {
     return (
-      <SessionProvider session={session}>
+      <SessionProvider>
         <MantineProvider withNormalizeCSS withGlobalStyles>
           <SpotlightProvider
             shortcut={["mod + P", "mod + K", "/"]}
@@ -168,7 +159,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   }
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <MantineProvider withNormalizeCSS withGlobalStyles>
         <SpotlightProvider
           shortcut={["mod + P", "mod + K", "/"]}

@@ -1,26 +1,19 @@
-import React, { Fragment, useEffect, useState, useCallback } from "react";
-import { Dialog, Transition, Disclosure } from "@headlessui/react";
-import {
-  FolderIcon,
-  HomeIcon,
-  TicketIcon,
-  XIcon,
-} from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { Dialog, Disclosure, Transition } from "@headlessui/react";
+import { FolderIcon, HomeIcon, TicketIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
-import { useTheme } from "next-themes";
-
+import { Bars3Icon } from "@heroicons/react/20/solid";
 import useTranslation from "next-translate/useTranslation";
 import CreateTicketModal from "../components/CreateTicketModal";
-import { Bars3Icon } from "@heroicons/react/20/solid";
+import { useUser } from "../store/session";
 
-function classNames(...classes) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SideLayout({ children }) {
+export default function SideLayout({ children }: any) {
   const location = useRouter();
 
   const [queues, setQueues] = useState([]);
@@ -28,18 +21,18 @@ export default function SideLayout({ children }) {
   const { t, lang } = useTranslation("peppermint");
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data: session, status } = useSession();
+  const { user } = useUser();
 
   if (status === "unauthenticated") {
     location.push("/auth/login");
   }
 
-  if (location.pathname.includes("/admin") && session.isAdmin === false) {
+  if (location.pathname.includes("/admin") && user.isAdmin === false) {
     location.push("/");
     alert("You do not have the correct perms for that action.");
   }
 
-  const locale = session.user.language || "en";
+  const locale = user.language || "en";
 
   const navigation = [
     {
@@ -86,17 +79,15 @@ export default function SideLayout({ children }) {
     getQueues();
   }, []);
 
-  const handleKeyPress = useCallback((event) => {
-    console.log(`Key pressed: ${event.key}`);
-    console.log(document.activeElement.tagName);
+  const handleKeyPress = useCallback((event: any) => {
     if (
-      document.activeElement.tagName !== "INPUT" &&
-      !document.activeElement.className.includes("ProseMirror")
+      document.activeElement!.tagName !== "INPUT" &&
+      !document.activeElement!.className.includes("ProseMirror")
     ) {
       switch (event.key) {
         case "c":
           var btn = document.getElementById("ticket_create");
-          btn.click();
+          btn!.click();
           break;
         case "h":
           location.push("/");
@@ -247,7 +238,7 @@ export default function SideLayout({ children }) {
                                     </Disclosure.Button>
                                     <Disclosure.Panel className="space-y-1">
                                       {item.children.length > 0 &&
-                                        item.children.map((subItem) => (
+                                        item.children.map((subItem: any) => (
                                           <Disclosure.Button
                                             key={subItem.name}
                                             as="a"
@@ -268,7 +259,7 @@ export default function SideLayout({ children }) {
                     </nav>
                     <div
                       className={
-                        session.user.isAdmin === true
+                        user.isAdmin === true
                           ? "flex flex-col mt-8 px-3 "
                           : "hidden"
                       }
@@ -303,11 +294,11 @@ export default function SideLayout({ children }) {
                   <div className="flex-shrink-0 flex-col flex p-4">
                     <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
                       <span className="text-sm font-medium leading-none text-white uppercase">
-                        {session.user.name[0]}
+                        {user.name[0]}
                       </span>
                     </span>
                     <p className="text-base font-medium text-white">
-                      {session.user.name}
+                      {user.name}
                     </p>
                     <Link
                       href="/settings"
@@ -412,7 +403,7 @@ export default function SideLayout({ children }) {
                                     {item.name}
                                   </Disclosure.Button>
                                   <Disclosure.Panel className="space-y-1">
-                                    {item.children.map((subItem) => (
+                                    {item.children.map((subItem: any) => (
                                       <Link href={`/queue/${subItem.name}`}>
                                         <Disclosure.Button
                                           key={subItem.name}
@@ -431,9 +422,7 @@ export default function SideLayout({ children }) {
                       )
                     )}
                   </nav>
-                  <div
-                    className={session.user.isAdmin === true ? "" : "hidden"}
-                  >
+                  <div className={user.isAdmin === true ? "" : "hidden"}>
                     <div
                       className="mt-1 space-y-1 px-2"
                       aria-labelledby="projects-headline"
@@ -449,16 +438,11 @@ export default function SideLayout({ children }) {
                           </span>
                         </div>
                       </Link>
-                      <a
-                        href="https://ko-fi.com/L3L0AA4YE"
-                        target="_blank"
-                        passHref
-                      >
+                      <a href="https://ko-fi.com/L3L0AA4YE" target="_blank">
                         <img
                           className="px-2 py-2 h-12 w-full"
                           height="36"
                           src="/kofi-white.png"
-                          border="0"
                           alt="Buy Me a Coffee at ko-fi.com"
                         />
                       </a>
@@ -471,13 +455,13 @@ export default function SideLayout({ children }) {
                       <div>
                         <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
                           <span className="text-sm font-medium leading-none text-white uppercase">
-                            {session.user.name[0]}
+                            {user.name[0]}
                           </span>
                         </span>
                       </div>
                       <div className="ml-3">
                         <p className="text-sm font-medium text-white">
-                          {session.user.name} [{lang}/{session.user.language}]
+                          {user.name} [{lang}/{user.language}]
                         </p>
                         <Link href="/settings">
                           <p className="text-xs font-medium text-white group-hover:text-green-400">
@@ -498,16 +482,13 @@ export default function SideLayout({ children }) {
                 onClick={() => setSidebarOpen(true)}
               >
                 <span className="sr-only">Open sidebar</span>
-                <Bars3Icon
-                  className="h-6 w-6"
-                  aria-hidden="true"
-                />
+                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
             <main className="flex-1 relative z-0 focus:outline-none overflow-y-auto bg-slate-100">
               <div className="py-6">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8">
-                  <div className="">{children}</div>
+                  {/* <div className="">{children}</div> */}
                 </div>
               </div>
             </main>

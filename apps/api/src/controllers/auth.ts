@@ -1,7 +1,9 @@
+import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import jwt from "jsonwebtoken";
+import { prisma } from "../prisma";
 
 export function authRoutes(fastify: FastifyInstance) {
-
   // Register a new user
   fastify.post(
     "/api/v1/auth/register",
@@ -22,24 +24,20 @@ export function authRoutes(fastify: FastifyInstance) {
       //   email: string;
       //   password: string;
       // };
-
       // let record = await prisma.user.findUnique({
       //   where: { email },
       // });
-
       // if (record) {
       //   reply.code(400).send({
       //     message: "Email already exists",
       //   });
       // }
-
       // let user = await prisma.user.create({
       //   data: {
       //     email,
       //     // isAdmin: Role.USER,
       //   },
       // });
-
       // const salt = pbkdf2Sync(
       //   password,
       //   new Date().toISOString(),
@@ -47,9 +45,7 @@ export function authRoutes(fastify: FastifyInstance) {
       //   64,
       //   `sha512`
       // ).toString(`hex`);
-
       // var hash = pbkdf2Sync(password, salt, 1000, 64, `sha512`).toString(`hex`);
-
       // await prisma.auth.create({
       //   data: {
       //     userId: user.id,
@@ -57,7 +53,6 @@ export function authRoutes(fastify: FastifyInstance) {
       //     hash,
       //   },
       // });
-
       // let token = jwt.sign(
       //   { id: record!.id, email: record!.email, role: record!.isAdmin },
       //   process.env.JWT_SECRET ?? "",
@@ -66,7 +61,6 @@ export function authRoutes(fastify: FastifyInstance) {
       //     issuer: "peppermint-labs",
       //   }
       // );
-
       // reply.send({
       //   token,
       //   user: record,
@@ -74,14 +68,12 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-
   // User login route
   fastify.post(
     "/api/v1/auth/login",
     {
       schema: {
         body: {
-          type: "object",
           properties: {
             email: { type: "string" },
             password: { type: "string" },
@@ -91,56 +83,118 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // let { email, password } = request.body as {
-      //   email: string;
-      //   password: string;
-      // };
+      let { email, password } = request.body as {
+        email: string;
+        password: string;
+      };
 
-      // let record = await prisma.user.findUnique({
-      //   where: { email },
-      // });
+      let user = await prisma.user.findUnique({
+        where: { email },
+      });
 
-      // if (!record) {
-      //   reply.code(401).send({
-      //     message: "Invalid email or password",
-      //   });
-      // }
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid email or password",
+        });
+      }
 
-      // let auth = await prisma.user.findFirst({
-      //   where: {
-      //     id: record!.id,
-      //   },
-      // });
+      const isPasswordValid = await bcrypt.compare(password, user!.password);
 
-      // if (!auth) {
-      //   reply.code(401).send({
-      //     message: "Invalid email or password",
-      //   });
-      // }
+      if (!isPasswordValid) {
+        reply.code(401).send({
+          message: "Invalid email or password",
+        });
 
-      // var hash = pbkdf2Sync(password, auth!.salt, 1000, 64, `sha512`).toString(
-      //   "hex"
-      // );
+        throw new Error("Password is not valid");
+      }
 
-      // if (hash !== auth!.hash) {
-      //   reply.code(401).send({
-      //     message: "Invalid email or password",
-      //   });
-      // }
+      var b64string = "TOMATOSOUP";
+      var buf = new Buffer(b64string, "base64"); // Ta-da
 
-      // let token = jwt.sign(
-      //   { id: record!.id, email: record!.email, role: record!.role },
-      //   process.env.JWT_SECRET ?? "",
-      //   {
-      //     expiresIn: "365d",
-      //     issuer: "satishbabariya.com",
-      //   }
-      // );
+      let token = jwt.sign(
+        {
+          data: { id: user!.id },
+        },
+        buf,
+        { expiresIn: "1d" }
+      );
 
-      // reply.send({
-      //   token,
-      //   user: record,
-      // });
+      await prisma.session.create({
+        data: {
+          userId: user!.id,
+          sessionToken: token,
+          expires: new Date(Date.now() + 60 * 60 * 1000),
+        },
+      });
+
+      const data = {
+        id: user!.id,
+        email: user!.email,
+        name: user!.name,
+        isAdmin: user!.isAdmin,
+        language: user!.language,
+        ticket_created: user!.notify_ticket_created,
+        ticket_status_changed: user!.notify_ticket_status_changed,
+        ticket_comments: user!.notify_ticket_comments,
+        ticket_assigned: user!.notify_ticket_assigned,
+      };
+
+      reply.send({
+        token,
+        user: data,
+      });
+    }
+  );
+
+  fastify.get(
+    "/api/v1/auth/profile",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      // check token
+      // see if token exists on session table
+      // if not, return 401
+      // if yes, return user data
+
+      var b64string = "TOMATOSOUP";
+      var buf = new Buffer(b64string, "base64"); // Ta-da
+
+      const token = jwt.verify(
+        request.headers.authorization!.split(" ")[1],
+        buf
+      );
+
+      console.log(token);
+
+      let session = await prisma.session.findUnique({
+        where: {
+          sessionToken: request.headers.authorization!.split(" ")[1],
+        },
+      });
+
+      let user = await prisma.user.findUnique({
+        where: { id: session!.userId },
+      });
+
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid email or password",
+        });
+      }
+
+      const data = {
+        id: user!.id,
+        email: user!.email,
+        name: user!.name,
+        isAdmin: user!.isAdmin,
+        language: user!.language,
+        ticket_created: user!.notify_ticket_created,
+        ticket_status_changed: user!.notify_ticket_status_changed,
+        ticket_comments: user!.notify_ticket_comments,
+        ticket_assigned: user!.notify_ticket_assigned,
+      };
+
+      reply.send({
+        user: data,
+      });
     }
   );
 }

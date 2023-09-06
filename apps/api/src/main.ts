@@ -1,35 +1,43 @@
-import { randomBytes } from "crypto";
+import cors from "@fastify/cors";
 import "dotenv/config";
-import Fastify from "fastify";
-// import cors from "fastify-cors";
+import Fastify, { FastifyInstance } from "fastify";
+
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
-const main = async () => {
-  const server = Fastify({
-    genReqId: () => randomBytes(8).toString("hex"),
-    logger: true,
-  });
+const server: FastifyInstance = Fastify({
+  logger: true,
+});
 
-  server.register( {
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-  });
+server.register(cors, {
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+});
 
-  // connect to database
-  await prisma.$connect();
-  server.log.info("Connected to Prisma");
+// register all routes
+registerRoutes(server);
 
-  // register all routes
-  registerRoutes(server);
+server.get("/", async function (request, response) {
+  const session = await prisma.session.findMany();
+  response.send({ session });
+});
 
+const start = async () => {
   try {
-    await server.listen(process.env.PORT || 5002, "0.0.0.0");
+    // connect to database
+    await prisma.$connect();
+    server.log.info("Connected to Prisma");
+
+    const port = process.env.PORT || 5003;
+
+    //@ts-expect-error
+    await server.listen({ port: port });
   } catch (err) {
     server.log.error(err);
     await prisma.$disconnect();
     process.exit(1);
   }
 };
-main();
+
+start();

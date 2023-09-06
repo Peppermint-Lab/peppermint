@@ -1,39 +1,39 @@
-import {
-  getCsrfToken,
-  getProviders,
-  signIn,
-  useSession,
-} from "next-auth/react";
-import Link from "next/link";
-import Loader from "react-spinners/ClipLoader";
+import { setCookie } from "cookies-next";
+import { useState } from "react";
 
-export async function getServerSideProps(context) {
-  const providers = await getProviders();
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-      providers,
-    },
-  };
-}
+import { useUser } from "../../store/session";
 
-export default function Login({ csrfToken, providers }) {
-  const { status } = useSession({
-    required: false,
-  });
+export default function Login({}) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("idle");
 
-  console.log(providers);
+  const { user, setUser } = useUser();
+
+  async function postData() {
+    await fetch("http://localhost:5003/api/v1/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setCookie("session", res.token);
+        setUser(res.user);
+      });
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Link href="https://peppermint.sh/">
+        <a target="_blank" href="https://peppermint.sh/">
           <img
             className="mx-auto h-36 w-auto"
             src="/login.svg"
             alt="peppermint.sh logo"
           />
-        </Link>
+        </a>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
@@ -44,17 +44,8 @@ export default function Login({ csrfToken, providers }) {
           <div className="text-center mr-4">{/* <Loader size={32} /> */}</div>
         ) : (
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form
-              className="space-y-6"
-              method="post"
-              action="/api/auth/callback/credentials"
-            >
+            <div className="space-y-6">
               <div>
-                <input
-                  name="csrfToken"
-                  type="hidden"
-                  defaultValue={csrfToken}
-                />
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
@@ -68,6 +59,7 @@ export default function Login({ csrfToken, providers }) {
                     type="email"
                     autoComplete="email"
                     required
+                    onChange={(e) => setEmail(e.target.value)}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   />
                 </div>
@@ -87,6 +79,7 @@ export default function Login({ csrfToken, providers }) {
                     type="password"
                     autoComplete="password"
                     required
+                    onChange={(e) => setPassword(e.target.value)}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   />
                 </div>
@@ -121,13 +114,14 @@ export default function Login({ csrfToken, providers }) {
               <div>
                 <button
                   type="submit"
+                  onClick={postData}
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                   Sign In
                 </button>
               </div>
 
-              {providers.github &&
+              {/* {providers.github &&
                 process.env.NEXT_PUBLIC_SSO_PROVIDER === "github" && (
                   <div>
                     <button
@@ -170,8 +164,8 @@ export default function Login({ csrfToken, providers }) {
                       Auth0
                     </button>
                   </div>
-                )}
-            </form>
+                )} */}
+            </div>
           </div>
         )}
 
