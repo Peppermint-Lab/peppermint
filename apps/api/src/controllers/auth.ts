@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
+import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function authRoutes(fastify: FastifyInstance) {
@@ -146,6 +147,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // User Profile
   fastify.get(
     "/api/v1/auth/profile",
     async (request: FastifyRequest, reply: FastifyReply) => {
@@ -154,47 +156,93 @@ export function authRoutes(fastify: FastifyInstance) {
       // if not, return 401
       // if yes, return user data
 
-      var b64string = "TOMATOSOUP";
-      var buf = new Buffer(b64string, "base64"); // Ta-da
+      const bearer = request.headers.authorization!.split(" ")[1];
 
-      const token = jwt.verify(
-        request.headers.authorization!.split(" ")[1],
-        buf
-      );
+      const token = checkToken(bearer);
 
-      console.log(token);
-
-      let session = await prisma.session.findUnique({
-        where: {
-          sessionToken: request.headers.authorization!.split(" ")[1],
-        },
-      });
-
-      let user = await prisma.user.findUnique({
-        where: { id: session!.userId },
-      });
-
-      if (!user) {
-        reply.code(401).send({
-          message: "Invalid email or password",
+      if (token) {
+        let session = await prisma.session.findUnique({
+          where: {
+            sessionToken: request.headers.authorization!.split(" ")[1],
+          },
         });
-      }
 
-      const data = {
-        id: user!.id,
-        email: user!.email,
-        name: user!.name,
-        isAdmin: user!.isAdmin,
-        language: user!.language,
-        ticket_created: user!.notify_ticket_created,
-        ticket_status_changed: user!.notify_ticket_status_changed,
-        ticket_comments: user!.notify_ticket_comments,
-        ticket_assigned: user!.notify_ticket_assigned,
+        let user = await prisma.user.findUnique({
+          where: { id: session!.userId },
+        });
+
+        if (!user) {
+          reply.code(401).send({
+            message: "Invalid email or password",
+          });
+        }
+
+        const data = {
+          id: user!.id,
+          email: user!.email,
+          name: user!.name,
+          isAdmin: user!.isAdmin,
+          language: user!.language,
+          ticket_created: user!.notify_ticket_created,
+          ticket_status_changed: user!.notify_ticket_status_changed,
+          ticket_comments: user!.notify_ticket_comments,
+          ticket_assigned: user!.notify_ticket_assigned,
+        };
+
+        reply.send({
+          user: data,
+        });
+      } else {
+        throw new Error("Invalid token");
+      }
+    }
+  );
+
+  // Reset Users password
+  fastify.post(
+    "/api/v1/auth/reset-password",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      let { password } = request.body as {
+        password: string;
       };
 
-      reply.send({
-        user: data,
-      });
+      const bearer = request.headers.authorization!.split(" ")[1];
+
+      //checks if token is valid and returns valid token
+      const token = checkToken(bearer);
+
+      if (token) {
+        let session = await prisma.session.findUnique({
+          where: {
+            sessionToken: bearer,
+          },
+        });
+
+        const hashedPass = await bcrypt.hash(password, 10);
+
+        await prisma.user.update({
+          where: { id: session?.userId },
+          data: {
+            password: hashedPass,
+          },
+        });
+
+        reply.send({
+          sucess: true,
+        });
+      } else {
+        reply.send({
+          sucess: false,
+        });
+      }
+    }
+  );
+
+  // Update a users profile/config
+  fastify.put(
+    "/api/v1/auth/profile",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      //
     }
   );
 }

@@ -1,12 +1,10 @@
-import React, { useState } from "react";
 import { message } from "antd";
-import { useSession, signOut } from "next-auth/react";
+import { useState } from "react";
 
-import { UserProfile } from "../components/UserProfile";
-import UserNotifications from "../components/UserNotifications";
+import { getCookie } from "cookies-next";
 
 export default function Settings() {
-  const { data: session } = useSession();
+  const token = getCookie("token");
 
   const linkStyles = {
     active:
@@ -24,21 +22,20 @@ export default function Settings() {
     message.success("Password updated");
   };
 
-  const fail = (f) => {
+  const fail = (f: any) => {
     message.error(`${f}`);
   };
 
   const postData = async () => {
-    const id = session.id;
     if (check === password) {
       await fetch(`/api/v1/users/resetpassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
           password,
-          id,
         }),
       })
         .then((res) => res.json())
@@ -146,12 +143,7 @@ export default function Settings() {
                     </svg>
                     <span className="truncate">Password</span>
                   </button>
-                  <button
-                    onClick={() =>
-                      signOut({ redirect: true, callbackUrl: "/" })
-                    }
-                    className={linkStyles.inactive}
-                  >
+                  <button className={linkStyles.inactive}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className=" flex-shrink-0 -ml-1 mr-3 h-6 w-6"
@@ -173,11 +165,11 @@ export default function Settings() {
 
               <div className=" lg:col-span-9">
                 <div className={`${show === "profile" ? "" : "hidden"}`}>
-                  <UserProfile />
+                  {/* <UserProfile /> */}
                 </div>
 
                 <div className={`${show === "notifications" ? "" : "hidden"}`}>
-                  <UserNotifications />
+                  {/* <UserNotifications /> */}
                 </div>
 
                 <div className={`${show === "password" ? "pb-12" : "hidden"}`}>

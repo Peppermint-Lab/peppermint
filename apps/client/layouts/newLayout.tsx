@@ -23,6 +23,7 @@ export default function NewLayout({ children }: any) {
   const location = useRouter();
 
   const { loading, user } = useUser();
+  const locale = user ? user.language : "en";
 
   const [queues, setQueues] = useState([]);
 
@@ -30,7 +31,7 @@ export default function NewLayout({ children }: any) {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  if (status === "unauthenticated") {
+  if (!user) {
     location.push("/auth/login");
   }
 
@@ -39,26 +40,24 @@ export default function NewLayout({ children }: any) {
     alert("You do not have the correct perms for that action.");
   }
 
-  const locale = user ? user.language : "en";
-
   const navigation = [
     {
       name: "Create a ticket",
-      href: `/new`,
+      href: `/${locale}/new`,
       icon: PlusIcon,
       current: location.pathname === "/new" ? true : false,
       initial: "c",
     },
     {
       name: t("sl_dashboard"),
-      href: `/`,
+      href: `/${locale}/`,
       icon: HomeIcon,
       current: location.pathname === "/" ? true : false,
       initial: "h",
     },
     {
       name: t("sl_notebook"),
-      href: `/notebook`,
+      href: `/${locale}/notebook`,
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
       initial: "n",
@@ -67,8 +66,7 @@ export default function NewLayout({ children }: any) {
       name: t("sl_tickets"),
       current: location.pathname.includes("/ticket") ? true : false,
       icon: TicketIcon,
-      // href: `/${locale}/tickets`,
-      href: "/tickets",
+      href: `/${locale}/tickets`,
       initial: "t",
     },
     // {
@@ -82,18 +80,19 @@ export default function NewLayout({ children }: any) {
   ];
 
   async function getQueues() {
-    const res = await fetch("/api/v1/admin/email-queue/check").then((res) =>
-      res.json()
-    );
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/email-queue/check`
+    ).then((res) => res.json());
     setQueues(res.queues);
   }
 
   useEffect(() => {
-    // location.push(location.pathname, location.asPath, {
-    //   locale,
-    // });
     getQueues();
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    location.push(`/${locale}/${location.pathname}`);
+  }, [location]);
 
   const handleKeyPress = useCallback((event: any) => {
     if (
@@ -564,7 +563,7 @@ export default function NewLayout({ children }: any) {
           </div>
 
           <main className="py-2">
-            {/* <div className="px-2 py-2 sm:px-4">{children}</div> */}
+            <div className="px-2 py-2 sm:px-4">{children}</div>
           </main>
         </div>
       </div>

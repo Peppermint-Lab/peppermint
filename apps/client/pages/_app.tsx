@@ -10,12 +10,12 @@ import {
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { SpotlightProvider } from "@mantine/spotlight";
-import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { SessionProvider } from "../store/session";
+import { SessionProvider, useUser } from "../store/session";
 
+import React from "react";
 import AdminLayout from "../layouts/adminLayout";
 import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
@@ -23,15 +23,13 @@ import NoteBookLayout from "../layouts/notebook";
 const queryClient = new QueryClient();
 
 function Auth({ children }: any) {
-  const cookie = getCookie("session");
+  const { loading, user } = useUser();
 
-  const isUser = cookie;
+  React.useEffect(() => {
+    if (loading) return; // Do nothing while loading
+  }, [user, loading]);
 
-  // React.useEffect(() => {
-  //   if (status) return; // Do nothing while loading
-  // }, [isUser, status]);
-
-  if (isUser) {
+  if (user) {
     return children;
   }
 
@@ -41,6 +39,7 @@ function Auth({ children }: any) {
   return (
     <div className="flex h-screen justify-center items-center text-green-600">
       {/* <ScaleLoader color="green" loading={status} size={100} /> */}
+      <span>loading</span>
     </div>
   );
 }

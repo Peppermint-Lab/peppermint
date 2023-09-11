@@ -1,8 +1,5 @@
-import {
-  CheckCircleIcon
-} from "@heroicons/react/20/solid";
+import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { message } from "antd";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -13,23 +10,24 @@ import ListTodo from "../components/ListTodo";
 import moment from "moment";
 import { useRouter } from "next/router";
 
+import { useUser } from "../store/session";
 
 export default function Home() {
-  const { data: session } = useSession();
-
   const router = useRouter();
 
-  const [hour, setHour] = useState();
+  const { user } = useUser();
+
+  const [hour, setHour] = useState<number>();
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);
   const [unassigned, setUnassigned] = useState(0);
   const [uploaded, setUploaded] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [tickets, setTickets] = useState();
+  const [tickets, setTickets] = useState<any>();
 
   const { t } = useTranslation("peppermint");
 
-  let file = [];
+  let file: any;
 
   async function time() {
     const date = new Date();
@@ -111,7 +109,7 @@ export default function Home() {
       data.append("file", file);
       data.append("filename", file.name);
     },
-    onChange(info) {
+    onChange(info: any) {
       if (info.file.status !== "uploading") {
         console.log(info.file, info.fileList);
       }
@@ -128,7 +126,7 @@ export default function Home() {
         "100%": "#87d068",
       },
       strokeWidth: 3,
-      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
+      format: (percent: any) => `${parseFloat(percent.toFixed(2))}%`,
     },
   };
 
@@ -156,16 +154,17 @@ export default function Home() {
                 <div className="flex items-center">
                   <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
                     <span className="text-sm font-medium leading-none text-white uppercase">
-                      {session.user.name[0]}
+                      {user.name[0]}
                     </span>
                   </span>
                   <div className="flex flex-col  pl-4 py-2 justify-start">
                     <div className="flex items-center">
                       <span className="text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                         {t("hello_good")}{" "}
-                        {hour < 12
+                        {hour! < Number(12)
                           ? t("hello_morning")
-                          : t("hello_afternoon")}, {session.user.name}!
+                          : t("hello_afternoon")}
+                        , {user.name}!
                       </span>
                     </div>
                     <dl className="flex flex-col sm:flex-row sm:flex-wrap">
@@ -175,7 +174,7 @@ export default function Home() {
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                           aria-hidden="true"
                         />
-                        {session.user.isAdmin ? "Admin" : "user"}
+                        {user.isAdmin ? "Admin" : "user"}
                       </dd>
                     </dl>
                   </div>
@@ -254,7 +253,7 @@ export default function Home() {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {tickets !== undefined &&
-                      tickets.slice(0, 10).map((item) => (
+                      tickets.slice(0, 10).map((item: any) => (
                         <tr
                           key={item.id}
                           className="hover:bg-gray-300 hover:cursor-pointer"
@@ -316,7 +315,7 @@ export default function Home() {
                             )}
                           </td>
                           <td className="px-3 py-1 text-sm text-gray-500 w-[160px]">
-                            {moment(item.createdAt).format('DD/MM/YYYY')}
+                            {moment(item.createdAt).format("DD/MM/YYYY")}
                           </td>
                           <td className="px-3 py-1 text-sm text-gray-500 w-[64px]">
                             {item.assignedTo ? item.assignedTo.name : "-"}

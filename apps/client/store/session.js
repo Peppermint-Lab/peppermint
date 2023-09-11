@@ -1,17 +1,19 @@
 // UserContext.js
 import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const UserContext = createContext();
 
 export const SessionProvider = ({ children }) => {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchUserProfile = async () => {
     const token = getCookie('session');
     try {
-      await fetch('http://localhost:5003/api/v1/auth/profile', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -24,11 +26,14 @@ export const SessionProvider = ({ children }) => {
             setLoading(false);
           } else {
               console.error('Failed to fetch user profile');
+              router.push('/auth/login');
           }
         })
     } catch (error) {
       // Handle fetch errors if necessary
       console.error('Error fetching user profile:', error);
+      router.push('/auth/login');
+      
     } finally {
       setLoading(false);
     }

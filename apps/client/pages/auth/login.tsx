@@ -1,14 +1,17 @@
 import { setCookie } from "cookies-next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { useUser } from "../../store/session";
 
 export default function Login({}) {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("idle");
 
-  const { user, setUser } = useUser();
+  const { setUser } = useUser();
 
   async function postData() {
     await fetch("http://localhost:5003/api/v1/auth/login", {
@@ -21,6 +24,7 @@ export default function Login({}) {
         console.log(res);
         setCookie("session", res.token);
         setUser(res.user);
+        router.push("/");
       });
   }
 
