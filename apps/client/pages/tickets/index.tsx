@@ -1,14 +1,14 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import Loader from "react-spinners/ClipLoader";
-import { useRouter } from "next/router";
-import Link from "next/link";
 
-import OpenTickets from "../../components/TicketViews/open";
 import AssignedTickets from "../../components/TicketViews/assigned";
-import UnassignedTickets from "../../components/TicketViews/unassiged";
 import ClosedTickets from "../../components/TicketViews/closed";
+import OpenTickets from "../../components/TicketViews/open";
+import UnassignedTickets from "../../components/TicketViews/unassiged";
 
-function classNames(...classes) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 

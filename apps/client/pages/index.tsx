@@ -10,12 +10,14 @@ import ListTodo from "../components/ListTodo";
 import moment from "moment";
 import { useRouter } from "next/router";
 
+import { getCookie } from "cookies-next";
 import { useUser } from "../store/session";
 
 export default function Home() {
   const router = useRouter();
 
   const { user } = useUser();
+  const token = getCookie("session");
 
   const [hour, setHour] = useState<number>();
   const [openTickets, setOpenTickets] = useState(0);
@@ -36,53 +38,57 @@ export default function Home() {
   }
 
   async function getOpenTickets() {
-    await fetch(`/api/v1/data/count/open-tickets`, {
-      method: "get",
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/open`, {
+      method: "GET",
       headers: {
-        ContentType: "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
       .then((res) => {
-        setOpenTickets(res.result);
+        setOpenTickets(res.count);
       });
   }
 
   async function getCompletedTickets() {
-    await fetch(`/api/v1/data/count/completed-tickets`, {
-      method: "get",
-      headers: {
-        ContentType: "application/json",
-      },
-    })
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/completed`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
-        setCompletedTickets(res.result);
+        setCompletedTickets(res.count);
       });
   }
 
   async function getUnassginedTickets() {
-    await fetch(`/api/v1/data/count/all/unissued`, {
-      method: "get",
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/open`, {
+      method: "GET",
       headers: {
-        ContentType: "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
       .then((res) => {
-        setUnassigned(res.result);
+        setUnassigned(res.count);
       });
   }
 
   async function fetchTickets() {
-    await fetch(`/api/v1/ticket/open`, {
-      method: "get",
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets/user/open`, {
+      method: "GET",
       headers: {
-        ContentType: "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         setTickets(res.tickets);
       });
   }

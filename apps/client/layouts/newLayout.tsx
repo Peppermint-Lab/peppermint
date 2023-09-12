@@ -81,7 +81,7 @@ export default function NewLayout({ children }: any) {
 
   async function getQueues() {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/email-queue/check`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`
     ).then((res) => res.json());
     setQueues(res.queues);
   }
@@ -91,8 +91,8 @@ export default function NewLayout({ children }: any) {
   }, [user]);
 
   useEffect(() => {
-    location.push(`/${locale}/${location.pathname}`);
-  }, [location]);
+    // location.push(`${locale}/${location.pathname}`);
+  }, []);
 
   const handleKeyPress = useCallback((event: any) => {
     if (

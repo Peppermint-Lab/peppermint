@@ -22,9 +22,11 @@ export default function Login({}) {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        setCookie("session", res.token);
-        setUser(res.user);
-        router.push("/");
+        if (res.user) {
+          setCookie("session", res.token);
+          setUser(res.user);
+          router.push("/");
+        }
       });
   }
 

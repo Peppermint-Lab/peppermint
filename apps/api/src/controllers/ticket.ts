@@ -1,9 +1,12 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { checkToken } from "../lib/jwt";
+import { checkSession } from "../lib/session";
+import { prisma } from "../prisma";
 
 export function ticketRoutes(fastify: FastifyInstance) {
   // Create a new ticket
   fastify.get(
-    "/api/v1/admin/client/create",
+    "/api/v1/tickets/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       // check jwt is valid
@@ -12,18 +15,108 @@ export function ticketRoutes(fastify: FastifyInstance) {
   );
 
   // Get all tickets
+  fastify.get(
+    "/api/v1/tickets/open",
 
-  // Get all tickets for a user
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-  // Get all opened tickets
+      if (token) {
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
 
-  // Get all closed tickets
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
+
+  // Get all open tickets for a user
+  fastify.get(
+    "/api/v1/tickets/user/open",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const user = await checkSession(bearer);
+
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: false, userId: user!.id },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
+
+  // Get all closed tickets for a user
 
   // Get all unassigned tickets
+  fastify.get(
+    "/api/v1/tickets/unassigned",
 
-  // export all tickets
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-  // import all tickets
+      if (token) {
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: false, userId: null },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
+
+  // export all tickets (admin only)
+
+  // import all tickets (admin only)
 
   // Delete a ticket (soft delete by admin only)
 }
