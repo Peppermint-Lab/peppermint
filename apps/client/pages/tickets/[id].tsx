@@ -1,40 +1,48 @@
-import { useQuery } from "react-query";
-import { useRouter } from "next/router";
-import React, { useState, useEffect, Fragment } from "react";
-import { message, Upload, Divider } from "antd";
-import moment from "moment";
-import { Menu, Transition, Listbox } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import {
-  PencilIcon,
-  LockOpenIcon,
-  ChatBubbleLeftEllipsisIcon,
   CalendarIcon,
+  ChatBubbleLeftEllipsisIcon,
   CheckCircleIcon,
-  LockClosedIcon,
   CheckIcon,
   ChevronUpDownIcon,
+  LockClosedIcon,
+  LockOpenIcon,
+  PencilIcon,
 } from "@heroicons/react/20/solid";
-import renderHTML from "react-render-html";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import moment from "moment";
+import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
-import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
-import { notifications } from "@mantine/notifications";
+import Superscript from "@tiptap/extension-superscript";
+import { getCookie } from "cookies-next";
 
-function classNames(...classes) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Ticket() {
   const router = useRouter();
 
+  const token = getCookie("session");
+
   const fetchTicketById = async () => {
     const id = router.query.id;
-    const res = await fetch(`/api/v1/ticket/${id}`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res.json();
   };
 
@@ -49,17 +57,17 @@ export default function Ticket() {
   const [assignedEdit, setAssignedEdit] = useState(false);
   const [labelEdit, setLabelEdit] = useState(false);
 
-  const [users, setUsers] = useState();
-  const [n, setN] = useState();
+  const [users, setUsers] = useState<any>();
+  const [n, setN] = useState<any>();
 
-  const [note, setNote] = useState();
-  const [issue, setIssue] = useState();
-  const [title, setTitle] = useState();
-  const [uploaded, setUploaded] = useState();
-  const [priority, setPriority] = useState();
-  const [ticketStatus, setTicketStatus] = useState();
-  const [comment, setComment] = useState();
-  const [timeSpent, setTimeSpent] = useState();
+  const [note, setNote] = useState<any>();
+  const [issue, setIssue] = useState<any>();
+  const [title, setTitle] = useState<any>();
+  const [uploaded, setUploaded] = useState<any>();
+  const [priority, setPriority] = useState<any>();
+  const [ticketStatus, setTicketStatus] = useState<any>();
+  const [comment, setComment] = useState<any>();
+  const [timeSpent, setTimeSpent] = useState<any>();
 
   const IssueEditor = useEditor({
     extensions: [
@@ -81,15 +89,17 @@ export default function Ticket() {
 
   const { id } = history.query;
 
-  let file = [];
+  let file: any = [];
 
   async function update() {
-    await fetch(`/api/v1/ticket/${id}/update`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/update`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        id,
         detail: issue,
         note,
         title,
@@ -102,26 +112,33 @@ export default function Ticket() {
   }
 
   async function updateStatus() {
-    await fetch(`/api/v1/ticket/${id}/update-status`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: !data.ticket.isComplete,
-      }),
-    })
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/update-status`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          status: !data.ticket.isComplete,
+          id,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then(() => refetch());
   }
   async function addComment() {
-    await fetch(`/api/v1/ticket/${id}/comment`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/comment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         text: comment,
+        id,
       }),
     })
       .then((res) => res.json())
@@ -129,11 +146,11 @@ export default function Ticket() {
   }
 
   async function addTime() {
-    console.log("hit");
-    await fetch(`/api/v1/time/new`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/time/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         time: timeSpent,
@@ -148,42 +165,43 @@ export default function Ticket() {
       });
   }
 
-  const propsUpload = {
-    name: "file",
-    showUploadList: false,
-    action: `/api/v1/ticket/${id}/file/upload`,
-    data: () => {
-      let data = new FormData();
-      data.append("file", file);
-      data.append("filename", file.name);
-      data.append("ticket", ticket.id);
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-        setUploaded(true);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    progress: {
-      strokeColor: {
-        "0%": "#108ee9",
-        "100%": "#87d068",
-      },
-      strokeWidth: 3,
-      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
-    },
-  };
+  // const propsUpload = {
+  //   name: "file",
+  //   showUploadList: false,
+  //   action: `/api/v1/ticket/${id}/file/upload`,
+  //   data: () => {
+  //     let data = new FormData();
+  //     data.append("file", file);
+  //     data.append("filename", file.name);
+  //     data.append("ticket", ticket.id);
+  //   },
+  //   onChange(info: any) {
+  //     if (info.file.status !== "uploading") {
+  //       console.log(info.file, info.fileList);
+  //     }
+  //     if (info.file.status === "done") {
+  //       message.success(`${info.file.name} file uploaded successfully`);
+  //       setUploaded(true);
+  //     } else if (info.file.status === "error") {
+  //       message.error(`${info.file.name} file upload failed.`);
+  //     }
+  //   },
+  //   progress: {
+  //     strokeColor: {
+  //       "0%": "#108ee9",
+  //       "100%": "#87d068",
+  //     },
+  //     strokeWidth: 3,
+  //     format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
+  //   },
+  // };
 
-  const fetchUsers = async () => {
-    await fetch(`/api/v1/users/all`, {
+  async function fetchUsers() {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
@@ -192,7 +210,7 @@ export default function Ticket() {
           setUsers(res.users);
         }
       });
-  };
+  }
 
   async function postData() {
     if (n !== undefined) {
@@ -216,7 +234,7 @@ export default function Ticket() {
   }
 
   useEffect(() => {
-    fetchUsers();
+    // fetchUsers();
   }, []);
 
   useEffect(() => {
@@ -410,11 +428,7 @@ export default function Ticket() {
                               </ul>
                             ) : (
                               users && (
-                                <Listbox
-                                  value={n}
-                                  onChange={setN}
-                                  className="z-50"
-                                >
+                                <Listbox value={n} onChange={setN}>
                                   {({ open }) => (
                                     <>
                                       <div className="mt-1 relative">
@@ -440,7 +454,7 @@ export default function Ticket() {
                                           leaveTo="opacity-0"
                                         >
                                           <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                            {users.map((user) => (
+                                            {users.map((user: any) => (
                                               <Listbox.Option
                                                 key={user.id}
                                                 className={({ active }) =>
@@ -453,7 +467,7 @@ export default function Ticket() {
                                                 }
                                                 value={user}
                                               >
-                                                {({ n, active }) => (
+                                                {({ n, active }: any) => (
                                                   <>
                                                     <span
                                                       className={classNames(
@@ -660,49 +674,51 @@ export default function Ticket() {
                           <div className="flow-root">
                             <ul role="list" className="-mb-8">
                               {data.ticket.comments.length > 0 &&
-                                data.ticket.comments.map((item, itemIdx) => (
-                                  <li key={item.id}>
-                                    <div className="relative pb-8">
-                                      {itemIdx !==
-                                      data.ticket.comments.length - 1 ? (
-                                        <span
-                                          className="absolute left-3 top-5 -ml-px h-full w-0.5 bg-gray-200"
-                                          aria-hidden="true"
-                                        />
-                                      ) : null}
-                                      <div className="relative flex items-start space-x-3">
-                                        <div className="relative">
-                                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                                            <span className="font-medium leading-none text-xs text-white uppercase">
-                                              {item.user.name[0]}
-                                            </span>
-                                          </span>
-                                        </div>
-                                        <div className="min-w-0 flex-1">
-                                          <div>
-                                            <div className="text-sm">
-                                              <span className="font-medium text-gray-900 ">
-                                                {item.user.name}
+                                data.ticket.comments.map(
+                                  (item: any, itemIdx: any) => (
+                                    <li key={item.id}>
+                                      <div className="relative pb-8">
+                                        {itemIdx !==
+                                        data.ticket.comments.length - 1 ? (
+                                          <span
+                                            className="absolute left-3 top-5 -ml-px h-full w-0.5 bg-gray-200"
+                                            aria-hidden="true"
+                                          />
+                                        ) : null}
+                                        <div className="relative flex items-start space-x-3">
+                                          <div className="relative">
+                                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                              <span className="font-medium leading-none text-xs text-white uppercase">
+                                                {item.user.name[0]}
                                               </span>
-                                            </div>
-                                            <p className="text-xs text-gray-500">
-                                              {item.public
-                                                ? "Publicly"
-                                                : "Internally"}{" "}
-                                              commented at{" "}
-                                              {moment(item.createdAt).format(
-                                                "hh:mm DD-MM-YYYY"
-                                              )}
-                                            </p>
+                                            </span>
                                           </div>
-                                          <div className="text-sm  text-gray-900">
-                                            <span>{item.text}</span>
+                                          <div className="min-w-0 flex-1">
+                                            <div>
+                                              <div className="text-sm">
+                                                <span className="font-medium text-gray-900 ">
+                                                  {item.user.name}
+                                                </span>
+                                              </div>
+                                              <p className="text-xs text-gray-500">
+                                                {item.public
+                                                  ? "Publicly"
+                                                  : "Internally"}{" "}
+                                                commented at{" "}
+                                                {moment(item.createdAt).format(
+                                                  "hh:mm DD-MM-YYYY"
+                                                )}
+                                              </p>
+                                            </div>
+                                            <div className="text-sm  text-gray-900">
+                                              <span>{item.text}</span>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </li>
-                                ))}
+                                    </li>
+                                  )
+                                )}
                             </ul>
                           </div>
                           <div className="mt-12">
@@ -874,7 +890,7 @@ export default function Ticket() {
                         </ul>
                       ) : (
                         users && (
-                          <Listbox value={n} onChange={setN} className="z-50">
+                          <Listbox value={n} onChange={setN}>
                             {({ open }) => (
                               <>
                                 <div className="mt-1 relative">
@@ -898,7 +914,7 @@ export default function Ticket() {
                                     leaveTo="opacity-0"
                                   >
                                     <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                      {users.map((user) => (
+                                      {users.map((user: any) => (
                                         <Listbox.Option
                                           key={user.id}
                                           className={({ active }) =>
@@ -911,7 +927,7 @@ export default function Ticket() {
                                           }
                                           value={user}
                                         >
-                                          {({ n, active }) => (
+                                          {({ n, active }: any) => (
                                             <>
                                               <span
                                                 className={classNames(
@@ -1441,7 +1457,7 @@ export default function Ticket() {
                         )}
                       </div>
                       {data.ticket.TimeTracking.length > 0 ? (
-                        data.ticket.TimeTracking.map((i) => (
+                        data.ticket.TimeTracking.map((i: any) => (
                           <div key={i.id} className="text-xs">
                             <div className="flex flex-row space-x-1.5 items-center">
                               <span>{i.user.name} / </span>
