@@ -1,21 +1,19 @@
+import moment from "moment";
+import { useRouter } from "next/router";
 import React from "react";
 import { useQuery } from "react-query";
 import {
-  useTable,
   useFilters,
   useGlobalFilter,
   usePagination,
+  useTable,
 } from "react-table";
-import Link from "next/link";
-import Loader from "react-spinners/ClipLoader";
-import { useRouter } from "next/router";
-import moment from "moment";
 
-import TicketsMobileList from "../../components/TicketsMobileList";
+import { getCookie } from "cookies-next";
+import TicketsMobileList from "../TicketsMobileList";
 
-function Table({ columns, data }) {
-
-  const router = useRouter()
+function Table({ columns, data }: any) {
+  const router = useRouter();
 
   const filterTypes = React.useMemo(
     () => ({
@@ -23,8 +21,8 @@ function Table({ columns, data }) {
       // fuzzyText: fuzzyTextFilterFn,
       // Or, override the default text filter to use
       // "startWith"
-      text: (rows, id, filterValue) =>
-        rows.filter((row) => {
+      text: (rows: any, id: any, filterValue: any) =>
+        rows.filter((row: any) => {
           const rowValue = row.values[id];
           return rowValue !== undefined
             ? String(rowValue)
@@ -57,6 +55,7 @@ function Table({ columns, data }) {
     nextPage,
     previousPage,
     setPageSize,
+    //@ts-expect-error
     state: { pageIndex, pageSize },
   } = useTable(
     {
@@ -65,6 +64,7 @@ function Table({ columns, data }) {
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
       initialState: {
+        //@ts-expect-error
         pageIndex: 0,
       },
     },
@@ -85,9 +85,11 @@ function Table({ columns, data }) {
               {headerGroups.map((headerGroup) => (
                 <tr
                   {...headerGroup.getHeaderGroupProps()}
+                  //@ts-expect-error
                   key={headerGroup.headers.map((header) => header.id)}
                 >
                   {headerGroup.headers.map((column) =>
+                    // @ts-expect-error
                     column.hideHeader === false ? null : (
                       <th
                         {...column.getHeaderProps()}
@@ -105,7 +107,7 @@ function Table({ columns, data }) {
               ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-              {page.map((row, i) => {
+              {page.map((row: any, i: any) => {
                 prepareRow(row);
                 return (
                   <tr
@@ -115,7 +117,7 @@ function Table({ columns, data }) {
                       router.push(`/tickets/${row.original.id}`);
                     }}
                   >
-                    {row.cells.map((cell) => (
+                    {row.cells.map((cell: any) => (
                       <td
                         style={{ maxWidth: 240 }}
                         className="px-6 py-4 whitespace-nowrap truncate text-sm font-medium text-gray-900"
@@ -136,10 +138,7 @@ function Table({ columns, data }) {
           >
             <div className="hidden sm:block">
               <div className="flex flex-row items-center flex-nowrap w-full space-x-2">
-                <span
-                  htmlFor="location"
-                  className="block text-sm font-medium text-gray-700 "
-                >
+                <span className="block text-sm font-medium text-gray-700 ">
                   Show
                 </span>
                 <div className="pl-4">
@@ -186,142 +185,151 @@ function Table({ columns, data }) {
   );
 }
 
-async function closed() {
-  const res = await fetch("/api/v1/ticket/closed");
+async function closed(token: any) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets/completed`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return res.json();
 }
 
 export default function ClosedTickets() {
-  const { data, status, error } = useQuery(
-    "closed",
-    closed
-  );
+  const token = getCookie("session");
+  const { data, status, error } = useQuery("closed", () => closed(token));
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  const columns = React.useMemo(() => [
-    {
-      Header: "Type",
-      accessor: "type",
-      id: "type",
-      width: 50,
-    },
-    {
-      Header: "Summary",
-      accessor: "title",
-      id: "summary",
-      Cell: ({ row, value }) => {
-        console.log(row);
-        return (
-          <>
-            <span className="max-w-[240px] truncate">{value}</span>
-          </>
-        );
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Type",
+        accessor: "type",
+        id: "type",
+        width: 50,
       },
-    },
-    {
-      Header: "Assignee",
-      accessor: "assignedTo.name",
-      id: "assignee",
-      Cell: ({ row, value }) => {
-        console.log(row);
-        return (
-          <>
-            <span className="w-[80px] truncate">{value ? value : "n/a"}</span>
-          </>
-        );
+      {
+        Header: "Summary",
+        accessor: "title",
+        id: "summary",
+        Cell: ({ row, value }: any) => {
+          console.log(row);
+          return (
+            <>
+              <span className="max-w-[240px] truncate">{value}</span>
+            </>
+          );
+        },
       },
-    },
-    {
-      Header: "Priority",
-      accessor: "priority",
-      id: "priority",
-      Cell: ({ row, value }) => {
-        let p = value;
-        let badge;
+      {
+        Header: "Assignee",
+        accessor: "assignedTo.name",
+        id: "assignee",
+        Cell: ({ row, value }) => {
+          console.log(row);
+          return (
+            <>
+              <span className="w-[80px] truncate">{value ? value : "n/a"}</span>
+            </>
+          );
+        },
+      },
+      {
+        Header: "Priority",
+        accessor: "priority",
+        id: "priority",
+        Cell: ({ row, value }) => {
+          let p = value;
+          let badge;
 
-        if (p === "Low") {
-          badge = low;
-        }
-        if (p === "Normal") {
-          badge = normal;
-        }
-        if (p === "High") {
-          badge = high;
-        }
+          if (p === "Low") {
+            badge = low;
+          }
+          if (p === "Normal") {
+            badge = normal;
+          }
+          if (p === "High") {
+            badge = high;
+          }
 
-        return (
-          <>
-            <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-            >
-              {value}
-            </span>
-          </>
-        );
+          return (
+            <>
+              <span
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+              >
+                {value}
+              </span>
+            </>
+          );
+        },
       },
-    },
-    {
-      Header: "Status",
-      accessor: "priority",
-      id: "status",
-      Cell: ({ row, value }) => {
-        let p = value;
-        let badge;
+      {
+        Header: "Status",
+        accessor: "priority",
+        id: "status",
+        Cell: ({ row, value }) => {
+          let p = value;
+          let badge;
 
-        if (p === "Low") {
-          badge = low;
-        }
-        if (p === "Normal") {
-          badge = normal;
-        }
-        if (p === "High") {
-          badge = high;
-        }
+          if (p === "Low") {
+            badge = low;
+          }
+          if (p === "Normal") {
+            badge = normal;
+          }
+          if (p === "High") {
+            badge = high;
+          }
 
-        return (
-          <>
-            <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-            >
-              {value}
-            </span>
-          </>
-        );
+          return (
+            <>
+              <span
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+              >
+                {value}
+              </span>
+            </>
+          );
+        },
       },
-    },
-    {
-      Header: "Created",
-      accessor: "createdAt",
-      id: "created",
-      Cell: ({ row, value }) => {
-        const now = moment(value).format("DD/MM/YYYY");
-        return (
-          <>
-            <span className="">{now}</span>
-          </>
-        );
+      {
+        Header: "Created",
+        accessor: "createdAt",
+        id: "created",
+        Cell: ({ row, value }) => {
+          const now = moment(value).format("DD/MM/YYYY");
+          return (
+            <>
+              <span className="">{now}</span>
+            </>
+          );
+        },
       },
-    },
-    // {
-    //   Header: "",
-    //   id: "actions",
-    //   Cell: ({ row, value }) => {
-    //     console.log(row)
-    //     return (
-    //       <>
-    //         <Link href={`/tickets/${row.original.id}`}>View</Link>
-    //       </>
-    //     );
-    //   },
-    // },
-  ]);
+      // {
+      //   Header: "",
+      //   id: "actions",
+      //   Cell: ({ row, value }) => {
+      //     console.log(row)
+      //     return (
+      //       <>
+      //         <Link href={`/tickets/${row.original.id}`}>View</Link>
+      //       </>
+      //     );
+      //   },
+      // },
+    ],
+    []
+  );
 
   return (
     <>
-     {status === "success" && (
+      {status === "success" && (
         <>
           {data.tickets && data.tickets.length > 0 && (
             <>

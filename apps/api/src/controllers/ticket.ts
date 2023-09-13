@@ -80,7 +80,37 @@ export function ticketRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Get all closed tickets for a user
+  // Get all closed tickets
+  fastify.get(
+    "/api/v1/tickets/completed",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: true },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
 
   // Get all unassigned tickets
   fastify.get(
@@ -119,4 +149,18 @@ export function ticketRoutes(fastify: FastifyInstance) {
   // import all tickets (admin only)
 
   // Delete a ticket (soft delete by admin only)
+
+  // Update a ticket
+
+  // Transfer a ticket to another user
+
+  // Link a ticket to another ticket
+
+  // Unlink a ticket from another ticket
+
+  // Comment on a ticket
+
+  // Update status of a ticket
+
+  // Get all tickets that created via imap
 }
