@@ -293,8 +293,22 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/transfer",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
+      const { user, id }: any = request.body;
+
+      await prisma.user.update({
+        where: { id: user },
+        data: {
+          tickets: {
+            connect: {
+              id: id,
+            },
+          },
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -303,8 +317,35 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/link",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
+      const { ticket, id }: any = request.body;
+
+      const prev: any = await prisma.ticket.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      const ids = [];
+
+      if (prev.length !== undefined && prev.linked.length > 0) {
+        ids.push(...prev.linked);
+      }
+
+      ids.push({
+        id: ticket.id,
+        title: ticket.title,
+      });
+
+      const data = await prisma.ticket.update({
+        where: {
+          id: id,
+        },
+        data: {
+          linked: {
+            ...ids,
+          },
+        },
+      });
     }
   );
 
@@ -312,10 +353,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/ticket/unlink",
 
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
-    }
+    async (request: FastifyRequest, reply: FastifyReply) => {}
   );
 
   // Comment on a ticket
@@ -352,37 +390,40 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/status/update",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      //   await prisma.ticket
-      //   .update({
-      //     where: { id: id },
-      //     data: {
-      //       isComplete: status,
-      //     },
-      //   })
-      //   .then(async (ticket) => {
-      //     await sendTicketStatus(ticket);
-      //   });
-      // const webhook = await prisma.webhooks.findMany({
-      //   where: {
-      //     type: "ticket_status_changed",
-      //   },
-      // });
-      // for (let i = 0; i < webhook.length; i++) {
-      //   if (webhook[i].active === true) {
-      //     const s = status ? "Completed" : "Outstanding";
-      //     await fetch(`${webhook[i].url}`, {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify({
-      //         data: `Ticket ${data.id} created by ${data.email}, has had it's status changed to ${s}`,
-      //       }),
-      //       redirect: "follow",
-      //     });
-      //   }
-      // }
-      // res.status(200).json({ message: "Status Updated" });
+      const { status, id }: any = request.body;
+
+      const ticket: any = await prisma.ticket
+        .update({
+          where: { id: id },
+          data: {
+            isComplete: status,
+          },
+        })
+        .then(async (ticket) => {
+          // await sendTicketStatus(ticket);
+        });
+
+      const webhook = await prisma.webhooks.findMany({
+        where: {
+          type: "ticket_status_changed",
+        },
+      });
+
+      for (let i = 0; i < webhook.length; i++) {
+        if (webhook[i].active === true) {
+          const s = status ? "Completed" : "Outstanding";
+          await axios.post(`${webhook[i].url}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+            }),
+            redirect: "follow",
+          });
+        }
+      }
     }
   );
 
@@ -390,9 +431,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/tickets/imap/all",
 
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
-    }
+    async (request: FastifyRequest, reply: FastifyReply) => {}
   );
 }
