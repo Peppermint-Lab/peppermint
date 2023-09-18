@@ -93,7 +93,7 @@ export default function Ticket() {
 
   async function update() {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/update`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -197,7 +197,7 @@ export default function Ticket() {
   // };
 
   async function fetchUsers() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -212,15 +212,16 @@ export default function Ticket() {
       });
   }
 
-  async function postData() {
+  async function transferTicket() {
     if (n !== undefined) {
-      await fetch(`/api/v1/ticket/${id}/transfer`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/transfer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           user: n.id,
+          id,
         }),
       })
         .then((res) => res.json())
@@ -234,7 +235,7 @@ export default function Ticket() {
   }
 
   useEffect(() => {
-    // fetchUsers();
+    fetchUsers();
   }, []);
 
   useEffect(() => {
@@ -394,7 +395,7 @@ export default function Ticket() {
                               ) : (
                                 <button
                                   onClick={() => {
-                                    postData();
+                                    transferTicket();
                                   }}
                                   className="text-sm font-medium text-gray-500 hover:underline"
                                 >
@@ -509,7 +510,7 @@ export default function Ticket() {
                             )}
                           </div>
                           <div className="border-t border-gray-200">
-                            <div className="flex flex-row items-center">
+                            <div className="flex flex-row items-center justify-between">
                               <span className="text-sm font-medium text-gray-500 mt-2">
                                 Labels
                               </span>
@@ -725,7 +726,7 @@ export default function Ticket() {
                             <div className="flex space-x-3">
                               <div className="flex-shrink-0">
                                 <div className="relative">
-                                  <span className="absolute -bottom-0.5 -right-1 rounded-t px-0.5 py-px">
+                                  <span className="absolute bottom-1 -right-6 rounded-t px-0.5 py-px">
                                     <ChatBubbleLeftEllipsisIcon
                                       className="h-5 w-5 text-gray-400"
                                       aria-hidden="true"
@@ -859,7 +860,7 @@ export default function Ticket() {
                         ) : (
                           <button
                             onClick={() => {
-                              postData();
+                              transferTicket();
                             }}
                             className="text-sm font-medium text-gray-500 hover:underline"
                           >
