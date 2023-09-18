@@ -1,17 +1,20 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useRouter } from "next/router";
+import { useState } from "react";
 // import TextAlign from '@tiptap/extension-text-align';
-import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import { getCookie } from "cookies-next";
 
 export default function ViewNoteBook() {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("Markdown Test");
+
+  const token = getCookie("session");
 
   const router = useRouter();
 
@@ -32,14 +35,16 @@ export default function ViewNoteBook() {
   });
 
   async function postMarkdown() {
-    await fetch("/api/v1/note/create-note", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebook/note/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+
       },
       body: JSON.stringify({
-        value,
         title,
+        content: value,
       }),
     })
       .then((res) => res.json())
