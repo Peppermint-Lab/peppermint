@@ -838,7 +838,7 @@ export default function Ticket() {
                         aria-hidden="true"
                       />
                       <span className="text-sm font-medium text-gray-900">
-                        Created created on{" "}
+                        Created on{" "}
                         {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
                       </span>
                     </div>

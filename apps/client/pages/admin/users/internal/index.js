@@ -1,17 +1,22 @@
+import { getCookie } from "cookies-next";
+import Link from "next/link";
 import React from "react";
 import { useQuery } from "react-query";
 import {
-  useTable,
   useFilters,
   useGlobalFilter,
   usePagination,
+  useTable,
 } from "react-table";
 import ResetPassword from "../../../../components/ResetPassword";
 import UpdateUserModal from "../../../../components/UpdateUserModal";
-import Link from "next/link";
 
-const fetchUsers = async () => {
-  const res = await fetch("/api/v1/users/all");
+const fetchUsers = async (token) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
   return res.json();
 };
 
@@ -191,10 +196,11 @@ function Table({ columns, data }) {
   );
 }
 
-export default function Auth() {
-  const { data, status, refetch } = useQuery("fetchAuthUsers", fetchUsers);
+export default function UserAuthPanel() {
+  const token = getCookie("session")
+  const { data, status, refetch } = useQuery("fetchAuthUsers", () => fetchUsers(token));
 
-  async function deleteClient(client) {
+  async function deleteUser(client) {
     const id = client.id;
     try {
       await fetch(`/api/v1/auth/delete/${id}`, {
@@ -247,30 +253,36 @@ export default function Auth() {
         );
       },
     },
-  ]);
+  ], []);
 
   return (
     <div>
-      <main
-        className="relative z-0 overflow-y-auto focus:outline-none"
-        tabIndex="0"
-      >
-        <div className="py-6">
-          <div className="flex flex-row max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Internal Users
-            </h1>
-            <div className="ml-4">
-              <Link
-                href="/admin/users/internal/new"
-                className="inline-flex items-center p-1 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                New User
-              </Link>
+
+      <main className="flex-1">
+        <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
+          <div className="pt-10 pb-16 divide-y-2">
+            <div className="px-4 sm:px-6 md:px-0">
+              <h1 className="text-3xl font-extrabold text-gray-900">
+                Internal Users
+              </h1>
             </div>
-          </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <div className="py-4">
+            <div className="px-4 sm:px-6 md:px-0">
+              <div className="sm:flex sm:items-center">
+                <div className="sm:flex-auto mt-4">
+                  <p className="mt-2 text-sm text-gray-700">
+                    A list of all internal users of your instance.
+                  </p>
+                </div>
+                <div className="mt-2 sm:mt-0 sm:ml-16 sm:flex-none">
+                  <Link
+                    href="/admin/users/internal/new"
+                    className="block rounded-md bg-green-600 py-1.5 px-3 text-center text-sm font-semibold leading-6 text-white hover:text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                  >
+                    New User
+                  </Link>
+                </div>
+              </div>
+              <div className="py-4">
               {status === "loading" && (
                 <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
                   <h2> Loading data ... </h2>
@@ -336,6 +348,7 @@ export default function Auth() {
                   </div>
                 </div>
               )}
+            </div>
             </div>
           </div>
         </div>

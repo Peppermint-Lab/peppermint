@@ -1,36 +1,37 @@
-import React, { useState, useEffect, Fragment, useRef } from "react";
-import { Dialog, Transition, Listbox } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import useTranslation from "next-translate/useTranslation";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import useTranslation from "next-translate/useTranslation";
+import { Fragment, useEffect, useState } from "react";
 // import TextAlign from '@tiptap/extension-text-align';
-import Superscript from "@tiptap/extension-superscript";
-import SubScript from "@tiptap/extension-subscript";
 import { notifications } from "@mantine/notifications";
+import SubScript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import { getCookie } from "cookies-next";
 
-function classNames(...classes) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function CreateTicketModal() {
+export default function CreateTicket() {
   const { t, lang } = useTranslation("peppermint");
+
+  const token = getCookie("session");
 
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
-  const [company, setCompany] = useState();
-  const [engineer, setEngineer] = useState();
+  const [company, setCompany] = useState<any>();
+  const [engineer, setEngineer] = useState<any>();
   const [email, setEmail] = useState("");
-  const [issue, setIssue] = useState(t("ticket_extra_details"));
+  const [issue, setIssue] = useState<any>(t("ticket_extra_details"));
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
-  const [users, setUsers] = useState();
-
-  const cancelButtonRef = useRef(null);
+  const [users, setUsers] = useState<any>();
 
   const editor = useEditor({
     extensions: [
@@ -49,10 +50,11 @@ export default function CreateTicketModal() {
   });
 
   const fetchClients = async () => {
-    await fetch(`/api/v1/clients/all`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
@@ -65,10 +67,11 @@ export default function CreateTicketModal() {
 
   async function fetchUsers() {
     try {
-      await fetch(`/api/v1/users/all`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((res) => res.json())
@@ -83,10 +86,11 @@ export default function CreateTicketModal() {
   }
 
   async function createTicket() {
-    await fetch("/api/v1/ticket/create", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/create`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name,
@@ -136,7 +140,7 @@ export default function CreateTicketModal() {
         name="title"
         placeholder={t("ticket_details")}
         maxLength={64}
-        autocomplete="off"
+        autoComplete="off"
         onChange={(e) => setTitle(e.target.value)}
         className="w-full pl-0 pr-0 sm:text-xl border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
       />
@@ -147,7 +151,7 @@ export default function CreateTicketModal() {
           id="name"
           placeholder={t("ticket_name_here")}
           name="name"
-          autocomplete="off"
+          autoComplete="off"
           onChange={(e) => setName(e.target.value)}
           className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
         />
@@ -230,7 +234,7 @@ export default function CreateTicketModal() {
                   >
                     <Listbox.Options className="absolute bottom-6 2xl:top-0 z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                       {options !== undefined &&
-                        options.map((person) => (
+                        options.map((person: any) => (
                           <Listbox.Option
                             key={person.id}
                             className={({ active }) =>
@@ -243,7 +247,7 @@ export default function CreateTicketModal() {
                             }
                             value={person}
                           >
-                            {({ company, active }) => (
+                            {({ company, active }: any) => (
                               <>
                                 <span
                                   className={classNames(
@@ -315,7 +319,7 @@ export default function CreateTicketModal() {
                           name: "Unassigned",
                         }}
                       >
-                        {({ company, active }) => (
+                        {({ company, active }: any) => (
                           <>
                             <span
                               className={classNames(
@@ -329,7 +333,7 @@ export default function CreateTicketModal() {
                         )}
                       </Listbox.Option>
                       {users !== undefined &&
-                        users.map((team) => (
+                        users.map((team: any) => (
                           <Listbox.Option
                             key={team.id}
                             className={({ active }) =>
@@ -342,7 +346,7 @@ export default function CreateTicketModal() {
                             }
                             value={team}
                           >
-                            {({ engineer, active }) => (
+                            {({ engineer, active }: any) => (
                               <>
                                 <span
                                   className={classNames(

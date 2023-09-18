@@ -4,6 +4,7 @@ import { dataRoutes } from "./controllers/data";
 import { emailQueueRoutes } from "./controllers/queue";
 import { ticketRoutes } from "./controllers/ticket";
 import { todoRoutes } from "./controllers/todos";
+import { userRoutes } from "./controllers/users";
 
 export function registerRoutes(fastify: FastifyInstance) {
   authRoutes(fastify);
@@ -11,4 +12,5 @@ export function registerRoutes(fastify: FastifyInstance) {
   todoRoutes(fastify);
   dataRoutes(fastify);
   ticketRoutes(fastify);
+  userRoutes(fastify);
 }

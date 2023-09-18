@@ -52,14 +52,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
       title: "Home",
       description: "Get to home page",
       onTrigger: () => router.push("/"),
-      //@ts-expect-error
       icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Notebook",
       description: "Personal User Notes",
       onTrigger: () => router.push("/notebook"),
-      //@ts-expect-error
       icon: <FolderIcon className="h-8 w-8 text-gray-900" />,
     },
     {
@@ -67,14 +65,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
       description:
         "Central store for all company & user tickets, open or closed",
       onTrigger: () => router.push("/tickets"),
-      //@ts-expect-error
       icon: <TicketIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Documentation",
       description: "Documentation for peppermint.sh",
       onTrigger: () => router.push("https://docs.peppermint.sh"),
-      //@ts-expect-error
       icon: <DocumentCheckIcon className="h-8 w-8 text-gray-900" />,
     },
     {
