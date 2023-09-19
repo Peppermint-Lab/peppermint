@@ -318,9 +318,9 @@ export default function NewLayout({ children }: any) {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-gray-900 px-6 pb-4">
             <div className="flex align-middle flex-row h-16 items-center">
-              <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" />
+              {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
-                <h1 className="text-4xl ml-2 mt-5 hover:text-green-600 font-extrabold text-white">
+                <h1 className="text-4xl ml-2 mt-1 hover:text-green-600 font-extrabold text-white">
                   Peppermint
                 </h1>
               </Link>

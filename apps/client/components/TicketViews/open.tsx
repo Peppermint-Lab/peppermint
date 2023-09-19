@@ -216,10 +216,9 @@ export default function OpenTickets() {
         accessor: "title",
         id: "summary",
         Cell: ({ row, value }: any) => {
-          console.log(row);
           return (
             <>
-              <span className="max-w-[240px] truncate">{value}</span>
+              <span className=" max-w-[240px] truncate">{value}</span>
             </>
           );
         },
@@ -275,7 +274,7 @@ export default function OpenTickets() {
 
           return (
             <>
-              <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+              <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-red-600/10">
                 {value === "needs_support" && <span>Needs Support</span>}
                 {value === "in_progress" && <span>In Progress</span>}
                 {value === "in_review" && <span>In Review</span>}

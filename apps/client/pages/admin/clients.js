@@ -1,19 +1,17 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { Popconfirm } from "antd";
 import {
-  useTable,
   useFilters,
   useGlobalFilter,
   usePagination,
+  useTable,
 } from "react-table";
 import ClientNotesModal from "../../components/ClientNotesModal";
 import CreateClient from "../../components/CreateClientModal";
 import UpdateClientModal from "../../components/UpdateClientModal";
-import Link from "next/link";
 
 const fetchAllClients = async () => {
-  const res = await fetch("/api/v1/clients/all");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/all`);
   return res.json();
 };
 
@@ -234,18 +232,14 @@ export default function Clients() {
           <div className="space-x-4 flex flex-row">
             <UpdateClientModal client={row.original} />
             <ClientNotesModal notes={row.original.notes} id={row.original.id} />
-            <a
-              type="button"
-              className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-              href={`/tickets/new/${row.original.id}`}
-            >
-              New Ticket
-            </a>
+           
           </div>
         );
       },
     },
   ]);
+
+  console.log(data)
 
   return (
     <div>
