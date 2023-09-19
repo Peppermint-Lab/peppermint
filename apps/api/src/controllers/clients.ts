@@ -17,6 +17,7 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/client/update",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
+      const { name, email, number, contactName, id }: any = request.body;
       // check jwt is valid
       // check user is admin
     }
