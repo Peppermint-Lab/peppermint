@@ -3,12 +3,25 @@ import { prisma } from "../prisma";
 
 export function emailQueueRoutes(fastify: FastifyInstance) {
   // Create a new email queue
-  fastify.get(
+  fastify.post(
     "/api/v1/email-queue/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
+      const { name, username, password, hostname, tls }: any = request.body;
+
+      await prisma.emailQueue.create({
+        data: {
+          name,
+          username,
+          password,
+          hostname,
+          tls,
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -22,20 +35,28 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
       // check user is admin
       const queues = await prisma.emailQueue.findMany({});
 
-      reply.send(queues);
+      reply.send({
+        success: true,
+        queues: queues,
+      });
     }
   );
 
   // Delete an email queue
-  fastify.get(
-    "/api/v1/email-queues/delete",
+  fastify.delete(
+    "/api/v1/email-queue/delete",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
-      const queues = await prisma.emailQueue.findMany({});
+      const { id }: any = request.body;
+      const queues = await prisma.emailQueue.delete({
+        where: {
+          id: id,
+        },
+      });
 
-      reply.send(queues);
+      reply.send({
+        success: true,
+      });
     }
   );
 }
