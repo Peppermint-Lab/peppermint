@@ -18,8 +18,20 @@ export function clientRoutes(fastify: FastifyInstance) {
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { name, email, number, contactName, id }: any = request.body;
-      // check jwt is valid
-      // check user is admin
+
+      await prisma.client.update({
+        where: { id: id },
+        data: {
+          name,
+          contactName,
+          email,
+          number: String(number),
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
