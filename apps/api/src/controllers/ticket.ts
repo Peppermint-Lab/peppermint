@@ -14,56 +14,50 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const { name, company, detail, title, priority, email, engineer }: any =
         request.body;
 
-      const ticket: any = await prisma.ticket
-        .create({
-          data: {
-            name,
-            title,
-            detail,
-            priority: priority ? priority : "low",
-            email,
-            client:
-              company !== undefined
-                ? {
-                    connect: { id: company.id },
-                  }
-                : undefined,
-            fromImap: false,
-            assignedTo:
-              engineer && engineer.name !== "Unassigned"
-                ? {
-                    connect: { id: engineer.id },
-                  }
-                : undefined,
-            isComplete: Boolean(false),
-          },
-        })
-        .then((ticket) => {
-          console.log(ticket);
-          // sendTicketCreate(ticket);
-        });
+      const ticket: any = await prisma.ticket.create({
+        data: {
+          name,
+          title,
+          detail,
+          priority: priority ? priority : "low",
+          email,
+          client:
+            company !== undefined
+              ? {
+                  connect: { id: company.id },
+                }
+              : undefined,
+          fromImap: false,
+          assignedTo:
+            engineer && engineer.name !== "Unassigned"
+              ? {
+                  connect: { id: engineer.id },
+                }
+              : undefined,
+          isComplete: Boolean(false),
+        },
+      });
 
-      // const webhook = await prisma.webhooks.findMany({
-      //   where: {
-      //     type: "ticket_created",
-      //   },
-      // });
+      const webhook = await prisma.webhooks.findMany({
+        where: {
+          type: "ticket_created",
+        },
+      });
 
-      // for (let i = 0; i < webhook.length; i++) {
-      //   if (webhook[i].active === true) {
-      //     console.log(webhook[i].url);
-      //     await axios.post(`${webhook[i].url}`, {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify({
-      //         data: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
-      //       }),
-      //       redirect: "follow",
-      //     });
-      //   }
-      // }
+      for (let i = 0; i < webhook.length; i++) {
+        if (webhook[i].active === true) {
+          console.log(webhook[i].url);
+          await axios.post(`${webhook[i].url}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              data: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
+            }),
+          });
+        }
+      }
 
       reply.status(200).send({
         message: "Ticket created correctly",

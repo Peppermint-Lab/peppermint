@@ -7,6 +7,7 @@ import { emailQueueRoutes } from "./controllers/queue";
 import { ticketRoutes } from "./controllers/ticket";
 import { todoRoutes } from "./controllers/todos";
 import { userRoutes } from "./controllers/users";
+import { webhookRoutes } from "./controllers/webhooks";
 
 export function registerRoutes(fastify: FastifyInstance) {
   authRoutes(fastify);
@@ -17,4 +18,5 @@ export function registerRoutes(fastify: FastifyInstance) {
   userRoutes(fastify);
   notebookRoutes(fastify);
   clientRoutes(fastify);
+  webhookRoutes(fastify);
 }

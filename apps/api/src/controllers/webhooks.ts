@@ -8,7 +8,6 @@ export function webhookRoutes(fastify: FastifyInstance) {
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { name, url, type, active, secret }: any = request.body;
-
       await prisma.webhooks.create({
         data: {
           name,
@@ -16,10 +15,9 @@ export function webhookRoutes(fastify: FastifyInstance) {
           type,
           active,
           secret,
-          createdBy: session.user.email,
+          createdBy: "375f7799-5485-40ff-ba8f-0a28e0855ecf",
         },
       });
-
       reply.status(200).send({ message: "Hook created!", success: true });
     }
   );
@@ -38,7 +36,7 @@ export function webhookRoutes(fastify: FastifyInstance) {
   // Delete a webhook
 
   fastify.delete(
-    "/api/v1/webhook/delete/:id",
+    "/api/v1/admin/webhook/:id/delete",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;

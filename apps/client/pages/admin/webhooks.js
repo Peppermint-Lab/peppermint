@@ -1,9 +1,11 @@
+import { Switch } from "@headlessui/react";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { Switch } from "@headlessui/react";
 
 async function getHooks() {
-  const res = await fetch("/api/v1/admin/webhooks/all-hooks");
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhooks/all`
+  );
   return res.json();
 }
 
@@ -22,7 +24,7 @@ export default function Notifications() {
   const { data, status, error, refetch } = useQuery("gethooks", getHooks);
 
   async function addHook() {
-    await fetch("/api/v1/admin/webhooks/create", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhook/create`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -42,12 +44,12 @@ export default function Notifications() {
   }
 
   async function deleteHook(id) {
-    await fetch(`/api/v1/admin/webhooks/${id}/delete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/webhook/${id}/delete`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         refetch();
@@ -102,10 +104,10 @@ export default function Notifications() {
                 </div>
                 <div className={show === "main" ? "" : "hidden"}>
                   {status === "success" && (
-                    <div>
-                      {data !== undefined && data.hooks.length > 0 ? (
-                        <div>
-                          {data.hooks.map((hook) => (
+                    <div className="mt-4">
+                      {data !== undefined && data.webhooks.length > 0 ? (
+                        <div className="flex flex-col gap-4">
+                          {data.webhooks.map((hook) => (
                             <div
                               key={hook.id}
                               className="rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3"
