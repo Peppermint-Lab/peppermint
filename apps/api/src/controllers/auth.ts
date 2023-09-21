@@ -7,7 +7,7 @@ import { prisma } from "../prisma";
 export function authRoutes(fastify: FastifyInstance) {
   // Register a new user
   fastify.post(
-    "/api/v1/auth/register",
+    "/api/v1/auth/user/register",
     {
       schema: {
         body: {
@@ -15,57 +15,45 @@ export function authRoutes(fastify: FastifyInstance) {
           properties: {
             email: { type: "string" },
             password: { type: "string" },
+            admin: { type: "boolean" },
+            name: { type: "string" },
           },
-          required: ["email", "password"],
+          required: ["email", "password", "name", "admin"],
         },
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // let { email, password } = request.body as {
-      //   email: string;
-      //   password: string;
-      // };
-      // let record = await prisma.user.findUnique({
-      //   where: { email },
-      // });
-      // if (record) {
-      //   reply.code(400).send({
-      //     message: "Email already exists",
-      //   });
-      // }
-      // let user = await prisma.user.create({
-      //   data: {
-      //     email,
-      //     // isAdmin: Role.USER,
-      //   },
-      // });
-      // const salt = pbkdf2Sync(
-      //   password,
-      //   new Date().toISOString(),
-      //   1000,
-      //   64,
-      //   `sha512`
-      // ).toString(`hex`);
-      // var hash = pbkdf2Sync(password, salt, 1000, 64, `sha512`).toString(`hex`);
-      // await prisma.auth.create({
-      //   data: {
-      //     userId: user.id,
-      //     salt,
-      //     hash,
-      //   },
-      // });
-      // let token = jwt.sign(
-      //   { id: record!.id, email: record!.email, role: record!.isAdmin },
-      //   process.env.JWT_SECRET ?? "",
-      //   {
-      //     expiresIn: "365d",
-      //     issuer: "peppermint-labs",
-      //   }
-      // );
-      // reply.send({
-      //   token,
-      //   user: record,
-      // });
+      let { email, password, admin, name } = request.body as {
+        email: string;
+        password: string;
+        admin: boolean;
+        name: string;
+      };
+
+      // Checks if email already exists
+      let record = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      // if exists, return 400
+      if (record) {
+        reply.code(400).send({
+          message: "Email already exists",
+        });
+      }
+
+      await prisma.user.create({
+        data: {
+          email,
+          password: await bcrypt.hash(password, 10),
+          name,
+          isAdmin: admin,
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -243,6 +231,20 @@ export function authRoutes(fastify: FastifyInstance) {
     "/api/v1/auth/profile",
     async (request: FastifyRequest, reply: FastifyReply) => {
       //
+    }
+  );
+
+  // Logout a user (deletes session)
+  fastify.get(
+    "/api/v1/auth/user/:id/logout",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id } = request.params as { id: string };
+
+      await prisma.session.deleteMany({
+        where: { userId: id },
+      });
+
+      reply.send({ success: true });
     }
   );
 }

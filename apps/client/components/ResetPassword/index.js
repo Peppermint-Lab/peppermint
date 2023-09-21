@@ -1,7 +1,7 @@
-import React, { useState, Fragment } from "react";
-import { message } from "antd";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { message } from "antd";
+import React, { Fragment, useState } from "react";
 
 export default function ResetPassword({ user }) {
   const [open, setOpen] = useState(false);
@@ -52,7 +52,7 @@ export default function ResetPassword({ user }) {
       <button
         onClick={() => setOpen(true)}
         type="button"
-        className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="inline-flex items-center px-2.5 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         Reset Password
       </button>

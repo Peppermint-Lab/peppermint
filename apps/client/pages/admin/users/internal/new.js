@@ -13,18 +13,21 @@ export default function CreateUser() {
   const router = useRouter();
 
   async function createUser() {
-    await fetch("/api/v1/admin/user/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        password,
-        email,
-        name,
-        admin,
-      }),
-    })
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password,
+          email,
+          name,
+          admin,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         if (res.sucess === true) {

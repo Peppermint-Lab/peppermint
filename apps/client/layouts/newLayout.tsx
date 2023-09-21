@@ -7,6 +7,7 @@ import {
   HomeIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { deleteCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useState } from "react";
@@ -84,6 +85,19 @@ export default function NewLayout({ children }: any) {
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`
     ).then((res) => res.json());
     setQueues(res.queues);
+  }
+
+  async function logout() {
+    // clears session on server
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${user.id}/logout`
+    ).then((res) => res.json());
+
+    // delete session cookie
+    if (res.success) {
+      deleteCookie("session");
+      location.reload();
+    }
   }
 
   useEffect(() => {
@@ -544,7 +558,7 @@ export default function NewLayout({ children }: any) {
                         {({ active }) => (
                           <button
                             onClick={() => {
-                              // signOut();
+                              logout();
                             }}
                             className={classNames(
                               active ? "bg-gray-100" : "",
