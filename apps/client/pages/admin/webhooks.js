@@ -62,46 +62,54 @@ export default function Notifications() {
   return (
     <main className="flex-1">
       <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
-        <div className="pt-10 pb-16">
-          <div className="px-4 sm:px-6 md:px-0">
-            <h1 className="text-3xl font-extrabold text-gray-900">
-              Webhook Settings
-            </h1>
-          </div>
-          <div className="px-4 sm:px-6 md:px-0">
-            <div className="py-6">
-              <div className="mt-4">
-                <div className="">
-                  <button
-                    onClick={() => setShow("create")}
-                    type="button"
-                    className={
-                      show === "main"
-                        ? "inline-flex float-right -mt-8 items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        : "hidden"
-                    }
-                  >
-                    Add Webhook
-                  </button>
-                  <button
-                    onClick={() => setShow("main")}
-                    type="button"
-                    className={
-                      show === "main"
-                        ? "hidden"
-                        : "inline-flex float-right -mt-8 items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    }
-                  >
-                    Cancel
-                  </button>
-                </div>
-                <div className={show === "main" ? "pt-8 sm:pt-4" : ""}>
-                  <p>
+        <div className="pt-10 pb-16 ">
+          <div className="divide-y-2">
+            <div className="px-4 sm:px-6 md:px-0">
+              <h1 className="text-3xl font-extrabold text-gray-900">
+                Webhook Settings
+              </h1>
+            </div>
+            <div className="px-4 sm:px-6 md:px-0">
+              <div className="sm:flex sm:items-center mt-4">
+                <div className="sm:flex-auto">
+                  <p className="mt-2 text-sm text-gray-700">
                     Webhooks allow external services to be notified when certain
                     events happen. When the specified events happen, we'll send
                     a POST request to each of the URLs you provide.
                   </p>
                 </div>
+                <div className="sm:ml-16 sm:flex-none">
+                  <>
+                    <button
+                      onClick={() => setShow("create")}
+                      type="button"
+                      className={
+                        show === "main"
+                          ? "rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                          : "hidden"
+                      }
+                    >
+                      Add Webhook
+                    </button>
+                    <button
+                      onClick={() => setShow("main")}
+                      type="button"
+                      className={
+                        show === "main"
+                          ? "hidden"
+                          : "rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      }
+                    >
+                      Cancel
+                    </button>
+                  </>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="px-4 sm:px-6 md:px-0">
+            <div className="py-6">
+              <div className="mt-4">
                 <div className={show === "main" ? "" : "hidden"}>
                   {status === "success" && (
                     <div className="mt-4">

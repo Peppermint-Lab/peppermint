@@ -98,14 +98,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
     );
   }
 
-  if (router.pathname.includes("/public")) {
-    return (
-      <SessionProvider>
-        <Component {...pageProps} />
-      </SessionProvider>
-    );
-  }
-
   if (router.pathname.includes("/admin")) {
     return (
       <SessionProvider>
@@ -118,6 +110,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
               <Auth>
                 <NewLayout>
                   <AdminLayout>
+                    <Notifications position="top-right" />
                     <Component {...pageProps} />
                   </AdminLayout>
                 </NewLayout>
@@ -142,6 +135,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
               <Auth>
                 <NewLayout>
                   <NoteBookLayout>
+                    <Notifications position="top-right" />
                     <Component {...pageProps} />
                   </NoteBookLayout>
                 </NewLayout>

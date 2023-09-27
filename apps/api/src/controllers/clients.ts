@@ -7,8 +7,20 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/client/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
+      const { name, email, number, contactName }: any = request.body;
+
+      await prisma.client.create({
+        data: {
+          name,
+          contactName,
+          email,
+          number: String(number),
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -45,6 +57,23 @@ export function clientRoutes(fastify: FastifyInstance) {
       reply.send({
         success: true,
         clients: clients,
+      });
+    }
+  );
+
+  // Delete client
+  fastify.delete(
+    "/api/v1/clients/:id/delete-client",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id }: any = request.params;
+
+      await prisma.client.delete({
+        where: { id: id },
+      });
+
+      reply.send({
+        success: true,
       });
     }
   );

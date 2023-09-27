@@ -205,23 +205,23 @@ export default function UserAuthPanel() {
     fetchUsers(token)
   );
 
-  async function deleteUser(client) {
-    const id = client.id;
-    try {
-      await fetch(`/api/v1/auth/delete/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then(() => {
-          refetch;
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function deleteUser(client) {
+  //   const id = client.id;
+  //   try {
+  //     await fetch(`/api/v1/auth/delete/${id}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //       .then((response) => response.json())
+  //       .then(() => {
+  //         refetch;
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const columns = React.useMemo(
     () => [
@@ -264,81 +264,80 @@ export default function UserAuthPanel() {
   );
 
   return (
-    <div>
-      <main className="flex-1">
-        <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
-          <div className="pt-10 pb-16 divide-y-2">
-            <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
-                Internal Users
-              </h1>
-            </div>
-            <div className="px-4 sm:px-6 md:px-0">
-              <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto mt-4">
-                  <p className="mt-2 text-sm text-gray-700">
-                    A list of all internal users of your instance.
-                  </p>
-                </div>
-                <div className="sm:ml-16 mt-5 sm:flex-none">
-                  <Link
-                    href="/admin/users/internal/new"
-                    className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  >
-                    New User
-                  </Link>
-                </div>
+    <main className="flex-1">
+      <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
+        <div className="pt-10 pb-16 divide-y-2">
+          <div className="px-4 sm:px-6 md:px-0">
+            <h1 className="text-3xl font-extrabold text-gray-900">
+              Internal Users
+            </h1>
+          </div>
+          <div className="px-4 sm:px-6 md:px-0">
+            <div className="sm:flex sm:items-center">
+              <div className="sm:flex-auto mt-4">
+                <p className="mt-2 text-sm text-gray-700">
+                  A list of all internal users of your instance.
+                </p>
               </div>
-              <div className="py-4">
-                {status === "loading" && (
-                  <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-                    <h2> Loading data ... </h2>
-                  </div>
-                )}
+              <div className="sm:ml-16 mt-5 sm:flex-none">
+                <Link
+                  href="/admin/users/internal/new"
+                  className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  New User
+                </Link>
+              </div>
+            </div>
+            <div className="py-4">
+              {status === "loading" && (
+                <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+                  <h2> Loading data ... </h2>
+                </div>
+              )}
 
-                {status === "error" && (
-                  <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-                    <h2 className="text-2xl font-bold">
-                      {" "}
-                      Error fetching data ...{" "}
-                    </h2>
-                  </div>
-                )}
+              {status === "error" && (
+                <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+                  <h2 className="text-2xl font-bold">
+                    {" "}
+                    Error fetching data ...{" "}
+                  </h2>
+                </div>
+              )}
 
-                {status === "success" && (
-                  <div>
-                    <div className="hidden sm:block">
-                      <Table columns={columns} data={data.users} />
-                    </div>
-                    <div className="sm:hidden">
-                      {data.users.map((user) => (
-                        <div
-                          key={user.id}
-                          className="flex flex-col text-center bg-white rounded-lg shadow mt-4"
-                        >
-                          <div className="flex-1 flex flex-col p-8">
-                            <h3 className=" text-gray-900 text-sm font-medium">
-                              {user.name}
-                            </h3>
-                            <dl className="mt-1 flex-grow flex flex-col justify-between">
-                              <dd className="text-gray-500 text-sm">
-                                {user.email}
-                              </dd>
-                              <dt className="sr-only">Role</dt>
-                              <dd className="mt-3">
-                                <span className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
-                                  {user.isAdmin ? "admin" : "user"}
-                                </span>
-                              </dd>
-                            </dl>
-                          </div>
-                          <div className="space-x-4 flex flex-row justify-center -mt-8 mb-4">
-                            <UpdateUserModal
-                              user={user}
-                              refetch={() => handleRefresh}
-                            />
-                            <ResetPassword user={user} />
-                            {/* <Popconfirm
+              {status === "success" && (
+                <div>
+                  <div className="hidden sm:block">
+                    <Table columns={columns} data={data.users} />
+                  </div>
+                  <div className="sm:hidden">
+                    {data.users.map((user) => (
+                      <div
+                        key={user.id}
+                        className="flex flex-col text-center bg-white rounded-lg shadow mt-4"
+                      >
+                        <div className="flex-1 flex flex-col p-8">
+                          <h3 className=" text-gray-900 text-sm font-medium">
+                            {user.name}
+                          </h3>
+                          <dl className="mt-1 flex-grow flex flex-col justify-between">
+                            <dd className="text-gray-500 text-sm">
+                              {user.email}
+                            </dd>
+                            <dt className="sr-only">Role</dt>
+                            <dd className="mt-3">
+                              <span className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
+                                {user.isAdmin ? "admin" : "user"}
+                              </span>
+                            </dd>
+                          </dl>
+                        </div>
+                        <div className="space-x-4 flex flex-row justify-center -mt-8 mb-4">
+                          <UpdateUserModal
+                            user={user}
+                            refetch={() => handleRefresh}
+                          />
+                          <ResetPassword user={user} />
+                          {/* <Popconfirm
                             title="Are you sure you want to delete?"
                             onConfirm={() => deleteClient(user.id)}
                           >
@@ -349,17 +348,16 @@ export default function UserAuthPanel() {
                               Delete
                             </button>
                           </Popconfirm> */}
-                          </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
