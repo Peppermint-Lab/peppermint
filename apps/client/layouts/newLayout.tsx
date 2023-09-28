@@ -429,14 +429,14 @@ export default function NewLayout({ children }: any) {
                   </ul>
                 </li>
                 <li className="mt-auto space-y-4">
-                  <a href="https://ko-fi.com/L3L0AA4YE" target="_blank">
+                  {/* <a href="https://ko-fi.com/L3L0AA4YE" target="_blank">
                     <img
                       className="py-1 h-12 w-full"
                       height="36"
                       src="/kofi-white.png"
                       alt="Buy Me a Coffee at ko-fi.com"
                     />
-                  </a>
+                  </a> */}
                   {user.isAdmin && (
                     <Link
                       href="/admin"

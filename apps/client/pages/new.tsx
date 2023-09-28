@@ -1,5 +1,3 @@
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/20/solid";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
 import Underline from "@tiptap/extension-underline";
@@ -8,6 +6,8 @@ import StarterKit from "@tiptap/starter-kit";
 import useTranslation from "next-translate/useTranslation";
 import { Fragment, useEffect, useState } from "react";
 // import TextAlign from '@tiptap/extension-text-align';
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { notifications } from "@mantine/notifications";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
@@ -30,7 +30,7 @@ export default function CreateTicket() {
   const [issue, setIssue] = useState<any>(t("ticket_extra_details"));
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState<any>();
   const [users, setUsers] = useState<any>();
 
   const editor = useEditor({
@@ -128,7 +128,7 @@ export default function CreateTicket() {
   }, []);
 
   return (
-    <div className="inline-block bg-white rounded-lg px-8 py-4 text-left shadow-xl align-middle 2xl:max-w-6xl w-full ">
+    <div className="inline-block bg-white rounded-lg px-8 py-4 text-left shadow-xl align-middle w-full ">
       <div className="flex flex-row w-full">
         <span className="text-md pb-2 font-bold text-xl">
           {t("ticket_new")}
@@ -212,16 +212,16 @@ export default function CreateTicket() {
           <Listbox value={company} onChange={setCompany}>
             {({ open }) => (
               <>
-                <div className="mt-1 relative">
-                  <Listbox.Button className="bg-white relative w-full min-w-[164px] border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-sm">
+                <div className="relative mt-2">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
-                      {company ? company.name : t("ticket_select_client")}
+                      {company === undefined ? "Select a client" : company.name}
                     </span>
-                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      {/* <SelectorIcon
-                                  className="h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                /> */}
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
                     </span>
                   </Listbox.Button>
 
@@ -232,33 +232,33 @@ export default function CreateTicket() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute bottom-6 2xl:top-0 z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {options !== undefined &&
-                        options.map((person: any) => (
+                        options.map((client: any) => (
                           <Listbox.Option
-                            key={person.id}
+                            key={client.id}
                             className={({ active }) =>
                               classNames(
                                 active
-                                  ? "text-gray-900 bg-gray-100"
+                                  ? "bg-indigo-600 text-white"
                                   : "text-gray-900",
-                                "cursor-default select-none relative py-2 pl-3 pr-9"
+                                "relative cursor-default select-none py-2 pl-3 pr-9"
                               )
                             }
-                            value={person}
+                            value={client}
                           >
-                            {({ company, active }: any) => (
+                            {({ selected, active }) => (
                               <>
                                 <span
                                   className={classNames(
-                                    company ? "font-semibold" : "font-normal",
+                                    selected ? "font-semibold" : "font-normal",
                                     "block truncate"
                                   )}
                                 >
-                                  {person.name}
+                                  {client.name}
                                 </span>
 
-                                {company ? (
+                                {selected ? (
                                   <span
                                     className={classNames(
                                       active ? "text-white" : "text-indigo-600",
@@ -281,20 +281,21 @@ export default function CreateTicket() {
               </>
             )}
           </Listbox>
-
           <Listbox value={engineer} onChange={setEngineer}>
             {({ open }) => (
               <>
-                <div className="mt-1 relative">
-                  <Listbox.Button className="bg-white relative min-w-[164px] w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-1 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ">
+                <div className="relative mt-2">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
-                      {engineer ? engineer.name : "Select an Engineer"}
+                      {engineer === undefined
+                        ? "Select a engineer"
+                        : engineer.name}
                     </span>
-                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      {/* <SelectorIcon
-                                  className="h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                /> */}
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
                     </span>
                   </Listbox.Button>
 
@@ -305,59 +306,33 @@ export default function CreateTicket() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute bottom-6 2xl:top-0 z-30 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      <Listbox.Option
-                        className={({ active }) =>
-                          classNames(
-                            active
-                              ? "text-gray-900 bg-gray-100"
-                              : "text-gray-900",
-                            "cursor-default select-none relative py-2 pl-3 pr-9"
-                          )
-                        }
-                        value={{
-                          name: "Unassigned",
-                        }}
-                      >
-                        {({ company, active }: any) => (
-                          <>
-                            <span
-                              className={classNames(
-                                company ? "font-semibold" : "font-normal",
-                                "block truncate"
-                              )}
-                            >
-                              Unassigned
-                            </span>
-                          </>
-                        )}
-                      </Listbox.Option>
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {users !== undefined &&
-                        users.map((team: any) => (
+                        users.map((user: any) => (
                           <Listbox.Option
-                            key={team.id}
+                            key={user.id}
                             className={({ active }) =>
                               classNames(
                                 active
-                                  ? "text-gray-900 bg-gray-100"
+                                  ? "bg-indigo-600 text-white"
                                   : "text-gray-900",
-                                "cursor-default select-none relative py-2 pl-3 pr-9"
+                                "relative cursor-default select-none py-2 pl-3 pr-9"
                               )
                             }
-                            value={team}
+                            value={user}
                           >
-                            {({ engineer, active }: any) => (
+                            {({ selected, active }) => (
                               <>
                                 <span
                                   className={classNames(
-                                    engineer ? "font-semibold" : "font-normal",
+                                    selected ? "font-semibold" : "font-normal",
                                     "block truncate"
                                   )}
                                 >
-                                  {team.name}
+                                  {user.name}
                                 </span>
 
-                                {engineer ? (
+                                {selected ? (
                                   <span
                                     className={classNames(
                                       active ? "text-white" : "text-indigo-600",
@@ -388,7 +363,7 @@ export default function CreateTicket() {
                 createTicket();
               }}
               type="button"
-              className="inline-flex justify-center rounded-md shadow-sm px-2.5 py-1.5 border border-transparent text-xs bg-green-600 font-medium text-white hover:bg-green-700 focus:outline-none "
+              className="rounded bg-green-600 hover:bg-green-800 px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-30"
             >
               Create Ticket
             </button>
