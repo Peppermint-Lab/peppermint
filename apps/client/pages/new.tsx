@@ -164,51 +164,7 @@ export default function CreateTicket() {
           className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
         />
 
-        <RichTextEditor editor={editor}>
-          <RichTextEditor.Toolbar>
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.Italic />
-              <RichTextEditor.Underline />
-              <RichTextEditor.Strikethrough />
-              <RichTextEditor.ClearFormatting />
-              <RichTextEditor.Highlight />
-              <RichTextEditor.Code />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.H1 />
-              <RichTextEditor.H2 />
-              <RichTextEditor.H3 />
-              <RichTextEditor.H4 />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Blockquote />
-              <RichTextEditor.Hr />
-              <RichTextEditor.BulletList />
-              <RichTextEditor.OrderedList />
-              <RichTextEditor.Subscript />
-              <RichTextEditor.Superscript />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Link />
-              <RichTextEditor.Unlink />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.AlignLeft />
-              <RichTextEditor.AlignCenter />
-              <RichTextEditor.AlignJustify />
-              <RichTextEditor.AlignRight />
-            </RichTextEditor.ControlsGroup>
-          </RichTextEditor.Toolbar>
-
-          <RichTextEditor.Content style={{ minHeight: 320 }} />
-        </RichTextEditor>
-
-        <div className="flex flex-row space-x-4 pb-2 mt-2">
+        <div className="flex flex-row space-x-4 pb-4 mt-2 border-b mb-4">
           <Listbox value={company} onChange={setCompany}>
             {({ open }) => (
               <>
@@ -356,6 +312,51 @@ export default function CreateTicket() {
             )}
           </Listbox>
         </div>
+
+        <RichTextEditor editor={editor}>
+          <RichTextEditor.Toolbar>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Underline />
+              <RichTextEditor.Strikethrough />
+              <RichTextEditor.ClearFormatting />
+              <RichTextEditor.Highlight />
+              <RichTextEditor.Code />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.H1 />
+              <RichTextEditor.H2 />
+              <RichTextEditor.H3 />
+              <RichTextEditor.H4 />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Blockquote />
+              <RichTextEditor.Hr />
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+              <RichTextEditor.Subscript />
+              <RichTextEditor.Superscript />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.AlignLeft />
+              <RichTextEditor.AlignCenter />
+              <RichTextEditor.AlignJustify />
+              <RichTextEditor.AlignRight />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
+
+          <RichTextEditor.Content style={{ minHeight: 320 }} />
+        </RichTextEditor>
+
         <div className="border-t border-gray-300 ">
           <div className="mt-2 float-right">
             <button
