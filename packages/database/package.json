@@ -23,9 +23,10 @@
     "predev": "npm run generate"
   },
   "dependencies": {
-    "@prisma/client": "latest"
+    "@prisma/client": "^4.10.1"
   },
   "devDependencies": {
+    "@types/node": "latest",
     "config": "*",
     "eslint": "^8.12.0",
     "prisma": "4.10.1",
@@ -33,8 +34,7 @@
     "tsconfig": "*",
     "tsup": "^5.11.13",
     "tsx": "^3.7.1",
-    "typescript": "^4.5.5",
-    "@types/node": "latest"
+    "typescript": "^4.5.5"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma",
