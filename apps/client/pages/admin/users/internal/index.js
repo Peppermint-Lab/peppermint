@@ -1,17 +1,25 @@
+import { getCookie } from "cookies-next";
+import Link from "next/link";
 import React from "react";
 import { useQuery } from "react-query";
 import {
-  useTable,
   useFilters,
   useGlobalFilter,
   usePagination,
+  useTable,
 } from "react-table";
 import ResetPassword from "../../../../components/ResetPassword";
 import UpdateUserModal from "../../../../components/UpdateUserModal";
-import Link from "next/link";
 
-const fetchUsers = async () => {
-  const res = await fetch("/api/v1/users/all");
+const fetchUsers = async (token) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return res.json();
 };
 
@@ -191,48 +199,52 @@ function Table({ columns, data }) {
   );
 }
 
-export default function Auth() {
-  const { data, status, refetch } = useQuery("fetchAuthUsers", fetchUsers);
+export default function UserAuthPanel() {
+  const token = getCookie("session");
+  const { data, status, refetch } = useQuery("fetchAuthUsers", () =>
+    fetchUsers(token)
+  );
 
-  async function deleteClient(client) {
-    const id = client.id;
-    try {
-      await fetch(`/api/v1/auth/delete/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then(() => {
-          refetch;
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function deleteUser(client) {
+  //   const id = client.id;
+  //   try {
+  //     await fetch(`/api/v1/auth/delete/${id}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //       .then((response) => response.json())
+  //       .then(() => {
+  //         refetch;
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
-  const columns = React.useMemo(() => [
-    {
-      Header: "Name",
-      accessor: "name",
-      width: 10,
-      id: "name",
-    },
-    {
-      Header: "Email",
-      accessor: "email",
-      id: "email",
-    },
-    {
-      Header: "",
-      id: "actions",
-      Cell: ({ row, value }) => {
-        return (
-          <div className="space-x-4 flex flex-row">
-            <UpdateUserModal user={row.original} />
-            <ResetPassword user={row.original} />
-            {/* <Popconfirm
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name",
+        width: 10,
+        id: "name",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+        id: "email",
+      },
+      {
+        Header: "",
+        id: "actions",
+        Cell: ({ row, value }) => {
+          return (
+            <div className="space-x-4 flex flex-row">
+              <UpdateUserModal user={row.original} />
+              <ResetPassword user={row.original} />
+              {/* <Popconfirm
               title="Are you sure you want to delete?"
               onConfirm={() => deleteClient(row.cells[0].value)}
             >
@@ -243,33 +255,39 @@ export default function Auth() {
                 Delete
               </button>
             </Popconfirm> */}
-          </div>
-        );
+            </div>
+          );
+        },
       },
-    },
-  ]);
+    ],
+    []
+  );
 
   return (
-    <div>
-      <main
-        className="relative z-0 overflow-y-auto focus:outline-none"
-        tabIndex="0"
-      >
-        <div className="py-6">
-          <div className="flex flex-row max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <h1 className="text-2xl font-semibold text-gray-900">
+    <main className="flex-1">
+      <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
+        <div className="pt-10 pb-16 divide-y-2">
+          <div className="px-4 sm:px-6 md:px-0">
+            <h1 className="text-3xl font-extrabold text-gray-900">
               Internal Users
             </h1>
-            <div className="ml-4">
-              <Link
-                href="/admin/users/internal/new"
-                className="inline-flex items-center p-1 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                New User
-              </Link>
-            </div>
           </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="px-4 sm:px-6 md:px-0">
+            <div className="sm:flex sm:items-center">
+              <div className="sm:flex-auto mt-4">
+                <p className="mt-2 text-sm text-gray-700">
+                  A list of all internal users of your instance.
+                </p>
+              </div>
+              <div className="sm:ml-16 mt-5 sm:flex-none">
+                <Link
+                  href="/admin/users/internal/new"
+                  className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  New User
+                </Link>
+              </div>
+            </div>
             <div className="py-4">
               {status === "loading" && (
                 <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
@@ -339,7 +357,7 @@ export default function Auth() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

@@ -10,10 +10,12 @@ import {
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { SpotlightProvider } from "@mantine/spotlight";
-import { SessionProvider, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+
+import { SessionProvider, useUser } from "../store/session";
+
+import React from "react";
 
 import AdminLayout from "../layouts/adminLayout";
 import NewLayout from "../layouts/newLayout";
@@ -22,15 +24,13 @@ import NoteBookLayout from "../layouts/notebook";
 const queryClient = new QueryClient();
 
 function Auth({ children }: any) {
-  const { data: session, status } = useSession({ required: true });
-
-  const isUser = !!session?.user;
+  const { loading, user } = useUser();
 
   React.useEffect(() => {
-    if (status) return; // Do nothing while loading
-  }, [isUser, status]);
+    if (loading) return; // Do nothing while loading
+  }, [user, loading]);
 
-  if (isUser) {
+  if (user) {
     return children;
   }
 
@@ -40,6 +40,7 @@ function Auth({ children }: any) {
   return (
     <div className="flex h-screen justify-center items-center text-green-600">
       {/* <ScaleLoader color="green" loading={status} size={100} /> */}
+      <span>loading</span>
     </div>
   );
 }
@@ -52,14 +53,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
       title: "Home",
       description: "Get to home page",
       onTrigger: () => router.push("/"),
-      //@ts-expect-error
       icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Notebook",
       description: "Personal User Notes",
       onTrigger: () => router.push("/notebook"),
-      //@ts-expect-error
       icon: <FolderIcon className="h-8 w-8 text-gray-900" />,
     },
     {
@@ -67,14 +66,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
       description:
         "Central store for all company & user tickets, open or closed",
       onTrigger: () => router.push("/tickets"),
-      //@ts-expect-error
       icon: <TicketIcon className="h-8 w-8 text-gray-900" />,
     },
     {
       title: "Documentation",
       description: "Documentation for peppermint.sh",
       onTrigger: () => router.push("https://docs.peppermint.sh"),
-      //@ts-expect-error
       icon: <DocumentCheckIcon className="h-8 w-8 text-gray-900" />,
     },
     {
@@ -96,25 +93,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
-      <SessionProvider session={session}>
-        <Component {...pageProps} />
-      </SessionProvider>
-    );
-  }
-
-  if (router.pathname === "/swagger") {
-    return (
-      <SessionProvider session={session}>
-        <Auth>
-          <Component {...pageProps} />
-        </Auth>
-      </SessionProvider>
-    );
-  }
-
-  if (router.pathname.includes("/public")) {
-    return (
-      <SessionProvider session={session}>
+      <SessionProvider>
         <Component {...pageProps} />
       </SessionProvider>
     );
@@ -122,7 +101,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.pathname.includes("/admin")) {
     return (
-      <SessionProvider session={session}>
+      <SessionProvider>
         <MantineProvider withNormalizeCSS withGlobalStyles>
           <SpotlightProvider
             shortcut={["mod + P", "mod + K", "/"]}
@@ -132,6 +111,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
               <Auth>
                 <NewLayout>
                   <AdminLayout>
+                    <Notifications position="top-right" />
                     <Component {...pageProps} />
                   </AdminLayout>
                 </NewLayout>
@@ -145,7 +125,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.pathname === "/notebook/[id]") {
     return (
-      <SessionProvider session={session}>
+      <SessionProvider>
         <MantineProvider withNormalizeCSS withGlobalStyles>
           <SpotlightProvider
             shortcut={["mod + P", "mod + K", "/"]}
@@ -156,6 +136,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
               <Auth>
                 <NewLayout>
                   <NoteBookLayout>
+                    <Notifications position="top-right" />
                     <Component {...pageProps} />
                   </NoteBookLayout>
                 </NewLayout>
@@ -168,7 +149,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   }
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <MantineProvider withNormalizeCSS withGlobalStyles>
         <SpotlightProvider
           shortcut={["mod + P", "mod + K", "/"]}

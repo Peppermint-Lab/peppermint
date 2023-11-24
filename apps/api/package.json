@@ -1,0 +1,46 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "repository": "",
+  "author": "Jack Andrews",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "prisma generate",
+    "db:push": "prisma db push --accept-data-loss",
+    "db:migrate": "prisma migrate dev",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn src/main.ts"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "^17.0.23",
+    "@types/passport-local": "^1.0.35",
+    "prisma": "5.2.0",
+    "ts-node": "^10.7.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.0.4",
+    "@fastify/cors": "^8.3.0",
+    "@fastify/session": "^10.4.0",
+    "@fastify/swagger": "^8.10.0",
+    "@prisma/client": "^5.2.0",
+    "axios": "^1.5.0",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
+    "fastify": "4.22.2",
+    "got": "^13.0.0",
+    "i": "^0.3.7",
+    "imap": "^0.8.19",
+    "jsonwebtoken": "9.0.2",
+    "mailparser": "^3.6.5",
+    "prisma": "^5.6.0"
+  },
+  "prisma": {
+    "schema": "./src/prisma/schema.prisma",
+    "seed": "node ./src/prisma/seed.js"
+  }
+}

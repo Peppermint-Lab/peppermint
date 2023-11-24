@@ -1,13 +1,12 @@
-import { useSession, signOut } from "next-auth/react";
-import { useState, useEffect } from "react";
 import { Switch } from "@headlessui/react";
+import { useEffect, useState } from "react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function UserNotifications() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   const [ticket_creation, setTicket_creation] = useState();
   const [ticket_status, setTicket_status] = useState();
