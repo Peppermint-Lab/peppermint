@@ -3,7 +3,7 @@ name: Dev Client Build
 on:
   push:
     branches:
-      - master
+      - next
 
 jobs:
   build:
