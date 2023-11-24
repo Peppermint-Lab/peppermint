@@ -150,53 +150,55 @@ function Table({ columns, data }: any) {
             </tbody>
           </table>
 
-          <nav
-            className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
-            aria-label="Pagination"
-          >
-            <div className="hidden sm:block">
-              <div className="flex flex-row items-center flex-nowrap w-full space-x-2">
-                <span className="block text-sm font-medium text-gray-700 ">
-                  Show
-                </span>
-                <div className="pl-4">
-                  <select
-                    id="location"
-                    name="location"
-                    className="block w-full h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                    value={pageSize}
-                    onChange={(e) => {
-                      setPageSize(Number(e.target.value));
-                    }}
-                  >
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
-                      <option key={pageSize} value={pageSize}>
-                        {pageSize}
-                      </option>
-                    ))}
-                  </select>
+          {data.length > 10 && (
+            <nav
+              className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+              aria-label="Pagination"
+            >
+              <div className="hidden sm:block">
+                <div className="flex flex-row items-center flex-nowrap w-full space-x-2">
+                  <span className="block text-sm font-medium text-gray-700 ">
+                    Show
+                  </span>
+                  <div className="pl-4">
+                    <select
+                      id="location"
+                      name="location"
+                      className="block w-full h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                      value={pageSize}
+                      onChange={(e) => {
+                        setPageSize(Number(e.target.value));
+                      }}
+                    >
+                      {[10, 20, 30, 40, 50].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                          {pageSize}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex-1 flex justify-between sm:justify-end">
-              <button
-                className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                type="button"
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-              >
-                Previous
-              </button>
-              <button
-                className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                type="button"
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-              >
-                Next
-              </button>
-            </div>
-          </nav>
+              <div className="flex-1 flex justify-between sm:justify-end">
+                <button
+                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                  type="button"
+                  onClick={() => previousPage()}
+                  disabled={!canPreviousPage}
+                >
+                  Previous
+                </button>
+                <button
+                  className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                  type="button"
+                  onClick={() => nextPage()}
+                  disabled={!canNextPage}
+                >
+                  Next
+                </button>
+              </div>
+            </nav>
+          )}
         </div>
       </div>
     </div>
