@@ -12,6 +12,7 @@ import { notifications } from "@mantine/notifications";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/router";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -19,6 +20,8 @@ function classNames(...classes: any) {
 
 export default function CreateTicket() {
   const { t, lang } = useTranslation("peppermint");
+
+  const router = useRouter();
 
   const token = getCookie("session");
 
@@ -111,6 +114,7 @@ export default function CreateTicket() {
             color: "green",
             autoClose: 5000,
           });
+          router.push("/tickets");
         } else {
           notifications.show({
             title: "Error",

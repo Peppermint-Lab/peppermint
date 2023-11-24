@@ -42,15 +42,16 @@ export default function Notebooks() {
 
   async function fetchNotebook() {
     if (editor) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res) =>
-        res.json()
-      );
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ).then((res) => res.json());
       console.log(res);
       editor.commands.setContent(res.note.note);
       setTitle(res.note.title);
@@ -60,16 +61,19 @@ export default function Notebooks() {
 
   async function updateNoteBook() {
     setSaving(true);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}/update`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        content: notebook,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}/update`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          content: notebook,
+        }),
+      }
+    );
     setSaving(false);
     let date = new Date();
     setLastSaved(new Date(date).getTime());
@@ -80,7 +84,7 @@ export default function Notebooks() {
   }, [editor, router]);
 
   useEffect(() => {
-    if (notebook !== undefined) {
+    if (notebook !== undefined && !loading) {
       updateNoteBook();
     }
   }, [value]);
@@ -90,58 +94,58 @@ export default function Notebooks() {
       <div className="flex flex-row items-center justify-between">
         <h2 className="text-xl font-bold">{title}</h2>
         {saving ? (
-          <span className="text-xs">
-            saving .... 
-          </span>
+          <span className="text-xs">saving ....</span>
         ) : (
           <span className="text-xs">
             last saved: {moment(lastSaved).format("hh:mm:ss")}
           </span>
         )}
       </div>
-      <RichTextEditor editor={editor}>
-        <RichTextEditor.Toolbar>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold />
-            <RichTextEditor.Italic />
-            <RichTextEditor.Underline />
-            <RichTextEditor.Strikethrough />
-            <RichTextEditor.ClearFormatting />
-            <RichTextEditor.Highlight />
-            <RichTextEditor.Code />
-          </RichTextEditor.ControlsGroup>
+      {!loading && (
+        <RichTextEditor editor={editor}>
+          <RichTextEditor.Toolbar>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Underline />
+              <RichTextEditor.Strikethrough />
+              <RichTextEditor.ClearFormatting />
+              <RichTextEditor.Highlight />
+              <RichTextEditor.Code />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.H1 />
-            <RichTextEditor.H2 />
-            <RichTextEditor.H3 />
-            <RichTextEditor.H4 />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.H1 />
+              <RichTextEditor.H2 />
+              <RichTextEditor.H3 />
+              <RichTextEditor.H4 />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Blockquote />
-            <RichTextEditor.Hr />
-            <RichTextEditor.BulletList />
-            <RichTextEditor.OrderedList />
-            <RichTextEditor.Subscript />
-            <RichTextEditor.Superscript />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Blockquote />
+              <RichTextEditor.Hr />
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+              <RichTextEditor.Subscript />
+              <RichTextEditor.Superscript />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Link />
-            <RichTextEditor.Unlink />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.AlignLeft />
-            <RichTextEditor.AlignCenter />
-            <RichTextEditor.AlignJustify />
-            <RichTextEditor.AlignRight />
-          </RichTextEditor.ControlsGroup>
-        </RichTextEditor.Toolbar>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.AlignLeft />
+              <RichTextEditor.AlignCenter />
+              <RichTextEditor.AlignJustify />
+              <RichTextEditor.AlignRight />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
 
-        <RichTextEditor.Content />
-      </RichTextEditor>
+          <RichTextEditor.Content />
+        </RichTextEditor>
+      )}
     </>
   );
 }

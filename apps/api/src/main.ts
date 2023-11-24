@@ -4,6 +4,7 @@ import Fastify, { FastifyInstance } from "fastify";
 import { getEmails } from "./lib/imap";
 
 import { exec } from "child_process";
+import { PostHog } from "posthog-node";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
@@ -70,7 +71,7 @@ const start = async () => {
   try {
     // Run prisma generate and migrate commands before starting the server
     await new Promise<void>((resolve, reject) => {
-      exec("npx prisma generate", (err, stdout, stderr) => {
+      exec("npx prisma migrate deploy", (err, stdout, stderr) => {
         if (err) {
           console.error(err);
           reject(err);
@@ -78,7 +79,7 @@ const start = async () => {
         console.log(stdout);
         console.error(stderr);
 
-        exec("npx prisma migrate dev", (err, stdout, stderr) => {
+        exec("npx prisma generate", (err, stdout, stderr) => {
           if (err) {
             console.error(err);
             reject(err);
@@ -107,11 +108,24 @@ const start = async () => {
 
     await server.listen(
       { port: Number(port), host: "0.0.0.0" },
-      (err, address) => {
+      async (err, address) => {
         if (err) {
           console.error(err);
           process.exit(1);
         }
+
+        const client = new PostHog(
+          "phc_2gbpy3JPtDC6hHrQy35yMxMci1NY0fD1sttGTcPjwVf",
+
+          { host: "https://app.posthog.com" }
+        );
+
+        client.capture({
+          event: "server_started",
+          distinctId: "api_server",
+        });
+
+        await client.shutdownAsync();
         console.info(`Server listening on ${address}`);
       }
     );
