@@ -45,31 +45,45 @@ version: "3.1"
 
 services:
   postgres:
+    profiles:
+      - prod
+      - dev
+      - test
     container_name: postgres
     image: postgres:latest
     restart: always
     volumes:
-      - ./docker-data/db:/data/db
-    environment: 
+      - pgdata:/var/lib/postgresql/data
+    environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
-  client:
+  peppermint:
+    profiles:
+      - prod
     container_name: peppermint
     image: pepperlabs/peppermint:latest
     ports:
-      - 5000:5000
-    restart: on-failure
+      - 5001:5001
+    restart: always
     depends_on:
       - postgres
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
-      PORT: 5000
+      PORT: 5001
       DB_USERNAME: peppermint
       DB_PASSWORD: 1234
-      DB_HOST: 'postgres'
-      BASE_URL: "http://localhost:5000"
+      DB_HOST: postgres
+      SECRET: 'peppermint4life'
+      
 
+volumes:
+ pgdata:
 ```
 
 Once this is completed then you can go to your base_url which was added to the compose file and login.
