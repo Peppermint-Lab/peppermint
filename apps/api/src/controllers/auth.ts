@@ -87,6 +87,7 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
+      //@ts-expect-error
       const isPasswordValid = await bcrypt.compare(password, user!.password);
 
       if (!isPasswordValid) {
