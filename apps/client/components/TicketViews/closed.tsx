@@ -46,14 +46,22 @@ function Table({ columns, data }: any) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    //@ts-expect-error
     page,
     prepareRow,
+    //@ts-expect-error
     canPreviousPage,
+    //@ts-expect-error
     canNextPage,
+    //@ts-expect-error
     pageCount,
+    //@ts-expect-error
     gotoPage,
+    //@ts-expect-error
     nextPage,
+    //@ts-expect-error
     previousPage,
+    //@ts-expect-error
     setPageSize,
     //@ts-expect-error
     state: { pageIndex, pageSize },
@@ -72,7 +80,6 @@ function Table({ columns, data }: any) {
     useGlobalFilter,
     usePagination
   );
-
   return (
     <div className="overflow-x-auto md:-mx-6 lg:-mx-8">
       <div className="py-2 align-middle inline-block min-w-full md:px-6 lg:px-8">

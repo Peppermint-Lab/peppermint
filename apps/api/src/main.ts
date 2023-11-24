@@ -1,7 +1,9 @@
 import cors from "@fastify/cors";
 import "dotenv/config";
 import Fastify, { FastifyInstance } from "fastify";
+import { getEmails } from "./lib/imap";
 
+import { exec } from "child_process";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
@@ -66,14 +68,55 @@ server.get("/", async function (request, response) {
 
 const start = async () => {
   try {
+    // Run prisma generate and migrate commands before starting the server
+    await new Promise<void>((resolve, reject) => {
+      exec("npx prisma generate", (err, stdout, stderr) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        }
+        console.log(stdout);
+        console.error(stderr);
+
+        exec("npx prisma migrate dev", (err, stdout, stderr) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          }
+          console.log(stdout);
+          console.error(stderr);
+        });
+
+        exec("npx prisma db seed", (err, stdout, stderr) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          }
+          console.log(stdout);
+          console.error(stderr);
+          resolve();
+        });
+      });
+    });
+
     // connect to database
     await prisma.$connect();
     server.log.info("Connected to Prisma");
 
     const port = process.env.PORT || 5003;
 
-    //@ts-expect-error
-    await server.listen({ port: port });
+    await server.listen(
+      { port: Number(port), host: "0.0.0.0" },
+      (err, address) => {
+        if (err) {
+          console.error(err);
+          process.exit(1);
+        }
+        console.info(`Server listening on ${address}`);
+      }
+    );
+
+    setInterval(() => getEmails(), 60000); // Call getEmails every minute
   } catch (err) {
     server.log.error(err);
     await prisma.$disconnect();

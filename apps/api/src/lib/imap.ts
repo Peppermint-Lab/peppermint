@@ -1,26 +1,19 @@
-const express = require("express");
 const Imap = require("imap");
 const { simpleParser } = require("mailparser");
-const { PrismaClient } = require("database");
+import { prisma } from "../prisma";
 
 require("dotenv").config();
 
-const client = new PrismaClient();
-const app = express();
-const PORT = 5001;
-
-app.use(express.json());
-
-app.listen(PORT, console.log(`Server running on port ${PORT}`));
+const client = prisma;
 
 const date = new Date();
 const today = date.getDate();
 const month = date.getMonth();
 const year = date.getFullYear();
+//@ts-ignore
 const d = new Date([year, month, today]);
 
-const getEmails = async () => {
-  console.log(date, d);
+export const getEmails = async () => {
   try {
     const queues = await client.emailQueue.findMany({});
 
@@ -39,7 +32,7 @@ const getEmails = async () => {
 
       imap.once("ready", () => {
         imap.openBox("INBOX", false, () => {
-          imap.search(["UNSEEN", ["ON", [date]]], (err, results) => {
+          imap.search(["UNSEEN", ["ON", [date]]], (err: any, results: any) => {
             if (err) {
               console.log(err);
               return;
@@ -54,9 +47,9 @@ const getEmails = async () => {
             console.log(results.length + " num of emails");
 
             const f = imap.fetch(results, { bodies: "" });
-            f.on("message", (msg) => {
-              msg.on("body", (stream) => {
-                simpleParser(stream, async (err, parsed) => {
+            f.on("message", (msg: any) => {
+              msg.on("body", (stream: any) => {
+                simpleParser(stream, async (err: any, parsed: any) => {
                   const { from, subject, textAsHtml, text, html } = parsed;
                   // console.log(from, subject, textAsHtml, text, html);
 
@@ -85,7 +78,7 @@ const getEmails = async () => {
                   console.log(imap, ticket);
                 });
               });
-              msg.once("attributes", (attrs) => {
+              msg.once("attributes", (attrs: any) => {
                 const { uid } = attrs;
                 imap.addFlags(uid, ["\\Seen"], () => {
                   // Mark the email as read after reading it
@@ -93,7 +86,7 @@ const getEmails = async () => {
                 });
               });
             });
-            f.once("error", (ex) => {
+            f.once("error", (ex: any) => {
               return Promise.reject(ex);
             });
             f.once("end", () => {
@@ -104,7 +97,7 @@ const getEmails = async () => {
         });
       });
 
-      imap.once("error", (err) => {
+      imap.once("error", (err: any) => {
         console.log(err);
       });
 
@@ -118,5 +111,3 @@ const getEmails = async () => {
     console.log("an error occurred ", error);
   }
 };
-
-setInterval(getEmails, 10000);

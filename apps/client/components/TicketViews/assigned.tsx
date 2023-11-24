@@ -46,15 +46,24 @@ function Table({ columns, data }: any) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    //@ts-expect-error
     page,
     prepareRow,
+    //@ts-expect-error
     canPreviousPage,
+    //@ts-expect-error
     canNextPage,
+    //@ts-expect-error
     pageCount,
+    //@ts-expect-error
     gotoPage,
+    //@ts-expect-error
     nextPage,
+    //@ts-expect-error
     previousPage,
+    //@ts-expect-error
     setPageSize,
+    //@ts-expect-error
     state: { pageIndex, pageSize },
   } = useTable(
     {
@@ -63,6 +72,7 @@ function Table({ columns, data }: any) {
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
       initialState: {
+        //@ts-expect-error
         pageIndex: 0,
       },
     },
@@ -83,9 +93,13 @@ function Table({ columns, data }: any) {
               {headerGroups.map((headerGroup) => (
                 <tr
                   {...headerGroup.getHeaderGroupProps()}
+                  //@ts-expect-error
+
                   key={headerGroup.headers.map((header) => header.id)}
                 >
                   {headerGroup.headers.map((column) =>
+                    //@ts-expect-error
+
                     column.hideHeader === false ? null : (
                       <th
                         {...column.getHeaderProps()}
@@ -134,10 +148,7 @@ function Table({ columns, data }: any) {
           >
             <div className="hidden sm:block">
               <div className="flex flex-row items-center flex-nowrap w-full space-x-2">
-                <span
-                  htmlFor="location"
-                  className="block text-sm font-medium text-gray-700 "
-                >
+                <span className="block text-sm font-medium text-gray-700 ">
                   Show
                 </span>
                 <div className="pl-4">

@@ -58,15 +58,24 @@ function Table({ columns, data }: any) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    //@ts-expect-error
     page,
     prepareRow,
+    //@ts-expect-error
     canPreviousPage,
+    //@ts-expect-error
     canNextPage,
+    //@ts-expect-error
     pageCount,
+    //@ts-expect-error
     gotoPage,
+    //@ts-expect-error
     nextPage,
+    //@ts-expect-error
     previousPage,
+    //@ts-expect-error
     setPageSize,
+    //@ts-expect-error
     state: { pageIndex, pageSize },
   } = useTable(
     {
@@ -75,6 +84,7 @@ function Table({ columns, data }: any) {
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
       initialState: {
+        //@ts-expect-error
         pageIndex: 0,
       },
     },
