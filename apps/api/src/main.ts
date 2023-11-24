@@ -71,7 +71,7 @@ const start = async () => {
   try {
     // Run prisma generate and migrate commands before starting the server
     await new Promise<void>((resolve, reject) => {
-      exec("npx prisma generate", (err, stdout, stderr) => {
+      exec("npx prisma migrate deploy", (err, stdout, stderr) => {
         if (err) {
           console.error(err);
           reject(err);
@@ -79,7 +79,7 @@ const start = async () => {
         console.log(stdout);
         console.error(stderr);
 
-        exec("npx prisma migrate dev", (err, stdout, stderr) => {
+        exec("npx prisma generate", (err, stdout, stderr) => {
           if (err) {
             console.error(err);
             reject(err);
