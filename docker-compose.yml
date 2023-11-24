@@ -36,7 +36,8 @@ services:
       DB_USERNAME: peppermint
       DB_PASSWORD: 1234
       DB_HOST: postgres
-      BASE_URL: http://localhost:5001
+      SECRET: 'peppermint4life'
+      
 
 volumes:
  pgdata:
