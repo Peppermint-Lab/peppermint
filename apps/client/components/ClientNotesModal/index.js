@@ -1,6 +1,5 @@
-import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/24/outline";
+import { Fragment, useState } from "react";
 
 export default function ClientNotesModal({ notes, id }) {
   const [open, setOpen] = useState(false);
@@ -79,7 +78,6 @@ export default function ClientNotesModal({ notes, id }) {
                     onClick={() => setOpen(false)}
                   >
                     <span className="sr-only">Close</span>
-                    <XIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
                 <div className="sm:flex sm:items-start w-full">

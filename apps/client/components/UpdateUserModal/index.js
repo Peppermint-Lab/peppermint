@@ -1,7 +1,7 @@
-import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
+import React, { Fragment, useState } from "react";
 
 export default function UpdateUserModal({ user }) {
   const [open, setOpen] = useState(false);
@@ -17,8 +17,6 @@ export default function UpdateUserModal({ user }) {
     { id: "user", title: "user" },
     { id: "admin", title: "admin" },
   ];
-
-  console.log(name.length, email);
 
   async function updateUser() {
     if (name.length > 0 && email.length > 0) {
@@ -43,7 +41,7 @@ export default function UpdateUserModal({ user }) {
       <button
         onClick={() => setOpen(true)}
         type="button"
-        className="inline-flex items-center py-1 px-4 border border-transparent rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        className="inline-flex items-center px-4 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         Edit
       </button>

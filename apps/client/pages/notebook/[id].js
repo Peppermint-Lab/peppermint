@@ -1,18 +1,20 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 // import TextAlign from '@tiptap/extension-text-align';
-import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
-import { useDebounce } from "use-debounce";
+import Superscript from "@tiptap/extension-superscript";
+import { getCookie } from "cookies-next";
 import moment from "moment";
+import { useDebounce } from "use-debounce";
 
 export default function Notebooks() {
   const router = useRouter();
+  const token = getCookie("session");
 
   const [notebook, setNoteBook] = useState("");
   const [title, setTitle] = useState();
@@ -40,24 +42,32 @@ export default function Notebooks() {
 
   async function fetchNotebook() {
     if (editor) {
-      const res = await fetch(`/api/v1/note/${router.query.id}`).then((res) =>
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) =>
         res.json()
       );
-      editor.commands.setContent(res.data.note);
-      setTitle(res.data.title);
+      console.log(res);
+      editor.commands.setContent(res.note.note);
+      setTitle(res.note.title);
       setLoading(false);
     }
   }
 
   async function updateNoteBook() {
     setSaving(true);
-    const res = await fetch(`/api/v1/note/${router.query.id}/update`, {
-      method: "POST",
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}/update`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        note: notebook,
+        content: notebook,
       }),
     });
     setSaving(false);

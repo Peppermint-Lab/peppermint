@@ -1,17 +1,24 @@
-import { useQuery } from "react-query";
+import { getCookie } from "cookies-next";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { Link } from "next/link";
+import { useQuery } from "react-query";
 
-async function fetchNotebooks() {
-  const res = await fetch("/api/v1/note/get-notes");
+async function fetchNotebooks(token) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 }
 
 export default function NoteBooksIndex() {
+  const token = getCookie("session");
   const { data, status, error, refetch } = useQuery(
     "getUsersNotebooks",
-    fetchNotebooks
+    () => fetchNotebooks(token),
   );
 
   const router = useRouter();

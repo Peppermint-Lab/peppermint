@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import { TrashIcon } from "@heroicons/react/20/solid";
 import { Pagination } from "antd";
-import { TrashIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
+import { getCookie } from "cookies-next";
+import { useState } from "react";
 import { useQuery } from "react-query";
 
-async function getTodos() {
-  const res = await fetch("/api/v1/todo/get");
+async function getTodos(token) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/todos/all`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 }
 
 export default function ListTodo() {
-  const { status, data, refetch } = useQuery("repoData", getTodos);
+  const token = getCookie("session");
+  const { status, data, refetch } = useQuery("repoData", () => getTodos(token));
 
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(12);
@@ -26,8 +33,12 @@ export default function ListTodo() {
   }
 
   async function onSubmit() {
-    await fetch("/api/v1/todo/create", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/todo/create`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         todo: text,
       }),
@@ -37,9 +48,15 @@ export default function ListTodo() {
     });
   }
 
+  console.log(data);
+
   async function deleteTodo(id) {
-    await fetch(`api/v1/todo/delete/${id}`, {
-      method: "POST",
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/todo/${id}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     }).then(() => refetch());
   }
 
@@ -108,7 +125,7 @@ export default function ListTodo() {
               <p>None Found</p>
             )}
           </div>
-          <div  className={data.todos.length > 12 ? "mt-4" : "hidden"}>
+          <div  className={data.todos && data.todos.length > 12 ? "mt-4" : "hidden"}>
             <Pagination
               defaultCurrent={1}
               total={12}

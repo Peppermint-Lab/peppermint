@@ -1,12 +1,19 @@
-import { useState, useEffect } from "react";
+import { PlusIcon as PlusIconMini } from "@heroicons/react/20/solid";
+import { getCookie } from "cookies-next";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import Loader from "react-spinners/ClipLoader";
-import { PlusIcon as PlusIconMini } from "@heroicons/react/20/solid";
-import { useRouter } from "next/router";
-import Link from "next/link";
 
-async function fetchNotebooks() {
-  const res = await fetch("/api/v1/note/get-notes");
+async function fetchNotebooks(token) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 }
 
@@ -16,7 +23,11 @@ function classNames(...classes) {
 
 export default function NoteBookLayout({ children }) {
   const router = useRouter()
-  const { data, status, error } = useQuery("getUsersNotebooks", fetchNotebooks);
+  const token = getCookie("session");
+
+  const { data, status, error, refetch } = useQuery(
+    "getUsersNotebooks",
+    () => fetchNotebooks(token),)
 
   const [notebooks, setNotebooks] = useState();
   const [selected, setSelected] = useState(0);
