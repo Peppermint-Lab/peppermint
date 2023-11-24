@@ -10,8 +10,11 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["^db:generate"],
       "outputs": ["dist/**", ".next/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

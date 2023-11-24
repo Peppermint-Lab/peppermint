@@ -50,7 +50,11 @@ model User {
   createdAt                    DateTime       @default(now())
   updatedAt                    DateTime       @default(now())
   name                         String
+<<<<<<<< HEAD:apps/api/src/prisma/schema.prisma
   password                     String
+========
+  password                     String?
+>>>>>>>> next:packages/database/prisma/schema.prisma
   email                        String         @unique
   image                        String?
   emailVerified                Boolean?
