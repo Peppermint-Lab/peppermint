@@ -32,7 +32,7 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
-      API_PORT: 5003
+      API_URL: "http://localhost:5003"
 
 volumes:
  pgdata:

@@ -29,6 +29,7 @@ server.register(require("@fastify/swagger"), {
       url: "https://swagger.io",
       description: "Find more info here",
     },
+    mode: "static",
     host: "localhost",
     schemes: ["http"],
     consumes: ["application/json"],
@@ -37,6 +38,7 @@ server.register(require("@fastify/swagger"), {
       { name: "user", description: "User related end-points" },
       { name: "code", description: "Code related end-points" },
     ],
+    exposeRoute: true,
     definitions: {
       User: {
         type: "object",

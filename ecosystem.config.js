@@ -11,6 +11,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3000, // Change this to your desired port
+        API_URL: process.env.API_URL,
       },
     },
     {

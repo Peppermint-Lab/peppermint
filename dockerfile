@@ -9,6 +9,8 @@ RUN apt-get update && \
 # Copy the package.json and package-lock.json files for both apps
 COPY apps/api/package*.json ./apps/api/
 COPY apps/client/package*.json ./apps/client/
+COPY ./ecosystem.config.js ./ecosystem.config.js
+
 
 RUN npm i -g prisma
 RUN npm i -g typescript@latest -g --force 
@@ -27,8 +29,7 @@ FROM node:lts AS runner
 
 COPY --from=builder /app/apps/api/ ./apps/api/
 COPY --from=builder /app/apps/client ./apps/client
-COPY ./ecosystem.config.js ./ecosystem.config.js
-
+COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
 
 # Expose the ports for both apps
 EXPOSE 3000 5003
@@ -37,5 +38,5 @@ EXPOSE 3000 5003
 RUN npm install -g pm2
 
 # Start both apps using PM2
-CMD ["pm2-runtime", "ecosystem.config .js"]
+CMD ["pm2-runtime", "ecosystem.config.js"]
 
