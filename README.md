@@ -44,37 +44,46 @@ Check out the getting started guide if this is the first time you've used Pepper
 version: "3.1"
 
 services:
-  postgres:
-    container_name: postgres
+  peppermint_postgres:
+    container_name: peppermint_postgres
     image: postgres:latest
     restart: always
+    ports:
+      - 5432:5432
     volumes:
-      - ./docker-data/db:/data/db
-    environment: 
+      - pgdata:/var/lib/postgresql/data
+    environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: peppermint
 
-  client:
+  peppermint:
     container_name: peppermint
     image: pepperlabs/peppermint:latest
     ports:
-      - 5000:5000
-    restart: on-failure
+      - 3000:3000
+      - 5003:5003
+    restart: always
     depends_on:
-      - postgres
+      - peppermint_postgres
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
-      PORT: 5000
-      DB_USERNAME: peppermint
-      DB_PASSWORD: 1234
-      DB_HOST: 'postgres'
-      BASE_URL: "http://localhost:5000"
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "peppermint_postgres"
 
+volumes:
+ pgdata:
 ```
 
 Once this is completed then you can go to your base_url which was added to the compose file and login.
 
 The default login credentials are
+
 ```
 admin@admin.com
 1234
@@ -109,10 +118,7 @@ Give a ⭐️ if this project helped you!
 
 ## Star History
 
-
 [![Star History Chart](https://api.star-history.com/svg?repos=Peppermint-Lab/peppermint&type=Date)](https://star-history.com/#Peppermint-Lab/peppermint&Date)
-
-
 
 ## Author
 
