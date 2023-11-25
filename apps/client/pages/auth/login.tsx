@@ -14,7 +14,7 @@ export default function Login({}) {
   const { setUser } = useUser();
 
   async function postData() {
-    await fetch("http://localhost:5003/api/v1/auth/login", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

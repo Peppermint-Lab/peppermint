@@ -3210,6 +3210,11 @@ fastq@^1.6.0, fastq@^1.6.1:
   dependencies:
     reusify "^1.0.4"
 
+fflate@^0.4.1:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.4.8.tgz#f90b82aefbd8ac174213abb338bd7ef848f0f5ae"
+  integrity sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==
+
 filesac@^13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/filesac/-/filesac-13.0.0.tgz#fdee2f7c477320ae99f2a5fde8f47ce7ba94b0aa"
@@ -5221,6 +5226,13 @@ postcss@8.4.31, postcss@^8.4.23, postcss@^8.4.5:
     nanoid "^3.3.6"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
+
+posthog-js@^1.93.2:
+  version "1.93.2"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.93.2.tgz#f3ab11983c558ad36966b552bb4ad98526cdcff6"
+  integrity sha512-0e2kqlb4kB1/Q9poLFlMF+SUrW+DCzNBHTJuUKl177euE4LChkJipSjy2vpq98qtJ2K3Hxw7ylHf2C+dZCx4RA==
+  dependencies:
+    fflate "^0.4.1"
 
 posthog-node@^3.1.3:
   version "3.1.3"

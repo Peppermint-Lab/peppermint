@@ -11,6 +11,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3000, // Change this to your desired port
+        API_URL: process.env.API_URL,
       },
     },
     {
@@ -25,7 +26,6 @@ module.exports = {
       restart_delay: 3000,
       env: {
         NODE_ENV: "production",
-        PORT: process.env.API_PORT,
         DB_USERNAME: process.env.DB_USERNAME,
         DB_PASSWORD: process.env.DB_PASSWORD,
         DB_HOST: process.env.DB_HOST,
