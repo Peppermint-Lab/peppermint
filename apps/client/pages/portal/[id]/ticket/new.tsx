@@ -16,12 +16,13 @@ import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 
 const type = [
-  { id: 1, name: "Bug" },
-  { id: 2, name: "Feature Request" },
-  { id: 3, name: "Support" },
-  { id: 4, name: "Billing" },
-  { id: 5, name: "Hardware" },
-  { id: 6, name: "Software" },
+  { id: 5, name: "Incident" },
+  { id: 1, name: "Service" },
+  { id: 2, name: "Feature" },
+  { id: 3, name: "Bug" },
+  { id: 4, name: "Maintenance" },
+  { id: 6, name: "Access" },
+  { id: 8, name: "Feedback" },
 ];
 
 const pri = [
@@ -37,7 +38,7 @@ export default function ClientTicketNew() {
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [view, setView] = useState("success");
+  const [view, setView] = useState("new");
   const [ticketID, setTicketID] = useState("");
 
   const [selected, setSelected] = useState(type[2]);
@@ -61,6 +62,7 @@ export default function ClientTicketNew() {
         email,
         detail: description,
         priority: priority.name,
+        type: selected.name,
       }),
     })
       .then((res) => res.json())

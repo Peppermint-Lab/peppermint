@@ -11,8 +11,16 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { name, company, detail, title, priority, email, engineer }: any =
-        request.body;
+      const {
+        name,
+        company,
+        detail,
+        title,
+        priority,
+        email,
+        engineer,
+        type,
+      }: any = request.body;
 
       console.log(request.body);
 
@@ -23,6 +31,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
           detail,
           priority: priority ? priority : "low",
           email,
+          type: type ? type.toLowerCase() : "support",
           client:
             company !== undefined
               ? {

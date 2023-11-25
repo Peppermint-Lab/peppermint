@@ -105,6 +105,7 @@ model Ticket {
   fromImap   Boolean
   Number     Int          @default(autoincrement())
   status     TicketStatus @default(needs_support)
+  type       TicketType   @default(support)
 
   TicketFile   TicketFile[]
   Comment      Comment[]
@@ -297,4 +298,15 @@ enum TicketStatus {
   in_progress
   in_review
   done
+}
+
+enum TicketType {
+  bug
+  feature
+  support
+  incident
+  service
+  maintenance
+  access
+  feedback
 }

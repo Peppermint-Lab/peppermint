@@ -254,6 +254,18 @@ export default function AssignedTickets() {
         },
       },
       {
+        Header: "Client",
+        accessor: "client.name",
+        id: "client",
+        Cell: ({ row, value }: any) => {
+          return (
+            <>
+              <span className="w-[80px] truncate">{value ? value : "n/a"}</span>
+            </>
+          );
+        },
+      },
+      {
         Header: "Priority",
         accessor: "priority",
         id: "priority",
