@@ -205,23 +205,28 @@ export default function UserAuthPanel() {
     fetchUsers(token)
   );
 
-  // async function deleteUser(client) {
-  //   const id = client.id;
-  //   try {
-  //     await fetch(`/api/v1/auth/delete/${id}`, {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     })
-  //       .then((response) => response.json())
-  //       .then(() => {
-  //         refetch;
-  //       });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async function deleteUser(id) {
+    if (confirm("Are you sure you want to delete this user?")) {
+      try {
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then(() => {
+            refetch;
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 
   const columns = React.useMemo(
     () => [
@@ -239,22 +244,20 @@ export default function UserAuthPanel() {
       {
         Header: "",
         id: "actions",
-        Cell: ({ row, value }) => {
+        Cell: ({ row }) => {
           return (
             <div className="space-x-4 flex flex-row">
               <UpdateUserModal user={row.original} />
               <ResetPassword user={row.original} />
-              {/* <Popconfirm
-              title="Are you sure you want to delete?"
-              onConfirm={() => deleteClient(row.cells[0].value)}
-            >
-              <button
-                type="button"
-                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Delete
-              </button>
-            </Popconfirm> */}
+              {row.original.isAdmin ? null : (
+                <button
+                  type="button"
+                  onClick={() => deleteUser(row.original.id)}
+                  className="inline-flex items-center px-4 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-white bg-red-700 hover:bg-red-500"
+                >
+                  Delete
+                </button>
+              )}
             </div>
           );
         },
@@ -337,17 +340,6 @@ export default function UserAuthPanel() {
                             refetch={() => handleRefresh}
                           />
                           <ResetPassword user={user} />
-                          {/* <Popconfirm
-                            title="Are you sure you want to delete?"
-                            onConfirm={() => deleteClient(user.id)}
-                          >
-                            <button
-                              type="button"
-                              className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                            >
-                              Delete
-                            </button>
-                          </Popconfirm> */}
                         </div>
                       </div>
                     ))}

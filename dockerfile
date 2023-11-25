@@ -1,11 +1,10 @@
-FROM node:lts-alpine AS builder
+FROM node:lts AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
 
-RUN apk update
-RUN apk add --no-cache bash
-RUN apk --no-cache --virtual build-dependencies add make g++ libc6-compat python3
+RUN apt-get update && \
+    apt-get install -y build-essential python3
 
 # Copy the package.json and package-lock.json files for both apps
 COPY apps/api/package*.json ./apps/api/
@@ -24,7 +23,7 @@ RUN cd apps/api && npm i --save-dev @types/node && npm run build
 RUN cd apps/client && yarn install --production --ignore-scripts --prefer-offline --network-timeout 1000000
 RUN cd apps/client && yarn add --dev typescript @types/node --network-timeout 1000000 && yarn build
 
-FROM node:lts-alpine AS runner
+FROM node:lts AS runner
 
 COPY --from=builder /app/apps/api/ ./apps/api/
 COPY --from=builder /app/apps/client ./apps/client

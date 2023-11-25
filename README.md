@@ -44,14 +44,16 @@ Check out the getting started guide if this is the first time you've used Pepper
 version: "3.1"
 
 services:
-  postgres:
+  peppermint_postgres:
+    container_name: peppermint_postgres
     profiles:
       - prod
       - dev
       - test
-    container_name: postgres
     image: postgres:latest
     restart: always
+    ports:
+      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
@@ -60,13 +62,16 @@ services:
       POSTGRES_DB: peppermint
 
   peppermint:
-    profiles:
-      - prod
     container_name: peppermint
     image: pepperlabs/peppermint:latest
     ports:
-      - 5001:5001
+      - 3000:3000
+      - 5003:5003
     restart: always
+    depends_on:
+      - peppermint_postgres
+    profiles:
+      - prod
     depends_on:
       - postgres
     healthcheck:
@@ -75,13 +80,11 @@ services:
       timeout: 10s
       retries: 3
     environment:
-      PORT: 5001
-      DB_USERNAME: peppermint
-      DB_PASSWORD: 1234
-      DB_HOST: postgres
+      DB_USERNAME: "peppermint"
+      DB_PASSWORD: "1234"
+      DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
       
-
 volumes:
  pgdata:
 ```
@@ -89,6 +92,7 @@ volumes:
 Once this is completed then you can go to your base_url which was added to the compose file and login.
 
 The default login credentials are
+
 ```
 admin@admin.com
 1234
@@ -123,10 +127,7 @@ Give a ⭐️ if this project helped you!
 
 ## Star History
 
-
 [![Star History Chart](https://api.star-history.com/svg?repos=Peppermint-Lab/peppermint&type=Date)](https://star-history.com/#Peppermint-Lab/peppermint&Date)
-
-
 
 ## Author
 

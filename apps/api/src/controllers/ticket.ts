@@ -11,8 +11,18 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { name, company, detail, title, priority, email, engineer }: any =
-        request.body;
+      const {
+        name,
+        company,
+        detail,
+        title,
+        priority,
+        email,
+        engineer,
+        type,
+      }: any = request.body;
+
+      console.log(request.body);
 
       const ticket: any = await prisma.ticket.create({
         data: {
@@ -21,10 +31,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
           detail,
           priority: priority ? priority : "low",
           email,
+          type: type ? type.toLowerCase() : "support",
           client:
             company !== undefined
               ? {
-                  connect: { id: company.id },
+                  connect: { id: company.id || company },
                 }
               : undefined,
           fromImap: false,
@@ -62,6 +73,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
       reply.status(200).send({
         message: "Ticket created correctly",
         success: true,
+        id: ticket.id,
       });
     }
   );

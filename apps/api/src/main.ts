@@ -59,6 +59,11 @@ server.register(require("@fastify/swagger"), {
   },
 });
 
+server.register(import("@fastify/rate-limit"), {
+  max: 20,
+  timeWindow: "1 minute",
+});
+
 // register all routes
 registerRoutes(server);
 
@@ -122,7 +127,7 @@ const start = async () => {
 
         client.capture({
           event: "server_started",
-          distinctId: "api_server",
+          distinctId: "uuid",
         });
 
         await client.shutdownAsync();
