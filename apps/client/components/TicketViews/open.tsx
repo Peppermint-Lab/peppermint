@@ -309,18 +309,6 @@ export default function OpenTickets() {
           );
         },
       },
-      // {
-      //   Header: "",
-      //   id: "actions",
-      //   Cell: ({ row, value }) => {
-      //     console.log(row)
-      //     return (
-      //       <>
-      //         <Link href={`/tickets/${row.original.id}`}>View</Link>
-      //       </>
-      //     );
-      //   },
-      // },
     ],
     []
   );

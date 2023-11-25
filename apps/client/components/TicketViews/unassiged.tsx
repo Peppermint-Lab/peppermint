@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "react-query";
 import {
   useFilters,
@@ -218,7 +218,7 @@ export default function UnassignedTickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
         Header: "Type",
@@ -233,7 +233,7 @@ export default function UnassignedTickets() {
         Cell: ({ row, value }: any) => {
           return (
             <>
-              <span className="max-w-[240px] truncate">{value}</span>
+              <span className=" max-w-[240px] truncate">{value}</span>
             </>
           );
         },
@@ -242,7 +242,7 @@ export default function UnassignedTickets() {
         Header: "Assignee",
         accessor: "assignedTo.name",
         id: "assignee",
-        Cell: ({ row, value }) => {
+        Cell: ({ row, value }: any) => {
           return (
             <>
               <span className="w-[80px] truncate">{value ? value : "n/a"}</span>
@@ -271,7 +271,7 @@ export default function UnassignedTickets() {
           return (
             <>
               <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
+                className={`inline-flex items-center rounded-md justify-center w-1/2 px-2 py-1 text-xs font-medium ring-1 ring-inset ${badge}`}
               >
                 {value}
               </span>
@@ -281,28 +281,19 @@ export default function UnassignedTickets() {
       },
       {
         Header: "Status",
-        accessor: "priority",
+        accessor: "status",
         id: "status",
         Cell: ({ row, value }) => {
           let p = value;
           let badge;
 
-          if (p === "Low") {
-            badge = low;
-          }
-          if (p === "Normal") {
-            badge = normal;
-          }
-          if (p === "High") {
-            badge = high;
-          }
-
           return (
             <>
-              <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge}`}
-              >
-                {value}
+              <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-red-600/10">
+                {value === "needs_support" && <span>Needs Support</span>}
+                {value === "in_progress" && <span>In Progress</span>}
+                {value === "in_review" && <span>In Review</span>}
+                {value === "done" && <span>Done</span>}
               </span>
             </>
           );
@@ -321,18 +312,6 @@ export default function UnassignedTickets() {
           );
         },
       },
-      // {
-      //   Header: "",
-      //   id: "actions",
-      //   Cell: ({ row, value }) => {
-      //     console.log(row)
-      //     return (
-      //       <>
-      //         <Link href={`/tickets/${row.original.id}`}>View</Link>
-      //       </>
-      //     );
-      //   },
-      // },
     ],
     []
   );
