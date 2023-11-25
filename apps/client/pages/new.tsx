@@ -25,7 +25,6 @@ export default function CreateTicket() {
 
   const token = getCookie("session");
 
-  const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [company, setCompany] = useState<any>();
   const [engineer, setEngineer] = useState<any>();

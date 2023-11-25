@@ -26,6 +26,8 @@ const queryClient = new QueryClient();
 function Auth({ children }: any) {
   const { loading, user } = useUser();
 
+  const router = useRouter();
+
   React.useEffect(() => {
     if (loading) return; // Do nothing while loading
   }, [user, loading]);
@@ -33,9 +35,6 @@ function Auth({ children }: any) {
   if (user) {
     return children;
   }
-
-  // Session is being fetched, or no user.
-  // If no user, useEffect() will redirect.
 
   return (
     <div className="flex h-screen justify-center items-center text-green-600">
@@ -145,6 +144,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
           </SpotlightProvider>
         </MantineProvider>
       </SessionProvider>
+    );
+  }
+
+  if (router.pathname.includes("/portal")) {
+    return (
+      <>
+        <Notifications position="top-right" />
+        <Component {...pageProps} />
+      </>
     );
   }
 

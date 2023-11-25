@@ -122,7 +122,7 @@ const start = async () => {
 
         client.capture({
           event: "server_started",
-          distinctId: "api_server",
+          distinctId: "uuid",
         });
 
         await client.shutdownAsync();
