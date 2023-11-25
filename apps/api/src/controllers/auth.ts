@@ -136,6 +136,20 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Delete a user
+  fastify.delete(
+    "/api/v1/auth/user/:id",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id } = request.params as { id: string };
+
+      await prisma.user.delete({
+        where: { id },
+      });
+
+      reply.send({ success: true });
+    }
+  );
+
   // User Profile
   fastify.get(
     "/api/v1/auth/profile",
