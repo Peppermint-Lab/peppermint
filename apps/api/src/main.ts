@@ -59,6 +59,11 @@ server.register(require("@fastify/swagger"), {
   },
 });
 
+server.register(import("@fastify/rate-limit"), {
+  max: 20,
+  timeWindow: "1 minute",
+});
+
 // register all routes
 registerRoutes(server);
 
