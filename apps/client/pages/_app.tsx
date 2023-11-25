@@ -20,6 +20,7 @@ import React from "react";
 import AdminLayout from "../layouts/adminLayout";
 import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
+import Settings from "../layouts/settings";
 
 const queryClient = new QueryClient();
 
@@ -138,6 +139,31 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
                     <Notifications position="top-right" />
                     <Component {...pageProps} />
                   </NoteBookLayout>
+                </NewLayout>
+              </Auth>
+            </QueryClientProvider>
+          </SpotlightProvider>
+        </MantineProvider>
+      </SessionProvider>
+    );
+  }
+
+  if (router.pathname.includes("/settings")) {
+    return (
+      <SessionProvider>
+        <MantineProvider withNormalizeCSS withGlobalStyles>
+          <SpotlightProvider
+            shortcut={["mod + P", "mod + K", "/"]}
+            actions={actions}
+            searchPlaceholder="Search ..."
+          >
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <NewLayout>
+                  <Settings>
+                    <Notifications position="top-right" />
+                    <Component {...pageProps} />
+                  </Settings>
                 </NewLayout>
               </Auth>
             </QueryClientProvider>
