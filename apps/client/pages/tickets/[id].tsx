@@ -7,7 +7,6 @@ import {
   ChevronUpDownIcon,
   LockClosedIcon,
   LockOpenIcon,
-  PencilIcon,
 } from "@heroicons/react/20/solid";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
@@ -23,6 +22,7 @@ import renderHTML from "react-render-html";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
+import { useUser } from "../../store/session";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -32,6 +32,10 @@ export default function Ticket() {
   const router = useRouter();
 
   const token = getCookie("session");
+
+  const { user } = useUser();
+
+  console.log(user);
 
   const fetchTicketById = async () => {
     const id = router.query.id;
@@ -113,9 +117,9 @@ export default function Ticket() {
 
   async function updateStatus() {
     await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/update-status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/status/update`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -129,6 +133,26 @@ export default function Ticket() {
       .then((res) => res.json())
       .then(() => refetch());
   }
+
+  async function hide(hidden) {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/status/hide`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          hidden,
+          id,
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then(() => refetch());
+  }
+
   async function addComment() {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/comment`, {
       method: "POST",
@@ -303,16 +327,23 @@ export default function Ticket() {
                           </p>
                         </div>
                         <div className="mt-4 flex space-x-3 md:mt-0">
+                          {user.isAdmin && (
+                            <button
+                              type="button"
+                              onClick={() => hide(!data.ticket.hidden)}
+                              className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            >
+                              {data.ticket.hidden
+                                ? "Show Global"
+                                : "Hide Ticket"}
+                            </button>
+                          )}
                           {!edit ? (
                             <button
                               type="button"
                               onClick={() => setEdit(true)}
-                              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                              className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             >
-                              <PencilIcon
-                                className="-ml-0.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
                               Edit
                             </button>
                           ) : (
@@ -322,12 +353,8 @@ export default function Ticket() {
                                 update();
                                 setEdit(false);
                               }}
-                              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             >
-                              <CheckIcon
-                                className="-ml-0.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
                               Save
                             </button>
                           )}
@@ -766,9 +793,7 @@ export default function Ticket() {
                                           className="-ml-0.5 h-5 w-5 text-red-500"
                                           aria-hidden="true"
                                         />
-                                        <span className="pt-1">
-                                          Re-Open issue
-                                        </span>
+                                        <span className="">Re-Open issue</span>
                                       </button>
                                     ) : (
                                       <button

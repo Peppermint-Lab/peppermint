@@ -153,7 +153,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const tickets = await prisma.ticket.findMany({
-          where: { isComplete: false },
+          where: { isComplete: false, hidden: false },
           include: {
             client: {
               select: { id: true, name: true, number: true },
@@ -187,7 +187,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         const user = await checkSession(bearer);
 
         const tickets = await prisma.ticket.findMany({
-          where: { isComplete: false, userId: user!.id },
+          where: { isComplete: false, userId: user!.id, hidden: false },
           include: {
             client: {
               select: { id: true, name: true, number: true },
@@ -219,7 +219,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const tickets = await prisma.ticket.findMany({
-          where: { isComplete: true },
+          where: { isComplete: true, hidden: false },
           include: {
             client: {
               select: { id: true, name: true, number: true },
@@ -254,6 +254,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
           where: {
             isComplete: false,
             assignedTo: null,
+            hidden: false,
           },
         });
 
@@ -430,6 +431,34 @@ export function ticketRoutes(fastify: FastifyInstance) {
           });
         }
       }
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
+  // Hide a ticket
+  fastify.put(
+    "/api/v1/ticket/status/hide",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { hidden, id }: any = request.body;
+
+      await prisma.ticket
+        .update({
+          where: { id: id },
+          data: {
+            hidden: hidden,
+          },
+        })
+        .then(async (ticket) => {
+          // await sendTicketStatus(ticket);
+        });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 

@@ -106,6 +106,7 @@ model Ticket {
   Number     Int          @default(autoincrement())
   status     TicketStatus @default(needs_support)
   type       TicketType   @default(support)
+  hidden     Boolean      @default(false)
 
   TicketFile   TicketFile[]
   Comment      Comment[]
