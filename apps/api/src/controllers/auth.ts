@@ -141,13 +141,18 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.delete(
     "/api/v1/auth/user/:id",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id } = request.params as { id: string };
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      await prisma.user.delete({
-        where: { id },
-      });
+      if (token) {
+        const { id } = request.params as { id: string };
 
-      reply.send({ success: true });
+        await prisma.user.delete({
+          where: { id },
+        });
+
+        reply.send({ success: true });
+      }
     }
   );
 
@@ -155,11 +160,6 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/auth/profile",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check token
-      // see if token exists on session table
-      // if not, return 401
-      // if yes, return user data
-
       const bearer = request.headers.authorization!.split(" ")[1];
 
       const token = checkToken(bearer);
@@ -211,8 +211,6 @@ export function authRoutes(fastify: FastifyInstance) {
       };
 
       const bearer = request.headers.authorization!.split(" ")[1];
-
-      //checks if token is valid and returns valid token
       const token = checkToken(bearer);
 
       if (token) {
@@ -288,13 +286,17 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/auth/user/:id/logout",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id } = request.params as { id: string };
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+      if (token) {
+        const { id } = request.params as { id: string };
 
-      await prisma.session.deleteMany({
-        where: { userId: id },
-      });
+        await prisma.session.deleteMany({
+          where: { userId: id },
+        });
 
-      reply.send({ success: true });
+        reply.send({ success: true });
+      }
     }
   );
 }

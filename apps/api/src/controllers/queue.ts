@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function emailQueueRoutes(fastify: FastifyInstance) {
@@ -7,21 +8,26 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
     "/api/v1/email-queue/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { name, username, password, hostname, tls }: any = request.body;
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      await prisma.emailQueue.create({
-        data: {
-          name,
-          username,
-          password,
-          hostname,
-          tls,
-        },
-      });
+      if (token) {
+        const { name, username, password, hostname, tls }: any = request.body;
 
-      reply.send({
-        success: true,
-      });
+        await prisma.emailQueue.create({
+          data: {
+            name,
+            username,
+            password,
+            hostname,
+            tls,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 
@@ -31,14 +37,17 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
     "/api/v1/email-queues/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
-      const queues = await prisma.emailQueue.findMany({});
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.send({
-        success: true,
-        queues: queues,
-      });
+      if (token) {
+        const queues = await prisma.emailQueue.findMany({});
+
+        reply.send({
+          success: true,
+          queues: queues,
+        });
+      }
     }
   );
 
@@ -47,16 +56,22 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
     "/api/v1/email-queue/delete",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id }: any = request.body;
-      const queues = await prisma.emailQueue.delete({
-        where: {
-          id: id,
-        },
-      });
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.send({
-        success: true,
-      });
+      if (token) {
+        const { id }: any = request.params;
+
+        await prisma.emailQueue.delete({
+          where: {
+            id: id,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 }

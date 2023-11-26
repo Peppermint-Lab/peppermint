@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function dataRoutes(fastify: FastifyInstance) {
@@ -7,8 +8,14 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const result = await prisma.ticket.count();
+
+        reply.send({ count: result });
+      }
     }
   );
 
@@ -17,11 +24,16 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/completed",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const result = await prisma.ticket.count({
-        where: { isComplete: true },
-      });
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.send({ count: result });
+      if (token) {
+        const result = await prisma.ticket.count({
+          where: { isComplete: true },
+        });
+
+        reply.send({ count: result });
+      }
     }
   );
 
@@ -30,11 +42,16 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/open",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const result = await prisma.ticket.count({
-        where: { isComplete: false },
-      });
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.send({ count: result });
+      if (token) {
+        const result = await prisma.ticket.count({
+          where: { isComplete: false },
+        });
+
+        reply.send({ count: result });
+      }
     }
   );
 
@@ -43,11 +60,16 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/unassigned",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const result = await prisma.ticket.count({
-        where: { userId: null },
-      });
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.send({ count: result });
+      if (token) {
+        const result = await prisma.ticket.count({
+          where: { userId: null },
+        });
+
+        reply.send({ count: result });
+      }
     }
   );
 }

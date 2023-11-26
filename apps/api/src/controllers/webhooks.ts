@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function webhookRoutes(fastify: FastifyInstance) {
@@ -7,18 +8,23 @@ export function webhookRoutes(fastify: FastifyInstance) {
     "/api/v1/webhook/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { name, url, type, active, secret }: any = request.body;
-      await prisma.webhooks.create({
-        data: {
-          name,
-          url,
-          type,
-          active,
-          secret,
-          createdBy: "375f7799-5485-40ff-ba8f-0a28e0855ecf",
-        },
-      });
-      reply.status(200).send({ message: "Hook created!", success: true });
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const { name, url, type, active, secret }: any = request.body;
+        await prisma.webhooks.create({
+          data: {
+            name,
+            url,
+            type,
+            active,
+            secret,
+            createdBy: "375f7799-5485-40ff-ba8f-0a28e0855ecf",
+          },
+        });
+        reply.status(200).send({ message: "Hook created!", success: true });
+      }
     }
   );
 
@@ -27,9 +33,14 @@ export function webhookRoutes(fastify: FastifyInstance) {
     "/api/v1/webhooks/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const webhooks = await prisma.webhooks.findMany({});
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.status(200).send({ webhooks: webhooks, success: true });
+      if (token) {
+        const webhooks = await prisma.webhooks.findMany({});
+
+        reply.status(200).send({ webhooks: webhooks, success: true });
+      }
     }
   );
 
@@ -39,14 +50,19 @@ export function webhookRoutes(fastify: FastifyInstance) {
     "/api/v1/admin/webhook/:id/delete",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id }: any = request.params;
-      await prisma.webhooks.delete({
-        where: {
-          id: id,
-        },
-      });
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.status(200).send({ success: true });
+      if (token) {
+        const { id }: any = request.params;
+        await prisma.webhooks.delete({
+          where: {
+            id: id,
+          },
+        });
+
+        reply.status(200).send({ success: true });
+      }
     }
   );
 }
