@@ -46,10 +46,6 @@ version: "3.1"
 services:
   peppermint_postgres:
     container_name: peppermint_postgres
-    profiles:
-      - prod
-      - dev
-      - test
     image: postgres:latest
     restart: always
     ports:
@@ -70,10 +66,6 @@ services:
     restart: always
     depends_on:
       - peppermint_postgres
-    profiles:
-      - prod
-    depends_on:
-      - postgres
     healthcheck:
       test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
       interval: 30s
@@ -84,9 +76,11 @@ services:
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
-      
+      API_URL: "http://localhost:5003"
+
 volumes:
  pgdata:
+
 ```
 
 Once this is completed then you can go to your base_url which was added to the compose file and login.

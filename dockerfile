@@ -11,7 +11,6 @@ COPY apps/api/package*.json ./apps/api/
 COPY apps/client/package*.json ./apps/client/
 COPY ./ecosystem.config.js ./ecosystem.config.js
 
-
 RUN npm i -g prisma
 RUN npm i -g typescript@latest -g --force 
 
@@ -23,7 +22,7 @@ RUN cd apps/api && npm install --production
 RUN cd apps/api && npm i --save-dev @types/node && npm run build
 
 RUN cd apps/client && yarn install --production --ignore-scripts --prefer-offline --network-timeout 1000000
-RUN cd apps/client && yarn add --dev typescript @types/node --network-timeout 1000000 && yarn build
+RUN cd apps/client && yarn add --dev typescript @types/node --network-timeout 1000000
 
 FROM node:lts AS runner
 

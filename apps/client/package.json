@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "docker": "next build && next start"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.2",

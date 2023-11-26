@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "client",
-      script: "npm run start",
+      script: "npm run docker",
       cwd: "apps/client",
       instances: "1",
       autorestart: true,
