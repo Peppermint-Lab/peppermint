@@ -48,9 +48,14 @@ export const SessionProvider = ({ children }) => {
     fetchUserProfile();
   }, []);
 
-  return (
+  return process.env.NEXT_PUBLIC_ENVIRONMENT === "production" &&
+    process.env.NEXT_PUBLIC_TELEMETRY === "1" ? (
     <UserContext.Provider value={{ user, setUser, loading }}>
       <PostHogProvider client={posthog}>{children}</PostHogProvider>
+    </UserContext.Provider>
+  ) : (
+    <UserContext.Provider value={{ user, setUser, loading }}>
+      {children}
     </UserContext.Provider>
   );
 };

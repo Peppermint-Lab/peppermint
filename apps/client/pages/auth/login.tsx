@@ -25,7 +25,11 @@ export default function Login({}) {
         if (res.user) {
           setCookie("session", res.token);
           setUser(res.user);
-          router.push("/");
+          if (res.user.firstLogin) {
+            router.push("/onboarding");
+          } else {
+            router.push("/");
+          }
         }
       });
   }

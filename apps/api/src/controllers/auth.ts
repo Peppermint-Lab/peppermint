@@ -127,6 +127,7 @@ export function authRoutes(fastify: FastifyInstance) {
         ticket_status_changed: user!.notify_ticket_status_changed,
         ticket_comments: user!.notify_ticket_comments,
         ticket_assigned: user!.notify_ticket_assigned,
+        firstLogin: user!.firstLogin,
       };
 
       reply.send({
