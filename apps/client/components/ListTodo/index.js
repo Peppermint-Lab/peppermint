@@ -1,16 +1,18 @@
 import { TrashIcon } from "@heroicons/react/20/solid";
-import { Pagination } from "antd";
 import { getCookie } from "cookies-next";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
 async function getTodos(token) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/todos/all`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/todos/all`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return res.json();
 }
 
@@ -125,13 +127,13 @@ export default function ListTodo() {
               <p>None Found</p>
             )}
           </div>
-          <div  className={data.todos && data.todos.length > 12 ? "mt-4" : "hidden"}>
+          {/* <div  className={data.todos && data.todos.length > 12 ? "mt-4" : "hidden"}>
             <Pagination
               defaultCurrent={1}
               total={12}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
         </div>
       )}
     </div>

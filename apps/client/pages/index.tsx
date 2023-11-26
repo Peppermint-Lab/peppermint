@@ -1,5 +1,4 @@
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { message } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -106,35 +105,6 @@ export default function Home() {
       href: "/tickets?filter=unassigned",
     },
   ];
-
-  const propsUpload = {
-    name: "file",
-    action: `/api/v1/users/file/upload`,
-    data: () => {
-      let data = new FormData();
-      data.append("file", file);
-      data.append("filename", file.name);
-    },
-    onChange(info: any) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-        setUploaded(true);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    progress: {
-      strokeColor: {
-        "0%": "#108ee9",
-        "100%": "#87d068",
-      },
-      strokeWidth: 3,
-      format: (percent: any) => `${parseFloat(percent.toFixed(2))}%`,
-    },
-  };
 
   async function datafetch() {
     fetchTickets();

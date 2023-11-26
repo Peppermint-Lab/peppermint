@@ -1,6 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { message } from "antd";
 import React, { Fragment, useState } from "react";
 
 export default function ResetPassword({ user }) {
@@ -8,37 +7,46 @@ export default function ResetPassword({ user }) {
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState("");
 
-  const success = () => {
-    message.success("Password updated");
-  };
-
-  const fail = (f) => {
-    message.error(`${f}`);
-  };
-
   const postData = async () => {
-    const id = user.id;
     if (check === password && password.length > 0) {
-      await fetch(`/api/v1/admin/user/resetpassword`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          password,
-          id,
-        }),
-      })
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            password,
+          }),
+        }
+      )
         .then((res) => res.json())
         .then((res) => {
           if (res.failed === false) {
-            success();
+            notifications.show({
+              title: "Success",
+              message: `Password updated :)`,
+              color: "green",
+              autoClose: 5000,
+            });
           } else {
-            fail(res.message);
+            notifications.show({
+              title: "Error",
+              message: `Error: ${res.message}`,
+              color: "red",
+              autoClose: 5000,
+            });
           }
         });
     } else {
-      fail("Passwords are not the same or empty");
+      notifications.show({
+        title: "Error",
+        message: `Error: passwords do not match`,
+        color: "red",
+        autoClose: 5000,
+      });
     }
   };
 

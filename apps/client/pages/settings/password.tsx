@@ -1,26 +1,16 @@
-import { message } from "antd";
 import { useState } from "react";
 
+import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 
 export default function PasswordChange({ children }) {
-  const token = getCookie("token");
+  const token = getCookie("session");
 
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState("");
 
-  const [show, setShow] = useState("profile");
-
-  const success = () => {
-    message.success("Password updated");
-  };
-
-  const fail = (f: any) => {
-    message.error(`${f}`);
-  };
-
   const postData = async () => {
-    if (check === password) {
+    if (check === password && password.length > 0) {
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reset-password`,
         {
@@ -37,21 +27,36 @@ export default function PasswordChange({ children }) {
         .then((res) => res.json())
         .then((res) => {
           if (res.failed === false) {
-            success();
+            notifications.show({
+              title: "Success",
+              message: `Password updated :)`,
+              color: "green",
+              autoClose: 5000,
+            });
           } else {
-            fail(res.message);
+            notifications.show({
+              title: "Error",
+              message: `Error: ${res.message}`,
+              color: "red",
+              autoClose: 5000,
+            });
           }
         });
     } else {
-      fail("Passwords are not the same");
+      notifications.show({
+        title: "Error",
+        message: `Error: passwords do not match`,
+        color: "red",
+        autoClose: 5000,
+      });
     }
   };
 
   return (
-    <div>
-      <main className="relative">
+    <>
+      <main className="py-2">
         <div className="mt-4">
-          <div className="m-2 space-y-4 p-4 ">
+          <div className="m-2 space-y-4 p-4">
             <input
               type="password"
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -65,16 +70,20 @@ export default function PasswordChange({ children }) {
               onChange={(e) => setCheck(e.target.value)}
               placeholder="Confirm users password"
             />
-            <button
-              type="button"
-              className=" mb-4 float-right w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-              onClick={() => postData()}
-            >
-              Update
-            </button>
           </div>
         </div>
+        <div className="pb-2 px-4 flex justify-end sm:px-6">
+          <button
+            onClick={async () => {
+              await postData();
+            }}
+            type="submit"
+            className="inline-flex items-center px-4 py-2 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 "
+          >
+            Update Password
+          </button>
+        </div>
       </main>
-    </div>
+    </>
   );
 }

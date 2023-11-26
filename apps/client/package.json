@@ -28,7 +28,6 @@
     "@tiptap/react": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
     "add": "^2.0.6",
-    "antd": "^4.18.3",
     "axios": "^0.25.0",
     "cookies-next": "^3.0.0",
     "dompurify": "^2.4.0",

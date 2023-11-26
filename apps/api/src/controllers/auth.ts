@@ -98,15 +98,15 @@ export function authRoutes(fastify: FastifyInstance) {
         throw new Error("Password is not valid");
       }
 
-      var b64string = "TOMATOSOUP";
-      var buf = new Buffer(b64string, "base64"); // Ta-da
+      var b64string = process.env.SECRET;
+      var buf = new Buffer(b64string!, "base64"); // Ta-da
 
       let token = jwt.sign(
         {
           data: { id: user!.id },
         },
         buf,
-        { expiresIn: "1d" }
+        { expiresIn: "7d" }
       );
 
       await prisma.session.create({
@@ -246,7 +246,41 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/auth/profile",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      //
+      const bearer = request.headers.authorization!.split(" ")[1];
+
+      //checks if token is valid and returns valid token
+      const token = checkToken(bearer);
+
+      if (token) {
+        let session = await prisma.session.findUnique({
+          where: {
+            sessionToken: bearer,
+          },
+        });
+
+        const { name, email, language } = request.body as {
+          name: string;
+          email: string;
+          language: string;
+        };
+
+        let user = await prisma.user.update({
+          where: { id: session?.userId },
+          data: {
+            name: name,
+            email: email,
+            language: language,
+          },
+        });
+
+        reply.send({
+          user,
+        });
+      } else {
+        reply.send({
+          sucess: false,
+        });
+      }
     }
   );
 

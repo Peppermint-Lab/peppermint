@@ -1,16 +1,14 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { Popconfirm } from "antd";
 import {
-  useTable,
   useFilters,
   useGlobalFilter,
   usePagination,
+  useTable,
 } from "react-table";
 import ClientNotesModal from "../../components/ClientNotesModal";
 import CreateTeamModal from "../../components/CreateTeamModal";
 import UpdateClientModal from "../../components/UpdateClientModal";
-import Link from "next/link";
 
 function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
   return (
