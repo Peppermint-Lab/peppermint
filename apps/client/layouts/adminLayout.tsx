@@ -1,6 +1,7 @@
 import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useUser } from "../store/session";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -10,7 +11,15 @@ export default function AdminLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
   const router = useRouter();
 
-  console.log("router.pathname", router.pathname);
+  const { user } = useUser();
+
+  if (user || user.role === "admin") {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-4xl font-bold">You are not an admin</h1>
+      </div>
+    );
+  }
 
   const navigation = [
     {
