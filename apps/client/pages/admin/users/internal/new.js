@@ -1,10 +1,9 @@
 import { notifications } from "@mantine/notifications";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 export default function CreateUser() {
-  const [open, setOpen] = useState(false);
-
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -19,6 +18,7 @@ export default function CreateUser() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + getCookie("session"),
         },
         body: JSON.stringify({
           password,
@@ -30,10 +30,10 @@ export default function CreateUser() {
     )
       .then((res) => res.json())
       .then((res) => {
-        if (res.sucess === true) {
-          router.push("/admin/internal/users");
+        if (res.success === true) {
+          router.push("/admin/users");
           notifications.show({
-            title: "User created sucessfully",
+            title: "User created successfully",
             message: "The action was processed correctly! 💚",
           });
         } else {

@@ -1,9 +1,12 @@
 import { notifications } from "@mantine/notifications";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function CreateClientPage() {
   const router = useRouter();
+
+  const token = getCookie("session");
 
   const [number, setNumber] = useState("");
   const [contactName, setContactName] = useState("");
@@ -20,6 +23,7 @@ export default function CreateClientPage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
       body: JSON.stringify({
         number,

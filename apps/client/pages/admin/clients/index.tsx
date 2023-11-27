@@ -1,3 +1,4 @@
+import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -13,7 +14,13 @@ import {
 
 const fetchAllClients = async () => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/all`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/all`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    }
   );
   return res.json();
 };

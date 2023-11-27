@@ -1,10 +1,18 @@
 import { Switch } from "@headlessui/react";
+import { getCookie } from "cookies-next";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-async function getHooks() {
+async function getHooks(token) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhooks/all`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhooks/all`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }
   );
   return res.json();
 }
@@ -21,7 +29,11 @@ export default function Notifications() {
   const [secret, setSecret] = useState();
   const [name, setName] = useState("");
 
-  const { data, status, error, refetch } = useQuery("gethooks", getHooks);
+  const cookie = getCookie("session");
+
+  const { data, status, error, refetch } = useQuery("gethooks", () =>
+    getHooks(cookie)
+  );
 
   async function addHook() {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhook/create`, {
