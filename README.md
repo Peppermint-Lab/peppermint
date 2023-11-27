@@ -76,7 +76,7 @@ services:
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
-      API_URL: "http://localhost:5003"
+      API_URL: "http://server-ip:5003"
 
 volumes:
  pgdata:
