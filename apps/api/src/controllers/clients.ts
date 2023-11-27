@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function clientRoutes(fastify: FastifyInstance) {
@@ -7,20 +8,25 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/client/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { name, email, number, contactName }: any = request.body;
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      await prisma.client.create({
-        data: {
-          name,
-          contactName,
-          email,
-          number: String(number),
-        },
-      });
+      if (token) {
+        const { name, email, number, contactName }: any = request.body;
 
-      reply.send({
-        success: true,
-      });
+        await prisma.client.create({
+          data: {
+            name,
+            contactName,
+            email,
+            number: String(number),
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 
@@ -29,21 +35,26 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/client/update",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { name, email, number, contactName, id }: any = request.body;
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      await prisma.client.update({
-        where: { id: id },
-        data: {
-          name,
-          contactName,
-          email,
-          number: String(number),
-        },
-      });
+      if (token) {
+        const { name, email, number, contactName, id }: any = request.body;
 
-      reply.send({
-        success: true,
-      });
+        await prisma.client.update({
+          where: { id: id },
+          data: {
+            name,
+            contactName,
+            email,
+            number: String(number),
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 
@@ -52,12 +63,17 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/clients/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const clients = await prisma.client.findMany({});
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.send({
-        success: true,
-        clients: clients,
-      });
+      if (token) {
+        const clients = await prisma.client.findMany({});
+
+        reply.send({
+          success: true,
+          clients: clients,
+        });
+      }
     }
   );
 
@@ -66,15 +82,20 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/clients/:id/delete-client",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id }: any = request.params;
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      await prisma.client.delete({
-        where: { id: id },
-      });
+      if (token) {
+        const { id }: any = request.params;
 
-      reply.send({
-        success: true,
-      });
+        await prisma.client.delete({
+          where: { id: id },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 }

@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function EmailQueues() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function EmailQueues() {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
       },
       body: JSON.stringify({
         name,
@@ -26,7 +28,7 @@ export default function EmailQueues() {
     })
       .then((res) => res.json())
       .then(() => {
-        // router.back();
+        router.back("/admin/email-queues");
       });
   }
 

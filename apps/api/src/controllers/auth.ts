@@ -98,15 +98,15 @@ export function authRoutes(fastify: FastifyInstance) {
         throw new Error("Password is not valid");
       }
 
-      var b64string = "TOMATOSOUP";
-      var buf = new Buffer(b64string, "base64"); // Ta-da
+      var b64string = process.env.SECRET;
+      var buf = new Buffer(b64string!, "base64"); // Ta-da
 
       let token = jwt.sign(
         {
           data: { id: user!.id },
         },
         buf,
-        { expiresIn: "1d" }
+        { expiresIn: "7d" }
       );
 
       await prisma.session.create({
@@ -127,6 +127,7 @@ export function authRoutes(fastify: FastifyInstance) {
         ticket_status_changed: user!.notify_ticket_status_changed,
         ticket_comments: user!.notify_ticket_comments,
         ticket_assigned: user!.notify_ticket_assigned,
+        firstLogin: user!.firstLogin,
       };
 
       reply.send({
@@ -140,13 +141,18 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.delete(
     "/api/v1/auth/user/:id",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id } = request.params as { id: string };
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      await prisma.user.delete({
-        where: { id },
-      });
+      if (token) {
+        const { id } = request.params as { id: string };
 
-      reply.send({ success: true });
+        await prisma.user.delete({
+          where: { id },
+        });
+
+        reply.send({ success: true });
+      }
     }
   );
 
@@ -154,11 +160,6 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/auth/profile",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check token
-      // see if token exists on session table
-      // if not, return 401
-      // if yes, return user data
-
       const bearer = request.headers.authorization!.split(" ")[1];
 
       const token = checkToken(bearer);
@@ -210,8 +211,6 @@ export function authRoutes(fastify: FastifyInstance) {
       };
 
       const bearer = request.headers.authorization!.split(" ")[1];
-
-      //checks if token is valid and returns valid token
       const token = checkToken(bearer);
 
       if (token) {
@@ -245,7 +244,41 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/auth/profile",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      //
+      const bearer = request.headers.authorization!.split(" ")[1];
+
+      //checks if token is valid and returns valid token
+      const token = checkToken(bearer);
+
+      if (token) {
+        let session = await prisma.session.findUnique({
+          where: {
+            sessionToken: bearer,
+          },
+        });
+
+        const { name, email, language } = request.body as {
+          name: string;
+          email: string;
+          language: string;
+        };
+
+        let user = await prisma.user.update({
+          where: { id: session?.userId },
+          data: {
+            name: name,
+            email: email,
+            language: language,
+          },
+        });
+
+        reply.send({
+          user,
+        });
+      } else {
+        reply.send({
+          sucess: false,
+        });
+      }
     }
   );
 
@@ -253,13 +286,17 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/auth/user/:id/logout",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id } = request.params as { id: string };
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+      if (token) {
+        const { id } = request.params as { id: string };
 
-      await prisma.session.deleteMany({
-        where: { userId: id },
-      });
+        await prisma.session.deleteMany({
+          where: { userId: id },
+        });
 
-      reply.send({ success: true });
+        reply.send({ success: true });
+      }
     }
   );
 }

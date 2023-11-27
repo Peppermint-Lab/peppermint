@@ -46,30 +46,32 @@ model Session {
 }
 
 model User {
-  id                           String         @id @default(uuid())
-  createdAt                    DateTime       @default(now())
-  updatedAt                    DateTime       @default(now())
+  id                           String   @id @default(uuid())
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @default(now())
   name                         String
   password                     String?
-  email                        String         @unique
+  email                        String   @unique
   image                        String?
   emailVerified                Boolean?
-  isAdmin                      Boolean        @default(false)
-  language                     String?        @default("en")
-  notify_ticket_created        Boolean        @default(true)
-  notify_ticket_status_changed Boolean        @default(true)
-  notify_ticket_comments       Boolean        @default(true)
-  notify_ticket_assigned       Boolean        @default(true)
-  todos                        Todos[]
-  tickets                      Ticket[]
-  file                         UserFile[]
-  notes                        Notes[]
-  Team                         Team?          @relation(fields: [teamId], references: [id])
-  teamId                       String?
-  Comment                      Comment[]
-  Account                      Account[]
-  Session                      Session[]
-  TimeTracking                 TimeTracking[]
+  isAdmin                      Boolean  @default(false)
+  language                     String?  @default("en")
+  notify_ticket_created        Boolean  @default(true)
+  notify_ticket_status_changed Boolean  @default(true)
+  notify_ticket_comments       Boolean  @default(true)
+  notify_ticket_assigned       Boolean  @default(true)
+  firstLogin                   Boolean  @default(true)
+
+  todos        Todos[]
+  tickets      Ticket[]
+  file         UserFile[]
+  notes        Notes[]
+  Team         Team?          @relation(fields: [teamId], references: [id])
+  teamId       String?
+  Comment      Comment[]
+  Account      Account[]
+  Session      Session[]
+  TimeTracking TimeTracking[]
 }
 
 model VerificationToken {

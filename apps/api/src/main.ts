@@ -70,8 +70,7 @@ server.register(import("@fastify/rate-limit"), {
 registerRoutes(server);
 
 server.get("/", async function (request, response) {
-  const session = await prisma.session.findMany();
-  response.send({ session });
+  response.send({ healthy: true });
 });
 
 const start = async () => {

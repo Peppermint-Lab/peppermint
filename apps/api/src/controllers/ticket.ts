@@ -22,8 +22,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
         type,
       }: any = request.body;
 
-      console.log(request.body);
-
       const ticket: any = await prisma.ticket.create({
         data: {
           name,
@@ -146,7 +144,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
   // Get all tickets
   fastify.get(
     "/api/v1/tickets/open",
-
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
@@ -300,68 +297,73 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/transfer",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
       const { user, id }: any = request.body;
 
-      await prisma.user.update({
-        where: { id: user },
-        data: {
-          tickets: {
-            connect: {
-              id: id,
+      if (token) {
+        await prisma.user.update({
+          where: { id: user },
+          data: {
+            tickets: {
+              connect: {
+                id: id,
+              },
             },
           },
-        },
-      });
+        });
 
-      reply.send({
-        success: true,
-      });
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 
   // Link a ticket to another ticket
-  fastify.post(
-    "/api/v1/ticket/link",
+  // fastify.post(
+  //   "/api/v1/ticket/link",
 
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      const { ticket, id }: any = request.body;
+  //   async (request: FastifyRequest, reply: FastifyReply) => {
+  //     const { ticket, id }: any = request.body;
 
-      const prev: any = await prisma.ticket.findUnique({
-        where: {
-          id: id,
-        },
-      });
+  //     const prev: any = await prisma.ticket.findUnique({
+  //       where: {
+  //         id: id,
+  //       },
+  //     });
 
-      const ids = [];
+  //     const ids = [];
 
-      if (prev.length !== undefined && prev.linked.length > 0) {
-        ids.push(...prev.linked);
-      }
+  //     if (prev.length !== undefined && prev.linked.length > 0) {
+  //       ids.push(...prev.linked);
+  //     }
 
-      ids.push({
-        id: ticket.id,
-        title: ticket.title,
-      });
+  //     ids.push({
+  //       id: ticket.id,
+  //       title: ticket.title,
+  //     });
 
-      const data = await prisma.ticket.update({
-        where: {
-          id: id,
-        },
-        data: {
-          linked: {
-            ...ids,
-          },
-        },
-      });
-    }
-  );
+  //     const data = await prisma.ticket.update({
+  //       where: {
+  //         id: id,
+  //       },
+  //       data: {
+  //         linked: {
+  //           ...ids,
+  //         },
+  //       },
+  //     });
+  //   }
+  // );
 
   // Unlink a ticket from another ticket
-  fastify.post(
-    "/api/v1/ticket/unlink",
+  // fastify.post(
+  //   "/api/v1/ticket/unlink",
 
-    async (request: FastifyRequest, reply: FastifyReply) => {}
-  );
+  //   async (request: FastifyRequest, reply: FastifyReply) => {}
+  // );
 
   // Comment on a ticket
   fastify.post(
@@ -397,44 +399,49 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/status/update",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { status, id }: any = request.body;
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      const ticket: any = await prisma.ticket
-        .update({
-          where: { id: id },
-          data: {
-            isComplete: status,
+      if (token) {
+        const { status, id }: any = request.body;
+
+        const ticket: any = await prisma.ticket
+          .update({
+            where: { id: id },
+            data: {
+              isComplete: status,
+            },
+          })
+          .then(async (ticket) => {
+            // await sendTicketStatus(ticket);
+          });
+
+        const webhook = await prisma.webhooks.findMany({
+          where: {
+            type: "ticket_status_changed",
           },
-        })
-        .then(async (ticket) => {
-          // await sendTicketStatus(ticket);
         });
 
-      const webhook = await prisma.webhooks.findMany({
-        where: {
-          type: "ticket_status_changed",
-        },
-      });
-
-      for (let i = 0; i < webhook.length; i++) {
-        if (webhook[i].active === true) {
-          const s = status ? "Completed" : "Outstanding";
-          await axios.post(`${webhook[i].url}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
-            }),
-            redirect: "follow",
-          });
+        for (let i = 0; i < webhook.length; i++) {
+          if (webhook[i].active === true) {
+            const s = status ? "Completed" : "Outstanding";
+            await axios.post(`${webhook[i].url}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+              }),
+              redirect: "follow",
+            });
+          }
         }
-      }
 
-      reply.send({
-        success: true,
-      });
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 
@@ -443,22 +450,27 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/ticket/status/hide",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { hidden, id }: any = request.body;
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      await prisma.ticket
-        .update({
-          where: { id: id },
-          data: {
-            hidden: hidden,
-          },
-        })
-        .then(async (ticket) => {
-          // await sendTicketStatus(ticket);
+      if (token) {
+        const { hidden, id }: any = request.body;
+
+        await prisma.ticket
+          .update({
+            where: { id: id },
+            data: {
+              hidden: hidden,
+            },
+          })
+          .then(async (ticket) => {
+            // await sendTicketStatus(ticket);
+          });
+
+        reply.send({
+          success: true,
         });
-
-      reply.send({
-        success: true,
-      });
+      }
     }
   );
 

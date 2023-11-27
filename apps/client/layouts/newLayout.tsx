@@ -544,7 +544,7 @@ export default function NewLayout({ children }: any) {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            href="/settings"
+                            href="/settings/profile"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-3 text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"

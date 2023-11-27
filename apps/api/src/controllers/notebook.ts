@@ -17,19 +17,21 @@ export function notebookRoutes(fastify: FastifyInstance) {
       if (!title) {
         return reply.status(422).send({ error: "Please add a title" });
       } else {
-        const user = await checkSession(bearer);
+        if (token) {
+          const user = await checkSession(bearer);
 
-        const data = await prisma.notes.create({
-          data: {
-            title,
-            note: content,
-            userId: user!.id,
-          },
-        });
+          const data = await prisma.notes.create({
+            data: {
+              title,
+              note: content,
+              userId: user!.id,
+            },
+          });
 
-        const { id } = data;
+          const { id } = data;
 
-        reply.status(200).send({ success: true, id });
+          reply.status(200).send({ success: true, id });
+        }
       }
     }
   );
@@ -41,13 +43,16 @@ export function notebookRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
-      const user = await checkSession(bearer);
 
-      const notebooks = await prisma.notes.findMany({
-        where: { userId: user!.id },
-      });
+      if (token) {
+        const user = await checkSession(bearer);
 
-      reply.status(200).send({ success: true, notebooks: notebooks });
+        const notebooks = await prisma.notes.findMany({
+          where: { userId: user!.id },
+        });
+
+        reply.status(200).send({ success: true, notebooks: notebooks });
+      }
     }
   );
 
@@ -58,19 +63,40 @@ export function notebookRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
-      const user = await checkSession(bearer);
 
-      const { id }: any = request.params;
+      if (token) {
+        const user = await checkSession(bearer);
 
-      const note = await prisma.notes.findUnique({
-        where: { userId: user!.id, id: id },
-      });
+        const { id }: any = request.params;
 
-      reply.status(200).send({ success: true, note });
+        const note = await prisma.notes.findUnique({
+          where: { userId: user!.id, id: id },
+        });
+
+        reply.status(200).send({ success: true, note });
+      }
     }
   );
 
   // Delete an entry
+  fastify.delete(
+    "/api/v1/notebooks/note/:id/delete",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id }: any = request.params;
+
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        await prisma.notes.delete({
+          where: { id: id },
+        });
+
+        reply.status(200).send({ success: true });
+      }
+    }
+  );
 
   // Update an entry
   fastify.put(
@@ -84,7 +110,7 @@ export function notebookRoutes(fastify: FastifyInstance) {
       const token = checkToken(bearer);
 
       if (token) {
-        const user = await checkSession(bearer);
+        await checkSession(bearer);
 
         await prisma.notes.update({
           where: { id: id },

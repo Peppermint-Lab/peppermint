@@ -1,16 +1,17 @@
+import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function EmailQueues() {
   const [queues, setQueues] = useState();
 
-  // fetch queues / display them
-  // create a new queue
-
   async function fetchQueues() {
-    const res = await fetch("/api/v1/admin/email-queue/check").then((res) =>
-      res.json()
-    );
+    const res = await fetch("/api/v1/admin/email-queue/check", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
+      },
+    }).then((res) => res.json());
     setQueues(res.queues);
   }
 
@@ -19,6 +20,7 @@ export default function EmailQueues() {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
       },
       body: JSON.stringify({
         id,

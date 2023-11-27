@@ -182,6 +182,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
     );
   }
 
+  if (router.pathname === "/onboarding") {
+    return (
+      <SessionProvider>
+        <Notifications position="top-right" />
+        <Component {...pageProps} />
+      </SessionProvider>
+    );
+  }
+
   return (
     <SessionProvider>
       <MantineProvider withNormalizeCSS withGlobalStyles>

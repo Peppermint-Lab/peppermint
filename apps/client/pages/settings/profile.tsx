@@ -1,4 +1,3 @@
-import { message } from "antd";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -12,15 +11,7 @@ export default function UserProfile() {
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
-  const [language, setLanguage] = useState(user.locale);
-
-  const success = () => {
-    message.success("Information updated!");
-  };
-
-  const fail = () => {
-    message.error("Information failed to update");
-  };
+  const [language, setLanguage] = useState(user.language);
 
   function changeLanguage(locale) {
     setLanguage(locale);

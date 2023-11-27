@@ -30,20 +30,22 @@ export function todoRoutes(fastify: FastifyInstance) {
         console.log("No text found!");
         reply.status(400).send({ success: false, message: "No text found!" });
       } else {
-        const user = await checkSession(bearer);
+        if (token) {
+          const user = await checkSession(bearer);
 
-        if (user) {
-          await prisma.todos.create({
-            data: {
-              text: todo,
-              userId: user!.id,
-            },
-          });
-          reply.send({ success: true, message: "Todo created!" });
-        } else {
-          reply
-            .status(400)
-            .send({ success: false, message: "User not found!" });
+          if (user) {
+            await prisma.todos.create({
+              data: {
+                text: todo,
+                userId: user!.id,
+              },
+            });
+            reply.send({ success: true, message: "Todo created!" });
+          } else {
+            reply
+              .status(400)
+              .send({ success: false, message: "User not found!" });
+          }
         }
       }
     }
@@ -55,11 +57,16 @@ export function todoRoutes(fastify: FastifyInstance) {
     "/api/v1/todos/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const todos = await prisma.todos.findMany({});
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      reply.send({
-        todos: todos,
-      });
+      if (token) {
+        const todos = await prisma.todos.findMany({});
+
+        reply.send({
+          todos: todos,
+        });
+      }
     }
   );
 
@@ -68,24 +75,29 @@ export function todoRoutes(fastify: FastifyInstance) {
     "/api/v1/todo/:id/delete",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id } = request.params as { id: string };
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-      const todo = await doesTodoExist(id);
+      if (token) {
+        const { id } = request.params as { id: string };
 
-      if (!todo) {
-        return reply.status(404).send({
-          success: false,
-          error: "Todo not found.",
+        const todo = await doesTodoExist(id);
+
+        if (!todo) {
+          return reply.status(404).send({
+            success: false,
+            error: "Todo not found.",
+          });
+        }
+
+        await prisma.todos.delete({
+          where: {
+            id: id,
+          },
         });
+
+        reply.status(201).send({ success: true, message: "Todo deleted" });
       }
-
-      await prisma.todos.delete({
-        where: {
-          id: id,
-        },
-      });
-
-      reply.status(201).send({ success: true, message: "Todo deleted" });
     }
   );
 }

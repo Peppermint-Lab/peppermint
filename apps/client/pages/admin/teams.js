@@ -1,16 +1,15 @@
+import { getCookie } from "cookies-next";
 import React from "react";
 import { useQuery } from "react-query";
-import { Popconfirm } from "antd";
 import {
-  useTable,
   useFilters,
   useGlobalFilter,
   usePagination,
+  useTable,
 } from "react-table";
 import ClientNotesModal from "../../components/ClientNotesModal";
 import CreateTeamModal from "../../components/CreateTeamModal";
 import UpdateClientModal from "../../components/UpdateClientModal";
-import Link from "next/link";
 
 function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
   return (
@@ -186,13 +185,20 @@ function Table({ columns, data }) {
   );
 }
 
-const fetchAllTeams = async () => {
-  const res = await fetch("/api/v1/admin/team/all");
+const fetchAllTeams = async (token) => {
+  const res = await fetch("/api/v1/admin/team/all", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 };
 
 export default function Teams() {
-  const { data, status, refetch } = useQuery("fetchAllTeams", fetchAllTeams);
+  const token = getCookie("session");
+  const { data, status, refetch } = useQuery("fetchAllTeams", () =>
+    fetchAllTeams(token)
+  );
 
   //   async function deleteClient(id) {
   //     try {
