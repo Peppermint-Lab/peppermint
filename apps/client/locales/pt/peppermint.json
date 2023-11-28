@@ -71,6 +71,13 @@
     "closed_issue": "Problema Fechado",
     "recent_tickets": "Tickets Recentes",
     "notebook_title": "Título do Caderno",
-    "admin_settings": "Configurações de Admin"
+    "admin_settings": "Configurações de Admin",
+    "profile": "Perfil",
+    "logout": "Sair",
+    "unassigned_tickets": "Tickets não atribuídos",
+    "profile_desc": "Estas informações serão exibidas publicamente, então tenha cuidado com o que compartilha.",
+  "language": "Idioma",
+  "notifications": "Notificações",
+  "save_and_reload": "Salvar e Recarregar"
   }
   

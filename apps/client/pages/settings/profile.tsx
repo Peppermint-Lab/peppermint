@@ -1,4 +1,5 @@
 import { getCookie } from "cookies-next";
+import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useUser } from "../../store/session";
@@ -6,6 +7,8 @@ import { useUser } from "../../store/session";
 export default function UserProfile() {
   const { user } = useUser();
   const token = getCookie("session");
+
+  const { t } = useTranslation("peppermint");
 
   const router = useRouter();
 
@@ -41,19 +44,16 @@ export default function UserProfile() {
       <div className="py-6 px-4 sm:p-6 lg:pb-8">
         <div>
           <h2 className="text-lg leading-6 font-medium text-gray-900">
-            Profile
+            {t("profile")}
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
-            This information will be displayed publicly so be careful what you
-            share.
-          </p>
+          <p className="mt-1 text-sm text-gray-500">{t("profile_desc")}</p>
         </div>
 
         <div className="mt-6 flex flex-col lg:flex-row">
           <div className="flex-grow space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Name
+                {t("name")}
               </label>
               <div className="mt-1 rounded-md shadow-sm flex">
                 <input
@@ -70,7 +70,7 @@ export default function UserProfile() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Email
+                {t("email")}
               </label>
               <div className="mt-1 rounded-md shadow-sm flex">
                 <input
@@ -85,7 +85,7 @@ export default function UserProfile() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Language
+                {t("language")}
               </label>
               <div className="mt-1 rounded-md shadow-sm flex">
                 <select
@@ -100,7 +100,7 @@ export default function UserProfile() {
                   <option value="se">Swedish</option>
                   <option value="es">Spanish</option>
                   <option value="no">Norwegian</option>
-                  <option value="se">French</option>
+                  <option value="fr">French</option>
                   <option value="pt">Tagalong</option>
                   <option value="da">Danish</option>
                   <option value="pt">Portuguese</option>
@@ -120,7 +120,7 @@ export default function UserProfile() {
           type="submit"
           className="inline-flex items-center px-4 py-2 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 "
         >
-          Save & Reload
+          {t("save_and_reload")}
         </button>
       </div>
     </>

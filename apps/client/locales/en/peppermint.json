@@ -74,5 +74,9 @@
   "admin_settings": "Admin Settings",
   "profile": "Profile",
   "logout": "Logout",
-  "unassigned_tickets": "Unassigned Tickets"
+  "unassigned_tickets": "Unassigned Tickets",
+  "profile_desc": "This information will be displayed publicly so be careful what you share.",
+  "language": "Language",
+  "notifications": "Notifications",
+  "save_and_reload": "Save and Reload"
 }

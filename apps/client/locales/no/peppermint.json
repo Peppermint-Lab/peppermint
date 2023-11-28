@@ -74,6 +74,10 @@
     "admin_settings": "Admininnstillinger",
     "profile": "Profil",
   "logout": "Logg ut",
-  "unassigned_tickets": "Ikke tildelte billetter"
+  "unassigned_tickets": "Ikke tildelte billetter",
+  "profile_desc": "Denne informasjonen vil bli vist offentlig, så vær forsiktig med hva du deler.",
+  "language": "Språk",
+  "notifications": "Varsler",
+  "save_and_reload": "Lagre og last inn på nytt"
   }
   

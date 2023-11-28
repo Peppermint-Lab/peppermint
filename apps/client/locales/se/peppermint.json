@@ -74,5 +74,9 @@
   "admin_settings": "Admininställningar",
   "profile": "Profil",
   "logout": "Logga ut",
-  "unassigned_tickets": "Oattribuerade biljetter"
+  "unassigned_tickets": "Oattribuerade biljetter",
+  "profile_desc": "Denna information kommer att visas offentligt, så var försiktig med vad du delar.",
+  "language": "Språk",
+  "notifications": "Notifieringar",
+  "save_and_reload": "Spara och ladda om"
 }

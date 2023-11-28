@@ -74,5 +74,9 @@
   "admin_settings": "Admin-Einstellungen",
   "profile": "Profil",
   "logout": "Abmelden",
-  "unassigned_tickets": "Nicht zugewiesene Tickets"
+  "unassigned_tickets": "Nicht zugewiesene Tickets",
+  "profile_desc": "Diese Informationen werden öffentlich angezeigt, also achten Sie darauf, was Sie teilen.",
+  "language": "Sprache",
+  "notifications": "Benachrichtigungen",
+  "save_and_reload": "Speichern und neu laden"
 }

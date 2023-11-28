@@ -74,7 +74,11 @@
     "admin_settings": "Mga Setting ng Admin",
       "profile": "Profile",
       "logout": "Mag-log out",
-      "unassigned_tickets": "Hindi itinalagang mga Tiket"
+      "unassigned_tickets": "Hindi itinalagang mga Tiket",
+      "profile_desc": "Ang impormasyong ito ay ipapakita sa publiko kaya mag-ingat sa iyong ibabahagi.",
+  "language": "Wika",
+  "notifications": "Mga Abiso",
+  "save_and_reload": "I-save at I-reload"
     
   }
   

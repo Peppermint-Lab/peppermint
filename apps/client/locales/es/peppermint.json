@@ -74,6 +74,10 @@
     "admin_settings": "Configuración de Administrador",
     "profile": "Perfil",
   "logout": "Cerrar sesión",
-  "unassigned_tickets": "Tickets no asignados"
+  "unassigned_tickets": "Tickets no asignados",
+  "profile_desc": "Esta información se mostrará públicamente, así que ten cuidado con lo que compartes.",
+  "language": "Idioma",
+  "notifications": "Notificaciones",
+  "save_and_reload": "Guardar y recargar"
   }
   
