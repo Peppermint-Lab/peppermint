@@ -43,7 +43,7 @@ export default function NewLayout({ children }: any) {
 
   const navigation = [
     {
-      name: "Create a ticket",
+      name: t("create_ticket"),
       href: `/${locale}/new`,
       icon: PlusIcon,
       current: location.pathname === "/new" ? true : false,
@@ -88,7 +88,6 @@ export default function NewLayout({ children }: any) {
   }
 
   async function logout() {
-    // clears session on server
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${user.id}/logout`,
       {
@@ -100,7 +99,6 @@ export default function NewLayout({ children }: any) {
       }
     ).then((res) => res.json());
 
-    // delete session cookie
     if (res.success) {
       deleteCookie("session");
       location.reload();
@@ -111,9 +109,9 @@ export default function NewLayout({ children }: any) {
     getQueues();
   }, [user]);
 
-  useEffect(() => {
-    // location.push(`${locale}/${location.pathname}`);
-  }, []);
+  // useEffect(() => {
+  // location.push(`${locale}/${location.pathname}`);
+  // }, [user, location]);
 
   const handleKeyPress = useCallback((event: any) => {
     if (
@@ -458,7 +456,9 @@ export default function NewLayout({ children }: any) {
                         className="h-6 w-6 shrink-0 text-white group-hover:text-white"
                         aria-hidden="true"
                       />
-                      <span className="whitespace-nowrap">Admin Settings</span>
+                      <span className="whitespace-nowrap">
+                        {t("admin_settings")}
+                      </span>
                       <div className="flex w-full justify-end float-right">
                         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                           a
@@ -557,7 +557,7 @@ export default function NewLayout({ children }: any) {
                               "block px-3 text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
                             )}
                           >
-                            Profile
+                            {t("profile")}
                           </Link>
                         )}
                       </Menu.Item>
@@ -572,7 +572,7 @@ export default function NewLayout({ children }: any) {
                               "block px-3 text-left text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
                             )}
                           >
-                            Sign Out
+                            {t("logout")}
                           </button>
                         )}
                       </Menu.Item>

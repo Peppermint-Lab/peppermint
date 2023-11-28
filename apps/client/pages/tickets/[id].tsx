@@ -22,6 +22,7 @@ import renderHTML from "react-render-html";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
+import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../../store/session";
 
 function classNames(...classes: any) {
@@ -30,12 +31,11 @@ function classNames(...classes: any) {
 
 export default function Ticket() {
   const router = useRouter();
+  const { t } = useTranslation("peppermint");
 
   const token = getCookie("session");
 
   const { user } = useUser();
-
-  console.log(user);
 
   const fetchTicketById = async () => {
     const id = router.query.id;
@@ -344,7 +344,7 @@ export default function Ticket() {
                               onClick={() => setEdit(true)}
                               className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             >
-                              Edit
+                              {t("edit-btn")}
                             </button>
                           ) : (
                             <button
@@ -355,7 +355,7 @@ export default function Ticket() {
                               }}
                               className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             >
-                              Save
+                              {t("save")}
                             </button>
                           )}
                         </div>
@@ -370,7 +370,7 @@ export default function Ticket() {
                                 aria-hidden="true"
                               />
                               <span className="text-sm font-medium text-green-700">
-                                Open Issue
+                                {t("open_issue")}
                               </span>
                             </div>
                           ) : (
@@ -380,7 +380,7 @@ export default function Ticket() {
                                 aria-hidden="true"
                               />
                               <span className="text-sm font-medium text-red-700">
-                                Closed Issue
+                                {t("closed_issue")}
                               </span>
                             </div>
                           )}
@@ -390,7 +390,7 @@ export default function Ticket() {
                               aria-hidden="true"
                             />
                             <span className="text-sm font-medium text-gray-900">
-                              {data.ticket.comments.length} comments
+                              {data.ticket.comments.length} {t("comments")}
                             </span>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -410,14 +410,14 @@ export default function Ticket() {
                           <div>
                             <div className="flex flex-row justify-between items-center">
                               <span className="text-sm font-medium text-gray-500">
-                                Assignees
+                                {t("assignees")}
                               </span>
                               {!assignedEdit ? (
                                 <button
                                   onClick={() => setAssignedEdit(true)}
                                   className="text-sm font-medium text-gray-500 hover:underline"
                                 >
-                                  edit
+                                  {t("edit-btn")}
                                 </button>
                               ) : (
                                 <button
@@ -426,32 +426,27 @@ export default function Ticket() {
                                   }}
                                   className="text-sm font-medium text-gray-500 hover:underline"
                                 >
-                                  save
+                                  {t("save")}
                                 </button>
                               )}
                             </div>
                             {!assignedEdit ? (
                               <ul role="list" className="mt-3 space-y-3">
                                 <li className="flex justify-start">
-                                  <a
-                                    href="#"
-                                    className="flex items-center space-x-3"
-                                  >
-                                    <div className="flex-shrink-0">
-                                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                                        <span className="text-xs font-medium leading-none text-white uppercase">
-                                          {data.ticket.assignedTo
-                                            ? data.ticket.assignedTo.name[0]
-                                            : "-"}
-                                        </span>
+                                  <div className="flex-shrink-0">
+                                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                      <span className="text-xs font-medium leading-none text-white uppercase">
+                                        {data.ticket.assignedTo
+                                          ? data.ticket.assignedTo.name[0]
+                                          : "-"}
                                       </span>
-                                    </div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {data.ticket.assignedTo
-                                        ? data.ticket.assignedTo.name
-                                        : "-"}
-                                    </div>
-                                  </a>
+                                    </span>
+                                  </div>
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {data.ticket.assignedTo
+                                      ? data.ticket.assignedTo.name
+                                      : ""}
+                                  </div>
                                 </li>
                               </ul>
                             ) : (
@@ -462,9 +457,7 @@ export default function Ticket() {
                                       <div className="mt-1 relative">
                                         <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                           <span className="block truncate">
-                                            {n
-                                              ? n.name
-                                              : "Please select new user"}
+                                            {n ? n.name : t("select_new_user")}
                                           </span>
                                           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                             {/* <SelectorIcon
@@ -539,10 +532,10 @@ export default function Ticket() {
                           <div className="border-t border-gray-200">
                             <div className="flex flex-row items-center justify-between">
                               <span className="text-sm font-medium text-gray-500 mt-2">
-                                Labels
+                                {t("labels")}
                               </span>
                               <span className="text-sm font-medium text-gray-500 mt-2">
-                                edit
+                                {t("edit-btn")}
                               </span>
                             </div>
                             <ul
@@ -559,7 +552,7 @@ export default function Ticket() {
                                       />
                                     </div>
                                     <div className="ml-3 text-xs font-semibold text-gray-900">
-                                      {data.ticket.priority} Priority
+                                      {data.ticket.priority} {t("priority")}
                                     </div>
                                   </div>
                                 </li>
@@ -574,7 +567,7 @@ export default function Ticket() {
                                       />
                                     </div>
                                     <div className="ml-3 text-xs font-semibold text-gray-900">
-                                      {data.ticket.priority} Priority
+                                      {data.ticket.priority} {t("priority")}
                                     </div>
                                   </div>
                                 </li>
@@ -589,7 +582,7 @@ export default function Ticket() {
                                       />
                                     </div>
                                     <div className="ml-3 text-xs font-semibold text-gray-900">
-                                      {data.ticket.priority} Priority
+                                      {data.ticket.priority} {t("priority")}
                                     </div>
                                   </div>
                                 </li>
@@ -626,7 +619,9 @@ export default function Ticket() {
                         </div>
                       </aside>
                       <div className="py-3 xl:pb-0 xl:pt-2">
-                        <span className="text-sm font-bold">Description</span>
+                        <span className="text-sm font-bold">
+                          {t("description")}
+                        </span>
                         <div className="prose max-w-none">
                           {edit ? (
                             <RichTextEditor editor={IssueEditor}>
@@ -694,7 +689,7 @@ export default function Ticket() {
                             id="activity-title"
                             className="text-lg font-medium text-gray-900"
                           >
-                            Comments
+                            {t("comments")}
                           </span>
                         </div>
                         <div className="pt-2">
@@ -731,8 +726,8 @@ export default function Ticket() {
                                               <p className="text-xs text-gray-500">
                                                 {item.public
                                                   ? "Publicly"
-                                                  : "Internally"}{" "}
-                                                commented at{" "}
+                                                  : "Internally"}
+                                                {t("commented_at")}
                                                 {moment(item.createdAt).format(
                                                   "hh:mm DD-MM-YYYY"
                                                 )}
@@ -768,7 +763,7 @@ export default function Ticket() {
                                       htmlFor="comment"
                                       className="sr-only"
                                     >
-                                      Comment
+                                      {t("comment")}
                                     </label>
                                     <textarea
                                       id="comment"
@@ -793,7 +788,9 @@ export default function Ticket() {
                                           className="-ml-0.5 h-5 w-5 text-red-500"
                                           aria-hidden="true"
                                         />
-                                        <span className="">Re-Open issue</span>
+                                        <span className="">
+                                          {t("reopen_issue")}
+                                        </span>
                                       </button>
                                     ) : (
                                       <button
@@ -805,7 +802,7 @@ export default function Ticket() {
                                           className="-ml-0.5 h-5 w-5 text-green-500"
                                           aria-hidden="true"
                                         />
-                                        Close issue
+                                        {t("close_issue")}
                                       </button>
                                     )}
                                     <button
@@ -813,7 +810,7 @@ export default function Ticket() {
                                       type="submit"
                                       className="inline-flex items-center justify-center rounded-md bg-gray-900 px-3 py-[7px] text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
                                     >
-                                      Comment
+                                      {t("comment")}
                                     </button>
                                   </div>
                                 </div>
@@ -826,7 +823,7 @@ export default function Ticket() {
                   </section>
                 </div>
                 <aside className="hidden xl:block xl:pl-8">
-                  <h2 className="sr-only">Details</h2>
+                  <h2 className="sr-only">{t("details")}</h2>
                   <div className="space-y-5">
                     {!data.ticket.isComplete ? (
                       <div className="flex items-center space-x-2">
@@ -835,7 +832,7 @@ export default function Ticket() {
                           aria-hidden="true"
                         />
                         <span className="text-sm font-medium text-green-700">
-                          Open Issue
+                          {t("open_issue")}
                         </span>
                       </div>
                     ) : (
@@ -845,7 +842,7 @@ export default function Ticket() {
                           aria-hidden="true"
                         />
                         <span className="text-sm font-medium text-red-700">
-                          Closed Issue
+                          {t("closed_issue")}
                         </span>
                       </div>
                     )}
@@ -855,7 +852,7 @@ export default function Ticket() {
                         aria-hidden="true"
                       />
                       <span className="text-sm font-medium text-gray-900">
-                        {data.ticket.comments.length} comments
+                        {data.ticket.comments.length} {t("comments")}
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -864,7 +861,7 @@ export default function Ticket() {
                         aria-hidden="true"
                       />
                       <span className="text-sm font-medium text-gray-900">
-                        Created on{" "}
+                        {t("created_at")}
                         {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
                       </span>
                     </div>
@@ -873,14 +870,14 @@ export default function Ticket() {
                     <div>
                       <div className="flex flex-row justify-between items-center">
                         <span className="text-sm font-medium text-gray-500">
-                          Assignees
+                          {t("assignees")}
                         </span>
                         {!assignedEdit ? (
                           <button
                             onClick={() => setAssignedEdit(true)}
                             className="text-sm font-medium text-gray-500 hover:underline"
                           >
-                            edit
+                            {t("edit-btn")}
                           </button>
                         ) : (
                           <button
@@ -889,29 +886,27 @@ export default function Ticket() {
                             }}
                             className="text-sm font-medium text-gray-500 hover:underline"
                           >
-                            save
+                            {t("save")}
                           </button>
                         )}
                       </div>
                       {!assignedEdit ? (
                         <ul role="list" className="mt-3 space-y-3">
                           <li className="flex justify-start">
-                            <a href="#" className="flex items-center space-x-3">
-                              <div className="flex-shrink-0">
-                                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                                  <span className="text-xs font-medium leading-none text-white uppercase">
-                                    {data.ticket.assignedTo
-                                      ? data.ticket.assignedTo.name[0]
-                                      : "-"}
-                                  </span>
+                            <div className="flex-shrink-0">
+                              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                <span className="text-xs font-medium leading-none text-white uppercase">
+                                  {data.ticket.assignedTo
+                                    ? data.ticket.assignedTo.name[0]
+                                    : "-"}
                                 </span>
-                              </div>
-                              <div className="text-sm font-medium text-gray-900">
-                                {data.ticket.assignedTo
-                                  ? data.ticket.assignedTo.name
-                                  : "-"}
-                              </div>
-                            </a>
+                              </span>
+                            </div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {data.ticket.assignedTo
+                                ? data.ticket.assignedTo.name
+                                : ""}
+                            </div>
                           </li>
                         </ul>
                       ) : (
@@ -922,7 +917,7 @@ export default function Ticket() {
                                 <div className="mt-1 relative">
                                   <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <span className="block truncate">
-                                      {n ? n.name : "Please select new user"}
+                                      {n ? n.name : t("select_new_user")}
                                     </span>
                                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                       {/* <SelectorIcon
@@ -997,14 +992,14 @@ export default function Ticket() {
                     <div className="border-t border-gray-200">
                       <div className="flex flex-row items-center justify-between mt-2">
                         <span className="text-sm font-medium text-gray-500 ">
-                          Labels
+                          {t("labels")}
                         </span>
                         {!labelEdit ? (
                           <button
                             onClick={() => setLabelEdit(true)}
                             className="text-sm font-medium text-gray-500 hover:underline"
                           >
-                            edit
+                            {t("edit-btn")}
                           </button>
                         ) : (
                           <button
@@ -1014,7 +1009,7 @@ export default function Ticket() {
                             }}
                             className="text-sm font-medium text-gray-500 hover:underline"
                           >
-                            save
+                            {t("save")}
                           </button>
                         )}
                       </div>
@@ -1030,7 +1025,7 @@ export default function Ticket() {
                                   />
                                 </div>
                                 <div className="ml-3 text-xs font-semibold text-gray-900">
-                                  {data.ticket.priority} Priority
+                                  {data.ticket.priority} {t("priority")}
                                 </div>
                               </div>
                             </li>
@@ -1045,7 +1040,7 @@ export default function Ticket() {
                                   />
                                 </div>
                                 <div className="ml-3 text-xs font-semibold text-gray-900">
-                                  {data.ticket.priority} Priority
+                                  {data.ticket.priority} {t("priority")}
                                 </div>
                               </div>
                             </li>
@@ -1060,7 +1055,7 @@ export default function Ticket() {
                                   />
                                 </div>
                                 <div className="ml-3 text-xs font-semibold text-gray-900">
-                                  {data.ticket.priority} Priority
+                                  {data.ticket.priority} {t("priority")}
                                 </div>
                               </div>
                             </li>
@@ -1458,7 +1453,7 @@ export default function Ticket() {
                         </>
                       )}
                     </div>
-                    <div className="border-t border-gray-200">
+                    {/* <div className="border-t border-gray-200">
                       <div className="flex flex-row items-center justify-between mt-2">
                         <span className="text-sm font-medium text-gray-500 ">
                           Time Tracking
@@ -1511,7 +1506,7 @@ export default function Ticket() {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </aside>
               </div>

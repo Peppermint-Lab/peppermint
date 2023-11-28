@@ -95,9 +95,15 @@ export default function UserProfile() {
                   value={language}
                   onChange={(e) => changeLanguage(e.target.value)}
                 >
-                  <option value="de">DE</option>
-                  <option value="en">EN</option>
-                  <option value="se">SE</option>
+                  <option value="en">English</option>
+                  <option value="de">German</option>
+                  <option value="se">Swedish</option>
+                  <option value="es">Spanish</option>
+                  <option value="no">Norwegian</option>
+                  <option value="se">French</option>
+                  <option value="pt">Tagalong</option>
+                  <option value="da">Danish</option>
+                  <option value="pt">Portuguese</option>
                 </select>
               </div>
             </div>

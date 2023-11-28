@@ -1,24 +1,29 @@
 import { getCookie } from "cookies-next";
 import moment from "moment";
+import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 
 async function fetchNotebooks(token) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return res.json();
 }
 
 export default function NoteBooksIndex() {
+  const { t } = useTranslation("peppermint");
+
   const token = getCookie("session");
-  const { data, status, error, refetch } = useQuery(
-    "getUsersNotebooks",
-    () => fetchNotebooks(token),
+  const { data, status, error, refetch } = useQuery("getUsersNotebooks", () =>
+    fetchNotebooks(token)
   );
 
   const router = useRouter();
@@ -39,10 +44,10 @@ export default function NoteBooksIndex() {
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-base font-semibold leading-6 text-gray-900">
-              Notebook
+              {t("notebooks")}
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              Below is a list of your private notebooks that only you can access
+              {t("notebooks_description")}
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -50,7 +55,7 @@ export default function NoteBooksIndex() {
               href="/notebook/new"
               className="block rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
             >
-              New Note
+              {t("create_notebook")}
             </a>
           </div>
         </div>
@@ -66,19 +71,19 @@ export default function NoteBooksIndex() {
                           scope="col"
                           className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                         >
-                          <span className="ml-4">Title</span>
+                          <span className="ml-4">{t("title")}</span>
                         </th>
                         <th
                           scope="col"
                           className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Created On
+                          {t("created_at")}
                         </th>
                         <th
                           scope="col"
                           className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Last Updated
+                          {t("updated_at")}
                         </th>
                         <th
                           scope="col"
@@ -108,7 +113,7 @@ export default function NoteBooksIndex() {
                               onClick={() => deleteNotebook(note.id)}
                               className="rounded z-50 bg-red-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                             >
-                              Delete
+                              {t("delete")}
                             </button>
                           </td>
                         </tr>
