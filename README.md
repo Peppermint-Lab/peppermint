@@ -83,7 +83,7 @@ volumes:
 
 ```
 
-Once this is completed then you can go to your base_url which was added to the compose file and login.
+Once this is completed then you can go to your server-ip:3000 which was added to the compose file and login.
 
 The default login credentials are
 
