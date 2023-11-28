@@ -7,7 +7,7 @@ import {
   HomeIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useState } from "react";
@@ -90,7 +90,14 @@ export default function NewLayout({ children }: any) {
   async function logout() {
     // clears session on server
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${user.id}/logout`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${user.id}/logout`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("session")}`,
+        },
+      }
     ).then((res) => res.json());
 
     // delete session cookie
