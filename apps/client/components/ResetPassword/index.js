@@ -1,21 +1,23 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { notifications } from "@mantine/notifications";
+import { getCookie } from "cookies-next";
 import React, { Fragment, useState } from "react";
 
-export default function ResetPassword({ user }) {
+export default function ResetPassword() {
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState("");
 
   const postData = async () => {
-    if (check === password && password.length > 0) {
+    if (check === password && password.length > 3) {
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reset-password`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + getCookie("session"),
           },
           body: JSON.stringify({
             password,
@@ -24,7 +26,7 @@ export default function ResetPassword({ user }) {
       )
         .then((res) => res.json())
         .then((res) => {
-          if (res.failed === false) {
+          if (res.success) {
             notifications.show({
               title: "Success",
               message: `Password updated :)`,
@@ -34,7 +36,7 @@ export default function ResetPassword({ user }) {
           } else {
             notifications.show({
               title: "Error",
-              message: `Error: ${res.message}`,
+              message: `Error: failed to update password`,
               color: "red",
               autoClose: 5000,
             });
