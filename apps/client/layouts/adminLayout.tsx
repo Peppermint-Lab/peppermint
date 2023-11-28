@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: any) {
 
   const { user } = useUser();
 
-  if (user || user.role === "admin") {
+  if (user && !user.isAdmin) {
     return (
       <div className="flex items-center justify-center h-screen">
         <h1 className="text-4xl font-bold">You are not an admin</h1>

@@ -230,11 +230,11 @@ export function authRoutes(fastify: FastifyInstance) {
         });
 
         reply.send({
-          sucess: true,
+          success: true,
         });
       } else {
         reply.send({
-          sucess: false,
+          success: false,
         });
       }
     }

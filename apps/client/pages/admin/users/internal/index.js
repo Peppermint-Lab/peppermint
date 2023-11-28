@@ -25,15 +25,17 @@ const fetchUsers = async (token) => {
 
 function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
   return (
-    <input
-      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-      type="text"
-      value={filterValue || ""}
-      onChange={(e) => {
-        setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-      }}
-      placeholder="Type to filter"
-    />
+    // <input
+    //   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+    //   type="text"
+    //   value={filterValue || ""}
+    //   autoComplete="off"
+    //   onChange={(e) => {
+    //     setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+    //   }}
+    //   placeholder="Type to filter"
+    // />
+    <></>
   );
 }
 function Table({ columns, data }) {

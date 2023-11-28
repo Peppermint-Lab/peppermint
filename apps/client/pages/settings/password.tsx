@@ -10,7 +10,7 @@ export default function PasswordChange({ children }) {
   const [check, setCheck] = useState("");
 
   const postData = async () => {
-    if (check === password && password.length > 0) {
+    if (check === password && password.length > 2) {
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reset-password`,
         {
@@ -26,7 +26,7 @@ export default function PasswordChange({ children }) {
       )
         .then((res) => res.json())
         .then((res) => {
-          if (res.failed === false) {
+          if (res.success) {
             notifications.show({
               title: "Success",
               message: `Password updated :)`,
@@ -36,7 +36,7 @@ export default function PasswordChange({ children }) {
           } else {
             notifications.show({
               title: "Error",
-              message: `Error: ${res.message}`,
+              message: `Error: Failed to update password`,
               color: "red",
               autoClose: 5000,
             });
