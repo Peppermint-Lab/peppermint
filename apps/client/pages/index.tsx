@@ -14,6 +14,7 @@ import { useUser } from "../store/session";
 
 export default function Home() {
   const router = useRouter();
+  const { t } = useTranslation("peppermint");
 
   const { user } = useUser();
   const token = getCookie("session");
@@ -25,8 +26,6 @@ export default function Home() {
   const [uploaded, setUploaded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState<any>();
-
-  const { t } = useTranslation("peppermint");
 
   let file: any;
 
@@ -79,7 +78,7 @@ export default function Home() {
   }
 
   async function fetchTickets() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets/user/open`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -100,7 +99,7 @@ export default function Home() {
       href: "/tickets?filter=closed",
     },
     {
-      name: "Unassigned Tickets",
+      name: t("unassigned_tickets"),
       stat: unassigned,
       href: "/tickets?filter=unassigned",
     },
@@ -211,7 +210,9 @@ export default function Home() {
                 </>
               ) : (
                 <>
-                  <span className="font-bold text-2xl">Recent Tickets</span>
+                  <span className="font-bold text-2xl">
+                    {t("recent_tickets")}
+                  </span>
                   <div className="-mx-4 sm:-mx-0 w-full">
                     <table className="min-w-full divide-y divide-gray-300">
                       <thead>
@@ -220,32 +221,32 @@ export default function Home() {
                             scope="col"
                             className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                           >
-                            Title
+                            {t("title")}
                           </th>
                           <th
                             scope="col"
                             className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                           >
-                            Priority
+                            {t("priority")}
                           </th>
                           <th
                             scope="col"
                             className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
                           >
-                            Status
+                            {t("status")}
                           </th>
                           <th
                             scope="col"
                             className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                           >
-                            Opened
+                            {t("created")}
                           </th>
 
                           <th
                             scope="col"
                             className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                           >
-                            Assigned
+                            {t("assigned_to")}
                           </th>
                           {/* <th
                         scope="col"
@@ -263,7 +264,7 @@ export default function Home() {
                               className="hover:bg-gray-300 hover:cursor-pointer"
                               onClick={() => router.push(`/tickets/${item.id}`)}
                             >
-                              <td className="w-full sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                              <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                                 {item.title}
                                 <dl className="font-normal lg:hidden">
                                   <dt className="sr-only sm:hidden">Email</dt>
@@ -300,7 +301,7 @@ export default function Home() {
                                       >
                                         <circle cx={3} cy={3} r={3} />
                                       </svg>
-                                      Closed
+                                      {t("closed")}
                                     </span>
                                   </div>
                                 ) : (
@@ -313,15 +314,15 @@ export default function Home() {
                                       >
                                         <circle cx={3} cy={3} r={3} />
                                       </svg>
-                                      Open
+                                      {t("open")}
                                     </span>
                                   </>
                                 )}
                               </td>
-                              <td className="px-3 py-1 text-sm text-gray-500 w-[160px]">
+                              <td className="px-3 py-1 text-sm text-gray-500 w-[110px]">
                                 {moment(item.createdAt).format("DD/MM/YYYY")}
                               </td>
-                              <td className="px-3 py-1 text-sm text-gray-500 w-[64px]">
+                              <td className="px-3 py-1 text-sm text-gray-500 w-[130px] truncate whitespace-nowrap">
                                 {item.assignedTo ? item.assignedTo.name : "-"}
                               </td>
                               {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
@@ -506,7 +507,7 @@ export default function Home() {
         )}
       </div>
       <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 2xl:max-h-[53vh]">
-        <span className="font-bold text-2xl ml-1">Reminders</span>
+        <span className="font-bold text-2xl ml-1">{t("reminders")}</span>
         <ListTodo />
       </div>
     </div>

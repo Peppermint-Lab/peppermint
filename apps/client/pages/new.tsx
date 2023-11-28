@@ -186,7 +186,9 @@ export default function CreateTicket() {
                 <div className="relative mt-2">
                   <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
-                      {company === undefined ? "Select a client" : company.name}
+                      {company === undefined
+                        ? t("select_a_client")
+                        : company.name}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon
@@ -259,7 +261,7 @@ export default function CreateTicket() {
                   <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {engineer === undefined
-                        ? "Select a engineer"
+                        ? t("select_an_engineer")
                         : engineer.name}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -450,7 +452,7 @@ export default function CreateTicket() {
               type="button"
               className="rounded bg-green-600 hover:bg-green-800 px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-30"
             >
-              Create Ticket
+              {t("ticket_create")}
             </button>
           </div>
         </div>

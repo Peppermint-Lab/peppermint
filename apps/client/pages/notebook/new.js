@@ -9,10 +9,13 @@ import { useState } from "react";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
+import useTranslation from "next-translate/useTranslation";
 
 export default function ViewNoteBook() {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("Markdown Test");
+
+  const { t } = useTranslation("peppermint");
 
   const token = getCookie("session");
 
@@ -35,18 +38,20 @@ export default function ViewNoteBook() {
   });
 
   async function postMarkdown() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebook/note/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-
-      },
-      body: JSON.stringify({
-        title,
-        content: value,
-      }),
-    })
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebook/note/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title,
+          content: value,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         router.push(`/notebook`);
@@ -60,7 +65,7 @@ export default function ViewNoteBook() {
           htmlFor="title"
           className="block text-sm font-medium text-gray-700"
         >
-          NoteBook Title
+          {t("notebook_title")}
         </label>
         <div className="mt-1">
           <input
@@ -77,7 +82,7 @@ export default function ViewNoteBook() {
 
       <div className="mt-4 h-full">
         <div className="m-h-[90vh]">
-          <RichTextEditor editor={editor} >
+          <RichTextEditor editor={editor}>
             <RichTextEditor.Toolbar>
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />
@@ -118,7 +123,7 @@ export default function ViewNoteBook() {
               </RichTextEditor.ControlsGroup>
             </RichTextEditor.Toolbar>
 
-            <RichTextEditor.Content  />
+            <RichTextEditor.Content />
           </RichTextEditor>
         </div>
 
@@ -128,7 +133,7 @@ export default function ViewNoteBook() {
             type="button"
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
           >
-            Save
+            {t("save")}
           </button>
         </div>
       </div>

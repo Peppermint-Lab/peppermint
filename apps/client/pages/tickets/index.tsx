@@ -1,3 +1,4 @@
+import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -14,30 +15,31 @@ function classNames(...classes: any) {
 
 export default function Tickets() {
   const router = useRouter();
+  const { t } = useTranslation("peppermint");
 
   const [loading, setLoading] = useState(false);
 
   const tabs = [
     {
-      name: "Open",
+      name: t("open"),
       href: "/tickets",
       //   count: "",
       current: router.asPath === "/tickets",
     },
     {
-      name: "Assigned to me",
+      name: t("assigned_to_me"),
       href: "?filter=assigned",
       //   count: "6",
       current: router.asPath === "/tickets?filter=assigned",
     },
     {
-      name: "Unassigned",
+      name: t("unassigned"),
       href: "?filter=unassigned",
       //   count: "4",
       current: router.asPath === "/tickets?filter=unassigned",
     },
     {
-      name: "Closed",
+      name: t("closed"),
       href: "?filter=closed",
       //   count: "",
       current: router.asPath === "/tickets?filter=closed",

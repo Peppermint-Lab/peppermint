@@ -1,5 +1,6 @@
 import { TrashIcon } from "@heroicons/react/20/solid";
 import { getCookie } from "cookies-next";
+import useTranslation from "next-translate/useTranslation";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
@@ -18,6 +19,7 @@ async function getTodos(token) {
 
 export default function ListTodo() {
   const token = getCookie("session");
+  const { t } = useTranslation("peppermint");
   const { status, data, refetch } = useQuery("repoData", () => getTodos(token));
 
   const [minValue, setMinValue] = useState(0);
@@ -50,8 +52,6 @@ export default function ListTodo() {
     });
   }
 
-  console.log(data);
-
   async function deleteTodo(id) {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/todo/${id}/delete`, {
       method: "DELETE",
@@ -61,12 +61,6 @@ export default function ListTodo() {
       },
     }).then(() => refetch());
   }
-
-  // async function markDone(id) {
-  //   await fetch(`api/v1/todo/mark-done/${id}`, {
-  //     method: "POST",
-  //   }).then(() => refetch());
-  // }
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -83,7 +77,7 @@ export default function ListTodo() {
             name="text"
             id="text"
             className="w-full shadow-sm text-gray-900 bg-gray-100 rounded-lg font-semibold border-none focus:outline-none "
-            placeholder="Enter todo here..."
+            placeholder={t("enter_todo")}
             onChange={(e) => {
               setText(e.target.value);
             }}
