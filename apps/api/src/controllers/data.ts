@@ -12,7 +12,9 @@ export function dataRoutes(fastify: FastifyInstance) {
       const token = checkToken(bearer);
 
       if (token) {
-        const result = await prisma.ticket.count();
+        const result = await prisma.ticket.count({
+          where: { hidden: false },
+        });
 
         reply.send({ count: result });
       }
@@ -29,7 +31,7 @@ export function dataRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const result = await prisma.ticket.count({
-          where: { isComplete: true },
+          where: { isComplete: true, hidden: false },
         });
 
         reply.send({ count: result });
@@ -47,7 +49,7 @@ export function dataRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const result = await prisma.ticket.count({
-          where: { isComplete: false },
+          where: { isComplete: false, hidden: false },
         });
 
         reply.send({ count: result });
@@ -65,7 +67,7 @@ export function dataRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const result = await prisma.ticket.count({
-          where: { userId: null },
+          where: { userId: null, hidden: false },
         });
 
         reply.send({ count: result });
