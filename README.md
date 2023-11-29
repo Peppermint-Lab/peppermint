@@ -76,14 +76,14 @@ services:
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
-      API_URL: "http://localhost:5003"
+      API_URL: "http://server-ip:5003"
 
 volumes:
  pgdata:
 
 ```
 
-Once this is completed then you can go to your base_url which was added to the compose file and login.
+Once this is completed then you can go to your server-ip:3000 which was added to the compose file and login.
 
 The default login credentials are
 
