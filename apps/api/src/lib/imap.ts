@@ -22,8 +22,8 @@ export const getEmails = async () => {
         user: queues[i].username,
         password: queues[i].password,
         host: queues[i].hostname,
-        port: 993,
-        tls: true,
+        port: queues[i].tls ? 993 : 110,
+        tls: queues[i].tls,
         tlsOptions: { servername: queues[i].hostname },
       };
 

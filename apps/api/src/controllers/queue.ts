@@ -60,7 +60,7 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
       const token = checkToken(bearer);
 
       if (token) {
-        const { id }: any = request.params;
+        const { id }: any = request.body;
 
         await prisma.emailQueue.delete({
           where: {
