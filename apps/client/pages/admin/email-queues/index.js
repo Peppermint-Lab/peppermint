@@ -22,7 +22,7 @@ export default function EmailQueues() {
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queue/delete`,
       {
-        method: "post",
+        method: "delete",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + getCookie("session"),

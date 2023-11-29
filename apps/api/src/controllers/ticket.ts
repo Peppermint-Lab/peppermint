@@ -151,6 +151,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
       if (token) {
         const tickets = await prisma.ticket.findMany({
           where: { isComplete: false, hidden: false },
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+          ],
           include: {
             client: {
               select: { id: true, name: true, number: true },

@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
