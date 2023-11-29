@@ -3,9 +3,9 @@
         "title": "Welcome"
     },
     "docker": {
-        title: "Docker"
+        "title": "Docker"
     }, 
-    "proxy": {
-        title: "proxy"
+    "reverse-proxy": {
+        "title": "Proxies"
     }
 }
