@@ -3,7 +3,7 @@ import { getCookie } from "cookies-next";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-async function getHooks(token) {
+async function getHooks() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhooks/all`,
     {
@@ -29,7 +29,7 @@ export default function Notifications() {
   const [secret, setSecret] = useState();
   const [name, setName] = useState("");
 
-  const { data, status, error, refetch } = useQuery("gethooks", getHooks());
+  const { data, status, error, refetch } = useQuery("gethooks", getHooks);
 
   async function addHook() {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhook/create`, {
@@ -51,6 +51,8 @@ export default function Notifications() {
         refetch();
       });
   }
+
+  console.log(data);
 
   async function deleteHook(id) {
     await fetch(
