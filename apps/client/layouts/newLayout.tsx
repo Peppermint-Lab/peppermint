@@ -82,7 +82,13 @@ export default function NewLayout({ children }: any) {
 
   async function getQueues() {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("session")}`,
+        },
+      }
     ).then((res) => res.json());
     setQueues(res.queues);
   }

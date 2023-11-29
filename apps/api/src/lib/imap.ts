@@ -1,6 +1,7 @@
 const Imap = require("imap");
-const { simpleParser } = require("mailparser");
 import { prisma } from "../prisma";
+
+const { simpleParser } = require("mailparser");
 
 require("dotenv").config();
 
@@ -13,6 +14,38 @@ const year = date.getFullYear();
 //@ts-ignore
 const d = new Date([year, month, today]);
 
+function parseEmailContent(emailText: any) {
+  const lines = emailText.split("\n");
+  const parsedData = {
+    name: "",
+    email: "",
+    phoneNumbers: [],
+    addresses: [],
+    companyDetails: "",
+  };
+
+  let inAddressSection = false;
+
+  lines.forEach((line: any) => {
+    if (line.includes("@")) {
+      parsedData.email = line.trim();
+    } else if (line.includes("US:") || line.includes("UK:")) {
+      //@ts-ignore
+      parsedData.phoneNumbers.push(line.trim());
+    } else if (line.includes("ISO")) {
+      parsedData.companyDetails = line.trim();
+    } else if (line.trim() === "North America:" || line.trim() === "Europe:") {
+      inAddressSection = true;
+      //@ts-ignore
+    } else if (inAddressSection && line.trim() !== "") {
+      //@ts-ignore
+      parsedData.addresses.push(line.trim());
+    }
+  });
+
+  return parsedData;
+}
+
 export const getEmails = async () => {
   try {
     const queues = await client.emailQueue.findMany({});
@@ -22,8 +55,8 @@ export const getEmails = async () => {
         user: queues[i].username,
         password: queues[i].password,
         host: queues[i].hostname,
-        port: 993,
-        tls: true,
+        port: queues[i].tls ? 993 : 110,
+        tls: queues[i].tls,
         tlsOptions: { servername: queues[i].hostname },
       };
 
@@ -51,7 +84,8 @@ export const getEmails = async () => {
               msg.on("body", (stream: any) => {
                 simpleParser(stream, async (err: any, parsed: any) => {
                   const { from, subject, textAsHtml, text, html } = parsed;
-                  // console.log(from, subject, textAsHtml, text, html);
+
+                  const parsedData = parseEmailContent(textAsHtml);
 
                   const imap = await client.imap_Email.create({
                     data: {
@@ -71,7 +105,7 @@ export const getEmails = async () => {
                       isComplete: Boolean(false),
                       priority: "Low",
                       fromImap: Boolean(true),
-                      detail: text,
+                      detail: textAsHtml,
                     },
                   });
 

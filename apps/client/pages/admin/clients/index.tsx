@@ -224,6 +224,7 @@ export default function Clients() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("session")}`,
         },
       }
     )

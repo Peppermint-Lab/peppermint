@@ -1,4 +1,11 @@
-# Install
+# Docker Install
+
+Requirements:
+
+- Docker
+- Docker Compose
+
+Make sure you update the docker-compose.yml file with your own server ip address in the API_URL environment variable.
 
 ```docker
 version: "3.1"
@@ -41,3 +48,11 @@ services:
 volumes:
  pgdata:
 ```
+
+After you have created the docker-compose.yml file, run the following command:
+
+```bash
+docker-compose up -d
+```
+
+Then you can access the application at http://server-ip:3000

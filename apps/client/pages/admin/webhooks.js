@@ -3,14 +3,14 @@ import { getCookie } from "cookies-next";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-async function getHooks(token) {
+async function getHooks() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhooks/all`,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
+        Authorization: `Bearer ${getCookie("session")}`,
       },
     }
   );
@@ -29,17 +29,14 @@ export default function Notifications() {
   const [secret, setSecret] = useState();
   const [name, setName] = useState("");
 
-  const cookie = getCookie("session");
-
-  const { data, status, error, refetch } = useQuery("gethooks", () =>
-    getHooks(cookie)
-  );
+  const { data, status, error, refetch } = useQuery("gethooks", getHooks);
 
   async function addHook() {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhook/create`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
       },
       body: JSON.stringify({
         name,
@@ -55,11 +52,17 @@ export default function Notifications() {
       });
   }
 
+  console.log(data);
+
   async function deleteHook(id) {
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/webhook/${id}/delete`,
       {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("session")}`,
+        },
       }
     )
       .then((res) => res.json())

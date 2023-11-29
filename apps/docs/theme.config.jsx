@@ -21,11 +21,14 @@ const config = {
   // i18n: [
   //   { locale: 'en', text: 'English' },
   // ],
-  footer: '',
+  footer: {
+    text: '',
+    component: () => <></>
+  },
    banner: {
     key: '2.0-release',
     text: (
-      <a href="https://nextra.site" target="_blank">
+      <a href="https://github.com/Peppermint-Lab/peppermint" target="_blank">
         🎉 Peppermint 0.3 is released. Read more →
       </a>
     )
