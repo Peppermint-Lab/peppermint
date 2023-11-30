@@ -15,7 +15,7 @@ export default function Home() {
 
   return (
     <div className="bg-gray-200">
-      <div className="flex justify-center align-center h-screen items-center sm:m-4">
+      <div className="flex justify-center align-center h-screen items-center">
         <div className="bg-white shadow-xl rounded-lg lg:p-8 p-4 mx-4">
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
