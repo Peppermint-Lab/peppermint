@@ -10,6 +10,14 @@ https://support.example.com
 
 Behind the scenes you'll most likely use nginx, trafik or haproxy to achieve this goal. In this example we will be using nginx on debian.
 
+In the end, you should have a setup like so:
+
+```
+https://peppermint.example.com -> https://peppermintapi.example.com -> nginx -> peppermint docker
+```
+
+I know two different subdomains may seem a bit overkill, but this is the only way to achieve this goal.
+
 ## Setting up the box & nginx
 
 In this example, I'm going to be using a node provided by linode pre-installed with docker, but any vm should be able to achieve this provided they have a static i.p address.
@@ -63,6 +71,8 @@ Lets enable that now
 ```
 sudo ufw allow 'Nginx HTTP'
 ```
+
+Use https if you have SSL cert enabled.
 
 ### Checking nginx
 
@@ -140,7 +150,7 @@ services:
     depends_on:
       - peppermint_postgres
     healthcheck:
-      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      test: ["CMD", "sh", "-c", "wget --spider $$API_URL"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -149,7 +159,7 @@ services:
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
-      API_URL: "http://server-ip:5003"
+      API_URL: "https://peppermintapi.example.com"
 
 volumes:
  pgdata:
@@ -169,7 +179,7 @@ This will pull the peppermint image & postgres and start the process of both con
 
 ### Nginx config
 
-Now that nginx is set up & both are containers are working, we can now implement the config file which is going to route our proxy to our subdomain.
+Now that nginx is set up & both are containers are working, we can now implement the config file which is going to route our proxy to our subdomains.
 
 I like to save this in the conf.d folder of nginx, it works for me and i never run into issues.
 
@@ -181,11 +191,13 @@ nano /etc/nginx/conf.d
 
 This will bring an editor up, in which you will paste
 
+### Client Proxy Config
+
 ```
 server {
     listen 80;
     listen [::]:80;
-    server_name support.example.com;
+    server_name peppermint.example.com;
     add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
 
     location / {
@@ -205,7 +217,36 @@ server {
 Replace the server name with your url of choice, including subdomain and procced to save the file as
 
 ```
-peppermint.conf
+peppermint-client.conf
+```
+
+### API Proxy Config
+
+```
+server {
+    listen 80;
+    listen [::]:80;
+    server_name peppermintapi.example.com;
+    add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+
+    location / {
+        proxy_pass http://127.0.0.1:5003;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_redirect off;
+        proxy_read_timeout 5m;
+    }
+    client_max_body_size 10M;
+}
+```
+
+Replace the server name with your url of choice, including subdomain and procced to save the file as, make sure this matches what you put in the docker-compose.yml file
+
+```
+peppermint-api.conf
 ```
 
 ### Restarting nginx
@@ -221,3 +262,7 @@ systemctl restart nginx
 You should now be able to see peppermint running on your choosen subdomain.
 
 I hope you found this guide usual :)
+
+## Issues i discovered
+
+An issue i discovered was that the api was not able to serve requests if it wasnt HTTPS, just bear that in mind.
