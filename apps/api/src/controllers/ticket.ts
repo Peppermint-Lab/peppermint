@@ -4,6 +4,7 @@ import axios from "axios";
 import { checkToken } from "../lib/jwt";
 
 //@ts-ignore
+import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
 import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
 import { checkSession } from "../lib/session";
@@ -314,7 +315,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const { user, id }: any = request.body;
 
       if (token) {
-        await prisma.user.update({
+        const ticket = await prisma.user.update({
           where: { id: user },
           data: {
             tickets: {
@@ -324,6 +325,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
             },
           },
         });
+
+        // Send email to user that has been assigned the ticket
+        // Saying that they have been assigned a ticket
+
+        await sendAssignedEmail(ticket);
 
         reply.send({
           success: true,
@@ -397,6 +403,9 @@ export function ticketRoutes(fastify: FastifyInstance) {
             userId: user!.id,
           },
         });
+
+        // if user that isnt the assigned comments, send email to all users that have commented on the ticket + assigned user
+        // excluding the user that commented
 
         reply.send({
           success: true,
