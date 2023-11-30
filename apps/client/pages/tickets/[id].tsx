@@ -433,7 +433,7 @@ export default function Ticket() {
                             </div>
                             {!assignedEdit ? (
                               <ul role="list" className="mt-3 space-y-3">
-                                <li className="flex justify-start">
+                                <li className="flex justify-start items-center space-x-4">
                                   <div className="flex-shrink-0">
                                     <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                                       <span className="text-xs font-medium leading-none text-white uppercase">
@@ -893,7 +893,7 @@ export default function Ticket() {
                       </div>
                       {!assignedEdit ? (
                         <ul role="list" className="mt-3 space-y-3">
-                          <li className="flex justify-start">
+                          <li className="flex justify-star items-center space-x-2">
                             <div className="flex-shrink-0">
                               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                                 <span className="text-xs font-medium leading-none text-white uppercase">
