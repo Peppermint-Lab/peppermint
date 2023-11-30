@@ -114,12 +114,13 @@ model Ticket {
   Comment      Comment[]
   TimeTracking TimeTracking[]
 
-  team       Team?   @relation(fields: [teamId], references: [id])
-  teamId     String?
-  assignedTo User?   @relation(fields: [userId], references: [id])
-  client     Client? @relation(fields: [clientId], references: [id])
-  clientId   String?
-  userId     String?
+  team          Team?           @relation(fields: [teamId], references: [id])
+  teamId        String?
+  assignedTo    User?           @relation(fields: [userId], references: [id])
+  client        Client?         @relation(fields: [clientId], references: [id])
+  clientId      String?
+  userId        String?
+  knowledgeBase knowledgeBase[]
 }
 
 model TimeTracking {
@@ -258,7 +259,58 @@ model Config {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  notifications Json // Array of service names and an active field of TRUE OR FALSE
+  notifications         Json // Array of service names and an active field of TRUE OR FALSE
+  sso_provider          String?
+  sso_active            Boolean   @default(false)
+  gh_version            String?
+  client_version        String?
+  portal_locale         String?
+  feature_previews      Boolean   @default(false)
+  out_of_office         Boolean   @default(false)
+  out_of_office_message String?
+  out_of_office_start   DateTime?
+  out_of_office_end     DateTime?
+}
+
+model SSO {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  name         String
+  clientId     String
+  clientSecret String
+  active       Boolean
+  issuer       String?
+  tenantId     String?
+}
+
+model Uptime {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  name    String
+  url     String
+  active  Boolean  @default(false)
+  webhook String?
+  latency Int?
+  status  Boolean?
+}
+
+model knowledgeBase {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  title   String
+  content String
+  tags    String[]
+  author  String
+  public  Boolean  @default(false)
+
+  ticketId String?
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
 }
 
 model Imap_Email {
