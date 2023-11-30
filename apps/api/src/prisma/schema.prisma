@@ -272,19 +272,6 @@ model Config {
   out_of_office_end     DateTime?
 }
 
-model SSO {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  name         String
-  clientId     String
-  clientSecret String
-  active       Boolean
-  issuer       String?
-  tenantId     String?
-}
-
 model Uptime {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
