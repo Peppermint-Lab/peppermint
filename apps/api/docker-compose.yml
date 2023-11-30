@@ -13,6 +13,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  mailhog:
+    image: jcalonso/mailhog
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
 
 volumes:
   postgres_data:

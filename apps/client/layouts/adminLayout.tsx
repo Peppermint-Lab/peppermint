@@ -42,10 +42,11 @@ export default function AdminLayout({ children }: any) {
       href: "/admin/webhooks",
       current: router.pathname === "/admin/webhooks",
     },
-    // {
-    //   name: "Notifications",
-    //   href: "/admin/notifications",
-    // },
+    {
+      name: "Outbound Emails",
+      href: "/admin/email",
+      current: router.pathname === "/admin/email",
+    },
   ];
 
   return (

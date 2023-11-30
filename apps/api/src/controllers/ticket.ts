@@ -2,6 +2,10 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import axios from "axios";
 import { checkToken } from "../lib/jwt";
+
+//@ts-ignore
+import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
+import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
 
@@ -52,6 +56,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
           type: "ticket_created",
         },
       });
+
+      await sendTicketCreate(ticket);
 
       for (let i = 0; i < webhook.length; i++) {
         if (webhook[i].active === true) {
@@ -410,16 +416,12 @@ export function ticketRoutes(fastify: FastifyInstance) {
       if (token) {
         const { status, id }: any = request.body;
 
-        const ticket: any = await prisma.ticket
-          .update({
-            where: { id: id },
-            data: {
-              isComplete: status,
-            },
-          })
-          .then(async (ticket) => {
-            // await sendTicketStatus(ticket);
-          });
+        const ticket: any = await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            isComplete: status,
+          },
+        });
 
         const webhook = await prisma.webhooks.findMany({
           where: {
@@ -442,6 +444,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
             });
           }
         }
+
+        sendTicketStatus(ticket);
 
         reply.send({
           success: true,
