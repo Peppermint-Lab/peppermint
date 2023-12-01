@@ -67,7 +67,7 @@ services:
     depends_on:
       - peppermint_postgres
     healthcheck:
-      test: ["CMD", "sh", "-c", "wget --spider $$BASE_URL"]
+      test: ["CMD", "sh", "-c", "wget --spider $$API_URL"]
       interval: 30s
       timeout: 10s
       retries: 3
