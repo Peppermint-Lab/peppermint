@@ -1,3 +1,4 @@
+import axios from "axios";
 import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
@@ -137,6 +138,118 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Checks if a user is SSO or password
+  fastify.post(
+    "/api/v1/auth/sso/check",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      let { email } = request.body as {
+        email: string;
+      };
+
+      let user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid email",
+          success: false,
+        });
+      }
+
+      const authtype = await prisma.config.findMany({
+        where: {
+          sso_active: true,
+        },
+      });
+
+      const provider = await prisma.provider.findMany();
+      const oauth = provider[0];
+
+      console.log(authtype);
+
+      if (authtype.length === 0) {
+        reply.code(200).send({
+          success: true,
+          message: "SSO not enabled",
+          oauth: false,
+        });
+      }
+
+      const url = "https://github.com/login/oauth/authorize";
+
+      reply.send({
+        oauth: true,
+        success: true,
+        ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&state=${email}&login=${email}`,
+      });
+    }
+  );
+
+  fastify.get(
+    "/api/v1/auth/sso/login/callback",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { code, state } = request.query as { code: string; state: string };
+
+      const data = await axios.post(
+        `https://github.com/login/oauth/access_token`,
+        {
+          client_id: "6b0c6bf8f44a4e0fa153",
+          client_secret: "4967e55b5f98e0ed189072b0584ef2a2a16e673b",
+          code: code,
+          redirect_uri: "http://localhost:5003/api/v1/auth/sso/login/check",
+        },
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      const access_token = data.data;
+
+      if (access_token) {
+        let user = await prisma.user.findUnique({
+          where: { email: state },
+        });
+
+        if (!user) {
+          reply.code(401).send({
+            message: "Invalid email",
+          });
+        }
+
+        var b64string = process.env.SECRET;
+        var buf = new Buffer(b64string!, "base64"); // Ta-da
+
+        let token = jwt.sign(
+          {
+            data: { id: user!.id },
+          },
+          buf,
+          { expiresIn: "8h" }
+        );
+
+        await prisma.session.create({
+          data: {
+            userId: user!.id,
+            sessionToken: token,
+            expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+          },
+        });
+
+        reply.send({
+          token,
+          success: true,
+        });
+      } else {
+        reply.status(403).send({
+          success: false,
+        });
+      }
+    }
+  );
+
   // Delete a user
   fastify.delete(
     "/api/v1/auth/user/:id",
@@ -177,7 +290,7 @@ export function authRoutes(fastify: FastifyInstance) {
 
         if (!user) {
           reply.code(401).send({
-            message: "Invalid email or password",
+            message: "Invalid user",
           });
         }
 

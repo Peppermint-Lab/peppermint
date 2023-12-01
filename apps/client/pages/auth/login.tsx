@@ -1,8 +1,7 @@
+import { notifications } from "@mantine/notifications";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
-import { useUser } from "../../store/session";
 
 export default function Login({}) {
   const router = useRouter();
@@ -10,28 +9,59 @@ export default function Login({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("idle");
-
-  const { setUser } = useUser();
+  const [auth, setAuth] = useState("oauth");
 
   async function postData() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.user) {
-          setCookie("session", res.token);
-          setUser(res.user);
-          if (res.user.firstLogin) {
-            router.push("/onboarding");
+    if (auth === "oauth") {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/sso/check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+        .then((res) => res.json())
+        .then(async (res) => {
+          if (res.success && res.oauth) {
+            router.push(res.ouath_url);
           } else {
-            router.push("/");
+            if (!res.success) {
+              notifications.show({
+                title: "Error",
+                message:
+                  "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
+                color: "red",
+                autoClose: 5000,
+              });
+            } else {
+              setAuth("password");
+            }
           }
-        }
-      });
+        });
+    } else {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((res) => res.json())
+        .then(async (res) => {
+          if (res.user) {
+            setCookie("session", res.token);
+            if (res.user.firstLogin) {
+              router.push("/onboarding");
+            } else {
+              router.push("/");
+            }
+          } else {
+            notifications.show({
+              title: "Error",
+              message:
+                "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
+              color: "red",
+              autoClose: 5000,
+            });
+          }
+        });
+    }
   }
 
   return (
@@ -75,25 +105,27 @@ export default function Login({}) {
                 </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="password"
-                    required
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                  />
+              {auth !== "oauth" && (
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Password
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="password"
+                      required
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* <div className="flex items-center justify-between">
                 <div className="flex items-center">

@@ -15,26 +15,7 @@ model Provider {
   active       Boolean
   issuer       String?
   tenantId     String?
-}
-
-model Account {
-  id                       String  @id @default(cuid())
-  userId                   String
-  type                     String
-  provider                 String
-  providerAccountId        String
-  refresh_token            String? @db.Text
-  access_token             String? @db.Text
-  expires_at               Int?
-  token_type               String?
-  scope                    String?
-  id_token                 String? @db.Text
-  session_state            String?
-  refresh_token_expires_in Int?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+  redirectUri  String?
 }
 
 model Session {
@@ -69,17 +50,8 @@ model User {
   Team         Team?          @relation(fields: [teamId], references: [id])
   teamId       String?
   Comment      Comment[]
-  Account      Account[]
   Session      Session[]
   TimeTracking TimeTracking[]
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
 }
 
 model Team {

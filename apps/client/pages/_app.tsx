@@ -92,9 +92,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
-      <SessionProvider>
+      <>
+        <Notifications position="top-right" />
         <Component {...pageProps} />
-      </SessionProvider>
+      </>
     );
   }
 
