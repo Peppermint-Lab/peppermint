@@ -12,7 +12,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useState } from "react";
 
-import { spotlight } from "@mantine/spotlight";
 import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../store/session";
 
@@ -496,7 +495,7 @@ export default function NewLayout({ children }: any) {
             />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 pb-2">
-              <div
+              {/* <div
                 className="relative mt-2 hidden sm:flex items-center w-full min-w-[320px] max-w-[360px] hover:cursor-pointer"
                 onClick={() => {
                   spotlight.open();
@@ -518,7 +517,7 @@ export default function NewLayout({ children }: any) {
                     /
                   </kbd>
                 </div>
-              </div>
+              </div> */}
               <div className="flex w-full justify-end items-center gap-x-4 lg:gap-x-6">
                 <button
                   type="button"
@@ -590,7 +589,7 @@ export default function NewLayout({ children }: any) {
           </div>
 
           <main className="py-2">
-            <div className="px-2 py-2 sm:px-4">{children}</div>
+            <div className="p-4 sm:p-8">{children}</div>
           </main>
         </div>
       </div>

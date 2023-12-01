@@ -60,6 +60,16 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
       await sendTicketCreate(ticket);
 
+      if (engineer && engineer.name !== "Unassigned") {
+        const assgined = await prisma.user.findUnique({
+          where: {
+            id: ticket.userId,
+          },
+        });
+
+        await sendAssignedEmail(assgined!.email);
+      }
+
       for (let i = 0; i < webhook.length; i++) {
         if (webhook[i].active === true) {
           console.log(webhook[i].url);
@@ -315,7 +325,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const { user, id }: any = request.body;
 
       if (token) {
-        const ticket = await prisma.user.update({
+        const assigned = await prisma.user.update({
           where: { id: user },
           data: {
             tickets: {
@@ -326,10 +336,9 @@ export function ticketRoutes(fastify: FastifyInstance) {
           },
         });
 
-        // Send email to user that has been assigned the ticket
-        // Saying that they have been assigned a ticket
+        const { email } = assigned;
 
-        await sendAssignedEmail(ticket);
+        await sendAssignedEmail(email);
 
         reply.send({
           success: true,
