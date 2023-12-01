@@ -1,18 +1,22 @@
-import { Fragment, useState } from "react";
-import { Menu, Transition, Switch } from "@headlessui/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Notifications() {
+export default function SSO() {
+  const router = useRouter();
+
   const [enabled, setEnabled] = useState(false);
-  const [provider, setProvider] = useState();
-  const [clientId, setClientId] = useState();
-  const [clientSecret, setClientSecret] = useState();
-  const [tenantId, setTenantId] = useState();
-  const [issuer, setIssuer] = useState();
+  const [provider, setProvider] = useState("");
+  const [clientId, setClientId] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [tenantId, setTenantId] = useState("");
+  const [issuer, setIssuer] = useState("");
+  const [redirectUri, setRedirectUri] = useState(
+    `${window.location.origin}/auth/oauth`
+  );
 
   async function postData() {
     const res = await fetch("/api/v1/admin/sso/update", {
@@ -43,8 +47,8 @@ export default function Notifications() {
               SSO Settings
             </h1>
           </div>
-          <div className="px-4 sm:px-6 md:px-0">
-            <div className="py-6">
+          <div className="px-4 sm:px-6 md:px-0 my-4">
+            <div className="py-6 bg-white shadow-md p-4 rounded-md">
               <div className="w-full lg:w-1/2">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
                   Provider
@@ -68,9 +72,6 @@ export default function Notifications() {
                   <option>Discord</option>
                   <option>Gitlab</option>
                   <option>Google</option>
-                  <option>Atlassian</option>
-                  <option>Apple</option>
-                  {/* <option>Amazon Cognito</option> */}
                 </select>
               </div>
               {provider !== undefined && (
@@ -80,7 +81,7 @@ export default function Notifications() {
                       htmlFor="email"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      clientId
+                      Client Id
                     </label>
                     <div className="mt-2">
                       <input
@@ -97,7 +98,7 @@ export default function Notifications() {
                       htmlFor="email"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      clientSecret
+                      Client Secret
                     </label>
                     <div className="mt-2">
                       <input
@@ -106,6 +107,23 @@ export default function Notifications() {
                         id="email"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         onChange={(e) => setClientSecret(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Redirect Uri
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        type="text"
+                        id="redirecturi"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        onChange={(e) => setRedirectUri(e.target.value)}
+                        value={redirectUri}
                       />
                     </div>
                   </div>
