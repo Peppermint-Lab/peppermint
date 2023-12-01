@@ -119,7 +119,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[85vh]">
+    <div className="flex flex-col xl:flex-row min-h-[85vh] m-6">
       <div className="w-full xl:w-[70%]">
         <div className="bg-white shadow rounded-lg">
           <div className="px-4 sm:px-6 lg:w-full lg:mx-auto lg:px-8">

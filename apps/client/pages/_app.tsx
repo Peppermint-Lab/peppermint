@@ -39,10 +39,7 @@ function Auth({ children }: any) {
   }
 
   return (
-    <div className="flex h-screen justify-center items-center text-green-600">
-      {/* <ScaleLoader color="green" loading={status} size={100} /> */}
-      <span>loading</span>
-    </div>
+    <div className="flex h-screen justify-center items-center text-green-600"></div>
   );
 }
 
