@@ -1,11 +1,10 @@
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function SSO() {
+  const router = useRouter();
+
   const [isloading, setIsLoading] = useState(true);
   const [enabled, setEnabled] = useState(false);
   const [provider, setProvider] = useState("");
@@ -40,7 +39,7 @@ export default function SSO() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          alert("Successfully updated SSO settings");
+          // router.reload();
         }
       });
   }
@@ -60,7 +59,12 @@ export default function SSO() {
       .then((res) => {
         if (res.success) {
           setEnabled(res.sso);
+
+          if (res.sso) {
+            setClientId(res.provider.clientId);
+          }
           setSSO(res.provider);
+
           setIsLoading(false);
         }
       });
@@ -121,7 +125,7 @@ export default function SSO() {
                       </div>
                       <div>
                         <label
-                          htmlFor="clientId"
+                          htmlFor="clientIdddd"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
                           Client Id
@@ -129,9 +133,9 @@ export default function SSO() {
                         <div className="mt-2">
                           <input
                             type="text"
-                            name="clientId"
-                            id="clientId"
-                            autoComplete="off"
+                            name="clientIdddd"
+                            id="clientIdddd"
+                            autoComplete="new-password"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={(e) => setClientId(e.target.value)}
                           />
@@ -149,7 +153,7 @@ export default function SSO() {
                             type="text"
                             name="secret"
                             id="secret"
-                            autoComplete="off"
+                            autoComplete="new-password"
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={(e) => setClientSecret(e.target.value)}
                           />
@@ -227,9 +231,17 @@ export default function SSO() {
                 sso !== undefined && (
                   <div className="p-4">
                     <div>
-                      <span className="text-xl font-bold capitalize">
-                        {sso?.name} SSO settings
-                      </span>
+                      <div className="flex flex-col space-y-2">
+                        <span className="text-xl font-bold capitalize">
+                          {sso.name} SSO settings
+                        </span>
+                        <span className="text-sm">
+                          Below are the settings for your active ouath based SSO
+                          set up. This set up is <strong>ORG WIDE</strong>, and
+                          affects all users. Take caution when updating these
+                          values.
+                        </span>
+                      </div>
                       <div className="space-y-4 mt-4">
                         <div>
                           <label
@@ -243,9 +255,11 @@ export default function SSO() {
                               type="text"
                               name="clientId"
                               id="clientId"
+                              autoComplete="new-password"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               onChange={(e) => setClientId(e.target.value)}
-                              value={sso.clientId}
+                              value={clientId}
+                              defaultValue={sso?.client_id}
                             />
                           </div>
                         </div>
@@ -261,7 +275,7 @@ export default function SSO() {
                               type="password"
                               name="secret"
                               id="secret"
-                              autoComplete="off"
+                              autoComplete="new-password"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               onChange={(e) => setClientSecret(e.target.value)}
                             />

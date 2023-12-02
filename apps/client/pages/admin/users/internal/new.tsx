@@ -4,6 +4,7 @@ import { Flex } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useUser } from "../../../../store/session";
 
 export default function CreateUser() {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +15,8 @@ export default function CreateUser() {
   const [name, setName] = useState("");
   const [admin, setAdmin] = useState(false);
   const [language, setLanguage] = useState("en");
+
+  const { user } = useUser();
 
   const router = useRouter();
 
@@ -102,7 +105,7 @@ export default function CreateUser() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              {auth === "password" && (
+              {!user.sso_active && (
                 <div className="w-1/2">
                   <label className="text-gray-900 font-bold">Password</label>
                   <input

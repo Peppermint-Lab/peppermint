@@ -77,7 +77,7 @@ export default function Settings({ children }) {
                     <span className="truncate">{t("notifications")}</span>
                   </Link>
 
-                  {user.sso_active && (
+                  {!user.sso_active && (
                     <Link
                       href="/settings/password"
                       className={

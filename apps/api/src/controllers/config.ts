@@ -72,18 +72,34 @@ export function configRoutes(fastify: FastifyInstance) {
           },
         });
 
-        // UPDATE PROVIDER
-        await prisma.provider.create({
-          data: {
-            name: name,
-            clientId: client_id,
-            clientSecret: client_secret,
-            active: true,
-            redirectUri: redirect_uri,
-            tenantId: tenantId,
-            issuer: issuer,
-          },
-        });
+        const check_provider = await prisma.provider.findFirst({});
+
+        if (check_provider === null) {
+          await prisma.provider.create({
+            data: {
+              name: name,
+              clientId: client_id,
+              clientSecret: client_secret,
+              active: true,
+              redirectUri: redirect_uri,
+              tenantId: tenantId,
+              issuer: issuer,
+            },
+          });
+        } else {
+          await prisma.provider.update({
+            where: { id: check_provider.id },
+            data: {
+              name: name,
+              clientId: client_id,
+              clientSecret: client_secret,
+              active: true,
+              redirectUri: redirect_uri,
+              tenantId: tenantId,
+              issuer: issuer,
+            },
+          });
+        }
 
         reply.send({
           success: true,

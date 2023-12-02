@@ -194,8 +194,6 @@ export function authRoutes(fastify: FastifyInstance) {
 
       const provider = await prisma.provider.findFirst({});
 
-      console.log(provider);
-
       const data = await axios.post(
         `https://github.com/login/oauth/access_token`,
         {

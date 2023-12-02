@@ -724,12 +724,13 @@ export default function Ticket() {
                                                 </span>
                                               </div>
                                               <p className="text-xs text-gray-500">
-                                                {item.public
+                                                {/* {item.public
                                                   ? "Publicly"
                                                   : "Internally"}
-                                                {t("commented_at")}
+                                                {t("commented_at")} */}
+                                                Commented at{" "}
                                                 {moment(item.createdAt).format(
-                                                  "hh:mm DD-MM-YYYY"
+                                                  "DD/MM/YYYY hh:mm"
                                                 )}
                                               </p>
                                             </div>
