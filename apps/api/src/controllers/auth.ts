@@ -295,6 +295,8 @@ export function authRoutes(fastify: FastifyInstance) {
           });
         }
 
+        const config = await prisma.config.findFirst();
+
         const data = {
           id: user!.id,
           email: user!.email,
@@ -305,6 +307,7 @@ export function authRoutes(fastify: FastifyInstance) {
           ticket_status_changed: user!.notify_ticket_status_changed,
           ticket_comments: user!.notify_ticket_comments,
           ticket_assigned: user!.notify_ticket_assigned,
+          sso_status: config!.sso_active,
         };
 
         reply.send({
