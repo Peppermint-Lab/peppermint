@@ -78,7 +78,11 @@
       "profile_desc": "Ang impormasyong ito ay ipapakita sa publiko kaya mag-ingat sa iyong ibabahagi.",
   "language": "Wika",
   "notifications": "Mga Abiso",
-  "save_and_reload": "I-save at I-reload"
+  "save_and_reload": "I-save at I-reload",
+    "select_a_client": "Pumili ng isang kliyente",
+    "select_an_engineer": "Pumili ng isang inhinyero",
+    "ticket_create": "Gumawa ng tiket",
+    "internallycommented_at": "Internallyo nag-komento sa"
     
   }
   

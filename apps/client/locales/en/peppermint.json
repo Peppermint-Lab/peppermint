@@ -78,5 +78,9 @@
   "profile_desc": "This information will be displayed publicly so be careful what you share.",
   "language": "Language",
   "notifications": "Notifications",
-  "save_and_reload": "Save and Reload"
+  "save_and_reload": "Save and Reload",
+  "select_a_client": "Select a client",
+  "select_an_engineer": "Select an engineer",
+  "ticket_create": "Create Ticket",
+  "internallycommented_at": "Internally Commented At"
 }

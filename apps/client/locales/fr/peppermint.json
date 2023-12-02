@@ -78,7 +78,11 @@
       "profile_desc": "Ces informations seront affichées publiquement, alors faites attention à ce que vous partagez.",
       "language": "Langue",
       "notifications": "Notifications",
-      "save_and_reload": "Enregistrer et recharger"
+      "save_and_reload": "Enregistrer et recharger",
+      "select_a_client": "Sélectionner un client",
+      "select_an_engineer": "Sélectionner un ingénieur",
+      "ticket_create": "Créer un ticket",
+      "internallycommented_at": "Commenté en interne à"
     
   }
   
