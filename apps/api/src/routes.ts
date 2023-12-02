@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { authRoutes } from "./controllers/auth";
 import { clientRoutes } from "./controllers/clients";
+import { configRoutes } from "./controllers/config";
 import { dataRoutes } from "./controllers/data";
 import { notebookRoutes } from "./controllers/notebook";
 import { emailQueueRoutes } from "./controllers/queue";
@@ -19,4 +20,5 @@ export function registerRoutes(fastify: FastifyInstance) {
   notebookRoutes(fastify);
   clientRoutes(fastify);
   webhookRoutes(fastify);
+  configRoutes(fastify);
 }

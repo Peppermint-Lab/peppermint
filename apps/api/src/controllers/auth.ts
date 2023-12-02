@@ -58,7 +58,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // User login route
+  // User password login route
   fastify.post(
     "/api/v1/auth/login",
     {
@@ -186,6 +186,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // SSO api callback route
   fastify.get(
     "/api/v1/auth/sso/login/callback",
     async (request: FastifyRequest, reply: FastifyReply) => {
