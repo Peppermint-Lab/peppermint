@@ -242,6 +242,8 @@ model Config {
   out_of_office_message String?
   out_of_office_start   DateTime?
   out_of_office_end     DateTime?
+  encryption_key        Bytes?
+  first_time_setup      Boolean   @default(true)
 }
 
 model Uptime {

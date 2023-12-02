@@ -9,25 +9,43 @@ export async function getServerSideProps({ query }: any) {
     const sso = await fetch(
       `http://127.0.0.1:5003/api/v1/auth/sso/login/callback?code=${query.code}&state=${query.state}`
     ).then((res) => res.json());
-    console.log(sso);
 
-    return {
-      props: {
-        token: sso.token,
-        permanent: true,
-      },
-    };
+    if (!sso.success) {
+      return {
+        redirect: {
+          destination: "/auth/login?error=account_not_found",
+          permanent: false,
+        },
+      };
+    } else {
+      return {
+        props: {
+          token: sso.token,
+          permanent: true,
+        },
+      };
+    }
   } else {
     const sso = await fetch(
       `${process.env.API_UR}/api/v1/auth/sso/login/check?code=${query.code}&state=${query.state}`
     ).then((res) => res.json());
     console.log(sso);
 
-    return {
-      props: {
-        sso,
-      },
-    };
+    if (!sso.success) {
+      return {
+        redirect: {
+          destination: "/auth/login?error=account_not_found",
+          permanent: false,
+        },
+      };
+    } else {
+      return {
+        props: {
+          token: sso.token,
+          permanent: true,
+        },
+      };
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import { notifications } from "@mantine/notifications";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Login({}) {
   const router = useRouter();
@@ -63,6 +63,18 @@ export default function Login({}) {
         });
     }
   }
+
+  useEffect(() => {
+    if (router.query.error) {
+      notifications.show({
+        title: "Account Error - No Account Found",
+        color: "red",
+        message:
+          "It looks like you have tried to use SSO with an account that does not exist. Please try again or contact your admin to get you set up first.",
+        autoClose: false,
+      });
+    }
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

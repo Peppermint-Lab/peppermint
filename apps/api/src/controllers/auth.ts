@@ -181,7 +181,7 @@ export function authRoutes(fastify: FastifyInstance) {
       reply.send({
         oauth: true,
         success: true,
-        ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&state=${email}&login=${email}`,
+        ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&state=${email}&login=${email}&scope=user`,
       });
     }
   );
@@ -192,13 +192,17 @@ export function authRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { code, state } = request.query as { code: string; state: string };
 
+      const provider = await prisma.provider.findFirst({});
+
+      console.log(provider);
+
       const data = await axios.post(
         `https://github.com/login/oauth/access_token`,
         {
-          client_id: "6b0c6bf8f44a4e0fa153",
-          client_secret: "4967e55b5f98e0ed189072b0584ef2a2a16e673b",
+          client_id: provider?.clientId,
+          client_secret: provider?.clientSecret,
           code: code,
-          redirect_uri: "http://localhost:5003/api/v1/auth/sso/login/check",
+          redirect_uri: provider?.redirectUri,
         },
         {
           headers: {
@@ -209,13 +213,27 @@ export function authRoutes(fastify: FastifyInstance) {
 
       const access_token = data.data;
 
+      console.log(access_token);
+
       if (access_token) {
+        const gh = await axios.get(`https://api.github.com/user/emails`, {
+          headers: {
+            Accept: "application/vnd.github+json",
+            Authorization: `token ${access_token.access_token}`,
+          },
+        });
+
+        const emails = gh.data;
+
+        const filter = emails.filter((e: any) => e.primary === true);
+
         let user = await prisma.user.findUnique({
-          where: { email: state },
+          where: { email: filter[0].email },
         });
 
         if (!user) {
-          reply.code(401).send({
+          reply.send({
+            success: false,
             message: "Invalid email",
           });
         }

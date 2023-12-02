@@ -1,16 +1,19 @@
+import { Switch } from "@headlessui/react";
 import { notifications } from "@mantine/notifications";
-import { Button, Flex, Select, Switch, Text } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function CreateUser() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [auth, setAuth] = useState(undefined);
+
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [admin, setAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [auth, setAuth] = useState(undefined);
+  const [language, setLanguage] = useState("en");
 
   const router = useRouter();
 
@@ -28,13 +31,14 @@ export default function CreateUser() {
           email,
           name,
           admin,
+          language,
         }),
       }
     )
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
-          router.push("/admin/internal/users");
+          router.push("/admin/users/internal");
           notifications.show({
             title: "User created successfully",
             message: "The action was processed correctly! 💚",
@@ -79,7 +83,7 @@ export default function CreateUser() {
             </div>
           </div>
           <div className="bg-white p-6 rounded-md shadow-lg">
-            <Flex gap="5" direction="column" align="start">
+            <Flex gap="4" direction="column" align="start">
               <div className="w-1/2">
                 <label className="text-gray-900 font-bold">Name</label>
                 <input
@@ -111,31 +115,53 @@ export default function CreateUser() {
               )}
               <div className="w-1/2 flex flex-col">
                 <label className="text-gray-900 font-bold">Language</label>
-                <Select.Root defaultValue="en">
-                  <Select.Trigger />
-                  <Select.Content>
-                    <Select.Group>
-                      <Select.Label>Locale</Select.Label>
-                      <Select.Item value="en">English</Select.Item>
-                      <Select.Item value="fr">French</Select.Item>
-                      <Select.Item value="es">Spanish</Select.Item>
-                      <Select.Item value="de">German</Select.Item>
-                      <Select.Item value="pt">Portuguease</Select.Item>
-                      <Select.Item value="da">Danish</Select.Item>
-                      <Select.Item value="no">Norweigan</Select.Item>
-                      <Select.Item value="se">Swedish</Select.Item>
-                      <Select.Item value="tl">Tag</Select.Item>
-                    </Select.Group>
-                  </Select.Content>
-                </Select.Root>
+                <select
+                  id="language"
+                  name="language"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                >
+                  <option value="en">English</option>
+                  <option value="de">German</option>
+                  <option value="se">Swedish</option>
+                  <option value="es">Spanish</option>
+                  <option value="no">Norwegian</option>
+                  <option value="fr">French</option>
+                  <option value="pt">Tagalong</option>
+                  <option value="da">Danish</option>
+                  <option value="pt">Portuguese</option>
+                </select>
               </div>
-              <Text as="label" size="2">
-                <Flex gap="2">
-                  <Switch /> Admin
-                </Flex>
-              </Text>
-              <div className="flex justify-end w-full " onClick={createUser}>
-                <Button>Submit</Button>
+              <div>
+                <label className="text-gray-900 font-bold">Admin User</label>
+                <div className="flex flex-row space-x-2 items-center">
+                  <Switch
+                    checked={admin}
+                    onChange={setAdmin}
+                    className={`${
+                      admin ? "bg-blue-600" : "bg-gray-200"
+                    } relative inline-flex h-6 w-11 items-center rounded-full`}
+                  >
+                    <span className="sr-only">Enable notifications</span>
+                    <span
+                      className={`${
+                        admin ? "translate-x-6" : "translate-x-1"
+                      } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                    />
+                  </Switch>
+                </div>
+              </div>
+              <div
+                className="flex justify-end w-full "
+                onClick={() => createUser()}
+              >
+                <button
+                  type="button"
+                  className="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-500"
+                >
+                  Create User
+                </button>
               </div>
             </Flex>
           </div>
