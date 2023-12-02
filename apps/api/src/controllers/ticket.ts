@@ -5,6 +5,7 @@ import { checkToken } from "../lib/jwt";
 
 //@ts-ignore
 import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
+import { sendComment } from "../lib/nodemailer/ticket/comment";
 import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
 import { checkSession } from "../lib/session";
@@ -399,7 +400,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
 
-      const { text, id }: any = request.body;
+      const { text, id, public: public_comment }: any = request.body;
 
       if (token) {
         const user = await checkSession(bearer);
@@ -413,8 +414,18 @@ export function ticketRoutes(fastify: FastifyInstance) {
           },
         });
 
-        // if user that isnt the assigned comments, send email to all users that have commented on the ticket + assigned user
-        // excluding the user that commented
+        const ticket = await prisma.ticket.findUnique({
+          where: {
+            id: id,
+          },
+        });
+
+        //@ts-expect-error
+        const { email, title } = ticket;
+
+        if (public_comment && email) {
+          sendComment(text, title, email);
+        }
 
         reply.send({
           success: true,
