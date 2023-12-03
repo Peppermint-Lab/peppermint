@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 import { checkToken } from "../lib/jwt";
+import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { prisma } from "../prisma";
 
 export function authRoutes(fastify: FastifyInstance) {
@@ -49,6 +50,100 @@ export function authRoutes(fastify: FastifyInstance) {
           password: await bcrypt.hash(password, 10),
           name,
           isAdmin: admin,
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
+  // Forgot password
+  fastify.post(
+    "/api/v1/auth/password-reset",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { email, link } = request.body as { email: string; link: string };
+
+      let user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid email",
+          success: false,
+        });
+      }
+
+      function generateRandomCode() {
+        const min = 100000; // Minimum 6-digit number
+        const max = 999999; // Maximum 6-digit number
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      const code = generateRandomCode();
+
+      await prisma.passwordResetToken.create({
+        data: {
+          userId: user!.id,
+          code: String(code),
+        },
+      });
+
+      forgotPassword(email, String(code), link);
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
+  fastify.post(
+    "/api/v1/auth/password-reset/code",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { code } = request.body as { code: string };
+
+      const reset = await prisma.passwordResetToken.findUnique({
+        where: { code: code },
+      });
+
+      if (!reset) {
+        reply.code(401).send({
+          message: "Invalid Code",
+          success: false,
+        });
+      } else {
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  fastify.post(
+    "/api/v1/auth/password-reset/password",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { password, code } = request.body as {
+        password: string;
+        code: string;
+      };
+
+      const user = await prisma.passwordResetToken.findUnique({
+        where: { code: code },
+      });
+
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid Code",
+          success: false,
+        });
+      }
+
+      await prisma.user.update({
+        where: { id: user!.userId },
+        data: {
+          password: await bcrypt.hash(password, 10),
         },
       });
 

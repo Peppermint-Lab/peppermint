@@ -26,6 +26,12 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model PasswordResetToken {
+  id     String @id @default(cuid())
+  code   String @unique
+  userId String
+}
+
 model User {
   id                           String   @id @default(uuid())
   createdAt                    DateTime @default(now())
