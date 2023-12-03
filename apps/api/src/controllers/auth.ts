@@ -2,6 +2,7 @@ import axios from "axios";
 import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
+import { track } from "../lib/hog";
 import { checkToken } from "../lib/jwt";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { prisma } from "../prisma";
@@ -44,13 +45,20 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      await prisma.user.create({
+      const user = await prisma.user.create({
         data: {
           email,
           password: await bcrypt.hash(password, 10),
           name,
           isAdmin: admin,
         },
+      });
+
+      const hog = track();
+
+      hog.capture({
+        event: "user_registered",
+        distinctId: user.id,
       });
 
       reply.send({
