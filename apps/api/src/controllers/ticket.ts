@@ -417,7 +417,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         await prisma.comment.create({
           data: {
             text: text,
-            public: Boolean(false),
+            public: public_comment,
             ticketId: id,
             userId: user!.id,
           },

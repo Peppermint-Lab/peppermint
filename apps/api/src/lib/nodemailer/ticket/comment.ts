@@ -9,6 +9,8 @@ export async function sendComment(
   try {
     let mail;
 
+    console.log("Sending email to: ", email);
+
     const emails = await prisma.email.findMany();
 
     if (emails.length > 0) {

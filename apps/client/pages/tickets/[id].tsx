@@ -723,16 +723,22 @@ export default function Ticket() {
                                                   {item.user.name}
                                                 </span>
                                               </div>
-                                              <p className="text-xs text-gray-500">
-                                                {/* {item.public
-                                                  ? "Publicly"
-                                                  : "Internally"}
-                                                {t("commented_at")} */}
-                                                Commented at{" "}
-                                                {moment(item.createdAt).format(
-                                                  "DD/MM/YYYY hh:mm"
-                                                )}
-                                              </p>
+                                              <div className=" flex flex-row space-x-1">
+                                                <span className="text-xs text-gray-500">
+                                                  {item.public
+                                                    ? "Publicly"
+                                                    : "Internally"}
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                                  commented at
+                                                </span>
+
+                                                <span className="text-xs text-gray-500">
+                                                  {moment(
+                                                    item.createdAt
+                                                  ).format("DD/MM/YYYY hh:mm")}
+                                                </span>
+                                              </div>
                                             </div>
                                             <div className="text-sm  text-gray-900">
                                               <span>{item.text}</span>
@@ -1523,7 +1529,16 @@ export default function Ticket() {
                       )}
                       {editTime && (
                         <div>
-                          <div className="mt-2">
+                          <div className="mt-2 flex flex-col">
+                            <input
+                              type="number"
+                              name="number"
+                              id="timespent"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="30"
+                              value={timeSpent}
+                              onChange={(e) => setTimeSpent(e.target.value)}
+                            />
                             <input
                               type="number"
                               name="number"
