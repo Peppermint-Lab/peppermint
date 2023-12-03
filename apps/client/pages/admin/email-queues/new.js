@@ -9,6 +9,7 @@ export default function EmailQueues() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [hostname, setHostname] = useState();
+  const [port, setPort] = useState();
   const [tls, setTls] = useState();
 
   async function newQueue() {
@@ -106,6 +107,21 @@ export default function EmailQueues() {
                       placeholder="Enter first name here..."
                       name="name"
                       onChange={(e) => setHostname(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Port
+                    </label>
+                    <input
+                      type="text"
+                      className="shadow-sm w-1/2  focus:ring-indigo-500 focus:border-indigo-500 block  sm:text-sm border-gray-300 rounded-md"
+                      placeholder="Enter first name here..."
+                      name="name"
+                      onChange={(e) => setPort(e.target.value)}
                     />
                   </div>
                   <div>
