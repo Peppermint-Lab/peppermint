@@ -11,7 +11,7 @@ export async function sendComment(
 
     const emails = await prisma.email.findMany();
 
-    if (emails.length === 0) {
+    if (emails.length > 0) {
       if (process.env.ENVIRONMENT === "development") {
         let testAccount = await nodeMailer.createTestAccount();
         mail = nodeMailer.createTransport({
