@@ -220,6 +220,41 @@ export function ticketRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Get all tickets (admin)
+  fastify.get(
+    "/api/v1/tickets/all/admin",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const tickets = await prisma.ticket.findMany({
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+          ],
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
+
   // Get all open tickets for a user
   fastify.get(
     "/api/v1/tickets/user/open",
