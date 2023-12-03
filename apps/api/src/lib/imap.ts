@@ -87,29 +87,39 @@ export const getEmails = async () => {
 
                   const parsedData = parseEmailContent(textAsHtml);
 
-                  const imap = await client.imap_Email.create({
-                    data: {
-                      from: from.text,
-                      subject: subject ? subject : "No Subject",
-                      body: text ? text : "No Body",
-                      html: html ? html : "",
-                      text: textAsHtml,
-                    },
-                  });
+                  if (subject.includes("Re:")) {
+                    return await client.comment.create({
+                      data: {
+                        text: text ? text : "No Body",
+                        userId: null,
+                        ticketId: subject.split(" ")[1].split("#")[1],
+                      },
+                    });
+                  } else {
+                    const imap = await client.imap_Email.create({
+                      data: {
+                        from: from.text,
+                        subject: subject ? subject : "No Subject",
+                        body: text ? text : "No Body",
+                        html: html ? html : "",
+                        text: textAsHtml,
+                      },
+                    });
 
-                  const ticket = await client.ticket.create({
-                    data: {
-                      email: imap.from,
-                      name: imap.from,
-                      title: imap.subject ? imap.subject : "-",
-                      isComplete: Boolean(false),
-                      priority: "Low",
-                      fromImap: Boolean(true),
-                      detail: textAsHtml,
-                    },
-                  });
+                    const ticket = await client.ticket.create({
+                      data: {
+                        email: imap.from,
+                        name: imap.from,
+                        title: imap.subject ? imap.subject : "-",
+                        isComplete: Boolean(false),
+                        priority: "Low",
+                        fromImap: Boolean(true),
+                        detail: textAsHtml,
+                      },
+                    });
 
-                  console.log(imap, ticket);
+                    console.log(imap, ticket);
+                  }
                 });
               });
               msg.once("attributes", (attrs: any) => {

@@ -118,10 +118,10 @@ model Comment {
   text   String
   public Boolean @default(false)
 
-  userId   String
-  user     User   @relation(fields: [userId], references: [id])
+  userId   String?
+  user     User?   @relation(fields: [userId], references: [id])
   ticketId String
-  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticket   Ticket  @relation(fields: [ticketId], references: [id])
 }
 
 model Client {
