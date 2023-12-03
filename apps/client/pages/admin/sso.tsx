@@ -1,3 +1,4 @@
+import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -39,7 +40,26 @@ export default function SSO() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          // router.reload();
+          router.reload();
+        }
+      });
+  }
+
+  async function deleteConfig() {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/sso/provider`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("session")}`,
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          router.reload();
         }
       });
   }
@@ -86,6 +106,50 @@ export default function SSO() {
             </h1>
           </div>
           <div className="px-4 sm:px-6 md:px-0 my-4">
+            <div className="mb-6">
+              {enabled ? (
+                <div className="rounded-md bg-green-50 p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <ExclamationTriangleIcon
+                        className="h-5 w-5 text-green-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-green-800">
+                        SSO is enabled & configured
+                      </h3>
+                      <div className="mt-2 text-sm text-green-700">
+                        <p>The config you supplied is working as intended.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="rounded-md bg-yellow-50 p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <ExclamationTriangleIcon
+                        className="h-5 w-5 text-yellow-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-yellow-800">
+                        No Active Email Settings found
+                      </h3>
+                      <div className="mt-2 text-sm text-yellow-700">
+                        <p>
+                          Please either create and submit an smtp config or
+                          active your old one.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="py-6 bg-white shadow-md p-4 rounded-md">
               {!isloading && !enabled ? (
                 <>
@@ -337,7 +401,14 @@ export default function SSO() {
                           </div>
                         )}
 
-                        <div className="mt-6 flex items-center justify-end gap-x-6">
+                        <div className="mt-12 flex items-center justify-between gap-x-6">
+                          <button
+                            type="submit"
+                            onClick={() => deleteConfig()}
+                            className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                          >
+                            Delete Config
+                          </button>
                           <button
                             type="submit"
                             onClick={() => postData()}

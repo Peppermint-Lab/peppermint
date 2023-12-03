@@ -109,6 +109,39 @@ export function configRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Delete SSO Provider
+  fastify.delete(
+    "/api/v1/config/sso/provider",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const conf = await prisma.config.findFirst();
+
+        //update config to true
+        await prisma.config.update({
+          where: { id: conf!.id },
+          data: {
+            sso_active: false,
+            sso_provider: "",
+          },
+        });
+
+        const provider = await prisma.provider.findFirst({});
+        await prisma.provider.delete({
+          where: { id: provider!.id },
+        });
+
+        reply.send({
+          success: true,
+          message: "SSO Provider deleted!",
+        });
+      }
+    }
+  );
+
   // Check if Emails are enabled & GET email settings
   fastify.get(
     "/api/v1/config/email",
