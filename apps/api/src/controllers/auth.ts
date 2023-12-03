@@ -99,6 +99,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Generate code and send to email
   fastify.post(
     "/api/v1/auth/password-reset/code",
     async (request: FastifyRequest, reply: FastifyReply) => {
@@ -121,6 +122,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Reset users password via code
   fastify.post(
     "/api/v1/auth/password-reset/password",
     async (request: FastifyRequest, reply: FastifyReply) => {
@@ -496,6 +498,50 @@ export function authRoutes(fastify: FastifyInstance) {
             name: name,
             email: email,
             language: language,
+          },
+        });
+
+        reply.send({
+          user,
+        });
+      } else {
+        reply.send({
+          sucess: false,
+        });
+      }
+    }
+  );
+
+  // Update a users Email notification settings
+  fastify.put(
+    "/api/v1/auth/profile/notifcations/emails",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+
+      //checks if token is valid and returns valid token
+      const token = checkToken(bearer);
+
+      if (token) {
+        let session = await prisma.session.findUnique({
+          where: {
+            sessionToken: bearer,
+          },
+        });
+
+        const {
+          notify_ticket_created,
+          notify_ticket_assigned,
+          notify_ticket_comments,
+          notify_ticket_status_changed,
+        } = request.body as any;
+
+        let user = await prisma.user.update({
+          where: { id: session?.userId },
+          data: {
+            notify_ticket_created: notify_ticket_created,
+            notify_ticket_assigned: notify_ticket_assigned,
+            notify_ticket_comments: notify_ticket_comments,
+            notify_ticket_status_changed: notify_ticket_status_changed,
           },
         });
 
