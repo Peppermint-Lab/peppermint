@@ -98,7 +98,7 @@ export const getEmails = async () => {
                   } else {
                     const imap = await client.imap_Email.create({
                       data: {
-                        from: from.text,
+                        from: from.text.split("<")[1].split(">")[0],
                         subject: subject ? subject : "No Subject",
                         body: text ? text : "No Body",
                         html: html ? html : "",
@@ -108,8 +108,8 @@ export const getEmails = async () => {
 
                     const ticket = await client.ticket.create({
                       data: {
-                        email: imap.from,
-                        name: imap.from,
+                        email: imap.from?.split("<")[1].split(">")[0],
+                        name: imap.from?.split("<")[0].split(">")[0],
                         title: imap.subject ? imap.subject : "-",
                         isComplete: Boolean(false),
                         priority: "Low",
