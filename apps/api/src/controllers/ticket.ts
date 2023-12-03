@@ -76,7 +76,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
         if (webhook[i].active === true) {
           const url = webhook[i].url;
           if (url.includes("discord.com")) {
-            console.log("discord");
             const message = {
               content: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
               avatar_url:
@@ -93,7 +92,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
                 console.error("Error sending message:", error);
               });
           } else {
-            console.log("non discord");
             await axios.post(`${webhook[i].url}`, {
               headers: {
                 "Content-Type": "application/json",
@@ -494,18 +492,36 @@ export function ticketRoutes(fastify: FastifyInstance) {
         });
 
         for (let i = 0; i < webhook.length; i++) {
+          const url = webhook[i].url;
+
           if (webhook[i].active === true) {
             const s = status ? "Completed" : "Outstanding";
-            await axios.post(`${webhook[i].url}`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
-              }),
-              redirect: "follow",
-            });
+            if (url.includes("discord.com")) {
+              const message = {
+                content: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+                avatar_url:
+                  "https://avatars.githubusercontent.com/u/76014454?s=200&v=4",
+                username: "Peppermint.sh",
+              };
+              axios
+                .post(url, message)
+                .then((response) => {
+                  console.log("Message sent successfully!");
+                  console.log("Discord API response:", response.data);
+                })
+                .catch((error) => {
+                  console.error("Error sending message:", error);
+                });
+            } else {
+              await axios.post(`${webhook[i].url}`, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+                }),
+              });
+            }
           }
         }
 
