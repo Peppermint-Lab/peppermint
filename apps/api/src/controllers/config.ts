@@ -108,4 +108,97 @@ export function configRoutes(fastify: FastifyInstance) {
       }
     }
   );
+
+  // Check if Emails are enabled & GET email settings
+  fastify.get(
+    "/api/v1/config/email",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        // GET EMAIL SETTINGS
+        const config = await prisma.email.findFirst({});
+
+        if (config === null) {
+          reply.send({
+            success: true,
+            active: false,
+          });
+        }
+
+        if (config?.active) {
+          reply.send({
+            success: true,
+            active: true,
+            email: config,
+          });
+        } else {
+          reply.send({
+            success: true,
+            active: false,
+            email: config,
+          });
+        }
+      }
+    }
+  );
+
+  // Update Email Provider Settings
+  fastify.put(
+    "/api/v1/config/email",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const {
+          host,
+          active,
+          port,
+          reply: replyto,
+          username,
+          password,
+        }: any = request.body;
+
+        const email = await prisma.email.findFirst();
+
+        if (email === null) {
+          await prisma.email.create({
+            data: {
+              host: host,
+              port: port,
+              reply: replyto,
+              user: username,
+              pass: password,
+              active: true,
+            },
+          });
+        } else {
+          await prisma.email.update({
+            where: { id: email.id },
+            data: {
+              host: host,
+              port: port,
+              reply: replyto,
+              user: username,
+              pass: password,
+              active: active,
+            },
+          });
+        }
+
+        reply.send({
+          success: true,
+          message: "SSO Provider updated!",
+        });
+      }
+    }
+  );
+
+  // Test email is working
+
+  // Disable/Enable Email
 }
