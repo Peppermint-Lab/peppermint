@@ -137,12 +137,12 @@ export default function SSO() {
                     </div>
                     <div className="ml-3">
                       <h3 className="text-sm font-medium text-yellow-800">
-                        No Active Email Settings found
+                        No Active SSO Settings found
                       </h3>
                       <div className="mt-2 text-sm text-yellow-700">
                         <p>
-                          Please either create and submit an smtp config or
-                          active your old one.
+                          Please either create and submit an sso config or
+                          activate your old one.
                         </p>
                       </div>
                     </div>
