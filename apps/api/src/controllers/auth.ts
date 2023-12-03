@@ -67,7 +67,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Forgot password
+  // Forgot password & generate code
   fastify.post(
     "/api/v1/auth/password-reset",
     async (request: FastifyRequest, reply: FastifyReply) => {
@@ -92,14 +92,14 @@ export function authRoutes(fastify: FastifyInstance) {
 
       const code = generateRandomCode();
 
-      await prisma.passwordResetToken.create({
+      const uuid = await prisma.passwordResetToken.create({
         data: {
           userId: user!.id,
           code: String(code),
         },
       });
 
-      forgotPassword(email, String(code), link);
+      forgotPassword(email, String(code), link, uuid.id);
 
       reply.send({
         success: true,
@@ -107,14 +107,14 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Generate code and send to email
+  // Check code & uuid us valid
   fastify.post(
     "/api/v1/auth/password-reset/code",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { code } = request.body as { code: string };
+      const { code, uuid } = request.body as { code: string; uuid: string };
 
       const reset = await prisma.passwordResetToken.findUnique({
-        where: { code: code },
+        where: { code: code, id: uuid },
       });
 
       if (!reset) {
@@ -315,8 +315,6 @@ export function authRoutes(fastify: FastifyInstance) {
       );
 
       const access_token = data.data;
-
-      console.log(access_token);
 
       if (access_token) {
         const gh = await axios.get(`https://api.github.com/user/emails`, {

@@ -4,14 +4,15 @@ import { prisma } from "../../../prisma";
 export async function forgotPassword(
   email: string,
   code: string,
-  link: string
+  link: string,
+  token: string
 ) {
   try {
     let mail;
 
     const emails = await prisma.email.findMany();
 
-    const resetlink = `${link}/auth/reset-password?code=${code}`;
+    const resetlink = `${link}/auth/reset-password?token=${token}`;
 
     if (emails.length > 0) {
       if (process.env.ENVIRONMENT === "development") {
@@ -41,10 +42,10 @@ export async function forgotPassword(
       console.log("Sending email to: ", email);
 
       let info = await mail.sendMail({
-        from: '"No reply 👻" noreply@peppermint.sh', // sender address
+        from: "noreply@peppermint.sh", // sender address
         to: email, // list of receivers
         subject: `Password Reset Request`, // Subject line
-        text: `Password Reset Code: ${code}, follow this link to reset your password ${link}`, // plain text body
+        text: `Password Reset Code: ${code}, follow this link to reset your password ${resetlink}`, // plain text body
         html: `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html lang="en">

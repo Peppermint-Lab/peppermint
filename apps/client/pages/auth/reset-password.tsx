@@ -15,7 +15,7 @@ export default function Login({}) {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, uuid: router.query.token }),
       }
     )
       .then((res) => res.json())
