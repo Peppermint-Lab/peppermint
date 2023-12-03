@@ -4,6 +4,7 @@ import axios from "axios";
 import { checkToken } from "../lib/jwt";
 
 //@ts-ignore
+import { track } from "../lib/hog";
 import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
 import { sendComment } from "../lib/nodemailer/ticket/comment";
 import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
@@ -85,6 +86,13 @@ export function ticketRoutes(fastify: FastifyInstance) {
           });
         }
       }
+
+      const hog = track();
+
+      hog.capture({
+        event: "ticket_created",
+        distinctId: ticket.id,
+      });
 
       reply.status(200).send({
         message: "Ticket created correctly",
@@ -349,6 +357,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   );
 
   // Link a ticket to another ticket
+
   // fastify.post(
   //   "/api/v1/ticket/link",
 
@@ -426,6 +435,13 @@ export function ticketRoutes(fastify: FastifyInstance) {
         if (public_comment && email) {
           sendComment(text, title, email);
         }
+
+        const hog = track();
+
+        hog.capture({
+          event: "ticket_comment",
+          distinctId: ticket!.id,
+        });
 
         reply.send({
           success: true,
