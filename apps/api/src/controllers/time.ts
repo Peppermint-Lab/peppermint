@@ -1,19 +1,32 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { prisma } from "../prisma";
 
 export function timeTrackingRoutes(fastify: FastifyInstance) {
   // Create a new entry
-  fastify.get(
-    "/api/v1/time/entries/new",
+  fastify.post(
+    "/api/v1/time/new",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // check jwt is valid
-      // check user is admin
+      const { time, ticket, title, user }: any = request.body;
+
+      console.log(request.body);
+
+      await prisma.timeTracking.create({
+        data: {
+          time: Number(time),
+          title,
+          userId: user,
+          ticketId: ticket,
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
   // Get all entries
 
   // Delete an entry
-
-  // Link an entry to a ticket
 }

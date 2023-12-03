@@ -19,6 +19,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
+import { notifications } from "@mantine/notifications";
 import { Text, Tooltip } from "@radix-ui/themes";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
@@ -74,6 +75,7 @@ export default function Ticket() {
   const [comment, setComment] = useState<any>();
   const [timeSpent, setTimeSpent] = useState<any>();
   const [publicComment, setPublicComment] = useState<any>(false);
+  const [timeReason, setTimeReason] = useState("");
 
   const IssueEditor = useEditor({
     extensions: [
@@ -181,14 +183,22 @@ export default function Ticket() {
       },
       body: JSON.stringify({
         time: timeSpent,
-        id: data.ticket.id,
-        title: data.ticket.title,
+        ticket: id,
+        title: timeReason,
+        user: user.id,
       }),
     })
       .then((res) => res.json())
-      .then(() => {
-        setTimeEdit(false);
-        refetch();
+      .then((res) => {
+        if (res.success) {
+          setTimeEdit(false);
+          refetch();
+          notifications.show({
+            title: "Time Added",
+            message: "Time has been added to the ticket",
+            color: "blue",
+          });
+        }
       });
   }
 
@@ -265,8 +275,6 @@ export default function Ticket() {
   useEffect(() => {
     fetchUsers();
   }, []);
-
-  console.log(publicComment);
 
   useEffect(() => {
     if (status === "success") {
@@ -1529,22 +1537,22 @@ export default function Ticket() {
                       )}
                       {editTime && (
                         <div>
-                          <div className="mt-2 flex flex-col">
+                          <div className="mt-2 flex flex-col space-y-2">
                             <input
-                              type="number"
-                              name="number"
-                              id="timespent"
+                              type="text"
+                              name="text"
+                              id="timespent_text"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder="30"
-                              value={timeSpent}
-                              onChange={(e) => setTimeSpent(e.target.value)}
+                              placeholder="What did you do?"
+                              value={timeReason}
+                              onChange={(e) => setTimeReason(e.target.value)}
                             />
                             <input
                               type="number"
                               name="number"
                               id="timespent"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder="30"
+                              placeholder="Time in minutes"
                               value={timeSpent}
                               onChange={(e) => setTimeSpent(e.target.value)}
                             />
