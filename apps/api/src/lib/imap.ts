@@ -85,6 +85,8 @@ export const getEmails = async () => {
                 simpleParser(stream, async (err: any, parsed: any) => {
                   const { from, subject, textAsHtml, text, html } = parsed;
 
+                  console.log("from", from);
+
                   const parsedData = parseEmailContent(textAsHtml);
 
                   if (subject.includes("Re:")) {
@@ -98,7 +100,7 @@ export const getEmails = async () => {
                   } else {
                     const imap = await client.imap_Email.create({
                       data: {
-                        from: from.text.split("<")[1].split(">")[0],
+                        from: from.value[0].address,
                         subject: subject ? subject : "No Subject",
                         body: text ? text : "No Body",
                         html: html ? html : "",
@@ -108,8 +110,8 @@ export const getEmails = async () => {
 
                     const ticket = await client.ticket.create({
                       data: {
-                        email: imap.from?.split("<")[1].split(">")[0],
-                        name: imap.from?.split("<")[0].split(">")[0],
+                        email: from.value[0].address,
+                        name: from.value[0].name,
                         title: imap.subject ? imap.subject : "-",
                         isComplete: Boolean(false),
                         priority: "Low",
