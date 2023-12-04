@@ -1,39 +1,29 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 
 export default function UpdateUserModal({ user }) {
   const [open, setOpen] = useState(false);
 
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
   const [admin, setAdmin] = useState(user.isAdmin);
-  const [error, setError] = useState(null);
 
   const router = useRouter();
 
-  const notificationMethods = [
-    { id: "user", title: "user" },
-    { id: "admin", title: "admin" },
-  ];
-
   async function updateUser() {
-    if (name.length > 0 && email.length > 0) {
-      await fetch("/api/v1/admin/user/update", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          name,
-          admin,
-          id: user.id,
-        }),
-      }).then(() => router.reload(router.pathname));
-    }
-    setError("Length needs to be more than zero");
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/role`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+      body: JSON.stringify({
+        role: admin,
+        id: user.id,
+      }),
+    });
+    // .then(() => router.reload());
   }
 
   return (
@@ -43,7 +33,7 @@ export default function UpdateUserModal({ user }) {
         type="button"
         className="inline-flex items-center px-4 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        Edit
+        Role
       </button>
 
       <Transition.Root show={open} as={Fragment}>
@@ -97,54 +87,10 @@ export default function UpdateUserModal({ user }) {
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Edit User
+                      Edit User Role
                     </Dialog.Title>
                     <div className="mt-2 space-y-4">
-                      <>
-                        <input
-                          type="text"
-                          className={
-                            error !== null && name.length === 0
-                              ? "shadow-sm focus:ring-red-500 focus:border-red-500 block w-3/4 sm:text-sm border-red-600 rounded-md"
-                              : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-3/4 sm:text-sm border-gray-300 rounded-md"
-                          }
-                          placeholder="Enter client name here..."
-                          name="name"
-                          onChange={(e) => setName(e.target.value)}
-                          value={name}
-                          focus={
-                            error !== null && name.length > 0 ? true : false
-                          }
-                        />
-                        {error !== null && name.length === 0 && (
-                          <p className="text-red-500 text-xs italic">{error}</p>
-                        )}
-                      </>
-
-                      <>
-                        <input
-                          type="email"
-                          className={
-                            error !== null && email.length === 0
-                              ? "shadow-sm focus:ring-red-500 focus:border-red-500 block w-3/4 sm:text-sm border-red-600 rounded-md"
-                              : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-3/4 sm:text-sm border-gray-300 rounded-md"
-                          }
-                          placeholder="Enter email here...."
-                          onChange={(e) => setEmail(e.target.value)}
-                          value={email}
-                          focus={
-                            error !== null && email.length > 0 ? true : false
-                          }
-                        />
-                        {error !== null && email.length === 0 && (
-                          <p className="text-red-500 text-xs italic">{error}</p>
-                        )}
-                      </>
-
                       <div className="">
-                        <label className="text-base font-medium text-gray-900">
-                          User Type
-                        </label>
                         <div className="space-y-2 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
                           <span className="relative z-0 inline-flex shadow-sm rounded-md space-x-4">
                             <button

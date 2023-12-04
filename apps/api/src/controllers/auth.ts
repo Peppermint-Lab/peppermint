@@ -579,4 +579,25 @@ export function authRoutes(fastify: FastifyInstance) {
       }
     }
   );
+
+  // Update a users role
+  fastify.put(
+    "/api/v1/auth/user/role",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+      if (token) {
+        const { id, role } = request.body as { id: string; role: boolean };
+
+        await prisma.user.update({
+          where: { id },
+          data: {
+            isAdmin: role,
+          },
+        });
+
+        reply.send({ success: true });
+      }
+    }
+  );
 }
