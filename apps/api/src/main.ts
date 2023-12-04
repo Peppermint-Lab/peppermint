@@ -4,7 +4,7 @@ import Fastify, { FastifyInstance } from "fastify";
 import { getEmails } from "./lib/imap";
 
 import { exec } from "child_process";
-import { PostHog } from "posthog-node";
+import { track } from "./lib/hog";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
@@ -112,7 +112,7 @@ const start = async () => {
 
     const port = process.env.PORT || 5003;
 
-    await server.listen(
+    server.listen(
       { port: Number(port), host: "0.0.0.0" },
       async (err, address) => {
         if (err) {
@@ -120,18 +120,14 @@ const start = async () => {
           process.exit(1);
         }
 
-        const client = new PostHog(
-          "phc_2gbpy3JPtDC6hHrQy35yMxMci1NY0fD1sttGTcPjwVf",
-
-          { host: "https://app.posthog.com" }
-        );
+        const client = track();
 
         client.capture({
           event: "server_started",
           distinctId: "uuid",
         });
 
-        await client.shutdownAsync();
+        client.shutdownAsync();
         console.info(`Server listening on ${address}`);
       }
     );

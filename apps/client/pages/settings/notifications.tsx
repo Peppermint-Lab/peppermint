@@ -16,21 +16,22 @@ export default function UserNotifications() {
     user.ticket_status_changed
   );
   const [ticket_assigned, setTicket_assigned] = useState(user.ticket_assigned);
-  const [loading, setLoading] = useState();
+  const [ticket_comments, setTicket_comments] = useState(user.ticket_comments);
 
   async function updateNotifications() {
     await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/profile/config`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/profile/notifcations/emails`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
-          ticket_creation,
-          ticket_assigned,
-          ticket_status,
+          notify_ticket_created: ticket_creation,
+          notify_ticket_assigned: ticket_assigned,
+          notify_ticket_status_changed: ticket_status,
+          notify_ticket_comments: ticket_comments,
         }),
       }
     );
@@ -102,7 +103,7 @@ export default function UserNotifications() {
                   </span>
                   <Switch
                     checked={ticket_status}
-                    onChange={() => setTicket_status}
+                    onChange={setTicket_status}
                     className={classNames(
                       ticket_status ? "bg-teal-600" : "bg-gray-200",
                       "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -154,9 +155,46 @@ export default function UserNotifications() {
                     />
                   </Switch>
                 </Switch.Group>
+
+                <Switch.Group
+                  as="div"
+                  className="flex items-center justify-between"
+                >
+                  <span className="flex-grow flex flex-col">
+                    <Switch.Label
+                      as="span"
+                      className="text-sm font-medium text-gray-900"
+                      passive
+                    >
+                      Ticket Comment
+                    </Switch.Label>
+                    <Switch.Description
+                      as="span"
+                      className="text-sm text-gray-500"
+                    >
+                      Get emailed when a comment is added to your ticket
+                    </Switch.Description>
+                  </span>
+                  <Switch
+                    checked={ticket_comments}
+                    onChange={setTicket_comments}
+                    className={classNames(
+                      ticket_comments ? "bg-teal-600" : "bg-gray-200",
+                      "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    )}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={classNames(
+                        ticket_comments ? "translate-x-5" : "translate-x-0",
+                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                      )}
+                    />
+                  </Switch>
+                </Switch.Group>
               </div>
 
-              <div className="m-4 float-right">
+              <div className="my-4 float-right">
                 <button
                   onClick={() => updateNotifications()}
                   type="button"

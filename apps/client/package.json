@@ -16,6 +16,7 @@
     "@mantine/notifications": "^6.0.13",
     "@mantine/spotlight": "^6.0.13",
     "@mantine/tiptap": "^6.0.13",
+    "@radix-ui/themes": "^2.0.1",
     "@tabler/icons-react": "^2.20.0",
     "@tailwindcss/forms": "^0.4.0",
     "@tiptap/extension-highlight": "^2.0.3",

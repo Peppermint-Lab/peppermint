@@ -108,6 +108,7 @@ export default function EmailQueues() {
                       onChange={(e) => setHostname(e.target.value)}
                     />
                   </div>
+
                   <div>
                     <label
                       htmlFor="email"

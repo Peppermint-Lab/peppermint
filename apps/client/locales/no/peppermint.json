@@ -78,6 +78,10 @@
   "profile_desc": "Denne informasjonen vil bli vist offentlig, så vær forsiktig med hva du deler.",
   "language": "Språk",
   "notifications": "Varsler",
-  "save_and_reload": "Lagre og last inn på nytt"
+  "save_and_reload": "Lagre og last inn på nytt",
+  "select_a_client": "Velg en kunde",
+      "select_an_engineer": "Velg en ingeniør",
+      "ticket_create": "Opprett billett",
+      "internallycommented_at": "Kommentert internt kl."
   }
   

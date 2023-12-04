@@ -1,8 +1,8 @@
+import { notifications } from "@mantine/notifications";
 import { setCookie } from "cookies-next";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
-
-import { useUser } from "../../store/session";
+import { useEffect, useState } from "react";
 
 export default function Login({}) {
   const router = useRouter();
@@ -10,29 +10,72 @@ export default function Login({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("idle");
-
-  const { setUser } = useUser();
+  const [auth, setAuth] = useState("oauth");
 
   async function postData() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.user) {
-          setCookie("session", res.token);
-          setUser(res.user);
-          if (res.user.firstLogin) {
-            router.push("/onboarding");
+    if (auth === "oauth") {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/sso/check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+        .then((res) => res.json())
+        .then(async (res) => {
+          if (res.success && res.oauth) {
+            router.push(res.ouath_url);
           } else {
-            router.push("/");
+            if (!res.success) {
+              notifications.show({
+                title: "Error",
+                message:
+                  "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
+                color: "red",
+                autoClose: 5000,
+              });
+            } else {
+              setAuth("password");
+            }
           }
-        }
-      });
+        });
+    } else {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((res) => res.json())
+        .then(async (res) => {
+          if (res.user) {
+            setCookie("session", res.token);
+            if (res.user.firstLogin) {
+              router.push("/onboarding");
+            } else {
+              router.push("/");
+            }
+          } else {
+            notifications.show({
+              title: "Error",
+              message:
+                "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
+              color: "red",
+              autoClose: 5000,
+            });
+          }
+        });
+    }
   }
+
+  useEffect(() => {
+    if (router.query.error) {
+      notifications.show({
+        title: "Account Error - No Account Found",
+        color: "red",
+        message:
+          "It looks like you have tried to use SSO with an account that does not exist. Please try again or contact your admin to get you set up first.",
+        autoClose: false,
+      });
+    }
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -54,7 +97,7 @@ export default function Login({}) {
           <div className="text-center mr-4">{/* <Loader size={32} /> */}</div>
         ) : (
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
                 <label
                   htmlFor="email"
@@ -75,51 +118,38 @@ export default function Login({}) {
                 </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="password"
-                    required
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                  />
-                </div>
-              </div>
-
-              {/* <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                  />
+              {auth !== "oauth" && (
+                <div>
                   <label
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-gray-900"
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
                   >
-                    Remember me
+                    Password
                   </label>
-                </div> 
+                  <div className="mt-1">
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="password"
+                      required
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+              )}
 
-                 <div className="text-sm">
-                  <a
-                    href="#"
+              <div className="flex items-center justify-between">
+                <div className="text-sm">
+                  <Link
+                    href="/auth/forgot-password"
                     className="font-medium text-indigo-600 hover:text-indigo-500"
                   >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
-              </div> */}
+              </div>
 
               <div>
                 <button
@@ -179,8 +209,11 @@ export default function Login({}) {
           </div>
         )}
 
-        <div className="mt-8 text-center">
+        <div className="mt-8 text-center flex flex-col space-y-2">
           <span className="font-bold">Built with 💚 by Peppermint Labs</span>
+          <a href="https://docs.peppermint.sh/" target="_blank">
+            Documentation
+          </a>
         </div>
       </div>
     </div>

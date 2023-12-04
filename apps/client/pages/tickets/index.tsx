@@ -4,10 +4,12 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Loader from "react-spinners/ClipLoader";
 
+import TicketsAdminLayout from "../../components/TicketViews/admin";
 import AssignedTickets from "../../components/TicketViews/assigned";
 import ClosedTickets from "../../components/TicketViews/closed";
 import OpenTickets from "../../components/TicketViews/open";
 import UnassignedTickets from "../../components/TicketViews/unassiged";
+import { useUser } from "../../store/session";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -18,6 +20,8 @@ export default function Tickets() {
   const { t } = useTranslation("peppermint");
 
   const [loading, setLoading] = useState(false);
+
+  const user = useUser();
 
   const tabs = [
     {
@@ -68,7 +72,10 @@ export default function Tickets() {
                 defaultValue={tabs[0].name}
               >
                 {tabs.map((tab) => (
-                  <option key={tab.name}>{tab.name}</option>
+                  <>
+                    <option key={tab.name}>{tab.name}</option>
+                    {user.isAdmin && <option key="admin">ADMIN</option>}
+                  </>
                 ))}
               </select>
             </div>
@@ -76,19 +83,20 @@ export default function Tickets() {
               <div className="">
                 <nav className="-mb-px flex space-x-8" aria-label="Tabs">
                   {tabs.map((tab) => (
-                    <Link
-                      key={tab.name}
-                      href={tab.href}
-                      className={classNames(
-                        tab.current
-                          ? "border-indigo-500 text-indigo-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200",
-                        "whitespace-nowrap flex py-2 px-1 border-b-2 font-medium text-sm"
-                      )}
-                      aria-current={tab.current ? "page" : undefined}
-                    >
-                      {tab.name}
-                      {/* {tab.count ? (
+                    <>
+                      <Link
+                        key={tab.name}
+                        href={tab.href}
+                        className={classNames(
+                          tab.current
+                            ? "border-indigo-500 text-indigo-600"
+                            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200",
+                          "whitespace-nowrap flex py-2 px-1 border-b-2 font-medium text-sm"
+                        )}
+                        aria-current={tab.current ? "page" : undefined}
+                      >
+                        {tab.name}
+                        {/* {tab.count ? (
                         <span
                           className={classNames(
                             tab.current
@@ -100,8 +108,21 @@ export default function Tickets() {
                           {tab.count}
                         </span>
                       ) : null} */}
-                    </Link>
+                      </Link>
+                    </>
                   ))}
+                  <Link
+                    key="admin"
+                    href="?filter=admin"
+                    className={classNames(
+                      router.asPath === "/tickets?filter=admin"
+                        ? "border-indigo-500 text-indigo-600"
+                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200",
+                      "whitespace-nowrap flex py-2 px-1 border-b-2 font-medium text-sm"
+                    )}
+                  >
+                    admin
+                  </Link>
                 </nav>
               </div>
             </div>
@@ -115,6 +136,9 @@ export default function Tickets() {
                 <UnassignedTickets />
               )}
               {router.asPath === "/tickets?filter=closed" && <ClosedTickets />}
+              {router.asPath === "/tickets?filter=admin" && (
+                <TicketsAdminLayout />
+              )}
             </div>
           </div>
         </>

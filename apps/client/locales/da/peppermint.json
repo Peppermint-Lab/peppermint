@@ -78,7 +78,11 @@
       "profile_desc": "Disse oplysninger vil blive vist offentligt, så vær forsigtig med, hvad du deler.",
       "language": "Sprog",
       "notifications": "Notifikationer",
-      "save_and_reload": "Gem og genindlæs"
+      "save_and_reload": "Gem og genindlæs",
+      "select_a_client": "Vælg en kunde",
+      "select_an_engineer": "Vælg en ingeniør",
+      "ticket_create": "Opret billet",
+      "internallycommented_at": "Kommenteret internt kl."
     
   }
   

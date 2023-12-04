@@ -1,4 +1,4 @@
-import { Listbox, Transition } from "@headlessui/react";
+import { Listbox, Switch, Transition } from "@headlessui/react";
 import {
   CalendarIcon,
   ChatBubbleLeftEllipsisIcon,
@@ -19,6 +19,8 @@ import { Fragment, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
+import { notifications } from "@mantine/notifications";
+import { Text, Tooltip } from "@radix-ui/themes";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
@@ -72,6 +74,8 @@ export default function Ticket() {
   const [ticketStatus, setTicketStatus] = useState<any>();
   const [comment, setComment] = useState<any>();
   const [timeSpent, setTimeSpent] = useState<any>();
+  const [publicComment, setPublicComment] = useState<any>(false);
+  const [timeReason, setTimeReason] = useState("");
 
   const IssueEditor = useEditor({
     extensions: [
@@ -163,6 +167,7 @@ export default function Ticket() {
       body: JSON.stringify({
         text: comment,
         id,
+        public: publicComment,
       }),
     })
       .then((res) => res.json())
@@ -178,14 +183,22 @@ export default function Ticket() {
       },
       body: JSON.stringify({
         time: timeSpent,
-        id: data.ticket.id,
-        title: data.ticket.title,
+        ticket: id,
+        title: timeReason,
+        user: user.id,
       }),
     })
       .then((res) => res.json())
-      .then(() => {
-        setTimeEdit(false);
-        refetch();
+      .then((res) => {
+        if (res.success) {
+          setTimeEdit(false);
+          refetch();
+          notifications.show({
+            title: "Time Added",
+            message: "Time has been added to the ticket",
+            color: "blue",
+          });
+        }
       });
   }
 
@@ -242,6 +255,7 @@ export default function Ticket() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           user: n.id,
@@ -432,7 +446,7 @@ export default function Ticket() {
                             </div>
                             {!assignedEdit ? (
                               <ul role="list" className="mt-3 space-y-3">
-                                <li className="flex justify-start">
+                                <li className="flex justify-start items-center space-x-4">
                                   <div className="flex-shrink-0">
                                     <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                                       <span className="text-xs font-medium leading-none text-white uppercase">
@@ -458,12 +472,6 @@ export default function Ticket() {
                                         <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                           <span className="block truncate">
                                             {n ? n.name : t("select_new_user")}
-                                          </span>
-                                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                            {/* <SelectorIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  /> */}
                                           </span>
                                         </Listbox.Button>
 
@@ -723,15 +731,22 @@ export default function Ticket() {
                                                   {item.user.name}
                                                 </span>
                                               </div>
-                                              <p className="text-xs text-gray-500">
-                                                {item.public
-                                                  ? "Publicly"
-                                                  : "Internally"}
-                                                {t("commented_at")}
-                                                {moment(item.createdAt).format(
-                                                  "hh:mm DD-MM-YYYY"
-                                                )}
-                                              </p>
+                                              <div className=" flex flex-row space-x-1">
+                                                <span className="text-xs text-gray-500">
+                                                  {item.public
+                                                    ? "Publicly"
+                                                    : "Internally"}
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                                  commented at
+                                                </span>
+
+                                                <span className="text-xs text-gray-500">
+                                                  {moment(
+                                                    item.createdAt
+                                                  ).format("DD/MM/YYYY hh:mm")}
+                                                </span>
+                                              </div>
                                             </div>
                                             <div className="text-sm  text-gray-900">
                                               <span>{item.text}</span>
@@ -777,7 +792,36 @@ export default function Ticket() {
                                       }
                                     />
                                   </div>
-                                  <div className="mt-6 flex items-center justify-end space-x-4">
+                                  <div className="mt-4 flex justify-end">
+                                    <Text as="label" size="2">
+                                      <div className="flex flex-row items-center space-x-2">
+                                        <Switch
+                                          checked={publicComment}
+                                          onChange={setPublicComment}
+                                          className={`${
+                                            publicComment
+                                              ? "bg-blue-600"
+                                              : "bg-gray-200"
+                                          } relative inline-flex h-6 w-11 items-center rounded-full`}
+                                        >
+                                          <span className="sr-only">
+                                            Enable notifications
+                                          </span>
+                                          <span
+                                            className={`${
+                                              publicComment
+                                                ? "translate-x-6"
+                                                : "translate-x-1"
+                                            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                                          />
+                                        </Switch>
+                                        <Tooltip content="Enabling this will mean the email registered to the ticket will get a reply based on your comment.">
+                                          <Text> Public Reply</Text>
+                                        </Tooltip>
+                                      </div>
+                                    </Text>
+                                  </div>
+                                  <div className="mt-4 flex items-center justify-end space-x-4">
                                     {data.ticket.isComplete ? (
                                       <button
                                         type="button"
@@ -892,7 +936,7 @@ export default function Ticket() {
                       </div>
                       {!assignedEdit ? (
                         <ul role="list" className="mt-3 space-y-3">
-                          <li className="flex justify-start">
+                          <li className="flex justify-star items-center space-x-2">
                             <div className="flex-shrink-0">
                               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                                 <span className="text-xs font-medium leading-none text-white uppercase">
@@ -1453,7 +1497,7 @@ export default function Ticket() {
                         </>
                       )}
                     </div>
-                    {/* <div className="border-t border-gray-200">
+                    <div className="border-t border-gray-200">
                       <div className="flex flex-row items-center justify-between mt-2">
                         <span className="text-sm font-medium text-gray-500 ">
                           Time Tracking
@@ -1493,20 +1537,29 @@ export default function Ticket() {
                       )}
                       {editTime && (
                         <div>
-                          <div className="mt-2">
+                          <div className="mt-2 flex flex-col space-y-2">
+                            <input
+                              type="text"
+                              name="text"
+                              id="timespent_text"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="What did you do?"
+                              value={timeReason}
+                              onChange={(e) => setTimeReason(e.target.value)}
+                            />
                             <input
                               type="number"
                               name="number"
                               id="timespent"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder="30"
+                              placeholder="Time in minutes"
                               value={timeSpent}
                               onChange={(e) => setTimeSpent(e.target.value)}
                             />
                           </div>
                         </div>
                       )}
-                    </div> */}
+                    </div>
                   </div>
                 </aside>
               </div>

@@ -2,8 +2,23 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import axios from "axios";
 import { checkToken } from "../lib/jwt";
+
+//@ts-ignore
+import { track } from "../lib/hog";
+import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
+import { sendComment } from "../lib/nodemailer/ticket/comment";
+import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
+import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
+
+const validateEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
 
 export function ticketRoutes(fastify: FastifyInstance) {
   // Create a new ticket
@@ -47,6 +62,20 @@ export function ticketRoutes(fastify: FastifyInstance) {
         },
       });
 
+      if (!email && !validateEmail(email)) {
+        await sendTicketCreate(ticket);
+      }
+
+      if (engineer && engineer.name !== "Unassigned") {
+        const assgined = await prisma.user.findUnique({
+          where: {
+            id: ticket.userId,
+          },
+        });
+
+        await sendAssignedEmail(assgined!.email);
+      }
+
       const webhook = await prisma.webhooks.findMany({
         where: {
           type: "ticket_created",
@@ -55,18 +84,42 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
       for (let i = 0; i < webhook.length; i++) {
         if (webhook[i].active === true) {
-          console.log(webhook[i].url);
-          await axios.post(`${webhook[i].url}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              data: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
-            }),
-          });
+          const url = webhook[i].url;
+          if (url.includes("discord.com")) {
+            const message = {
+              content: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
+              avatar_url:
+                "https://avatars.githubusercontent.com/u/76014454?s=200&v=4",
+              username: "Peppermint.sh",
+            };
+            axios
+              .post(url, message)
+              .then((response) => {
+                console.log("Message sent successfully!");
+                console.log("Discord API response:", response.data);
+              })
+              .catch((error) => {
+                console.error("Error sending message:", error);
+              });
+          } else {
+            await axios.post(`${webhook[i].url}`, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                data: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
+              }),
+            });
+          }
         }
       }
+
+      const hog = track();
+
+      hog.capture({
+        event: "ticket_created",
+        distinctId: ticket.id,
+      });
 
       reply.status(200).send({
         message: "Ticket created correctly",
@@ -151,6 +204,41 @@ export function ticketRoutes(fastify: FastifyInstance) {
       if (token) {
         const tickets = await prisma.ticket.findMany({
           where: { isComplete: false, hidden: false },
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+          ],
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
+
+  // Get all tickets (admin)
+  fastify.get(
+    "/api/v1/tickets/all/admin",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const tickets = await prisma.ticket.findMany({
           orderBy: [
             {
               createdAt: "desc",
@@ -308,7 +396,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const { user, id }: any = request.body;
 
       if (token) {
-        await prisma.user.update({
+        const assigned = await prisma.user.update({
           where: { id: user },
           data: {
             tickets: {
@@ -319,6 +407,10 @@ export function ticketRoutes(fastify: FastifyInstance) {
           },
         });
 
+        const { email } = assigned;
+
+        await sendAssignedEmail(email);
+
         reply.send({
           success: true,
         });
@@ -327,6 +419,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   );
 
   // Link a ticket to another ticket
+
   // fastify.post(
   //   "/api/v1/ticket/link",
 
@@ -378,7 +471,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
 
-      const { text, id }: any = request.body;
+      const { text, id, public: public_comment }: any = request.body;
 
       if (token) {
         const user = await checkSession(bearer);
@@ -386,10 +479,30 @@ export function ticketRoutes(fastify: FastifyInstance) {
         await prisma.comment.create({
           data: {
             text: text,
-            public: Boolean(false),
+            public: public_comment,
             ticketId: id,
             userId: user!.id,
           },
+        });
+
+        const ticket = await prisma.ticket.findUnique({
+          where: {
+            id: id,
+          },
+        });
+
+        //@ts-expect-error
+        const { email, title } = ticket;
+
+        if (public_comment && email) {
+          sendComment(text, title, email);
+        }
+
+        const hog = track();
+
+        hog.capture({
+          event: "ticket_comment",
+          distinctId: ticket!.id,
         });
 
         reply.send({
@@ -410,16 +523,12 @@ export function ticketRoutes(fastify: FastifyInstance) {
       if (token) {
         const { status, id }: any = request.body;
 
-        const ticket: any = await prisma.ticket
-          .update({
-            where: { id: id },
-            data: {
-              isComplete: status,
-            },
-          })
-          .then(async (ticket) => {
-            // await sendTicketStatus(ticket);
-          });
+        const ticket: any = await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            isComplete: status,
+          },
+        });
 
         const webhook = await prisma.webhooks.findMany({
           where: {
@@ -428,20 +537,40 @@ export function ticketRoutes(fastify: FastifyInstance) {
         });
 
         for (let i = 0; i < webhook.length; i++) {
+          const url = webhook[i].url;
+
           if (webhook[i].active === true) {
             const s = status ? "Completed" : "Outstanding";
-            await axios.post(`${webhook[i].url}`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
-              }),
-              redirect: "follow",
-            });
+            if (url.includes("discord.com")) {
+              const message = {
+                content: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+                avatar_url:
+                  "https://avatars.githubusercontent.com/u/76014454?s=200&v=4",
+                username: "Peppermint.sh",
+              };
+              axios
+                .post(url, message)
+                .then((response) => {
+                  console.log("Message sent successfully!");
+                  console.log("Discord API response:", response.data);
+                })
+                .catch((error) => {
+                  console.error("Error sending message:", error);
+                });
+            } else {
+              await axios.post(`${webhook[i].url}`, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+                }),
+              });
+            }
           }
         }
+
+        sendTicketStatus(ticket);
 
         reply.send({
           success: true,

@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { track } from "../lib/hog";
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
@@ -14,13 +15,20 @@ export function clientRoutes(fastify: FastifyInstance) {
       if (token) {
         const { name, email, number, contactName }: any = request.body;
 
-        await prisma.client.create({
+        const client = await prisma.client.create({
           data: {
             name,
             contactName,
             email,
             number: String(number),
           },
+        });
+
+        const hog = track();
+
+        hog.capture({
+          event: "client_created",
+          distinctId: client.id,
         });
 
         reply.send({

@@ -78,5 +78,9 @@
   "profile_desc": "Diese Informationen werden öffentlich angezeigt, also achten Sie darauf, was Sie teilen.",
   "language": "Sprache",
   "notifications": "Benachrichtigungen",
-  "save_and_reload": "Speichern und neu laden"
+  "save_and_reload": "Speichern und neu laden",
+  "select_a_client": "Kunden auswählen",
+  "select_an_engineer": "Einen Ingenieur auswählen",
+  "ticket_create": "Ticket erstellen",
+  "internallycommented_at": "Intern kommentiert um"
 }

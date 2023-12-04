@@ -1,7 +1,10 @@
+import axios from "axios";
 import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
+import { track } from "../lib/hog";
 import { checkToken } from "../lib/jwt";
+import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { prisma } from "../prisma";
 
 export function authRoutes(fastify: FastifyInstance) {
@@ -42,12 +45,115 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      await prisma.user.create({
+      const user = await prisma.user.create({
         data: {
           email,
           password: await bcrypt.hash(password, 10),
           name,
           isAdmin: admin,
+        },
+      });
+
+      const hog = track();
+
+      hog.capture({
+        event: "user_registered",
+        distinctId: user.id,
+      });
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
+  // Forgot password & generate code
+  fastify.post(
+    "/api/v1/auth/password-reset",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { email, link } = request.body as { email: string; link: string };
+
+      let user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid email",
+          success: false,
+        });
+      }
+
+      function generateRandomCode() {
+        const min = 100000; // Minimum 6-digit number
+        const max = 999999; // Maximum 6-digit number
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      const code = generateRandomCode();
+
+      const uuid = await prisma.passwordResetToken.create({
+        data: {
+          userId: user!.id,
+          code: String(code),
+        },
+      });
+
+      forgotPassword(email, String(code), link, uuid.id);
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
+  // Check code & uuid us valid
+  fastify.post(
+    "/api/v1/auth/password-reset/code",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { code, uuid } = request.body as { code: string; uuid: string };
+
+      const reset = await prisma.passwordResetToken.findUnique({
+        where: { code: code, id: uuid },
+      });
+
+      if (!reset) {
+        reply.code(401).send({
+          message: "Invalid Code",
+          success: false,
+        });
+      } else {
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  // Reset users password via code
+  fastify.post(
+    "/api/v1/auth/password-reset/password",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { password, code } = request.body as {
+        password: string;
+        code: string;
+      };
+
+      const user = await prisma.passwordResetToken.findUnique({
+        where: { code: code },
+      });
+
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid Code",
+          success: false,
+        });
+      }
+
+      await prisma.user.update({
+        where: { id: user!.userId },
+        data: {
+          password: await bcrypt.hash(password, 10),
         },
       });
 
@@ -57,7 +163,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // User login route
+  // User password login route
   fastify.post(
     "/api/v1/auth/login",
     {
@@ -137,6 +243,133 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Checks if a user is SSO or password
+  fastify.post(
+    "/api/v1/auth/sso/check",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      let { email } = request.body as {
+        email: string;
+      };
+
+      let user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        reply.code(401).send({
+          message: "Invalid email",
+          success: false,
+        });
+      }
+
+      const authtype = await prisma.config.findMany({
+        where: {
+          sso_active: true,
+        },
+      });
+
+      const provider = await prisma.provider.findMany();
+      const oauth = provider[0];
+
+      console.log(authtype);
+
+      if (authtype.length === 0) {
+        reply.code(200).send({
+          success: true,
+          message: "SSO not enabled",
+          oauth: false,
+        });
+      }
+
+      const url = "https://github.com/login/oauth/authorize";
+
+      reply.send({
+        oauth: true,
+        success: true,
+        ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&state=${email}&login=${email}&scope=user`,
+      });
+    }
+  );
+
+  // SSO api callback route
+  fastify.get(
+    "/api/v1/auth/sso/login/callback",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { code, state } = request.query as { code: string; state: string };
+
+      const provider = await prisma.provider.findFirst({});
+
+      const data = await axios.post(
+        `https://github.com/login/oauth/access_token`,
+        {
+          client_id: provider?.clientId,
+          client_secret: provider?.clientSecret,
+          code: code,
+          redirect_uri: provider?.redirectUri,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      const access_token = data.data;
+
+      if (access_token) {
+        const gh = await axios.get(`https://api.github.com/user/emails`, {
+          headers: {
+            Accept: "application/vnd.github+json",
+            Authorization: `token ${access_token.access_token}`,
+          },
+        });
+
+        const emails = gh.data;
+
+        const filter = emails.filter((e: any) => e.primary === true);
+
+        let user = await prisma.user.findUnique({
+          where: { email: filter[0].email },
+        });
+
+        if (!user) {
+          reply.send({
+            success: false,
+            message: "Invalid email",
+          });
+        }
+
+        var b64string = process.env.SECRET;
+        var buf = new Buffer(b64string!, "base64"); // Ta-da
+
+        let token = jwt.sign(
+          {
+            data: { id: user!.id },
+          },
+          buf,
+          { expiresIn: "8h" }
+        );
+
+        await prisma.session.create({
+          data: {
+            userId: user!.id,
+            sessionToken: token,
+            expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+          },
+        });
+
+        reply.send({
+          token,
+          success: true,
+        });
+      } else {
+        reply.status(403).send({
+          success: false,
+        });
+      }
+    }
+  );
+
   // Delete a user
   fastify.delete(
     "/api/v1/auth/user/:id",
@@ -177,9 +410,11 @@ export function authRoutes(fastify: FastifyInstance) {
 
         if (!user) {
           reply.code(401).send({
-            message: "Invalid email or password",
+            message: "Invalid user",
           });
         }
+
+        const config = await prisma.config.findFirst();
 
         const data = {
           id: user!.id,
@@ -191,6 +426,7 @@ export function authRoutes(fastify: FastifyInstance) {
           ticket_status_changed: user!.notify_ticket_status_changed,
           ticket_comments: user!.notify_ticket_comments,
           ticket_assigned: user!.notify_ticket_assigned,
+          sso_status: config!.sso_active,
         };
 
         reply.send({
@@ -282,6 +518,50 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Update a users Email notification settings
+  fastify.put(
+    "/api/v1/auth/profile/notifcations/emails",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+
+      //checks if token is valid and returns valid token
+      const token = checkToken(bearer);
+
+      if (token) {
+        let session = await prisma.session.findUnique({
+          where: {
+            sessionToken: bearer,
+          },
+        });
+
+        const {
+          notify_ticket_created,
+          notify_ticket_assigned,
+          notify_ticket_comments,
+          notify_ticket_status_changed,
+        } = request.body as any;
+
+        let user = await prisma.user.update({
+          where: { id: session?.userId },
+          data: {
+            notify_ticket_created: notify_ticket_created,
+            notify_ticket_assigned: notify_ticket_assigned,
+            notify_ticket_comments: notify_ticket_comments,
+            notify_ticket_status_changed: notify_ticket_status_changed,
+          },
+        });
+
+        reply.send({
+          user,
+        });
+      } else {
+        reply.send({
+          sucess: false,
+        });
+      }
+    }
+  );
+
   // Logout a user (deletes session)
   fastify.get(
     "/api/v1/auth/user/:id/logout",
@@ -293,6 +573,27 @@ export function authRoutes(fastify: FastifyInstance) {
 
         await prisma.session.deleteMany({
           where: { userId: id },
+        });
+
+        reply.send({ success: true });
+      }
+    }
+  );
+
+  // Update a users role
+  fastify.put(
+    "/api/v1/auth/user/role",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+      if (token) {
+        const { id, role } = request.body as { id: string; role: boolean };
+
+        await prisma.user.update({
+          where: { id },
+          data: {
+            isAdmin: role,
+          },
         });
 
         reply.send({ success: true });

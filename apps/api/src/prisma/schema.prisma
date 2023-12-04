@@ -15,26 +15,7 @@ model Provider {
   active       Boolean
   issuer       String?
   tenantId     String?
-}
-
-model Account {
-  id                       String  @id @default(cuid())
-  userId                   String
-  type                     String
-  provider                 String
-  providerAccountId        String
-  refresh_token            String? @db.Text
-  access_token             String? @db.Text
-  expires_at               Int?
-  token_type               String?
-  scope                    String?
-  id_token                 String? @db.Text
-  session_state            String?
-  refresh_token_expires_in Int?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+  redirectUri  String?
 }
 
 model Session {
@@ -43,6 +24,12 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id     String @id @default(cuid())
+  code   String @unique
+  userId String
 }
 
 model User {
@@ -69,17 +56,8 @@ model User {
   Team         Team?          @relation(fields: [teamId], references: [id])
   teamId       String?
   Comment      Comment[]
-  Account      Account[]
   Session      Session[]
   TimeTracking TimeTracking[]
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
 }
 
 model Team {
@@ -114,12 +92,13 @@ model Ticket {
   Comment      Comment[]
   TimeTracking TimeTracking[]
 
-  team       Team?   @relation(fields: [teamId], references: [id])
-  teamId     String?
-  assignedTo User?   @relation(fields: [userId], references: [id])
-  client     Client? @relation(fields: [clientId], references: [id])
-  clientId   String?
-  userId     String?
+  team          Team?           @relation(fields: [teamId], references: [id])
+  teamId        String?
+  assignedTo    User?           @relation(fields: [userId], references: [id])
+  client        Client?         @relation(fields: [clientId], references: [id])
+  clientId      String?
+  userId        String?
+  knowledgeBase knowledgeBase[]
 }
 
 model TimeTracking {
@@ -145,10 +124,10 @@ model Comment {
   text   String
   public Boolean @default(false)
 
-  userId   String
-  user     User   @relation(fields: [userId], references: [id])
+  userId   String?
+  user     User?   @relation(fields: [userId], references: [id])
   ticketId String
-  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticket   Ticket  @relation(fields: [ticketId], references: [id])
 }
 
 model Client {
@@ -258,7 +237,47 @@ model Config {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  notifications Json // Array of service names and an active field of TRUE OR FALSE
+  notifications         Json? // Array of service names and an active field of TRUE OR FALSE
+  sso_provider          String?
+  sso_active            Boolean   @default(false)
+  gh_version            String?
+  client_version        String?
+  portal_locale         String?
+  feature_previews      Boolean   @default(false)
+  out_of_office         Boolean   @default(false)
+  out_of_office_message String?
+  out_of_office_start   DateTime?
+  out_of_office_end     DateTime?
+  encryption_key        Bytes?
+  first_time_setup      Boolean   @default(true)
+}
+
+model Uptime {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  name    String
+  url     String
+  active  Boolean  @default(false)
+  webhook String?
+  latency Int?
+  status  Boolean?
+}
+
+model knowledgeBase {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  title   String
+  content String
+  tags    String[]
+  author  String
+  public  Boolean  @default(false)
+
+  ticketId String?
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
 }
 
 model Imap_Email {
