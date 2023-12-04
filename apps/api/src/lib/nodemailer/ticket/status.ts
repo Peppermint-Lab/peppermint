@@ -31,16 +31,17 @@ export async function sendTicketStatus(ticket: any) {
       });
     }
 
-    let info = await mail.sendMail({
-      from: '"No reply 👻" noreply@peppermint.sh', // sender address
-      to: ticket.email,
-      subject: `Ticket ${ticket.id} status is now ${
-        ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
-      }`, // Subject line
-      text: `Hello there, Ticket ${ticket.id}, now has a status of ${
-        ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
-      }`, // plain text body
-      html: `
+    await mail
+      .sendMail({
+        from: "noreply@peppermint.sh", // sender address
+        to: ticket.email,
+        subject: `Ticket ${ticket.id} status is now ${
+          ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
+        }`, // Subject line
+        text: `Hello there, Ticket ${ticket.id}, now has a status of ${
+          ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
+        }`, // plain text body
+        html: `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html lang="en">
         
@@ -77,8 +78,8 @@ export async function sendTicketStatus(ticket: any) {
                     <tbody>
                       <tr>
                         <td>
-                          <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://slackhq.com" rel="noopener noreferrer">Our blog</a>   |   <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://slack.com/legal" rel="noopener noreferrer">Documentation</a>   |   <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://slack.com/help" rel="noopener noreferrer">Discord</a> </a>
-                          <p style="font-size:12px;line-height:15px;margin:16px 0;color:#b7b7b7;text-align:left">This was an automated message sent by peppermint.sh -> An open source helpdesk solution</p>
+                        <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://docs.peppermint.sh" rel="noopener noreferrer">Documentation</a>   |   <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://discord.gg/8XFkbgKmgv" rel="noopener noreferrer">Discord</a> </a>
+                        <p style="font-size:12px;line-height:15px;margin:16px 0;color:#b7b7b7;text-align:left">This was an automated message sent by peppermint.sh -> An open source helpdesk solution</p>
                           <p style="font-size:12px;line-height:15px;margin:16px 0;color:#b7b7b7;text-align:left;margin-bottom:50px">©2022 Peppermint Ticket Management, a Peppermint Labs product.<br />All rights reserved.</p>
                         </td>
                       </tr>
@@ -91,11 +92,10 @@ export async function sendTicketStatus(ticket: any) {
         
         </html>
         `,
-    });
-
-    console.log("Message sent: %s", info.messageId);
-
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
+      })
+      .then((info) => {
+        console.log("Message sent: %s", info.messageId);
+      })
+      .catch((err) => console.log(err));
   }
 }

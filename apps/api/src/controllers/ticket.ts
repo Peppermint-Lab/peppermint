@@ -12,6 +12,14 @@ import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
 
+const validateEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 export function ticketRoutes(fastify: FastifyInstance) {
   // Create a new ticket
   fastify.post(
@@ -54,13 +62,9 @@ export function ticketRoutes(fastify: FastifyInstance) {
         },
       });
 
-      const webhook = await prisma.webhooks.findMany({
-        where: {
-          type: "ticket_created",
-        },
-      });
-
-      await sendTicketCreate(ticket);
+      if (!email && !validateEmail(email)) {
+        await sendTicketCreate(ticket);
+      }
 
       if (engineer && engineer.name !== "Unassigned") {
         const assgined = await prisma.user.findUnique({
@@ -71,6 +75,12 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         await sendAssignedEmail(assgined!.email);
       }
+
+      const webhook = await prisma.webhooks.findMany({
+        where: {
+          type: "ticket_created",
+        },
+      });
 
       for (let i = 0; i < webhook.length; i++) {
         if (webhook[i].active === true) {

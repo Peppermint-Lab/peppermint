@@ -89,7 +89,7 @@ export const getEmails = async () => {
 
                   const parsedData = parseEmailContent(textAsHtml);
 
-                  if (subject.includes("Re:")) {
+                  if (subject !== undefined && subject.includes("Re:")) {
                     return await client.comment.create({
                       data: {
                         text: text ? text : "No Body",
