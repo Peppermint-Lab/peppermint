@@ -16,7 +16,9 @@ const config = {
   docsRepositoryBase: 'https://github.com/Peppermint-Lab/docs',
   sidebar: {
     toggleButton: true,
-    
+  },
+  chat: {
+    link: 'https://discord.gg/X9yFbcV2rF',
   },
   // i18n: [
   //   { locale: 'en', text: 'English' },
@@ -26,10 +28,10 @@ const config = {
     component: () => <></>
   },
    banner: {
-    key: '2.0-release',
+    key: 'release',
     text: (
       <a href="https://github.com/Peppermint-Lab/peppermint" target="_blank">
-        🎉 Peppermint 0.3 is released. Read more →
+        🎉 Peppermint 0.4 is released. Read more →
       </a>
     )
   },
