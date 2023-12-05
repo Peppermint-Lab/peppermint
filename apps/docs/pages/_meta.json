@@ -1,11 +1,58 @@
 {
+    "-- Getting Started": {
+        "type": "separator",
+        "title": "Getting Started"
+      },
     "index": {
         "title": "Welcome"
     },
+
+    "-- Installation": {
+        "type": "separator",
+        "title": "Installation"
+      },
+
     "docker": {
         "title": "Docker"
     }, 
+
+    "-- Features": {
+        "type": "separator",
+        "title": "Features"
+      },
+      "Tickets": {
+        "title": "Tickets"
+    }, 
+    "Imap Mailboxes": {
+        "title": "Imap Mailboxes"
+    }, 
+    "Outbound Smtp": {
+        "title": "Outbound Smtp"
+    }, 
+    "Conversations": {
+        "title": "Conversations"
+    }, 
+    "Webhooks": {
+        "title": "Webhooks"
+    }, 
+    "SSO": {
+        "title": "SSO"
+    }, 
+    "Notebooks": {
+        "title": "Notebooks"
+    }, 
+    "International": {
+        "title": "International"
+    }, 
+    "API": {
+        "title": "API"
+    }, 
+
+    "-- Guide": {
+        "type": "separator",
+        "title": "How To Guides"
+      },
     "reverse-proxy": {
-        "title": "Proxies"
+        "title": "Subdomain"
     }
 }
