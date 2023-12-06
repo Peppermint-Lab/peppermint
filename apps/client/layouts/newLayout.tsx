@@ -1,5 +1,16 @@
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { PlusIcon, TicketIcon } from "@heroicons/react/20/solid";
+import {
+  Dialog,
+  Disclosure,
+  Menu,
+  Popover,
+  Transition,
+} from "@headlessui/react";
+import {
+  ArchiveBoxIcon,
+  BellAlertIcon,
+  PlusIcon,
+  TicketIcon,
+} from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   Cog6ToothIcon,
@@ -30,6 +41,7 @@ export default function NewLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [tab, setTab] = useState("unread");
 
   if (!user) {
     location.push("/auth/login");
@@ -39,6 +51,8 @@ export default function NewLayout({ children }: any) {
     location.push("/");
     alert("You do not have the correct perms for that action.");
   }
+
+  console.log(user);
 
   const navigation = [
     {
@@ -518,21 +532,78 @@ export default function NewLayout({ children }: any) {
                   </kbd>
                 </div>
               </div> */}
-              <div className="flex w-full justify-end items-center gap-x-4 lg:gap-x-6">
-                <button
-                  type="button"
-                  className="-m-2.5 p-2.5  text-white hover:text-gray-500"
-                >
-                  <span className="sr-only">View notifications</span>
-                  {/* <BellIcon className="h-6 w-6 text-gray-900" aria-hidden="true" /> */}
-                </button>
+              <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2">
+                <Popover className="relative">
+                  <Popover.Button className="relative mt-2.5 rounded-full  p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <BellAlertIcon
+                      className="h-6 w-6 text-white"
+                      aria-hidden="true"
+                    />
+                  </Popover.Button>
 
-                {/* Separator */}
-                {/* <div
-              className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200"
-              aria-hidden="true"
-            /> */}
-
+                  <Popover.Panel className="absolute z-10 sm:min-w-[400px] right-1 overflow-hidden rounded-lg bg-white shadow">
+                    <div className="px-6 p-6">
+                      <div className="border-b border-gray-200">
+                        <nav
+                          className="-mb-px flex space-x-8"
+                          aria-label="Tabs"
+                        >
+                          <button
+                            onClick={() => setTab("unread")}
+                            className={classNames(
+                              tab === "unread"
+                                ? "border-indigo-500 text-indigo-600"
+                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                              "whitespace-nowrap border-b-2  px-1 text-sm font-medium"
+                            )}
+                          >
+                            Unread
+                          </button>
+                          <button
+                            onClick={() => setTab("archive")}
+                            className={classNames(
+                              tab === "archive"
+                                ? "border-indigo-500 text-indigo-600"
+                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                              "whitespace-nowrap border-b-2 px-1 text-sm font-medium"
+                            )}
+                          >
+                            Archive
+                          </button>
+                        </nav>
+                      </div>
+                      <div className="mt-2">
+                        {user !== undefined ? (
+                          tab === "unread" ? (
+                            user.notifcations
+                              .filter((notification) => !notification.red)
+                              .map((notification: any) => (
+                                <div className="w-full items-start border-b py-3">
+                                  <div className="flex justify-between flex-row w-full">
+                                    <p className="text-md font-medium text-gray-900">
+                                      {notification.text}
+                                    </p>
+                                    <button
+                                      type="button"
+                                      className="rounded bg-transparent  text-sm font-semibold"
+                                    >
+                                      <ArchiveBoxIcon className="h-5 w-5 text-green-500 hover:text-green-600" />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))
+                          ) : (
+                            user.notifcations
+                              .filter((notification) => notification.read)
+                              .map((notification: any) => <>Hello</>)
+                          )
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  </Popover.Panel>
+                </Popover>
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="mt-2 z-50 flex items-center p-1.5">
