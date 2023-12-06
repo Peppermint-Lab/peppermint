@@ -52,8 +52,6 @@ export default function NewLayout({ children }: any) {
     alert("You do not have the correct perms for that action.");
   }
 
-  console.log(user);
-
   const navigation = [
     {
       name: t("create_ticket"),
@@ -122,6 +120,18 @@ export default function NewLayout({ children }: any) {
       deleteCookie("session");
       location.reload();
     }
+  }
+
+  async function markasread(id) {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/notifcation/${id}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getCookie("session")}`,
+        },
+      }
+    ).then((res) => res.json());
   }
 
   useEffect(() => {
@@ -576,7 +586,7 @@ export default function NewLayout({ children }: any) {
                         {user !== undefined ? (
                           tab === "unread" ? (
                             user.notifcations
-                              .filter((notification) => !notification.red)
+                              .filter((notification) => !notification.read)
                               .map((notification: any) => (
                                 <div className="w-full items-start border-b py-3">
                                   <div className="flex justify-between flex-row w-full">
@@ -585,6 +595,9 @@ export default function NewLayout({ children }: any) {
                                     </p>
                                     <button
                                       type="button"
+                                      onClick={() =>
+                                        markasread(notification.id)
+                                      }
                                       className="rounded bg-transparent  text-sm font-semibold"
                                     >
                                       <ArchiveBoxIcon className="h-5 w-5 text-green-500 hover:text-green-600" />
@@ -595,7 +608,15 @@ export default function NewLayout({ children }: any) {
                           ) : (
                             user.notifcations
                               .filter((notification) => notification.read)
-                              .map((notification: any) => <>Hello</>)
+                              .map((notification: any) => (
+                                <div className="w-full items-start border-b py-3">
+                                  <div className="flex justify-between flex-row w-full">
+                                    <p className="text-md font-medium text-gray-900">
+                                      {notification.text}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))
                           )
                         ) : (
                           <></>

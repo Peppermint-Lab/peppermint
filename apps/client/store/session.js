@@ -44,7 +44,6 @@ export const SessionProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("fetching user profile");
     fetchUserProfile();
   }, []);
 
