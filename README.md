@@ -123,6 +123,9 @@ Give a ⭐️ if this project helped you!
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Peppermint-Lab/peppermint&type=Date)](https://star-history.com/#Peppermint-Lab/peppermint&Date)
 
+## Activity
+![Alt](https://repobeats.axiom.co/api/embed/9b568eb9e41b60f60fe155836b1ef0fb2a7b93b9.svg "Repobeats analytics image")
+
 ## Author
 
 👤 **Jack Andrews**
