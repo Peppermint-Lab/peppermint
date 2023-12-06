@@ -434,6 +434,7 @@ export function authRoutes(fastify: FastifyInstance) {
           ticket_comments: user!.notify_ticket_comments,
           ticket_assigned: user!.notify_ticket_assigned,
           sso_status: config!.sso_active,
+          version: config!.client_version,
           notifcations,
         };
 

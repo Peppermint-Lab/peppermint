@@ -471,6 +471,7 @@ export default function NewLayout({ children }: any) {
                       alt="Buy Me a Coffee at ko-fi.com"
                     />
                   </a> */}
+
                   {user.isAdmin && (
                     <Link
                       href="/admin"
@@ -518,7 +519,14 @@ export default function NewLayout({ children }: any) {
               aria-hidden="true"
             />
 
-            <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 pb-2">
+            <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
+              <div className="flex w-full justify-start items-center">
+                <Link className="" href="">
+                  <span className="inline-flex items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20">
+                    Version {user.version}
+                  </span>
+                </Link>
+              </div>
               {/* <div
                 className="relative mt-2 hidden sm:flex items-center w-full min-w-[320px] max-w-[360px] hover:cursor-pointer"
                 onClick={() => {
@@ -544,7 +552,7 @@ export default function NewLayout({ children }: any) {
               </div> */}
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2">
                 <Popover className="relative">
-                  <Popover.Button className="relative mt-2.5 rounded-full  p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <Popover.Button className="relative  rounded-full  p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <BellAlertIcon
                       className="h-6 w-6 text-white"
                       aria-hidden="true"
@@ -627,10 +635,10 @@ export default function NewLayout({ children }: any) {
                 </Popover>
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
-                  <Menu.Button className="mt-2 z-50 flex items-center p-1.5">
+                  <Menu.Button className="z-50 mb-0.5 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
-                      <span className="text-sm mt-0.5 font-medium leading-none text-white uppercase">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                      <span className="text-xs mt-0.5 font-medium leading-none text-white uppercase">
                         {user.name[0]}
                       </span>
                     </span>
