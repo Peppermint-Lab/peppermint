@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 
 import useTranslation from "next-translate/useTranslation";
 
-import ListTodo from "../components/ListTodo";
-// import ListUserFiles from "../components/ListUserFiles";
 import { useRouter } from "next/router";
+import ListTodo from "../components/ListTodo";
 
 import { getCookie } from "cookies-next";
 import moment from "moment";
 import { useUser } from "../store/session";
+
+export async function getServerSideProps({ req, res }) {
+  return res.redirect("/tickets");
+}
 
 export default function Home() {
   const router = useRouter();
