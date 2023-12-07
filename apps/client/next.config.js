@@ -3,23 +3,6 @@ const nextTranslate = require("next-translate");
 
 module.exports = removeImports({
   reactStrictMode: true,
-  swcMinify: false,
+  swcMinify: true,
   ...nextTranslate(),
-
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/api/:path*",
-  //       destination: `/:path*`,
-  //     },
-  //   ];
-  // },
-
-  // webpack: (config, { isServer }) => {
-  //   if (isServer) {
-  //     config.plugins = [...config.plugins, new PrismaPlugin()]
-  //   }
-
-  //   return config
-  // },
 });
