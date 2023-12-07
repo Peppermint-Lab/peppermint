@@ -1,21 +1,10 @@
-import {
-  Dialog,
-  Disclosure,
-  Menu,
-  Popover,
-  Transition,
-} from "@headlessui/react";
-import {
-  ArchiveBoxIcon,
-  BellAlertIcon,
-  PlusIcon,
-  TicketIcon,
-} from "@heroicons/react/20/solid";
+import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
-  HomeIcon,
+  TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { deleteCookie, getCookie } from "cookies-next";
@@ -60,26 +49,19 @@ export default function NewLayout({ children }: any) {
       current: location.pathname === "/new" ? true : false,
       initial: "c",
     },
-    {
-      name: t("sl_dashboard"),
-      href: `/${locale}/`,
-      icon: HomeIcon,
-      current: location.pathname === "/" ? true : false,
-      initial: "h",
-    },
+    // {
+    //   name: t("sl_dashboard"),
+    //   href: `/${locale}/`,
+    //   icon: HomeIcon,
+    //   current: location.pathname === "/" ? true : false,
+    //   initial: "h",
+    // },
     {
       name: t("sl_notebook"),
       href: `/${locale}/notebook`,
       icon: FolderIcon,
       current: location.pathname === "/notebook" ? true : false,
       initial: "n",
-    },
-    {
-      name: t("sl_tickets"),
-      current: location.pathname.includes("/ticket") ? true : false,
-      icon: TicketIcon,
-      href: `/${locale}/tickets`,
-      initial: "t",
     },
     // {
     //   name: "Email Queues",
@@ -91,18 +73,18 @@ export default function NewLayout({ children }: any) {
     // },
   ];
 
-  async function getQueues() {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    ).then((res) => res.json());
-    setQueues(res.queues);
-  }
+  // async function getQueues() {
+  //   const res = await fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`,
+  //     {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${getCookie("session")}`,
+  //       },
+  //     }
+  //   ).then((res) => res.json());
+  //   setQueues(res.queues);
+  // }
 
   async function logout() {
     const res = await fetch(
@@ -134,9 +116,9 @@ export default function NewLayout({ children }: any) {
     ).then((res) => res.json());
   }
 
-  useEffect(() => {
-    getQueues();
-  }, [user]);
+  // useEffect(() => {
+  //   getQueues();
+  // }, [user]);
 
   // useEffect(() => {
   // location.push(`${locale}/${location.pathname}`);
@@ -362,148 +344,138 @@ export default function NewLayout({ children }: any) {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-gray-900 px-6 pb-4">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] px-6 pb-4">
             <div className="flex align-middle flex-row h-16 items-center">
               {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
-                <h1 className="text-4xl ml-2 mt-1 hover:text-green-600 font-extrabold text-white">
+                <span className="text-3xl ml-2 mt-2 hover:text-green-600 font-bold ">
                   Peppermint
-                </h1>
+                </span>
               </Link>
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item: any) =>
-                      !item.children ? (
-                        <li key={item.name}>
-                          <Link
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-green-400 text-white hover:text-white"
-                                : "text-white hover:text-white hover:bg-green-500",
-                              "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                            )}
-                          >
-                            <item.icon
-                              className={classNames(
-                                item.current ? "text-white" : "text-white",
-                                "h-6 w-6 shrink-0"
-                              )}
-                              aria-hidden="true"
-                            />
-                            <span className="whitespace-nowrap">
-                              {item.name}
-                            </span>
-                            <div className="flex w-full justify-end float-right">
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                                {item.initial}
-                              </span>
-                            </div>
-                          </Link>
-                        </li>
-                      ) : (
-                        <Disclosure
-                          as="div"
-                          key={item.name}
-                          className="space-y-1"
-                        >
-                          {({ open }) => (
-                            <>
-                              {queues.length > 0 && (
-                                <>
-                                  <Disclosure.Button
-                                    className={classNames(
-                                      item.current
-                                        ? "bg-green-400 text-white"
-                                        : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
-                                      "group w-full flex items-center pl-2 pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
-                                    )}
-                                  >
-                                    <svg
-                                      className={classNames(
-                                        open
-                                          ? "text-white rotate-90"
-                                          : "text-white",
-                                        "mr-2 flex-shrink-0 h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150"
-                                      )}
-                                      viewBox="0 0 20 20"
-                                      aria-hidden="true"
-                                    >
-                                      <path
-                                        d="M6 6L14 10L6 14V6Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                    {item.name}
-                                  </Disclosure.Button>
-                                  <Disclosure.Panel className="space-y-1">
-                                    {item.children.map((subItem: any) => (
-                                      <Link href={`/queue/${subItem.name}`}>
-                                        <Disclosure.Button
-                                          key={subItem.name}
-                                          className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400 focus:outline-none"
-                                        >
-                                          {subItem.name}
-                                        </Disclosure.Button>
-                                      </Link>
-                                    ))}
-                                  </Disclosure.Panel>
-                                </>
-                              )}
-                            </>
+                    {navigation.map((item: any) => (
+                      <li key={item.name}>
+                        <Link
+                          href={item.href}
+                          className={classNames(
+                            item.current
+                              ? "bg-[#F0F3F9]"
+                              : " hover:bg-[#F0F3F9]",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
-                        </Disclosure>
-                      )
-                    )}
-                  </ul>
-                </li>
-                <li className="mt-auto space-y-4">
-                  {/* <a href="https://ko-fi.com/L3L0AA4YE" target="_blank">
-                    <img
-                      className="py-1 h-12 w-full"
-                      height="36"
-                      src="/kofi-white.png"
-                      alt="Buy Me a Coffee at ko-fi.com"
-                    />
-                  </a> */}
+                        >
+                          <item.icon
+                            className="h-4 w-4 shrink-0 mt-1"
+                            aria-hidden="true"
+                          />
+                          <span className="whitespace-nowrap">{item.name}</span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              {item.initial}
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                    <ul className="w-full space-y-1">
+                      <li>
+                        <Link
+                          href="/tickets"
+                          className={classNames(
+                            location.pathname === "/tickets"
+                              ? "bg-[#F0F3F9]"
+                              : " hover:bg-[#F0F3F9]",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <TicketIcon className="h-4 w-4 shrink-0 mt-1" />
+                          <span className="whitespace-nowrap">Tickets</span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              t
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                      <li className="ml-8">
+                        <Link
+                          href="/tickets/open"
+                          className={classNames(
+                            location.pathname === "/tickets/open"
+                              ? "bg-[#F0F3F9]"
+                              : " hover:bg-[#F0F3F9]",
+                            "group -mx-2 flex gap-x-3 p-1 mll-2 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <span className="whitespace-nowrap">open</span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              o
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
 
-                  {user.isAdmin && (
-                    <Link
-                      href="/admin"
-                      className={classNames(
-                        location.pathname.includes("/admin")
-                          ? "bg-green-400 text-white"
-                          : "text-white hover:bg-green-500 hover:text-white",
-                        "group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+                      <li className="ml-8 ">
+                        <Link
+                          href="/tickets/closed"
+                          className={classNames(
+                            location.pathname === "/tickets/closed"
+                              ? "bg-[#F0F3F9]"
+                              : " hover:bg-[#F0F3F9]",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <span className="whitespace-nowrap">closed</span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              c
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                    <li className="mt-auto space-y-4">
+                      {user.isAdmin && (
+                        <Link
+                          href="/admin"
+                          className={classNames(
+                            location.pathname.includes("/admin")
+                              ? "bg-[#F0F3F9]"
+                              : "hover:bg-[#F0F3F9]",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <Cog6ToothIcon
+                            className="h-4 w-4 shrink-0 mt-1"
+                            aria-hidden="true"
+                          />
+                          <span className="whitespace-nowrap">
+                            {t("admin_settings")}
+                          </span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              a
+                            </span>
+                          </div>
+                        </Link>
                       )}
-                    >
-                      <Cog6ToothIcon
-                        className="h-6 w-6 shrink-0 text-white group-hover:text-white"
-                        aria-hidden="true"
-                      />
-                      <span className="whitespace-nowrap">
-                        {t("admin_settings")}
-                      </span>
-                      <div className="flex w-full justify-end float-right">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                          a
-                        </span>
-                      </div>
-                    </Link>
-                  )}
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </nav>
           </div>
         </div>
 
-        <div className="lg:pl-72">
-          <div className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-gray-900 px-4 shadow-sm sm:gap-x-6">
+        <div className="lg:pl-64 2xl:pl-72">
+          <div className="sticky top-0 z-10 flex h-12 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 sm:gap-x-6">
             <button
               type="button"
               className="-m-2.5 p-2.5 text-white lg:hidden"
@@ -522,7 +494,7 @@ export default function NewLayout({ children }: any) {
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
               <div className="flex w-full justify-start items-center">
                 <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
-                  <span className="inline-flex items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20">
+                  <span className="inline-flex items-center rounded-md bg-green-700/10 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
                     Version {user.version}
                   </span>
                 </Link>
@@ -551,7 +523,7 @@ export default function NewLayout({ children }: any) {
                 </div>
               </div> */}
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2">
-                <Popover className="relative">
+                {/* <Popover className="relative">
                   <Popover.Button className="relative  rounded-full  p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <BellAlertIcon
                       className="h-6 w-6 text-white"
@@ -632,10 +604,10 @@ export default function NewLayout({ children }: any) {
                       </div>
                     </div>
                   </Popover.Panel>
-                </Popover>
+                </Popover> */}
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
-                  <Menu.Button className="z-50 mb-0.5 flex items-center p-1.5">
+                  <Menu.Button className="z-50 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
                     <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                       <span className="text-xs mt-0.5 font-medium leading-none text-white uppercase">
@@ -688,9 +660,7 @@ export default function NewLayout({ children }: any) {
             </div>
           </div>
 
-          <main className="py-2">
-            <div className="p-4 sm:p-8">{children}</div>
-          </main>
+          <main className="">{children}</main>
         </div>
       </div>
     )
