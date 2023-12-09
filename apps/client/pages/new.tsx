@@ -143,48 +143,14 @@ export default function CreateTicket() {
   }, []);
 
   return (
-    <div className="inline-block bg-white rounded-lg px-8 py-4 text-left shadow-xl align-middle w-full ">
-      <div className="flex flex-row w-full">
-        <span className="text-md pb-2 font-bold text-xl">
-          {t("ticket_new")}
-        </span>
-      </div>
-
-      <input
-        type="text"
-        name="title"
-        placeholder={t("ticket_details")}
-        maxLength={64}
-        autoComplete="off"
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full pl-0 pr-0 sm:text-xl border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-      />
-
-      <div className="">
-        <input
-          type="text"
-          id="name"
-          placeholder={t("ticket_name_here")}
-          name="name"
-          autoComplete="off"
-          onChange={(e) => setName(e.target.value)}
-          className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-        />
-
-        <input
-          type="text"
-          name="email"
-          placeholder={t("ticket_email_here")}
-          onChange={(e) => setEmail(e.target.value)}
-          className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-        />
-
-        <div className="flex flex-row space-x-4 pb-4 mt-2 border-b mb-4">
+    <div className="min-h-screen overflow-hidden bg-white">
+      <div className="w-full border-b-[1px] p-2 flex flex-row justify-between items-center">
+        <div className="flex flex-row space-x-4">
           <Listbox value={company} onChange={setCompany}>
             {({ open }) => (
               <>
-                <div className="relative mt-2">
-                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <div className="relative">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {company === undefined
                         ? t("select_a_client")
@@ -257,8 +223,8 @@ export default function CreateTicket() {
           <Listbox value={engineer} onChange={setEngineer}>
             {({ open }) => (
               <>
-                <div className="relative mt-2">
-                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <div className="relative">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {engineer === undefined
                         ? t("select_an_engineer")
@@ -331,8 +297,8 @@ export default function CreateTicket() {
           <Listbox value={selected} onChange={setSelected}>
             {({ open }) => (
               <>
-                <div className="relative mt-2">
-                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none sm:text-sm sm:leading-6">
+                <div className="relative">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none sm:text-sm sm:leading-6">
                     <span className="block truncate">{selected.name}</span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon
@@ -398,62 +364,93 @@ export default function CreateTicket() {
             )}
           </Listbox>
         </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => createTicket()}
+            className="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Create Ticket
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col xl:flex-row h-full w-full">
+        <div className="w-full xl:w-2/3 order-2 xl:order-1">
+          <RichTextEditor
+            editor={editor}
+            style={{ borderRadius: 0, border: 0 }}
+          >
+            <RichTextEditor.Toolbar>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Bold />
+                <RichTextEditor.Italic />
+                <RichTextEditor.Underline />
+                <RichTextEditor.Strikethrough />
+                <RichTextEditor.ClearFormatting />
+                <RichTextEditor.Highlight />
+                <RichTextEditor.Code />
+              </RichTextEditor.ControlsGroup>
 
-        <RichTextEditor editor={editor}>
-          <RichTextEditor.Toolbar>
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.Italic />
-              <RichTextEditor.Underline />
-              <RichTextEditor.Strikethrough />
-              <RichTextEditor.ClearFormatting />
-              <RichTextEditor.Highlight />
-              <RichTextEditor.Code />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.H1 />
+                <RichTextEditor.H2 />
+                <RichTextEditor.H3 />
+                <RichTextEditor.H4 />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.H1 />
-              <RichTextEditor.H2 />
-              <RichTextEditor.H3 />
-              <RichTextEditor.H4 />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Blockquote />
+                <RichTextEditor.Hr />
+                <RichTextEditor.BulletList />
+                <RichTextEditor.OrderedList />
+                <RichTextEditor.Subscript />
+                <RichTextEditor.Superscript />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Blockquote />
-              <RichTextEditor.Hr />
-              <RichTextEditor.BulletList />
-              <RichTextEditor.OrderedList />
-              <RichTextEditor.Subscript />
-              <RichTextEditor.Superscript />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Link />
+                <RichTextEditor.Unlink />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Link />
-              <RichTextEditor.Unlink />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.AlignLeft />
+                <RichTextEditor.AlignCenter />
+                <RichTextEditor.AlignJustify />
+                <RichTextEditor.AlignRight />
+              </RichTextEditor.ControlsGroup>
+            </RichTextEditor.Toolbar>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.AlignLeft />
-              <RichTextEditor.AlignCenter />
-              <RichTextEditor.AlignJustify />
-              <RichTextEditor.AlignRight />
-            </RichTextEditor.ControlsGroup>
-          </RichTextEditor.Toolbar>
+            <RichTextEditor.Content style={{ minHeight: "50vh" }} />
+          </RichTextEditor>
+        </div>
+        <div className="w-full xl:w-1/4 p-3 flex flex-col  border-b-[1px] xl:border-b-0 xl:border-l-[1px] order-1 xl:order-2">
+          <div className="flex flex-col">
+            <input
+              type="text"
+              name="title"
+              placeholder={t("ticket_details")}
+              maxLength={64}
+              autoComplete="off"
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full pl-0 pr-0 sm:text-xl border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+            />
+            <input
+              type="text"
+              id="name"
+              placeholder={t("ticket_name_here")}
+              name="name"
+              autoComplete="off"
+              onChange={(e) => setName(e.target.value)}
+              className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+            />
 
-          <RichTextEditor.Content style={{ minHeight: 320 }} />
-        </RichTextEditor>
-
-        <div className="border-t border-gray-300 ">
-          <div className="mt-2 float-right">
-            <button
-              onClick={() => {
-                createTicket();
-              }}
-              type="button"
-              className="rounded bg-green-600 hover:bg-green-800 px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-30"
-            >
-              {t("ticket_create")}
-            </button>
+            <input
+              type="text"
+              name="email"
+              placeholder={t("ticket_email_here")}
+              onChange={(e) => setEmail(e.target.value)}
+              className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+            />
           </div>
         </div>
       </div>

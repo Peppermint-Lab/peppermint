@@ -55,7 +55,7 @@ export default function AdminLayout({ children }: any) {
   ];
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center p-6">
       <div className="flex xl:divide-x-2 justify-center h-[85vh] max-w-5xl pr-4">
         <div className="hidden xl:flex w-56 mt-11 pr-4">
           <nav className="space-y-1 w-full pr-4" aria-label="Sidebar">

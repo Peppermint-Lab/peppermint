@@ -52,7 +52,7 @@ export default function Tickets() {
         <div>
           <div className="flex flex-col">
             <div className="p-2 ml-4">
-              <span className="text-sm font-bold">All Tickets</span>
+              <span className="text-sm font-bold">All Closed</span>
             </div>
             {data.tickets.length > 0 ? (
               data.tickets.map((ticket) => {

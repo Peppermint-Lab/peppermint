@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Loader from "react-spinners/ClipLoader";
 
 import { getCookie } from "cookies-next";
+import moment from "moment";
 import Link from "next/link";
 import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
@@ -38,8 +39,6 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  console.log(data);
-
   return (
     <div>
       {status === "loading" && (
@@ -51,8 +50,16 @@ export default function Tickets() {
       {status === "success" && (
         <div>
           <div className="flex flex-col">
-            <div className="p-2 ml-4">
-              <span className="text-sm font-bold">All Tickets</span>
+            <div className="p-2 ml-4 flex flex-row items-center justify-between">
+              <span className="text-sm font-bold">All Open</span>
+              <div>
+                <button
+                  type="button"
+                  className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  Assigned to Me
+                </button>
+              </div>
             </div>
             {data.tickets.length > 0 ? (
               data.tickets.map((ticket) => {
@@ -78,6 +85,9 @@ export default function Tickets() {
                         </span>
                       </div>
                       <div className="flex flex-row space-x-3 items-center">
+                        <span className="text-xs">
+                          {moment(ticket.createdAt).format("DD/MM/yyyy")}
+                        </span>
                         <span
                           className={`inline-flex items-center rounded-md px-2 justify-center w-16 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
                         >

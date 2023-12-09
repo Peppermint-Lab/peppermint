@@ -11,10 +11,6 @@ import { getCookie } from "cookies-next";
 import moment from "moment";
 import { useUser } from "../store/session";
 
-export async function getServerSideProps({ req, res }) {
-  return res.redirect("/tickets");
-}
-
 export default function Home() {
   const router = useRouter();
   const { t } = useTranslation("peppermint");
@@ -122,7 +118,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[85vh]">
+    <div className="flex flex-col xl:flex-row min-h-[85vh] p-8">
       <div className="w-full xl:w-[70%]">
         <div className="bg-white shadow rounded-lg">
           <div className="px-4 sm:px-6 lg:w-full lg:mx-auto lg:px-8">

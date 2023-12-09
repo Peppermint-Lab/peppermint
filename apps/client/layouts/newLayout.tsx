@@ -4,6 +4,7 @@ import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
+  HomeIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -49,13 +50,13 @@ export default function NewLayout({ children }: any) {
       current: location.pathname === "/new" ? true : false,
       initial: "c",
     },
-    // {
-    //   name: t("sl_dashboard"),
-    //   href: `/${locale}/`,
-    //   icon: HomeIcon,
-    //   current: location.pathname === "/" ? true : false,
-    //   initial: "h",
-    // },
+    {
+      name: t("sl_dashboard"),
+      href: `/${locale}/`,
+      icon: HomeIcon,
+      current: location.pathname === "/" ? true : false,
+      initial: "h",
+    },
     {
       name: t("sl_notebook"),
       href: `/${locale}/notebook`,
@@ -128,7 +129,8 @@ export default function NewLayout({ children }: any) {
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
-      !document.activeElement!.className.includes("ProseMirror")
+      !document.activeElement!.className.includes("ProseMirror") &&
+      location.pathname !== "/new"
     ) {
       switch (event.key) {
         case "c":
@@ -146,9 +148,16 @@ export default function NewLayout({ children }: any) {
         case "a":
           location.push("/admin");
           break;
-        default:
+        case "o":
+          location.push("/tickets/open");
+          break;
+        case "f":
+          location.push("/tickets/closed");
           break;
       }
+    } else {
+      console;
+      return null;
     }
   }, []);
 
@@ -346,16 +355,16 @@ export default function NewLayout({ children }: any) {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] px-6 pb-4">
-            <div className="flex align-middle flex-row h-16 items-center">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] pb-4">
+            <div className="flex align-middle flex-row h-14 items-center border-b-[1px] px-6">
               {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
-                <span className="text-3xl ml-2 mt-2 hover:text-green-600 font-bold ">
+                <span className="text-3xl ml-2  hover:text-green-600 font-bold ">
                   Peppermint
                 </span>
               </Link>
             </div>
-            <nav className="flex flex-1 flex-col">
+            <nav className="flex flex-1 flex-col px-6">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
@@ -435,7 +444,7 @@ export default function NewLayout({ children }: any) {
                           <span className="whitespace-nowrap">closed</span>
                           <div className="flex w-full justify-end float-right">
                             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-                              c
+                              f
                             </span>
                           </div>
                         </Link>
@@ -475,7 +484,7 @@ export default function NewLayout({ children }: any) {
         </div>
 
         <div className="lg:pl-64 2xl:pl-72">
-          <div className="sticky top-0 z-10 flex h-12 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 sm:gap-x-6">
+          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 sm:gap-x-6">
             <button
               type="button"
               className="-m-2.5 p-2.5 text-white lg:hidden"
