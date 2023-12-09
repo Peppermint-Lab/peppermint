@@ -2,6 +2,7 @@ import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import Loader from "react-spinners/ClipLoader";
 
+import { ContextMenu } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useQuery } from "react-query";
@@ -38,8 +39,6 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  console.log(data);
-
   return (
     <div>
       {status === "loading" && (
@@ -71,25 +70,69 @@ export default function Tickets() {
 
                 return (
                   <Link href={`/ticket/${ticket.id}`}>
-                    <div className="flex flex-row w-full bg-white border-b-[1px] p-3 justify-between px-6 hover:bg-gray-100">
-                      <div>
-                        <span className="text-xs font-semibold">
-                          {ticket.title}
-                        </span>
-                      </div>
-                      <div className="flex flex-row space-x-3 items-center">
-                        <span
-                          className={`inline-flex items-center rounded-md px-2 justify-center w-16 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
-                        >
-                          {ticket.priority}
-                        </span>
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
-                          <span className="text-[11px] font-medium leading-none text-white uppercase">
-                            {ticket.assignedTo ? ticket.assignedTo.name[0] : ""}
-                          </span>
-                        </span>
-                      </div>
-                    </div>
+                    <ContextMenu.Root>
+                      <ContextMenu.Trigger>
+                        <div className="flex flex-row w-full bg-white border-b-[1px] p-3 justify-between px-6 hover:bg-gray-100">
+                          <div>
+                            <span className="text-xs font-semibold">
+                              {ticket.title}
+                            </span>
+                          </div>
+                          <div className="flex flex-row space-x-3 items-center">
+                            <span
+                              className={`inline-flex items-center rounded-md px-2 justify-center w-16 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
+                            >
+                              {ticket.priority}
+                            </span>
+                            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
+                              <span className="text-[11px] font-medium leading-none text-white uppercase">
+                                {ticket.assignedTo
+                                  ? ticket.assignedTo.name[0]
+                                  : ""}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      </ContextMenu.Trigger>
+                      <ContextMenu.Content>
+                        <ContextMenu.Item shortcut="⌘ E">Edit</ContextMenu.Item>
+                        <ContextMenu.Item shortcut="⌘ D">
+                          Status
+                        </ContextMenu.Item>
+                        <ContextMenu.Separator />
+                        <ContextMenu.Item shortcut="⌘ N">
+                          Assigned To
+                        </ContextMenu.Item>
+                        <ContextMenu.Item shortcut="⌘ N">
+                          Priortiy
+                        </ContextMenu.Item>
+                        <ContextMenu.Item shortcut="⌘ N">
+                          Label
+                        </ContextMenu.Item>
+
+                        {/* <ContextMenu.Sub>
+                          <ContextMenu.SubTrigger>More</ContextMenu.SubTrigger>
+                          <ContextMenu.SubContent>
+                            <ContextMenu.Item>
+                              Move to project…
+                            </ContextMenu.Item>
+                            <ContextMenu.Item>Move to folder…</ContextMenu.Item>
+                            <ContextMenu.Separator />
+                            <ContextMenu.Item>
+                              Advanced options…
+                            </ContextMenu.Item>
+                          </ContextMenu.SubContent>
+                        </ContextMenu.Sub> */}
+
+                        <ContextMenu.Separator />
+                        <ContextMenu.Item>Share</ContextMenu.Item>
+                        <ContextMenu.Item>Add to favorites</ContextMenu.Item>
+                        <ContextMenu.Separator />
+                        <ContextMenu.Item shortcut="⌘ ⌫" color="red">
+                          Delete
+                        </ContextMenu.Item>
+                      </ContextMenu.Content>
+                    </ContextMenu.Root>
                   </Link>
                 );
               })

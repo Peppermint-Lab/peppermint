@@ -173,7 +173,7 @@ export default function NewLayout({ children }: any) {
 
   return (
     !loading && (
-      <div className="min-h-screen overflow-hidden bg-slate-100">
+      <div className="min-h-screen overflow-hidden">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
