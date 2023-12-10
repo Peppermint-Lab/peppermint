@@ -13,7 +13,7 @@ function classNames(...classes: any) {
 }
 
 async function getUserTickets(token: any) {
-  const res = await fetch(`/api/v1/tickets/open`, {
+  const res = await fetch(`/api/v1/tickets/user/open`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -47,16 +47,11 @@ export default function Tickets() {
       {status === "success" && (
         <div>
           <div className="flex flex-col">
-            <div className="p-2 ml-4 flex flex-row items-center justify-between">
-              <span className="text-sm font-bold">All Open</span>
-              <div>
-                <button
-                  type="button"
-                  className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  Assigned to Me
-                </button>
-              </div>
+            <div className="py-2 px-6 flex flex-row items-center justify-between bg-gray-200">
+              <span className="text-sm font-bold">
+                You have {data.tickets.length} open ticket
+                {data.tickets.length > 1 ? "'s" : ""}
+              </span>
             </div>
             {data.tickets.length > 0 ? (
               data.tickets.map((ticket) => {
@@ -83,6 +78,7 @@ export default function Tickets() {
                       </div>
                       <div className="flex flex-row space-x-3 items-center">
                         <span className="text-xs">
+                          created at{" "}
                           {moment(ticket.createdAt).format("DD/MM/yyyy")}
                         </span>
                         <span

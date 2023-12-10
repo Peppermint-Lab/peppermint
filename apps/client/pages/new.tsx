@@ -143,7 +143,7 @@ export default function CreateTicket() {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-hidden bg-white">
+    <div className="overflow-hidden bg-white">
       <div className="w-full border-b-[1px] p-2 flex flex-row justify-between items-center">
         <div className="flex flex-row space-x-4">
           <Listbox value={company} onChange={setCompany}>
@@ -375,7 +375,7 @@ export default function CreateTicket() {
         </div>
       </div>
       <div className="flex flex-col xl:flex-row h-full w-full">
-        <div className="w-full xl:w-2/3 order-2 xl:order-1">
+        <div className="w-full xl:w-2/3 order-2 xl:order-2">
           <RichTextEditor
             editor={editor}
             style={{ borderRadius: 0, border: 0 }}
@@ -423,7 +423,7 @@ export default function CreateTicket() {
             <RichTextEditor.Content style={{ minHeight: "50vh" }} />
           </RichTextEditor>
         </div>
-        <div className="w-full xl:w-1/4 p-3 flex flex-col  border-b-[1px] xl:border-b-0 xl:border-l-[1px] order-1 xl:order-2">
+        <div className="w-full xl:w-1/6 p-3 flex flex-col  border-b-[1px] xl:border-b-0 xl:border-r-[1px] order-1 xl:order-1">
           <div className="flex flex-col">
             <input
               type="text"

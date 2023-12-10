@@ -235,13 +235,14 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
   // Get all tickets (admin)
   fastify.get(
-    "/api/v1/tickets/all/admin",
+    "/api/v1/tickets/all",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
 
       if (token) {
         const tickets = await prisma.ticket.findMany({
+          where: { hidden: false },
           orderBy: [
             {
               createdAt: "desc",

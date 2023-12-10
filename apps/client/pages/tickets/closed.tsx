@@ -12,7 +12,7 @@ function classNames(...classes: any) {
 }
 
 async function getUserTickets(token: any) {
-  const res = await fetch(`/api/v1/tickets/open`, {
+  const res = await fetch(`/api/v1/tickets/completed`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -48,8 +48,11 @@ export default function Tickets() {
       {status === "success" && (
         <div>
           <div className="flex flex-col">
-            <div className="p-2 ml-4">
-              <span className="text-sm font-bold">All Closed</span>
+            <div className="py-2 px-6 flex flex-row items-center justify-between bg-gray-200">
+              <span className="text-sm font-bold">
+                You have {data.tickets.length} closed ticket
+                {data.tickets.length > 1 ? "'s" : ""}
+              </span>
             </div>
             {data.tickets.length > 0 ? (
               data.tickets.map((ticket) => {
