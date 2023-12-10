@@ -10,7 +10,6 @@ import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
 import moment from "moment";
-import { useDebounce } from "use-debounce";
 
 export default function Notebooks() {
   const router = useRouter();
@@ -22,7 +21,7 @@ export default function Notebooks() {
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState();
 
-  const [value] = useDebounce(notebook, 2000);
+  // const [value] = useDebounce(notebook, 2000);
 
   const editor = useEditor({
     extensions: [
@@ -41,6 +40,8 @@ export default function Notebooks() {
   });
 
   async function fetchNotebook() {
+    setNoteBook("");
+    setLoading(true);
     if (editor) {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}`,
@@ -61,7 +62,7 @@ export default function Notebooks() {
 
   async function updateNoteBook() {
     setSaving(true);
-    const res = await fetch(
+    await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}/update`,
       {
         method: "PUT",
@@ -88,11 +89,11 @@ export default function Notebooks() {
     if (notebook !== undefined && !loading) {
       updateNoteBook();
     }
-  }, [value]);
+  }, [notebook]);
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between border-b-[1px] p-2">
+      <div className="flex flex-row items-center justify-between border-b-[1px] py-1 px-4">
         <h2 className="text-xl font-bold">{title}</h2>
         {saving ? (
           <span className="text-xs">saving ....</span>

@@ -116,8 +116,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[85vh] p-8 max-w-6xl justify-center">
-      <div className="w-full xl:w-[70%]">
+    <div className="flex flex-col xl:flex-row min-h-[85vh] p-8 justify-center w-full">
+      <div className="w-full xl:w-[70%] max-w-5xl">
         {!loading && (
           <>
             <div>

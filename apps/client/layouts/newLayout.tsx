@@ -716,9 +716,7 @@ export default function NewLayout({ children }: any) {
             </div>
           </div>
 
-          <main className="bg-white dark:bg-gray-900 min-h-screen">
-            {children}
-          </main>
+          <main className="bg-white dark:bg-gray-900">{children}</main>
         </div>
       </div>
     )
