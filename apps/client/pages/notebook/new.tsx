@@ -38,20 +38,17 @@ export default function ViewNoteBook() {
   });
 
   async function postMarkdown() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebook/note/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title,
-          content: value,
-        }),
-      }
-    )
+    await fetch(`/api/v1/notebook/note/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title,
+        content: value,
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         router.push(`/notebook`);

@@ -11,19 +11,16 @@ export default function PasswordChange({ children }) {
 
   const postData = async () => {
     if (check === password && password.length > 2) {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reset-password`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            password,
-          }),
-        }
-      )
+      await fetch(`/api/v1/auth/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          password,
+        }),
+      })
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {

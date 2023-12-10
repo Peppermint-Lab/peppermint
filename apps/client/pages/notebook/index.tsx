@@ -4,16 +4,13 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 
 async function fetchNotebooks(token) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/notebooks/all`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 }
 

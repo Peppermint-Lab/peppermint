@@ -7,16 +7,13 @@ import { useQuery } from "react-query";
 import Loader from "react-spinners/ClipLoader";
 
 async function fetchNotebooks(token) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/notebooks/all`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 }
 

@@ -303,7 +303,7 @@ export default function Ticket() {
       {status === "success" && (
         <main className="flex-1">
           <div className="py-6">
-            <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 flex flex-col xl:flex-row xl:max-w-5xl">
+            <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 flex flex-col xl:flex-row xl:max-w-6xl">
               <div className="xl:col-span-2 xl:border-r xl:border-gray-200 xl:pr-8">
                 <div>
                   <div>

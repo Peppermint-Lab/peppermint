@@ -77,7 +77,7 @@ export default function NewLayout({ children }: any) {
 
   // async function getQueues() {
   //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`,
+  //     `/api/v1/email-queues/all`,
   //     {
   //       headers: {
   //         "Content-Type": "application/json",
@@ -89,16 +89,13 @@ export default function NewLayout({ children }: any) {
   // }
 
   async function logout() {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${user.id}/logout`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    ).then((res) => res.json());
+    const res = await fetch(`/api/v1/auth/user/${user.id}/logout`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    }).then((res) => res.json());
 
     if (res.success) {
       deleteCookie("session");
@@ -107,15 +104,12 @@ export default function NewLayout({ children }: any) {
   }
 
   async function markasread(id) {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/notifcation/${id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    ).then((res) => res.json());
+    await fetch(`/api/v1/user/notifcation/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    }).then((res) => res.json());
   }
 
   // useEffect(() => {
@@ -174,7 +168,7 @@ export default function NewLayout({ children }: any) {
 
   return (
     !loading && (
-      <div className="min-h-screen overflow-hidden">
+      <div className="min-h-screen overflow-hidden bg-white dark:bg-gray-900">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"

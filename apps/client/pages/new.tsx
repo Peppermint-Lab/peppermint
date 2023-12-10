@@ -63,7 +63,7 @@ export default function CreateTicket() {
   });
 
   const fetchClients = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/all`, {
+    await fetch(`/api/v1/clients/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function CreateTicket() {
 
   async function fetchUsers() {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`, {
+      await fetch(`/api/v1/users/all`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function CreateTicket() {
   }
 
   async function createTicket() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/create`, {
+    await fetch(`/api/v1/ticket/create`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

@@ -10,14 +10,11 @@ export default function Login({}) {
   const [view, setView] = useState("request");
 
   async function postData() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/password-reset`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, link: window.location.origin }),
-      }
-    )
+    await fetch(`/api/v1/auth/password-reset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, link: window.location.origin }),
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {

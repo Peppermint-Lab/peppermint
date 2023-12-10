@@ -43,16 +43,13 @@ export default function Notebooks() {
     setNoteBook("");
     setLoading(true);
     if (editor) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ).then((res) => res.json());
+      const res = await fetch(`/api/v1/notebooks/note/${router.query.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json());
       console.log(res);
       editor.commands.setContent(res.note.note);
       setTitle(res.note.title);
@@ -62,19 +59,16 @@ export default function Notebooks() {
 
   async function updateNoteBook() {
     setSaving(true);
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}/update`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          content: notebook,
-        }),
-      }
-    );
+    await fetch(`/api/v1/notebooks/note/${router.query.id}/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        content: notebook,
+      }),
+    });
     setSaving(false);
     let date = new Date();
     // @ts-ignore
