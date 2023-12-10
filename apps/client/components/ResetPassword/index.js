@@ -11,19 +11,16 @@ export default function ResetPassword() {
 
   const postData = async () => {
     if (check === password && password.length > 3) {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/reset-password`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + getCookie("session"),
-          },
-          body: JSON.stringify({
-            password,
-          }),
-        }
-      )
+      await fetch(`/api/v1/auth/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + getCookie("session"),
+        },
+        body: JSON.stringify({
+          password,
+        }),
+      })
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {

@@ -5,15 +5,12 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 
 async function getTodos(token) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/todos/all`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/todos/all`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 }
 
@@ -37,7 +34,7 @@ export default function ListTodo() {
   }
 
   async function onSubmit() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/todo/create`, {
+    await fetch(`/api/v1/todo/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +50,7 @@ export default function ListTodo() {
   }
 
   async function deleteTodo(id) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/todo/${id}/delete`, {
+    await fetch(`/api/v1/todo/${id}/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -12,7 +12,7 @@ export default function UpdateUserModal({ user }) {
   const router = useRouter();
 
   async function updateUser() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/role`, {
+    await fetch(`/api/v1/auth/user/role`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
