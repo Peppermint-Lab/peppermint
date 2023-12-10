@@ -12,14 +12,11 @@ import ResetPassword from "../../../../components/ResetPassword";
 import UpdateUserModal from "../../../../components/UpdateUserModal";
 
 const fetchUsers = async (token) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/users/all`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 };
 
@@ -210,16 +207,13 @@ export default function UserAuthPanel() {
   async function deleteUser(id) {
     if (confirm("Are you sure you want to delete this user?")) {
       try {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        await fetch(`/api/v1/auth/user/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
           .then((response) => response.json())
           .then(() => {
             refetch;

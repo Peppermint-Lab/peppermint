@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "client",
-      script: "npm run docker",
+      script: "npm run start",
       cwd: "apps/client",
       instances: "1",
       autorestart: true,
@@ -11,7 +11,6 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3000, // Change this to your desired port
-        API_URL: process.env.API_URL,
       },
     },
     {

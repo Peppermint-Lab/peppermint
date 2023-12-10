@@ -12,23 +12,20 @@ export default function EmailQueues() {
   const [tls, setTls] = useState();
 
   async function newQueue() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queue/create`,
-      {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("session"),
-        },
-        body: JSON.stringify({
-          name,
-          username,
-          password,
-          hostname,
-          tls,
-        }),
-      }
-    )
+    await fetch(`/api/v1/email-queue/create`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
+      },
+      body: JSON.stringify({
+        name,
+        username,
+        password,
+        hostname,
+        tls,
+      }),
+    })
       .then((res) => res.json())
       .then(() => {
         router.back("/admin/email-queues");

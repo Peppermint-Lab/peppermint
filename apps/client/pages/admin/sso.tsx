@@ -19,24 +19,21 @@ export default function SSO() {
   const [sso, setSSO] = useState<any>();
 
   async function postData() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/sso/provider`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-        body: JSON.stringify({
-          name: provider,
-          client_id: clientId,
-          client_secret: clientSecret,
-          tenantId,
-          issuer,
-          redirect_uri: redirectUri,
-        }),
-      }
-    )
+    await fetch(`/api/v1/config/sso/provider`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+      body: JSON.stringify({
+        name: provider,
+        client_id: clientId,
+        client_secret: clientSecret,
+        tenantId,
+        issuer,
+        redirect_uri: redirectUri,
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
@@ -46,16 +43,13 @@ export default function SSO() {
   }
 
   async function deleteConfig() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/sso/provider`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    )
+    await fetch(`/api/v1/config/sso/provider`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
@@ -65,16 +59,13 @@ export default function SSO() {
   }
 
   async function checkState() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/sso/enabled`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    )
+    await fetch(`/api/v1/config/sso/enabled`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {

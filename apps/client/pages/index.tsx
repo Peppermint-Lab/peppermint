@@ -33,7 +33,7 @@ export default function Home() {
   }
 
   async function getOpenTickets() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/open`, {
+    await fetch(`/api/v1/data/tickets/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,15 +46,12 @@ export default function Home() {
   }
 
   async function getCompletedTickets() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/completed`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    await fetch(`/api/v1/data/tickets/completed`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         setCompletedTickets(res.count);
@@ -62,7 +59,7 @@ export default function Home() {
   }
 
   async function getUnassginedTickets() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/open`, {
+    await fetch(`/api/v1/data/tickets/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +72,7 @@ export default function Home() {
   }
 
   async function fetchTickets() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets/open`, {
+    await fetch(`/api/v1/tickets/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

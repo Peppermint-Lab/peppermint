@@ -19,7 +19,7 @@ export default function CreateClientPage() {
     email.length > 0;
 
   async function createClient() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/client/create`, {
+    await fetch(`/api/v1/client/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

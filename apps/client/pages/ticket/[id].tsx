@@ -41,14 +41,11 @@ export default function Ticket() {
 
   const fetchTicketById = async () => {
     const id = router.query.id;
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await fetch(`/api/v1/ticket/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.json();
   };
 
@@ -100,7 +97,7 @@ export default function Ticket() {
   let file: any = [];
 
   async function update() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/update`, {
+    await fetch(`/api/v1/ticket/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -120,45 +117,39 @@ export default function Ticket() {
   }
 
   async function updateStatus() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/status/update`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          status: !data.ticket.isComplete,
-          id,
-        }),
-      }
-    )
+    await fetch(`/api/v1/ticket/status/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status: !data.ticket.isComplete,
+        id,
+      }),
+    })
       .then((res) => res.json())
       .then(() => refetch());
   }
 
   async function hide(hidden) {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/status/hide`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          hidden,
-          id,
-        }),
-      }
-    )
+    await fetch(`/api/v1/ticket/status/hide`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        hidden,
+        id,
+      }),
+    })
       .then((res) => res.json())
       .then(() => refetch());
   }
 
   async function addComment() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/comment`, {
+    await fetch(`/api/v1/ticket/comment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -175,7 +166,7 @@ export default function Ticket() {
   }
 
   async function addTime() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/time/new`, {
+    await fetch(`/api/v1/time/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -234,7 +225,7 @@ export default function Ticket() {
   // };
 
   async function fetchUsers() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`, {
+    await fetch(`/api/v1/users/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -251,7 +242,7 @@ export default function Ticket() {
 
   async function transferTicket() {
     if (n !== undefined) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/transfer`, {
+      await fetch(`/api/v1/ticket/transfer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -21,23 +21,20 @@ export default function CreateUser() {
   const router = useRouter();
 
   async function createUser() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("session"),
-        },
-        body: JSON.stringify({
-          password,
-          email,
-          name,
-          admin,
-          language,
-        }),
-      }
-    )
+    await fetch(`/api/v1/auth/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
+      },
+      body: JSON.stringify({
+        password,
+        email,
+        name,
+        admin,
+        language,
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
@@ -57,7 +54,7 @@ export default function CreateUser() {
   }
 
   async function checkAuth() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/check`, {
+    await fetch(`/api/v1/auth/check`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

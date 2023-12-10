@@ -13,15 +13,12 @@ import {
 // import UpdateClientModal from "../../components/UpdateClientModal";
 
 const fetchAllClients = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/all`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("session")}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/clients/all`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("session")}`,
+    },
+  });
   return res.json();
 };
 
@@ -218,16 +215,13 @@ export default function Clients() {
   const router = useRouter();
 
   async function deleteClient(id: any) {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/${id}/delete-client`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    )
+    await fetch(`/api/v1/clients/${id}/delete-client`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);

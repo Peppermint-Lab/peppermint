@@ -6,32 +6,26 @@ export default function EmailQueues() {
   const [queues, setQueues] = useState();
 
   async function fetchQueues() {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("session"),
-        },
-      }
-    ).then((res) => res.json());
+    const res = await fetch(`/api/v1/email-queues/all`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
+      },
+    }).then((res) => res.json());
     setQueues(res.queues);
   }
 
   async function deleteItem(id) {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queue/delete`,
-      {
-        method: "delete",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("session"),
-        },
-        body: JSON.stringify({
-          id,
-        }),
-      }
-    )
+    await fetch(`/api/v1/email-queue/delete`, {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    })
       .then((res) => res.json())
       .then(() => fetchQueues());
   }

@@ -4,16 +4,13 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 
 async function getHooks() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhooks/all`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("session")}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/webhooks/all`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("session")}`,
+    },
+  });
   return res.json();
 }
 
@@ -32,7 +29,7 @@ export default function Notifications() {
   const { data, status, error, refetch } = useQuery("gethooks", getHooks);
 
   async function addHook() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/webhook/create`, {
+    await fetch(`/api/v1/webhook/create`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -55,16 +52,13 @@ export default function Notifications() {
   console.log(data);
 
   async function deleteHook(id) {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/webhook/${id}/delete`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    )
+    await fetch(`/api/v1/admin/webhook/${id}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         refetch();

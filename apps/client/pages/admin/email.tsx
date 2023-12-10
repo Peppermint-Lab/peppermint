@@ -14,7 +14,7 @@ export default function Notifications() {
   const [password, setPassword] = useState("");
 
   async function updateEmailConfig() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/email`, {
+    await fetch(`/api/v1/config/email`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function Notifications() {
   }
 
   async function fetchEmailConfig() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/email`, {
+    await fetch(`/api/v1/config/email`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
