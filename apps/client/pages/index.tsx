@@ -1,11 +1,9 @@
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import useTranslation from "next-translate/useTranslation";
 
 import { useRouter } from "next/router";
-import ListTodo from "../components/ListTodo";
 
 import { getCookie } from "cookies-next";
 import moment from "moment";
@@ -118,60 +116,22 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[85vh] p-8">
+    <div className="flex flex-col xl:flex-row min-h-[85vh] p-8 max-w-6xl justify-center">
       <div className="w-full xl:w-[70%]">
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-4 sm:px-6 lg:w-full lg:mx-auto lg:px-8">
-            <div className="py-1 md:flex md:items-center md:justify-between">
-              <div className="flex-1 min-w-0">
-                {/* Profile */}
-                <div className="flex items-center">
-                  <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
-                    <span className="text-sm font-medium leading-none text-white uppercase">
-                      {user.name[0]}
-                    </span>
-                  </span>
-                  <div className="flex flex-col  pl-4 py-2 justify-start">
-                    <div className="flex items-center">
-                      <span className="text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        {t("hello_good")}{" "}
-                        {hour! < Number(12)
-                          ? t("hello_morning")
-                          : t("hello_afternoon")}
-                        , {user.name}!
-                      </span>
-                    </div>
-                    <dl className="flex flex-col sm:flex-row sm:flex-wrap">
-                      <dt className="sr-only">{t("account_status")}</dt>
-                      <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
-                        <CheckCircleIcon
-                          className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                          aria-hidden="true"
-                        />
-                        {user.isAdmin ? "Admin" : "user"}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {!loading && (
           <>
             <div>
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+              <dl className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 {stats.map((item) => (
                   <Link href={item.href}>
                     <div
                       key={item.name}
-                      className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+                      className="px-4 py-5 bg-gray-900 shadow rounded-lg overflow-hidden sm:p-6"
                     >
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-sm font-medium text-white truncate">
                         {item.name}
                       </dt>
-                      <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                      <dd className="mt-1 text-3xl font-semibold text-white">
                         {item.stat}
                       </dd>
                     </div>
@@ -505,10 +465,10 @@ export default function Home() {
           </>
         )}
       </div>
-      <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 2xl:max-h-[53vh]">
+      {/* <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 2xl:max-h-[53vh]">
         <span className="font-bold text-2xl ml-1">{t("reminders")}</span>
         <ListTodo />
-      </div>
+      </div> */}
     </div>
   );
 }

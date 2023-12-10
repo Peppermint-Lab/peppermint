@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useState } from "react";
 
+import { ContextMenu } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../store/session";
 
@@ -355,7 +356,7 @@ export default function NewLayout({ children }: any) {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] pb-4">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] dark:bg-gray-900 pb-4">
             <div className="flex align-middle flex-row h-14 items-center border-b-[1px] px-6">
               {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
@@ -374,8 +375,8 @@ export default function NewLayout({ children }: any) {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? "bg-[#F0F3F9]"
-                              : " hover:bg-[#F0F3F9]",
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
                         >
@@ -398,8 +399,8 @@ export default function NewLayout({ children }: any) {
                           href="/tickets"
                           className={classNames(
                             location.pathname === "/tickets"
-                              ? "bg-[#F0F3F9]"
-                              : " hover:bg-[#F0F3F9]",
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
                         >
@@ -417,8 +418,8 @@ export default function NewLayout({ children }: any) {
                           href="/tickets/open"
                           className={classNames(
                             location.pathname === "/tickets/open"
-                              ? "bg-[#F0F3F9]"
-                              : " hover:bg-[#F0F3F9]",
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 mll-2 text-xs font-semibold leading-6"
                           )}
                         >
@@ -436,8 +437,8 @@ export default function NewLayout({ children }: any) {
                           href="/tickets/closed"
                           className={classNames(
                             location.pathname === "/tickets/closed"
-                              ? "bg-[#F0F3F9]"
-                              : " hover:bg-[#F0F3F9]",
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
                         >
@@ -456,23 +457,69 @@ export default function NewLayout({ children }: any) {
                           href="/admin"
                           className={classNames(
                             location.pathname.includes("/admin")
-                              ? "bg-[#F0F3F9]"
-                              : "hover:bg-[#F0F3F9]",
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
                         >
-                          <Cog6ToothIcon
-                            className="h-4 w-4 shrink-0 mt-1"
-                            aria-hidden="true"
-                          />
-                          <span className="whitespace-nowrap">
-                            {t("admin_settings")}
-                          </span>
-                          <div className="flex w-full justify-end float-right">
-                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-                              a
-                            </span>
-                          </div>
+                          <ContextMenu.Root>
+                            <ContextMenu.Trigger>
+                              <>
+                                <Cog6ToothIcon
+                                  className="h-4 w-4 shrink-0 mt-1"
+                                  aria-hidden="true"
+                                />
+                                <span className="whitespace-nowrap">
+                                  {t("admin_settings")}
+                                </span>
+                                <div className="flex w-full justify-end float-right">
+                                  <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                                    a
+                                  </span>
+                                </div>
+                              </>
+                            </ContextMenu.Trigger>
+                            <ContextMenu.Content>
+                              <ContextMenu.Item shortcut="⌘ E">
+                                Edit
+                              </ContextMenu.Item>
+                              <ContextMenu.Item shortcut="⌘ D">
+                                Duplicate
+                              </ContextMenu.Item>
+                              <ContextMenu.Separator />
+                              <ContextMenu.Item shortcut="⌘ N">
+                                Archive
+                              </ContextMenu.Item>
+
+                              <ContextMenu.Sub>
+                                <ContextMenu.SubTrigger>
+                                  More
+                                </ContextMenu.SubTrigger>
+                                <ContextMenu.SubContent>
+                                  <ContextMenu.Item>
+                                    Move to project…
+                                  </ContextMenu.Item>
+                                  <ContextMenu.Item>
+                                    Move to folder…
+                                  </ContextMenu.Item>
+                                  <ContextMenu.Separator />
+                                  <ContextMenu.Item>
+                                    Advanced options…
+                                  </ContextMenu.Item>
+                                </ContextMenu.SubContent>
+                              </ContextMenu.Sub>
+
+                              <ContextMenu.Separator />
+                              <ContextMenu.Item>Share</ContextMenu.Item>
+                              <ContextMenu.Item>
+                                Add to favorites
+                              </ContextMenu.Item>
+                              <ContextMenu.Separator />
+                              <ContextMenu.Item shortcut="⌘ ⌫" color="red">
+                                Delete
+                              </ContextMenu.Item>
+                            </ContextMenu.Content>
+                          </ContextMenu.Root>
                         </Link>
                       )}
                     </li>
@@ -484,7 +531,7 @@ export default function NewLayout({ children }: any) {
         </div>
 
         <div className="lg:pl-64 2xl:pl-72">
-          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 sm:gap-x-6">
+          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-gray-900 px-4 sm:gap-x-6">
             <button
               type="button"
               className="-m-2.5 p-2.5 text-white lg:hidden"
@@ -531,7 +578,7 @@ export default function NewLayout({ children }: any) {
                   </kbd>
                 </div>
               </div> */}
-              <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2">
+              <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
                 {/* <Popover className="relative">
                   <Popover.Button className="relative  rounded-full  p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <BellAlertIcon
@@ -669,7 +716,9 @@ export default function NewLayout({ children }: any) {
             </div>
           </div>
 
-          <main className="">{children}</main>
+          <main className="bg-white dark:bg-gray-900 min-h-screen">
+            {children}
+          </main>
         </div>
       </div>
     )

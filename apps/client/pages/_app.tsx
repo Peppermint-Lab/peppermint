@@ -1,4 +1,5 @@
 import "@radix-ui/themes/styles.css";
+import { ThemeProvider } from "next-themes";
 import "../styles/globals.css";
 
 import {
@@ -7,9 +8,7 @@ import {
   HomeIcon,
   TicketIcon,
 } from "@heroicons/react/24/outline";
-import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
-import { SpotlightProvider } from "@mantine/spotlight";
 import { Theme } from "@radix-ui/themes";
 import { useRouter } from "next/router";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -27,8 +26,6 @@ const queryClient = new QueryClient();
 
 function Auth({ children }: any) {
   const { loading, user } = useUser();
-
-  const router = useRouter();
 
   React.useEffect(() => {
     if (loading) return; // Do nothing while loading
@@ -101,38 +98,37 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/admin")) {
     return (
       <SessionProvider>
-        <Theme>
-          <MantineProvider withNormalizeCSS withGlobalStyles>
-            <SpotlightProvider
-              shortcut={["mod + P", "mod + K", "/"]}
-              actions={actions}
-            >
-              <QueryClientProvider client={queryClient}>
-                <Auth>
-                  <NewLayout>
-                    <AdminLayout>
-                      <Notifications position="top-right" />
-                      <Component {...pageProps} />
-                    </AdminLayout>
-                  </NewLayout>
-                </Auth>
-              </QueryClientProvider>
-            </SpotlightProvider>
-          </MantineProvider>
-        </Theme>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          forcedTheme="light"
+        >
+          <Theme>
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <NewLayout>
+                  <AdminLayout>
+                    <Notifications position="top-right" />
+                    <Component {...pageProps} />
+                  </AdminLayout>
+                </NewLayout>
+              </Auth>
+            </QueryClientProvider>
+          </Theme>
+        </ThemeProvider>
       </SessionProvider>
     );
   }
 
-  if (router.pathname === "/notebook/[id]") {
+  if (router.pathname.includes("/notebook")) {
     return (
       <SessionProvider>
-        <MantineProvider withNormalizeCSS withGlobalStyles>
-          <SpotlightProvider
-            shortcut={["mod + P", "mod + K", "/"]}
-            actions={actions}
-            searchPlaceholder="Search ..."
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          forcedTheme="light"
+        >
+          <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
                 <NewLayout>
@@ -143,8 +139,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
                 </NewLayout>
               </Auth>
             </QueryClientProvider>
-          </SpotlightProvider>
-        </MantineProvider>
+          </Theme>
+        </ThemeProvider>
       </SessionProvider>
     );
   }
@@ -152,12 +148,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/settings")) {
     return (
       <SessionProvider>
-        <MantineProvider withNormalizeCSS withGlobalStyles>
-          <SpotlightProvider
-            shortcut={["mod + P", "mod + K", "/"]}
-            actions={actions}
-            searchPlaceholder="Search ..."
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          forcedTheme="light"
+        >
+          <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
                 <NewLayout>
@@ -168,8 +164,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
                 </NewLayout>
               </Auth>
             </QueryClientProvider>
-          </SpotlightProvider>
-        </MantineProvider>
+          </Theme>
+        </ThemeProvider>
       </SessionProvider>
     );
   }
@@ -194,24 +190,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   return (
     <SessionProvider>
-      <Theme>
-        <MantineProvider withNormalizeCSS withGlobalStyles>
-          <SpotlightProvider
-            shortcut={["mod + P", "mod + K", "/"]}
-            actions={actions}
-            searchPlaceholder="Search ..."
-          >
-            <QueryClientProvider client={queryClient}>
-              <Auth>
-                <NewLayout>
-                  <Notifications position="top-right" />
-                  <Component {...pageProps} />
-                </NewLayout>
-              </Auth>
-            </QueryClientProvider>
-          </SpotlightProvider>
-        </MantineProvider>
-      </Theme>
+      <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
+        <Theme>
+          <QueryClientProvider client={queryClient}>
+            <Auth>
+              <NewLayout>
+                <Notifications position="top-right" />
+                <Component {...pageProps} />
+              </NewLayout>
+            </Auth>
+          </QueryClientProvider>
+        </Theme>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

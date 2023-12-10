@@ -76,6 +76,7 @@ export default function Notebooks() {
     );
     setSaving(false);
     let date = new Date();
+    // @ts-ignore
     setLastSaved(new Date(date).getTime());
   }
 
@@ -91,7 +92,7 @@ export default function Notebooks() {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between border-b-[1px] p-2">
         <h2 className="text-xl font-bold">{title}</h2>
         {saving ? (
           <span className="text-xs">saving ....</span>
@@ -102,7 +103,7 @@ export default function Notebooks() {
         )}
       </div>
       {!loading && (
-        <RichTextEditor editor={editor}>
+        <RichTextEditor editor={editor} className="rounded-none border-none">
           <RichTextEditor.Toolbar>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />

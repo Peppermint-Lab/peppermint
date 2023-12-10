@@ -13,7 +13,7 @@ import useTranslation from "next-translate/useTranslation";
 
 export default function ViewNoteBook() {
   const [value, setValue] = useState("");
-  const [title, setTitle] = useState("Markdown Test");
+  const [title, setTitle] = useState("");
 
   const { t } = useTranslation("peppermint");
 
@@ -60,29 +60,28 @@ export default function ViewNoteBook() {
 
   return (
     <div className="">
-      <div>
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
+      <div className="flex flex-row justify-between items-center border-b-[1px] px-4">
+        <input
+          type="text"
+          name="title"
+          id="title"
+          className="focus:none block w-full sm:text-sm border-none border-transparent focus:border-transparent focus:ring-0"
+          placeholder="Notebook title goes here..."
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+        />
+        <button
+          onClick={() => postMarkdown()}
+          type="button"
+          className="inline-flex items-center px-4 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
         >
-          {t("notebook_title")}
-        </label>
-        <div className="mt-1">
-          <input
-            type="text"
-            name="title"
-            id="title"
-            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            placeholder="Notebook title goes here..."
-            onChange={(e) => setTitle(e.target.value)}
-            value={title}
-          />
-        </div>
+          {t("save")}
+        </button>
       </div>
 
-      <div className="mt-4 h-full">
+      <div className="h-full">
         <div className="m-h-[90vh]">
-          <RichTextEditor editor={editor}>
+          <RichTextEditor editor={editor} className="rounded-none border-none">
             <RichTextEditor.Toolbar>
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />
@@ -125,16 +124,6 @@ export default function ViewNoteBook() {
 
             <RichTextEditor.Content />
           </RichTextEditor>
-        </div>
-
-        <div className="mt-4 float-right">
-          <button
-            onClick={() => postMarkdown()}
-            type="button"
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-          >
-            {t("save")}
-          </button>
         </div>
       </div>
     </div>

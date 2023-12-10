@@ -7,13 +7,16 @@ import { useQuery } from "react-query";
 import Loader from "react-spinners/ClipLoader";
 
 async function fetchNotebooks(token) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/all`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return res.json();
 }
 
@@ -22,14 +25,14 @@ function classNames(...classes) {
 }
 
 export default function NoteBookLayout({ children }) {
-  const router = useRouter()
+  const router = useRouter();
   const token = getCookie("session");
 
-  const { data, status, error, refetch } = useQuery(
-    "getUsersNotebooks",
-    () => fetchNotebooks(token),)
+  const { data, status, error, refetch } = useQuery("getUsersNotebooks", () =>
+    fetchNotebooks(token)
+  );
 
-  const [notebooks, setNotebooks] = useState();
+  const [notebooks, setNotebooks] = useState<any>();
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
@@ -49,18 +52,17 @@ export default function NoteBookLayout({ children }) {
       {status === "success" && (
         <div className="">
           <div className="flex flex-row">
-            <div className="flex flex-col w-64">
+            <div className="flex flex-col w-64 border-r-[1px]">
               <div className="flex-row">
-                <nav className="flex-1 space-y-1 px-2" aria-label="Sidebar">
-                  <h1 className="text-3xl ml-2 font-bold">
-                    Notebooks{" "}
+                <nav className="flex-1 w-full " aria-label="Sidebar">
+                  <div className="border-b-[1px]">
                     <Link
-                      className="inline-flex float-right items-center px-4 py-2 text-sm font-medium text-green-600 mt-1"
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-green-600"
                       href="/notebook/new"
                     >
                       <PlusIconMini className="h-5 w-5" aria-hidden="true" />
                     </Link>
-                  </h1>
+                  </div>
                   {notebooks &&
                     notebooks.map((item, index) => (
                       <Link
@@ -70,17 +72,22 @@ export default function NoteBookLayout({ children }) {
                           router.query.id === item.id
                             ? "bg-green-500 text-white hover:text-white"
                             : "text-gray-900 hover:bg-green-500 hover:text-white hover:bg-opacity-75",
-                          "group flex text-left px-2 py-2 w-full text-sm font-medium rounded-md "
+                          "group flex text-left px-2 py-2 w-full text-sm font-medium border-b-[1px] border-gray-200"
                         )}
                       >
-                        <span className="flex-1">{item.title}</span>
+                        <div className="flex flex-row items-center justify-between w-full">
+                          <span className="truncate">{item.title}</span>
+                          {/* <span className="text-right text-xs">
+                            {moment(item.updated_at).fromNow()}
+                          </span> */}
+                        </div>
                       </Link>
                     ))}
                 </nav>
               </div>
             </div>
             <div className="flex-1">
-              <div className="h-[80vh] px-4">{children}</div>
+              <div className="h-[80vh]">{children}</div>
             </div>
           </div>
         </div>
