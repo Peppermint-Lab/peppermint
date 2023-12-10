@@ -70,7 +70,7 @@ export default function Tickets() {
 
                 return (
                   <Link href={`/ticket/${ticket.id}`}>
-                    <div className="flex flex-row w-full bg-white border-b-[1px] p-3 justify-between px-6 hover:bg-gray-100">
+                    <div className="flex flex-row w-full bg-white border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
                       <div>
                         <span className="text-xs font-semibold">
                           {ticket.title}

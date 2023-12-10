@@ -11,7 +11,7 @@ import {
 import { deleteCookie, getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import { ContextMenu } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
@@ -33,6 +33,7 @@ export default function NewLayout({ children }: any) {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [tab, setTab] = useState("unread");
+  const [currentPath, setCurrentPath] = useState();
 
   if (!user) {
     location.push("/auth/login");
@@ -120,12 +121,49 @@ export default function NewLayout({ children }: any) {
   // location.push(`${locale}/${location.pathname}`);
   // }, [user, location]);
 
-  const handleKeyPress = useCallback((event: any) => {
+  // const handleKeyPress = useCallback((event: any, location: any) => {
+  //   console.log(location);
+  //   if (
+  //     document.activeElement!.tagName !== "INPUT" &&
+  //     document.activeElement!.tagName !== "TEXTAREA" &&
+  //     !document.activeElement!.className.includes("ProseMirror")
+  //   ) {
+  //     switch (event.key) {
+  //       case "c":
+  //         location.push("/new");
+  //         break;
+  //       case "h":
+  //         location.push("/");
+  //         break;
+  //       case "n":
+  //         location.push("/notebook");
+  //         break;
+  //       case "t":
+  //         location.push("/tickets");
+  //         break;
+  //       case "a":
+  //         location.push("/admin");
+  //         break;
+  //       case "o":
+  //         location.push("/tickets/open");
+  //         break;
+  //       case "f":
+  //         location.push("/tickets/closed");
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // }, []);
+
+  function handleKeyPress(event: any) {
+    const pathname = location.pathname;
+    console.log(pathname);
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
       !document.activeElement!.className.includes("ProseMirror") &&
-      location.pathname !== "/new"
+      !pathname.includes("/new")
     ) {
       switch (event.key) {
         case "c":
@@ -149,12 +187,11 @@ export default function NewLayout({ children }: any) {
         case "f":
           location.push("/tickets/closed");
           break;
+        default:
+          break;
       }
-    } else {
-      console;
-      return null;
     }
-  }, []);
+  }
 
   useEffect(() => {
     // attach the event listener
@@ -164,7 +201,7 @@ export default function NewLayout({ children }: any) {
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
-  }, [handleKeyPress]);
+  }, [handleKeyPress, location]);
 
   return (
     !loading && (
