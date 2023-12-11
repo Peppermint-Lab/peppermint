@@ -1,8 +1,8 @@
 module.exports = {
-  locales: ['en', 'de', 'se', 'he'],
-  defaultLocale: 'en',
+  locales: ["en", "da", "de", "es", "fr", "no", "pt", "se", "tl", "he"],
+  defaultLocale: "en",
   pages: {
-    '*': ['peppermint'],
+    "*": ["peppermint"],
   },
-  localeDetection: true,
+  localeDetection: false,
 };
