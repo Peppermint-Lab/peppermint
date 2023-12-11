@@ -78,7 +78,7 @@ export default function Tickets() {
                   <Link href={`/ticket/${ticket.id}`}>
                     <ContextMenu.Root>
                       <ContextMenu.Trigger>
-                        <div className="flex flex-row w-full bg-white border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
+                        <div className="flex flex-row w-full bg-white border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
                           <div className="flex flex-row items-center space-x-4">
                             <span className="text-xs font-semibold">
                               #{ticket.Number}
