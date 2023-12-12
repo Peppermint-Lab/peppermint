@@ -311,16 +311,19 @@ export default function Ticket() {
                         />
                       </div>
                     ) : (
-                      <h1 className="text-2xl font-bold text-gray-900">
+                      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                         {data.ticket.title}
                       </h1>
                     )}
-                    <p className="mt-2 text-sm text-gray-500">
-                      <span className="font-medium text-gray-900">
+                    <p className="mt-2 text-sm text-gray-500 dark:text-white">
+                      <span className="font-medium text-gray-900 dark:text-white">
                         {data.ticket.email}
                       </span>{" "}
                       via
-                      <a href="#" className="font-medium text-gray-900">
+                      <a
+                        href="#"
+                        className="font-medium text-gray-900 dark:text-white"
+                      >
                         {data.ticket.fromImap === true
                           ? " Email - "
                           : " Ticket Creation - "}
@@ -368,7 +371,7 @@ export default function Ticket() {
                           className="h-5 w-5 text-green-500"
                           aria-hidden="true"
                         />
-                        <span className="text-sm font-medium text-green-700">
+                        <span className="text-sm font-medium text-green-700 dark:text-white">
                           {t("open_issue")}
                         </span>
                       </div>
@@ -378,7 +381,7 @@ export default function Ticket() {
                           className="h-5 w-5 text-red-500"
                           aria-hidden="true"
                         />
-                        <span className="text-sm font-medium text-red-700">
+                        <span className="text-sm font-medium text-red-700 dark:text-white">
                           {t("closed_issue")}
                         </span>
                       </div>
@@ -388,7 +391,7 @@ export default function Ticket() {
                         className="h-5 w-5 text-gray-400"
                         aria-hidden="true"
                       />
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
                         {data.ticket.comments.length} {t("comments")}
                       </span>
                     </div>
@@ -397,7 +400,7 @@ export default function Ticket() {
                         className="h-5 w-5 text-gray-400"
                         aria-hidden="true"
                       />
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
                         Created on{" "}
                         {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
                       </span>
@@ -564,9 +567,12 @@ export default function Ticket() {
                 <div className="py-3 xl:pb-0 xl:pt-2">
                   <span className="text-sm font-bold">{t("description")}</span>
                   <div className="prose max-w-none">
-                    {edit ? (
-                      <RichTextEditor editor={IssueEditor}>
-                        <RichTextEditor.Toolbar>
+                    {edit && !data.ticket.fromImap ? (
+                      <RichTextEditor
+                        editor={IssueEditor}
+                        className="dark:bg-gray-900 dark:text-white rounded-none border-none"
+                      >
+                        <RichTextEditor.Toolbar className="dark:text-white rounded-none dark:bg-[#0A090C]">
                           <RichTextEditor.ControlsGroup>
                             <RichTextEditor.Bold />
                             <RichTextEditor.Italic />
@@ -606,12 +612,20 @@ export default function Ticket() {
                           </RichTextEditor.ControlsGroup>
                         </RichTextEditor.Toolbar>
 
-                        <RichTextEditor.Content style={{ minHeight: 320 }} />
+                        <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
                       </RichTextEditor>
                     ) : (
-                      <span className="break-words">
-                        {renderHTML(data.ticket.detail)}
-                      </span>
+                      <div className="">
+                        {data.ticket.fromImap ? (
+                          <div className="break-words bg-white rounded-md p-4 text-black">
+                            {renderHTML(data.ticket.detail)}
+                          </div>
+                        ) : (
+                          <div className="">
+                            {renderHTML(data.ticket.detail)}
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -625,7 +639,7 @@ export default function Ticket() {
                     <div className="pb-2">
                       <span
                         id="activity-title"
-                        className="text-lg font-medium text-gray-900"
+                        className="text-lg font-medium text-gray-900 dark:text-white"
                       >
                         {t("comments")}
                       </span>
@@ -657,28 +671,28 @@ export default function Ticket() {
                                       <div className="min-w-0 flex-1">
                                         <div>
                                           <div className="text-sm">
-                                            <span className="font-medium text-gray-900 ">
+                                            <span className="font-medium text-gray-900 dark:text-white ">
                                               {item.user.name}
                                             </span>
                                           </div>
                                           <div className=" flex flex-row space-x-1">
-                                            <span className="text-xs text-gray-500">
+                                            <span className="text-xs text-gray-500 dark:text-white">
                                               {item.public
                                                 ? "Publicly"
                                                 : "Internally"}
                                             </span>
-                                            <span className="text-xs text-gray-500">
+                                            <span className="text-xs text-gray-500 dark:text-white">
                                               commented at
                                             </span>
 
-                                            <span className="text-xs text-gray-500">
+                                            <span className="text-xs text-gray-500 dark:text-white">
                                               {moment(item.createdAt).format(
                                                 "DD/MM/YYYY hh:mm"
                                               )}
                                             </span>
                                           </div>
                                         </div>
-                                        <div className="text-sm  text-gray-900">
+                                        <div className="text-sm  text-gray-900 dark:text-white">
                                           <span>{item.text}</span>
                                         </div>
                                       </div>
@@ -701,7 +715,7 @@ export default function Ticket() {
                                   id="comment"
                                   name="comment"
                                   rows={3}
-                                  className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                  className="block w-full dark:bg-black rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                   placeholder="Leave a comment"
                                   defaultValue={""}
                                   onChange={(e) => setComment(e.target.value)}
@@ -741,7 +755,7 @@ export default function Ticket() {
                                   <button
                                     type="button"
                                     onClick={() => updateStatus()}
-                                    className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                                   >
                                     <CheckCircleIcon
                                       className="-ml-0.5 h-5 w-5 text-red-500"
@@ -755,7 +769,7 @@ export default function Ticket() {
                                   <button
                                     type="button"
                                     onClick={() => updateStatus()}
-                                    className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                                   >
                                     <CheckCircleIcon
                                       className="-ml-0.5 h-5 w-5 text-green-500"
@@ -767,7 +781,7 @@ export default function Ticket() {
                                 <button
                                   onClick={() => addComment()}
                                   type="submit"
-                                  className="inline-flex items-center justify-center rounded-md bg-gray-900 px-3 py-[7px] text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                                  className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
                                 >
                                   {t("comment")}
                                 </button>
@@ -790,7 +804,7 @@ export default function Ticket() {
                       className="h-5 w-5 text-green-500"
                       aria-hidden="true"
                     />
-                    <span className="text-sm font-medium text-green-700">
+                    <span className="text-sm font-medium text-green-700 dark:text-white">
                       {t("open_issue")}
                     </span>
                   </div>
@@ -800,29 +814,29 @@ export default function Ticket() {
                       className="h-5 w-5 text-red-500"
                       aria-hidden="true"
                     />
-                    <span className="text-sm font-medium text-red-700">
+                    <span className="text-sm font-medium text-red-700 dark:text-white">
                       {t("closed_issue")}
                     </span>
                   </div>
                 )}
                 <div className="flex items-center space-x-2">
                   <ChatBubbleLeftEllipsisIcon
-                    className="h-5 w-5 text-gray-400"
+                    className="h-5 w-5 text-gray-400 dark:text-white"
                     aria-hidden="true"
                   />
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
                     {data.ticket.comments.length} {t("comments")}
                   </span>
                 </div>
                 <div className="flex flex-row items-center space-x-2">
                   <CalendarIcon
-                    className="h-5 w-5 text-gray-400"
+                    className="h-5 w-5 text-gray-400 dark:text-white"
                     aria-hidden="true"
                   />
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
                     {t("created_at")}
                   </span>
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
                     {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
                   </span>
                 </div>
@@ -830,13 +844,13 @@ export default function Ticket() {
               <div className="mt-2 space-y-8 border-t border-gray-200 py-2">
                 <div>
                   <div className="flex flex-row justify-between items-center">
-                    <span className="text-sm font-medium text-gray-500">
+                    <span className="text-sm font-medium text-gray-500 dark:text-white">
                       {t("assignees")}
                     </span>
                     {!assignedEdit ? (
                       <button
                         onClick={() => setAssignedEdit(true)}
-                        className="text-sm font-medium text-gray-500 hover:underline"
+                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
                       >
                         {t("edit-btn")}
                       </button>
@@ -845,7 +859,7 @@ export default function Ticket() {
                         onClick={() => {
                           transferTicket();
                         }}
-                        className="text-sm font-medium text-gray-500 hover:underline"
+                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
                       >
                         {t("save")}
                       </button>
@@ -856,14 +870,14 @@ export default function Ticket() {
                       <li className="flex justify-star items-center space-x-2">
                         <div className="flex-shrink-0">
                           <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                            <span className="text-xs font-medium leading-none text-white uppercase">
+                            <span className="text-xs font-medium leading-none text-white uppercase ">
                               {data.ticket.assignedTo
                                 ? data.ticket.assignedTo.name[0]
                                 : "-"}
                             </span>
                           </span>
                         </div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {data.ticket.assignedTo
                             ? data.ticket.assignedTo.name
                             : ""}
@@ -880,12 +894,7 @@ export default function Ticket() {
                                 <span className="block truncate">
                                   {n ? n.name : t("select_new_user")}
                                 </span>
-                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                  {/* <SelectorIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  /> */}
-                                </span>
+                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"></span>
                               </Listbox.Button>
 
                               <Transition
@@ -952,7 +961,7 @@ export default function Ticket() {
                 </div>
                 <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
-                    <span className="text-sm font-medium text-gray-500 ">
+                    <span className="text-sm font-medium text-gray-500 dark:text-white">
                       {t("labels")}
                     </span>
                     {!labelEdit ? (
@@ -985,7 +994,7 @@ export default function Ticket() {
                                 aria-hidden="true"
                               />
                             </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900">
+                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
                               {data.ticket.priority} {t("priority")}
                             </div>
                           </div>
@@ -996,11 +1005,11 @@ export default function Ticket() {
                           <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                             <div className="absolute flex flex-shrink-0 items-center justify-center">
                               <span
-                                className="h-1.5 w-1.5 rounded-full bg-green-500"
+                                className="h-1.5 w-1.5 rounded-full bg-green-500 "
                                 aria-hidden="true"
                               />
                             </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900">
+                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
                               {data.ticket.priority} {t("priority")}
                             </div>
                           </div>
@@ -1015,7 +1024,7 @@ export default function Ticket() {
                                 aria-hidden="true"
                               />
                             </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900">
+                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
                               {data.ticket.priority} {t("priority")}
                             </div>
                           </div>
@@ -1030,7 +1039,7 @@ export default function Ticket() {
                                 aria-hidden="true"
                               />
                             </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900">
+                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
                               {data.ticket.status === "needs_support" && (
                                 <span>Needs Support</span>
                               )}
@@ -1411,13 +1420,13 @@ export default function Ticket() {
                 </div>
                 <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
-                    <span className="text-sm font-medium text-gray-500 ">
+                    <span className="text-sm font-medium text-gray-500 dark:text-white">
                       Time Tracking
                     </span>
                     {!editTime ? (
                       <button
                         onClick={() => setTimeEdit(true)}
-                        className="text-sm font-medium text-gray-500 hover:underline"
+                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
                       >
                         add
                       </button>
@@ -1427,7 +1436,7 @@ export default function Ticket() {
                           setTimeEdit(false);
                           addTime();
                         }}
-                        className="text-sm font-medium text-gray-500 hover:underline"
+                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
                       >
                         save
                       </button>
@@ -1436,7 +1445,7 @@ export default function Ticket() {
                   {data.ticket.TimeTracking.length > 0 ? (
                     data.ticket.TimeTracking.map((i: any) => (
                       <div key={i.id} className="text-xs">
-                        <div className="flex flex-row space-x-1.5 items-center">
+                        <div className="flex flex-row space-x-1.5 items-center dark:text-white">
                           <span>{i.user.name} / </span>
                           <span>{i.time} minutes</span>
                         </div>
@@ -1444,7 +1453,9 @@ export default function Ticket() {
                     ))
                   ) : (
                     <div>
-                      <span className="text-xs">No Time added</span>
+                      <span className="text-xs dark:text-white">
+                        No Time added
+                      </span>
                     </div>
                   )}
                   {editTime && (

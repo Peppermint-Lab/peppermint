@@ -66,7 +66,7 @@ export default function AdminLayout({ children }: any) {
                 className={classNames(
                   item.current
                     ? "bg-green-500 text-white hover:text-white"
-                    : "text-gray-800 hover:bg-gray-200 hover:text-gray-900",
+                    : "text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-green-600 hover:text-gray-900",
                   "flex items-center px-3 py-2 text-sm font-medium rounded-md w-full"
                 )}
                 aria-current={item.current ? "page" : undefined}

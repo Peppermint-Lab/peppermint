@@ -92,7 +92,7 @@ export default function SSO() {
       <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
         <div className="pt-10 pb-16">
           <div className="px-4 sm:px-6 md:px-0">
-            <h1 className="text-3xl font-extrabold text-gray-900">
+            <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
               SSO Settings
             </h1>
           </div>
@@ -174,7 +174,7 @@ export default function SSO() {
                   {provider !== "" && (
                     <div className="space-y-4 mt-4">
                       <div>
-                        <span className="text-xl font-bold capitalize">
+                        <span className="text-xl font-bold text-black capitalize">
                           {provider} SSO settings
                         </span>
                       </div>

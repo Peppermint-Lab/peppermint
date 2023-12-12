@@ -58,7 +58,7 @@ export default function CreateClientPage() {
         <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
           <div className="pt-10 pb-16 divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
                 Register a new client
               </h1>
             </div>
@@ -67,10 +67,10 @@ export default function CreateClientPage() {
                 <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">
+                      <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                         Create a new client
                       </h3>
-                      <h3 className="text-xs font-normal text-gray-900">
+                      <h3 className="text-xs font-normal text-gray-900  dark:text-white">
                         All fields are required!
                       </h3>
                       <div className="mt-2 space-y-4">

@@ -40,14 +40,14 @@ export default function EmailQueues() {
         <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
           <div className="pt-10 pb-16 divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
                 Email Queues
               </h1>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto mt-4">
-                  <p className="mt-2 text-sm text-gray-700">
+                  <p className="mt-2 text-sm text-gray-700  dark:text-white">
                     A list of the mailboxes you are listening too, these will
                     automatically create tickets and can be accessed down the
                     side navigation.

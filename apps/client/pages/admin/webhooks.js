@@ -49,8 +49,6 @@ export default function Notifications() {
       });
   }
 
-  console.log(data);
-
   async function deleteHook(id) {
     await fetch(`/api/v1/admin/webhook/${id}/delete`, {
       method: "DELETE",
@@ -74,14 +72,14 @@ export default function Notifications() {
         <div className="pt-10 pb-16 ">
           <div className="divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
                 Webhook Settings
               </h1>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center mt-4">
                 <div className="sm:flex-auto">
-                  <p className="mt-2 text-sm text-gray-700">
+                  <p className="mt-2 text-sm text-gray-700  dark:text-white">
                     Webhooks allow external services to be notified when certain
                     events happen. When the specified events happen, we'll send
                     a POST request to each of the URLs you provide.
@@ -130,10 +128,10 @@ export default function Notifications() {
                               className="rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3"
                             >
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900">
+                                <p className="text-sm font-medium text-gray-900  dark:text-white">
                                   {hook.name}
                                 </p>
-                                <p className="text-sm text-gray-500 truncate">
+                                <p className="text-sm text-gray-500 truncate  dark:text-white">
                                   {hook.url} | {hook.type}
                                 </p>
                               </div>
@@ -150,7 +148,9 @@ export default function Notifications() {
                           ))}
                         </div>
                       ) : (
-                        <p>You currently have no web hooks added</p>
+                        <p className=" dark:text-white">
+                          You currently have no web hooks added
+                        </p>
                       )}
                     </div>
                   )}
@@ -162,7 +162,7 @@ export default function Notifications() {
                       <div className="space-y-4">
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-700"
+                          className="block text-sm font-medium text-gray-700  dark:text-white"
                         >
                           Webhook Name
                         </label>
@@ -171,7 +171,7 @@ export default function Notifications() {
                             type="text"
                             name="url"
                             id="url"
-                            className="shadow-sm focus:ring-green\-500 focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
+                            className="shadow-sm focus:ring-green\-500 dark:text-black  focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
                             required
                             onChange={(e) => setName(e.target.value)}
                           />
@@ -179,7 +179,7 @@ export default function Notifications() {
 
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-700 PT-4"
+                          className="block text-sm font-medium text-gray-700  dark:text-white PT-4"
                         >
                           Payload Url
                         </label>
@@ -188,39 +188,23 @@ export default function Notifications() {
                             type="text"
                             name="url"
                             id="url"
-                            className="shadow-sm focus:ring-green\-500 focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
+                            className="shadow-sm focus:ring-green\-500 dark:text-black focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
                             required
                             onChange={(e) => setUrl(e.target.value)}
                           />
                         </div>
-                        {/* <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mt-2"
-              >
-                Secret
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="url"
-                  id="url"
-                  className="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder=""
-                  onChange={(e) => setSecret(e.target.value)}
-                />
-              </div> */}
 
                         <div className="w-3/4">
                           <label
                             htmlFor="location"
-                            className="mt-4 block text-sm font-medium text-gray-700"
+                            className="mt-4 block text-sm font-medium text-gray-700  dark:text-white"
                           >
                             Type
                           </label>
                           <select
                             id="location"
                             name="location"
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                            className="mt-1 block w-full pl-3 pr-10 py-2 dark:text-black text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                             defaultValue="ticket_created"
                             onChange={(e) => setType(e.target.value)}
                           >
@@ -241,7 +225,7 @@ export default function Notifications() {
                             <span className="flex-grow flex flex-row">
                               <Switch.Label
                                 as="span"
-                                className="text-sm font-medium text-gray-900 w-1/6"
+                                className="text-sm font-medium text-gray-900  dark:text-white w-1/6"
                                 passive
                               >
                                 Active
