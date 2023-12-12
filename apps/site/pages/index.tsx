@@ -652,7 +652,7 @@ export default function Home() {
                 Aiming to bridge the gap of features and cost.
               </p>
               <div className="flex space-x-6">
-                {footer.social.map((item) => (
+                {/* {footer.social.map((item) => (
                   <a
                     key={item.name}
                     href={item.href}
@@ -661,7 +661,8 @@ export default function Home() {
                     <span className="sr-only">{item.name}</span>
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </a>
-                ))}
+                ))} */}
+
               </div>
             </div>
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
