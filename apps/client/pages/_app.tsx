@@ -102,7 +102,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          forcedTheme="light"
+          forcedTheme="dark"
         >
           <Theme>
             <QueryClientProvider client={queryClient}>
@@ -127,7 +127,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          forcedTheme="light"
+          forcedTheme="dark"
         >
           <Theme>
             <QueryClientProvider client={queryClient}>
@@ -152,7 +152,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          forcedTheme="light"
+          forcedTheme="dark"
         >
           <Theme>
             <QueryClientProvider client={queryClient}>
@@ -191,7 +191,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   return (
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
+      <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="dark">
         <Theme>
           <QueryClientProvider client={queryClient}>
             <Auth>

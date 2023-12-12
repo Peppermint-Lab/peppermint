@@ -38,10 +38,10 @@ export default function NoteBooksIndex() {
     <div className="px-4 py-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
+          <h1 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
             {t("notebooks")}
           </h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <p className="mt-2 text-sm text-gray-700 dark:text-white">
             {t("notebooks_description")}
           </p>
         </div>

@@ -48,7 +48,7 @@ export default function Tickets() {
       {status === "success" && (
         <div>
           <div className="flex flex-col">
-            <div className="py-2 px-6 bg-gray-200 flex flex-row items-center justify-between">
+            <div className="py-2 px-6 bg-gray-200 dark:bg-[#0A090C] border-b-[1px] flex flex-row items-center justify-between">
               <span className="text-sm font-bold">All Tickets</span>
               {/* <div>
                 <button
@@ -78,7 +78,7 @@ export default function Tickets() {
                   <Link href={`/ticket/${ticket.id}`}>
                     <ContextMenu.Root>
                       <ContextMenu.Trigger>
-                        <div className="flex flex-row w-full bg-white border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
+                        <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
                           <div className="flex flex-row items-center space-x-4">
                             <span className="text-xs font-semibold">
                               #{ticket.Number}

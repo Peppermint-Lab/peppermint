@@ -146,7 +146,7 @@ export default function Home() {
                     onClick={() => router.push("/new")}
                   >
                     <svg
-                      className="mx-auto h-12 w-12 text-gray-400"
+                      className="mx-auto h-12 w-12 text-gray-400 dark:text-white"
                       stroke="currentColor"
                       fill="none"
                       viewBox="0 0 48 48"
@@ -159,7 +159,7 @@ export default function Home() {
                         d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6"
                       />
                     </svg>
-                    <span className="mt-2 block text-sm font-semibold text-gray-900">
+                    <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-white">
                       Create your first ticket
                     </span>
                   </button>
@@ -175,41 +175,35 @@ export default function Home() {
                         <tr>
                           <th
                             scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-0"
                           >
                             {t("title")}
                           </th>
                           <th
                             scope="col"
-                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white lg:table-cell"
                           >
                             {t("priority")}
                           </th>
                           <th
                             scope="col"
-                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell"
                           >
                             {t("status")}
                           </th>
                           <th
                             scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
                           >
                             {t("created")}
                           </th>
 
                           <th
                             scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
                           >
                             {t("assigned_to")}
                           </th>
-                          {/* <th
-                        scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                      >
-                        <span className="sr-only">Actions</span>
-                      </th> */}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
@@ -217,10 +211,10 @@ export default function Home() {
                           tickets.slice(0, 10).map((item: any) => (
                             <tr
                               key={item.id}
-                              className="hover:bg-gray-300 hover:cursor-pointer"
+                              className="hover:bg-gray-300 dark:hover:bg-green-600 hover:cursor-pointer"
                               onClick={() => router.push(`/ticket/${item.id}`)}
                             >
-                              <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                              <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-0">
                                 {item.title}
                                 <dl className="font-normal lg:hidden">
                                   <dt className="sr-only sm:hidden">Email</dt>
@@ -231,7 +225,7 @@ export default function Home() {
                               </td>
                               <td className="hidden px-3 py-1 text-sm text-gray-500 lg:table-cell w-[64px]">
                                 {item.priority === "Low" && (
-                                  <span className="inline-flex w-full justify-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                                  <span className="inline-flex w-full justify-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700  ring-1 ring-inset ring-blue-600/20">
                                     {item.priority}
                                   </span>
                                 )}
@@ -275,10 +269,10 @@ export default function Home() {
                                   </>
                                 )}
                               </td>
-                              <td className="px-3 py-1 text-sm text-gray-500 w-[110px]">
+                              <td className="px-3 py-1 text-sm text-gray-500 dark:text-white w-[110px]">
                                 {moment(item.createdAt).format("DD/MM/YYYY")}
                               </td>
-                              <td className="px-3 py-1 text-sm text-gray-500 w-[130px] truncate whitespace-nowrap">
+                              <td className="px-3 py-1 text-sm text-gray-500 w-[130px] dark:text-white truncate whitespace-nowrap">
                                 {item.assignedTo ? item.assignedTo.name : "-"}
                               </td>
                               {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">

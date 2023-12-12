@@ -98,9 +98,12 @@ export default function Notebooks() {
         )}
       </div>
       {!loading && (
-        <RichTextEditor editor={editor} className="rounded-none border-none">
-          <RichTextEditor.Toolbar>
-            <RichTextEditor.ControlsGroup>
+        <RichTextEditor
+          editor={editor}
+          className="dark:bg-gray-900 dark:text-white rounded-none border-none"
+        >
+          <RichTextEditor.Toolbar className="dark:text-white rounded-none dark:bg-[#0A090C] ">
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.Bold />
               <RichTextEditor.Italic />
               <RichTextEditor.Underline />
@@ -110,14 +113,14 @@ export default function Notebooks() {
               <RichTextEditor.Code />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.H1 />
               <RichTextEditor.H2 />
               <RichTextEditor.H3 />
               <RichTextEditor.H4 />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.Blockquote />
               <RichTextEditor.Hr />
               <RichTextEditor.BulletList />
@@ -126,12 +129,12 @@ export default function Notebooks() {
               <RichTextEditor.Superscript />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.Link />
               <RichTextEditor.Unlink />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.AlignLeft />
               <RichTextEditor.AlignCenter />
               <RichTextEditor.AlignJustify />
@@ -139,7 +142,7 @@ export default function Notebooks() {
             </RichTextEditor.ControlsGroup>
           </RichTextEditor.Toolbar>
 
-          <RichTextEditor.Content />
+          <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
         </RichTextEditor>
       )}
     </>

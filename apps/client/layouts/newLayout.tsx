@@ -205,7 +205,7 @@ export default function NewLayout({ children }: any) {
 
   return (
     !loading && (
-      <div className="min-h-screen overflow-hidden bg-white dark:bg-gray-900">
+      <div className="min-h-screen overflow-hidden bg-white dark:bg-[#0A090C]">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -387,7 +387,7 @@ export default function NewLayout({ children }: any) {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] dark:bg-gray-900 pb-4">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] dark:bg-[#393E46] pb-4">
             <div className="flex align-middle flex-row h-14 items-center border-b-[1px] px-6">
               {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
@@ -407,7 +407,7 @@ export default function NewLayout({ children }: any) {
                           className={classNames(
                             item.current
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
-                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-gray-800 dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
                         >
@@ -566,7 +566,7 @@ export default function NewLayout({ children }: any) {
         </div>
 
         <div className="lg:pl-64 2xl:pl-72">
-          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-gray-900 px-4 sm:gap-x-6">
+          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-[#0A090C] px-4 sm:gap-x-6">
             <button
               type="button"
               className="-m-2.5 p-2.5 text-white lg:hidden"
@@ -751,7 +751,7 @@ export default function NewLayout({ children }: any) {
             </div>
           </div>
 
-          <main className="bg-white dark:bg-gray-900">{children}</main>
+          <main className="bg-white dark:bg-[#0A090C]">{children}</main>
         </div>
       </div>
     )

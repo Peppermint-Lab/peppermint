@@ -143,14 +143,14 @@ export default function CreateTicket() {
   }, []);
 
   return (
-    <div className="overflow-hidden bg-white">
+    <div className="h-full bg-white dark:bg-[#0A090C]">
       <div className="w-full border-b-[1px] p-2 flex flex-row justify-between items-center">
         <div className="flex flex-row space-x-4">
           <Listbox value={company} onChange={setCompany}>
             {({ open }) => (
               <>
                 <div className="relative">
-                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {company === undefined
                         ? t("select_a_client")
@@ -171,7 +171,7 @@ export default function CreateTicket() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10  max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute z-10  max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {options !== undefined &&
                         options.map((client: any) => (
                           <Listbox.Option
@@ -180,7 +180,7 @@ export default function CreateTicket() {
                               classNames(
                                 active
                                   ? "bg-indigo-600 text-white"
-                                  : "text-gray-900",
+                                  : "text-gray-900 dark:text-white",
                                 "relative cursor-default select-none py-2 pl-3 pr-9"
                               )
                             }
@@ -224,7 +224,7 @@ export default function CreateTicket() {
             {({ open }) => (
               <>
                 <div className="relative">
-                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {engineer === undefined
                         ? t("select_an_engineer")
@@ -245,7 +245,7 @@ export default function CreateTicket() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {users !== undefined &&
                         users.map((user: any) => (
                           <Listbox.Option
@@ -254,7 +254,7 @@ export default function CreateTicket() {
                               classNames(
                                 active
                                   ? "bg-indigo-600 text-white"
-                                  : "text-gray-900",
+                                  : "text-gray-900 dark:text-white",
                                 "relative cursor-default select-none py-2 pl-3 pr-9"
                               )
                             }
@@ -298,7 +298,7 @@ export default function CreateTicket() {
             {({ open }) => (
               <>
                 <div className="relative">
-                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none sm:text-sm sm:leading-6">
+                  <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none sm:text-sm sm:leading-6">
                     <span className="block truncate">{selected.name}</span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon
@@ -315,7 +315,7 @@ export default function CreateTicket() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {type.map((person) => (
                         <Listbox.Option
                           key={person.id}
@@ -323,7 +323,7 @@ export default function CreateTicket() {
                             classNames(
                               active
                                 ? "bg-gray-400 text-white"
-                                : "text-gray-900",
+                                : "text-gray-900 dark:text-white",
                               "relative cursor-default select-none py-2 pl-3 pr-9"
                             )
                           }
@@ -378,11 +378,11 @@ export default function CreateTicket() {
         <div className="w-full xl:w-2/3 order-2 xl:order-2">
           <RichTextEditor
             editor={editor}
-            style={{ borderRadius: 0, border: 0 }}
+            className="dark:bg-gray-900 dark:text-white rounded-none border-none"
           >
-            <RichTextEditor.Toolbar>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
+            <RichTextEditor.Toolbar className="rounded-none dark:bg-[#0A090C]">
+              <RichTextEditor.ControlsGroup className="dark:text-white">
+                <RichTextEditor.Bold className="dark:text-white" />
                 <RichTextEditor.Italic />
                 <RichTextEditor.Underline />
                 <RichTextEditor.Strikethrough />
@@ -420,37 +420,58 @@ export default function CreateTicket() {
               </RichTextEditor.ControlsGroup>
             </RichTextEditor.Toolbar>
 
-            <RichTextEditor.Content style={{ minHeight: "50vh" }} />
+            <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
           </RichTextEditor>
         </div>
-        <div className="w-full xl:w-1/6 p-3 flex flex-col  border-b-[1px] xl:border-b-0 xl:border-r-[1px] order-1 xl:order-1">
+        <div className="w-full xl:w-1/6 p-3 flex flex-col dark:bg-[#0A090C] dark:text-white  border-b-[1px] xl:border-b-0 xl:border-r-[1px] order-1 xl:order-1">
           <div className="flex flex-col">
-            <input
-              type="text"
-              name="title"
-              placeholder={t("ticket_details")}
-              maxLength={64}
-              autoComplete="off"
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full pl-0 pr-0 sm:text-xl border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-            />
-            <input
-              type="text"
-              id="name"
-              placeholder={t("ticket_name_here")}
-              name="name"
-              autoComplete="off"
-              onChange={(e) => setName(e.target.value)}
-              className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-            />
+            <div>
+              <label>
+                <span className="block text-sm font-medium text-gray-700 dark:text-white">
+                  Title
+                </span>
+              </label>
+              <input
+                type="text"
+                name="title"
+                placeholder={t("ticket_details")}
+                maxLength={64}
+                autoComplete="off"
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full pl-0 pr-0 sm:text-xl border-none dark:bg-[#0A090C] dark:text-white focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+              />
+            </div>
+            <div>
+              <label>
+                <span className="block text-sm font-medium text-gray-700 dark:text-white">
+                  Contact Name
+                </span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                placeholder={t("ticket_name_here")}
+                name="name"
+                autoComplete="off"
+                onChange={(e) => setName(e.target.value)}
+                className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none dark:bg-[#0A090C] dark:text-white focus:shadow-none focus:ring-0 focus:border-none"
+              />
+            </div>
 
-            <input
-              type="text"
-              name="email"
-              placeholder={t("ticket_email_here")}
-              onChange={(e) => setEmail(e.target.value)}
-              className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-            />
+            <div>
+              <label>
+                <span className="block text-sm font-medium text-gray-700 dark:text-white">
+                  Contact Email
+                </span>
+              </label>
+              <input
+                type="text"
+                name="email"
+                placeholder={t("ticket_email_here")}
+                onChange={(e) => setEmail(e.target.value)}
+                className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none dark:bg-[#0A090C] dark:text-white focus:shadow-none focus:ring-0 focus:border-none"
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -62,7 +62,7 @@ export default function ViewNoteBook() {
           type="text"
           name="title"
           id="title"
-          className="focus:none block w-full sm:text-sm border-none border-transparent focus:border-transparent focus:ring-0"
+          className="focus:none block w-full sm:text-sm border-none border-transparent focus:border-transparent focus:ring-0 rounded-none dark:bg-[#0A090C] dark:text-white"
           placeholder="Notebook title goes here..."
           onChange={(e) => setTitle(e.target.value)}
           value={title}
@@ -78,8 +78,11 @@ export default function ViewNoteBook() {
 
       <div className="h-full">
         <div className="m-h-[90vh]">
-          <RichTextEditor editor={editor} className="rounded-none border-none">
-            <RichTextEditor.Toolbar>
+          <RichTextEditor
+            editor={editor}
+            className="dark:bg-gray-900 dark:text-white rounded-none border-none"
+          >
+            <RichTextEditor.Toolbar className="dark:text-white rounded-none dark:bg-[#0A090C]">
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />
                 <RichTextEditor.Italic />
@@ -119,7 +122,7 @@ export default function ViewNoteBook() {
               </RichTextEditor.ControlsGroup>
             </RichTextEditor.Toolbar>
 
-            <RichTextEditor.Content />
+            <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
           </RichTextEditor>
         </div>
       </div>

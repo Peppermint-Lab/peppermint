@@ -49,7 +49,7 @@ export default function Tickets() {
       {status === "success" && (
         <div>
           <div className="flex flex-col">
-            <div className="py-2 px-6 flex flex-row items-center justify-between bg-gray-200">
+            <div className="py-2 px-6 flex flex-row items-center justify-between bg-gray-200 dark:bg-[#0A090C] border-b-[1px]">
               <span className="text-sm font-bold">
                 You have {data.tickets.length} closed ticket
                 {data.tickets.length > 1 ? "'s" : ""}
@@ -72,7 +72,7 @@ export default function Tickets() {
 
                 return (
                   <Link href={`/ticket/${ticket.id}`}>
-                    <div className="flex flex-row w-full bg-white border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
+                    <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
                       <div className="flex flex-row space-x-2 items-center">
                         <span className="text-xs font-semibold">
                           #{ticket.Number}
