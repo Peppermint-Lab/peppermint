@@ -136,4 +136,29 @@ export function userRoutes(fastify: FastifyInstance) {
       }
     }
   );
+
+  // Mark Notification as read
+  fastify.get(
+    "/api/v1/user/notifcation/:id",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      const { id }: any = request.params;
+
+      if (token) {
+        await prisma.notifications.update({
+          where: { id: id },
+          data: {
+            read: true,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
 }

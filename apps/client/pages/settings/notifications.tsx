@@ -19,22 +19,19 @@ export default function UserNotifications() {
   const [ticket_comments, setTicket_comments] = useState(user.ticket_comments);
 
   async function updateNotifications() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/profile/notifcations/emails`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          notify_ticket_created: ticket_creation,
-          notify_ticket_assigned: ticket_assigned,
-          notify_ticket_status_changed: ticket_status,
-          notify_ticket_comments: ticket_comments,
-        }),
-      }
-    );
+    await fetch(`/api/v1/auth/profile/notifcations/emails`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        notify_ticket_created: ticket_creation,
+        notify_ticket_assigned: ticket_assigned,
+        notify_ticket_status_changed: ticket_status,
+        notify_ticket_comments: ticket_comments,
+      }),
+    });
   }
 
   return (

@@ -21,23 +21,20 @@ export default function CreateUser() {
   const router = useRouter();
 
   async function createUser() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + getCookie("session"),
-        },
-        body: JSON.stringify({
-          password,
-          email,
-          name,
-          admin,
-          language,
-        }),
-      }
-    )
+    await fetch(`/api/v1/auth/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
+      },
+      body: JSON.stringify({
+        password,
+        email,
+        name,
+        admin,
+        language,
+      }),
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
@@ -57,7 +54,7 @@ export default function CreateUser() {
   }
 
   async function checkAuth() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/check`, {
+    await fetch(`/api/v1/auth/check`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +77,7 @@ export default function CreateUser() {
         <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
           <div className="pt-10 pb-6 divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
                 Add a new user
               </h1>
             </div>

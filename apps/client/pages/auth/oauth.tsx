@@ -7,7 +7,7 @@ export async function getServerSideProps({ query }: any) {
 
   if (process.env.API_URL.includes("localhost")) {
     const sso = await fetch(
-      `http://127.0.0.1:5003/api/v1/auth/sso/login/callback?code=${query.code}&state=${query.state}`
+      `/api/v1/auth/sso/login/callback?code=${query.code}&state=${query.state}`
     ).then((res) => res.json());
 
     if (!sso.success) {
@@ -27,7 +27,7 @@ export async function getServerSideProps({ query }: any) {
     }
   } else {
     const sso = await fetch(
-      `${process.env.API_UR}/api/v1/auth/sso/login/check?code=${query.code}&state=${query.state}`
+      `/api/v1/auth/sso/login/check?code=${query.code}&state=${query.state}`
     ).then((res) => res.json());
     console.log(sso);
 

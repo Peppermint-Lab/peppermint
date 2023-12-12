@@ -10,14 +10,11 @@ export default function Login({}) {
   const [view, setView] = useState("code");
 
   async function sendCode() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/password-reset/code`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, uuid: router.query.token }),
-      }
-    )
+    await fetch(`/api/v1/auth/password-reset/code`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, uuid: router.query.token }),
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
@@ -49,14 +46,11 @@ export default function Login({}) {
         autoClose: 5000,
       });
     } else {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/password-reset/password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code, password }),
-        }
-      )
+      await fetch(`/api/v1/auth/password-reset/password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, password }),
+      })
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {

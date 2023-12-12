@@ -24,7 +24,7 @@ export default function UserProfile() {
   }
 
   async function updateProfile() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/profile`, {
+    await fetch(`/api/v1/auth/profile`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

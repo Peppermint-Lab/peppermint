@@ -14,7 +14,7 @@ export default function Notifications() {
   const [password, setPassword] = useState("");
 
   async function updateEmailConfig() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/email`, {
+    await fetch(`/api/v1/config/email`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function Notifications() {
   }
 
   async function fetchEmailConfig() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/config/email`, {
+    await fetch(`/api/v1/config/email`, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -71,14 +71,14 @@ export default function Notifications() {
         <div className="pt-10 pb-6">
           <div className="divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
                 Outbound Email Settings
               </h1>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center mt-4">
                 <div className="sm:flex-auto">
-                  <p className="mt-2 text-sm text-gray-700">
+                  <p className="mt-2 text-sm text-gray-700  dark:text-white">
                     Manage your outbound email settings. This is the mailbox
                     that will send all outbound emails. To either clients or
                     internal users for Notifications.

@@ -116,7 +116,7 @@ export const getEmails = async () => {
                         isComplete: Boolean(false),
                         priority: "Low",
                         fromImap: Boolean(true),
-                        detail: textAsHtml,
+                        detail: html,
                       },
                     });
 

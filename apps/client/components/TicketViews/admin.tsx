@@ -12,15 +12,12 @@ import {
 import TicketsMobileList from "../../components/TicketsMobileList";
 
 const fetchALLTIckets = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets/all/admin`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("session")}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/tickets/all/admin`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("session")}`,
+    },
+  });
   return res.json();
 };
 

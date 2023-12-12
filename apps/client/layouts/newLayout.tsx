@@ -1,17 +1,19 @@
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { PlusIcon, TicketIcon } from "@heroicons/react/20/solid";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
   HomeIcon,
+  TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { deleteCookie, getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
+import { ContextMenu } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../store/session";
 
@@ -30,6 +32,8 @@ export default function NewLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [tab, setTab] = useState("unread");
+  const [currentPath, setCurrentPath] = useState();
 
   if (!user) {
     location.push("/auth/login");
@@ -62,13 +66,6 @@ export default function NewLayout({ children }: any) {
       current: location.pathname === "/notebook" ? true : false,
       initial: "n",
     },
-    {
-      name: t("sl_tickets"),
-      current: location.pathname.includes("/ticket") ? true : false,
-      icon: TicketIcon,
-      href: `/${locale}/tickets`,
-      initial: "t",
-    },
     // {
     //   name: "Email Queues",
     //   current: false,
@@ -79,30 +76,27 @@ export default function NewLayout({ children }: any) {
     // },
   ];
 
-  async function getQueues() {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/email-queues/all`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    ).then((res) => res.json());
-    setQueues(res.queues);
-  }
+  // async function getQueues() {
+  //   const res = await fetch(
+  //     `/api/v1/email-queues/all`,
+  //     {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${getCookie("session")}`,
+  //       },
+  //     }
+  //   ).then((res) => res.json());
+  //   setQueues(res.queues);
+  // }
 
   async function logout() {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${user.id}/logout`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      }
-    ).then((res) => res.json());
+    const res = await fetch(`/api/v1/auth/user/${user.id}/logout`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    }).then((res) => res.json());
 
     if (res.success) {
       deleteCookie("session");
@@ -110,19 +104,66 @@ export default function NewLayout({ children }: any) {
     }
   }
 
-  useEffect(() => {
-    getQueues();
-  }, [user]);
+  async function markasread(id) {
+    await fetch(`/api/v1/user/notifcation/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    }).then((res) => res.json());
+  }
+
+  // useEffect(() => {
+  //   getQueues();
+  // }, [user]);
 
   // useEffect(() => {
   // location.push(`${locale}/${location.pathname}`);
   // }, [user, location]);
 
-  const handleKeyPress = useCallback((event: any) => {
+  // const handleKeyPress = useCallback((event: any, location: any) => {
+  //   console.log(location);
+  //   if (
+  //     document.activeElement!.tagName !== "INPUT" &&
+  //     document.activeElement!.tagName !== "TEXTAREA" &&
+  //     !document.activeElement!.className.includes("ProseMirror")
+  //   ) {
+  //     switch (event.key) {
+  //       case "c":
+  //         location.push("/new");
+  //         break;
+  //       case "h":
+  //         location.push("/");
+  //         break;
+  //       case "n":
+  //         location.push("/notebook");
+  //         break;
+  //       case "t":
+  //         location.push("/tickets");
+  //         break;
+  //       case "a":
+  //         location.push("/admin");
+  //         break;
+  //       case "o":
+  //         location.push("/tickets/open");
+  //         break;
+  //       case "f":
+  //         location.push("/tickets/closed");
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // }, []);
+
+  function handleKeyPress(event: any) {
+    const pathname = location.pathname;
+    console.log(pathname);
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
-      !document.activeElement!.className.includes("ProseMirror")
+      !document.activeElement!.className.includes("ProseMirror") &&
+      !pathname.includes("/new")
     ) {
       switch (event.key) {
         case "c":
@@ -140,11 +181,17 @@ export default function NewLayout({ children }: any) {
         case "a":
           location.push("/admin");
           break;
+        case "o":
+          location.push("/tickets/open");
+          break;
+        case "f":
+          location.push("/tickets/closed");
+          break;
         default:
           break;
       }
     }
-  }, []);
+  }
 
   useEffect(() => {
     // attach the event listener
@@ -154,11 +201,11 @@ export default function NewLayout({ children }: any) {
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
-  }, [handleKeyPress]);
+  }, [handleKeyPress, location]);
 
   return (
     !loading && (
-      <div className="min-h-screen overflow-hidden bg-slate-100">
+      <div className="min-h-screen overflow-hidden bg-white dark:bg-[#0A090C]">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -338,147 +385,188 @@ export default function NewLayout({ children }: any) {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-gray-900 px-6 pb-4">
-            <div className="flex align-middle flex-row h-16 items-center">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] dark:bg-[#393E46] pb-4">
+            <div className="flex align-middle flex-row h-14 items-center border-b-[1px] px-6">
               {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
-                <h1 className="text-4xl ml-2 mt-1 hover:text-green-600 font-extrabold text-white">
+                <span className="text-3xl ml-2  hover:text-green-600 font-bold ">
                   Peppermint
-                </h1>
+                </span>
               </Link>
             </div>
-            <nav className="flex flex-1 flex-col">
+            <nav className="flex flex-1 flex-col px-6">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item: any) =>
-                      !item.children ? (
-                        <li key={item.name}>
-                          <Link
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-green-400 text-white hover:text-white"
-                                : "text-white hover:text-white hover:bg-green-500",
-                              "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                            )}
-                          >
-                            <item.icon
-                              className={classNames(
-                                item.current ? "text-white" : "text-white",
-                                "h-6 w-6 shrink-0"
-                              )}
-                              aria-hidden="true"
-                            />
-                            <span className="whitespace-nowrap">
-                              {item.name}
-                            </span>
-                            <div className="flex w-full justify-end float-right">
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                                {item.initial}
-                              </span>
-                            </div>
-                          </Link>
-                        </li>
-                      ) : (
-                        <Disclosure
-                          as="div"
-                          key={item.name}
-                          className="space-y-1"
-                        >
-                          {({ open }) => (
-                            <>
-                              {queues.length > 0 && (
-                                <>
-                                  <Disclosure.Button
-                                    className={classNames(
-                                      item.current
-                                        ? "bg-green-400 text-white"
-                                        : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
-                                      "group w-full flex items-center pl-2 pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
-                                    )}
-                                  >
-                                    <svg
-                                      className={classNames(
-                                        open
-                                          ? "text-white rotate-90"
-                                          : "text-white",
-                                        "mr-2 flex-shrink-0 h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150"
-                                      )}
-                                      viewBox="0 0 20 20"
-                                      aria-hidden="true"
-                                    >
-                                      <path
-                                        d="M6 6L14 10L6 14V6Z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                    {item.name}
-                                  </Disclosure.Button>
-                                  <Disclosure.Panel className="space-y-1">
-                                    {item.children.map((subItem: any) => (
-                                      <Link href={`/queue/${subItem.name}`}>
-                                        <Disclosure.Button
-                                          key={subItem.name}
-                                          className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400 focus:outline-none"
-                                        >
-                                          {subItem.name}
-                                        </Disclosure.Button>
-                                      </Link>
-                                    ))}
-                                  </Disclosure.Panel>
-                                </>
-                              )}
-                            </>
+                    {navigation.map((item: any) => (
+                      <li key={item.name}>
+                        <Link
+                          href={item.href}
+                          className={classNames(
+                            item.current
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-gray-800 dark:hover:text-gray-900 ",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
-                        </Disclosure>
-                      )
-                    )}
-                  </ul>
-                </li>
-                <li className="mt-auto space-y-4">
-                  {/* <a href="https://ko-fi.com/L3L0AA4YE" target="_blank">
-                    <img
-                      className="py-1 h-12 w-full"
-                      height="36"
-                      src="/kofi-white.png"
-                      alt="Buy Me a Coffee at ko-fi.com"
-                    />
-                  </a> */}
-                  {user.isAdmin && (
-                    <Link
-                      href="/admin"
-                      className={classNames(
-                        location.pathname.includes("/admin")
-                          ? "bg-green-400 text-white"
-                          : "text-white hover:bg-green-500 hover:text-white",
-                        "group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+                        >
+                          <item.icon
+                            className="h-4 w-4 shrink-0 mt-1"
+                            aria-hidden="true"
+                          />
+                          <span className="whitespace-nowrap">{item.name}</span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              {item.initial}
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                    <ul className="w-full space-y-1">
+                      <li>
+                        <Link
+                          href="/tickets"
+                          className={classNames(
+                            location.pathname === "/tickets"
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <TicketIcon className="h-4 w-4 shrink-0 mt-1" />
+                          <span className="whitespace-nowrap">Tickets</span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              t
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                      <li className="ml-8">
+                        <Link
+                          href="/tickets/open"
+                          className={classNames(
+                            location.pathname === "/tickets/open"
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                            "group -mx-2 flex gap-x-3 p-1 mll-2 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <span className="whitespace-nowrap">
+                            {user.name}'s open
+                          </span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              o
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+
+                      <li className="ml-8 ">
+                        <Link
+                          href="/tickets/closed"
+                          className={classNames(
+                            location.pathname === "/tickets/closed"
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <span className="whitespace-nowrap">
+                            {user.name}'s closed
+                          </span>
+                          <div className="flex w-full justify-end float-right">
+                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                              f
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                    <li className="mt-auto space-y-4">
+                      {user.isAdmin && (
+                        <Link
+                          href="/admin"
+                          className={classNames(
+                            location.pathname.includes("/admin")
+                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                          )}
+                        >
+                          <ContextMenu.Root>
+                            <ContextMenu.Trigger>
+                              <>
+                                <Cog6ToothIcon
+                                  className="h-4 w-4 shrink-0 mt-1"
+                                  aria-hidden="true"
+                                />
+                                <span className="whitespace-nowrap">
+                                  {t("admin_settings")}
+                                </span>
+                                <div className="flex w-full justify-end float-right">
+                                  <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                                    a
+                                  </span>
+                                </div>
+                              </>
+                            </ContextMenu.Trigger>
+                            <ContextMenu.Content>
+                              <ContextMenu.Item shortcut="⌘ E">
+                                Edit
+                              </ContextMenu.Item>
+                              <ContextMenu.Item shortcut="⌘ D">
+                                Duplicate
+                              </ContextMenu.Item>
+                              <ContextMenu.Separator />
+                              <ContextMenu.Item shortcut="⌘ N">
+                                Archive
+                              </ContextMenu.Item>
+
+                              <ContextMenu.Sub>
+                                <ContextMenu.SubTrigger>
+                                  More
+                                </ContextMenu.SubTrigger>
+                                <ContextMenu.SubContent>
+                                  <ContextMenu.Item>
+                                    Move to project…
+                                  </ContextMenu.Item>
+                                  <ContextMenu.Item>
+                                    Move to folder…
+                                  </ContextMenu.Item>
+                                  <ContextMenu.Separator />
+                                  <ContextMenu.Item>
+                                    Advanced options…
+                                  </ContextMenu.Item>
+                                </ContextMenu.SubContent>
+                              </ContextMenu.Sub>
+
+                              <ContextMenu.Separator />
+                              <ContextMenu.Item>Share</ContextMenu.Item>
+                              <ContextMenu.Item>
+                                Add to favorites
+                              </ContextMenu.Item>
+                              <ContextMenu.Separator />
+                              <ContextMenu.Item shortcut="⌘ ⌫" color="red">
+                                Delete
+                              </ContextMenu.Item>
+                            </ContextMenu.Content>
+                          </ContextMenu.Root>
+                        </Link>
                       )}
-                    >
-                      <Cog6ToothIcon
-                        className="h-6 w-6 shrink-0 text-white group-hover:text-white"
-                        aria-hidden="true"
-                      />
-                      <span className="whitespace-nowrap">
-                        {t("admin_settings")}
-                      </span>
-                      <div className="flex w-full justify-end float-right">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                          a
-                        </span>
-                      </div>
-                    </Link>
-                  )}
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </nav>
           </div>
         </div>
 
-        <div className="lg:pl-72">
-          <div className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-gray-900 px-4 shadow-sm sm:gap-x-6">
+        <div className="lg:pl-64 2xl:pl-72">
+          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-[#0A090C] px-4 sm:gap-x-6">
             <button
               type="button"
               className="-m-2.5 p-2.5 text-white lg:hidden"
@@ -494,7 +582,14 @@ export default function NewLayout({ children }: any) {
               aria-hidden="true"
             />
 
-            <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 pb-2">
+            <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
+              <div className="flex w-full justify-start items-center">
+                <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+                  <span className="inline-flex items-center rounded-md bg-green-700/10 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
+                    Version {user.version}
+                  </span>
+                </Link>
+              </div>
               {/* <div
                 className="relative mt-2 hidden sm:flex items-center w-full min-w-[320px] max-w-[360px] hover:cursor-pointer"
                 onClick={() => {
@@ -518,27 +613,95 @@ export default function NewLayout({ children }: any) {
                   </kbd>
                 </div>
               </div> */}
-              <div className="flex w-full justify-end items-center gap-x-4 lg:gap-x-6">
-                <button
-                  type="button"
-                  className="-m-2.5 p-2.5  text-white hover:text-gray-500"
-                >
-                  <span className="sr-only">View notifications</span>
-                  {/* <BellIcon className="h-6 w-6 text-gray-900" aria-hidden="true" /> */}
-                </button>
+              <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
+                {/* <Popover className="relative">
+                  <Popover.Button className="relative  rounded-full  p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <BellAlertIcon
+                      className="h-6 w-6 text-white"
+                      aria-hidden="true"
+                    />
+                  </Popover.Button>
 
-                {/* Separator */}
-                {/* <div
-              className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200"
-              aria-hidden="true"
-            /> */}
-
+                  <Popover.Panel className="absolute z-10 sm:min-w-[400px] right-1 overflow-hidden rounded-lg bg-white shadow">
+                    <div className="px-6 p-6">
+                      <div className="border-b border-gray-200">
+                        <nav
+                          className="-mb-px flex space-x-8"
+                          aria-label="Tabs"
+                        >
+                          <button
+                            onClick={() => setTab("unread")}
+                            className={classNames(
+                              tab === "unread"
+                                ? "border-indigo-500 text-indigo-600"
+                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                              "whitespace-nowrap border-b-2  px-1 text-sm font-medium"
+                            )}
+                          >
+                            Unread
+                          </button>
+                          <button
+                            onClick={() => setTab("archive")}
+                            className={classNames(
+                              tab === "archive"
+                                ? "border-indigo-500 text-indigo-600"
+                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                              "whitespace-nowrap border-b-2 px-1 text-sm font-medium"
+                            )}
+                          >
+                            Archive
+                          </button>
+                        </nav>
+                      </div>
+                      <div className="mt-2">
+                        {user !== undefined ? (
+                          tab === "unread" ? (
+                            user.notifcations
+                              .filter((notification) => !notification.read)
+                              .map((notification: any) => (
+                                <div className="w-full items-start border-b py-3">
+                                  <div className="flex justify-between flex-row w-full">
+                                    <p className="text-md font-medium text-gray-900">
+                                      {notification.text}
+                                    </p>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        markasread(notification.id)
+                                      }
+                                      className="rounded bg-transparent  text-sm font-semibold"
+                                    >
+                                      <ArchiveBoxIcon className="h-5 w-5 text-green-500 hover:text-green-600" />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))
+                          ) : (
+                            user.notifcations
+                              .filter((notification) => notification.read)
+                              .map((notification: any) => (
+                                <div className="w-full items-start border-b py-3">
+                                  <div className="flex justify-between flex-row w-full">
+                                    <p className="text-md font-medium text-gray-900">
+                                      {notification.text}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))
+                          )
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  </Popover.Panel>
+                </Popover> */}
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
-                  <Menu.Button className="mt-2 z-50 flex items-center p-1.5">
+                  <Menu.Button className="z-50 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
-                      <span className="text-sm mt-0.5 font-medium leading-none text-white uppercase">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                      <span className="text-xs mt-0.5 font-medium leading-none text-white uppercase">
                         {user.name[0]}
                       </span>
                     </span>
@@ -588,9 +751,7 @@ export default function NewLayout({ children }: any) {
             </div>
           </div>
 
-          <main className="py-2">
-            <div className="p-4 sm:p-8">{children}</div>
-          </main>
+          <main className="bg-white dark:bg-[#0A090C]">{children}</main>
         </div>
       </div>
     )

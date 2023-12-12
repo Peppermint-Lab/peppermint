@@ -9,6 +9,7 @@ import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
 import { sendComment } from "../lib/nodemailer/ticket/comment";
 import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
+import { createNotification } from "../lib/notifications";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
 
@@ -74,6 +75,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
         });
 
         await sendAssignedEmail(assgined!.email);
+
+        await createNotification("ticket_assigned", engineer.id, ticket);
       }
 
       const webhook = await prisma.webhooks.findMany({
@@ -232,13 +235,14 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
   // Get all tickets (admin)
   fastify.get(
-    "/api/v1/tickets/all/admin",
+    "/api/v1/tickets/all",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
 
       if (token) {
         const tickets = await prisma.ticket.findMany({
+          where: { hidden: false },
           orderBy: [
             {
               createdAt: "desc",

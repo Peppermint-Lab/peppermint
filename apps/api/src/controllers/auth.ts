@@ -416,6 +416,13 @@ export function authRoutes(fastify: FastifyInstance) {
 
         const config = await prisma.config.findFirst();
 
+        const notifcations = await prisma.notifications.findMany({
+          where: { userId: user!.id },
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
         const data = {
           id: user!.id,
           email: user!.email,
@@ -427,6 +434,8 @@ export function authRoutes(fastify: FastifyInstance) {
           ticket_comments: user!.notify_ticket_comments,
           ticket_assigned: user!.notify_ticket_assigned,
           sso_status: config!.sso_active,
+          version: config!.client_version,
+          notifcations,
         };
 
         reply.send({

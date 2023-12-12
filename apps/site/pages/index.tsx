@@ -662,6 +662,7 @@ export default function Home() {
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </a>
                 ))} */}
+
               </div>
             </div>
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">

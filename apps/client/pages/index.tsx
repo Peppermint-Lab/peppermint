@@ -1,11 +1,8 @@
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import useTranslation from "next-translate/useTranslation";
 
-import ListTodo from "../components/ListTodo";
-// import ListUserFiles from "../components/ListUserFiles";
 import { useRouter } from "next/router";
 
 import { getCookie } from "cookies-next";
@@ -36,7 +33,7 @@ export default function Home() {
   }
 
   async function getOpenTickets() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/open`, {
+    await fetch(`/api/v1/data/tickets/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -49,15 +46,12 @@ export default function Home() {
   }
 
   async function getCompletedTickets() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/completed`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    await fetch(`/api/v1/data/tickets/completed`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((res) => {
         setCompletedTickets(res.count);
@@ -65,7 +59,7 @@ export default function Home() {
   }
 
   async function getUnassginedTickets() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data/tickets/open`, {
+    await fetch(`/api/v1/data/tickets/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -78,7 +72,7 @@ export default function Home() {
   }
 
   async function fetchTickets() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets/open`, {
+    await fetch(`/api/v1/tickets/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -119,60 +113,22 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[85vh]">
-      <div className="w-full xl:w-[70%]">
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-4 sm:px-6 lg:w-full lg:mx-auto lg:px-8">
-            <div className="py-1 md:flex md:items-center md:justify-between">
-              <div className="flex-1 min-w-0">
-                {/* Profile */}
-                <div className="flex items-center">
-                  <span className="hidden sm:inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
-                    <span className="text-sm font-medium leading-none text-white uppercase">
-                      {user.name[0]}
-                    </span>
-                  </span>
-                  <div className="flex flex-col  pl-4 py-2 justify-start">
-                    <div className="flex items-center">
-                      <span className="text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        {t("hello_good")}{" "}
-                        {hour! < Number(12)
-                          ? t("hello_morning")
-                          : t("hello_afternoon")}
-                        , {user.name}!
-                      </span>
-                    </div>
-                    <dl className="flex flex-col sm:flex-row sm:flex-wrap">
-                      <dt className="sr-only">{t("account_status")}</dt>
-                      <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
-                        <CheckCircleIcon
-                          className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                          aria-hidden="true"
-                        />
-                        {user.isAdmin ? "Admin" : "user"}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+    <div className="flex flex-col xl:flex-row p-8 justify-center w-full">
+      <div className="w-full xl:w-[70%] max-w-5xl">
         {!loading && (
           <>
             <div>
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+              <dl className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 {stats.map((item) => (
                   <Link href={item.href}>
                     <div
                       key={item.name}
-                      className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+                      className="px-4 py-5 bg-gray-900 shadow rounded-lg overflow-hidden sm:p-6"
                     >
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-sm font-medium text-white truncate">
                         {item.name}
                       </dt>
-                      <dd className="mt-1 text-3xl font-semibold text-gray-900">
+                      <dd className="mt-1 text-3xl font-semibold text-white">
                         {item.stat}
                       </dd>
                     </div>
@@ -190,7 +146,7 @@ export default function Home() {
                     onClick={() => router.push("/new")}
                   >
                     <svg
-                      className="mx-auto h-12 w-12 text-gray-400"
+                      className="mx-auto h-12 w-12 text-gray-400 dark:text-white"
                       stroke="currentColor"
                       fill="none"
                       viewBox="0 0 48 48"
@@ -203,7 +159,7 @@ export default function Home() {
                         d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6"
                       />
                     </svg>
-                    <span className="mt-2 block text-sm font-semibold text-gray-900">
+                    <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-white">
                       Create your first ticket
                     </span>
                   </button>
@@ -219,41 +175,35 @@ export default function Home() {
                         <tr>
                           <th
                             scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-0"
                           >
                             {t("title")}
                           </th>
                           <th
                             scope="col"
-                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white lg:table-cell"
                           >
                             {t("priority")}
                           </th>
                           <th
                             scope="col"
-                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell"
                           >
                             {t("status")}
                           </th>
                           <th
                             scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
                           >
                             {t("created")}
                           </th>
 
                           <th
                             scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
                           >
                             {t("assigned_to")}
                           </th>
-                          {/* <th
-                        scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                      >
-                        <span className="sr-only">Actions</span>
-                      </th> */}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
@@ -261,10 +211,10 @@ export default function Home() {
                           tickets.slice(0, 10).map((item: any) => (
                             <tr
                               key={item.id}
-                              className="hover:bg-gray-300 hover:cursor-pointer"
-                              onClick={() => router.push(`/tickets/${item.id}`)}
+                              className="hover:bg-gray-300 dark:hover:bg-green-600 hover:cursor-pointer"
+                              onClick={() => router.push(`/ticket/${item.id}`)}
                             >
-                              <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                              <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-0">
                                 {item.title}
                                 <dl className="font-normal lg:hidden">
                                   <dt className="sr-only sm:hidden">Email</dt>
@@ -275,7 +225,7 @@ export default function Home() {
                               </td>
                               <td className="hidden px-3 py-1 text-sm text-gray-500 lg:table-cell w-[64px]">
                                 {item.priority === "Low" && (
-                                  <span className="inline-flex w-full justify-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                                  <span className="inline-flex w-full justify-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700  ring-1 ring-inset ring-blue-600/20">
                                     {item.priority}
                                   </span>
                                 )}
@@ -319,10 +269,10 @@ export default function Home() {
                                   </>
                                 )}
                               </td>
-                              <td className="px-3 py-1 text-sm text-gray-500 w-[110px]">
+                              <td className="px-3 py-1 text-sm text-gray-500 dark:text-white w-[110px]">
                                 {moment(item.createdAt).format("DD/MM/YYYY")}
                               </td>
-                              <td className="px-3 py-1 text-sm text-gray-500 w-[130px] truncate whitespace-nowrap">
+                              <td className="px-3 py-1 text-sm text-gray-500 w-[130px] dark:text-white truncate whitespace-nowrap">
                                 {item.assignedTo ? item.assignedTo.name : "-"}
                               </td>
                               {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
@@ -506,10 +456,10 @@ export default function Home() {
           </>
         )}
       </div>
-      <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 2xl:max-h-[53vh]">
+      {/* <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 2xl:max-h-[53vh]">
         <span className="font-bold text-2xl ml-1">{t("reminders")}</span>
         <ListTodo />
-      </div>
+      </div> */}
     </div>
   );
 }

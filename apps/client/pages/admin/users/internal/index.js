@@ -12,14 +12,11 @@ import ResetPassword from "../../../../components/ResetPassword";
 import UpdateUserModal from "../../../../components/UpdateUserModal";
 
 const fetchUsers = async (token) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`/api/v1/users/all`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 };
 
@@ -210,16 +207,13 @@ export default function UserAuthPanel() {
   async function deleteUser(id) {
     if (confirm("Are you sure you want to delete this user?")) {
       try {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        await fetch(`/api/v1/auth/user/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
           .then((response) => response.json())
           .then(() => {
             refetch;
@@ -273,14 +267,14 @@ export default function UserAuthPanel() {
       <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
         <div className="pt-10 pb-16 divide-y-2">
           <div className="px-4 sm:px-6 md:px-0">
-            <h1 className="text-3xl font-extrabold text-gray-900">
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
               Internal Users
             </h1>
           </div>
           <div className="px-4 sm:px-6 md:px-0">
             <div className="sm:flex sm:items-center">
               <div className="sm:flex-auto mt-4">
-                <p className="mt-2 text-sm text-gray-700">
+                <p className="mt-2 text-sm text-gray-700  dark:text-white">
                   A list of all internal users of your instance.
                 </p>
               </div>

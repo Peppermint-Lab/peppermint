@@ -55,7 +55,7 @@ export default function AdminLayout({ children }: any) {
   ];
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center p-6">
       <div className="flex xl:divide-x-2 justify-center h-[85vh] max-w-5xl pr-4">
         <div className="hidden xl:flex w-56 mt-11 pr-4">
           <nav className="space-y-1 w-full pr-4" aria-label="Sidebar">
@@ -66,7 +66,7 @@ export default function AdminLayout({ children }: any) {
                 className={classNames(
                   item.current
                     ? "bg-green-500 text-white hover:text-white"
-                    : "text-gray-800 hover:bg-gray-200 hover:text-gray-900",
+                    : "text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-green-600 hover:text-gray-900",
                   "flex items-center px-3 py-2 text-sm font-medium rounded-md w-full"
                 )}
                 aria-current={item.current ? "page" : undefined}

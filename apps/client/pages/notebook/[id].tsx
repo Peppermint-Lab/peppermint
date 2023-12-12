@@ -10,7 +10,6 @@ import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
 import moment from "moment";
-import { useDebounce } from "use-debounce";
 
 export default function Notebooks() {
   const router = useRouter();
@@ -22,7 +21,7 @@ export default function Notebooks() {
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState();
 
-  const [value] = useDebounce(notebook, 2000);
+  // const [value] = useDebounce(notebook, 2000);
 
   const editor = useEditor({
     extensions: [
@@ -41,17 +40,16 @@ export default function Notebooks() {
   });
 
   async function fetchNotebook() {
+    setNoteBook("");
+    setLoading(true);
     if (editor) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ).then((res) => res.json());
+      const res = await fetch(`/api/v1/notebooks/note/${router.query.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json());
       console.log(res);
       editor.commands.setContent(res.note.note);
       setTitle(res.note.title);
@@ -61,21 +59,19 @@ export default function Notebooks() {
 
   async function updateNoteBook() {
     setSaving(true);
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notebooks/note/${router.query.id}/update`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          content: notebook,
-        }),
-      }
-    );
+    await fetch(`/api/v1/notebooks/note/${router.query.id}/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        content: notebook,
+      }),
+    });
     setSaving(false);
     let date = new Date();
+    // @ts-ignore
     setLastSaved(new Date(date).getTime());
   }
 
@@ -87,11 +83,11 @@ export default function Notebooks() {
     if (notebook !== undefined && !loading) {
       updateNoteBook();
     }
-  }, [value]);
+  }, [notebook]);
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between border-b-[1px] py-1 px-4">
         <h2 className="text-xl font-bold">{title}</h2>
         {saving ? (
           <span className="text-xs">saving ....</span>
@@ -102,9 +98,12 @@ export default function Notebooks() {
         )}
       </div>
       {!loading && (
-        <RichTextEditor editor={editor}>
-          <RichTextEditor.Toolbar>
-            <RichTextEditor.ControlsGroup>
+        <RichTextEditor
+          editor={editor}
+          className="dark:bg-gray-900 dark:text-white rounded-none border-none"
+        >
+          <RichTextEditor.Toolbar className="dark:text-white rounded-none dark:bg-[#0A090C] ">
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.Bold />
               <RichTextEditor.Italic />
               <RichTextEditor.Underline />
@@ -114,14 +113,14 @@ export default function Notebooks() {
               <RichTextEditor.Code />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.H1 />
               <RichTextEditor.H2 />
               <RichTextEditor.H3 />
               <RichTextEditor.H4 />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.Blockquote />
               <RichTextEditor.Hr />
               <RichTextEditor.BulletList />
@@ -130,12 +129,12 @@ export default function Notebooks() {
               <RichTextEditor.Superscript />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.Link />
               <RichTextEditor.Unlink />
             </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup className="dark:hover:text-black ">
               <RichTextEditor.AlignLeft />
               <RichTextEditor.AlignCenter />
               <RichTextEditor.AlignJustify />
@@ -143,7 +142,7 @@ export default function Notebooks() {
             </RichTextEditor.ControlsGroup>
           </RichTextEditor.Toolbar>
 
-          <RichTextEditor.Content />
+          <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
         </RichTextEditor>
       )}
     </>
