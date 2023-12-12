@@ -33,6 +33,7 @@ export default function NewLayout({ children }: any) {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [tab, setTab] = useState("unread");
+  const [currentPath, setCurrentPath] = useState();
 
   if (!user) {
     location.push("/auth/login");
@@ -147,7 +148,46 @@ export default function NewLayout({ children }: any) {
 
   // useEffect(() => {
   //   getQueues();
+  // }, [user]);
+
+  // useEffect(() => {
+  //   getQueues();
   // }, [user])
+
+  // const handleKeyPress = useCallback((event: any, location: any) => {
+  //   console.log(location);
+  //   if (
+  //     document.activeElement!.tagName !== "INPUT" &&
+  //     document.activeElement!.tagName !== "TEXTAREA" &&
+  //     !document.activeElement!.className.includes("ProseMirror")
+  //   ) {
+  //     switch (event.key) {
+  //       case "c":
+  //         location.push("/new");
+  //         break;
+  //       case "h":
+  //         location.push("/");
+  //         break;
+  //       case "n":
+  //         location.push("/notebook");
+  //         break;
+  //       case "t":
+  //         location.push("/tickets");
+  //         break;
+  //       case "a":
+  //         location.push("/admin");
+  //         break;
+  //       case "o":
+  //         location.push("/tickets/open");
+  //         break;
+  //       case "f":
+  //         location.push("/tickets/closed");
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // }, []);
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
