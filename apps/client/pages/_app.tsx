@@ -99,11 +99,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/admin")) {
     return (
       <SessionProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          forcedTheme="dark"
-        >
+        <ThemeProvider attribute="class" defaultTheme="light">
           <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
@@ -124,11 +120,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/notebook")) {
     return (
       <SessionProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          forcedTheme="dark"
-        >
+        <ThemeProvider attribute="class" defaultTheme="light">
           <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
@@ -149,11 +141,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/settings")) {
     return (
       <SessionProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          forcedTheme="dark"
-        >
+        <ThemeProvider attribute="class" defaultTheme="light">
           <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
@@ -191,7 +179,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   return (
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="dark">
+      <ThemeProvider attribute="class" defaultTheme="light">
         <Theme>
           <QueryClientProvider client={queryClient}>
             <Auth>
