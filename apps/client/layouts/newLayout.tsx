@@ -652,7 +652,7 @@ export default function NewLayout({ children }: any) {
           <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-[#0A090C] px-4 sm:gap-x-6">
             <button
               type="button"
-              className="-m-2.5 p-2.5 text-black dark:text-whitelg:hidden"
+              className="-m-2.5 p-2.5 text-black dark:text-white lg:hidden"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
