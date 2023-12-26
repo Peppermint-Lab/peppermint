@@ -1,24 +1,26 @@
+import { getCookie } from "cookies-next";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function EmailQueues() {
   const [queues, setQueues] = useState();
 
-  // fetch queues / display them
-  // create a new queue
-
   async function fetchQueues() {
-    const res = await fetch("/api/v1/admin/email-queue/check").then((res) =>
-      res.json()
-    );
+    const res = await fetch(`/api/v1/email-queues/all`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
+      },
+    }).then((res) => res.json());
     setQueues(res.queues);
   }
 
   async function deleteItem(id) {
-    await fetch("/api/v1/admin/email-queue/delete", {
-      method: "post",
+    await fetch(`/api/v1/email-queue/delete`, {
+      method: "delete",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
       },
       body: JSON.stringify({
         id,
@@ -30,7 +32,7 @@ export default function EmailQueues() {
 
   useEffect(() => {
     fetchQueues();
-  });
+  }, []);
 
   return (
     <div>
@@ -38,14 +40,14 @@ export default function EmailQueues() {
         <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
           <div className="pt-10 pb-16 divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
                 Email Queues
               </h1>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto mt-4">
-                  <p className="mt-2 text-sm text-gray-700">
+                  <p className="mt-2 text-sm text-gray-700  dark:text-white">
                     A list of the mailboxes you are listening too, these will
                     automatically create tickets and can be accessed down the
                     side navigation.
@@ -54,7 +56,7 @@ export default function EmailQueues() {
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                   <Link
                     href="/admin/email-queues/new"
-                    className="block rounded-md bg-green-600 py-1.5 px-3 text-center text-sm font-semibold leading-6 text-white hover:text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                    className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   >
                     New Queue
                   </Link>

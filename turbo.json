@@ -10,12 +10,7 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"]
-    },
-    "lint": {},
-    "generate": {
-      "dependsOn": ["^generate"]
     },
     "dev": {
       "cache": false,

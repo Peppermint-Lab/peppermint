@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function EmailQueues() {
   const router = useRouter();
@@ -11,10 +12,11 @@ export default function EmailQueues() {
   const [tls, setTls] = useState();
 
   async function newQueue() {
-    await fetch("/api/v1/admin/email-queue/new", {
+    await fetch(`/api/v1/email-queue/create`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + getCookie("session"),
       },
       body: JSON.stringify({
         name,
@@ -26,7 +28,7 @@ export default function EmailQueues() {
     })
       .then((res) => res.json())
       .then(() => {
-        // router.back();
+        router.back("/admin/email-queues");
       });
   }
 
@@ -36,7 +38,7 @@ export default function EmailQueues() {
         <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
           <div className="pt-10 pb-16 divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
                 New Email Queue
               </h1>
             </div>
@@ -46,7 +48,7 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
+                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
                     >
                       Queue name
                     </label>
@@ -61,7 +63,7 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
+                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
                     >
                       Username (email)
                     </label>
@@ -76,7 +78,7 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
+                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
                     >
                       Password
                     </label>
@@ -91,7 +93,7 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
+                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
                     >
                       Hostname
                     </label>
@@ -103,10 +105,11 @@ export default function EmailQueues() {
                       onChange={(e) => setHostname(e.target.value)}
                     />
                   </div>
+
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
+                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
                     >
                       TLS
                     </label>

@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  pg:
+    image: "postgres:11"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=pepppermint
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=peppermint
+    container_name: "pg"
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mailhog:
+    image: jcalonso/mailhog
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+volumes:
+  postgres_data:

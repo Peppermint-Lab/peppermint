@@ -4,6 +4,9 @@
 node_modules
 .pnp
 .pnp.js
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
 
 # testing
 coverage
@@ -37,3 +40,4 @@ yarn-error.log*
 
 # Typescript build
 dist
+

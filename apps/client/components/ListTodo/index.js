@@ -1,15 +1,23 @@
-import React, { useState } from "react";
-import { Pagination } from "antd";
-import { TrashIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
+import { TrashIcon } from "@heroicons/react/20/solid";
+import { getCookie } from "cookies-next";
+import useTranslation from "next-translate/useTranslation";
+import { useState } from "react";
 import { useQuery } from "react-query";
 
-async function getTodos() {
-  const res = await fetch("/api/v1/todo/get");
+async function getTodos(token) {
+  const res = await fetch(`/api/v1/todos/all`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 }
 
 export default function ListTodo() {
-  const { status, data, refetch } = useQuery("repoData", getTodos);
+  const token = getCookie("session");
+  const { t } = useTranslation("peppermint");
+  const { status, data, refetch } = useQuery("repoData", () => getTodos(token));
 
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(12);
@@ -26,8 +34,12 @@ export default function ListTodo() {
   }
 
   async function onSubmit() {
-    await fetch("/api/v1/todo/create", {
+    await fetch(`/api/v1/todo/create`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         todo: text,
       }),
@@ -38,16 +50,14 @@ export default function ListTodo() {
   }
 
   async function deleteTodo(id) {
-    await fetch(`api/v1/todo/delete/${id}`, {
-      method: "POST",
+    await fetch(`/api/v1/todo/${id}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     }).then(() => refetch());
   }
-
-  // async function markDone(id) {
-  //   await fetch(`api/v1/todo/mark-done/${id}`, {
-  //     method: "POST",
-  //   }).then(() => refetch());
-  // }
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -64,7 +74,7 @@ export default function ListTodo() {
             name="text"
             id="text"
             className="w-full shadow-sm text-gray-900 bg-gray-100 rounded-lg font-semibold border-none focus:outline-none "
-            placeholder="Enter todo here..."
+            placeholder={t("enter_todo")}
             onChange={(e) => {
               setText(e.target.value);
             }}
@@ -108,13 +118,13 @@ export default function ListTodo() {
               <p>None Found</p>
             )}
           </div>
-          <div  className={data.todos.length > 12 ? "mt-4" : "hidden"}>
+          {/* <div  className={data.todos && data.todos.length > 12 ? "mt-4" : "hidden"}>
             <Pagination
               defaultCurrent={1}
               total={12}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
         </div>
       )}
     </div>

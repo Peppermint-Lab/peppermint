@@ -1,44 +1,51 @@
-import React, { useState, Fragment } from "react";
-import { message } from "antd";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { notifications } from "@mantine/notifications";
+import { getCookie } from "cookies-next";
+import React, { Fragment, useState } from "react";
 
-export default function ResetPassword({ user }) {
+export default function ResetPassword() {
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState("");
 
-  const success = () => {
-    message.success("Password updated");
-  };
-
-  const fail = (f) => {
-    message.error(`${f}`);
-  };
-
   const postData = async () => {
-    const id = user.id;
-    if (check === password && password.length > 0) {
-      await fetch(`/api/v1/admin/user/resetpassword`, {
+    if (check === password && password.length > 3) {
+      await fetch(`/api/v1/auth/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + getCookie("session"),
         },
         body: JSON.stringify({
           password,
-          id,
         }),
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.failed === false) {
-            success();
+          if (res.success) {
+            notifications.show({
+              title: "Success",
+              message: `Password updated :)`,
+              color: "green",
+              autoClose: 5000,
+            });
           } else {
-            fail(res.message);
+            notifications.show({
+              title: "Error",
+              message: `Error: failed to update password`,
+              color: "red",
+              autoClose: 5000,
+            });
           }
         });
     } else {
-      fail("Passwords are not the same or empty");
+      notifications.show({
+        title: "Error",
+        message: `Error: passwords do not match`,
+        color: "red",
+        autoClose: 5000,
+      });
     }
   };
 
@@ -52,7 +59,7 @@ export default function ResetPassword({ user }) {
       <button
         onClick={() => setOpen(true)}
         type="button"
-        className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="inline-flex items-center px-2.5 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         Reset Password
       </button>
