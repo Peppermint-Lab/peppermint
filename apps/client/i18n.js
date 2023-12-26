@@ -3,8 +3,6 @@ module.exports = {
   defaultLocale: "en",
   pages: {
     "*": ["peppermint"],
-    "*": ["peppermint"],
   },
-  localeDetection: false,
   localeDetection: false,
 };
