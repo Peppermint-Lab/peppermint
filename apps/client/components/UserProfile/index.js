@@ -68,43 +68,43 @@ export function UserProfile() {
               </div>
             </div>
 
-              <div>
-                <label
-                  for="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email
-                </label>
-                <div className="mt-1 rounded-md shadow-sm flex">
-                  <input
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    defaultValue={session.user.email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+            <div>
+              <label
+                for="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <div className="mt-1 rounded-md shadow-sm flex">
+                <input
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  className="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                  defaultValue={session.user.email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
-              <div>
-                <label
-                  for="language"
-                  className="block text-sm font-medium text-gray-700"
+            </div>
+            <div>
+              <label
+                for="language"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Language
+              </label>
+              <div className="mt-1 rounded-md shadow-sm flex">
+                <select
+                  id="language"
+                  name="language"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  defaultValue={router.locale}
+                  onChange={(e) => changeLanguage(e.target.value)}
                 >
-                  Language
-                </label>
-                <div className="mt-1 rounded-md shadow-sm flex">
-                  <select
-                    id="language"
-                    name="language"
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                    defaultValue={router.locale}
-                    onChange={(e) => changeLanguage(e.target.value)}
-                  >
-                    <option value="de">DE</option>
-                    <option value="en">EN</option>
-                    <option value="se">SE</option>
-                    <option value="he">HE</option>
+                  <option value="de">DE</option>
+                  <option value="en">EN</option>
+                  <option value="se">SE</option>
+                  <option value="he">HE</option>
                 </select>
               </div>
             </div>
