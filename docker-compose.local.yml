@@ -32,7 +32,21 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
+      SECRET: 'peppermint4life'
+      API_URL: "http://192.168.1.91:5003"
       DATABASE_URL: "postgresql://peppermint:1234@peppermint_postgres:5432/peppermint"
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 8080:80  # Exposes pgAdmin on port 8080 of the host
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"  # Set the default admin email
+      PGADMIN_DEFAULT_PASSWORD: "admin"  # Set the default admin password
+    depends_on:
+      - peppermint_postgres
       
 volumes: 
  pgdata:
