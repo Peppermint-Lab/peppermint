@@ -19,7 +19,7 @@ services:
     build: "."
     ports:
       - 3000:3000
-      - 5001:5003
+      - 5003:5003
     restart: always
     depends_on:
       - peppermint_postgres
@@ -32,6 +32,7 @@ services:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
+      DATABASE_URL: "postgresql://peppermint:1234@peppermint_postgres:5432/peppermint"
       
 volumes: 
  pgdata:
