@@ -3,6 +3,7 @@ import { prisma } from "../../../prisma";
 
 export async function sendTicketStatus(ticket: any) {
   let mail;
+  let replyto;
 
   const emails = await prisma.email.findMany();
 
@@ -19,6 +20,7 @@ export async function sendTicketStatus(ticket: any) {
       });
     } else {
       const email = emails[0];
+      replyto = email.reply;
       mail = nodeMailer.createTransport({
         //@ts-ignore
         host: email.host,
@@ -33,7 +35,7 @@ export async function sendTicketStatus(ticket: any) {
 
     await mail
       .sendMail({
-        from: "noreply@peppermint.sh", // sender address
+        from: replyto, // sender address
         to: ticket.email,
         subject: `Ticket ${ticket.id} status is now ${
           ticket.isComplete ? "COMPLETED" : "OUTSTANDING"

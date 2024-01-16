@@ -4,6 +4,7 @@ import { prisma } from "../../../prisma";
 export async function sendTicketCreate(ticket: any) {
   try {
     let mail;
+    let replyto;
 
     const emails = await prisma.email.findMany();
 
@@ -20,6 +21,7 @@ export async function sendTicketCreate(ticket: any) {
         });
       } else {
         const email = emails[0];
+        replyto = email.reply;
         mail = nodeMailer.createTransport({
           // @ts-ignore
           host: email.host,
@@ -34,7 +36,7 @@ export async function sendTicketCreate(ticket: any) {
 
       await mail
         .sendMail({
-          from: '"No reply 👻" noreply@peppermint.sh', // sender address
+          from: '"No reply 👻" ' + replyto, // sender address
           to: ticket.email,
           subject: `Ticket ${ticket.id} has just been created & logged`, // Subject line
           text: `Hello there, Ticket ${ticket.id}, which you reported on ${ticket.createdAt}, has now been created and logged`, // plain text body

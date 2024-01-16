@@ -9,6 +9,7 @@ export async function forgotPassword(
 ) {
   try {
     let mail;
+    let replyto;
 
     const emails = await prisma.email.findMany();
 
@@ -27,6 +28,7 @@ export async function forgotPassword(
         });
       } else {
         const email = emails[0];
+        replyto = email.reply;
         mail = nodeMailer.createTransport({
           // @ts-ignore
           host: email.host,
@@ -42,7 +44,7 @@ export async function forgotPassword(
       console.log("Sending email to: ", email);
 
       let info = await mail.sendMail({
-        from: "noreply@peppermint.sh", // sender address
+        from: replyto, // sender address
         to: email, // list of receivers
         subject: `Password Reset Request`, // Subject line
         text: `Password Reset Code: ${code}, follow this link to reset your password ${resetlink}`, // plain text body
