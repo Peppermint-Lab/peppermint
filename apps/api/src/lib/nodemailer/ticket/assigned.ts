@@ -4,6 +4,7 @@ import { prisma } from "../../../prisma";
 export async function sendAssignedEmail(email: any) {
   try {
     let mail;
+    let replyto;
 
     const emails = await prisma.email.findMany();
 
@@ -20,6 +21,7 @@ export async function sendAssignedEmail(email: any) {
         });
       } else {
         const email = emails[0];
+        replyto = email.reply;
         mail = nodeMailer.createTransport({
           // @ts-ignore
           host: email.host,
