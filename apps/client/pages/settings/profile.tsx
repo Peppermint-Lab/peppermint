@@ -104,6 +104,7 @@ export default function UserProfile() {
                   <option value="pt">Tagalong</option>
                   <option value="da">Danish</option>
                   <option value="pt">Portuguese</option>
+                  <option value="it">Italiano</option>
                 </select>
               </div>
             </div>
