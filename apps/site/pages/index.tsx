@@ -99,9 +99,9 @@ const posts = [
     date: "30th Mar 2023 ",
     datetime: "2023-03-30",
     author: {
-      name: "DB Tech",
+      name: "Network Chuck",
       role: "Content Creator / Youtuber",
-      href: "https://www.youtube.com/@DBTechYT",
+      href: "https://www.youtube.com/@NetworkChuck",
       imageUrl:
         "https://yt3.googleusercontent.com/ytc/AL5GRJW5XsaEbRr2gFUPOzr8i0iVyS7vihYNp0sAKXsrBA=s176-c-k-c0x00ffffff-no-rj",
     },
