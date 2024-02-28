@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 
-import { ContextMenu } from "@radix-ui/themes";
+import { Button, ContextMenu } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../store/session";
 
@@ -76,6 +76,39 @@ export default function NewLayout({ children }: any) {
     // },
   ];
 
+  const admin_settings = [
+    {
+      name: t("sl_users"),
+      href: "/admin/users/internal",
+      current: location.pathname === "/admin/users/internal",
+    },
+    {
+      name: t("sl_clients"),
+      href: "/admin/clients",
+      current: location.pathname === "/admin/clients",
+    },
+    {
+      name: "Email Queues",
+      href: "/admin/email-queues",
+      current: location.pathname === "/admin/email-queues",
+    },
+    {
+      name: "Webhooks",
+      href: "/admin/webhooks",
+      current: location.pathname === "/admin/webhooks",
+    },
+    {
+      name: "Outbound Emails",
+      href: "/admin/email",
+      current: location.pathname === "/admin/email",
+    },
+    {
+      name: "SSO",
+      href: "/admin/sso",
+      current: location.pathname === "/admin/sso",
+    },
+  ];
+
   // async function getQueues() {
   //   const res = await fetch(
   //     `/api/v1/email-queues/all`,
@@ -118,8 +151,8 @@ export default function NewLayout({ children }: any) {
   // }, [user]);
 
   // useEffect(() => {
-  // location.push(`${locale}/${location.pathname}`);
-  // }, [user, location]);
+  //   getQueues();
+  // }, [user])
 
   // const handleKeyPress = useCallback((event: any, location: any) => {
   //   console.log(location);
@@ -260,12 +293,13 @@ export default function NewLayout({ children }: any) {
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
-                    <div className="flex h-16 shrink-0 items-center">
-                      <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
-                      />
+                    <div className="flex align-middle flex-row h-14 items-center border-b-[1px]">
+                      {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
+                      <Link href="https://peppermint.sh">
+                        <span className="text-3xl ml-2  hover:text-green-600 font-bold ">
+                          Peppermint
+                        </span>
+                      </Link>
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -295,11 +329,6 @@ export default function NewLayout({ children }: any) {
                                     <span className="whitespace-nowrap">
                                       {item.name}
                                     </span>
-                                    <div className="flex w-full justify-end float-right">
-                                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                                        {item.initial}
-                                      </span>
-                                    </div>
                                   </Link>
                                 </li>
                               ) : (
@@ -362,6 +391,100 @@ export default function NewLayout({ children }: any) {
                             )}
                           </ul>
                         </li>
+
+                        {user.isAdmin && (
+                          <li>
+                            <span className="mb-2 text-sm font-bold">
+                              Admin Settings
+                            </span>
+                            <ul role="list" className="-mx-2 space-y-1">
+                              {admin_settings.map((item: any) =>
+                                !item.children ? (
+                                  <li key={item.name}>
+                                    <Link
+                                      href={item.href}
+                                      className={classNames(
+                                        item.current
+                                          ? "bg-gray-50 text-indigo-600"
+                                          : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                                        "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                      )}
+                                    >
+                                      {/* <item.icon
+                                     className={classNames(
+                                       item.current
+                                         ? "text-indigo-600"
+                                         : "text-gray-400 group-hover:text-indigo-600",
+                                       "h-6 w-6 shrink-0"
+                                     )}
+                                     aria-hidden="true"
+                                   /> */}
+                                      <span className="whitespace-nowrap">
+                                        {item.name}
+                                      </span>
+                                    </Link>
+                                  </li>
+                                ) : (
+                                  <Disclosure
+                                    as="div"
+                                    key={item.name}
+                                    className="space-y-1"
+                                  >
+                                    {({ open }) => (
+                                      <>
+                                        {queues.length > 0 && (
+                                          <>
+                                            <Disclosure.Button
+                                              className={classNames(
+                                                item.current
+                                                  ? "bg-green-400 text-white"
+                                                  : "bg-gray-900 text-white hover:bg-green-400 hover:text-white",
+                                                "group w-full flex items-center pl-2 pr-2 py-2 text-left text-sm font-medium rounded-md focus:outline-none"
+                                              )}
+                                            >
+                                              <svg
+                                                className={classNames(
+                                                  open
+                                                    ? "text-white rotate-90"
+                                                    : "text-white",
+                                                  "mr-2 flex-shrink-0 h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150"
+                                                )}
+                                                viewBox="0 0 20 20"
+                                                aria-hidden="true"
+                                              >
+                                                <path
+                                                  d="M6 6L14 10L6 14V6Z"
+                                                  fill="currentColor"
+                                                />
+                                              </svg>
+                                              {item.name}
+                                            </Disclosure.Button>
+                                            <Disclosure.Panel className="space-y-1">
+                                              {item.children.map(
+                                                (subItem: any) => (
+                                                  <Link
+                                                    href={`/queue/${subItem.name}`}
+                                                  >
+                                                    <Disclosure.Button
+                                                      key={subItem.name}
+                                                      className="group w-full flex items-center pl-10 pr-2 py-2 text-sm font-medium text-white rounded-md hover:text-white hover:bg-green-400 focus:outline-none"
+                                                    >
+                                                      {subItem.name}
+                                                    </Disclosure.Button>
+                                                  </Link>
+                                                )
+                                              )}
+                                            </Disclosure.Panel>
+                                          </>
+                                        )}
+                                      </>
+                                    )}
+                                  </Disclosure>
+                                )
+                              )}
+                            </ul>
+                          </li>
+                        )}
 
                         <li className="mt-auto">
                           <a
@@ -569,11 +692,14 @@ export default function NewLayout({ children }: any) {
           <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-[#0A090C] px-4 sm:gap-x-6">
             <button
               type="button"
-              className="-m-2.5 p-2.5 text-white lg:hidden"
+              className="-m-2.5 p-2.5 text-black dark:text-white lg:hidden"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
-              <Bars3Icon className="h-6 w-6 text-white" aria-hidden="true" />
+              <Bars3Icon
+                className="h-6 w-6 text-black dark:text-white"
+                aria-hidden="true"
+              />
             </button>
 
             {/* Separator */}
@@ -697,6 +823,15 @@ export default function NewLayout({ children }: any) {
                   </Popover.Panel>
                 </Popover> */}
                 {/* Profile dropdown */}
+                <Link
+                  href="https://github.com/Peppermint-Lab/peppermint/discussions"
+                  target="_blank"
+                  className="hover:cursor-pointer"
+                >
+                  <Button variant="outline" className="hover:cursor-pointer">
+                    Send Feedback
+                  </Button>
+                </Link>
                 <Menu as="div" className="relative">
                   <Menu.Button className="z-50 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>

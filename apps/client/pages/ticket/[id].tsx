@@ -20,7 +20,7 @@ import { useQuery } from "react-query";
 import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
 import { notifications } from "@mantine/notifications";
-import { Text, Tooltip } from "@radix-ui/themes";
+import { Button, DropdownMenu, Text, Tooltip } from "@radix-ui/themes";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
@@ -268,6 +268,10 @@ export default function Ticket() {
   }, []);
 
   useEffect(() => {
+    transferTicket();
+  }, [n]);
+
+  useEffect(() => {
     if (status === "success") {
       if (IssueEditor) {
         IssueEditor.commands.setContent(data.ticket.detail);
@@ -332,6 +336,43 @@ export default function Ticket() {
                     </p>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
+                    {!edit && (
+                      <DropdownMenu.Root>
+                        <DropdownMenu.Trigger className="hover:cursor-pointer">
+                          <Button variant="outline">Options</Button>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content className="min-w-[176px] mr-6">
+                          <DropdownMenu.Item
+                            className="min-w-[176px] capitalize hover:cursor-pointer"
+                            onClick={() => setEdit(!edit)}
+                          >
+                            {!edit ? t("edit-btn") : "save"}
+                          </DropdownMenu.Item>
+
+                          {user.isAdmin && (
+                            <DropdownMenu.Item
+                              className="hover:cursor-pointer"
+                              onClick={() => hide(!data.ticket.hidden)}
+                            >
+                              {data.ticket.hidden
+                                ? "Show Global"
+                                : "Hide Ticket"}
+                            </DropdownMenu.Item>
+                          )}
+                        </DropdownMenu.Content>
+                      </DropdownMenu.Root>
+                    )}
+                    {edit && (
+                      <Button
+                        className="hover:cursor-pointer"
+                        variant="outline"
+                        onClick={() => {
+                          update();
+                          setEdit(!edit);
+                        }}
+                      >
+                        save
+                      </Button>
                     {user.isAdmin && (
                       <button
                         type="button"
@@ -412,9 +453,12 @@ export default function Ticket() {
                           <>
                             <div className="relative">
                               <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 px-4 py-1.5 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <span className="block truncate">
-                                  {n ? n.name : t("select_new_user")}
-                                </span>
+                                <span className="block min-w-[75px] text-xs">
+                                  {data.ticket.assignedTo
+                                    ? data.ticket.assignedTo.name
+                                    : n
+                                    ? n.name
+                                    : t("select_new_user")}
                               </Listbox.Button>
 
                               <Transition
