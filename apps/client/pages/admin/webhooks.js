@@ -53,7 +53,6 @@ export default function Notifications() {
     await fetch(`/api/v1/admin/webhook/${id}/delete`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${getCookie("session")}`,
       },
     })
