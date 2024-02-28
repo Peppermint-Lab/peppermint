@@ -1,4 +1,5 @@
 import { Link, RichTextEditor } from "@mantine/tiptap";
+import Placeholder from '@tiptap/extension-placeholder';
 import Highlight from "@tiptap/extension-highlight";
 import Underline from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
@@ -39,7 +40,7 @@ export default function CreateTicket() {
   const [company, setCompany] = useState<any>();
   const [engineer, setEngineer] = useState<any>();
   const [email, setEmail] = useState("");
-  const [issue, setIssue] = useState<any>(t("ticket_extra_details"));
+  const [issue, setIssue] = useState<any>("");
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState<any>();
@@ -54,6 +55,7 @@ export default function CreateTicket() {
       Superscript,
       SubScript,
       Highlight,
+      Placeholder.configure({ placeholder: t("ticket_extra_details") })
       // TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content: issue,
@@ -378,6 +380,7 @@ export default function CreateTicket() {
         <div className="w-full xl:w-2/3 order-2 xl:order-2">
           <RichTextEditor
             editor={editor}
+            placeholder={t("ticket_extra_details")}
             className="dark:bg-gray-900 dark:text-white rounded-none border-none"
           >
             <RichTextEditor.Toolbar className="rounded-none dark:bg-[#0A090C]">
