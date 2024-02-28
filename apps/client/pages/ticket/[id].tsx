@@ -336,54 +336,43 @@ export default function Ticket() {
                     </p>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
-                    <DropdownMenu.Root>
-                      <DropdownMenu.Trigger className="hover:cursor-pointer">
-                        <Button variant="outline">Options</Button>
-                      </DropdownMenu.Trigger>
-                      <DropdownMenu.Content className="min-w-[176px] mr-6">
-                        <DropdownMenu.Item
-                          className="min-w-[176px] capitalize"
-                          onClick={() => setEdit(!edit)}
-                        >
-                          {!edit ? t("edit-btn") : "save"}
-                        </DropdownMenu.Item>
-                        {user.isAdmin && (
+                    {!edit && (
+                      <DropdownMenu.Root>
+                        <DropdownMenu.Trigger className="hover:cursor-pointer">
+                          <Button variant="outline">Options</Button>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content className="min-w-[176px] mr-6">
                           <DropdownMenu.Item
-                            onClick={() => hide(!data.ticket.hidden)}
+                            className="min-w-[176px] capitalize hover:cursor-pointer"
+                            onClick={() => setEdit(!edit)}
                           >
-                            {data.ticket.hidden ? "Show Global" : "Hide Ticket"}
+                            {!edit ? t("edit-btn") : "save"}
                           </DropdownMenu.Item>
-                        )}
-                      </DropdownMenu.Content>
-                    </DropdownMenu.Root>
-                    {user.isAdmin && (
-                      <button
-                        type="button"
-                        onClick={() => hide(!data.ticket.hidden)}
-                        className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {data.ticket.hidden ? "Show Global" : "Hide Ticket"}
-                      </button>
+
+                          {user.isAdmin && (
+                            <DropdownMenu.Item
+                              className="hover:cursor-pointer"
+                              onClick={() => hide(!data.ticket.hidden)}
+                            >
+                              {data.ticket.hidden
+                                ? "Show Global"
+                                : "Hide Ticket"}
+                            </DropdownMenu.Item>
+                          )}
+                        </DropdownMenu.Content>
+                      </DropdownMenu.Root>
                     )}
-                    {!edit ? (
-                      <button
-                        type="button"
-                        onClick={() => setEdit(true)}
-                        className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {t("edit-btn")}
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
+                    {edit && (
+                      <Button
+                        className="hover:cursor-pointer"
+                        variant="outline"
                         onClick={() => {
                           update();
-                          setEdit(false);
+                          setEdit(!edit);
                         }}
-                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       >
-                        {t("save")}
-                      </button>
+                        save
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -442,8 +431,6 @@ export default function Ticket() {
                                     : n
                                     ? n.name
                                     : t("select_new_user")}
-                                <span className="block truncate">
-                                  {n ? n.name : t("select_new_user")}
                                 </span>
                               </Listbox.Button>
 
