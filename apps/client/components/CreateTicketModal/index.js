@@ -7,6 +7,7 @@ import { useEditor } from "@tiptap/react";
 import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import Placeholder from '@tiptap/extension-placeholder';
 // import TextAlign from '@tiptap/extension-text-align';
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
@@ -24,7 +25,7 @@ export default function CreateTicketModal() {
   const [company, setCompany] = useState();
   const [engineer, setEngineer] = useState();
   const [email, setEmail] = useState("");
-  const [issue, setIssue] = useState(t("ticket_extra_details"));
+  const [issue, setIssue] = useState("");
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState([]);
@@ -40,6 +41,7 @@ export default function CreateTicketModal() {
       Superscript,
       SubScript,
       Highlight,
+      Placeholder.configure({ placeholder: t("ticket_extra_details") })
       // TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content: issue,
