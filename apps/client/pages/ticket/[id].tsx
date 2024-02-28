@@ -20,7 +20,7 @@ import { useQuery } from "react-query";
 import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
 import { notifications } from "@mantine/notifications";
-import { Text, Tooltip } from "@radix-ui/themes";
+import { Button, DropdownMenu, Text, Tooltip } from "@radix-ui/themes";
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
@@ -268,6 +268,10 @@ export default function Ticket() {
   }, []);
 
   useEffect(() => {
+    transferTicket();
+  }, [n]);
+
+  useEffect(() => {
     if (status === "success") {
       if (IssueEditor) {
         IssueEditor.commands.setContent(data.ticket.detail);
@@ -332,35 +336,26 @@ export default function Ticket() {
                     </p>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
-                    {user.isAdmin && (
-                      <button
-                        type="button"
-                        onClick={() => hide(!data.ticket.hidden)}
-                        className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {data.ticket.hidden ? "Show Global" : "Hide Ticket"}
-                      </button>
-                    )}
-                    {!edit ? (
-                      <button
-                        type="button"
-                        onClick={() => setEdit(true)}
-                        className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {t("edit-btn")}
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          update();
-                          setEdit(false);
-                        }}
-                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {t("save")}
-                      </button>
-                    )}
+                    <DropdownMenu.Root>
+                      <DropdownMenu.Trigger className="hover:cursor-pointer">
+                        <Button variant="outline">Options</Button>
+                      </DropdownMenu.Trigger>
+                      <DropdownMenu.Content className="min-w-[176px] mr-6">
+                        <DropdownMenu.Item
+                          className="min-w-[176px] capitalize"
+                          onClick={() => setEdit(!edit)}
+                        >
+                          {!edit ? t("edit-btn") : "save"}
+                        </DropdownMenu.Item>
+                        {user.isAdmin && (
+                          <DropdownMenu.Item
+                            onClick={() => hide(!data.ticket.hidden)}
+                          >
+                            {data.ticket.hidden ? "Show Global" : "Hide Ticket"}
+                          </DropdownMenu.Item>
+                        )}
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Root>
                   </div>
                 </div>
                 <aside className="mt-4 xl:hidden">
@@ -412,8 +407,12 @@ export default function Ticket() {
                           <>
                             <div className="relative">
                               <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 px-4 py-1.5 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <span className="block truncate">
-                                  {n ? n.name : t("select_new_user")}
+                                <span className="block min-w-[75px] text-xs">
+                                  {data.ticket.assignedTo
+                                    ? data.ticket.assignedTo.name
+                                    : n
+                                    ? n.name
+                                    : t("select_new_user")}
                                 </span>
                               </Listbox.Button>
 
