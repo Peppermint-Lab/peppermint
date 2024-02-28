@@ -38,7 +38,7 @@ export async function sendAssignedEmail(email: any) {
 
       await mail
         .sendMail({
-          from: "noreply@peppermint.sh", // sender address
+          from: replyto, // sender address
           to: email, // list of receivers
           subject: `A new ticket has been assigned to you`, // Subject line
           text: `Hello there, a ticket has been assigned to you`, // plain text body
