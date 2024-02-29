@@ -105,6 +105,7 @@ export function UserProfile() {
                   <option value="en">EN</option>
                   <option value="se">SE</option>
                   <option value="it">IT</option>
+                  <option value="he">HE</option>
                 </select>
               </div>
             </div>
