@@ -76,6 +76,7 @@ export default function AdminLayout({ children }: any) {
             ))}
           </nav>
         </div>
+
         <div className="flex-1 px-6 xl:w-[800px] ">{children}</div>
       </div>
     </div>

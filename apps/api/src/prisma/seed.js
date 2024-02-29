@@ -36,8 +36,8 @@ async function main() {
 
     const conf = await prisma.config.create({
       data: {
-        gh_version: "0.3.6",
-        client_version: "0.3.6",
+        gh_version: "0.4.2",
+        client_version: "0.4,2",
         portal_locale: "en",
         encryption_key: encryptionKey,
       },

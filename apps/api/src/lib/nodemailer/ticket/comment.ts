@@ -8,6 +8,7 @@ export async function sendComment(
 ) {
   try {
     let mail;
+    let replyto;
 
     console.log("Sending email to: ", email);
 
@@ -26,6 +27,7 @@ export async function sendComment(
         });
       } else {
         const email = emails[0];
+        replyto = email.reply;
         mail = nodeMailer.createTransport({
           // @ts-ignore
           host: email.host,
@@ -40,7 +42,7 @@ export async function sendComment(
 
       await mail
         .sendMail({
-          from: '"No reply 👻" noreply@peppermint.sh', // sender address
+          from: '"No reply 👻" ' + replyto, // sender address
           to: email,
           subject: `New comment on a ticket`, // Subject line
           text: `Hello there, Ticket: ${title}, has had an update with a comment of ${comment}`, // plain text body
