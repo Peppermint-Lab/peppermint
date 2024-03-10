@@ -19,8 +19,8 @@
     "ticket_name_here": "Name",
     "ticket_email_here": "Email",
     "ticket_details": "Title",
-    "ticket_select_client": "Select a client",
-    "ticket_select_eng": "Select an engineer",
+    "ticket_select_client": "Select a Client",
+    "ticket_select_eng": "Select an Engineer",
     "ticket_extra_details": "Enter extra details here... markdown is supported",
     "cancel": "Cancel",
     "create": "Create",
@@ -79,8 +79,8 @@
     "language": "Language",
     "notifications": "Notifications",
     "save_and_reload": "Save and Reload",
-    "select_a_client": "Select a client",
-    "select_an_engineer": "Select an engineer",
+    "select_a_client": "Select a Client",
+    "select_an_engineer": "Select an Engineer",
     "ticket_create": "Create Ticket",
     "internallycommented_at": "Internally Commented at"
 }
