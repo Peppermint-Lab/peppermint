@@ -50,7 +50,7 @@
     "assigned_to": "Assigned To",
     "enter_todo": "Enter Todo",
     "notebooks": "Notebooks",
-    "notebooks_description": "This is a personal notebook, you can use it to store notes, links, code snippets, etc.",
+    "notebooks_description": "This is a personal notebook. Here you can save notes, links, code snippets, etc.",
     "create_notebook": "Create Notebook",
     "open": "Open", 
     "assigned_to_me": "Assigned to me",
