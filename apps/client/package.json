@@ -31,6 +31,7 @@
     "@tiptap/starter-kit": "^2.0.3",
     "add": "^2.0.6",
     "axios": "^0.25.0",
+    "cmdk": "^1.0.0",
     "cookies-next": "^3.0.0",
     "dompurify": "^2.4.0",
     "email-templates": "^8.0.8",

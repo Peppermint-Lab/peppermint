@@ -1,10 +1,20 @@
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { PlusIcon } from "@heroicons/react/20/solid";
+import {
+  Combobox,
+  Dialog,
+  Disclosure,
+  Menu,
+  Transition,
+} from "@headlessui/react";
+import { DocumentPlusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
+  FolderPlusIcon,
+  HashtagIcon,
   HomeIcon,
+  MagnifyingGlassIcon,
+  TagIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -17,8 +27,286 @@ import { Button, ContextMenu } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../store/session";
 
-function classNames(...classes: any) {
+const projects = [
+  { id: 1, name: "Workflow Inc. / Website Redesign", url: "#" },
+  // More projects...
+];
+const quickActions = [
+  { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
+  { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
+  { name: "Add hashtag...", icon: HashtagIcon, shortcut: "H", url: "#" },
+  { name: "Add label...", icon: TagIcon, shortcut: "L", url: "#" },
+];
+
+function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
+}
+
+function CommandModal() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [tickets, setTickets] = useState([]);
+
+  function handleKeyPress(event: KeyboardEvent) {
+    if (
+      document.activeElement!.tagName !== "INPUT" &&
+      document.activeElement!.tagName !== "TEXTAREA" &&
+      !document.activeElement!.className.includes("ProseMirror")
+    )
+      if (event.key === "k") {
+        setOpen(true);
+      }
+  }
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener("keydown", handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress, location]);
+
+  async function GlobalTicketSearch() {
+    const res = await fetch(`/api/v1/tickets/search`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+      body: JSON.stringify({ query }),
+    }).then((res) => res.json());
+
+    console.log(res);
+
+    if (res.success) {
+      setTickets(res.tickets);
+    }
+  }
+
+  useEffect(() => {
+    console.log(query.length);
+    if (query.length !== 0 && query !== "") {
+      GlobalTicketSearch();
+    }
+  }, [query]);
+
+  function handleRouting(id) {
+    setQuery("");
+    setOpen(false);
+    router.push(`/ticket/${id}`);
+  }
+
+  return (
+    <>
+      <Button
+        variant="outline"
+        className="hover:cursor-pointer"
+        onClick={() => setOpen(true)}
+      >
+        Search
+        <kbd className="inline-flex items-center rounded border ml-2 border-gray-200 px-1 font-sans text-xs text-gray-400">
+          K
+        </kbd>
+      </Button>
+      <Transition.Root
+        show={open}
+        as={Fragment}
+        afterLeave={() => setQuery("")}
+        appear
+      >
+        <Dialog as="div" className="relative z-10" onClose={setOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto p-4 sm:p-6 md:p-20">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="mx-auto max-w-2xl transform divide-y divide-gray-500 divide-opacity-20 overflow-hidden rounded-xl bg-gray-900 shadow-2xl transition-all">
+                <Combobox>
+                  <div className="relative">
+                    <MagnifyingGlassIcon
+                      className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-500"
+                      aria-hidden="true"
+                    />
+                    <Combobox.Input
+                      className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-white focus:ring-0 sm:text-sm"
+                      placeholder="Search Tickets..."
+                      onChange={(event) => setQuery(event.target.value)}
+                    />
+                  </div>
+
+                  {(query === "" || tickets.length > 0) && (
+                    <Combobox.Options
+                      static
+                      className="max-h-80 scroll-py-2 divide-y divide-gray-500 divide-opacity-20 overflow-y-auto"
+                    >
+                      {/* <li className="p-2">
+                        {query === "" && (
+                          <h2 className="mb-2 mt-4 px-3 text-xs font-semibold text-gray-200">
+                            Recent searches
+                          </h2>
+                        )}
+                        <ul className="text-sm text-gray-400">
+                          {(query === "" ? recent : tickets).map((project) => (
+                            <Combobox.Option
+                              key={project.id}
+                              value={project}
+                              className={({ active }) =>
+                                classNames(
+                                  "flex cursor-default select-none items-center rounded-md px-3 py-2",
+                                  active && "bg-gray-800 text-white"
+                                )
+                              }
+                            >
+                              {({ active }) => (
+                                <>
+                                  <FolderIcon
+                                    className={classNames(
+                                      "h-6 w-6 flex-none",
+                                      active ? "text-white" : "text-gray-500"
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                  <span className="ml-3 flex-auto truncate">
+                                    {project.name}
+                                  </span>
+                                  {active && (
+                                    <span className="ml-3 flex-none text-gray-400">
+                                      Jump to...
+                                    </span>
+                                  )}
+                                </>
+                              )}
+                            </Combobox.Option>
+                          ))}
+                        </ul>
+                      </li> */}
+                      {query === "" && (
+                        <li className="p-2">
+                          <h2 className="sr-only">Quick actions</h2>
+                          <ul className="text-sm text-gray-400">
+                            {quickActions.map((action) => (
+                              <Combobox.Option
+                                key={action.shortcut}
+                                value={action}
+                                className={({ active }) =>
+                                  classNames(
+                                    "flex cursor-default select-none items-center rounded-md px-3 py-2",
+                                    active && "bg-gray-800 text-white"
+                                  )
+                                }
+                              >
+                                {({ active }) => (
+                                  <>
+                                    <action.icon
+                                      className={classNames(
+                                        "h-6 w-6 flex-none",
+                                        active ? "text-white" : "text-gray-500"
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                    <span className="ml-3 flex-auto truncate">
+                                      {action.name}
+                                    </span>
+                                    <span className="ml-3 flex-none text-xs font-semibold text-gray-400">
+                                      <kbd className="font-sans">⌘</kbd>
+                                      <kbd className="font-sans">
+                                        {action.shortcut}
+                                      </kbd>
+                                    </span>
+                                  </>
+                                )}
+                              </Combobox.Option>
+                            ))}
+                          </ul>
+                        </li>
+                      )}
+                    </Combobox.Options>
+                  )}
+
+                  {query !== "" && tickets.length === 0 && (
+                    <div className="px-6 py-14 text-center sm:px-14">
+                      <FolderIcon
+                        className="mx-auto h-6 w-6 text-gray-500"
+                        aria-hidden="true"
+                      />
+                      <p className="mt-4 text-sm text-gray-200">
+                        We couldn't find any projects with that term. Please try
+                        again.
+                      </p>
+                    </div>
+                  )}
+
+                  {query !== "" && tickets.length > 0 && (
+                    <div className="p-2">
+                      <Combobox.Options
+                        static
+                        className="max-h-80 scroll-py-2  divide-opacity-20 overflow-y-auto"
+                      >
+                        {tickets.map((ticket) => (
+                          <Combobox.Option
+                            key={ticket.id}
+                            value={ticket}
+                            onClick={() => handleRouting(ticket.id)}
+                            className={({ active }) =>
+                              classNames(
+                                "flex cursor-default select-none items-center rounded-md px-3 py-2 text-gray-500",
+                                active &&
+                                  "bg-gray-800 text-white hover:cursor-pointer"
+                              )
+                            }
+                          >
+                            {({ active }) => (
+                              <>
+                                <FolderIcon
+                                  className={classNames(
+                                    "h-6 w-6 flex-none",
+                                    active ? "text-white" : "text-gray-500"
+                                  )}
+                                  aria-hidden="true"
+                                />
+                                <span className="ml-3 flex-auto truncate">
+                                  {ticket.title}
+                                </span>
+                                {active && (
+                                  <span className="ml-3 flex-none text-gray-400">
+                                    Jump to...
+                                  </span>
+                                )}
+                              </>
+                            )}
+                          </Combobox.Option>
+                        ))}
+                      </Combobox.Options>
+                    </div>
+                  )}
+                </Combobox>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition.Root>
+    </>
+  );
 }
 
 export default function NewLayout({ children }: any) {
@@ -709,13 +997,16 @@ export default function NewLayout({ children }: any) {
             />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
-              <div className="flex w-full justify-start items-center">
+              <div className="flex w-full justify-start items-center space-x-6">
                 <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
-                  <span className="inline-flex items-center rounded-md bg-green-700/10 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                    Version {user.version}
+                  <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
+                    Version 0.4.2
                   </span>
                 </Link>
+
+                <CommandModal />
               </div>
+
               {/* <div
                 className="relative mt-2 hidden sm:flex items-center w-full min-w-[320px] max-w-[360px] hover:cursor-pointer"
                 onClick={() => {
