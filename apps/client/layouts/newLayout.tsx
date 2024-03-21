@@ -3,9 +3,15 @@ import {
   Dialog,
   Disclosure,
   Menu,
+  Popover,
   Transition,
 } from "@headlessui/react";
-import { DocumentPlusIcon, PlusIcon } from "@heroicons/react/20/solid";
+import {
+  ArchiveBoxIcon,
+  DocumentPlusIcon,
+  InboxStackIcon,
+  PlusIcon,
+} from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   Cog6ToothIcon,
@@ -312,7 +318,7 @@ function CommandModal() {
 export default function NewLayout({ children }: any) {
   const location = useRouter();
 
-  const { loading, user } = useUser();
+  const { loading, user, fetchUserProfile } = useUser();
   const locale = user ? user.language : "en";
 
   const [queues, setQueues] = useState([]);
@@ -432,6 +438,7 @@ export default function NewLayout({ children }: any) {
         Authorization: `Bearer ${getCookie("session")}`,
       },
     }).then((res) => res.json());
+    await fetchUserProfile();
   }
 
   // useEffect(() => {
@@ -441,41 +448,6 @@ export default function NewLayout({ children }: any) {
   // useEffect(() => {
   //   getQueues();
   // }, [user])
-
-  // const handleKeyPress = useCallback((event: any, location: any) => {
-  //   console.log(location);
-  //   if (
-  //     document.activeElement!.tagName !== "INPUT" &&
-  //     document.activeElement!.tagName !== "TEXTAREA" &&
-  //     !document.activeElement!.className.includes("ProseMirror")
-  //   ) {
-  //     switch (event.key) {
-  //       case "c":
-  //         location.push("/new");
-  //         break;
-  //       case "h":
-  //         location.push("/");
-  //         break;
-  //       case "n":
-  //         location.push("/notebook");
-  //         break;
-  //       case "t":
-  //         location.push("/tickets");
-  //         break;
-  //       case "a":
-  //         location.push("/admin");
-  //         break;
-  //       case "o":
-  //         location.push("/tickets/open");
-  //         break;
-  //       case "f":
-  //         location.push("/tickets/closed");
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-  // }, []);
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
@@ -1007,39 +979,24 @@ export default function NewLayout({ children }: any) {
                 <CommandModal />
               </div>
 
-              {/* <div
-                className="relative mt-2 hidden sm:flex items-center w-full min-w-[320px] max-w-[360px] hover:cursor-pointer"
-                onClick={() => {
-                  spotlight.open();
-                }}
-              >
-                <input
-                  type="text"
-                  name="search"
-                  id="search"
-                  readOnly
-                  placeholder="Spotlight Search"
-                  onClick={() => {
-                    spotlight.open();
-                  }}
-                  className="block w-full hover:cursor-pointer rounded-md border-0 py-1.5 pr-14 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-                <div className="absolute inset-y-0 right-0 flex py-2.5 pr-1">
-                  <kbd className="inline-flex items-center rounded border border-gray-200 px-1.5 font-sans text-xs text-gray-400">
-                    /
-                  </kbd>
-                </div>
-              </div> */}
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
-                {/* <Popover className="relative">
-                  <Popover.Button className="relative  rounded-full  p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <BellAlertIcon
-                      className="h-6 w-6 text-white"
-                      aria-hidden="true"
-                    />
+                <Popover className="relative">
+                  <Popover.Button className="relative border rounded-md  p-2 shadow-md text-gray-400 hover:text-gray-500 focus:outline-none">
+                    <InboxStackIcon className="h-4 w-4 text-black" />
+                    {user.notifcations.filter(
+                      (notification) => !notification.read
+                    ).length > 0 && (
+                      <svg
+                        className="h-2.5 w-2.5 absolute bottom-6 left-6  animate-pulse fill-green-500"
+                        viewBox="0 0 6 6"
+                        aria-hidden="true"
+                      >
+                        <circle cx={3} cy={3} r={3} />
+                      </svg>
+                    )}
                   </Popover.Button>
 
-                  <Popover.Panel className="absolute z-10 sm:min-w-[400px] right-1 overflow-hidden rounded-lg bg-white shadow">
+                  <Popover.Panel className="absolute z-10 mt-1 sm:min-w-[400px] right-1 overflow-hidden rounded-lg bg-white shadow">
                     <div className="px-6 p-6">
                       <div className="border-b border-gray-200">
                         <nav
@@ -1112,8 +1069,8 @@ export default function NewLayout({ children }: any) {
                       </div>
                     </div>
                   </Popover.Panel>
-                </Popover> */}
-                {/* Profile dropdown */}
+                </Popover>
+
                 <Link
                   href="https://github.com/Peppermint-Lab/peppermint/discussions"
                   target="_blank"
@@ -1123,6 +1080,8 @@ export default function NewLayout({ children }: any) {
                     Send Feedback
                   </Button>
                 </Link>
+
+                {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="z-50 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
