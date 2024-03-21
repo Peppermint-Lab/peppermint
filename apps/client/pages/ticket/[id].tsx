@@ -362,27 +362,6 @@ export default function Ticket() {
                         </DropdownMenu.Content>
                       </DropdownMenu.Root>
                     )}
-                    {edit && (
-                      <Button
-                        className="hover:cursor-pointer"
-                        variant="outline"
-                        onClick={() => {
-                          update();
-                          setEdit(!edit);
-                        }}
-                      >
-                        save
-                      </Button>
-                    )}
-                    {user.isAdmin && (
-                      <button
-                        type="button"
-                        onClick={() => hide(!data.ticket.hidden)}
-                        className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {data.ticket.hidden ? "Show Global" : "Hide Ticket"}
-                      </button>
-                    )}
                   </div>
                 </div>
                 <aside className="mt-4 xl:hidden">
