@@ -39,7 +39,7 @@ export function authRoutes(fastify: FastifyInstance) {
       if (bearer) {
         const token = checkToken(bearer);
         if (token) {
-          const requester = await checkSession(token);
+          const requester = await checkSession(bearer);
 
           if (!requester?.isAdmin) {
             reply.code(401).send({
@@ -395,6 +395,10 @@ export function authRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const { id } = request.params as { id: string };
+
+        await prisma.notes.deleteMany({ where: { userId: id } });
+        await prisma.session.deleteMany({ where: { userId: id } });
+        await prisma.notifications.deleteMany({ where: { userId: id } });
 
         await prisma.user.delete({
           where: { id },

@@ -205,22 +205,19 @@ export default function UserAuthPanel() {
   );
 
   async function deleteUser(id) {
-    if (confirm("Are you sure you want to delete this user?")) {
-      try {
-        await fetch(`/api/v1/auth/user/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then((response) => response.json())
-          .then(() => {
-            refetch;
-          });
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      await fetch(`/api/v1/auth/user/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then(() => {
+          refetch();
+        });
+    } catch (error) {
+      console.log(error);
     }
   }
 
