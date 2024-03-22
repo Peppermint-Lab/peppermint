@@ -108,9 +108,9 @@ const posts = [
 ];
 
 const stats = [
-  { label: "Docker Pulls", value: "99k+" },
-  { label: "Github Stars", value: "1.1k" },
-  { label: "Weekly Active Users", value: "212" },
+  { label: "Docker Pulls", value: "120k+" },
+  { label: "Github Stars", value: "1.3k" },
+  { label: "Weekly Active Users", value: "550" },
 ];
 
 const features = [
@@ -170,12 +170,14 @@ export default function Home() {
   return (
     <div className="sm:min-h-screen mx-16 sm:mx-0">
       <header className="bg-white mx-auto text-base max-w-xl">
-        <nav className="flex justify-between p-6 lg:px-8" aria-label="Global">
+        <nav className="flex justify-between py-8" aria-label="Global">
           <div className="flex justify-between lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Peppermint Labs</span>
-              <span className="font-bold text-xl">🍵 Peppermint Labs</span>
-            </a>
+            <div className="-m-1.5 p-1.5">
+              <span className="sm:hidden">🍵</span>
+              <span className="hidden sm:block font-bold text-xl">
+                🍵 Peppermint Labs
+              </span>
+            </div>
           </div>
 
           <div className="flex gap-x-12">
@@ -253,7 +255,7 @@ export default function Home() {
                     {feature.name}
                   </span>
                 </dt>
-                <dd className="flex flex-auto flex-col text-base  text-gray-900">
+                <dd className="flex flex-auto flex-col mt-1 text-sm sm:text-base  text-gray-900">
                   <p className="flex-auto">{feature.description}</p>
                 </dd>
               </div>
@@ -263,9 +265,9 @@ export default function Home() {
       </div>
 
       <div className="max-w-xl mx-auto mt-4">
-        <dl className="space-y-8 flex flex-row space-x-12">
+        <dl className="space-y-4 flex flex-col md:flex-row sm:space-x-12">
           {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col-reverse gap-y-4">
+            <div key={stat.label} className="flex flex-col-reverse ">
               <dt className="text-base leading-7 text-gray-600">
                 {stat.label}
               </dt>
@@ -401,7 +403,7 @@ export default function Home() {
         </div>
       </div> */}
 
-      <div className="bg-white py-8">
+      {/* <div className="bg-white py-8">
         <div className="mx-auto max-w-xl">
           <div className="">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 ">
@@ -422,12 +424,6 @@ export default function Home() {
                   <time dateTime={post.datetime} className="text-gray-500">
                     {post.date}
                   </time>
-                  {/* <a
-                    href={post.category.href}
-                    className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
-                  >
-                    {post.category.title}
-                  </a> */}
                 </div>
                 <div className="group relative">
                   <h3 className="text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
@@ -436,8 +432,9 @@ export default function Home() {
                       {post.title}
                     </a>
                   </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600 max-w-full">
                     <span
+                      className="max-w-full"
                       dangerouslySetInnerHTML={{ __html: post.embed }}
                     ></span>
                   </p>
@@ -462,7 +459,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       <footer className="bg-white" aria-labelledby="footer-heading">
         <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
