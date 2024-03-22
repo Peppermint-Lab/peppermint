@@ -8,7 +8,6 @@ import {
 } from "@headlessui/react";
 import {
   ArchiveBoxIcon,
-  DocumentPlusIcon,
   InboxStackIcon,
   PlusIcon,
 } from "@heroicons/react/20/solid";
@@ -16,11 +15,8 @@ import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
-  FolderPlusIcon,
-  HashtagIcon,
   HomeIcon,
   MagnifyingGlassIcon,
-  TagIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -38,10 +34,10 @@ const projects = [
   // More projects...
 ];
 const quickActions = [
-  { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
-  { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
-  { name: "Add hashtag...", icon: HashtagIcon, shortcut: "H", url: "#" },
-  { name: "Add label...", icon: TagIcon, shortcut: "L", url: "#" },
+  // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
+  // { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
+  // { name: "Add hashtag...", icon: HashtagIcon, shortcut: "H", url: "#" },
+  // { name: "Add label...", icon: TagIcon, shortcut: "L", url: "#" },
 ];
 
 function classNames(...classes) {
