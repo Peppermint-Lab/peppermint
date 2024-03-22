@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { track } from "../lib/hog";
 import { checkToken } from "../lib/jwt";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
+import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
 
 export function authRoutes(fastify: FastifyInstance) {
@@ -26,6 +27,8 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+
       let { email, password, admin, name } = request.body as {
         email: string;
         password: string;
@@ -33,37 +36,50 @@ export function authRoutes(fastify: FastifyInstance) {
         name: string;
       };
 
-      // Checks if email already exists
-      let record = await prisma.user.findUnique({
-        where: { email },
-      });
+      if (bearer) {
+        const token = checkToken(bearer);
+        if (token) {
+          const requester = await checkSession(bearer);
 
-      // if exists, return 400
-      if (record) {
-        reply.code(400).send({
-          message: "Email already exists",
-        });
+          if (!requester?.isAdmin) {
+            reply.code(401).send({
+              message: "Unauthorized",
+            });
+          }
+
+          // Checks if email already exists
+          let record = await prisma.user.findUnique({
+            where: { email },
+          });
+
+          // if exists, return 400
+          if (record) {
+            reply.code(400).send({
+              message: "Email already exists",
+            });
+          }
+
+          const user = await prisma.user.create({
+            data: {
+              email,
+              password: await bcrypt.hash(password, 10),
+              name,
+              isAdmin: admin,
+            },
+          });
+
+          const hog = track();
+
+          hog.capture({
+            event: "user_registered",
+            distinctId: user.id,
+          });
+
+          reply.send({
+            success: true,
+          });
+        }
       }
-
-      const user = await prisma.user.create({
-        data: {
-          email,
-          password: await bcrypt.hash(password, 10),
-          name,
-          isAdmin: admin,
-        },
-      });
-
-      const hog = track();
-
-      hog.capture({
-        event: "user_registered",
-        distinctId: user.id,
-      });
-
-      reply.send({
-        success: true,
-      });
     }
   );
 
@@ -379,6 +395,10 @@ export function authRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const { id } = request.params as { id: string };
+
+        await prisma.notes.deleteMany({ where: { userId: id } });
+        await prisma.session.deleteMany({ where: { userId: id } });
+        await prisma.notifications.deleteMany({ where: { userId: id } });
 
         await prisma.user.delete({
           where: { id },

@@ -233,6 +233,37 @@ export function ticketRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Basic Search for a ticket
+  fastify.post(
+    "/api/v1/tickets/search",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      const { title }: any = request.body;
+
+      if (token) {
+        const tickets = await prisma.ticket.findMany({
+          where: {
+            title: {
+              contains: title,
+            },
+          },
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+          ],
+        });
+
+        reply.send({
+          tickets: tickets,
+          success: true,
+        });
+      }
+    }
+  );
+
   // Get all tickets (admin)
   fastify.get(
     "/api/v1/tickets/all",

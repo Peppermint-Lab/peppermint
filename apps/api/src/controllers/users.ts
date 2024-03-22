@@ -101,42 +101,6 @@ export function userRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Delete user
-
-  // Update user
-  fastify.put(
-    "/api/v1/user/update",
-
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-
-      const { name, email, admin, id }: any = request.body;
-
-      if (bearer) {
-        const token = checkToken(bearer);
-        if (token) {
-          await prisma.user.update({
-            where: { id: id },
-            data: {
-              name,
-              email,
-              isAdmin: admin,
-            },
-          });
-
-          reply.send({
-            success: true,
-          });
-        }
-      } else {
-        reply.send({
-          success: false,
-          message: "No token provided",
-        });
-      }
-    }
-  );
-
   // Mark Notification as read
   fastify.get(
     "/api/v1/user/notifcation/:id",

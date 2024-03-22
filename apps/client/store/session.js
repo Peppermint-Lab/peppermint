@@ -45,15 +45,15 @@ export const SessionProvider = ({ children }) => {
 
   useEffect(() => {
     fetchUserProfile();
-  }, []);
+  }, [router]);
 
   return process.env.NEXT_PUBLIC_ENVIRONMENT === "production" &&
     process.env.NEXT_PUBLIC_TELEMETRY === "1" ? (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, setUser, loading, fetchUserProfile }}>
       <PostHogProvider client={posthog}>{children}</PostHogProvider>
     </UserContext.Provider>
   ) : (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, setUser, loading, fetchUserProfile }}>
       {children}
     </UserContext.Provider>
   );
