@@ -132,6 +132,7 @@ export default function CreateUser() {
                   <option value="da">Danish</option>
                   <option value="pt">Portuguese</option>
                   <option value="it">Italiano</option>
+                  <option value="he">Hebrew</option>
                 </select>
               </div>
               <div>
