@@ -8,6 +8,7 @@ import {
 } from "@headlessui/react";
 import {
   ArchiveBoxIcon,
+  DocumentPlusIcon,
   InboxStackIcon,
   PlusIcon,
 } from "@heroicons/react/20/solid";
@@ -15,8 +16,11 @@ import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
+  FolderPlusIcon,
+  HashtagIcon,
   HomeIcon,
   MagnifyingGlassIcon,
+  TagIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
