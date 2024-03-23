@@ -48,6 +48,11 @@ export default function AdminLayout({ children }: any) {
       current: router.pathname === "/admin/email",
     },
     {
+      name: "Email Templates",
+      href: "/admin/email/templates",
+      current: router.pathname === "/admin/email/templates",
+    },
+    {
       name: "SSO",
       href: "/admin/sso",
       current: router.pathname === "/admin/sso",
@@ -55,8 +60,8 @@ export default function AdminLayout({ children }: any) {
   ];
 
   return (
-    <div className="flex justify-center p-6">
-      <div className="flex xl:divide-x-2 justify-center h-[85vh] max-w-5xl pr-4">
+    <div className="flex w-full p-4">
+      <div className="flex xl:divide-x-2 w-full h-[85vh] max-w-10xl pr-4">
         <div className="hidden md:flex w-56 mt-11 pr-4">
           <nav className="space-y-1 w-full pr-4" aria-label="Sidebar">
             {navigation.map((item) => (
@@ -77,7 +82,9 @@ export default function AdminLayout({ children }: any) {
           </nav>
         </div>
 
-        <div className="flex-1 px-6 xl:w-[800px] ">{children}</div>
+        <div className="flex-1 px-6 xl:w-[800px] overflow-y-scroll ">
+          {children}
+        </div>
       </div>
     </div>
   );
