@@ -8,7 +8,6 @@ import {
 } from "@headlessui/react";
 import {
   ArchiveBoxIcon,
-  DocumentPlusIcon,
   InboxStackIcon,
   PlusIcon,
 } from "@heroicons/react/20/solid";
@@ -16,11 +15,8 @@ import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
-  FolderPlusIcon,
-  HashtagIcon,
   HomeIcon,
   MagnifyingGlassIcon,
-  TagIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -972,7 +968,7 @@ export default function NewLayout({ children }: any) {
               <div className="flex w-full justify-start items-center space-x-6">
                 <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
                   <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                    Version 0.4.3
+                    Version 0.4.4
                   </span>
                 </Link>
 
