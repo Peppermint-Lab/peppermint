@@ -50,7 +50,7 @@ export async function sendTicketCreate(ticket: any) {
 
       await mail
         .sendMail({
-          from: '"No reply 👻" ' + replyto, // sender address
+          from: replyto, // sender address
           to: ticket.email,
           subject: `Ticket ${ticket.id} has just been created & logged`, // Subject line
           text: `Hello there, Ticket ${ticket.id}, which you reported on ${ticket.createdAt}, has now been created and logged`, // plain text body

@@ -116,9 +116,8 @@ export default function EmailQueues() {
                             {item.hostname}
                           </td>
                           <td className="px-3 py-4 text-sm ">
-                            {item.hostname}
+                            {item.tls ? "993" : "110"}
                           </td>
-                          <td className="px-3 py-4 text-sm ">{item.port}</td>
                           <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <button
                               type="button"
