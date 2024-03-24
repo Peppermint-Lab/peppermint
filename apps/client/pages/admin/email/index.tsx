@@ -1,4 +1,3 @@
-import { Switch } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
@@ -8,7 +7,6 @@ export default function Notifications() {
   const [enabled, setEnabled] = useState(false);
   const [host, setHost] = useState("");
   const [port, setPort] = useState("");
-  const [secure, setSecure] = useState(true);
   const [reply, setReply] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,14 +22,14 @@ export default function Notifications() {
         host,
         active: enabled,
         port,
-        secure,
         reply,
         username,
         password,
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then(() => {
+        setLoading(true);
         fetchEmailConfig();
       });
   }
@@ -51,7 +49,6 @@ export default function Notifications() {
           setEnabled(res.email.active);
           setHost(res.email.host);
           setPort(res.email.port);
-          setSecure(res.email.secure);
           setUsername(res.email.user);
           setReply(res.email.reply);
         } else {
@@ -249,27 +246,6 @@ export default function Notifications() {
                         />
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="company_website"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Secure
-                    </label>
-                    <Switch
-                      checked={secure}
-                      onChange={setSecure}
-                      className={`${
-                        enabled ? "bg-blue-600" : "bg-gray-200"
-                      } relative inline-flex h-6 w-11 items-center rounded-full`}
-                    >
-                      <span
-                        className={`${
-                          enabled ? "translate-x-6" : "translate-x-1"
-                        } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                      />
-                    </Switch>
                   </div>
                 </div>
               </div>

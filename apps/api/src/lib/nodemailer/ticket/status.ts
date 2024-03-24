@@ -23,10 +23,10 @@ export async function sendTicketStatus(ticket: any) {
       const email = emails[0];
       replyto = email.reply;
       mail = nodeMailer.createTransport({
-        //@ts-ignore
+        // @ts-ignore
         host: email.host,
         port: email.port,
-        secure: email.secure, // true for 465, false for other ports
+        secure: email.port === "465" ? true : false, // true for 465, false for other ports
         auth: {
           user: email.user, // generated ethereal user
           pass: email.pass, // generated ethereal password
