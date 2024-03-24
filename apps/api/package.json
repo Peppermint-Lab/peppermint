@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "prisma generate",
+    "generate": "prisma generate",
     "db:push": "prisma db push --accept-data-loss",
     "db:migrate": "prisma migrate dev",
     "build": "tsc",

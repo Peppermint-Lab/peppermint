@@ -240,20 +240,15 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
 
-      const { title }: any = request.body;
+      const { query }: any = request.body;
 
       if (token) {
         const tickets = await prisma.ticket.findMany({
           where: {
             title: {
-              contains: title,
+              contains: query,
             },
           },
-          orderBy: [
-            {
-              createdAt: "desc",
-            },
-          ],
         });
 
         reply.send({
