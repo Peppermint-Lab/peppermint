@@ -1,4 +1,5 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
+import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
@@ -34,6 +35,51 @@ export default function Notifications() {
       });
   }
 
+  async function deleteEmailConfig() {
+    setLoading(true);
+    await fetch(`/api/v1/config/email`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setHost("");
+        setPort("");
+        setUsername("");
+        setPassword("");
+        setReply("");
+        fetchEmailConfig();
+      });
+  }
+
+  async function testEmailConfig() {
+    // Send a test email to the reply address
+    await fetch(`/api/v1/config/email/verify`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          notifications.show({
+            title: "Email Config Test",
+            message: "Email Config Test was successful",
+            color: "teal",
+          });
+        } else {
+          notifications.show({
+            title: "Email Config Test",
+            message: "Email Config Test failed",
+            color: "red",
+          });
+        }
+      });
+  }
+
   async function fetchEmailConfig() {
     await fetch(`/api/v1/config/email`, {
       method: "get",
@@ -45,7 +91,6 @@ export default function Notifications() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success && res.active) {
-          console.log(res);
           setEnabled(res.email.active);
           setHost(res.email.host);
           setPort(res.email.port);
@@ -81,19 +126,39 @@ export default function Notifications() {
                     internal users for Notifications.
                   </p>
                 </div>
-                <div className="sm:ml-16 sm:flex-none">
-                  <>
-                    <button
-                      onClick={() => updateEmailConfig()}
-                      type="button"
-                      className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      Save
-                    </button>
-                  </>
-                </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="sm:flex-none mb-4">
+          <div className="flex flex-row gap-x-4 justify-between">
+            <div className="space-x-4">
+              <button
+                onClick={() => updateEmailConfig()}
+                type="button"
+                className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Update Settings
+              </button>
+              {enabled && (
+                <button
+                  onClick={testEmailConfig}
+                  type="button"
+                  className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  Test Settings
+                </button>
+              )}
+            </div>
+            {enabled && (
+              <button
+                onClick={deleteEmailConfig}
+                type="button"
+                className="rounded bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400"
+              >
+                Delete Settings
+              </button>
+            )}
           </div>
         </div>
         {!loading && (
