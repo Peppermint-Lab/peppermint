@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -323,6 +324,15 @@ model notifications {
   userId String
 }
 
+model emailTemplate {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  html String
+  type Template
+}
+
 enum Hook {
   ticket_created
   ticket_status_changed
@@ -344,4 +354,11 @@ enum TicketType {
   maintenance
   access
   feedback
+}
+
+enum Template {
+  ticket_created
+  ticket_status_changed
+  ticket_assigned
+  ticket_comment
 }

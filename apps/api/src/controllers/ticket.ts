@@ -240,20 +240,15 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
 
-      const { title }: any = request.body;
+      const { query }: any = request.body;
 
       if (token) {
         const tickets = await prisma.ticket.findMany({
           where: {
             title: {
-              contains: title,
+              contains: query,
             },
           },
-          orderBy: [
-            {
-              createdAt: "desc",
-            },
-          ],
         });
 
         reply.send({
@@ -648,5 +643,85 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/tickets/imap/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {}
+  );
+
+  // GET all ticket templates
+  fastify.get(
+    "/api/v1/ticket/templates",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const templates = await prisma.emailTemplate.findMany({
+          select: {
+            createdAt: true,
+            updatedAt: true,
+            type: true,
+            id: true,
+          },
+        });
+
+        reply.send({
+          success: true,
+          templates: templates,
+        });
+      }
+    }
+  );
+
+  // GET ticket template by ID
+  fastify.get(
+    "/api/v1/ticket/template/:id",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      const { id }: any = request.params;
+
+      if (token) {
+        const template = await prisma.emailTemplate.findMany({
+          where: {
+            id: id,
+          },
+        });
+
+        reply.send({
+          success: true,
+          template: template,
+        });
+      }
+    }
+  );
+
+  // PUT ticket template by ID
+  fastify.put(
+    "/api/v1/ticket/template/:id",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      const { id }: any = request.params;
+
+      const { html }: any = request.body;
+
+      if (token) {
+        await prisma.emailTemplate.update({
+          where: {
+            id: id,
+          },
+          data: {
+            html: html,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
   );
 }

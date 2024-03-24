@@ -1,5 +1,5 @@
-import { Switch } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
+import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
@@ -8,7 +8,6 @@ export default function Notifications() {
   const [enabled, setEnabled] = useState(false);
   const [host, setHost] = useState("");
   const [port, setPort] = useState("");
-  const [secure, setSecure] = useState(true);
   const [reply, setReply] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,15 +23,60 @@ export default function Notifications() {
         host,
         active: enabled,
         port,
-        secure,
         reply,
         username,
         password,
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then(() => {
+        setLoading(true);
         fetchEmailConfig();
+      });
+  }
+
+  async function deleteEmailConfig() {
+    setLoading(true);
+    await fetch(`/api/v1/config/email`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setHost("");
+        setPort("");
+        setUsername("");
+        setPassword("");
+        setReply("");
+        fetchEmailConfig();
+      });
+  }
+
+  async function testEmailConfig() {
+    // Send a test email to the reply address
+    await fetch(`/api/v1/config/email/verify`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          notifications.show({
+            title: "Email Config Test",
+            message: "Email Config Test was successful",
+            color: "teal",
+          });
+        } else {
+          notifications.show({
+            title: "Email Config Test",
+            message: "Email Config Test failed",
+            color: "red",
+          });
+        }
       });
   }
 
@@ -47,11 +91,9 @@ export default function Notifications() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success && res.active) {
-          console.log(res);
           setEnabled(res.email.active);
           setHost(res.email.host);
           setPort(res.email.port);
-          setSecure(res.email.secure);
           setUsername(res.email.user);
           setReply(res.email.reply);
         } else {
@@ -84,19 +126,39 @@ export default function Notifications() {
                     internal users for Notifications.
                   </p>
                 </div>
-                <div className="sm:ml-16 sm:flex-none">
-                  <>
-                    <button
-                      onClick={() => updateEmailConfig()}
-                      type="button"
-                      className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      Save
-                    </button>
-                  </>
-                </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="sm:flex-none mb-4">
+          <div className="flex flex-row gap-x-4 justify-between">
+            <div className="space-x-4">
+              <button
+                onClick={() => updateEmailConfig()}
+                type="button"
+                className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Update Settings
+              </button>
+              {enabled && (
+                <button
+                  onClick={testEmailConfig}
+                  type="button"
+                  className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  Test Settings
+                </button>
+              )}
+            </div>
+            {enabled && (
+              <button
+                onClick={deleteEmailConfig}
+                type="button"
+                className="rounded bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400"
+              >
+                Delete Settings
+              </button>
+            )}
           </div>
         </div>
         {!loading && (
@@ -249,27 +311,6 @@ export default function Notifications() {
                         />
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="company_website"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Secure
-                    </label>
-                    <Switch
-                      checked={secure}
-                      onChange={setSecure}
-                      className={`${
-                        enabled ? "bg-blue-600" : "bg-gray-200"
-                      } relative inline-flex h-6 w-11 items-center rounded-full`}
-                    >
-                      <span
-                        className={`${
-                          enabled ? "translate-x-6" : "translate-x-1"
-                        } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                      />
-                    </Switch>
                   </div>
                 </div>
               </div>

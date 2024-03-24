@@ -6,6 +6,7 @@
 // Feature Flags
 
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import nodeMailer from "nodemailer";
 
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
@@ -152,7 +153,15 @@ export function configRoutes(fastify: FastifyInstance) {
 
       if (token) {
         // GET EMAIL SETTINGS
-        const config = await prisma.email.findFirst({});
+        const config = await prisma.email.findFirst({
+          select: {
+            active: true,
+            host: true,
+            port: true,
+            reply: true,
+            user: true,
+          },
+        });
 
         if (config === null) {
           reply.send({
@@ -232,6 +241,72 @@ export function configRoutes(fastify: FastifyInstance) {
   );
 
   // Test email is working
+  fastify.get(
+    "/api/v1/config/email/verify",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        // GET EMAIL SETTINGS
+        const config = await prisma.email.findFirst({});
+
+        if (config === null) {
+          return reply.send({
+            success: true,
+            active: false,
+          });
+        }
+
+        const emails = await prisma.email.findMany();
+        const email = emails[0];
+
+        const mail = nodeMailer.createTransport({
+          // @ts-ignore
+          host: email.host,
+          port: email.port,
+          secure: email.port === "465" ? true : false,
+          auth: {
+            user: email.user,
+            pass: email.pass,
+          },
+        });
+
+        const ver = await mail.verify();
+
+        if (ver) {
+          reply.send({
+            success: true,
+            message: "Email is working!",
+          });
+        } else {
+          reply.send({
+            success: false,
+            message:
+              "Incorrect settings or credentials provided. Please check and try again.",
+          });
+        }
+      }
+    }
+  );
 
   // Disable/Enable Email
+  fastify.delete(
+    "/api/v1/config/email",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        await prisma.email.deleteMany({});
+
+        reply.send({
+          success: true,
+          message: "Email settings deleted!",
+        });
+      }
+    }
+  );
 }

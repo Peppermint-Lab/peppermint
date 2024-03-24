@@ -168,7 +168,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="sm:min-h-screen mx-16 sm:mx-0">
+    <div className="sm:min-h-screen mx-6 sm:mx-0">
       <header className="bg-white mx-auto text-base max-w-xl">
         <nav className="flex justify-between py-8" aria-label="Global">
           <div className="flex justify-between lg:flex-1">
@@ -197,7 +197,7 @@ export default function Home() {
       <div className="relative isolate overflow-hidden bg-white mx-auto max-w-xl">
         <div className="max-w-xl">
           <div className="hidden sm:mb-4 sm:flex">
-            <div className="mt-20">
+            <div className="">
               <a
                 href="https://github.com/Peppermint-Lab/peppermint/releases"
                 className="inline-flex space-x-6"
@@ -265,7 +265,7 @@ export default function Home() {
       </div>
 
       <div className="max-w-xl mx-auto mt-4">
-        <dl className="space-y-4 flex flex-col md:flex-row sm:space-x-12">
+        <dl className="space-y-4 flex flex-col md:flex-row md:space-x-12">
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col-reverse ">
               <dt className="text-base leading-7 text-gray-600">
@@ -403,7 +403,7 @@ export default function Home() {
         </div>
       </div> */}
 
-      {/* <div className="bg-white py-8">
+      <div className="bg-white">
         <div className="mx-auto max-w-xl">
           <div className="">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 ">
@@ -432,12 +432,12 @@ export default function Home() {
                       {post.title}
                     </a>
                   </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600 max-w-full">
-                    <span
-                      className="max-w-full"
+                  <div className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600 max-w-full">
+                    <div
+                      className="max-w-full relative w-[350px] sm:w-full"
                       dangerouslySetInnerHTML={{ __html: post.embed }}
-                    ></span>
-                  </p>
+                    ></div>
+                  </div>
                 </div>
                 <div className="relative mt-4 flex items-center gap-x-4">
                   <img
@@ -459,7 +459,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </div> */}
+      </div>
 
       <footer className="bg-white" aria-labelledby="footer-heading">
         <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
