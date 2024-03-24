@@ -25,6 +25,8 @@ import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
 import useTranslation from "next-translate/useTranslation";
+import Frame from "react-frame-component";
+
 import { useUser } from "../../store/session";
 
 function classNames(...classes: any) {
@@ -623,7 +625,13 @@ export default function Ticket() {
                       <div className="">
                         {data.ticket.fromImap ? (
                           <div className="break-words bg-white rounded-md p-4 text-black">
-                            {renderHTML(data.ticket.detail)}
+                            {/* {renderHTML(data.ticket.detail)} */}
+                            <Frame
+                              className="min-h-[60vh] h-full w-full"
+                              initialContent={data.ticket.detail}
+                            >
+                              {" "}
+                            </Frame>
                           </div>
                         ) : (
                           <div className="">
