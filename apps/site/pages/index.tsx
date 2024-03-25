@@ -208,7 +208,7 @@ export default function Home() {
                 <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-400 ring-1 ring-inset ring-indigo-500/20">
                   What's new -
                   <span className="ml-1 inline-flex items-center space-x-2 text-sm font-medium leading-6 ">
-                    <span>v0.4.3 shipped</span>
+                    <span>Version 0.4.5 is live! 🚀</span>
                     <ChevronRightIcon
                       className="h-5 w-5 text-gray-500"
                       aria-hidden="true"
