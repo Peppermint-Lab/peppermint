@@ -211,6 +211,26 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.4.tgz#923ca57e173c6b232bbbb07347b1be982f03e783"
   integrity sha512-s3jaWicZd0pkP0jf5ysyHUI/RE7MHos6qlToFcGWXVp+ykHOy77OUMrfbgJ9it2C5bow7OIQwYYaHjk9XlBQ2A==
 
+"@calcom/embed-core@1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@calcom/embed-core/-/embed-core-1.3.3.tgz#546b758e249a7a8bdf73103c89b385c7a4fc6156"
+  integrity sha512-bz7S9cvz1JMVWFcJI+dvoOQd5F63YzdQ5gOp1vunob5idje7PoYfiTf6ncMSVeX6vsrJA1oVFD07JMxuYt/d+A==
+
+"@calcom/embed-react@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@calcom/embed-react/-/embed-react-1.3.2.tgz#273ecf4d9b10af3ca5b43f7f312798ceb4713611"
+  integrity sha512-tya/NJQJs0g70RLeeKtfhzF8vX7RzwwWTxlXCojCthuqKdMbx/8WEwZsdDzuJ8OjbPEiLiV3ImO2rgRRftZxNw==
+  dependencies:
+    "@calcom/embed-core" "1.3.3"
+    "@calcom/embed-snippet" "1.1.3"
+
+"@calcom/embed-snippet@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@calcom/embed-snippet/-/embed-snippet-1.1.3.tgz#c442d062320923e326a52afa47e89f3e6b244aa9"
+  integrity sha512-whtpkc54btyIIDfCXsCP7BN8wE3GGgh8cTX5JiprvbcHaej+OEUcuMuhMcLlBersMADwGENpFrlB6AhSJfEA/Q==
+  dependencies:
+    "@calcom/embed-core" "1.3.3"
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -4807,6 +4827,11 @@ fastq@^1.6.0, fastq@^1.6.1:
   integrity sha512-wBrocU2LCXXa+lWBt8RoIRD89Fi8OdABODa/kEnyeyjS5aZO5/GNvI5sEINADqP/h8M29UHTHUb53sUu5Ihqdw==
   dependencies:
     reusify "^1.0.4"
+
+fathom-client@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/fathom-client/-/fathom-client-3.6.0.tgz#f46d8949cf73df89998a8793e51ad2c21efd703b"
+  integrity sha512-/mrgmVvpw4HqDCcqUfPulERhONKgnJGL74RAxfqKDuRQ+7w9lKoTHMzqBWE7WNBvmsgZEthQWJFOWOEjv+T3gA==
 
 fflate@^0.4.1:
   version "0.4.8"
