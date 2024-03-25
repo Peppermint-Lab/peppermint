@@ -21,6 +21,7 @@ import React from "react";
 import AdminLayout from "../layouts/adminLayout";
 import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
+import PortalLayout from "../layouts/portalLayout";
 import Settings from "../layouts/settings";
 
 const queryClient = new QueryClient();
@@ -159,12 +160,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
     );
   }
 
-  if (router.pathname.includes("/portal")) {
+  if (router.pathname.startsWith("/portal")) {
     return (
-      <>
-        <Notifications position="top-right" />
-        <Component {...pageProps} />
-      </>
+      <SessionProvider>
+        <Theme>
+          <Auth>
+            <PortalLayout>
+              <Notifications position="top-right" />
+              <Component {...pageProps} />
+            </PortalLayout>
+          </Auth>
+        </Theme>
+      </SessionProvider>
     );
   }
 
