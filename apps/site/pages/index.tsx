@@ -119,21 +119,21 @@ const features = [
   {
     name: "Notifications",
     description:
-      "Hook up peppermint to third party services using webhooks and various third party providers alongside emails.",
+      "Connect Peppermint to third-party services using webhooks and various providers, including email integration.",
     href: "#",
     icon: BellAlertIcon,
   },
   {
     name: "Email Fetching",
     description:
-      "Set up mailbox's to allow your customers to email you directly and have it automatically create a ticket",
+      "Configure mailboxes to facilitate direct customer emails, automatically converting them into tickets for efficient management.",
     href: "#",
     icon: InboxIcon,
   },
   {
     name: "Single Sign On",
     description:
-      "Enable single sign on for all your users to allow for shared authentication via multiple providers.",
+      "Implement single sign-on (SSO) for all users to enable shared authentication across multiple providers.",
     href: "#",
     icon: LockClosedIcon,
   },
@@ -143,25 +143,25 @@ const features2 = [
   {
     name: "Location",
     description:
-      "Peppermint can be hosted anywhere and all of its core features available without the need to access the internet.",
+      "Peppermint is designed to be hosted in any environment, offering all of its core features without requiring an internet connection.",
     icon: GlobeEuropeAfricaIcon,
   },
   {
     name: "Data Ownership",
     description:
-      "Peppermint never transfers any customer app data to its servers. All data is stored locally on your server.",
+      "Peppermint ensures customer app data remains private by never transferring it to external servers. All data is securely stored locally on your server.",
     icon: LockClosedIcon,
   },
   {
     name: "Lightweight",
     description:
-      "Peppermint is built to be lightweight and fast, allowing it to run on low end hardware and low usage. Reduce cost by hosting on a low end VPS or even a raspberry pi.",
+      "Peppermint is designed to be lightweight and fast, making it suitable for running on low-end hardware with minimal resource usage. This allows for cost-effective hosting on a low-end VPS or even a Raspberry Pi.",
     icon: LightBulbIcon,
   },
   {
     name: "Customer First",
     description:
-      "Peppermint is developed with the customer in mind. Allowing us to offer the best features possible by listening to what our customers need.",
+      "Peppermint is customer-centric, enabling us to provide the best features by actively listening to and addressing our customer's needs.",
     icon: UserIcon,
   },
 ];
@@ -220,13 +220,12 @@ export default function Home() {
           </div>
           <div className="">
             <span className="text-2xl font-bold tracking-tight text-gray-900 ">
-              Control your support
+              Elevate Your Customer Support
             </span>
             <div className="mt-4 flex flex-col ">
               <div className="">
                 <p className="text-base text-gray-800">
-                  Peppermint is a solution to the ever growing cost of todays
-                  corprate world.
+                  Peppermint offers a refreshing approach to customer support in a cost-conscious world.
                 </p>
               </div>
               <div className="my-6 space-x-4 flex flex-row">
@@ -317,18 +316,10 @@ export default function Home() {
           <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
             <div className="lg:w-full lg:max-w-2xl lg:flex-auto">
               <p className="text-base text-gray-600">
-                Peppermint sets out to bridge the gap between features and cost.
-                Peppermint seeks to offer a robust and comprehensive array of
-                tools, functionalities, and user experiences without burdening
-                users with exorbitant expenses.
+                Peppermint aims to bridge the gap between rich features and affordability. We strive to provide a wide range of tools, functionalities, and user experiences without imposing excessive costs on our users.
               </p>
               <p className="mt-4 max-w-xl text-base  text-gray-700">
-                The project's ethos lies in empowering users by providing a
-                platform that doesn't compromise on quality and usability while
-                maintaining a reasonable cost structure. This approach fosters
-                inclusivity, allowing individuals and organizations with varying
-                budgetary constraints to benefit from a feature-rich software
-                solution without sacrificing performance or breaking the bank.
+                The project's core values focus on empowering users through a platform that prioritizes quality and usability without compromising affordability. This inclusive approach enables individuals and organizations with diverse budgetary constraints to access a feature-rich software solution without compromising performance or affordability.
               </p>
             </div>
           </div>
@@ -419,8 +410,7 @@ export default function Home() {
               Video Reviews
             </h2>
             <p className="text-base leading-8 text-gray-800">
-              Some excellent videos that shows an overview of peppermint and its
-              features.
+              Check out these great videos showcasing peppermint and its features.
             </p>
           </div>
           <div className="mx-auto mt-4 flex flex-col max-w-2xl grid-cols-1 gap-x-8 gap-y-8 border-t border-gray-200 pt-5 sm:pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-2">
