@@ -47,10 +47,14 @@ export default function Login({}) {
         .then(async (res) => {
           if (res.user) {
             setCookie("session", res.token);
-            if (res.user.firstLogin) {
-              router.push("/onboarding");
+            if (res.user.external_user) {
+              router.push("/portal");
             } else {
-              router.push("/");
+              if (res.user.firstLogin) {
+                router.push("/onboarding");
+              } else {
+                router.push("/");
+              }
             }
           } else {
             notifications.show({

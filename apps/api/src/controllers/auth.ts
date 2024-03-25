@@ -83,6 +83,70 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Register a new external user
+  fastify.post(
+    "/api/v1/auth/user/register/external",
+    {
+      schema: {
+        body: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            password: { type: "string" },
+            name: { type: "string" },
+            language: { type: "string" },
+          },
+          required: ["email", "password", "name"],
+        },
+      },
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      // const bearer = request.headers.authorization!.split(" ")[1];
+
+      let { email, password, name, language } = request.body as {
+        email: string;
+        password: string;
+        name: string;
+        language: string;
+      };
+
+      // Checks if email already exists
+      let record = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      // if exists, return 400
+      if (record) {
+        reply.code(400).send({
+          message: "Email already exists",
+        });
+      }
+
+      const user = await prisma.user.create({
+        data: {
+          email,
+          password: await bcrypt.hash(password, 10),
+          name,
+          isAdmin: false,
+          language,
+          external_user: true,
+          firstLogin: false,
+        },
+      });
+
+      const hog = track();
+
+      hog.capture({
+        event: "user_registered",
+        distinctId: user.id,
+      });
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
   // Forgot password & generate code
   fastify.post(
     "/api/v1/auth/password-reset",
@@ -250,6 +314,7 @@ export function authRoutes(fastify: FastifyInstance) {
         ticket_comments: user!.notify_ticket_comments,
         ticket_assigned: user!.notify_ticket_assigned,
         firstLogin: user!.firstLogin,
+        external_user: user!.external_user,
       };
 
       reply.send({
@@ -278,6 +343,14 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
+      if (user?.external_user) {
+        reply.send({
+          success: true,
+          message: "External user",
+          oauth: false,
+        });
+      }
+
       const authtype = await prisma.config.findMany({
         where: {
           sso_active: true,
@@ -286,8 +359,6 @@ export function authRoutes(fastify: FastifyInstance) {
 
       const provider = await prisma.provider.findMany();
       const oauth = provider[0];
-
-      console.log(authtype);
 
       if (authtype.length === 0) {
         reply.code(200).send({
