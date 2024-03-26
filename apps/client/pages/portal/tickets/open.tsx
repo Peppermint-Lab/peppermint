@@ -13,7 +13,7 @@ function classNames(...classes: any) {
 }
 
 async function getUserTickets(token: any) {
-  const res = await fetch(`/api/v1/tickets/user/open`, {
+  const res = await fetch(`/api/v1/tickets/user/open/external`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
