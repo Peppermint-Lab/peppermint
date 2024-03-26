@@ -30,8 +30,8 @@ const config = {
    banner: {
     key: 'release',
     text: (
-      <a href="https://github.com/Peppermint-Lab/peppermint" target="_blank">
-        🎉 Peppermint 0.4 is released. Read more →
+      <a href="https://github.com/Peppermint-Lab/peppermint/releases" target="_blank">
+        🎉 Peppermint 0.4.5 is here! Check it out now! 🚀
       </a>
     )
   },
