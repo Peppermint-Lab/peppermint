@@ -10,18 +10,6 @@ import {
   UserIcon,
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import { FaDownload, FaStar, FaUser } from 'react-icons/fa';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-
-function MyComponent() {
-  const router = useRouter();
-
-  useEffect(() => {
-    // Your useEffect code here
-    // Make sure to include router.events in the dependency array if you use it
-  }, [router.events]); // Include router.events in the dependency array
-}
 
 const navigation = [
   // { name: "About Us", href: "#" },
@@ -122,9 +110,9 @@ const posts = [
 ];
 
 const stats = [
-  { label: "Docker Pulls", value: "120k+", icon: <FaDownload /> },
-  { label: "Github Stars", value: "1.3k", icon: <FaStar /> },
-  { label: "Weekly Active Users", value: "550", icon: <FaUser /> },
+  { label: "Docker Pulls", value: "120k+" },
+  { label: "Github Stars", value: "1.3k" },
+  { label: "Weekly Active Users", value: "550" },
 ];
 
 const features = [
