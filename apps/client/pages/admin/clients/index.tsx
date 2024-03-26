@@ -218,13 +218,11 @@ export default function Clients() {
     await fetch(`/api/v1/clients/${id}/delete-client`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${getCookie("session")}`,
       },
     })
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         refetch();
       });
   }
