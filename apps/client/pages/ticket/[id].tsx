@@ -918,51 +918,53 @@ export default function Ticket() {
                                 leaveTo="opacity-0"
                               >
                                 <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                  {users.map((user: any) => (
-                                    <Listbox.Option
-                                      key={user.id}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active
-                                            ? "text-white bg-indigo-600"
-                                            : "text-gray-900",
-                                          "cursor-default select-none relative py-2 pl-3 pr-9"
-                                        )
-                                      }
-                                      value={user}
-                                    >
-                                      {({ n, active }: any) => (
-                                        <>
-                                          <span
-                                            className={classNames(
-                                              n
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "block truncate"
-                                            )}
-                                          >
-                                            {user.name}
-                                          </span>
-
-                                          {n ? (
+                                  {users
+                                    .filter((e) => !e.external_user)
+                                    .map((user: any) => (
+                                      <Listbox.Option
+                                        key={user.id}
+                                        className={({ active }) =>
+                                          classNames(
+                                            active
+                                              ? "text-white bg-indigo-600"
+                                              : "text-gray-900",
+                                            "cursor-default select-none relative py-2 pl-3 pr-9"
+                                          )
+                                        }
+                                        value={user}
+                                      >
+                                        {({ n, active }: any) => (
+                                          <>
                                             <span
                                               className={classNames(
-                                                active
-                                                  ? "text-white"
-                                                  : "text-indigo-600",
-                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                n
+                                                  ? "font-semibold"
+                                                  : "font-normal",
+                                                "block truncate"
                                               )}
                                             >
-                                              <CheckIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                              />
+                                              {user.name}
                                             </span>
-                                          ) : null}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
+
+                                            {n ? (
+                                              <span
+                                                className={classNames(
+                                                  active
+                                                    ? "text-white"
+                                                    : "text-indigo-600",
+                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                )}
+                                              >
+                                                <CheckIcon
+                                                  className="h-5 w-5"
+                                                  aria-hidden="true"
+                                                />
+                                              </span>
+                                            ) : null}
+                                          </>
+                                        )}
+                                      </Listbox.Option>
+                                    ))}
                                 </Listbox.Options>
                               </Transition>
                             </div>

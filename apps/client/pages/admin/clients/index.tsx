@@ -255,13 +255,6 @@ export default function Clients() {
               >
                 Delete
               </button>
-              <Link
-                href={`/portal/${row.original.id}/ticket/new`}
-                type="button"
-                className="inline-flex items-center px-2.5 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Portal Url
-              </Link>
             </div>
           );
         },
@@ -286,10 +279,31 @@ export default function Clients() {
                   A list of all internal users of your instance.
                 </p>
               </div>
-              <div className="sm:ml-16 mt-5 sm:flex-none">
+              <div className="sm:ml-16 mt-5 flex flex-row space-x-2">
+                <Link
+                  href={`/submit`}
+                  type="button"
+                  className="inline-flex items-center px-2.5 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Guest Ticket Url
+                </Link>
+                <Link
+                  href={`/portal/`}
+                  type="button"
+                  className="inline-flex items-center px-2.5 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Portal Url
+                </Link>
+                <Link
+                  href={`/auth/register`}
+                  type="button"
+                  className="inline-flex items-center px-2.5 py-1.5 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Portal Register
+                </Link>
                 <Link
                   href="/admin/clients/new"
-                  className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  className="rounded bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                 >
                   New Client
                 </Link>
