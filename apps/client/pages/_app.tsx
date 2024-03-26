@@ -186,6 +186,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
     );
   }
 
+  if (router.pathname === "/submit") {
+    return (
+      <>
+        <Notifications position="top-right" />
+        <Component {...pageProps} />
+      </>
+    );
+  }
+
   return (
     <SessionProvider>
       <ThemeProvider attribute="class" defaultTheme="light">
