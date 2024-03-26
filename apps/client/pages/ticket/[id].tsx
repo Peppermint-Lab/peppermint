@@ -115,7 +115,10 @@ export default function Ticket() {
       }),
     })
       .then((res) => res.json())
-      .then(() => refetch());
+      .then(() => {
+        setEdit(false);
+        refetch();
+      });
   }
 
   async function updateStatus() {
@@ -338,7 +341,7 @@ export default function Ticket() {
                     </p>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
-                    {!edit && (
+                    {!edit ? (
                       <DropdownMenu.Root>
                         <DropdownMenu.Trigger className="hover:cursor-pointer">
                           <Button variant="outline">Options</Button>
@@ -363,6 +366,14 @@ export default function Ticket() {
                           )}
                         </DropdownMenu.Content>
                       </DropdownMenu.Root>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        className="hover:cursor-pointer"
+                        onClick={() => update()}
+                      >
+                        Save
+                      </Button>
                     )}
                   </div>
                 </div>
