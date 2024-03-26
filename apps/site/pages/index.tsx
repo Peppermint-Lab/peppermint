@@ -110,9 +110,9 @@ const posts = [
 ];
 
 const stats = [
-  { label: "Docker Pulls", value: "120k+" },
-  { label: "Github Stars", value: "1.3k" },
-  { label: "Weekly Active Users", value: "550" },
+  { label: "Docker Pulls", value: "120k+", icon: "🐳" },
+  { label: "Github Stars", value: "1.3k", icon: "⭐" },
+  { label: "Weekly Active Users", value: "550", icon: "👥" },
 ];
 
 const features = [
