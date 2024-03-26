@@ -164,12 +164,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
     return (
       <SessionProvider>
         <Theme>
-          <Auth>
-            <PortalLayout>
-              <Notifications position="top-right" />
-              <Component {...pageProps} />
-            </PortalLayout>
-          </Auth>
+          <QueryClientProvider client={queryClient}>
+            <Auth>
+              <PortalLayout>
+                <Notifications position="top-right" />
+                <Component {...pageProps} />
+              </PortalLayout>
+            </Auth>
+          </QueryClientProvider>
         </Theme>
       </SessionProvider>
     );
