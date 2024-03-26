@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import useTranslation from "next-translate/useTranslation";
@@ -22,47 +21,47 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState<any>();
 
-  async function getOpenTickets() {
-    await fetch(`/api/v1/data/tickets/open`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setOpenTickets(res.count);
-      });
-  }
+  // async function getOpenTickets() {
+  //   await fetch(`/api/v1/data/tickets/open`, {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setOpenTickets(res.count);
+  //     });
+  // }
 
-  async function getCompletedTickets() {
-    await fetch(`/api/v1/data/tickets/completed`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setCompletedTickets(res.count);
-      });
-  }
+  // async function getCompletedTickets() {
+  //   await fetch(`/api/v1/data/tickets/completed`, {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setCompletedTickets(res.count);
+  //     });
+  // }
 
-  async function getUnassginedTickets() {
-    await fetch(`/api/v1/data/tickets/open`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setUnassigned(res.count);
-      });
-  }
+  // async function getUnassginedTickets() {
+  //   await fetch(`/api/v1/data/tickets/open`, {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setUnassigned(res.count);
+  //     });
+  // }
 
   async function fetchTickets() {
-    await fetch(`/api/v1/tickets/open`, {
+    await fetch(`/api/v1/tickets/user/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -70,7 +69,6 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setTickets(res.tickets);
       });
   }
@@ -95,9 +93,9 @@ export default function Home() {
 
   async function datafetch() {
     fetchTickets();
-    getOpenTickets();
-    getCompletedTickets();
-    getUnassginedTickets();
+    // getOpenTickets();
+    // getCompletedTickets();
+    // getUnassginedTickets();
     await setLoading(false);
   }
 
@@ -110,7 +108,7 @@ export default function Home() {
       <div className="w-full xl:w-[70%] max-w-5xl">
         {!loading && (
           <>
-            <div>
+            {/* <div>
               <dl className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 {stats.map((item) => (
                   <Link href={item.href}>
@@ -128,7 +126,7 @@ export default function Home() {
                   </Link>
                 ))}
               </dl>
-            </div>
+            </div> */}
 
             <div className="flex w-full flex-col mt-4 px-1 mb-4">
               {tickets !== undefined && tickets.length === 0 ? (
@@ -136,7 +134,7 @@ export default function Home() {
                   <button
                     type="button"
                     className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => router.push("/new")}
+                    onClick={() => router.push("/portal/new")}
                   >
                     <svg
                       className="mx-auto h-12 w-12 text-gray-400 dark:text-white"

@@ -527,6 +527,7 @@ export function authRoutes(fastify: FastifyInstance) {
           sso_status: config!.sso_active,
           version: config!.client_version,
           notifcations,
+          external_user: user!.external_user,
         };
 
         reply.send({

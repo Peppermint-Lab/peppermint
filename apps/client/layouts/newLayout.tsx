@@ -334,6 +334,10 @@ export default function NewLayout({ children }: any) {
     alert("You do not have the correct perms for that action.");
   }
 
+  if (user && user.external_user) {
+    location.push("/portal");
+  }
+
   const navigation = [
     {
       name: t("create_ticket"),
@@ -437,14 +441,6 @@ export default function NewLayout({ children }: any) {
     await fetchUserProfile();
   }
 
-  // useEffect(() => {
-  //   getQueues();
-  // }, [user]);
-
-  // useEffect(() => {
-  //   getQueues();
-  // }, [user])
-
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
     console.log(pathname);
@@ -493,7 +489,8 @@ export default function NewLayout({ children }: any) {
   }, [handleKeyPress, location]);
 
   return (
-    !loading && (
+    !loading &&
+    user && (
       <div className="min-h-screen overflow-hidden bg-white dark:bg-[#0A090C]">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
@@ -1132,7 +1129,9 @@ export default function NewLayout({ children }: any) {
             </div>
           </div>
 
-          <main className="bg-white dark:bg-[#0A090C]">{children}</main>
+          {!loading && !user.external_user && (
+            <main className="bg-white dark:bg-[#0A090C]">{children}</main>
+          )}
         </div>
       </div>
     )
