@@ -10,6 +10,7 @@ import {
   UserIcon,
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
+import { FaDownload, FaStar, FaUser } from 'react-icons/fa';
 
 const navigation = [
   // { name: "About Us", href: "#" },
