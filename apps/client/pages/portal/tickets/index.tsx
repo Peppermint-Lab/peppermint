@@ -75,7 +75,7 @@ export default function Tickets() {
                 }
 
                 return (
-                  <Link href={`/ticket/${ticket.id}`}>
+                  <Link href={`/portal/ticket/${ticket.id}`}>
                     <ContextMenu.Root>
                       <ContextMenu.Trigger>
                         <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
