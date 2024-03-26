@@ -109,41 +109,11 @@ const posts = [
   },
 ];
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
-
 const stats = [
-  { label: "Docker Pulls", value: "120k+", icon: faDownload },
-  { label: "Github Stars", value: "1.3k", icon: faStar },
-  { label: "Weekly Active Users", value: "550", icon: faUser },
+  { label: "Docker Pulls", value: "120k+" },
+  { label: "Github Stars", value: "1.3k" },
+  { label: "Weekly Active Users", value: "550" },
 ];
-
-const StatisticComponent = ({ label, value, icon }) => (
-  <div className="statistic">
-    <div className="statistic-icon">
-      <FontAwesomeIcon icon={icon} />
-    </div>
-    <div className="statistic-info">
-      <div className="statistic-label">{label}</div>
-      <div className="statistic-value">{value}</div>
-    </div>
-  </div>
-);
-
-const YourComponent = () => (
-  <div>
-    {stats.map((stat, index) => (
-      <StatisticComponent
-        key={index}
-        label={stat.label}
-        value={stat.value}
-        icon={stat.icon}
-      />
-    ))}
-  </div>
-);
-
-
 
 const features = [
   {
@@ -494,7 +464,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
           <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
             <p className="text-xs leading-5 text-gray-500">
-              &copy; 2023 Peppermint Labs Ltd. All rights reserved.
+              &copy; 2024 Peppermint Labs Ltd. All rights reserved.
             </p>
           </div>
         </div>
