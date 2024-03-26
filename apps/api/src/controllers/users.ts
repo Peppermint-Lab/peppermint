@@ -15,7 +15,17 @@ export function userRoutes(fastify: FastifyInstance) {
       if (bearer) {
         const token = checkToken(bearer);
         if (token) {
-          const users = await prisma.user.findMany({});
+          const users = await prisma.user.findMany({
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              isAdmin: true,
+              createdAt: true,
+              updatedAt: true,
+              language: true,
+            },
+          });
 
           reply.send({
             users,
