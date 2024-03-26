@@ -109,15 +109,6 @@ We have started working on creating documentation for peppermint which covers de
 
 Give a ⭐️ if this project helped you!
 
-## Screenshots
-
-<p align="center">
-    <img src="./static/homepage.png" alt="Logo" width="350px" >
-    <img src="./static/create_a_ticket.png" alt="Logo" width="350px" >
-    <img src="./static/tickets.png" alt="Logo" width="350px" >
-    <img src="./static/detail.png" alt="Logo" width="350px" >
-</p>
-
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Peppermint-Lab/peppermint&type=Date)](https://star-history.com/#Peppermint-Lab/peppermint&Date)
@@ -125,11 +116,6 @@ Give a ⭐️ if this project helped you!
 ## Activity
 ![Alt](https://repobeats.axiom.co/api/embed/9b568eb9e41b60f60fe155836b1ef0fb2a7b93b9.svg "Repobeats analytics image")
 
-## Author
-
-👤 **Jack Andrews**
-
 - Website: [peppermint.sh](https://peppermint.sh/)
-- Twitter: [@andrewsjack18 ](https://twitter.com/andrewsjack18)
 - Github: [@potts99](https://github.com/potts99)
 - LinkedIn: [@jack-andrews-146852131](https://linkedin.com/in/jack-andrews-146852131)
