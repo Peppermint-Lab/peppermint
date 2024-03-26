@@ -59,7 +59,7 @@ export default function Home() {
   }
 
   async function getUnassginedTickets() {
-    await fetch(`/api/v1/data/tickets/open`, {
+    await fetch(`/api/v1/data/tickets/unassigned`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
