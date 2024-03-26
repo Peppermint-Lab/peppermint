@@ -724,4 +724,106 @@ export function ticketRoutes(fastify: FastifyInstance) {
       }
     }
   );
+
+  // Get all open tickets for an external user
+  fastify.get(
+    "/api/v1/tickets/user/open/external",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const user = await checkSession(bearer);
+
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: false, email: user!.email, hidden: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
+
+  // Get all closed tickets for an external user
+  fastify.get(
+    "/api/v1/tickets/user/closed/external",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const user = await checkSession(bearer);
+
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: true, email: user!.email, hidden: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
+
+  // Get all tickets for an external user
+  fastify.get(
+    "/api/v1/tickets/user/external",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const user = await checkSession(bearer);
+
+        const tickets = await prisma.ticket.findMany({
+          where: { email: user!.email, hidden: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      }
+    }
+  );
 }

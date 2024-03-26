@@ -334,6 +334,10 @@ export default function NewLayout({ children }: any) {
     alert("You do not have the correct perms for that action.");
   }
 
+  if (user && user.external_user) {
+    location.push("/portal");
+  }
+
   const navigation = [
     {
       name: t("create_ticket"),
@@ -437,14 +441,6 @@ export default function NewLayout({ children }: any) {
     await fetchUserProfile();
   }
 
-  // useEffect(() => {
-  //   getQueues();
-  // }, [user]);
-
-  // useEffect(() => {
-  //   getQueues();
-  // }, [user])
-
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
     console.log(pathname);
@@ -493,7 +489,8 @@ export default function NewLayout({ children }: any) {
   }, [handleKeyPress, location]);
 
   return (
-    !loading && (
+    !loading &&
+    user && (
       <div className="min-h-screen overflow-hidden bg-white dark:bg-[#0A090C]">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
@@ -966,11 +963,13 @@ export default function NewLayout({ children }: any) {
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
               <div className="flex w-full justify-start items-center space-x-6">
-                <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
-                  <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                    Version 0.4.5
-                  </span>
-                </Link>
+                {user.isAdmin && (
+                  <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+                    <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
+                      Version 0.4.5
+                    </span>
+                  </Link>
+                )}
 
                 <CommandModal />
               </div>
@@ -1067,15 +1066,17 @@ export default function NewLayout({ children }: any) {
                   </Popover.Panel>
                 </Popover>
 
-                <Link
-                  href="https://github.com/Peppermint-Lab/peppermint/discussions"
-                  target="_blank"
-                  className="hover:cursor-pointer"
-                >
-                  <Button variant="outline" className="hover:cursor-pointer">
-                    Send Feedback
-                  </Button>
-                </Link>
+                {user.isAdmin && (
+                  <Link
+                    href="https://github.com/Peppermint-Lab/peppermint/discussions"
+                    target="_blank"
+                    className="hover:cursor-pointer"
+                  >
+                    <Button variant="outline" className="hover:cursor-pointer">
+                      Send Feedback
+                    </Button>
+                  </Link>
+                )}
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
@@ -1132,7 +1133,9 @@ export default function NewLayout({ children }: any) {
             </div>
           </div>
 
-          <main className="bg-white dark:bg-[#0A090C]">{children}</main>
+          {!loading && !user.external_user && (
+            <main className="bg-white dark:bg-[#0A090C]">{children}</main>
+          )}
         </div>
       </div>
     )

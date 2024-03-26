@@ -49,6 +49,7 @@ model User {
   notify_ticket_comments       Boolean  @default(true)
   notify_ticket_assigned       Boolean  @default(true)
   firstLogin                   Boolean  @default(true)
+  external_user                Boolean  @default(false)
 
   todos         Todos[]
   tickets       Ticket[]
