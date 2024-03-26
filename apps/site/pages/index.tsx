@@ -109,11 +109,42 @@ const posts = [
   },
 ];
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
+
 const stats = [
-  { label: "Docker Pulls", value: "120k+" },
-  { label: "Github Stars", value: "1.3k" },
-  { label: "Weekly Active Users", value: "550" },
+  { label: "Docker Pulls", value: "120k+", icon: faDownload },
+  { label: "Github Stars", value: "1.3k", icon: faStar },
+  { label: "Weekly Active Users", value: "550", icon: faUser },
 ];
+
+const StatisticComponent = ({ label, value, icon }) => (
+  <div className="statistic">
+    <div className="statistic-icon">
+      <FontAwesomeIcon icon={icon} />
+    </div>
+    <div className="statistic-info">
+      <div className="statistic-label">{label}</div>
+      <div className="statistic-value">{value}</div>
+    </div>
+  </div>
+);
+
+const YourComponent = () => (
+  <div>
+    {stats.map((stat, index) => (
+      <StatisticComponent
+        key={index}
+        label={stat.label}
+        value={stat.value}
+        icon={stat.icon}
+      />
+    ))}
+  </div>
+);
+
+export default YourComponent;
+
 
 const features = [
   {
