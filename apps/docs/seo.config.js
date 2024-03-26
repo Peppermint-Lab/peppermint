@@ -3,10 +3,10 @@ const seoConfig = {
   title: {
     template: "Peppermint",
     default:
-      "Peppermint - An open source zendesk alternative with a focus on simplicity and speed",
+      "Peppermint - Revolutionizing Customer Support for Rapid Resolutions. Your Premier Zendesk Alternative",
   },
   description:
-    "Peppermint is an open source zendesk alternative with a focus on simplicity and speed",
+    "Peppermint is revolutionizing customer support for rapid resolutions. Your premier zendesk alternative",
   themeColor: "#F6E458",
   openGraph: {
     images: "/og-image.png",
