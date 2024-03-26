@@ -143,7 +143,6 @@ const YourComponent = () => (
   </div>
 );
 
-export default YourComponent;
 
 
 const features = [
