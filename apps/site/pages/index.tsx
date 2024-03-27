@@ -218,6 +218,7 @@ export default function Home() {
               </a>
             </div>
           </div>
+
           <div className="">
             <span className="text-2xl font-bold tracking-tight text-gray-900 ">
               Elevate Your Customer Support
@@ -225,7 +226,8 @@ export default function Home() {
             <div className="mt-4 flex flex-col ">
               <div className="">
                 <p className="text-base text-gray-800">
-                  Peppermint offers a refreshing approach to customer support in a cost-conscious world.
+                  Peppermint offers a refreshing approach to customer support in
+                  a cost-conscious world.
                 </p>
               </div>
               <div className="my-6 space-x-4 flex flex-row">
@@ -246,6 +248,14 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div>
+          <img
+            className="h-full w-full rounded-md shadow-lg my-4"
+            src="/dashboard.jpeg"
+            alt="landing page screenshot of dashboard"
+          />
         </div>
       </div>
 
@@ -316,10 +326,18 @@ export default function Home() {
           <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
             <div className="lg:w-full lg:max-w-2xl lg:flex-auto">
               <p className="text-base text-gray-600">
-                Peppermint aims to bridge the gap between rich features and affordability. We strive to provide a wide range of tools, functionalities, and user experiences without imposing excessive costs on our users.
+                Peppermint aims to bridge the gap between rich features and
+                affordability. We strive to provide a wide range of tools,
+                functionalities, and user experiences without imposing excessive
+                costs on our users.
               </p>
               <p className="mt-4 max-w-xl text-base  text-gray-700">
-                The project's core values focus on empowering users through a platform that prioritizes quality and usability without compromising affordability. This inclusive approach enables individuals and organizations with diverse budgetary constraints to access a feature-rich software solution without compromising performance or affordability.
+                The project's core values focus on empowering users through a
+                platform that prioritizes quality and usability without
+                compromising affordability. This inclusive approach enables
+                individuals and organizations with diverse budgetary constraints
+                to access a feature-rich software solution without compromising
+                performance or affordability.
               </p>
             </div>
           </div>
@@ -410,7 +428,8 @@ export default function Home() {
               Video Reviews
             </h2>
             <p className="text-base leading-8 text-gray-800">
-              Check out these great videos showcasing peppermint and its features.
+              Check out these great videos showcasing peppermint and its
+              features.
             </p>
           </div>
           <div className="mx-auto mt-4 flex flex-col max-w-2xl grid-cols-1 gap-x-8 gap-y-8 border-t border-gray-200 pt-5 sm:pt-8 lg:mx-0 lg:max-w-none lg:grid-cols-2">
