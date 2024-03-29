@@ -9,7 +9,6 @@ import {
   LockClosedIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
-import { useState } from "react";
 
 const navigation = [
   { name: "Github", href: "https://github.com/Peppermint-Lab/peppermint" },
