@@ -75,6 +75,7 @@ export default function Ticket() {
   const [timeSpent, setTimeSpent] = useState<any>();
   const [publicComment, setPublicComment] = useState<any>(false);
   const [timeReason, setTimeReason] = useState("");
+  const [file, setFile] = useState<File | null>(null);
 
   const IssueEditor = useEditor({
     extensions: [
@@ -95,8 +96,6 @@ export default function Ticket() {
   const history = useRouter();
 
   const { id } = history.query;
-
-  let file: any = [];
 
   async function update() {
     await fetch(`/api/v1/ticket/update`, {
@@ -198,37 +197,6 @@ export default function Ticket() {
       });
   }
 
-  // const propsUpload = {
-  //   name: "file",
-  //   showUploadList: false,
-  //   action: `/api/v1/ticket/${id}/file/upload`,
-  //   data: () => {
-  //     let data = new FormData();
-  //     data.append("file", file);
-  //     data.append("filename", file.name);
-  //     data.append("ticket", ticket.id);
-  //   },
-  //   onChange(info: any) {
-  //     if (info.file.status !== "uploading") {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === "done") {
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //       setUploaded(true);
-  //     } else if (info.file.status === "error") {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  //   progress: {
-  //     strokeColor: {
-  //       "0%": "#108ee9",
-  //       "100%": "#87d068",
-  //     },
-  //     strokeWidth: 3,
-  //     format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
-  //   },
-  // };
-
   async function fetchUsers() {
     await fetch(`/api/v1/users/all`, {
       method: "GET",
@@ -267,6 +235,35 @@ export default function Ticket() {
         });
     }
   }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (file) {
+      console.log("Uploading file...");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        // You can write the URL of your server or any other endpoint used for file upload
+        const result = await fetch("/api/v1/storage/ticket/1234/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await result.json();
+
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -1508,6 +1505,46 @@ export default function Ticket() {
                       </div>
                     </div>
                   )}
+                </div>
+                <div className="border-t border-gray-200">
+                  <div className="flex flex-row items-center justify-between mt-2">
+                    <span className="text-sm font-medium text-gray-500 dark:text-white">
+                      Attachments
+                    </span>
+                    <button
+                      onClick={() => null}
+                      className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
+                    >
+                      upload
+                    </button>
+                  </div>
+
+                  <>
+                    <div>
+                      <label htmlFor="file" className="sr-only">
+                        Choose a file
+                      </label>
+                      <input
+                        id="file"
+                        type="file"
+                        onChange={handleFileChange}
+                      />
+                    </div>
+                    {file && (
+                      <section>
+                        File details:
+                        <ul>
+                          <li>Name: {file.name}</li>
+                          <li>Type: {file.type}</li>
+                          <li>Size: {file.size} bytes</li>
+                        </ul>
+                      </section>
+                    )}
+
+                    {file && (
+                      <button onClick={handleUpload}>Upload a file</button>
+                    )}
+                  </>
                 </div>
               </div>
             </div>
