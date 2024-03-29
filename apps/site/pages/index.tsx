@@ -112,7 +112,6 @@ const features2 = [
 ];
 
 export default function Home() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="sm:min-h-screen mx-6 sm:mx-0">
