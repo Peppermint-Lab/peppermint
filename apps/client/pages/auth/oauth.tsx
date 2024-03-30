@@ -7,8 +7,6 @@ export default function Login() {
 
   async function check() {
     if (router.query.code) {
-      console.log("hit");
-
       const sso = await fetch(
         `/api/v1/auth/sso/login/callback?code=${router.query.code}`
       ).then((res) => res.json());
