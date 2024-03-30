@@ -103,6 +103,7 @@ model Ticket {
   clientId      String?
   userId        String?
   knowledgeBase knowledgeBase[]
+  notifications notifications[]
 }
 
 model TimeTracking {
@@ -327,8 +328,10 @@ model notifications {
   read Boolean @default(false)
   text String
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  user     User    @relation(fields: [userId], references: [id])
+  userId   String
+  ticketId String?
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
 }
 
 model emailTemplate {

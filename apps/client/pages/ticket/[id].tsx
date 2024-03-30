@@ -275,9 +275,12 @@ export default function Ticket() {
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
-    // Click the hidden file input element
     fileInputRef.current.click();
   };
+
+  useEffect(() => {
+    handleUpload();
+  }, [file]);
 
   useEffect(() => {
     fetchUsers();
@@ -1387,28 +1390,19 @@ export default function Ticket() {
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
                       Attachments
                     </span>
-                    {!file ? (
-                      <button
-                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
-                        onClick={handleButtonClick}
-                      >
-                        upload
-                        <input
-                          id="file"
-                          type="file"
-                          hidden
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                        />
-                      </button>
-                    ) : (
-                      <button
-                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
-                        onClick={handleUpload}
-                      >
-                        confirm
-                      </button>
-                    )}
+                    <button
+                      className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
+                      onClick={handleButtonClick}
+                    >
+                      upload
+                      <input
+                        id="file"
+                        type="file"
+                        hidden
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                      />
+                    </button>
                   </div>
 
                   <>
@@ -1418,6 +1412,11 @@ export default function Ticket() {
                           <span className="text-xs">{file.filename}</span>
                         </div>
                       ))}
+                    {file && (
+                      <div className="p-1/2 px-1">
+                        <span className="text-xs">{file.name}</span>
+                      </div>
+                    )}
                   </>
                 </div>
               </div>
