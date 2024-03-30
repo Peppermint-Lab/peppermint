@@ -46,7 +46,6 @@ export default function SSO() {
     await fetch(`/api/v1/config/sso/provider`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${getCookie("session")}`,
       },
     })

@@ -6,7 +6,7 @@ const upload = multer({ dest: "uploads/" });
 export function objectStoreRoutes(fastify: FastifyInstance) {
   //
   fastify.post(
-    "/api/v1/storage/ticket/:id/upload",
+    "/api/v1/storage/ticket/:id/upload/single",
     { preHandler: upload.single("file") },
 
     async (request: FastifyRequest, reply: FastifyReply) => {
