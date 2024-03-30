@@ -5,8 +5,6 @@ import { useEffect } from "react";
 export default function Login() {
   const router = useRouter();
 
-  console.log(router);
-
   async function check() {
     if (router.query.code) {
       console.log("hit");
