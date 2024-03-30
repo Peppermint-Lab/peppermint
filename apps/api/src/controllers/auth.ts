@@ -590,6 +590,57 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Reset password by admin
+  fastify.post(
+    "/api/v1/auth/admin/reset-password",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      let { password, user } = request.body as {
+        password: string;
+        user: string;
+      };
+
+      console.log(user);
+
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        let session = await prisma.session.findUnique({
+          where: {
+            sessionToken: bearer,
+          },
+        });
+
+        const check = await prisma.user.findUnique({
+          where: { id: session?.userId },
+        });
+
+        if (check?.isAdmin === false) {
+          reply.code(401).send({
+            message: "Unauthorized",
+          });
+        }
+
+        const hashedPass = await bcrypt.hash(password, 10);
+
+        await prisma.user.update({
+          where: { id: user },
+          data: {
+            password: hashedPass,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      } else {
+        reply.send({
+          success: false,
+        });
+      }
+    }
+  );
+
   // Update a users profile/config
   fastify.put(
     "/api/v1/auth/profile",
