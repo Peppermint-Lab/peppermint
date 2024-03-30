@@ -248,13 +248,17 @@ export default function Ticket() {
 
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("user", user.id);
 
       try {
         // You can write the URL of your server or any other endpoint used for file upload
-        const result = await fetch("/api/v1/storage/ticket/1234/upload", {
-          method: "POST",
-          body: formData,
-        });
+        const result = await fetch(
+          `/api/v1/storage/ticket/${router.query.id}/upload/single`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         const data = await result.json();
 

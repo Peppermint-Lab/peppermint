@@ -61,6 +61,7 @@ model User {
   Session       Session[]
   TimeTracking  TimeTracking[]
   notifications notifications[]
+  TicketFile    TicketFile[]
 }
 
 model Team {
@@ -162,9 +163,14 @@ model TicketFile {
   createdAt DateTime @default(now())
   filename  String
   path      String
+  mime      String
+  encoding  String
+  size      Int
 
   ticketId String
   ticket   Ticket @relation(fields: [ticketId], references: [id])
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
 }
 
 model Notes {
