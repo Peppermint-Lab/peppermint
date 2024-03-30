@@ -1,10 +1,11 @@
 import cors from "@fastify/cors";
 import "dotenv/config";
 import Fastify, { FastifyInstance } from "fastify";
-import { getEmails } from "./lib/imap";
+import multer from "fastify-multer";
 
 import { exec } from "child_process";
 import { track } from "./lib/hog";
+import { getEmails } from "./lib/imap";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
@@ -60,6 +61,8 @@ server.register(require("@fastify/swagger"), {
     },
   },
 });
+
+server.register(multer.contentParser);
 
 // server.register(import("@fastify/rate-limit"), {
 //   max: 20,

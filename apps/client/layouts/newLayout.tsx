@@ -3,19 +3,15 @@ import {
   Dialog,
   Disclosure,
   Menu,
-  Popover,
   Transition,
 } from "@headlessui/react";
-import {
-  ArchiveBoxIcon,
-  InboxStackIcon,
-  PlusIcon,
-} from "@heroicons/react/20/solid";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   Cog6ToothIcon,
   FolderIcon,
   HomeIcon,
+  InboxStackIcon,
   MagnifyingGlassIcon,
   TicketIcon,
   XMarkIcon,
@@ -429,16 +425,6 @@ export default function NewLayout({ children }: any) {
       deleteCookie("session");
       location.reload();
     }
-  }
-
-  async function markasread(id) {
-    await fetch(`/api/v1/user/notifcation/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${getCookie("session")}`,
-      },
-    }).then((res) => res.json());
-    await fetchUserProfile();
   }
 
   function handleKeyPress(event: any) {
@@ -966,7 +952,7 @@ export default function NewLayout({ children }: any) {
                 {user.isAdmin && (
                   <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
                     <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                      Version 0.4.5
+                      Version 0.4.6
                     </span>
                   </Link>
                 )}
@@ -975,8 +961,11 @@ export default function NewLayout({ children }: any) {
               </div>
 
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
-                <Popover className="relative">
-                  <Popover.Button className="relative border rounded-md  p-2 shadow-md text-gray-400 hover:text-gray-500 focus:outline-none">
+                <Button
+                  variant="outline"
+                  className="relative rounded-md  p-2  text-gray-400 hover:text-gray-500 hover:cursor-pointer focus:outline-none"
+                >
+                  <Link href="/notifications">
                     <InboxStackIcon className="h-4 w-4 text-black" />
                     {user.notifcations.filter(
                       (notification) => !notification.read
@@ -989,82 +978,8 @@ export default function NewLayout({ children }: any) {
                         <circle cx={3} cy={3} r={3} />
                       </svg>
                     )}
-                  </Popover.Button>
-
-                  <Popover.Panel className="absolute z-10 mt-1 sm:min-w-[400px] right-1 overflow-hidden rounded-lg bg-white shadow">
-                    <div className="px-6 p-6">
-                      <div className="border-b border-gray-200">
-                        <nav
-                          className="-mb-px flex space-x-8"
-                          aria-label="Tabs"
-                        >
-                          <button
-                            onClick={() => setTab("unread")}
-                            className={classNames(
-                              tab === "unread"
-                                ? "border-indigo-500 text-indigo-600"
-                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                              "whitespace-nowrap border-b-2  px-1 text-sm font-medium"
-                            )}
-                          >
-                            Unread
-                          </button>
-                          <button
-                            onClick={() => setTab("archive")}
-                            className={classNames(
-                              tab === "archive"
-                                ? "border-indigo-500 text-indigo-600"
-                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                              "whitespace-nowrap border-b-2 px-1 text-sm font-medium"
-                            )}
-                          >
-                            Archive
-                          </button>
-                        </nav>
-                      </div>
-                      <div className="mt-2">
-                        {user !== undefined ? (
-                          tab === "unread" ? (
-                            user.notifcations
-                              .filter((notification) => !notification.read)
-                              .map((notification: any) => (
-                                <div className="w-full items-start border-b py-3">
-                                  <div className="flex justify-between flex-row w-full">
-                                    <p className="text-md font-medium text-gray-900">
-                                      {notification.text}
-                                    </p>
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        markasread(notification.id)
-                                      }
-                                      className="rounded bg-transparent  text-sm font-semibold"
-                                    >
-                                      <ArchiveBoxIcon className="h-5 w-5 text-green-500 hover:text-green-600" />
-                                    </button>
-                                  </div>
-                                </div>
-                              ))
-                          ) : (
-                            user.notifcations
-                              .filter((notification) => notification.read)
-                              .map((notification: any) => (
-                                <div className="w-full items-start border-b py-3">
-                                  <div className="flex justify-between flex-row w-full">
-                                    <p className="text-md font-medium text-gray-900">
-                                      {notification.text}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))
-                          )
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </div>
-                  </Popover.Panel>
-                </Popover>
+                  </Link>
+                </Button>
 
                 {user.isAdmin && (
                   <Link

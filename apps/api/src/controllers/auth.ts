@@ -373,7 +373,7 @@ export function authRoutes(fastify: FastifyInstance) {
       reply.send({
         oauth: true,
         success: true,
-        ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&state=${email}&login=${email}&scope=user`,
+        ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&login=${email}&scope=user`,
       });
     }
   );
@@ -384,62 +384,73 @@ export function authRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { code, state } = request.query as { code: string; state: string };
 
-      const provider = await prisma.provider.findFirst({});
+      console.log("HIT");
 
-      const data = await axios.post(
-        `https://github.com/login/oauth/access_token`,
-        {
-          client_id: provider?.clientId,
-          client_secret: provider?.clientSecret,
-          code: code,
-          redirect_uri: provider?.redirectUri,
-        },
-        {
-          headers: {
-            Accept: "application/json",
+      try {
+        const provider = await prisma.provider.findFirst({});
+        if (!provider) throw new Error("Provider not found");
+
+        const { clientId, clientSecret, redirectUri } = provider;
+
+        const { data: github_user } = await axios.post(
+          `https://github.com/login/oauth/access_token`,
+          {
+            client_id: clientId,
+            client_secret: clientSecret,
+            code: code,
+            redirect_uri: redirectUri,
           },
-        }
-      );
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
 
-      const access_token = data.data;
+        console.log(github_user);
 
-      if (access_token) {
-        const gh = await axios.get(`https://api.github.com/user/emails`, {
-          headers: {
-            Accept: "application/vnd.github+json",
-            Authorization: `token ${access_token.access_token}`,
-          },
-        });
+        // await new Promise((r) => setTimeout(r, 2000));
 
-        const emails = gh.data;
+        const { data: emails } = await axios.get(
+          `https://api.github.com/user/emails`,
+          {
+            headers: {
+              Accept: "application/vnd.github+json",
+              Authorization: `Bearer ${github_user.access_token}`,
+            },
+          }
+        );
 
-        const filter = emails.filter((e: any) => e.primary === true);
+        console.log(emails);
+
+        const primaryEmail = emails.find((e: any) => e.primary === true)?.email;
+        if (!primaryEmail) throw new Error("Primary email not found");
 
         let user = await prisma.user.findUnique({
-          where: { email: filter[0].email },
+          where: { email: primaryEmail },
         });
 
         if (!user) {
-          reply.send({
+          return reply.send({
             success: false,
             message: "Invalid email",
           });
         }
 
         var b64string = process.env.SECRET;
-        var buf = new Buffer(b64string!, "base64"); // Ta-da
+        var secret = new Buffer(b64string!, "base64"); // Ta-da
 
         let token = jwt.sign(
           {
-            data: { id: user!.id },
+            data: { id: user.id },
           },
-          buf,
+          secret,
           { expiresIn: "8h" }
         );
 
         await prisma.session.create({
           data: {
-            userId: user!.id,
+            userId: user.id,
             sessionToken: token,
             expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
           },
@@ -449,9 +460,11 @@ export function authRoutes(fastify: FastifyInstance) {
           token,
           success: true,
         });
-      } else {
+      } catch (error: any) {
+        console.error("Authentication error:", error);
         reply.status(403).send({
           success: false,
+          message: error.message || "Authentication failed",
         });
       }
     }

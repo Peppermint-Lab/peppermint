@@ -61,6 +61,7 @@ model User {
   Session       Session[]
   TimeTracking  TimeTracking[]
   notifications notifications[]
+  TicketFile    TicketFile[]
 }
 
 model Team {
@@ -102,6 +103,7 @@ model Ticket {
   clientId      String?
   userId        String?
   knowledgeBase knowledgeBase[]
+  notifications notifications[]
 }
 
 model TimeTracking {
@@ -162,9 +164,14 @@ model TicketFile {
   createdAt DateTime @default(now())
   filename  String
   path      String
+  mime      String
+  encoding  String
+  size      Int
 
   ticketId String
   ticket   Ticket @relation(fields: [ticketId], references: [id])
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
 }
 
 model Notes {
@@ -321,8 +328,10 @@ model notifications {
   read Boolean @default(false)
   text String
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  user     User    @relation(fields: [userId], references: [id])
+  userId   String
+  ticketId String?
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
 }
 
 model emailTemplate {
