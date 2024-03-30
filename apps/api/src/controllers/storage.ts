@@ -17,7 +17,7 @@ export function objectStoreRoutes(fastify: FastifyInstance) {
       const uploadedFile = await prisma.ticketFile.create({
         data: {
           ticketId: request.params.id,
-          filename: request.file.filename,
+          filename: request.file.originalname,
           path: request.file.path,
           mime: request.file.mimetype,
           size: request.file.size,

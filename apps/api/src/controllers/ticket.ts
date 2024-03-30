@@ -183,10 +183,17 @@ export function ticketRoutes(fastify: FastifyInstance) {
           },
         });
 
+        const files = await prisma.ticketFile.findMany({
+          where: {
+            ticketId: id,
+          },
+        });
+
         var t = {
           ...ticket,
           comments: [...comments],
           TimeTracking: [...timeTracking],
+          files: [...files],
         };
 
         reply.send({

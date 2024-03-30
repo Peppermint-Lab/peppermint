@@ -15,7 +15,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
@@ -262,11 +262,23 @@ export default function Ticket() {
 
         const data = await result.json();
 
+        if (data.success) {
+          setFile(null);
+          refetch();
+        }
+
         console.log(data);
       } catch (error) {
         console.error(error);
       }
     }
+  };
+
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+    // Click the hidden file input element
+    fileInputRef.current.click();
   };
 
   useEffect(() => {
@@ -1515,39 +1527,37 @@ export default function Ticket() {
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
                       Attachments
                     </span>
-                    <button
-                      onClick={() => null}
-                      className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
-                    >
-                      upload
-                    </button>
+                    {!file ? (
+                      <button
+                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
+                        onClick={handleButtonClick}
+                      >
+                        upload
+                        <input
+                          id="file"
+                          type="file"
+                          hidden
+                          ref={fileInputRef}
+                          onChange={handleFileChange}
+                        />
+                      </button>
+                    ) : (
+                      <button
+                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
+                        onClick={handleUpload}
+                      >
+                        confirm
+                      </button>
+                    )}
                   </div>
 
                   <>
-                    <div>
-                      <label htmlFor="file" className="sr-only">
-                        Choose a file
-                      </label>
-                      <input
-                        id="file"
-                        type="file"
-                        onChange={handleFileChange}
-                      />
-                    </div>
-                    {file && (
-                      <section>
-                        File details:
-                        <ul>
-                          <li>Name: {file.name}</li>
-                          <li>Type: {file.type}</li>
-                          <li>Size: {file.size} bytes</li>
-                        </ul>
-                      </section>
-                    )}
-
-                    {file && (
-                      <button onClick={handleUpload}>Upload a file</button>
-                    )}
+                    {data.ticket.files.length > 0 &&
+                      data.ticket.files.map((file: any) => (
+                        <div>
+                          <span className="text-xs">{file.filename}</span>
+                        </div>
+                      ))}
                   </>
                 </div>
               </div>
