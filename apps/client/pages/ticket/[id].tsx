@@ -332,7 +332,7 @@ export default function Ticket() {
                       </div>
                     ) : (
                       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {data.ticket.title}
+                        <span>#{data.ticket.Number} -</span> {data.ticket.title}
                       </h1>
                     )}
                     <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
@@ -361,15 +361,14 @@ export default function Ticket() {
                         {data.ticket.email}
                       </span>
                       <span className="text-xs text-gray-900 dark:text-whit">
-                        {" "}
                         via
                       </span>
                       <span className="font-medium text-xs text-gray-900 dark:text-white">
                         {data.ticket.fromImap === true
                           ? " Email - "
-                          : " Ticket Creation - "}
+                          : " Agent - "}
                       </span>
-                      #{data.ticket.Number} -{" "}
+
                       <span className="text-xs font-medium text-gray-900 dark:text-white">
                         {t("created_at")}{" "}
                         {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
