@@ -1,7 +1,5 @@
 import { Listbox, Switch, Transition } from "@headlessui/react";
 import {
-  CalendarIcon,
-  ChatBubbleLeftEllipsisIcon,
   CheckCircleIcon,
   CheckIcon,
   ChevronUpDownIcon,
@@ -319,7 +317,7 @@ export default function Ticket() {
             <div className="xl:border-r xl:border-gray-200 xl:pr-8 xl:w-2/3">
               <div className="">
                 <div className="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
-                  <div className="w-1/2">
+                  <div className="w-4/5">
                     {edit ? (
                       <div className="">
                         <input
@@ -337,21 +335,46 @@ export default function Ticket() {
                         {data.ticket.title}
                       </h1>
                     )}
-                    <p className="mt-2 text-sm text-gray-500 dark:text-white">
-                      <span className="font-medium text-gray-900 dark:text-white">
+                    <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
+                      {!data.ticket.isComplete ? (
+                        <div className="flex items-center space-x-2">
+                          <LockOpenIcon
+                            className="h-3 w-3 text-green-500"
+                            aria-hidden="true"
+                          />
+                          <span className="text-xs font-medium text-green-700 dark:text-white">
+                            {t("open_issue")}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <LockClosedIcon
+                            className="h-4 w-4 text-red-500"
+                            aria-hidden="true"
+                          />
+                          <span className="text-xs font-medium text-red-700 dark:text-white">
+                            {t("closed_issue")}
+                          </span>
+                        </div>
+                      )}
+                      <span className="font-medium text-xs text-gray-900 dark:text-white">
                         {data.ticket.email}
-                      </span>{" "}
-                      via
-                      <a
-                        href="#"
-                        className="font-medium text-gray-900 dark:text-white"
-                      >
+                      </span>
+                      <span className="text-xs text-gray-900 dark:text-whit">
+                        {" "}
+                        via
+                      </span>
+                      <span className="font-medium text-xs text-gray-900 dark:text-white">
                         {data.ticket.fromImap === true
                           ? " Email - "
                           : " Ticket Creation - "}
-                      </a>
-                      #{data.ticket.Number}
-                    </p>
+                      </span>
+                      #{data.ticket.Number} -{" "}
+                      <span className="text-xs font-medium text-gray-900 dark:text-white">
+                        {t("created_at")}{" "}
+                        {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
+                      </span>
+                    </div>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
                     {!edit ? (
@@ -391,124 +414,6 @@ export default function Ticket() {
                   </div>
                 </div>
                 <aside className="mt-4 xl:hidden">
-                  <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0 ">
-                    {!data.ticket.isComplete ? (
-                      <div className="flex items-center space-x-2">
-                        <LockOpenIcon
-                          className="h-5 w-5 text-green-500"
-                          aria-hidden="true"
-                        />
-                        <span className="text-sm font-medium text-green-700 dark:text-white">
-                          {t("open_issue")}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <LockClosedIcon
-                          className="h-5 w-5 text-red-500"
-                          aria-hidden="true"
-                        />
-                        <span className="text-sm font-medium text-red-700 dark:text-white">
-                          {t("closed_issue")}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex items-center space-x-2">
-                      <ChatBubbleLeftEllipsisIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {data.ticket.comments.length} {t("comments")}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CalendarIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        Created on{" "}
-                        {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
-                      </span>
-                    </div>
-
-                    {users && (
-                      <Listbox value={n} onChange={setN}>
-                        {({ open }) => (
-                          <>
-                            <div className="relative">
-                              <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 px-4 py-1.5 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <span className="block min-w-[75px] text-xs">
-                                  {data.ticket.assignedTo
-                                    ? data.ticket.assignedTo.name
-                                    : n
-                                    ? n.name
-                                    : t("select_new_user")}
-                                </span>
-                              </Listbox.Button>
-
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                  {users.map((user: any) => (
-                                    <Listbox.Option
-                                      key={user.id}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active
-                                            ? "text-white bg-indigo-600"
-                                            : "text-gray-900",
-                                          "cursor-default select-none relative py-2 pl-3 pr-9"
-                                        )
-                                      }
-                                      value={user}
-                                    >
-                                      {({ n, active }: any) => (
-                                        <>
-                                          <span
-                                            className={classNames(
-                                              n
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "block truncate"
-                                            )}
-                                          >
-                                            {user.name}
-                                          </span>
-
-                                          {n ? (
-                                            <span
-                                              className={classNames(
-                                                active
-                                                  ? "text-white"
-                                                  : "text-indigo-600",
-                                                "absolute inset-y-0 right-0 flex items-center pr-4"
-                                              )}
-                                            >
-                                              <CheckIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                              />
-                                            </span>
-                                          ) : null}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
-                    )}
-                  </div>
                   <div className="py-3 border-b border-gray-200">
                     <div className="border-t border-gray-200">
                       <div className="flex flex-row items-center justify-between">
@@ -834,51 +739,7 @@ export default function Ticket() {
             </div>
             <div className="hidden xl:block xl:pl-8 xl:order-2 order-1">
               <h2 className="sr-only">{t("details")}</h2>
-              <div className="space-y-5">
-                {!data.ticket.isComplete ? (
-                  <div className="flex items-center space-x-2">
-                    <LockOpenIcon
-                      className="h-5 w-5 text-green-500"
-                      aria-hidden="true"
-                    />
-                    <span className="text-sm font-medium text-green-700 dark:text-white">
-                      {t("open_issue")}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <LockClosedIcon
-                      className="h-5 w-5 text-red-500"
-                      aria-hidden="true"
-                    />
-                    <span className="text-sm font-medium text-red-700 dark:text-white">
-                      {t("closed_issue")}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center space-x-2">
-                  <ChatBubbleLeftEllipsisIcon
-                    className="h-5 w-5 text-gray-400 dark:text-white"
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {data.ticket.comments.length} {t("comments")}
-                  </span>
-                </div>
-                <div className="flex flex-row items-center space-x-2">
-                  <CalendarIcon
-                    className="h-5 w-5 text-gray-400 dark:text-white"
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {t("created_at")}
-                  </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
-                  </span>
-                </div>
-              </div>
-              <div className="mt-2 space-y-8 border-t border-gray-200 py-2">
+              <div className="space-y-4  border-gray-200 py-2">
                 <div>
                   <div className="flex flex-row justify-between items-center">
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
@@ -1554,7 +1415,7 @@ export default function Ticket() {
                   <>
                     {data.ticket.files.length > 0 &&
                       data.ticket.files.map((file: any) => (
-                        <div>
+                        <div className="p-1/2 px-1  hover:bg-gray-200 hover:cursor-pointer">
                           <span className="text-xs">{file.filename}</span>
                         </div>
                       ))}
