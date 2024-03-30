@@ -965,7 +965,7 @@ export default function NewLayout({ children }: any) {
               <div className="flex w-full justify-start items-center space-x-6">
                 {user.isAdmin && (
                   <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
-                    <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
+                    <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20 whitespace-nowrap">
                       Version 0.4.5
                     </span>
                   </Link>
@@ -1072,7 +1072,11 @@ export default function NewLayout({ children }: any) {
                     target="_blank"
                     className="hover:cursor-pointer"
                   >
-                    <Button variant="outline" className="hover:cursor-pointer">
+                    {/* <Button variant="outline" className="hover:cursor-pointer">
+                      Send Feedback
+                    </Button> */}
+
+                    <Button variant="outline" className="hover:cursor-pointer whitespace-nowrap">
                       Send Feedback
                     </Button>
                   </Link>
