@@ -13,8 +13,6 @@ export default function Login() {
         `/api/v1/auth/sso/login/callback?code=${router.query.code}`
       ).then((res) => res.json());
 
-      console.log("SSO", sso);
-
       if (!sso.success) {
         router.push("/auth/login?error=account_not_found");
       } else {
