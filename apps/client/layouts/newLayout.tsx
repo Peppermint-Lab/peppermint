@@ -966,7 +966,7 @@ export default function NewLayout({ children }: any) {
                 {user.isAdmin && (
                   <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
                     <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20 whitespace-nowrap">
-                      Version 0.4.5
+                      Version 0.4.6
                     </span>
                   </Link>
                 )}
