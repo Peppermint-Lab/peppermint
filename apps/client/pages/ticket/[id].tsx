@@ -1,10 +1,9 @@
+//@ts-nocheck
 import { Listbox, Switch, Transition } from "@headlessui/react";
 import {
   CheckCircleIcon,
   CheckIcon,
   ChevronUpDownIcon,
-  LockClosedIcon,
-  LockOpenIcon,
 } from "@heroicons/react/20/solid";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
@@ -310,16 +309,15 @@ export default function Ticket() {
       {status === "error" && (
         <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold"> Error fetching data ... </h2>
-          {/* <img src={server} className="h-96 w-96" alt="error" /> */}
         </div>
       )}
 
       {status === "success" && (
         <main className="flex-1 min-h-[90vh] py-8">
-          <div className="mx-auto max-w-6xl w-full px-4 sm:px-6 lg:px-8 flex flex-col xl:flex-row justify-center">
+          <div className="mx-auto max-w-7xl w-full px-4 flex flex-col xl:flex-row justify-center">
             <div className="xl:border-r xl:border-gray-200 xl:pr-8 xl:w-2/3">
               <div className="">
-                <div className="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
+                <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
                   <div className="w-4/5">
                     {edit ? (
                       <div className="">
@@ -341,41 +339,17 @@ export default function Ticket() {
                     <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
                       {!data.ticket.isComplete ? (
                         <div className="flex items-center space-x-2">
-                          <LockOpenIcon
-                            className="h-3 w-3 text-green-500"
-                            aria-hidden="true"
-                          />
-                          <span className="text-xs font-medium text-green-700 dark:text-white">
+                          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                             {t("open_issue")}
                           </span>
                         </div>
                       ) : (
                         <div className="flex items-center space-x-2">
-                          <LockClosedIcon
-                            className="h-4 w-4 text-red-500"
-                            aria-hidden="true"
-                          />
-                          <span className="text-xs font-medium text-red-700 dark:text-white">
+                          <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                             {t("closed_issue")}
                           </span>
                         </div>
                       )}
-                      <span className="font-medium text-xs text-gray-900 dark:text-white">
-                        {data.ticket.email}
-                      </span>
-                      <span className="text-xs text-gray-900 dark:text-whit">
-                        via
-                      </span>
-                      <span className="font-medium text-xs text-gray-900 dark:text-white">
-                        {data.ticket.fromImap === true
-                          ? " Email - "
-                          : " Agent - "}
-                      </span>
-
-                      <span className="text-xs font-medium text-gray-900 dark:text-white">
-                        {t("created_at")}{" "}
-                        {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
-                      </span>
                     </div>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
@@ -407,7 +381,7 @@ export default function Ticket() {
                     ) : (
                       <Button
                         variant="outline"
-                        className="hover:cursor-pointer"
+                        className="hover:cursor-pointer align-top"
                         onClick={() => update()}
                       >
                         Save
@@ -503,8 +477,25 @@ export default function Ticket() {
                   </div>
                 </aside>
                 <div className="py-3 xl:pb-0 xl:pt-2">
-                  <span className="text-sm font-bold">{t("description")}</span>
-                  <div className="prose max-w-none">
+                  <div className="flex flex-row items-center text-sm space-x-1">
+                    {data.ticket.fromImap ? (
+                      <>
+                        <span className="font-bold">{data.ticket.email}</span>
+                        <span>created via email at </span>
+                        <span className="font-bold">
+                          {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Created by at </span>
+                        <span className="">
+                          {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <div className="prose max-w-none mt-2">
                     {edit && !data.ticket.fromImap ? (
                       <RichTextEditor
                         editor={IssueEditor}
@@ -555,14 +546,11 @@ export default function Ticket() {
                     ) : (
                       <div className="">
                         {data.ticket.fromImap ? (
-                          <div className="break-words bg-white rounded-md p-4 text-black">
-                            {/* {renderHTML(data.ticket.detail)} */}
+                          <div className="break-words bg-white rounded-md text-black">
                             <Frame
                               className="min-h-[60vh] h-full w-full"
                               initialContent={data.ticket.detail}
-                            >
-                              {" "}
-                            </Frame>
+                            />
                           </div>
                         ) : (
                           <div className="">
@@ -756,20 +744,18 @@ export default function Ticket() {
                       </button>
                     ) : (
                       <button
-                        onClick={() => {
-                          transferTicket();
-                        }}
-                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
+                        onClick={() => setAssignedEdit(false)}
+                        className="text-sm align-top font-medium text-gray-500 hover:underline dark:text-white"
                       >
-                        {t("save")}
+                        cancel
                       </button>
                     )}
                   </div>
                   {!assignedEdit ? (
-                    <ul role="list" className="mt-3 space-y-3">
-                      <li className="flex justify-star items-center space-x-2">
+                    <ul role="list" className="mt-1 space-y-3">
+                      <li className="flex justify-start items-center space-x-2">
                         <div className="flex-shrink-0">
-                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
                             <span className="text-xs font-medium leading-none text-white uppercase ">
                               {data.ticket.assignedTo
                                 ? data.ticket.assignedTo.name[0]
@@ -777,7 +763,7 @@ export default function Ticket() {
                             </span>
                           </span>
                         </div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div className="text-sm font-medium mt-[4px] text-gray-900 dark:text-white">
                           {data.ticket.assignedTo
                             ? data.ticket.assignedTo.name
                             : ""}
