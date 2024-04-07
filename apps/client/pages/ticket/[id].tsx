@@ -1371,7 +1371,7 @@ export default function Ticket() {
                     </div>
                   )}
                 </div>
-                <div className="border-t border-gray-200">
+                {/* <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
                       Attachments
@@ -1404,7 +1404,7 @@ export default function Ticket() {
                       </div>
                     )}
                   </>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
