@@ -14,38 +14,6 @@ const year = date.getFullYear();
 //@ts-ignore
 const d = new Date([year, month, today]);
 
-function parseEmailContent(emailText: any) {
-  const lines = emailText.split("\n");
-  const parsedData = {
-    name: "",
-    email: "",
-    phoneNumbers: [],
-    addresses: [],
-    companyDetails: "",
-  };
-
-  let inAddressSection = false;
-
-  lines.forEach((line: any) => {
-    if (line.includes("@")) {
-      parsedData.email = line.trim();
-    } else if (line.includes("US:") || line.includes("UK:")) {
-      //@ts-ignore
-      parsedData.phoneNumbers.push(line.trim());
-    } else if (line.includes("ISO")) {
-      parsedData.companyDetails = line.trim();
-    } else if (line.trim() === "North America:" || line.trim() === "Europe:") {
-      inAddressSection = true;
-      //@ts-ignore
-    } else if (inAddressSection && line.trim() !== "") {
-      //@ts-ignore
-      parsedData.addresses.push(line.trim());
-    }
-  });
-
-  return parsedData;
-}
-
 export const getEmails = async () => {
   try {
     const queues = await client.emailQueue.findMany({});
@@ -87,7 +55,7 @@ export const getEmails = async () => {
 
                   console.log("from", from);
 
-                  const parsedData = parseEmailContent(textAsHtml);
+                  // const parsedData = parseEmailContent(textAsHtml);
 
                   if (subject !== undefined && subject.includes("Re:")) {
                     return await client.comment.create({
@@ -116,7 +84,7 @@ export const getEmails = async () => {
                         isComplete: Boolean(false),
                         priority: "Low",
                         fromImap: Boolean(true),
-                        detail: html,
+                        detail: html ? html : textAsHtml,
                       },
                     });
 
