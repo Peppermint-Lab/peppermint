@@ -4,14 +4,14 @@ import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import React, { Fragment, useState } from "react";
 
-export default function ResetPassword() {
+export default function ResetPassword({ user }) {
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState("");
 
   const postData = async () => {
     if (check === password && password.length > 3) {
-      await fetch(`/api/v1/auth/reset-password`, {
+      await fetch(`/api/v1/auth/admin/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -19,6 +19,7 @@ export default function ResetPassword() {
         },
         body: JSON.stringify({
           password,
+          user: user.id,
         }),
       })
         .then((res) => res.json())
@@ -26,7 +27,7 @@ export default function ResetPassword() {
           if (res.success) {
             notifications.show({
               title: "Success",
-              message: `Password updated :)`,
+              message: `Password updated`,
               color: "green",
               autoClose: 5000,
             });

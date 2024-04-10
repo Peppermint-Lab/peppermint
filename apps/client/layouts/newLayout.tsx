@@ -770,11 +770,11 @@ export default function NewLayout({ children }: any) {
                             item.current
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-gray-800 dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                            "group -mx-2 flex gap-x-3 p-1 text-xs rounded-md font-semibold leading-6"
                           )}
                         >
                           <item.icon
-                            className="h-4 w-4 shrink-0 mt-1"
+                            className="h-4 w-4 ml-1 shrink-0 mt-1"
                             aria-hidden="true"
                           />
                           <span className="whitespace-nowrap">{item.name}</span>
@@ -794,10 +794,10 @@ export default function NewLayout({ children }: any) {
                             location.pathname === "/tickets"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                            "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
-                          <TicketIcon className="h-4 w-4 shrink-0 mt-1" />
+                          <TicketIcon className="h-4 w-4 ml-1 shrink-0 mt-1" />
                           <span className="whitespace-nowrap">Tickets</span>
                           <div className="flex w-full justify-end float-right">
                             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
@@ -813,7 +813,7 @@ export default function NewLayout({ children }: any) {
                             location.pathname === "/tickets/open"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 mll-2 text-xs font-semibold leading-6"
+                            "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
                           <span className="whitespace-nowrap">
@@ -834,7 +834,7 @@ export default function NewLayout({ children }: any) {
                             location.pathname === "/tickets/closed"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                            "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
                           <span className="whitespace-nowrap">
@@ -856,14 +856,14 @@ export default function NewLayout({ children }: any) {
                             location.pathname.includes("/admin")
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
+                            "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
                           <ContextMenu.Root>
                             <ContextMenu.Trigger>
                               <>
                                 <Cog6ToothIcon
-                                  className="h-4 w-4 shrink-0 mt-1"
+                                  className="h-4 w-4 ml-1 shrink-0 mt-1"
                                   aria-hidden="true"
                                 />
                                 <span className="whitespace-nowrap">

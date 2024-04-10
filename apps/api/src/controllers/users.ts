@@ -16,6 +16,9 @@ export function userRoutes(fastify: FastifyInstance) {
         const token = checkToken(bearer);
         if (token) {
           const users = await prisma.user.findMany({
+            where: {
+              external_user: false,
+            },
             select: {
               id: true,
               name: true,
