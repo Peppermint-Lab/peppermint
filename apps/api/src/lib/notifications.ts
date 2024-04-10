@@ -23,6 +23,7 @@ export async function createNotification(
       data: {
         text,
         userId,
+        ticketId: ticket.id,
       },
     });
   } catch (error) {

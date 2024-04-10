@@ -1,12 +1,9 @@
+//@ts-nocheck
 import { Listbox, Switch, Transition } from "@headlessui/react";
 import {
-  CalendarIcon,
-  ChatBubbleLeftEllipsisIcon,
   CheckCircleIcon,
   CheckIcon,
   ChevronUpDownIcon,
-  LockClosedIcon,
-  LockOpenIcon,
 } from "@heroicons/react/20/solid";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
@@ -15,7 +12,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
@@ -75,6 +72,7 @@ export default function Ticket() {
   const [timeSpent, setTimeSpent] = useState<any>();
   const [publicComment, setPublicComment] = useState<any>(false);
   const [timeReason, setTimeReason] = useState("");
+  const [file, setFile] = useState<File | null>(null);
 
   const IssueEditor = useEditor({
     extensions: [
@@ -96,8 +94,6 @@ export default function Ticket() {
 
   const { id } = history.query;
 
-  let file: any = [];
-
   async function update() {
     await fetch(`/api/v1/ticket/update`, {
       method: "PUT",
@@ -115,7 +111,10 @@ export default function Ticket() {
       }),
     })
       .then((res) => res.json())
-      .then(() => refetch());
+      .then(() => {
+        setEdit(false);
+        refetch();
+      });
   }
 
   async function updateStatus() {
@@ -195,37 +194,6 @@ export default function Ticket() {
       });
   }
 
-  // const propsUpload = {
-  //   name: "file",
-  //   showUploadList: false,
-  //   action: `/api/v1/ticket/${id}/file/upload`,
-  //   data: () => {
-  //     let data = new FormData();
-  //     data.append("file", file);
-  //     data.append("filename", file.name);
-  //     data.append("ticket", ticket.id);
-  //   },
-  //   onChange(info: any) {
-  //     if (info.file.status !== "uploading") {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === "done") {
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //       setUploaded(true);
-  //     } else if (info.file.status === "error") {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  //   progress: {
-  //     strokeColor: {
-  //       "0%": "#108ee9",
-  //       "100%": "#87d068",
-  //     },
-  //     strokeWidth: 3,
-  //     format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
-  //   },
-  // };
-
   async function fetchUsers() {
     await fetch(`/api/v1/users/all`, {
       method: "GET",
@@ -265,6 +233,54 @@ export default function Ticket() {
     }
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (file) {
+      console.log("Uploading file...");
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("user", user.id);
+
+      try {
+        // You can write the URL of your server or any other endpoint used for file upload
+        const result = await fetch(
+          `/api/v1/storage/ticket/${router.query.id}/upload/single`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await result.json();
+
+        if (data.success) {
+          setFile(null);
+          refetch();
+        }
+
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  useEffect(() => {
+    handleUpload();
+  }, [file]);
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -293,17 +309,16 @@ export default function Ticket() {
       {status === "error" && (
         <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold"> Error fetching data ... </h2>
-          {/* <img src={server} className="h-96 w-96" alt="error" /> */}
         </div>
       )}
 
       {status === "success" && (
         <main className="flex-1 min-h-[90vh] py-8">
-          <div className="mx-auto max-w-6xl w-full px-4 sm:px-6 lg:px-8 flex flex-col xl:flex-row justify-center">
+          <div className="mx-auto max-w-7xl w-full px-4 flex flex-col xl:flex-row justify-center">
             <div className="xl:border-r xl:border-gray-200 xl:pr-8 xl:w-2/3">
               <div className="">
-                <div className="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
-                  <div className="w-1/2">
+                <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
+                  <div className="w-4/5">
                     {edit ? (
                       <div className="">
                         <input
@@ -318,27 +333,27 @@ export default function Ticket() {
                       </div>
                     ) : (
                       <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {data.ticket.title}
+                        <span>#{data.ticket.Number} -</span> {data.ticket.title}
                       </h1>
                     )}
-                    <p className="mt-2 text-sm text-gray-500 dark:text-white">
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {data.ticket.email}
-                      </span>{" "}
-                      via
-                      <a
-                        href="#"
-                        className="font-medium text-gray-900 dark:text-white"
-                      >
-                        {data.ticket.fromImap === true
-                          ? " Email - "
-                          : " Ticket Creation - "}
-                      </a>
-                      #{data.ticket.Number}
-                    </p>
+                    <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
+                      {!data.ticket.isComplete ? (
+                        <div className="flex items-center space-x-2">
+                          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                            {t("open_issue")}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                            {t("closed_issue")}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="mt-4 flex space-x-3 md:mt-0">
-                    {!edit && (
+                    {!edit ? (
                       <DropdownMenu.Root>
                         <DropdownMenu.Trigger className="hover:cursor-pointer">
                           <Button variant="outline">Options</Button>
@@ -363,128 +378,18 @@ export default function Ticket() {
                           )}
                         </DropdownMenu.Content>
                       </DropdownMenu.Root>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        className="hover:cursor-pointer align-top"
+                        onClick={() => update()}
+                      >
+                        Save
+                      </Button>
                     )}
                   </div>
                 </div>
                 <aside className="mt-4 xl:hidden">
-                  <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0 ">
-                    {!data.ticket.isComplete ? (
-                      <div className="flex items-center space-x-2">
-                        <LockOpenIcon
-                          className="h-5 w-5 text-green-500"
-                          aria-hidden="true"
-                        />
-                        <span className="text-sm font-medium text-green-700 dark:text-white">
-                          {t("open_issue")}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <LockClosedIcon
-                          className="h-5 w-5 text-red-500"
-                          aria-hidden="true"
-                        />
-                        <span className="text-sm font-medium text-red-700 dark:text-white">
-                          {t("closed_issue")}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex items-center space-x-2">
-                      <ChatBubbleLeftEllipsisIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {data.ticket.comments.length} {t("comments")}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CalendarIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        Created on{" "}
-                        {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
-                      </span>
-                    </div>
-
-                    {users && (
-                      <Listbox value={n} onChange={setN}>
-                        {({ open }) => (
-                          <>
-                            <div className="relative">
-                              <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 px-4 py-1.5 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <span className="block min-w-[75px] text-xs">
-                                  {data.ticket.assignedTo
-                                    ? data.ticket.assignedTo.name
-                                    : n
-                                    ? n.name
-                                    : t("select_new_user")}
-                                </span>
-                              </Listbox.Button>
-
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                  {users.map((user: any) => (
-                                    <Listbox.Option
-                                      key={user.id}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active
-                                            ? "text-white bg-indigo-600"
-                                            : "text-gray-900",
-                                          "cursor-default select-none relative py-2 pl-3 pr-9"
-                                        )
-                                      }
-                                      value={user}
-                                    >
-                                      {({ n, active }: any) => (
-                                        <>
-                                          <span
-                                            className={classNames(
-                                              n
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "block truncate"
-                                            )}
-                                          >
-                                            {user.name}
-                                          </span>
-
-                                          {n ? (
-                                            <span
-                                              className={classNames(
-                                                active
-                                                  ? "text-white"
-                                                  : "text-indigo-600",
-                                                "absolute inset-y-0 right-0 flex items-center pr-4"
-                                              )}
-                                            >
-                                              <CheckIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                              />
-                                            </span>
-                                          ) : null}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
-                    )}
-                  </div>
                   <div className="py-3 border-b border-gray-200">
                     <div className="border-t border-gray-200">
                       <div className="flex flex-row items-center justify-between">
@@ -572,8 +477,25 @@ export default function Ticket() {
                   </div>
                 </aside>
                 <div className="py-3 xl:pb-0 xl:pt-2">
-                  <span className="text-sm font-bold">{t("description")}</span>
-                  <div className="prose max-w-none">
+                  <div className="flex flex-row items-center text-sm space-x-1">
+                    {data.ticket.fromImap ? (
+                      <>
+                        <span className="font-bold">{data.ticket.email}</span>
+                        <span>created via email at </span>
+                        <span className="font-bold">
+                          {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Created by at </span>
+                        <span className="">
+                          {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <div className="prose max-w-none mt-2">
                     {edit && !data.ticket.fromImap ? (
                       <RichTextEditor
                         editor={IssueEditor}
@@ -624,14 +546,11 @@ export default function Ticket() {
                     ) : (
                       <div className="">
                         {data.ticket.fromImap ? (
-                          <div className="break-words bg-white rounded-md p-4 text-black">
-                            {/* {renderHTML(data.ticket.detail)} */}
+                          <div className="break-words bg-white rounded-md text-black">
                             <Frame
                               className="min-h-[60vh] h-full w-full"
                               initialContent={data.ticket.detail}
-                            >
-                              {" "}
-                            </Frame>
+                            />
                           </div>
                         ) : (
                           <div className="">
@@ -810,51 +729,7 @@ export default function Ticket() {
             </div>
             <div className="hidden xl:block xl:pl-8 xl:order-2 order-1">
               <h2 className="sr-only">{t("details")}</h2>
-              <div className="space-y-5">
-                {!data.ticket.isComplete ? (
-                  <div className="flex items-center space-x-2">
-                    <LockOpenIcon
-                      className="h-5 w-5 text-green-500"
-                      aria-hidden="true"
-                    />
-                    <span className="text-sm font-medium text-green-700 dark:text-white">
-                      {t("open_issue")}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <LockClosedIcon
-                      className="h-5 w-5 text-red-500"
-                      aria-hidden="true"
-                    />
-                    <span className="text-sm font-medium text-red-700 dark:text-white">
-                      {t("closed_issue")}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center space-x-2">
-                  <ChatBubbleLeftEllipsisIcon
-                    className="h-5 w-5 text-gray-400 dark:text-white"
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {data.ticket.comments.length} {t("comments")}
-                  </span>
-                </div>
-                <div className="flex flex-row items-center space-x-2">
-                  <CalendarIcon
-                    className="h-5 w-5 text-gray-400 dark:text-white"
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {t("created_at")}
-                  </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
-                  </span>
-                </div>
-              </div>
-              <div className="mt-2 space-y-8 border-t border-gray-200 py-2">
+              <div className="space-y-4  border-gray-200 py-2">
                 <div>
                   <div className="flex flex-row justify-between items-center">
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
@@ -869,20 +744,18 @@ export default function Ticket() {
                       </button>
                     ) : (
                       <button
-                        onClick={() => {
-                          transferTicket();
-                        }}
-                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
+                        onClick={() => setAssignedEdit(false)}
+                        className="text-sm align-top font-medium text-gray-500 hover:underline dark:text-white"
                       >
-                        {t("save")}
+                        cancel
                       </button>
                     )}
                   </div>
                   {!assignedEdit ? (
-                    <ul role="list" className="mt-3 space-y-3">
-                      <li className="flex justify-star items-center space-x-2">
+                    <ul role="list" className="mt-1 space-y-3">
+                      <li className="flex justify-start items-center space-x-2">
                         <div className="flex-shrink-0">
-                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
                             <span className="text-xs font-medium leading-none text-white uppercase ">
                               {data.ticket.assignedTo
                                 ? data.ticket.assignedTo.name[0]
@@ -890,7 +763,7 @@ export default function Ticket() {
                             </span>
                           </span>
                         </div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div className="text-sm font-medium mt-[4px] text-gray-900 dark:text-white">
                           {data.ticket.assignedTo
                             ? data.ticket.assignedTo.name
                             : ""}
@@ -1498,6 +1371,40 @@ export default function Ticket() {
                     </div>
                   )}
                 </div>
+                {/* <div className="border-t border-gray-200">
+                  <div className="flex flex-row items-center justify-between mt-2">
+                    <span className="text-sm font-medium text-gray-500 dark:text-white">
+                      Attachments
+                    </span>
+                    <button
+                      className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
+                      onClick={handleButtonClick}
+                    >
+                      upload
+                      <input
+                        id="file"
+                        type="file"
+                        hidden
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                      />
+                    </button>
+                  </div>
+
+                  <>
+                    {data.ticket.files.length > 0 &&
+                      data.ticket.files.map((file: any) => (
+                        <div className="p-1/2 px-1  hover:bg-gray-200 hover:cursor-pointer">
+                          <span className="text-xs">{file.filename}</span>
+                        </div>
+                      ))}
+                    {file && (
+                      <div className="p-1/2 px-1">
+                        <span className="text-xs">{file.name}</span>
+                      </div>
+                    )}
+                  </>
+                </div> */}
               </div>
             </div>
           </div>

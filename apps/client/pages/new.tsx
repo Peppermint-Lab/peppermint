@@ -1,6 +1,6 @@
 import { Link, RichTextEditor } from "@mantine/tiptap";
-import Placeholder from '@tiptap/extension-placeholder';
 import Highlight from "@tiptap/extension-highlight";
+import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -55,7 +55,7 @@ export default function CreateTicket() {
       Superscript,
       SubScript,
       Highlight,
-      Placeholder.configure({ placeholder: t("ticket_extra_details") })
+      Placeholder.configure({ placeholder: t("ticket_extra_details") }),
       // TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content: issue,
@@ -378,6 +378,17 @@ export default function CreateTicket() {
       </div>
       <div className="flex flex-col xl:flex-row h-full w-full">
         <div className="w-full xl:w-2/3 order-2 xl:order-2">
+          <div className="px-4 border-b border-gray-700">
+            <input
+              type="text"
+              name="title"
+              placeholder={t("ticket_details")}
+              maxLength={64}
+              autoComplete="off"
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full pl-0 pr-0 sm:text-xl border-none dark:bg-[#0A090C] dark:text-white focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+            />
+          </div>
           <RichTextEditor
             editor={editor}
             placeholder={t("ticket_extra_details")}
@@ -428,22 +439,6 @@ export default function CreateTicket() {
         </div>
         <div className="w-full xl:w-1/6 p-3 flex flex-col dark:bg-[#0A090C] dark:text-white  border-b-[1px] xl:border-b-0 xl:border-r-[1px] order-1 xl:order-1">
           <div className="flex flex-col">
-            <div>
-              <label>
-                <span className="block text-sm font-medium text-gray-700 dark:text-white">
-                  Title
-                </span>
-              </label>
-              <input
-                type="text"
-                name="title"
-                placeholder={t("ticket_details")}
-                maxLength={64}
-                autoComplete="off"
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full pl-0 pr-0 sm:text-xl border-none dark:bg-[#0A090C] dark:text-white focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-              />
-            </div>
             <div>
               <label>
                 <span className="block text-sm font-medium text-gray-700 dark:text-white">
