@@ -5,34 +5,27 @@ services:
     container_name: peppermint_postgres
     image: postgres:latest
     restart: always
-    ports:
-      - 5432:5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_live:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: peppermint
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_PASSWORD: 12345
       POSTGRES_DB: peppermint
 
   peppermint:
     container_name: peppermint
     image: pepperlabs/peppermint:latest
     ports:
-      - 3000:3000
-      - 5003:5003
+      - 1000:3000
+      - 1001:5003
     restart: always
     depends_on:
       - peppermint_postgres
-    healthcheck:
-      test: ["CMD", "sh", "-c", "wget --spider $$API_URL"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     environment:
       DB_USERNAME: "peppermint"
-      DB_PASSWORD: "1234"
+      DB_PASSWORD: "12345"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
 
 volumes:
- pgdata:
+ pgdata_live:
