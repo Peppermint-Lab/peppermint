@@ -48,7 +48,7 @@ export default function EmailQueues() {
               <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto mt-4">
                   <p className="mt-2 text-sm text-gray-700  dark:text-white">
-                    A list of the mailboxes you are listening too, these will
+                    A list of the mailboxes you are listening to, these will
                     automatically create tickets and can be accessed down the
                     side navigation.
                   </p>
