@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
@@ -22,6 +23,24 @@ export default function UpdateUserModal({ user }) {
         role: admin,
         id: user.id,
       }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success === true) {
+          notifications.show({
+            title: "User Updated",
+            message: "User updated succesfully",
+            color: "green",
+            autoClose: 5000,
+          });
+    		} else {
+          notifications.show({
+            title: "Error",
+            message: res.message,
+            color: "red",
+            autoClose: 5000,
+          });
+        }
     });
     // .then(() => router.reload());
   }
