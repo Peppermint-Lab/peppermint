@@ -51,10 +51,10 @@ export async function sendTicketStatus(ticket: any) {
       .sendMail({
         from: replyto, // sender address
         to: ticket.email,
-        subject: `Ticket ${ticket.id} status is now ${
+        subject: `Ticket ${ticket.Number} status is now ${
           ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
         }`, // Subject line
-        text: `Hello there, Ticket ${ticket.id}, now has a status of ${
+        text: `Hello there, Ticket ${ticket.Number}, now has a status of ${
           ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
         }`, // plain text body
         html: htmlToSend,
