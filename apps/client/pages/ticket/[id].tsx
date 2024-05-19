@@ -931,7 +931,7 @@ export default function Ticket() {
                       )}
                     </ul>
                   ) : (
-                    <>
+                    <div className={'w-[150px]'}>
                       <Listbox value={priority} onChange={setPriority}>
                         {({ open }) => (
                           <>
@@ -1165,7 +1165,7 @@ export default function Ticket() {
                           </>
                         )}
                       </Listbox>
-                    </>
+                    </div>
                   )}
                 </div>
                 <div className="border-t border-gray-200">
