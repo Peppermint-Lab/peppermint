@@ -106,6 +106,8 @@ export default function UserProfile() {
                   <option value="pt">Portuguese</option>
                   <option value="it">Italiano</option>
                   <option value="he">Hebrew</option>
+                  <option value="tr">Turkish</option>
+                  <option value="hu">Hungarian</option>
                 </select>
               </div>
             </div>

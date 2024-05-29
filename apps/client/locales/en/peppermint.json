@@ -82,5 +82,11 @@
   "select_a_client": "Select a Client",
   "select_an_engineer": "Select an Engineer",
   "ticket_create": "Create Ticket",
-  "internallycommented_at": "Internally Commented at"
+  "internallycommented_at": "Internally Commented at",
+  "reopen_issue": "Reopen Issue",
+  "needs_support": "Needs Support",
+  "in_progress": "In Progress",
+  "in_review": "In Review",
+  "done": "Done",
+  "select_new_user": "Select new user"
 }

@@ -753,7 +753,19 @@ export function authRoutes(fastify: FastifyInstance) {
       const token = checkToken(bearer);
       if (token) {
         const { id, role } = request.body as { id: string; role: boolean };
-
+        // check for atleast one admin on role downgrade
+				if (role === false) {
+					const admins = await prisma.user.findMany({
+						where: { isAdmin: true },
+					});
+					if (admins.length === 1) {
+						reply.code(400).send({
+							message: "Atleast one admin is required",
+							success: false
+						});
+						return;
+					}
+				}
         await prisma.user.update({
           where: { id },
           data: {
