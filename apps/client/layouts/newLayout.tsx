@@ -987,7 +987,11 @@ export default function NewLayout({ children }: any) {
                     target="_blank"
                     className="hover:cursor-pointer"
                   >
-                    <Button variant="outline" className="hover:cursor-pointer">
+                    {/* <Button variant="outline" className="hover:cursor-pointer">
+                      Send Feedback
+                    </Button> */}
+
+                    <Button variant="outline" className="hover:cursor-pointer whitespace-nowrap">
                       Send Feedback
                     </Button>
                   </Link>
