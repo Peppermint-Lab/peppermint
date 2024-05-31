@@ -91,6 +91,7 @@ model Ticket {
   status     TicketStatus @default(needs_support)
   type       TicketType   @default(support)
   hidden     Boolean      @default(false)
+  createdBy  Json?
 
   TicketFile   TicketFile[]
   Comment      Comment[]
@@ -102,6 +103,8 @@ model Ticket {
   client        Client?         @relation(fields: [clientId], references: [id])
   clientId      String?
   userId        String?
+
+
   knowledgeBase knowledgeBase[]
   notifications notifications[]
 }

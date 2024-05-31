@@ -484,10 +484,14 @@ export default function Ticket() {
                       </>
                     ) : (
                       <>
-                        <span>Created by at </span>
-                        <span className="">
+                      {data.ticket.createdBy && (
+                        <>
+                          <span>Created by <strong>{data.ticket.createdBy.name}</strong> at </span>
+                          <span className="">
                           {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
                         </span>
+                        </>
+                      )}
                       </>
                     )}
                   </div>

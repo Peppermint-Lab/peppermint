@@ -14,6 +14,7 @@ import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
+import { useUser } from "../store/session";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -35,6 +36,8 @@ export default function CreateTicket() {
   const router = useRouter();
 
   const token = getCookie("session");
+
+  const { user } = useUser()
 
   const [name, setName] = useState("");
   const [company, setCompany] = useState<any>();
@@ -92,6 +95,8 @@ export default function CreateTicket() {
         .then((res) => res.json())
         .then((res) => {
           if (res) {
+            // TODO: THINK ABOUT AUTO ASSIGN PREFERENCES
+            // setEngineer(user)
             setUsers(res.users);
           }
         });
@@ -116,6 +121,12 @@ export default function CreateTicket() {
         priority,
         engineer,
         type: selected.name,
+        createdBy: {
+          id: user.id,
+          name: user.name,
+          role: user.role,
+          email: user.email
+        }
       }),
     })
       .then((res) => res.json())

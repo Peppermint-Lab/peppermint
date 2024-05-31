@@ -36,6 +36,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         email,
         engineer,
         type,
+        createdBy
       }: any = request.body;
 
       const ticket: any = await prisma.ticket.create({
@@ -46,6 +47,12 @@ export function ticketRoutes(fastify: FastifyInstance) {
           priority: priority ? priority : "low",
           email,
           type: type ? type.toLowerCase() : "support",
+          createdBy: {
+            id: createdBy.id,
+            name: createdBy.name,
+            role: createdBy.role,
+            email: createdBy.email
+          },
           client:
             company !== undefined
               ? {
