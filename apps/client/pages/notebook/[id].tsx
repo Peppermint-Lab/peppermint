@@ -25,7 +25,13 @@ export default function Notebooks() {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: {
+          HTMLAttributes: {
+            class: "list-disc"
+          }
+        }
+      }),
       Underline,
       Link,
       Superscript,
@@ -33,6 +39,11 @@ export default function Notebooks() {
       Highlight,
       // TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
+    editorProps: {
+      attributes: {
+        class: "prose dark:prose-invert prose-sm sm:prose-base [&ul]:list-disc"
+      }
+    },
     content: notebook,
     onUpdate({ editor }) {
       setNoteBook(editor.getHTML());

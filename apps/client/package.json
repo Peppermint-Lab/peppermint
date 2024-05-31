@@ -20,6 +20,7 @@
     "@radix-ui/themes": "^2.0.1",
     "@tabler/icons-react": "^2.20.0",
     "@tailwindcss/forms": "^0.4.0",
+    "@tailwindcss/typography": "^0.5.13",
     "@tiptap/extension-highlight": "^2.0.3",
     "@tiptap/extension-link": "^2.0.3",
     "@tiptap/extension-placeholder": "^2.1.13",

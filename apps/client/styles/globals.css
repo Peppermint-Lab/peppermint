@@ -29,6 +29,18 @@
   max-height: 70vh;
 }
 
+.ProseMirror ol {
+  list-style: disc !important;
+}
+
+.ProseMirror ul {
+  list-style: disc !important;
+}
+
+.ProseMirror li {
+  list-style: disc !important;
+}
+
 .mantine-1drwy5n {
   background-color: unset !important;
   border-radius: 0;
