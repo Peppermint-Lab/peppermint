@@ -484,13 +484,26 @@ export default function Ticket() {
                       </>
                     ) : (
                       <>
-                      {data.ticket.createdBy && (
+                      {data.ticket.createdBy ? (
                         <>
                           <span>Created by <strong>{data.ticket.createdBy.name}</strong> at </span>
                           <span className="">
-                          {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
+                          {moment(data.ticket.createdAt).format("LLL")}
+                          {data.ticket.client && (
+                             <span> for <strong>{data.ticket.client.name}</strong></span>
+                          )}
                         </span>
                         </>
+                      ) : (
+                        <>
+                        <span>Created at </span>
+                        <span className="">
+                        <strong>{moment(data.ticket.createdAt).format("LLL")}</strong>
+                        {data.ticket.client && (
+                             <span> for <strong>{data.ticket.client.name}</strong></span>
+                          )}
+                      </span>
+                      </>
                       )}
                       </>
                     )}
