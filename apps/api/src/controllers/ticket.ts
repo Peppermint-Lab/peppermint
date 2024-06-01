@@ -47,12 +47,12 @@ export function ticketRoutes(fastify: FastifyInstance) {
           priority: priority ? priority : "low",
           email,
           type: type ? type.toLowerCase() : "support",
-          createdBy: {
+          createdBy: createdBy ?  {
             id: createdBy.id,
             name: createdBy.name,
             role: createdBy.role,
             email: createdBy.email
-          },
+          } : undefined,
           client:
             company !== undefined
               ? {
