@@ -82,5 +82,11 @@
   "select_a_client": "בחר לקוח",
   "select_an_engineer": "בחר מהנדס",
   "ticket_create": "צור קריאה",
-  "internallycommented_at": "הערה פנימית ב-"
+  "internallycommented_at": "הערה פנימית ב-",
+  "reopen_issue": "פתח נושא מחדש",
+  "needs_support": "צריך תמיכה",
+  "in_progress": "בתהליך",
+  "in_review": "בסקירה",
+  "done": "בוצע",
+  "select_new_user": "בחר משתמש חדש"
 }
