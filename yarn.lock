@@ -4741,7 +4741,7 @@ __metadata:
     moment: "npm:^2.29.1"
     next: "npm:13.5"
     next-remove-imports: "npm:^1.0.6"
-    next-themes: "npm:^0.0.15"
+    next-themes: "npm:^0.3.0"
     next-translate: "npm:^1.3.4"
     postcss: "npm:^8.4.5"
     posthog-js: "npm:1.93.2"
@@ -9956,17 +9956,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-themes@npm:^0.0.15":
-  version: 0.0.15
-  resolution: "next-themes@npm:0.0.15"
-  peerDependencies:
-    next: "*"
-    react: "*"
-    react-dom: "*"
-  checksum: 10c0/0c077f675e963c3f7d88fae2809fcedb2c7409fcf40e2cbb530624c9525883b6fe8ecff349c33ffc8b7450ba41bdb83113be7dbe03b66079db3591bf5529a05c
-  languageName: node
-  linkType: hard
-
 "next-themes@npm:^0.2.1":
   version: 0.2.1
   resolution: "next-themes@npm:0.2.1"
@@ -9975,6 +9964,16 @@ __metadata:
     react: "*"
     react-dom: "*"
   checksum: 10c0/979dec0a2de049ce7d1b5da835e7f7dc3b7ec83ba9e464348f497a52a6a6e5b5c395c97f071f66a63f50f22cce89fb6d19061ec7e75643b0eab215b21794bde7
+  languageName: node
+  linkType: hard
+
+"next-themes@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "next-themes@npm:0.3.0"
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18
+    react-dom: ^16.8 || ^17 || ^18
+  checksum: 10c0/72bd670ad6b9f547dc18cece340dfd1ac41e3e7b37eb321d4767db90bfa2c239f937011cd0efe35ca0081f1ea260051bc0868808ef39b0fbff2ddefd7146cec6
   languageName: node
   linkType: hard
 
