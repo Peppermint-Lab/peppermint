@@ -85,7 +85,6 @@ function CommandModal() {
   }
 
   useEffect(() => {
-    console.log(query.length);
     if (query.length !== 0 && query !== "") {
       GlobalTicketSearch();
     }
@@ -318,8 +317,6 @@ export default function NewLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [tab, setTab] = useState("unread");
-  const [currentPath, setCurrentPath] = useState();
 
   if (!user) {
     location.push("/auth/login");
@@ -429,7 +426,6 @@ export default function NewLayout({ children }: any) {
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
-    console.log(pathname);
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
@@ -457,6 +453,9 @@ export default function NewLayout({ children }: any) {
           break;
         case "f":
           location.push("/tickets/closed");
+          break;
+        case "Escape":
+          location.push("/tickets");
           break;
         default:
           break;
@@ -991,7 +990,10 @@ export default function NewLayout({ children }: any) {
                       Send Feedback
                     </Button> */}
 
-                    <Button variant="outline" className="hover:cursor-pointer whitespace-nowrap">
+                    <Button
+                      variant="outline"
+                      className="hover:cursor-pointer whitespace-nowrap"
+                    >
                       Send Feedback
                     </Button>
                   </Link>
