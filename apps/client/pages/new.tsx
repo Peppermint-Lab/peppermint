@@ -48,7 +48,7 @@ export default function CreateTicket() {
   const [priority, setPriority] = useState("Normal");
   const [options, setOptions] = useState<any>();
   const [users, setUsers] = useState<any>();
-  const [selected, setSelected] = useState<any>(type[2]);
+  const [selected, setSelected] = useState<any>(type[3]);
 
   const editor = useEditor({
     extensions: [
@@ -166,7 +166,7 @@ export default function CreateTicket() {
                   <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {company === undefined
-                        ? t("select_a_client")
+                        ? t("select_a_client") : company === "" ? t("select_a_client")
                         : company.name}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -185,6 +185,44 @@ export default function CreateTicket() {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10  max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Option
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? "bg-indigo-600 text-white"
+                                  : "text-gray-900 dark:text-white",
+                                "relative cursor-default select-none py-2 pl-3 pr-9"
+                              )
+                            }
+                            value={undefined}
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                <span
+                                  className={classNames(
+                                    selected ? "font-semibold" : "font-normal",
+                                    "block truncate"
+                                  )}
+                                >
+                                  Unassigned
+                                </span>
+
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? "text-white" : "text-indigo-600",
+                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                    )}
+                                  >
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
                       {options !== undefined &&
                         options.map((client: any) => (
                           <Listbox.Option
@@ -259,6 +297,44 @@ export default function CreateTicket() {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Option
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? "bg-indigo-600 text-white"
+                                  : "text-gray-900 dark:text-white",
+                                "relative cursor-default select-none py-2 pl-3 pr-9"
+                              )
+                            }
+                            value={undefined}
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                <span
+                                  className={classNames(
+                                    selected ? "font-semibold" : "font-normal",
+                                    "block truncate"
+                                  )}
+                                >
+                                  Unassigned
+                                </span>
+
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? "text-white" : "text-indigo-600",
+                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                    )}
+                                  >
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
                       {users !== undefined &&
                         users.map((user: any) => (
                           <Listbox.Option
@@ -388,7 +464,7 @@ export default function CreateTicket() {
         </div>
       </div>
       <div className="flex flex-col xl:flex-row h-full w-full">
-        <div className="w-full xl:w-2/3 order-2 xl:order-2">
+        <div className="w-full  order-2 xl:order-2">
           <div className="px-4 border-b border-gray-700">
             <input
               type="text"
