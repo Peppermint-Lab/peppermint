@@ -26,6 +26,17 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
+function isHTML(str) {
+  var a = document.createElement('div');
+  a.innerHTML = str;
+
+  for (var c = a.childNodes, i = c.length; i--; ) {
+    if (c[i].nodeType == 1) return true; 
+  }
+
+  return false;
+}
+
 const ticketStatusMapping = {
   needs_support: "Needs Support",
   in_progress: "In Progress",
@@ -281,11 +292,16 @@ export default function Ticket() {
   }, [n]);
 
   async function loadFromStorage() {
-    console.log(data)
     const storageString = data.ticket.detail as PartialBlock[];
-    return storageString
+
+    if (isHTML(storageString)) {
+      return await editor.tryParseHTMLToBlocks(storageString);
+    } else {
+      return storageString
       ? (JSON.parse(storageString) as PartialBlock[])
       : undefined;
+    }
+
   }
 
    // Loads the previously stored editor contents.
