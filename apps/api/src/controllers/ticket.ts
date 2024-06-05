@@ -43,7 +43,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         data: {
           name,
           title,
-          detail,
+          detail: JSON.stringify(detail),
           priority: priority ? priority : "low",
           email,
           type: type ? type.toLowerCase() : "support",

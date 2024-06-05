@@ -5,24 +5,20 @@ import {
   CheckIcon,
   ChevronUpDownIcon,
 } from "@heroicons/react/20/solid";
-import { Link, RichTextEditor } from "@mantine/tiptap";
-import Highlight from "@tiptap/extension-highlight";
-import Underline from "@tiptap/extension-underline";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState, useMemo } from "react";
 import { useQuery } from "react-query";
 import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
 import { notifications } from "@mantine/notifications";
 import { Button, DropdownMenu, Text, Tooltip } from "@radix-ui/themes";
-import SubScript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
 import useTranslation from "next-translate/useTranslation";
 import Frame from "react-frame-component";
+import { useCreateBlockNote } from "@blocknote/react";
+import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
 
@@ -61,6 +57,10 @@ export default function Ticket() {
     refetch();
   }, [router]);
 
+  const [initialContent, setInitialContent] = useState<
+    PartialBlock[] | undefined | "loading"
+  >("loading");
+
   const [edit, setEdit] = useState(false);
   const [editTime, setTimeEdit] = useState(false);
   const [assignedEdit, setAssignedEdit] = useState(false);
@@ -80,23 +80,7 @@ export default function Ticket() {
   const [publicComment, setPublicComment] = useState<any>(false);
   const [timeReason, setTimeReason] = useState("");
   const [file, setFile] = useState<File | null>(null);
-
-  const IssueEditor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
-      // TextAlign.configure({ types: ['heading', 'paragraph'] }),
-    ],
-    content: issue,
-    onUpdate({ editor }) {
-      setIssue(editor.getHTML());
-    },
-  });
-
+  
   const history = useRouter();
 
   const { id } = history.query;
@@ -296,13 +280,43 @@ export default function Ticket() {
     transferTicket();
   }, [n]);
 
-  useEffect(() => {
-    if (status === "success") {
-      if (IssueEditor) {
-        IssueEditor.commands.setContent(data.ticket.detail);
-      }
+  async function loadFromStorage() {
+    console.log(data)
+    const storageString = data.ticket.detail as PartialBlock[];
+    return storageString
+      ? (JSON.parse(storageString) as PartialBlock[])
+      : undefined;
+  }
+
+   // Loads the previously stored editor contents.
+   useEffect(() => {
+   if(status === "success") {
+    loadFromStorage().then((content) => {
+      setInitialContent(content);
+    });
+   }
+  }, [status, data]);
+
+  // useEffect(() => {
+  //   console.log("fire");
+  //   if (status === "success") {
+  //     loadFromStorage().then((content) => {
+  //       setInitialContent(content);
+  //     });
+  //   }
+  // }, [data, editor, status]);
+
+  const editor = useMemo(() => {
+    if (initialContent === "loading") {
+      return undefined;
     }
-  }, [data, IssueEditor]);
+    return BlockNoteEditor.create({ initialContent });
+  }, [initialContent]);
+
+  if (editor === undefined) {
+    return "Loading content...";
+  }
+
 
   return (
     <div>
@@ -504,52 +518,16 @@ export default function Ticket() {
                   </div>
                   <div className="prose max-w-none mt-2">
                     {edit && !data.ticket.fromImap ? (
-                      <RichTextEditor
-                        editor={IssueEditor}
-                        className="dark:bg-gray-900 dark:text-white rounded-none border-none"
-                      >
-                        <RichTextEditor.Toolbar className="dark:text-white rounded-none dark:bg-[#0A090C]">
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Bold />
-                            <RichTextEditor.Italic />
-                            <RichTextEditor.Underline />
-                            <RichTextEditor.Strikethrough />
-                            <RichTextEditor.ClearFormatting />
-                            <RichTextEditor.Highlight />
-                            <RichTextEditor.Code />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.H1 />
-                            <RichTextEditor.H2 />
-                            <RichTextEditor.H3 />
-                            <RichTextEditor.H4 />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Blockquote />
-                            <RichTextEditor.Hr />
-                            <RichTextEditor.BulletList />
-                            <RichTextEditor.OrderedList />
-                            <RichTextEditor.Subscript />
-                            <RichTextEditor.Superscript />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.Link />
-                            <RichTextEditor.Unlink />
-                          </RichTextEditor.ControlsGroup>
-
-                          <RichTextEditor.ControlsGroup>
-                            <RichTextEditor.AlignLeft />
-                            <RichTextEditor.AlignCenter />
-                            <RichTextEditor.AlignJustify />
-                            <RichTextEditor.AlignRight />
-                          </RichTextEditor.ControlsGroup>
-                        </RichTextEditor.Toolbar>
-
-                        <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
-                      </RichTextEditor>
+                      <>
+                        <BlockNoteView
+                          editor={editor}
+                          sideMenu={false}
+                          className="m-0 p-0"
+                          onChange={() => {
+                            setIssue(editor.document);
+                          }}
+                        />
+                      </>
                     ) : (
                       <div className="">
                         {data.ticket.fromImap ? (
@@ -561,7 +539,14 @@ export default function Ticket() {
                           </div>
                         ) : (
                           <div className="">
-                            {renderHTML(data.ticket.detail)}
+                            <BlockNoteView
+                              editor={editor}
+                              sideMenu={false}
+                              className="m-0 p-0"
+                              onChange={() => {
+                                setIssue(editor.document);
+                              }}
+                            />
                           </div>
                         )}
                       </div>

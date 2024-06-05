@@ -24,11 +24,12 @@ import { Fragment, useEffect, useState } from "react";
 import { Button, ContextMenu } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../store/session";
+import CreateTicketModal from "../components/CreateTicketModal";
 
-const projects = [
-  { id: 1, name: "Workflow Inc. / Website Redesign", url: "#" },
-  // More projects...
-];
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/mantine/style.css";
+
+
 const quickActions = [
   // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
   // { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
@@ -313,6 +314,7 @@ export default function NewLayout({ children }: any) {
   const locale = user ? user.language : "en";
 
   const [queues, setQueues] = useState([]);
+  const [keypressdown, setKeyPressDown] = useState(false)
 
   const { t, lang } = useTranslation("peppermint");
 
@@ -332,13 +334,13 @@ export default function NewLayout({ children }: any) {
   }
 
   const navigation = [
-    {
-      name: t("create_ticket"),
-      href: `/${locale}/new`,
-      icon: PlusIcon,
-      current: location.pathname === "/new" ? true : false,
-      initial: "c",
-    },
+    // {
+    //   name: t("create_ticket"),
+    //   href: `/${locale}/new`,
+    //   icon: PlusIcon,
+    //   current: location.pathname === "/new" ? true : false,
+    //   initial: "c",
+    // },
     {
       name: t("sl_dashboard"),
       href: `/${locale}/`,
@@ -434,7 +436,7 @@ export default function NewLayout({ children }: any) {
     ) {
       switch (event.key) {
         case "c":
-          location.push("/new");
+          setKeyPressDown(true)
           break;
         case "h":
           location.push("/");
@@ -761,6 +763,7 @@ export default function NewLayout({ children }: any) {
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
+                    <CreateTicketModal keypress={keypressdown} />
                     {navigation.map((item: any) => (
                       <li key={item.name}>
                         <Link
