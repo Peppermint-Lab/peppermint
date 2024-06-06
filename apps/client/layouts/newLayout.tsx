@@ -760,10 +760,10 @@ export default function NewLayout({ children }: any) {
               </Link>
             </div>
             <nav className="flex flex-1 flex-col px-6">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
+              <ul role="list" className="flex flex-1 flex-col gap-y-7 w-full">
                 <li>
-                  <ul role="list" className="-mx-2 space-y-1">
-                    <CreateTicketModal keypress={keypressdown} />
+                  <ul role="list" className="-mx-2 space-y-1 w-full">
+                    <CreateTicketModal keypress={keypressdown} setKeyPressDown={setKeyPressDown} />
                     {navigation.map((item: any) => (
                       <li key={item.name}>
                         <Link

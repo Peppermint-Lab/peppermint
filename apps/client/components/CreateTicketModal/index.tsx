@@ -28,7 +28,7 @@ const type = [
   { id: 8, name: "Feedback" },
 ];
 
-export default function CreateTicketModal({ keypress }) {
+export default function CreateTicketModal({ keypress, setKeyPressDown }) {
   const { t, lang } = useTranslation("peppermint");
   const [open, setOpen] = useState(false);
 
@@ -137,6 +137,7 @@ export default function CreateTicketModal({ keypress }) {
   function checkPress() {
     if (keypress) {
       setOpen(true);
+      setKeyPressDown(false);
     }
   }
 
@@ -148,30 +149,26 @@ export default function CreateTicketModal({ keypress }) {
   useEffect(() => checkPress(), [keypress]);
 
   return (
-    <div>
-      <>
+    <>
+      <li className="w-[calc(100%+15px)]">
         <button
-          onClick={() => setOpen(true)}
-          id="ticket_create"
-          type="button"
-          className="group flex items-center w-full rounded-md px-6 text-sm leading-6 font-semibold hover:bg-[#F0F3F9]"
+          onClick={() => setOpen(open)}
+          className={classNames(
+            open
+              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+              : " hover:bg-[#F0F3F9] dark:hover:bg-gray-800 dark:hover:text-gray-900 ",
+            "group -mx-2 w-full flex gap-x-3 p-1 text-xs rounded-md font-semibold leading-6"
+          )}
         >
-          <li>
-            <div className="group -mx-2 flex gap-x-3 p-1 text-xs rounded-md font-semibold leading-6">
-              <PlusIcon
-                className="h-4 w-4 ml-1 shrink-0 mt-1"
-                aria-hidden="true"
-              />
-              <span className="whitespace-nowrap">Create Ticket</span>
-              <div className="flex w-full justify-end float-right">
-                <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-                  c
-                </span>
-              </div>
-            </div>
-          </li>
+          <PlusIcon className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
+          <span className="whitespace-nowrap">{t("create_ticket")}</span>
+          <div className="flex w-full justify-end float-right">
+            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+              c
+            </span>
+          </div>
         </button>
-      </>
+      </li>
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="fixed z-10 inset-0" onClose={setOpen}>
@@ -614,6 +611,6 @@ export default function CreateTicketModal({ keypress }) {
           </div>
         </Dialog>
       </Transition.Root>
-    </div>
+    </>
   );
 }
