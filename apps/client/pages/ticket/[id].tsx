@@ -16,8 +16,14 @@ import { Button, DropdownMenu, Text, Tooltip } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import useTranslation from "next-translate/useTranslation";
 import Frame from "react-frame-component";
+import { useDebounce } from "use-debounce";
 import { useCreateBlockNote } from "@blocknote/react";
-import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import {
+  Block,
+  BlockNoteEditor,
+  PartialBlock,
+  tryParseHTMLToBlocks,
+} from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
@@ -27,11 +33,11 @@ function classNames(...classes: any) {
 }
 
 function isHTML(str) {
-  var a = document.createElement('div');
+  var a = document.createElement("div");
   a.innerHTML = str;
 
   for (var c = a.childNodes, i = c.length; i--; ) {
-    if (c[i].nodeType == 1) return true; 
+    if (c[i].nodeType == 1) return true;
   }
 
   return false;
@@ -72,6 +78,13 @@ export default function Ticket() {
     PartialBlock[] | undefined | "loading"
   >("loading");
 
+  const editor = useMemo(() => {
+    if (initialContent === "loading") {
+      return undefined;
+    }
+    return BlockNoteEditor.create({ initialContent });
+  }, [initialContent]);
+
   const [edit, setEdit] = useState(false);
   const [editTime, setTimeEdit] = useState(false);
   const [assignedEdit, setAssignedEdit] = useState(false);
@@ -83,7 +96,7 @@ export default function Ticket() {
   const [note, setNote] = useState<any>();
   const [issue, setIssue] = useState<any>();
   const [title, setTitle] = useState<any>();
-  const [uploaded, setUploaded] = useState<any>();
+  // const [uploaded, setUploaded] = useState<any>();
   const [priority, setPriority] = useState<any>();
   const [ticketStatus, setTicketStatus] = useState<any>();
   const [comment, setComment] = useState<any>();
@@ -91,7 +104,7 @@ export default function Ticket() {
   const [publicComment, setPublicComment] = useState<any>(false);
   const [timeReason, setTimeReason] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  
+
   const history = useRouter();
 
   const { id } = history.query;
@@ -105,7 +118,7 @@ export default function Ticket() {
       },
       body: JSON.stringify({
         id,
-        detail: issue,
+        detail: JSON.stringify(debouncedValue),
         note,
         title,
         priority,
@@ -115,7 +128,7 @@ export default function Ticket() {
       .then((res) => res.json())
       .then(() => {
         setEdit(false);
-        refetch();
+        // refetch();
       });
   }
 
@@ -291,47 +304,54 @@ export default function Ticket() {
     transferTicket();
   }, [n]);
 
+  const [debouncedValue] = useDebounce(issue, 500);
+
+  useEffect(() => {
+    if(issue) {
+      update()
+    }
+  }, [debouncedValue]);
+
   async function loadFromStorage() {
     const storageString = data.ticket.detail as PartialBlock[];
 
     if (isHTML(storageString)) {
-      return await editor.tryParseHTMLToBlocks(storageString);
+      return undefined;
     } else {
       return storageString
-      ? (JSON.parse(storageString) as PartialBlock[])
-      : undefined;
+        ? (JSON.parse(storageString) as PartialBlock[])
+        : undefined;
     }
-
   }
 
-   // Loads the previously stored editor contents.
-   useEffect(() => {
-   if(status === "success") {
-    loadFromStorage().then((content) => {
-      setInitialContent(content);
-    });
-   }
+  async function convertHTML() {
+    const blocks = await editor.tryParseHTMLToBlocks(data.ticket.detail);
+    editor.replaceBlocks(editor.document, blocks);
+  }
+
+  // Loads the previously stored editor contents.
+  useEffect(() => {
+    if (status === "success") {
+      loadFromStorage().then((content) => {
+        console.log(content);
+        setInitialContent(content);
+      });
+    }
   }, [status, data]);
 
-  // useEffect(() => {
-  //   console.log("fire");
-  //   if (status === "success") {
-  //     loadFromStorage().then((content) => {
-  //       setInitialContent(content);
-  //     });
-  //   }
-  // }, [data, editor, status]);
-
-  const editor = useMemo(() => {
-    if (initialContent === "loading") {
-      return undefined;
+  useEffect(() => {
+    if (initialContent === undefined) {
+      convertHTML();
     }
-    return BlockNoteEditor.create({ initialContent });
   }, [initialContent]);
 
   if (editor === undefined) {
     return "Loading content...";
   }
+
+  const handleInputChange = (editor) => {
+    setIssue(editor.document);
+  };
 
 
   return (
@@ -539,9 +559,9 @@ export default function Ticket() {
                           editor={editor}
                           sideMenu={false}
                           className="m-0 p-0"
-                          onChange={() => {
-                            setIssue(editor.document);
-                          }}
+                          // onChange={() => {
+                          //   setIssue(editor.document);
+                          // }}
                         />
                       </>
                     ) : (
@@ -559,9 +579,7 @@ export default function Ticket() {
                               editor={editor}
                               sideMenu={false}
                               className="m-0 p-0"
-                              onChange={() => {
-                                setIssue(editor.document);
-                              }}
+                              onChange={handleInputChange}
                             />
                           </div>
                         )}

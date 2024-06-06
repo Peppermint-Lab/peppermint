@@ -37,6 +37,7 @@
     "axios": "^0.25.0",
     "cookies-next": "^3.0.0",
     "js-file-download": "^0.4.12",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "next": "13.5",
     "next-remove-imports": "^1.0.6",
@@ -53,9 +54,10 @@
     "react-simple-code-editor": "^0.13.1",
     "react-spinners": "^0.11.0",
     "react-table": "^7.7.0",
-    "use-debounce": "^9.0.4"
+    "use-debounce": "^10.0.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4",
     "@types/next": "^9.0.0",
     "@types/node": "17.0.4",
     "@types/prismjs": "^1",
