@@ -11,8 +11,10 @@ import {
 import { useRouter } from "next/router";
 import { useUser } from "../../store/session";
 import { getCookie } from "cookies-next";
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
+
+import dynamic from "next/dynamic";
+ 
+const Editor = dynamic(() => import("../BlockEditor"), { ssr: false });
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -49,7 +51,6 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
   const [users, setUsers] = useState<any>();
   const [selected, setSelected] = useState<any>(type[3]);
 
-  const editor = useCreateBlockNote();
 
   const fetchClients = async () => {
     await fetch(`/api/v1/clients/all`, {
@@ -246,14 +247,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                     className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                   />
 
-                  <BlockNoteView
-                    editor={editor}
-                    sideMenu={false}
-                    className="m-0 p-0"
-                    onChange={() => {
-                      setIssue(editor.document);
-                    }}
-                  />
+                  <Editor setIssue={setIssue} />
 
                   <div className="flex flex-row space-x-4 pb-2 mt-2">
                     <Listbox value={company} onChange={setCompany}>

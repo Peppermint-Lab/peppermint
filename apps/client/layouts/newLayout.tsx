@@ -26,10 +26,6 @@ import useTranslation from "next-translate/useTranslation";
 import { useUser } from "../store/session";
 import CreateTicketModal from "../components/CreateTicketModal";
 
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
-
-
 const quickActions = [
   // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
   // { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
