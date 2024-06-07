@@ -7,7 +7,6 @@ export default function Login({}) {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
-  const [view, setView] = useState("request");
 
   async function postData() {
     await fetch(`/api/v1/auth/password-reset`, {

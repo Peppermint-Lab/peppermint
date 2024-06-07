@@ -452,9 +452,9 @@ export default function NewLayout({ children }: any) {
         case "f":
           location.push("/tickets/closed");
           break;
-        case "Escape":
-          location.push("/tickets");
-          break;
+        // case "Escape":
+        //   location.push("/tickets");
+        //   break;
         default:
           break;
       }

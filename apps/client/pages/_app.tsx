@@ -1,5 +1,6 @@
 //@ts-nocheck
 import "@radix-ui/themes/styles.css";
+
 import { ThemeProvider } from "next-themes";
 import "../styles/globals.css";
 
@@ -10,6 +11,7 @@ import {
   TicketIcon,
 } from "@heroicons/react/24/outline";
 import { Notifications } from "@mantine/notifications";
+import { MantineProvider } from "@mantine/core";
 import { Theme } from "@radix-ui/themes";
 import { useRouter } from "next/router";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -90,30 +92,32 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
-      <>
+      <MantineProvider>
         <Notifications position="top-right" />
         <Component {...pageProps} />
-      </>
+      </MantineProvider>
     );
   }
 
   if (router.pathname.includes("/admin")) {
     return (
       <SessionProvider>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Theme>
-            <QueryClientProvider client={queryClient}>
-              <Auth>
-                <NewLayout>
-                  <AdminLayout>
-                    <Notifications position="top-right" />
-                    <Component {...pageProps} />
-                  </AdminLayout>
-                </NewLayout>
-              </Auth>
-            </QueryClientProvider>
-          </Theme>
-        </ThemeProvider>
+        <MantineProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <Theme>
+              <QueryClientProvider client={queryClient}>
+                <Auth>
+                  <NewLayout>
+                    <AdminLayout>
+                      <Notifications position="top-right" />
+                      <Component {...pageProps} />
+                    </AdminLayout>
+                  </NewLayout>
+                </Auth>
+              </QueryClientProvider>
+            </Theme>
+          </ThemeProvider>
+        </MantineProvider>
       </SessionProvider>
     );
   }
@@ -121,20 +125,22 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/notebook")) {
     return (
       <SessionProvider>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Theme>
-            <QueryClientProvider client={queryClient}>
-              <Auth>
-                <NewLayout>
-                  <NoteBookLayout>
-                    <Notifications position="top-right" />
-                    <Component {...pageProps} />
-                  </NoteBookLayout>
-                </NewLayout>
-              </Auth>
-            </QueryClientProvider>
-          </Theme>
-        </ThemeProvider>
+        <MantineProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <Theme>
+              <QueryClientProvider client={queryClient}>
+                <Auth>
+                  <NewLayout>
+                    <NoteBookLayout>
+                      <Notifications position="top-right" />
+                      <Component {...pageProps} />
+                    </NoteBookLayout>
+                  </NewLayout>
+                </Auth>
+              </QueryClientProvider>
+            </Theme>
+          </ThemeProvider>
+        </MantineProvider>
       </SessionProvider>
     );
   }
@@ -142,6 +148,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/settings")) {
     return (
       <SessionProvider>
+        <MantineProvider>
         <ThemeProvider attribute="class" defaultTheme="light">
           <Theme>
             <QueryClientProvider client={queryClient}>
@@ -156,6 +163,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
             </QueryClientProvider>
           </Theme>
         </ThemeProvider>
+        </MantineProvider>
       </SessionProvider>
     );
   }
@@ -163,16 +171,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.startsWith("/portal")) {
     return (
       <SessionProvider>
-        <Theme>
-          <QueryClientProvider client={queryClient}>
-            <Auth>
-              <PortalLayout>
-                <Notifications position="top-right" />
-                <Component {...pageProps} />
-              </PortalLayout>
-            </Auth>
-          </QueryClientProvider>
-        </Theme>
+        <MantineProvider defaultColorScheme="light">
+          <Theme>
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <PortalLayout>
+                  <Notifications position="top-right" />
+                  <Component {...pageProps} />
+                </PortalLayout>
+              </Auth>
+            </QueryClientProvider>
+          </Theme>
+        </MantineProvider>
       </SessionProvider>
     );
   }
@@ -180,35 +190,39 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname === "/onboarding") {
     return (
       <SessionProvider>
-        <Notifications position="top-right" />
-        <Component {...pageProps} />
+        <MantineProvider defaultColorScheme="light">
+          <Notifications position="top-right" />
+          <Component {...pageProps} />
+        </MantineProvider>
       </SessionProvider>
     );
   }
 
   if (router.pathname === "/submit") {
     return (
-      <>
+      <MantineProvider defaultColorScheme="light">
         <Notifications position="top-right" />
         <Component {...pageProps} />
-      </>
+      </MantineProvider>
     );
   }
 
   return (
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="light">
-        <Theme>
-          <QueryClientProvider client={queryClient}>
-            <Auth>
-              <NewLayout>
-                <Notifications position="top-right" />
-                <Component {...pageProps} />
-              </NewLayout>
-            </Auth>
-          </QueryClientProvider>
-        </Theme>
-      </ThemeProvider>
+      <MantineProvider defaultColorScheme="light">
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Theme>
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <NewLayout>
+                  <Notifications position="top-right" />
+                  <Component {...pageProps} />
+                </NewLayout>
+              </Auth>
+            </QueryClientProvider>
+          </Theme>
+        </ThemeProvider>
+      </MantineProvider>
     </SessionProvider>
   );
 }

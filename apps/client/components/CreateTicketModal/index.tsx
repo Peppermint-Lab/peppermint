@@ -151,9 +151,9 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
 
   return (
     <>
-      <li className="w-[calc(100%+15px)]">
+      <li className="w-[calc(100%+15px)]" >
         <button
-          onClick={() => setOpen(open)}
+          onClick={() => setOpen(true)}
           className={classNames(
             open
               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
