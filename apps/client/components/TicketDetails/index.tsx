@@ -9,7 +9,6 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useRef, useState, useMemo } from "react";
 import { useQuery } from "react-query";
-import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
 import { notifications } from "@mantine/notifications";
 import { Text, Tooltip } from "@radix-ui/themes";
@@ -19,10 +18,6 @@ import Frame from "react-frame-component";
 import { useDebounce } from "use-debounce";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
-
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
-
 
 import { useUser } from "../../store/session";
 

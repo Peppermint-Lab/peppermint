@@ -16,7 +16,6 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import renderHTML from "react-render-html";
 // import TextAlign from '@tiptap/extension-text-align';
 import SubScript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
@@ -411,7 +410,6 @@ export default function Ticket() {
                     <div className="">
                       {data.ticket.fromImap ? (
                         <div className="break-words bg-white rounded-md p-4 text-black">
-                          {/* {renderHTML(data.ticket.detail)} */}
                           <Frame
                             className="min-h-[60vh] h-full w-full"
                             initialContent={data.ticket.detail}
@@ -420,7 +418,7 @@ export default function Ticket() {
                           </Frame>
                         </div>
                       ) : (
-                        <div className="">{renderHTML(data.ticket.detail)}</div>
+                        <div className=""></div>
                       )}
                     </div>
                   </div>
