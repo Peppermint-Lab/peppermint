@@ -4807,11 +4807,10 @@ __metadata:
     posthog-js: "npm:1.93.2"
     prismjs: "npm:^1.29.0"
     prosemirror-model: "npm:^1.18.1"
-    react: "npm:18.2.0"
-    react-dom: "npm:18.2.0"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
     react-frame-component: "npm:^5.2.6"
     react-query: "npm:^3.34.7"
-    react-render-html: "npm:^0.6.0"
     react-simple-code-editor: "npm:^0.13.1"
     react-spinners: "npm:^0.11.0"
     react-table: "npm:^7.7.0"
@@ -10975,15 +10974,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse5@npm:^3.0.2":
-  version: 3.0.3
-  resolution: "parse5@npm:3.0.3"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/b9ea8adfb03fb55bbc0e090233f8ccf6b47210daf71b4c8785612b27484f6e98a83b9b3998c54c1d26ba1f1d9ebc9402f7e4b3c285a7650df1a0d2532fe79cb1
-  languageName: node
-  linkType: hard
-
 "parse5@npm:^6.0.0":
   version: 6.0.1
   resolution: "parse5@npm:6.0.1"
@@ -11675,13 +11665,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-attr-converter@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "react-attr-converter@npm:0.3.1"
-  checksum: 10c0/c460dafcbcca6058a2589c69bace1947c1614ca06865561ded3503095618c87318e508ec93edde18044a89ca90520adc5c38aeefb3b45683f40eb9ba6616fc64
-  languageName: node
-  linkType: hard
-
 "react-dom@npm:18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
@@ -11694,7 +11677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18, react-dom@npm:^18.2.0":
+"react-dom@npm:^18, react-dom@npm:^18.2.0, react-dom@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
@@ -11817,18 +11800,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-render-html@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "react-render-html@npm:0.6.0"
-  dependencies:
-    parse5: "npm:^3.0.2"
-    react-attr-converter: "npm:^0.3.1"
-  peerDependencies:
-    react: ^16.1.0
-  checksum: 10c0/7cd330008c22e2a13eae1a254d010010851760d7e83ebc42404dbeb4311d4b84a5cbc6b9f7279a4af631394e99bae3ee53f384ecbb0f2d20805622e0c68c7682
-  languageName: node
-  linkType: hard
-
 "react-simple-code-editor@npm:^0.13.1":
   version: 0.13.1
   resolution: "react-simple-code-editor@npm:0.13.1"
@@ -11914,7 +11885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18, react@npm:^18.2.0":
+"react@npm:^18, react@npm:^18.2.0, react@npm:^18.3.1":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:
