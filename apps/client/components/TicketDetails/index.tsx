@@ -133,8 +133,8 @@ export default function Ticket() {
         detail: JSON.stringify(debouncedValue),
         note,
         title,
-        priority,
-        status: ticketStatus,
+        priority: priority ? priority.value : undefined,
+        status: ticketStatus ? ticketStatus.value : undefined,
       }),
     })
       .then((res) => res.json())
@@ -313,6 +313,10 @@ export default function Ticket() {
   useEffect(() => {
     transferTicket();
   }, [n]);
+
+  useEffect(() => {
+    update();
+  }, [priority, ticketStatus]);
 
   const [debouncedValue] = useDebounce(issue, 500);
 
@@ -765,11 +769,13 @@ export default function Ticket() {
                   value={priorityOptions}
                   update={setPriority}
                   defaultName={data.ticket.priority ? data.ticket.priority : ""}
+                  hideInitial={true}
                 />
                 <UserCombo
                   value={ticketStatusMap}
                   update={setTicketStatus}
                   defaultName={data.ticket.status ? data.ticket.status : ""}
+                  hideInitial={true}
                 />
 
                 {/* <div className="border-t border-gray-200">

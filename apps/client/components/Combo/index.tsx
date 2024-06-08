@@ -26,7 +26,7 @@ type Status = {
   icon: LucideIcon;
 };
 
-export function UserCombo({ value, update, defaultName }) {
+export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
   const [open, setOpen] = React.useState(false);
   const [selectedStatus, setSelectedStatus] = React.useState<any | null>(null);
 
@@ -41,25 +41,29 @@ export function UserCombo({ value, update, defaultName }) {
           >
             {selectedStatus ? (
               <div className="flex flex-row space-x-4 w-[120px]">
-                <div className="flex-shrink-0">
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
-                    <span className="text-xs font-medium leading-none text-white uppercase ">
-                      {selectedStatus.name[0]}
+                {!hideInitial && (
+                  <div className="flex-shrink-0">
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
+                      <span className="text-xs font-medium leading-none text-white uppercase ">
+                        {selectedStatus.name[0]}
+                      </span>
                     </span>
-                  </span>
-                </div>
+                  </div>
+                )}
                 {selectedStatus.name}
               </div>
             ) : defaultName ? (
               <>
                 <div className="flex flex-row space-x-2">
-                  <div className="flex-shrink-0">
-                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
-                      <span className="text-xs font-medium leading-none text-white uppercase ">
-                        {defaultName[0]}
+                  {!hideInitial && (
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
+                        <span className="text-xs font-medium leading-none text-white uppercase ">
+                          {defaultName[0]}
+                        </span>
                       </span>
-                    </span>
-                  </div>
+                    </div>
+                  )}
                   <span>{defaultName}</span>
                 </div>
               </>

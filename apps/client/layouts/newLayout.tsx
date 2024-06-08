@@ -310,7 +310,7 @@ export default function NewLayout({ children }: any) {
   const locale = user ? user.language : "en";
 
   const [queues, setQueues] = useState([]);
-  const [keypressdown, setKeyPressDown] = useState(false)
+  const [keypressdown, setKeyPressDown] = useState(false);
 
   const { t, lang } = useTranslation("peppermint");
 
@@ -432,7 +432,7 @@ export default function NewLayout({ children }: any) {
     ) {
       switch (event.key) {
         case "c":
-          setKeyPressDown(true)
+          setKeyPressDown(true);
           break;
         case "h":
           location.push("/");
@@ -759,7 +759,10 @@ export default function NewLayout({ children }: any) {
               <ul role="list" className="flex flex-1 flex-col gap-y-7 w-full">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1 w-full">
-                    <CreateTicketModal keypress={keypressdown} setKeyPressDown={setKeyPressDown} />
+                    <CreateTicketModal
+                      keypress={keypressdown}
+                      setKeyPressDown={setKeyPressDown}
+                    />
                     {navigation.map((item: any) => (
                       <li key={item.name}>
                         <Link
@@ -857,64 +860,20 @@ export default function NewLayout({ children }: any) {
                             "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
-                          <ContextMenu.Root>
-                            <ContextMenu.Trigger>
-                              <>
-                                <Cog6ToothIcon
-                                  className="h-4 w-4 ml-1 shrink-0 mt-1"
-                                  aria-hidden="true"
-                                />
-                                <span className="whitespace-nowrap">
-                                  {t("admin_settings")}
-                                </span>
-                                <div className="flex w-full justify-end float-right">
-                                  <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-                                    a
-                                  </span>
-                                </div>
-                              </>
-                            </ContextMenu.Trigger>
-                            <ContextMenu.Content>
-                              <ContextMenu.Item shortcut="⌘ E">
-                                Edit
-                              </ContextMenu.Item>
-                              <ContextMenu.Item shortcut="⌘ D">
-                                Duplicate
-                              </ContextMenu.Item>
-                              <ContextMenu.Separator />
-                              <ContextMenu.Item shortcut="⌘ N">
-                                Archive
-                              </ContextMenu.Item>
-
-                              <ContextMenu.Sub>
-                                <ContextMenu.SubTrigger>
-                                  More
-                                </ContextMenu.SubTrigger>
-                                <ContextMenu.SubContent>
-                                  <ContextMenu.Item>
-                                    Move to project…
-                                  </ContextMenu.Item>
-                                  <ContextMenu.Item>
-                                    Move to folder…
-                                  </ContextMenu.Item>
-                                  <ContextMenu.Separator />
-                                  <ContextMenu.Item>
-                                    Advanced options…
-                                  </ContextMenu.Item>
-                                </ContextMenu.SubContent>
-                              </ContextMenu.Sub>
-
-                              <ContextMenu.Separator />
-                              <ContextMenu.Item>Share</ContextMenu.Item>
-                              <ContextMenu.Item>
-                                Add to favorites
-                              </ContextMenu.Item>
-                              <ContextMenu.Separator />
-                              <ContextMenu.Item shortcut="⌘ ⌫" color="red">
-                                Delete
-                              </ContextMenu.Item>
-                            </ContextMenu.Content>
-                          </ContextMenu.Root>
+                          <>
+                            <Cog6ToothIcon
+                              className="h-4 w-4 ml-1 shrink-0 mt-1"
+                              aria-hidden="true"
+                            />
+                            <span className="whitespace-nowrap">
+                              {t("admin_settings")}
+                            </span>
+                            <div className="flex w-full justify-end float-right">
+                              <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                                a
+                              </span>
+                            </div>
+                          </>
                         </Link>
                       )}
                     </li>
