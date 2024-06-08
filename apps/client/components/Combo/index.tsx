@@ -26,87 +26,75 @@ type Status = {
   icon: LucideIcon;
 };
 
-const statuses: Status[] = [
-  {
-    value: "backlog",
-    label: "Backlog",
-    icon: HelpCircle,
-  },
-  {
-    value: "todo",
-    label: "Todo",
-    icon: Circle,
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
-    icon: ArrowUpCircle,
-  },
-  {
-    value: "done",
-    label: "Done",
-    icon: CheckCircle2,
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-    icon: XCircle,
-  },
-];
-
-export function Combo() {
+export function UserCombo({ value, update, defaultName }) {
   const [open, setOpen] = React.useState(false);
-  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
-    null
-  );
+  const [selectedStatus, setSelectedStatus] = React.useState<any | null>(null);
 
   return (
     <div className="flex items-center space-x-4">
-      <p className="text-sm text-muted-foreground">Status</p>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             size="sm"
-            className="w-[150px] justify-start"
+            className="w-[150px] justify-start border-none"
           >
             {selectedStatus ? (
+              <div className="flex flex-row space-x-4 w-[120px]">
+                <div className="flex-shrink-0">
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
+                    <span className="text-xs font-medium leading-none text-white uppercase ">
+                      {selectedStatus.name[0]}
+                    </span>
+                  </span>
+                </div>
+                {selectedStatus.name}
+              </div>
+            ) : defaultName ? (
               <>
-                <selectedStatus.icon className="mr-2 h-4 w-4 shrink-0" />
-                {selectedStatus.label}
+                <div className="flex flex-row space-x-2">
+                  <div className="flex-shrink-0">
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
+                      <span className="text-xs font-medium leading-none text-white uppercase ">
+                        {defaultName[0]}
+                      </span>
+                    </span>
+                  </div>
+                  <span>{defaultName}</span>
+                </div>
               </>
             ) : (
-              <>+ Set status</>
+              <span>unassigned</span>
             )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" side="right" align="start">
           <Command>
-            <CommandInput placeholder="Change status..." />
+            {/* <CommandInput placeholder="Change status..." /> */}
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {statuses.map((status) => (
+                {value.map((val) => (
                   <CommandItem
-                    key={status.value}
-                    value={status.value}
-                    onSelect={(value) => {
-                      setSelectedStatus(
-                        statuses.find((priority) => priority.value === value) ||
-                          null
-                      );
+                    className=" hover:cursor-pointer"
+                    key={val.value}
+                    value={val}
+                    onSelect={(selected) => {
+                      const user = value.find((k) => k.name === selected);
+                      setSelectedStatus(user);
+                      update(user);
                       setOpen(false);
                     }}
                   >
-                    <status.icon
+                    {/* <val.icon
                       className={cn(
                         "mr-2 h-4 w-4",
-                        status.value === selectedStatus?.value
+                        val.value === selectedStatus?.value
                           ? "opacity-100"
                           : "opacity-40"
                       )}
-                    />
-                    <span>{status.label}</span>
+                    /> */}
+                    <span>{val.name}</span>
                   </CommandItem>
                 ))}
               </CommandGroup>

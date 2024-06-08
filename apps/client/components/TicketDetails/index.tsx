@@ -20,7 +20,7 @@ import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
-import { Combo, ComboboxDemo } from "../Combo";
+import { UserCombo } from "../Combo";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -37,12 +37,30 @@ function isHTML(str) {
   return false;
 }
 
-const ticketStatusMapping = {
-  needs_support: "Needs Support",
-  in_progress: "In Progress",
-  in_review: "In Review",
-  done: "Done",
-};
+const ticketStatusMap = [
+  { id: 1, value: "needs_support", name: "Needs Support" },
+  { id: 2, value: "in_progress", name: "In Progress" },
+  { id: 3, value: "in_review", name: "In Review" },
+  { id: 4, value: "done", name: "Done" },
+];
+
+const priorityOptions = [
+  {
+    id: "1",
+    name: "Low",
+    value: "low",
+  },
+  {
+    id: "2",
+    name: "Medium",
+    value: "medium",
+  },
+  {
+    id: "1",
+    name: "High",
+    value: "high",
+  },
+];
 
 export default function Ticket() {
   const router = useRouter();
@@ -272,8 +290,6 @@ export default function Ticket() {
           setFile(null);
           refetch();
         }
-
-        console.log(data);
       } catch (error) {
         console.error(error);
       }
@@ -489,7 +505,7 @@ export default function Ticket() {
                                 />
                               </div>
                               <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {ticketStatusMapping[data.ticket.status]}
+                                {ticketStatusMap[data.ticket.status]}
                               </div>
                             </div>
                           </li>
@@ -735,452 +751,28 @@ export default function Ticket() {
             </div>
             <div className="hidden xl:block xl:pl-8 xl:order-2 order-1">
               <h2 className="sr-only">{t("details")}</h2>
-              <div className="space-y-4  border-gray-200 py-2">
-                <div>
-                  <div className="flex flex-row justify-between items-center">
-                    <span className="text-sm font-medium text-gray-500 dark:text-white">
-                      {t("assignees")}
-                    </span>
-                    {!assignedEdit ? (
-                      <button
-                        onClick={() => setAssignedEdit(true)}
-                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
-                      >
-                        {t("edit-btn")}
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => setAssignedEdit(false)}
-                        className="text-sm align-top font-medium text-gray-500 hover:underline dark:text-white"
-                      >
-                        cancel
-                      </button>
-                    )}
-                  </div>
-                  {!assignedEdit ? (
-                    <ul role="list" className="mt-1 space-y-3">
-                      <li className="flex justify-start items-center space-x-2">
-                        <div className="flex-shrink-0">
-                          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
-                            <span className="text-xs font-medium leading-none text-white uppercase ">
-                              {data.ticket.assignedTo
-                                ? data.ticket.assignedTo.name[0]
-                                : "-"}
-                            </span>
-                          </span>
-                        </div>
-                        <div className="text-sm font-medium mt-[4px] text-gray-900 dark:text-white">
-                          {data.ticket.assignedTo
-                            ? data.ticket.assignedTo.name
-                            : ""}
-                        </div>
-                      </li>
-                    </ul>
-                  ) : (
-                    users && (
-                      <Listbox value={n} onChange={setN}>
-                        {({ open }) => (
-                          <>
-                            <div className="mt-1 relative">
-                              <Listbox.Button className="bg-white z-50 relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <span className="block truncate">
-                                  {n ? n.name : t("select_new_user")}
-                                </span>
-                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"></span>
-                              </Listbox.Button>
+              <div className="space-y-1  border-gray-200 py-2">
+                {users && (
+                  <UserCombo
+                    value={users}
+                    update={setN}
+                    defaultName={
+                      data.ticket.assignedTo ? data.ticket.assignedTo.name : ""
+                    }
+                  />
+                )}
+                <UserCombo
+                  value={priorityOptions}
+                  update={setPriority}
+                  defaultName={data.ticket.priority ? data.ticket.priority : ""}
+                />
+                <UserCombo
+                  value={ticketStatusMap}
+                  update={setTicketStatus}
+                  defaultName={data.ticket.status ? data.ticket.status : ""}
+                />
 
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-50 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                  {users
-                                    .filter((e) => !e.external_user)
-                                    .map((user: any) => (
-                                      <Listbox.Option
-                                        key={user.id}
-                                        className={({ active }) =>
-                                          classNames(
-                                            active
-                                              ? "text-white bg-indigo-600"
-                                              : "text-gray-900",
-                                            "cursor-default select-none relative py-2 pl-3 pr-9"
-                                          )
-                                        }
-                                        value={user}
-                                      >
-                                        {({ n, active }: any) => (
-                                          <>
-                                            <span
-                                              className={classNames(
-                                                n
-                                                  ? "font-semibold"
-                                                  : "font-normal",
-                                                "block truncate"
-                                              )}
-                                            >
-                                              {user.name}
-                                            </span>
-
-                                            {n ? (
-                                              <span
-                                                className={classNames(
-                                                  active
-                                                    ? "text-white"
-                                                    : "text-indigo-600",
-                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                )}
-                                              >
-                                                <CheckIcon
-                                                  className="h-5 w-5"
-                                                  aria-hidden="true"
-                                                />
-                                              </span>
-                                            ) : null}
-                                          </>
-                                        )}
-                                      </Listbox.Option>
-                                    ))}
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
-                    )
-                  )}
-                </div>
-                <div className="border-t border-gray-200">
-                  <div className="flex flex-row items-center justify-between mt-2">
-                    <span className="text-sm font-medium text-gray-500 dark:text-white">
-                      {t("labels")}
-                    </span>
-                    {!labelEdit ? (
-                      <button
-                        onClick={() => setLabelEdit(true)}
-                        className="text-sm font-medium text-gray-500 hover:underline"
-                      >
-                        {t("edit-btn")}
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          setLabelEdit(false);
-                          update();
-                        }}
-                        className="text-sm font-medium text-gray-500 hover:underline"
-                      >
-                        {t("save")}
-                      </button>
-                    )}
-                  </div>
-                  {!labelEdit ? (
-                    <ul role="list" className="mt-2 leading-8 space-x-2">
-                      {data.ticket.priority === "Low" && (
-                        <li className="inline">
-                          <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                              <span
-                                className="h-1.5 w-1.5 rounded-full bg-blue-500"
-                                aria-hidden="true"
-                              />
-                            </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
-                              {data.ticket.priority} {t("priority")}
-                            </div>
-                          </div>
-                        </li>
-                      )}
-                      {data.ticket.priority === "Normal" && (
-                        <li className="inline">
-                          <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                              <span
-                                className="h-1.5 w-1.5 rounded-full bg-green-500 "
-                                aria-hidden="true"
-                              />
-                            </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
-                              {data.ticket.priority} {t("priority")}
-                            </div>
-                          </div>
-                        </li>
-                      )}
-                      {data.ticket.priority === "High" && (
-                        <li className="inline">
-                          <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                              <span
-                                className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                aria-hidden="true"
-                              />
-                            </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
-                              {data.ticket.priority} {t("priority")}
-                            </div>
-                          </div>
-                        </li>
-                      )}
-                      {data.ticket.status && (
-                        <li className="inline">
-                          <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                              <span
-                                className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                aria-hidden="true"
-                              />
-                            </div>
-                            <div className="ml-3 text-xs font-semibold text-gray-900 dark:text-white">
-                              {ticketStatusMapping[data.ticket.status]}
-                            </div>
-                          </div>
-                        </li>
-                      )}
-                    </ul>
-                  ) : (
-                    <div className={"w-[150px]"}>
-                      <Listbox value={priority} onChange={setPriority}>
-                        {({ open }) => (
-                          <>
-                            <div className="relative mt-2">
-                              <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                <span className="block truncate">
-                                  {priority ? priority : data.ticket.priority}
-                                </span>
-                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                  <ChevronUpDownIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Listbox.Button>
-
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                  <Listbox.Option
-                                    className={({ active }) =>
-                                      classNames(
-                                        active
-                                          ? "bg-indigo-600 text-white"
-                                          : "text-gray-900",
-                                        "relative cursor-default select-none py-2 pl-3 pr-9"
-                                      )
-                                    }
-                                    value="Low"
-                                  >
-                                    {({ selected, active }) => (
-                                      <>
-                                        <span
-                                          className={classNames(
-                                            selected
-                                              ? "font-semibold"
-                                              : "font-normal",
-                                            "block truncate"
-                                          )}
-                                        >
-                                          Low
-                                        </span>
-
-                                        {selected ? (
-                                          <span
-                                            className={classNames(
-                                              active
-                                                ? "text-white"
-                                                : "text-indigo-600",
-                                              "absolute inset-y-0 right-0 flex items-center pr-4"
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        ) : null}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                  <Listbox.Option
-                                    className={({ active }) =>
-                                      classNames(
-                                        active
-                                          ? "bg-indigo-600 text-white"
-                                          : "text-gray-900",
-                                        "relative cursor-default select-none py-2 pl-3 pr-9"
-                                      )
-                                    }
-                                    value="Normal"
-                                  >
-                                    {({ selected, active }) => (
-                                      <>
-                                        <span
-                                          className={classNames(
-                                            selected
-                                              ? "font-semibold"
-                                              : "font-normal",
-                                            "block truncate"
-                                          )}
-                                        >
-                                          Normal
-                                        </span>
-
-                                        {selected ? (
-                                          <span
-                                            className={classNames(
-                                              active
-                                                ? "text-white"
-                                                : "text-indigo-600",
-                                              "absolute inset-y-0 right-0 flex items-center pr-4"
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        ) : null}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                  <Listbox.Option
-                                    className={({ active }) =>
-                                      classNames(
-                                        active
-                                          ? "bg-indigo-600 text-white"
-                                          : "text-gray-900",
-                                        "relative cursor-default select-none py-2 pl-3 pr-9"
-                                      )
-                                    }
-                                    value="High"
-                                  >
-                                    {({ selected, active }) => (
-                                      <>
-                                        <span
-                                          className={classNames(
-                                            selected
-                                              ? "font-semibold"
-                                              : "font-normal",
-                                            "block truncate"
-                                          )}
-                                        >
-                                          High
-                                        </span>
-
-                                        {selected ? (
-                                          <span
-                                            className={classNames(
-                                              active
-                                                ? "text-white"
-                                                : "text-indigo-600",
-                                              "absolute inset-y-0 right-0 flex items-center pr-4"
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        ) : null}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
-                      <Listbox value={ticketStatus} onChange={setTicketStatus}>
-                        {({ open }) => (
-                          <>
-                            <div className="relative mt-2">
-                              <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                <div className="block truncate">
-                                  {ticketStatus
-                                    ? ticketStatusMapping[ticketStatus]
-                                    : ticketStatusMapping[data.ticket.status]}
-                                </div>
-                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                  <ChevronUpDownIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Listbox.Button>
-
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                  {Object.keys(ticketStatusMapping).map(
-                                    (status) => (
-                                      <Listbox.Option
-                                        key={status}
-                                        className={({ active }) =>
-                                          classNames(
-                                            active
-                                              ? "bg-indigo-600 text-white"
-                                              : "text-gray-900",
-                                            "relative cursor-default select-none py-2 pl-3 pr-9"
-                                          )
-                                        }
-                                        value={status}
-                                      >
-                                        {({ selected, active }) => (
-                                          <>
-                                            <span
-                                              className={classNames(
-                                                selected
-                                                  ? "font-semibold"
-                                                  : "font-normal",
-                                                "block truncate"
-                                              )}
-                                            >
-                                              {ticketStatusMapping[status]}
-                                            </span>
-
-                                            {selected ? (
-                                              <span
-                                                className={classNames(
-                                                  active
-                                                    ? "text-white"
-                                                    : "text-indigo-600",
-                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                )}
-                                              >
-                                                <CheckIcon
-                                                  className="h-5 w-5"
-                                                  aria-hidden="true"
-                                                />
-                                              </span>
-                                            ) : null}
-                                          </>
-                                        )}
-                                      </Listbox.Option>
-                                    )
-                                  )}
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
-                    </div>
-                  )}
-                </div>
-                <div className="border-t border-gray-200">
+                {/* <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
                       Time Tracking
@@ -1244,7 +836,7 @@ export default function Ticket() {
                       </div>
                     </div>
                   )}
-                </div>
+                </div> */}
                 {/* <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
                     <span className="text-sm font-medium text-gray-500 dark:text-white">

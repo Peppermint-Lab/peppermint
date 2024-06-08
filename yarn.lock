@@ -4784,6 +4784,7 @@ __metadata:
     "@monaco-editor/react": "npm:^4.6.0"
     "@radix-ui/react-dialog": "npm:^1.0.5"
     "@radix-ui/react-popover": "npm:^1.0.7"
+    "@radix-ui/react-select": "npm:^2.0.0"
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@radix-ui/themes": "npm:^2.0.1"
     "@tabler/icons-react": "npm:^3.5.0"
