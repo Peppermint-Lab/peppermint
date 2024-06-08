@@ -20,6 +20,7 @@ import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
+import { Combo, ComboboxDemo } from "../Combo";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
