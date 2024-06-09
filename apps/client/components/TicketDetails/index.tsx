@@ -132,7 +132,7 @@ export default function Ticket() {
         id,
         detail: JSON.stringify(debouncedValue),
         note,
-        title,
+        title: debounceTitle,
         priority: priority ? priority.value : undefined,
         status: ticketStatus ? ticketStatus.value : undefined,
       }),
@@ -314,11 +314,12 @@ export default function Ticket() {
     transferTicket();
   }, [n]);
 
+  const [debouncedValue] = useDebounce(issue, 500);
+  const [debounceTitle] = useDebounce(title, 500);
+
   useEffect(() => {
     update();
-  }, [priority, ticketStatus]);
-
-  const [debouncedValue] = useDebounce(issue, 500);
+  }, [priority, ticketStatus, debounceTitle]);
 
   useEffect(() => {
     if (issue) {
@@ -388,24 +389,22 @@ export default function Ticket() {
             <div className="xl:border-r xl:border-gray-200 xl:pr-8 xl:w-2/3">
               <div className="">
                 <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
-                  <div className="w-4/5">
-                    {edit ? (
-                      <div className="">
-                        <input
-                          type="text"
-                          name="title"
-                          id="title"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          value={title}
-                          defaultValue={data.ticket.title}
-                          onChange={(e) => setTitle(e.target.value)}
-                        />
-                      </div>
-                    ) : (
-                      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        <span>#{data.ticket.Number} -</span> {data.ticket.title}
+                  <div className="w-full">
+                    <div className="flex flex-row space-x-1">
+                      <h1 className="text-2xl mt-[5px] font-bold text-gray-900 dark:text-white">
+                        #{data.ticket.Number} -
                       </h1>
-                    )}
+                      <input
+                        type="text"
+                        name="title"
+                        id="title"
+                        style={{ fontSize: "1.5rem" }}
+                        className="border-none w-1/2 block text-gray-900 font-bold focus:outline-none focus:ring-0 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        value={title}
+                        defaultValue={data.ticket.title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </div>
                     <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
                       {!data.ticket.isComplete ? (
                         <div className="flex items-center space-x-2">
@@ -421,25 +420,6 @@ export default function Ticket() {
                         </div>
                       )}
                     </div>
-                  </div>
-                  <div className="mt-4 flex h-8 space-x-3 md:mt-0">
-                    {!edit ? (
-                      <button
-                        type="button"
-                        onClick={() => setEdit(true)}
-                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {t("edit")}
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => update()}
-                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {t("save")}
-                      </button>
-                    )}
                   </div>
                 </div>
                 <aside className="mt-4 xl:hidden">

@@ -37,7 +37,7 @@ export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
           <Button
             variant="outline"
             size="sm"
-            className="w-[150px] justify-start border-none"
+            className="w-[180px] justify-start border-none"
           >
             {selectedStatus ? (
               <div className="flex flex-row space-x-4 w-[120px]">
