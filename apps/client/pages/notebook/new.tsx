@@ -1,15 +1,12 @@
-import { Link, RichTextEditor } from "@mantine/tiptap";
-import Highlight from "@tiptap/extension-highlight";
-import Underline from "@tiptap/extension-underline";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { useRouter } from "next/router";
 import { useState } from "react";
-// import TextAlign from '@tiptap/extension-text-align';
-import SubScript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
 import { getCookie } from "cookies-next";
 import useTranslation from "next-translate/useTranslation";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("../../components/BlockEditor"), {
+  ssr: false,
+});
 
 export default function ViewNoteBook() {
   const [value, setValue] = useState("");
@@ -21,33 +18,6 @@ export default function ViewNoteBook() {
 
   const router = useRouter();
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        bulletList: {
-          HTMLAttributes: {
-            class: "list-disc"
-          }
-        }
-      }),
-      Underline,
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
-      // TextAlign.configure({ types: ['heading', 'paragraph'] }),
-    ],
-    editorProps: {
-      attributes: {
-        class: "prose dark:prose-invert prose-sm sm:prose-base [&ul]:list-disc"
-      }
-    },
-    content: value,
-    onUpdate({ editor }) {
-      setValue(editor.getHTML());
-    },
-  });
-
   async function postMarkdown() {
     await fetch(`/api/v1/notebook/note/create`, {
       method: "POST",
@@ -57,7 +27,7 @@ export default function ViewNoteBook() {
       },
       body: JSON.stringify({
         title,
-        content: value,
+        content: JSON.stringify(value),
       }),
     })
       .then((res) => res.json())
@@ -68,7 +38,7 @@ export default function ViewNoteBook() {
 
   return (
     <div className="">
-      <div className="flex flex-row justify-between items-center border-b-[1px] px-4">
+      <div className="flex flex-row justify-between items-center border-b-[1px] py-1">
         <input
           type="text"
           name="title"
@@ -81,60 +51,15 @@ export default function ViewNoteBook() {
         <button
           onClick={() => postMarkdown()}
           type="button"
-          className="inline-flex items-center px-4 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          className="inline-flex items-center px-4 py-1 mr-4 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
         >
           {t("save")}
         </button>
       </div>
 
       <div className="h-full">
-        <div className="m-h-[90vh]">
-          <RichTextEditor
-            editor={editor}
-            className="dark:bg-gray-900 dark:text-white rounded-none border-none"
-          >
-            <RichTextEditor.Toolbar className="dark:text-white rounded-none dark:bg-[#0A090C]">
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
-                <RichTextEditor.Italic />
-                <RichTextEditor.Underline />
-                <RichTextEditor.Strikethrough />
-                <RichTextEditor.ClearFormatting />
-                <RichTextEditor.Highlight />
-                <RichTextEditor.Code />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Blockquote />
-                <RichTextEditor.Hr />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-                <RichTextEditor.Subscript />
-                <RichTextEditor.Superscript />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.AlignRight />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
-
-            <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
-          </RichTextEditor>
+        <div className="m-h-[90vh] p-2">
+          <Editor setIssue={setValue} />
         </div>
       </div>
     </div>

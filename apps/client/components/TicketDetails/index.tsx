@@ -1,15 +1,10 @@
 //@ts-nocheck
-import { Listbox, Switch, Transition } from "@headlessui/react";
-import {
-  CheckCircleIcon,
-  CheckIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/20/solid";
+import { Switch } from "@headlessui/react";
+import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useQuery } from "react-query";
-// import TextAlign from '@tiptap/extension-text-align';
 import { notifications } from "@mantine/notifications";
 import { Text, Tooltip } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
@@ -21,10 +16,6 @@ import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
 import { UserCombo } from "../Combo";
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
 
 function isHTML(str) {
   var a = document.createElement("div");
