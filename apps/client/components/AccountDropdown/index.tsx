@@ -67,15 +67,18 @@ export function AccountDropdown() {
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="hover:cursor-pointer"
-            onClick={() => router.push("/settings/profile")}
+            onClick={() => router.push("/profile")}
           >
             <User className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <span>profile</span>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem className="hover:cursor-pointer">
+          <DropdownMenuItem
+            className="hover:cursor-pointer"
+            onClick={() => router.push("/settings/notifications")}
+          >
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
-          </DropdownMenuItem> */}
+          </DropdownMenuItem>
           {/* <DropdownMenuItem>
             <Keyboard className="mr-2 h-4 w-4" />
             <span>Keyboard shortcuts</span>
