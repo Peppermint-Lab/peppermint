@@ -896,12 +896,12 @@ export default function NewLayout({ children }: any) {
                 {user.isAdmin && (
                   <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
                     <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                      Version 0.4.8
+                      Version 0.4.9
                     </span>
                   </Link>
                 )}
 
-                <CommandModal />
+                {/* <CommandModal /> */}
               </div>
 
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">

@@ -1,8 +1,8 @@
 //@ts-nocheck
 import "@radix-ui/themes/styles.css";
+import "../styles/globals.css";
 
 import { ThemeProvider } from "next-themes";
-import "../styles/globals.css";
 
 import {
   DocumentCheckIcon,
@@ -25,6 +25,7 @@ import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
 import PortalLayout from "../layouts/portalLayout";
 import Settings from "../layouts/settings";
+import GlobalShortcut from '@/shadcn/block/GlobalShortcut'
 
 const queryClient = new QueryClient();
 
@@ -215,6 +216,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
             <QueryClientProvider client={queryClient}>
               <Auth>
                 <NewLayout>
+                  <GlobalShortcut />
                   <Notifications position="top-right" />
                   <Component {...pageProps} />
                 </NewLayout>
