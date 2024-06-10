@@ -5,7 +5,6 @@ import {
   Menu,
   Transition,
 } from "@headlessui/react";
-import { PlusIcon } from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   Cog6ToothIcon,
@@ -16,15 +15,18 @@ import {
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { deleteCookie, getCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-
-import { Button, ContextMenu } from "@radix-ui/themes";
+import { Button } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
-import { useUser } from "../store/session";
+
 import CreateTicketModal from "../components/CreateTicketModal";
+import { AccountDropdown } from "../components/AccountDropdown";
+
+import { useUser } from "../store/session";
+
 
 const quickActions = [
   // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
@@ -406,21 +408,6 @@ export default function NewLayout({ children }: any) {
   //   ).then((res) => res.json());
   //   setQueues(res.queues);
   // }
-
-  async function logout() {
-    const res = await fetch(`/api/v1/auth/user/${user.id}/logout`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("session")}`,
-      },
-    }).then((res) => res.json());
-
-    if (res.success) {
-      deleteCookie("session");
-      location.reload();
-    }
-  }
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
@@ -944,9 +931,6 @@ export default function NewLayout({ children }: any) {
                     target="_blank"
                     className="hover:cursor-pointer"
                   >
-                    {/* <Button variant="outline" className="hover:cursor-pointer">
-                      Send Feedback
-                    </Button> */}
 
                     <Button
                       variant="outline"
@@ -958,56 +942,7 @@ export default function NewLayout({ children }: any) {
                 )}
 
                 {/* Profile dropdown */}
-                <Menu as="div" className="relative">
-                  <Menu.Button className="z-50 flex items-center p-1.5">
-                    <span className="sr-only">Open user menu</span>
-                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                      <span className="text-xs mt-0.5 font-medium leading-none text-white uppercase">
-                        {user.name[0]}
-                      </span>
-                    </span>
-                  </Menu.Button>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="bg-white absolute right-0 z-50 w-40 origin-top-right rounded-md  shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            href="/settings/profile"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-3 text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
-                            )}
-                          >
-                            {t("profile")}
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={() => {
-                              logout();
-                            }}
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-3 text-left text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
-                            )}
-                          >
-                            {t("logout")}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                <AccountDropdown />
               </div>
             </div>
           </div>
