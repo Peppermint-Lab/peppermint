@@ -32,7 +32,7 @@ export default function Home() {
                 <img src="/github.svg" className="h-10 w-10" />
                 <div className="flex flex-col align-center lg:w-[36em]">
                   <span className="font-bold text-lg">Github</span>
-                  <span className="max-w-md lg:max-w-lg text-xs md:text-md">
+                  <span className="max-w-lg  text-xs md:text-md">
                     Being an open source project, all of our source code can be
                     housed here. If you ever face a bug or are unsure about
                     something.
@@ -85,7 +85,7 @@ export default function Home() {
           </div>
           <div className="float-right mt-4">
             <button
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg"
+              className="bg-green-500 hover:bg-green-600 text-white px-2.5 py-1.5 mr-6 text-sm font-semibold rounded-lg"
               onClick={() => router.push("/")}
             >
               To Dashboard
