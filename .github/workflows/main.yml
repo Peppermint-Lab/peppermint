@@ -1,9 +1,9 @@
 name: Main Client Build
 
-on:
-  push:
-    branches:
-      - master
+# on:
+#   push:
+#     branches:
+#       - master
 
 jobs:
   build:
@@ -40,4 +40,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            pepperlabs/peppermint:latest
+            pepperlabs/peppermint:nightly
