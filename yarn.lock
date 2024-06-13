@@ -1513,31 +1513,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:5.2.0":
-  version: 5.2.0
-  resolution: "@prisma/client@npm:5.2.0"
+"@prisma/client@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@prisma/client@npm:5.6.0"
   dependencies:
-    "@prisma/engines-version": "npm:5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f"
+    "@prisma/engines-version": "npm:5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: 10c0/2b6a6db72c1f17eaff4217e2f98e5d9e179755e57d2b92dbe8c5040fa88529ebf9f9cac03b367589577fbbb3bcbac9d53c07b3a35b2acc47210697a747d01a7f
+  checksum: 10c0/21f5840833dbd88cf60d6d3585faab192481a8caf16a6ee2cba8ec8720d8995bc0eee13d66e3bbe31b6f3809c832fd95cf2d2993aaa2dc1ca354e37685852aef
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f":
-  version: 5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f
-  resolution: "@prisma/engines-version@npm:5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f"
-  checksum: 10c0/4b941762ccce9234bb4bf00e77c09252dcf2362779fc40fe3c9f1415a36616c85ffb4345ea0e4684d4faa0274b564a4f5728c3368cb45a4f5820fbfcbf2b4474
+"@prisma/engines-version@npm:5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee":
+  version: 5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee
+  resolution: "@prisma/engines-version@npm:5.6.0-32.e95e739751f42d8ca026f6b910f5a2dc5adeaeee"
+  checksum: 10c0/06a0e9126213cb881ef15e6d13b2ba29be1d31c65aca6bf070b5182ce82a04de3b93b721549a27be3ddb551e003aa94fa0ca61b78736d5bd3579b9114ba96b49
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:5.2.0":
-  version: 5.2.0
-  resolution: "@prisma/engines@npm:5.2.0"
-  checksum: 10c0/6140199d7588a58bb8ea0cd954b0c56fc2e649b420f41f4fe1b2771b20134edacf4a4870629716e9b66257a0cf8d90cd5c2871ed3a7c6453d8827cffcfdf946b
+"@prisma/engines@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@prisma/engines@npm:5.6.0"
+  checksum: 10c0/587cf254da9628ddfd21a8f519b841c5c7713f2e3208e65cae3ec0ef812a67a001bee4ffe19d8ba71a867419a3f8540b64d7998c63696b951270397732d08886
   languageName: node
   linkType: hard
 
@@ -4049,7 +4049,7 @@ __metadata:
     "@fastify/rate-limit": "npm:^9.0.0"
     "@fastify/session": "npm:^10.4.0"
     "@fastify/swagger": "npm:^8.10.0"
-    "@prisma/client": "npm:5.2.0"
+    "@prisma/client": "npm:5.6.0"
     "@types/bcrypt": "npm:^5.0.0"
     "@types/formidable": "npm:^3.4.5"
     "@types/jsonwebtoken": "npm:^8.5.8"
@@ -4072,7 +4072,7 @@ __metadata:
     mailparser: "npm:^3.6.5"
     nodemailer: "npm:^6.9.7"
     posthog-node: "npm:^3.1.3"
-    prisma: "npm:5.2.0"
+    prisma: "npm:5.6.0"
     ts-node: "npm:^10.7.0"
     ts-node-dev: "npm:^2.0.0"
     typescript: "npm:^5.3.2"
@@ -11366,14 +11366,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:5.2.0":
-  version: 5.2.0
-  resolution: "prisma@npm:5.2.0"
+"prisma@npm:5.6.0":
+  version: 5.6.0
+  resolution: "prisma@npm:5.6.0"
   dependencies:
-    "@prisma/engines": "npm:5.2.0"
+    "@prisma/engines": "npm:5.6.0"
   bin:
     prisma: build/index.js
-  checksum: 10c0/213f222ef30dfb3f74a5be095087c6a2dd3cdaf4a66f887be38636541499bd5b5fe2400d0746bd90017ac0845fe352bea695bae9f12c11add87d336bbe0377fc
+  checksum: 10c0/8d8069295cf7402f6eb103fa1d5c511c1006fc78057fa180e9b0688076703b33301ce6b04a30575d8b01f0bbe9a26b3c196d0bc4f9253eca9ee780e0800ce602
   languageName: node
   linkType: hard
 
