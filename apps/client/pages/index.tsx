@@ -102,9 +102,9 @@ export default function Home() {
   async function datafetch() {
     Promise.all([
       fetchTickets(),
-      // getOpenTickets(),
-      // getCompletedTickets(),
-      // getUnassginedTickets()
+      getOpenTickets(),
+      getCompletedTickets(),
+      getUnassginedTickets()
     ])
     await setLoading(false);
   }
