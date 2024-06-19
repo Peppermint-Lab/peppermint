@@ -25,7 +25,7 @@ import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
 import PortalLayout from "../layouts/portalLayout";
 import Settings from "../layouts/settings";
-import GlobalShortcut from '@/shadcn/block/GlobalShortcut'
+import GlobalShortcut from "@/shadcn/block/GlobalShortcut";
 
 const queryClient = new QueryClient();
 
@@ -108,12 +108,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
             <Theme>
               <QueryClientProvider client={queryClient}>
                 <Auth>
-                  <NewLayout>
-                    <AdminLayout>
-                      <Notifications position="top-right" />
-                      <Component {...pageProps} />
-                    </AdminLayout>
-                  </NewLayout>
+                  <AdminLayout>
+                    <Notifications position="top-right" />
+                    <Component {...pageProps} />
+                  </AdminLayout>
                 </Auth>
               </QueryClientProvider>
             </Theme>
@@ -150,20 +148,20 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
     return (
       <SessionProvider>
         <MantineProvider>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Theme>
-            <QueryClientProvider client={queryClient}>
-              <Auth>
-                <NewLayout>
-                  <Settings>
-                    <Notifications position="top-right" />
-                    <Component {...pageProps} />
-                  </Settings>
-                </NewLayout>
-              </Auth>
-            </QueryClientProvider>
-          </Theme>
-        </ThemeProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <Theme>
+              <QueryClientProvider client={queryClient}>
+                <Auth>
+                  <NewLayout>
+                    <Settings>
+                      <Notifications position="top-right" />
+                      <Component {...pageProps} />
+                    </Settings>
+                  </NewLayout>
+                </Auth>
+              </QueryClientProvider>
+            </Theme>
+          </ThemeProvider>
         </MantineProvider>
       </SessionProvider>
     );
