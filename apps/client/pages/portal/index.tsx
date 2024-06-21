@@ -21,45 +21,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState<any>();
 
-  // async function getOpenTickets() {
-  //   await fetch(`/api/v1/data/tickets/open`, {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       setOpenTickets(res.count);
-  //     });
-  // }
-
-  // async function getCompletedTickets() {
-  //   await fetch(`/api/v1/data/tickets/completed`, {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       setCompletedTickets(res.count);
-  //     });
-  // }
-
-  // async function getUnassginedTickets() {
-  //   await fetch(`/api/v1/data/tickets/open`, {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       setUnassigned(res.count);
-  //     });
-  // }
-
   async function fetchTickets() {
     await fetch(`/api/v1/tickets/user/open`, {
       method: "GET",
@@ -73,29 +34,8 @@ export default function Home() {
       });
   }
 
-  const stats = [
-    {
-      name: t("open_tickets"),
-      stat: openTickets,
-      href: "/portal/tickets/open",
-    },
-    {
-      name: t("completed_tickets"),
-      stat: completedTickets,
-      href: "/portal/tickets/closed",
-    },
-    {
-      name: t("unassigned_tickets"),
-      stat: unassigned,
-      href: "/tickets",
-    },
-  ];
-
   async function datafetch() {
     fetchTickets();
-    // getOpenTickets();
-    // getCompletedTickets();
-    // getUnassginedTickets();
     await setLoading(false);
   }
 
@@ -108,26 +48,6 @@ export default function Home() {
       <div className="w-full xl:w-[70%] max-w-5xl">
         {!loading && (
           <>
-            {/* <div>
-              <dl className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-                {stats.map((item) => (
-                  <Link href={item.href}>
-                    <div
-                      key={item.name}
-                      className="px-4 py-5 bg-gray-900 shadow rounded-lg overflow-hidden sm:p-6"
-                    >
-                      <dt className="text-sm font-medium text-white truncate">
-                        {item.name}
-                      </dt>
-                      <dd className="mt-1 text-3xl font-semibold text-white">
-                        {item.stat}
-                      </dd>
-                    </div>
-                  </Link>
-                ))}
-              </dl>
-            </div> */}
-
             <div className="flex w-full flex-col mt-4 px-1 mb-4">
               {tickets !== undefined && tickets.length === 0 ? (
                 <>

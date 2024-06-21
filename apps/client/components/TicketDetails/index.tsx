@@ -27,6 +27,14 @@ function isHTML(str) {
 
   return false;
 }
+function isJsonString(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
 
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support" },
@@ -259,7 +267,6 @@ export default function Ticket() {
 
   const handleUpload = async () => {
     if (file) {
-      console.log("Uploading file...");
 
       const formData = new FormData();
       formData.append("file", file);
@@ -320,18 +327,17 @@ export default function Ticket() {
 
   async function loadFromStorage() {
     const storageString = data.ticket.detail as PartialBlock[];
-
-    if (isHTML(storageString)) {
-      return undefined;
+    if (storageString && isJsonString(storageString)) {
+      return JSON.parse(storageString) as PartialBlock[];
     } else {
-      return storageString
-        ? (JSON.parse(storageString) as PartialBlock[])
-        : undefined;
+      return undefined;
     }
   }
 
   async function convertHTML() {
-    const blocks = await editor.tryParseHTMLToBlocks(data.ticket.detail);
+    const blocks = (await editor.tryParseHTMLToBlocks(
+      data.ticket.detail
+    )) as PartialBlock[];
     editor.replaceBlocks(editor.document, blocks);
   }
 
@@ -339,7 +345,6 @@ export default function Ticket() {
   useEffect(() => {
     if (status === "success") {
       loadFromStorage().then((content) => {
-        console.log(content);
         setInitialContent(content);
       });
     }

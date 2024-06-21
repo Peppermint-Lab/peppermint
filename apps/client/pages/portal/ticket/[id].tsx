@@ -7,27 +7,17 @@ import {
   LockClosedIcon,
   LockOpenIcon,
 } from "@heroicons/react/20/solid";
-import { Link } from "@mantine/tiptap";
-import Highlight from "@tiptap/extension-highlight";
-import Underline from "@tiptap/extension-underline";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-// import TextAlign from '@tiptap/extension-text-align';
-import SubScript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
+
 import { getCookie } from "cookies-next";
 import useTranslation from "next-translate/useTranslation";
 import Frame from "react-frame-component";
 
 import { useUser } from "../../../store/session";
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "@/shadcn/lib/utils";
 
 export default function Ticket() {
   const router = useRouter();
@@ -61,22 +51,6 @@ export default function Ticket() {
   const [timeSpent, setTimeSpent] = useState<any>();
   const [publicComment, setPublicComment] = useState<any>(false);
   const [timeReason, setTimeReason] = useState("");
-
-  const IssueEditor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
-      // TextAlign.configure({ types: ['heading', 'paragraph'] }),
-    ],
-    content: issue,
-    onUpdate({ editor }) {
-      setIssue(editor.getHTML());
-    },
-  });
 
   const history = useRouter();
 
@@ -116,45 +90,6 @@ export default function Ticket() {
       .then((res) => res.json())
       .then(() => refetch());
   }
-
-  // const propsUpload = {
-  //   name: "file",
-  //   showUploadList: false,
-  //   action: `/api/v1/ticket/${id}/file/upload`,
-  //   data: () => {
-  //     let data = new FormData();
-  //     data.append("file", file);
-  //     data.append("filename", file.name);
-  //     data.append("ticket", ticket.id);
-  //   },
-  //   onChange(info: any) {
-  //     if (info.file.status !== "uploading") {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === "done") {
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //       setUploaded(true);
-  //     } else if (info.file.status === "error") {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  //   progress: {
-  //     strokeColor: {
-  //       "0%": "#108ee9",
-  //       "100%": "#87d068",
-  //     },
-  //     strokeWidth: 3,
-  //     format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
-  //   },
-  // };
-
-  useEffect(() => {
-    if (status === "success") {
-      if (IssueEditor) {
-        IssueEditor.commands.setContent(data.ticket.detail);
-      }
-    }
-  }, [data, IssueEditor]);
 
   return (
     <div>
