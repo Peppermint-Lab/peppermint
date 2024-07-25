@@ -42,7 +42,7 @@ export function authRoutes(fastify: FastifyInstance) {
           const requester = await checkSession(bearer);
 
           if (!requester?.isAdmin) {
-            reply.code(401).send({
+            return reply.code(401).send({
               message: "Unauthorized",
             });
           }
@@ -54,7 +54,7 @@ export function authRoutes(fastify: FastifyInstance) {
 
           // if exists, return 400
           if (record) {
-            reply.code(400).send({
+            return reply.code(400).send({
               message: "Email already exists",
             });
           }
@@ -117,7 +117,7 @@ export function authRoutes(fastify: FastifyInstance) {
 
       // if exists, return 400
       if (record) {
-        reply.code(400).send({
+        return reply.code(400).send({
           message: "Email already exists",
         });
       }
@@ -158,7 +158,7 @@ export function authRoutes(fastify: FastifyInstance) {
       });
 
       if (!user) {
-        reply.code(401).send({
+        return reply.code(401).send({
           message: "Invalid email",
           success: false,
         });
@@ -224,7 +224,7 @@ export function authRoutes(fastify: FastifyInstance) {
       });
 
       if (!user) {
-        reply.code(401).send({
+        return reply.code(401).send({
           message: "Invalid Code",
           success: false,
         });
@@ -267,20 +267,18 @@ export function authRoutes(fastify: FastifyInstance) {
         where: { email },
       });
 
-      if (!user) {
-        reply.code(401).send({
+      if (!user?.password) {
+        return reply.code(401).send({
           message: "Invalid email or password",
         });
       }
 
-      //@ts-expect-error
       const isPasswordValid = await bcrypt.compare(password, user!.password);
 
       if (!isPasswordValid) {
         reply.code(401).send({
           message: "Invalid email or password",
         });
-
         throw new Error("Password is not valid");
       }
 
@@ -337,14 +335,14 @@ export function authRoutes(fastify: FastifyInstance) {
       });
 
       if (!user) {
-        reply.code(401).send({
+        return reply.code(401).send({
           message: "Invalid email",
           success: false,
         });
       }
 
       if (user?.external_user) {
-        reply.send({
+        return reply.send({
           success: true,
           message: "External user",
           oauth: false,
@@ -361,7 +359,7 @@ export function authRoutes(fastify: FastifyInstance) {
       const oauth = provider[0];
 
       if (authtype.length === 0) {
-        reply.code(200).send({
+        return reply.code(200).send({
           success: true,
           message: "SSO not enabled",
           oauth: false,
@@ -513,7 +511,7 @@ export function authRoutes(fastify: FastifyInstance) {
         });
 
         if (!user) {
-          reply.code(401).send({
+          return reply.code(401).send({
             message: "Invalid user",
           });
         }
@@ -616,7 +614,7 @@ export function authRoutes(fastify: FastifyInstance) {
         });
 
         if (check?.isAdmin === false) {
-          reply.code(401).send({
+          return reply.code(401).send({
             message: "Unauthorized",
           });
         }
