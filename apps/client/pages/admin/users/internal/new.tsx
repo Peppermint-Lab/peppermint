@@ -136,6 +136,7 @@ export default function CreateUser() {
                   <option value="tr">Turkish</option>
                   <option value="hu">Hungarian</option>
                   <option value="th">Thai (ภาษาไทย)</option>
+                  <option value="zh-CN">Simplified Chinese (简体中文)</option>
                 </select>
               </div>
               <div>
