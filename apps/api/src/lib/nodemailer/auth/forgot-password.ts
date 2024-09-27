@@ -92,7 +92,7 @@ export async function forgotPassword(
       console.log("Message sent: %s", info.messageId);
 
       // Preview only available when sending through an Ethereal account
-      console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
+      // console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
     }
   } catch (error) {
     console.log(error);
