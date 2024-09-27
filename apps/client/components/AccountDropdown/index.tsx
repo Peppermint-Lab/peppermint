@@ -70,7 +70,7 @@ export function AccountDropdown() {
             onClick={() => router.push("/profile")}
           >
             <User className="mr-2 h-4 w-4" />
-            <span>profile</span>
+            <span>Profile</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="hover:cursor-pointer"
