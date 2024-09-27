@@ -17,26 +17,6 @@ import { BlockNoteView } from "@blocknote/mantine";
 import { useUser } from "../../store/session";
 import { UserCombo } from "../Combo";
 
-function isHTML(str) {
-  var a = document.createElement("div");
-  a.innerHTML = str;
-
-  for (var c = a.childNodes, i = c.length; i--; ) {
-    if (c[i].nodeType == 1) return true;
-  }
-
-  return false;
-}
-
-function isJsonString(str) {
-  try {
-    return JSON.parse(str);
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-}
-
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support" },
   { id: 2, value: "in_progress", name: "In Progress" },

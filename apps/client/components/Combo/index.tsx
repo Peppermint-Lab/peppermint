@@ -40,7 +40,7 @@ export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
             className="w-[180px] justify-start border-none"
           >
             {selectedStatus ? (
-              <div className="flex flex-row space-x-4 w-[120px]">
+              <div className="flex flex-row space-x-2 w-[120px]">
                 {!hideInitial && (
                   <div className="flex-shrink-0">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
@@ -50,7 +50,7 @@ export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
                     </span>
                   </div>
                 )}
-                {selectedStatus.name}
+                <span>{defaultName}</span>
               </div>
             ) : defaultName ? (
               <>
