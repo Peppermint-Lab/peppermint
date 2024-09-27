@@ -80,13 +80,13 @@ export default function NewLayout({ children }: any) {
       current: location.pathname === "/" ? true : false,
       initial: "h",
     },
-    {
-      name: t("sl_notebook"),
-      href: `/${locale}/notebook`,
-      icon: FolderIcon,
-      current: location.pathname === "/notebook" ? true : false,
-      initial: "n",
-    },
+    // {
+    //   name: t("sl_notebook"),
+    //   href: `/${locale}/notebook`,
+    //   icon: FolderIcon,
+    //   current: location.pathname === "/notebook" ? true : false,
+    //   initial: "n",
+    // },
     // {
     //   name: "Email Queues",
     //   current: false,
