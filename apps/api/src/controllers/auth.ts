@@ -164,12 +164,12 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      function generateRandomCode() {
-        const min = 100000; // Minimum 6-digit number
-        const max = 999999; // Maximum 6-digit number
+      function generateRandomCode(length = 6) {
+        const min = Math.pow(10, length - 1); // Minimum number for the given length
+        const max = Math.pow(10, length) - 1; // Maximum number for the given length
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
-
+      
       const code = generateRandomCode();
 
       const uuid = await prisma.passwordResetToken.create({
