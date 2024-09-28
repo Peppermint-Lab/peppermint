@@ -162,16 +162,16 @@ export default function NewLayout({ children }: any) {
           location.push("/notebook");
           break;
         case "t":
-          location.push("/tickets");
+          location.push("/issues");
           break;
         case "a":
           location.push("/admin");
           break;
         case "o":
-          location.push("/tickets/open");
+          location.push("/issues/open");
           break;
         case "f":
-          location.push("/tickets/closed");
+          location.push("/issues/closed");
           break;
         // case "Escape":
         //   location.push("/tickets");
@@ -511,16 +511,16 @@ export default function NewLayout({ children }: any) {
                     <ul className="w-full space-y-1">
                       <li>
                         <Link
-                          href="/tickets"
+                          href="/issues"
                           className={classNames(
-                            location.pathname === "/tickets"
+                            location.pathname === "/issues"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
                           <TicketIcon className="h-4 w-4 ml-1 shrink-0 mt-1" />
-                          <span className="whitespace-nowrap">Tickets</span>
+                          <span className="whitespace-nowrap">Issues</span>
                           <div className="flex w-full justify-end float-right">
                             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
                               t
@@ -530,7 +530,7 @@ export default function NewLayout({ children }: any) {
                       </li>
                       <li className="ml-8">
                         <Link
-                          href="/tickets/open"
+                          href="/issues/open"
                           className={classNames(
                             location.pathname === "/tickets/open"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
@@ -551,7 +551,7 @@ export default function NewLayout({ children }: any) {
 
                       <li className="ml-8 ">
                         <Link
-                          href="/tickets/closed"
+                          href="/issues/closed"
                           className={classNames(
                             location.pathname === "/tickets/closed"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
