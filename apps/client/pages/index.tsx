@@ -214,7 +214,7 @@ export default function Home() {
                             <tr
                               key={item.id}
                               className="hover:bg-gray-300 dark:hover:bg-green-600 hover:cursor-pointer"
-                              onClick={() => router.push(`/ticket/${item.id}`)}
+                              onClick={() => router.push(`/issue/${item.id}`)}
                             >
                               <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-0">
                                 {item.title}

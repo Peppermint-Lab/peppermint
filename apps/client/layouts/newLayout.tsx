@@ -532,7 +532,7 @@ export default function NewLayout({ children }: any) {
                         <Link
                           href="/issues/open"
                           className={classNames(
-                            location.pathname === "/tickets/open"
+                            location.pathname === "/issues/open"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"
@@ -553,7 +553,7 @@ export default function NewLayout({ children }: any) {
                         <Link
                           href="/issues/closed"
                           className={classNames(
-                            location.pathname === "/tickets/closed"
+                            location.pathname === "/issues/closed"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"

@@ -25,33 +25,33 @@ export default function GlobalShortcut() {
     {
       name: "All Tickets",
       icon: DocumentPlusIcon,
-      shortcut: () => router.push("/tickets"),
+      shortcut: () => router.push("/issues"),
       url: "/tickets",
     },
     {
       name: `${user.name}'s open tickets`,
       icon: DocumentPlusIcon,
-      shortcut: () => router.push("/tickets/open"),
+      shortcut: () => router.push("/issues/open"),
       url: "/tickets",
     },
     {
       name: `${user.name}'s closed tickets`,
       icon: DocumentPlusIcon,
-      shortcut: () => router.push("/tickets/closed"),
+      shortcut: () => router.push("/issues/closed"),
       url: "/tickets",
     },
-    {
-      name: `Notes`,
-      icon: DocumentPlusIcon,
-      shortcut: () => router.push("/notebook"),
-      url: "/tickets",
-    },
-    {
-      name: `New Note`,
-      icon: DocumentPlusIcon,
-      shortcut: () => router.push("/notebook/new"),
-      url: "/tickets",
-    },
+    // {
+    //   name: `Notes`,
+    //   icon: DocumentPlusIcon,
+    //   shortcut: () => router.push("/notebook"),
+    //   url: "/tickets",
+    // },
+    // {
+    //   name: `New Note`,
+    //   icon: DocumentPlusIcon,
+    //   shortcut: () => router.push("/notebook/new"),
+    //   url: "/tickets",
+    // },
   ];
 
   async function GlobalTicketSearch() {

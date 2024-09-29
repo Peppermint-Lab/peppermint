@@ -36,8 +36,6 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  console.log(data);
-
   return (
     <div>
       {status === "loading" && (
