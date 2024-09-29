@@ -9,9 +9,9 @@
     "docker": "next build && next start"
   },
   "dependencies": {
-    "@blocknote/core": "^0.14",
-    "@blocknote/mantine": "^0.13.5",
-    "@blocknote/react": "^0.13.5",
+    "@blocknote/core": "^0.15.10",
+    "@blocknote/mantine": "0.13.5",
+    "@blocknote/react": "^0.15.10",
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^2.0.18",
     "@mantine/core": "^7.10.1",

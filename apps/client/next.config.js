@@ -2,7 +2,7 @@ const removeImports = require("next-remove-imports")();
 const nextTranslate = require("next-translate");
 
 module.exports = removeImports({
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   ...nextTranslate(),
 
