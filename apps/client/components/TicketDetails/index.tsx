@@ -375,7 +375,7 @@ export default function Ticket() {
       {status === "success" && (
         <main className="flex-1 min-h-[90vh] py-8">
           <div className="mx-auto max-w-7xl w-full px-4 flex flex-col xl:flex-row justify-center">
-            <div className="xl:border-r xl:border-gray-200 xl:pr-8 xl:w-2/3">
+            <div className="xl:border-r  xl:pr-8 xl:w-2/3">
               <div className="">
                 <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
                   <div className="w-full">
@@ -412,8 +412,8 @@ export default function Ticket() {
                   </div>
                 </div>
                 <aside className="mt-4 xl:hidden">
-                  <div className="py-3 border-b border-gray-200">
-                    <div className="border-t border-gray-200">
+                  <div className="py-3 border-b ">
+                    <div className="border-t ">
                       <div className="flex flex-row items-center justify-between">
                         <span className="text-sm font-medium text-gray-500 mt-2">
                           {t("labels")}
@@ -562,7 +562,7 @@ export default function Ticket() {
                 className="mt-8 xl:mt-10"
               >
                 <div>
-                  <div className="divide-y divide-gray-200">
+                  <div className="divide-y">
                     <div className="pb-2">
                       <span
                         id="activity-title"
@@ -642,7 +642,7 @@ export default function Ticket() {
                                   id="comment"
                                   name="comment"
                                   rows={3}
-                                  className="block w-full dark:bg-black rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                  className="block w-full bg-transparent rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                   placeholder="Leave a comment"
                                   defaultValue={""}
                                   onChange={(e) => setComment(e.target.value)}
@@ -724,7 +724,7 @@ export default function Ticket() {
             </div>
             <div className="hidden xl:block xl:pl-8 xl:order-2 order-1">
               <h2 className="sr-only">{t("details")}</h2>
-              <div className="space-y-1  border-gray-200 py-2">
+              <div className="space-y-1   py-2">
                 {users && (
                   <UserCombo
                     value={users}
