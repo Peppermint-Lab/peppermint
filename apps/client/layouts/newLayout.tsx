@@ -467,11 +467,10 @@ export default function NewLayout({ children }: any) {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] dark:bg-[#393E46] pb-4">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background pb-4">
             <div className="flex align-middle flex-row h-14 items-center border-b-[1px] px-6">
-              {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
-                <span className="text-3xl ml-2  hover:text-green-600 font-bold ">
+                <span className="text-3xl ml-2  hover:text-green-600 font-bold text-primary">
                   Peppermint
                 </span>
               </Link>
@@ -490,8 +489,8 @@ export default function NewLayout({ children }: any) {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
-                              : " hover:bg-[#F0F3F9] dark:hover:bg-gray-800 dark:hover:text-gray-900 ",
+                              ? "bg-secondary dark:bg-primary"
+                              : "hover:bg-secondary dark:hover:bg-secondary-foreground dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs rounded-md font-semibold leading-6"
                           )}
                         >
@@ -514,7 +513,7 @@ export default function NewLayout({ children }: any) {
                           href="/issues"
                           className={classNames(
                             location.pathname === "/issues"
-                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              ? "bg-secondary dark:bg-primary"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
@@ -533,7 +532,7 @@ export default function NewLayout({ children }: any) {
                           href="/issues/open"
                           className={classNames(
                             location.pathname === "/issues/open"
-                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              ? "bg-secondary dark:bg-primary"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"
                           )}
@@ -554,7 +553,7 @@ export default function NewLayout({ children }: any) {
                           href="/issues/closed"
                           className={classNames(
                             location.pathname === "/issues/closed"
-                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              ? "bg-secondary dark:bg-primary"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"
                           )}
@@ -576,7 +575,7 @@ export default function NewLayout({ children }: any) {
                           href="/admin"
                           className={classNames(
                             location.pathname.includes("/admin")
-                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
+                              ? "bg-secondary dark:bg-primary"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
@@ -606,7 +605,7 @@ export default function NewLayout({ children }: any) {
         </div>
 
         <div className="lg:pl-64 2xl:pl-72">
-          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-[#0A090C] px-4 sm:gap-x-6">
+          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b bg-background px-4 sm:gap-x-6">
             <button
               type="button"
               className="-m-2.5 p-2.5 text-black dark:text-white lg:hidden"
@@ -641,15 +640,15 @@ export default function NewLayout({ children }: any) {
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
                 <Button
                   variant="outline"
-                  className="relative rounded-md  p-2  text-gray-400 hover:text-gray-500 hover:cursor-pointer focus:outline-none"
+                  className="relative rounded-md p-2 text-gray-400 hover:text-gray-500 hover:cursor-pointer focus:outline-none"
                 >
                   <Link href="/notifications">
-                    <InboxStackIcon className="h-4 w-4 text-black" />
+                    <InboxStackIcon className="h-4 w-4 text-foreground" />
                     {user.notifcations.filter(
                       (notification) => !notification.read
                     ).length > 0 && (
                       <svg
-                        className="h-2.5 w-2.5 absolute bottom-6 left-6  animate-pulse fill-green-500"
+                        className="h-2.5 w-2.5 absolute bottom-6 left-6 animate-pulse fill-green-500"
                         viewBox="0 0 6 6"
                         aria-hidden="true"
                       >
@@ -668,7 +667,7 @@ export default function NewLayout({ children }: any) {
 
                     <Button
                       variant="outline"
-                      className="hover:cursor-pointer whitespace-nowrap"
+                      className="text-foreground hover:cursor-pointer whitespace-nowrap"
                     >
                       Send Feedback
                     </Button>
@@ -682,7 +681,7 @@ export default function NewLayout({ children }: any) {
           </div>
 
           {!loading && !user.external_user && (
-            <main className="bg-white dark:bg-[#0A090C]">{children}</main>
+            <main className="bg-background min-h-screen">{children}</main>
           )}
         </div>
       </div>

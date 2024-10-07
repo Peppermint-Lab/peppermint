@@ -376,7 +376,7 @@ export default function Ticket() {
                 <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
                   <div className="w-full">
                     <div className="flex flex-row space-x-1">
-                      <h1 className="text-2xl mt-[5px] font-bold text-gray-900 dark:text-white">
+                      <h1 className="text-2xl mt-[5px] font-bold text-foreground">
                         #{data.ticket.Number} -
                       </h1>
                       <input
@@ -384,7 +384,7 @@ export default function Ticket() {
                         name="title"
                         id="title"
                         style={{ fontSize: "1.5rem" }}
-                        className="border-none w-1/2 block text-gray-900 font-bold focus:outline-none focus:ring-0 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        className="border-none px-0 pl-0.5 w-1/2 m block text-foreground bg-transparent font-bold focus:outline-none focus:ring-0 placeholder:text-primary sm:text-sm sm:leading-6"
                         value={title}
                         defaultValue={data.ticket.title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -536,7 +536,7 @@ export default function Ticket() {
                         <BlockNoteView
                           editor={editor}
                           sideMenu={false}
-                          className="m-0 p-0"
+                          className="m-0 p-0 bg-transparent dark:text-white"
                           onChange={handleInputChange}
                         />
                       </>
