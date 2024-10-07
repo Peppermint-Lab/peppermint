@@ -12,8 +12,16 @@ import {
 import { Button } from "@radix-ui/themes";
 import { AccountDropdown } from "../components/AccountDropdown";
 import { classNames } from "@/shadcn/lib/utils";
-import { ContactIcon, KeyRound, Mail, Mailbox, MoveLeft, User2, UserRound, Webhook } from "lucide-react";
-
+import {
+  ContactIcon,
+  KeyRound,
+  Mail,
+  Mailbox,
+  MoveLeft,
+  User2,
+  UserRound,
+  Webhook,
+} from "lucide-react";
 
 export default function AdminLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
@@ -79,7 +87,7 @@ export default function AdminLayout({ children }: any) {
   return (
     !loading &&
     user && (
-      <div className="min-h-screen overflow-hidden bg-white dark:bg-[#0A090C]">
+      <div className="min-h-screen overflow-hidden bg-background">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -184,10 +192,10 @@ export default function AdminLayout({ children }: any) {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-[#ffffff] dark:bg-[#393E46] pb-4">
-            <div className="flex align-middle flex-row h-14 items-center border-b-[1px] px-6">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background pb-4">
+            <div className="flex align-middle flex-row h-14 items-center border-b px-6">
               {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
               <Link href="https://peppermint.sh">
                 <span className="text-3xl ml-2  hover:text-green-600 font-bold ">
@@ -231,15 +239,15 @@ export default function AdminLayout({ children }: any) {
         </div>
 
         <div className="lg:pl-64 2xl:pl-72">
-          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-[#0A090C] px-4 sm:gap-x-6">
+          <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b  bg-background px-4 sm:gap-x-6">
             <button
               type="button"
-              className="-m-2.5 p-2.5 text-black dark:text-white lg:hidden"
+              className="-m-2.5 p-2.5 text-foreground lg:hidden"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
               <Bars3Icon
-                className="h-6 w-6 text-black dark:text-white"
+                className="h-6 w-6 text-foreground"
                 aria-hidden="true"
               />
             </button>
@@ -306,7 +314,7 @@ export default function AdminLayout({ children }: any) {
           </div>
 
           {!loading && !user.external_user && (
-            <main className="bg-white dark:bg-[#0A090C] m-4">{children}</main>
+            <main className="bg-background m-4">{children}</main>
           )}
         </div>
       </div>

@@ -15,13 +15,14 @@ import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
-import { UserCombo } from "../Combo";
+import { IconCombo, UserCombo } from "../Combo";
+import { CircleCheck, CircleDotDashed, LifeBuoy, Loader, SignalHigh, SignalLow, SignalMedium } from "lucide-react";
 
 const ticketStatusMap = [
-  { id: 1, value: "needs_support", name: "Needs Support" },
-  { id: 2, value: "in_progress", name: "In Progress" },
-  { id: 3, value: "in_review", name: "In Review" },
-  { id: 4, value: "done", name: "Done" },
+  { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
+  { id: 2, value: "in_progress", name: "In Progress", icon: CircleDotDashed },
+  { id: 3, value: "in_review", name: "In Review", icon: Loader },
+  { id: 4, value: "done", name: "Done", icon: CircleCheck },
 ];
 
 const priorityOptions = [
@@ -29,16 +30,19 @@ const priorityOptions = [
     id: "1",
     name: "Low",
     value: "low",
+    icon: SignalLow,
   },
   {
     id: "2",
     name: "Medium",
     value: "medium",
+    icon: SignalMedium,
   },
   {
     id: "1",
     name: "High",
     value: "high",
+    icon: SignalHigh,
   },
 ];
 
@@ -730,17 +734,17 @@ export default function Ticket() {
                     }
                   />
                 )}
-                <UserCombo
+
+                <IconCombo
                   value={priorityOptions}
                   update={setPriority}
                   defaultName={data.ticket.priority ? data.ticket.priority : ""}
-                  hideInitial={true}
                 />
-                <UserCombo
+
+                <IconCombo
                   value={ticketStatusMap}
                   update={setTicketStatus}
                   defaultName={data.ticket.status ? data.ticket.status : ""}
-                  hideInitial={true}
                 />
 
                 {/* <div className="border-t border-gray-200">

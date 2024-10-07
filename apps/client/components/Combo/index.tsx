@@ -5,6 +5,7 @@ import {
   Circle,
   HelpCircle,
   LucideIcon,
+  SignalLowIcon,
   XCircle,
 } from "lucide-react";
 
@@ -26,7 +27,13 @@ type Status = {
   icon: LucideIcon;
 };
 
-export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
+export function UserCombo({
+  value,
+  update,
+  defaultName,
+  hideInitial,
+  showIcon,
+}) {
   const [open, setOpen] = React.useState(false);
   const [selectedStatus, setSelectedStatus] = React.useState<any | null>(null);
 
@@ -54,7 +61,7 @@ export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
               </div>
             ) : defaultName ? (
               <>
-                <div className="flex flex-row space-x-2">
+                <div className="flex flex-row space-x-3">
                   {!hideInitial && (
                     <div className="flex-shrink-0">
                       <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
@@ -64,7 +71,7 @@ export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
                       </span>
                     </div>
                   )}
-                  <span>{defaultName}</span>
+                  <span className="">{defaultName}</span>
                 </div>
               </>
             ) : (
@@ -98,6 +105,91 @@ export function UserCombo({ value, update, defaultName, hideInitial, Icon }) {
                           : "opacity-40"
                       )}
                     /> */}
+                    <span>{val.name}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+export function IconCombo({ value, update, defaultName, hideInitial }) {
+  const [open, setOpen] = React.useState(false);
+  const [selectedStatus, setSelectedStatus] = React.useState<any | null>(null);
+  const defaultIcon = value.find((k) => k.value === defaultName);
+
+  console.log(defaultIcon);
+
+  return (
+    <div className="flex items-center space-x-4">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-[180px] justify-start border-none"
+          >
+            {selectedStatus ? (
+              <div className="flex flex-row space-x-2 w-[120px]">
+                {!hideInitial && (
+                  <div className="flex-shrink-0">
+                     <span className="inline-flex h-6 w-6 pl-2.5 items-center justify-center ">
+                    <span className="text-xs font-medium leading-none text-foreground uppercase ">
+                      <selectedStatus.icon className="mr-2 h-4 w-4 shrink-0" />
+                    </span>
+                  </span>
+                  </div>
+                )}
+                <span className="mt-[2.5px] capitalize">
+                  {selectedStatus.value}
+                </span>
+              </div>
+            ) : defaultName ? (
+              <div className="flex flex-row space-x-2">
+                <div className="flex-shrink-0">
+                  <span className="inline-flex h-6 w-6 pl-2.5 items-center justify-center ">
+                    <span className="text-xs font-medium leading-none text-foreground uppercase ">
+                      <defaultIcon.icon className="mr-2 h-4 w-4 shrink-0" />
+                    </span>
+                  </span>
+                </div>
+                <span className="mt-[2.5px] capitalize">{defaultName}</span>
+              </div>
+            ) : (
+              <span>unassigned</span>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="p-0" side="right" align="start">
+          <Command>
+            {/* <CommandInput placeholder="Change status..." /> */}
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup>
+                {value.map((val) => (
+                  <CommandItem
+                    className=" hover:cursor-pointer"
+                    key={val.value}
+                    value={val}
+                    onSelect={(selected) => {
+                      const user = value.find((k) => k.name === selected);
+                      setSelectedStatus(user);
+                      update(user);
+                      setOpen(false);
+                    }}
+                  >
+                    <val.icon
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        val.value === selectedStatus?.value
+                          ? "opacity-100"
+                          : "opacity-40"
+                      )}
+                    />
                     <span>{val.name}</span>
                   </CommandItem>
                 ))}
