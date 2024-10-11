@@ -64,13 +64,13 @@ export default function Tickets() {
                 if (p === "Normal") {
                   badge = normal;
                 }
-                if (p === "High") {
+                if (p === "high") {
                   badge = high;
                 }
 
                 return (
-                  <Link href={`/issue/${ticket.id}`}>
-                    <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
+                  <Link href={`/issue/${ticket.id}`} key={ticket.id}>
+                    <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100"  key={ticket.id}>
                       <div className="flex flex-row space-x-2 items-center">
                         <span className="text-xs font-semibold">
                           #{ticket.Number}
@@ -85,7 +85,7 @@ export default function Tickets() {
                           {moment(ticket.createdAt).format("DD/MM/yyyy")}
                         </span>
                         <span
-                          className={`inline-flex items-center rounded-md px-2 justify-center w-16 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
+                          className={`inline-flex items-center rounded-md capitalize px-2 justify-center w-16 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
                         >
                           {ticket.priority}
                         </span>
