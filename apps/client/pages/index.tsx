@@ -86,14 +86,14 @@ export default function Home() {
   }
 
   const stats = [
-    { name: t("open_tickets"), stat: openTickets, href: "/tickets" },
+    { name: "Open Issues", stat: openTickets, href: "/tickets" },
     {
-      name: t("completed_tickets"),
+      name: "Completed Issues",
       stat: completedTickets,
       href: "/tickets?filter=closed",
     },
     {
-      name: t("unassigned_tickets"),
+      name: "Unassigned Issues",
       stat: unassigned,
       href: "/tickets?filter=unassigned",
     },
@@ -162,14 +162,14 @@ export default function Home() {
                       />
                     </svg>
                     <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-white">
-                      Create your first ticket
+                      Create your first Issue
                     </span>
                   </button>
                 </>
               ) : (
                 <>
                   <span className="font-bold text-2xl">
-                    {t("recent_tickets")}
+                    Recent Issues
                   </span>
                   <div className="-mx-4 sm:-mx-0 w-full">
                     <table className="min-w-full divide-y divide-gray-300">

@@ -123,7 +123,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
             color: "green",
             autoClose: 5000,
           });
-          router.push("/tickets");
+          router.push("/issues");
         } else {
           notifications.show({
             title: "Error",
@@ -162,7 +162,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
           )}
         >
           <PlusIcon className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
-          <span className="whitespace-nowrap">{t("create_ticket")}</span>
+          <span className="whitespace-nowrap">New Issue</span>
           <div className="flex w-full justify-end float-right">
             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
               c
@@ -205,7 +205,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
               <div className="inline-block bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 align-middle md:max-w-3xl w-full ">
                 <div className="flex flex-row w-full">
                   <span className="text-md pb-2 font-semibold text-sm">
-                    {t("ticket_new")}
+                    New Issue
                   </span>
 
                   <button
