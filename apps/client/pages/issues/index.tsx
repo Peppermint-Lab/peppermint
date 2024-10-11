@@ -70,7 +70,7 @@ export default function Tickets() {
                 if (p === "Normal") {
                   badge = normal;
                 }
-                if (p === "High") {
+                if (p === "high") {
                   badge = high;
                 }
 
@@ -124,7 +124,7 @@ export default function Tickets() {
                             </div>
                             <div>
                               <span
-                                className={`inline-flex items-center rounded-md px-2 py-1 justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
+                                className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
                               >
                                 {ticket.priority}
                               </span>
