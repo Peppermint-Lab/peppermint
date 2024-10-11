@@ -16,7 +16,7 @@ import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
 import { IconCombo, UserCombo } from "../Combo";
-import { CircleCheck, CircleDotDashed, LifeBuoy, Loader, SignalHigh, SignalLow, SignalMedium } from "lucide-react";
+import { CircleCheck, CircleDotDashed, LifeBuoy, Loader, LoaderCircle, SignalHigh, SignalLow, SignalMedium } from "lucide-react";
 
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
@@ -350,7 +350,11 @@ export default function Ticket() {
   }, [initialContent]);
 
   if (editor === undefined) {
-    return "Loading content...";
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoaderCircle className="animate-spin" />
+      </div>
+    );
   }
 
   const handleInputChange = (editor) => {
