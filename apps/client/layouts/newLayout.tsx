@@ -26,6 +26,7 @@ import CreateTicketModal from "../components/CreateTicketModal";
 import { AccountDropdown } from "../components/AccountDropdown";
 
 import { useUser } from "../store/session";
+import ThemeSettings from "../components/ThemeSettings";
 
 
 const quickActions = [
@@ -600,6 +601,7 @@ export default function NewLayout({ children }: any) {
                   </ul>
                 </li>
               </ul>
+              <ThemeSettings />
             </nav>
           </div>
         </div>

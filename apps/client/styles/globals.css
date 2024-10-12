@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -59,9 +57,439 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  /* Solarized Light Theme */
+
+  .solarized-light {
+    --background: 45 100% 94.1%; /* Base3 - #fdf6e3 */
+    --foreground: 192 13% 23.5%; /* Base00 - #657b83 */
+
+    --card: 45 100% 94.1%; /* Same as background */
+    --card-foreground: 192 13% 23.5%; /* Same as foreground */
+
+    --popover: 45 100% 94.1%; /* Same as background */
+    --popover-foreground: 192 13% 23.5%; /* Same as foreground */
+
+    --primary: 205 82% 33%; /* Blue - #268bd2 */
+    --primary-foreground: 45 100% 94.1%; /* Base3 - #fdf6e3 */
+
+    --secondary: 39 94% 45%; /* Yellow - #b58900 */
+    --secondary-foreground: 45 100% 94.1%; /* Base3 - #fdf6e3 */
+
+    --muted: 180 9% 88%; /* Base2 - #eee8d5 */
+    --muted-foreground: 192 13% 23.5%; /* Base00 - #657b83 */
+
+    --accent: 175 32% 47%; /* Cyan - #2aa198 */
+    --accent-foreground: 45 100% 94.1%; /* Base3 - #fdf6e3 */
+
+    --destructive: 8 73% 53%; /* Red - #dc322f */
+    --destructive-foreground: 45 100% 94.1%; /* Base3 - #fdf6e3 */
+
+    --border: 180 9% 88%; /* Base2 - #eee8d5 */
+    --input: 180 9% 88%; /* Base2 - #eee8d5 */
+    --ring: 205 82% 33%; /* Blue - #268bd2 */
+
+    --radius: 0.5rem;
+  }
+
+  /* Solarized Dark Theme */
+
+  .solarized-dark {
+    --background: 192 13% 12.2%; /* Base03 - #002b36 */
+    --foreground: 180 9% 88%; /* Base2 - #eee8d5 */
+
+    --card: 192 13% 12.2%; /* Same as background */
+    --card-foreground: 180 9% 88%; /* Same as foreground */
+
+    --popover: 192 13% 12.2%; /* Same as background */
+    --popover-foreground: 180 9% 88%; /* Same as foreground */
+
+    --primary: 39 94% 45%; /* Yellow - #b58900 */
+    --primary-foreground: 192 13% 12.2%; /* Base03 - #002b36 */
+
+    --secondary: 205 82% 33%; /* Blue - #268bd2 */
+    --secondary-foreground: 192 13% 12.2%; /* Base03 - #002b36 */
+
+    --muted: 192 13% 23.5%; /* Base01 - #586e75 */
+    --muted-foreground: 180 9% 88%; /* Base2 - #eee8d5 */
+
+    --accent: 175 32% 47%; /* Cyan - #2aa198 */
+    --accent-foreground: 192 13% 12.2%; /* Base03 - #002b36 */
+
+    --destructive: 8 73% 53%; /* Red - #dc322f */
+    --destructive-foreground: 192 13% 12.2%; /* Base03 - #002b36 */
+
+    --border: 192 13% 23.5%; /* Base01 - #586e75 */
+    --input: 192 13% 23.5%; /* Base01 - #586e75 */
+    --ring: 39 94% 45%; /* Yellow - #b58900 */
+
+    --radius: 0.5rem;
+  }
+
+  /* Dracula Theme */
+
+  .dracula {
+    --background: 231 15% 18%; /* Background - #282a36 */
+    --foreground: 60 9% 91%; /* Foreground - #f8f8f2 */
+
+    --card: 231 15% 18%; /* Same as background */
+    --card-foreground: 60 9% 91%; /* Same as foreground */
+
+    --popover: 231 15% 18%; /* Same as background */
+    --popover-foreground: 60 9% 91%; /* Same as foreground */
+
+    --primary: 253 86% 59%; /* Pink - #ff79c6 */
+    --primary-foreground: 231 15% 18%; /* Background - #282a36 */
+
+    --secondary: 191 97% 61%; /* Cyan - #8be9fd */
+    --secondary-foreground: 231 15% 18%; /* Background - #282a36 */
+
+    --muted: 231 15% 28%; /* Comment - #6272a4 */
+    --muted-foreground: 60 9% 91%; /* Foreground - #f8f8f2 */
+
+    --accent: 48 100% 67%; /* Yellow - #f1fa8c */
+    --accent-foreground: 231 15% 18%; /* Background - #282a36 */
+
+    --destructive: 343 82% 58%; /* Red - #ff5555 */
+    --destructive-foreground: 231 15% 18%; /* Background - #282a36 */
+
+    --border: 231 15% 28%; /* Comment - #6272a4 */
+    --input: 231 15% 28%; /* Comment - #6272a4 */
+    --ring: 253 86% 59%; /* Pink - #ff79c6 */
+
+    --radius: 0.5rem;
+  }
+
+  .oceanic {
+    --background: 200 100% 95%; /* Light Blue - #e0f7fa */
+    --foreground: 200 15% 20%; /* Dark Blue - #01579b */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 185 84% 41%; /* Teal - #00bcd4 */
+    --primary-foreground: 0 0% 100%; /* White - #ffffff */
+
+    --secondary: 197 100% 50%; /* Cyan - #00e5ff */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 200 100% 90%; /* Lighter Blue - #b2ebf2 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 174 100% 29%; /* Green - #00c853 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%; /* Red - #ff5252 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 100% 85%; /* Light Blue - #b2ebf2 */
+    --input: var(--border);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  .forest {
+    --background: 120 20% 94%; /* Light Green - #e8f5e9 */
+    --foreground: 120 25% 20%; /* Dark Green - #1b5e20 */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 123 39% 49%; /* Green - #43a047 */
+    --primary-foreground: 0 0% 100%; /* White - #ffffff */
+
+    --secondary: 88 50% 53%; /* Lime - #cddc39 */
+    --secondary-foreground: var(--foreground);
+
+    --muted: 120 20% 90%; /* Lighter Green - #c8e6c9 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 40 100% 50%; /* Orange - #ff9800 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%; /* Red - #f44336 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 120 20% 85%; /* Light Green - #c8e6c9 */
+    --input: var(--border);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  .monokai {
+    --background: 84 20% 16%; /* Dark Background - #272822 */
+    --foreground: 60 9% 91%; /* Light Foreground - #f8f8f2 */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 54 89% 60%; /* Yellow - #e6db74 */
+    --primary-foreground: var(--background);
+
+    --secondary: 261 67% 59%; /* Purple - #ae81ff */
+    --secondary-foreground: var(--background);
+
+    --muted: 84 20% 20%; /* Darker Background - #3e3d32 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 21 89% 56%; /* Orange - #fd971f */
+    --accent-foreground: var(--background);
+
+    --destructive: 355 65% 65%; /* Red - #f92672 */
+    --destructive-foreground: var(--background);
+
+    --border: 84 20% 20%; /* Darker Background - #3e3d32 */
+    --input: var(--border);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  .material-light {
+    --background: 0 0% 100%; /* White - #ffffff */
+    --foreground: 0 0% 0%; /* Black - #000000 */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 200 100% 50%; /* Blue - #2196f3 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 100% 50%; /* Pink - #e91e63 */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 95%; /* Light Gray - #f2f2f2 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 45 100% 51%; /* Amber - #ffc107 */
+    --accent-foreground: var(--foreground);
+
+    --destructive: 0 84% 60%; /* Red - #f44336 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%; /* Light Gray - #e0e0e0 */
+    --input: var(--border);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  .material-dark {
+    --background: 0 0% 13%; /* Dark Gray - #212121 */
+    --foreground: 0 0% 100%; /* White - #ffffff */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 200 100% 50%; /* Blue - #2196f3 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 100% 50%; /* Pink - #e91e63 */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 20%; /* Darker Gray - #333333 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 45 100% 51%; /* Amber - #ffc107 */
+    --accent-foreground: var(--foreground);
+
+    --destructive: 0 84% 60%; /* Red - #f44336 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%; /* Darker Gray - #333333 */
+    --input: var(--border);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  /* GitHub Light Theme */
+
+  .github-light {
+    --background: 210 16% 96%; /* Light Gray - #f6f8fa */
+    --foreground: 210 10% 23%; /* Dark Gray - #24292e */
+
+    --card: 0 0% 100%; /* White - #ffffff */
+    --card-foreground: var(--foreground);
+
+    --popover: var(--card);
+    --popover-foreground: var(--foreground);
+
+    --primary: 210 100% 50%; /* Blue - #0366d6 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: var(--background);
+    --secondary-foreground: var(--foreground);
+
+    --muted: 210 16% 90%; /* Gray - #e1e4e8 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 120 100% 35%; /* Green - #28a745 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%; /* Red - #d73a49 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 16% 85%; /* Gray - #d1d5da */
+    --input: var(--card);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  /* GitHub Dark Theme */
+
+  .github-dark {
+    --background: 210 16% 20%; /* Dark Gray - #0d1117 */
+    --foreground: 0 0% 100%; /* White - #ffffff */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: 210 16% 24%; /* Slightly Lighter Gray - #161b22 */
+    --popover-foreground: var(--foreground);
+
+    --primary: 210 100% 50%; /* Blue - #58a6ff */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: var(--popover);
+    --secondary-foreground: var(--foreground);
+
+    --muted: 210 16% 28%; /* Gray - #21262d */
+    --muted-foreground: var(--foreground);
+
+    --accent: 120 100% 35%; /* Green - #3fb950 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%; /* Red - #da3633 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: var(--popover);
+    --input: var(--popover);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  /* High Contrast Light Theme */
+
+  .high-contrast-light {
+    --background: 0 0% 100%; /* White - #ffffff */
+    --foreground: 0 0% 0%; /* Black - #000000 */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 240 100% 50%; /* Blue - #0000ff */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 120 100% 25%; /* Dark Green - #008000 */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 90%; /* Light Gray - #e6e6e6 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 60 100% 50%; /* Yellow - #ffff00 */
+    --accent-foreground: var(--foreground);
+
+    --destructive: 0 100% 50%; /* Red - #ff0000 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 0%; /* Black - #000000 */
+    --input: var(--muted);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  /* High Contrast Dark Theme */
+
+  .high-contrast-dark {
+    --background: 0 0% 0%; /* Black - #000000 */
+    --foreground: 0 0% 100%; /* White - #ffffff */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 240 100% 50%; /* Blue - #0000ff */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 120 100% 25%; /* Dark Green - #008000 */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 20%; /* Dark Gray - #333333 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 60 100% 50%; /* Yellow - #ffff00 */
+    --accent-foreground: var(--foreground);
+
+    --destructive: 0 100% 50%; /* Red - #ff0000 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 100%; /* White - #ffffff */
+    --input: var(--muted);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
+
+  /* Pastel Theme */
+
+  .pastel {
+    --background: 60 100% 94%; /* Light Yellow - #ffffe0 */
+    --foreground: 240 10% 20%; /* Dark Blue - #1a1a66 */
+
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+
+    --popover: var(--background);
+    --popover-foreground: var(--foreground);
+
+    --primary: 180 100% 90%; /* Light Cyan - #e0ffff */
+    --primary-foreground: var(--foreground);
+
+    --secondary: 300 100% 90%; /* Light Pink - #ffe0ff */
+    --secondary-foreground: var(--foreground);
+
+    --muted: 60 100% 96%; /* Very Light Yellow - #fffff0 */
+    --muted-foreground: var(--foreground);
+
+    --accent: 120 100% 90%; /* Light Green - #e0ffe0 */
+    --accent-foreground: var(--foreground);
+
+    --destructive: 0 100% 90%; /* Light Red - #ffe0e0 */
+    --destructive-foreground: var(--foreground);
+
+    --border: 60 100% 90%; /* Light Yellow - #fffacd */
+    --input: var(--border);
+    --ring: var(--primary);
+
+    --radius: 0.5rem;
+  }
 }
-
-
 
 @layer base {
   * {
@@ -71,8 +499,6 @@
     @apply bg-background text-foreground;
   }
 }
-
-
 
 .ProseMirror {
   overflow-y: auto;

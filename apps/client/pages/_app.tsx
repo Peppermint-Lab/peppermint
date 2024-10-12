@@ -209,7 +209,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   return (
     <SessionProvider>
       <MantineProvider defaultColorScheme="dark">
-        <ThemeProvider attribute="class" defaultTheme="dark">
+        <ThemeProvider attribute="class" defaultTheme="light">
           <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
