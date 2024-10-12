@@ -86,16 +86,16 @@ export default function Home() {
   }
 
   const stats = [
-    { name: "Open Issues", stat: openTickets, href: "/tickets" },
+    { name: "Open Issues", stat: openTickets, href: "/issues" },
     {
       name: "Completed Issues",
       stat: completedTickets,
-      href: "/tickets?filter=closed",
+      href: "/issues?filter=closed",
     },
     {
       name: "Unassigned Issues",
       stat: unassigned,
-      href: "/tickets?filter=unassigned",
+      href: "/issues?filter=unassigned",
     },
   ];
 

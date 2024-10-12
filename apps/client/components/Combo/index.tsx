@@ -151,7 +151,7 @@ export function IconCombo({ value, update, defaultName, hideInitial }) {
                 <div className="flex-shrink-0">
                   <span className="inline-flex h-6 w-6 pl-2.5 items-center justify-center ">
                     <span className="text-xs font-medium leading-none text-foreground uppercase ">
-                      <defaultIcon.icon className="mr-2 h-4 w-4 shrink-0" />
+                     {defaultIcon && <defaultIcon.icon className="mr-2 h-4 w-4 shrink-0" />}
                     </span>
                   </span>
                 </div>

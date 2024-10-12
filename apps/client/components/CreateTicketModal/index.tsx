@@ -13,7 +13,7 @@ import { useUser } from "../../store/session";
 import { getCookie } from "cookies-next";
 
 import dynamic from "next/dynamic";
- 
+
 const Editor = dynamic(() => import("../BlockEditor"), { ssr: false });
 
 function classNames(...classes) {
@@ -46,11 +46,10 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState<any>("");
   const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("Normal");
+  const [priority, setPriority] = useState("medium");
   const [options, setOptions] = useState<any>();
   const [users, setUsers] = useState<any>();
   const [selected, setSelected] = useState<any>(type[3]);
-
 
   const fetchClients = async () => {
     await fetch(`/api/v1/clients/all`, {
@@ -151,7 +150,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
 
   return (
     <>
-      <li className="w-[calc(100%+15px)]" >
+      <li className="w-[calc(100%+15px)]">
         <button
           onClick={() => setOpen(true)}
           className={classNames(
