@@ -225,7 +225,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                   placeholder="Issue title"
                   maxLength={64}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full pl-0 pr-0 text-md border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                  className="w-full pl-0 pr-0 text-md text-gray-900  border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                 />
 
                 <div className="">
@@ -235,7 +235,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                     placeholder={t("ticket_name_here")}
                     name="name"
                     onChange={(e) => setName(e.target.value)}
-                    className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                    className=" w-full pl-0 pr-0 text-gray-900 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                   />
 
                   <input
@@ -243,7 +243,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                     name="email"
                     placeholder={t("ticket_email_here")}
                     onChange={(e) => setEmail(e.target.value)}
-                    className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                    className=" w-full pl-0 pr-0 text-gray-900  sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                   />
 
                   <Editor setIssue={setIssue} />
