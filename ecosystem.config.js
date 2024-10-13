@@ -2,7 +2,8 @@ module.exports = {
   apps: [
     {
       name: "client",
-      script: "npm run start",
+      script: "node",
+      args: "server.js",
       cwd: "apps/client",
       instances: "1",
       autorestart: true,

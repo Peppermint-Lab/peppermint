@@ -4,6 +4,7 @@ const nextTranslate = require("next-translate");
 module.exports = removeImports({
   reactStrictMode: false,
   swcMinify: true,
+  output: "standalone",
   ...nextTranslate(),
 
   async rewrites() {
