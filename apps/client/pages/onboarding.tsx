@@ -14,13 +14,13 @@ export default function Home() {
   const token = getCookie("session");
 
   return (
-    <div className="bg-gray-200">
+    <div className="bg-background">
       <div className="flex justify-center align-center h-screen items-center">
-        <div className="bg-white shadow-xl rounded-lg lg:p-8 p-4 mx-4">
+        <div className="bg-background shadow-xl rounded-lg lg:p-8 p-4 mx-4">
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
-              <h1 className="text-2xl font-bold">Peppermint </h1>
-              <p className="text-gray-600">
+              <h1 className="text-2xl text-foreground font-bold">Peppermint </h1>
+              <p className="text-foreground">
                 Welcome to Peppermint! A fully open sourced ticket management
                 system.
               </p>

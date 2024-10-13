@@ -94,8 +94,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
       <MantineProvider>
-        <Notifications position="top-right" />
-        <Component {...pageProps} />
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Notifications position="top-right" />
+          <Component {...pageProps} />
+        </ThemeProvider>
       </MantineProvider>
     );
   }
