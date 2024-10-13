@@ -16,7 +16,16 @@ import { BlockNoteView } from "@blocknote/mantine";
 
 import { useUser } from "../../store/session";
 import { IconCombo, UserCombo } from "../Combo";
-import { CircleCheck, CircleDotDashed, LifeBuoy, Loader, LoaderCircle, SignalHigh, SignalLow, SignalMedium } from "lucide-react";
+import {
+  CircleCheck,
+  CircleDotDashed,
+  LifeBuoy,
+  Loader,
+  LoaderCircle,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
+} from "lucide-react";
 
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
@@ -337,7 +346,7 @@ export default function Ticket() {
         if (typeof content === "object") {
           setInitialContent(content);
         } else {
-          setInitialContent(undefined)
+          setInitialContent(undefined);
         }
       });
     }
@@ -417,77 +426,36 @@ export default function Ticket() {
                 </div>
                 <aside className="mt-4 xl:hidden">
                   <div className="py-3 border-b ">
-                    <div className="border-t ">
-                      <div className="flex flex-row items-center justify-between">
-                        <span className="text-sm font-medium text-gray-500 mt-2">
-                          {t("labels")}
-                        </span>
-                        <span className="text-sm font-medium text-gray-500 mt-2">
-                          {t("edit-btn")}
-                        </span>
+                    <div className="border-t">
+                      <div className="flex flex-row space-x-2 mt-4">
+                        {users && (
+                          <UserCombo
+                            value={users}
+                            update={setN}
+                            defaultName={
+                              data.ticket.assignedTo
+                                ? data.ticket.assignedTo.name
+                                : ""
+                            }
+                          />
+                        )}
+
+                        <IconCombo
+                          value={priorityOptions}
+                          update={setPriority}
+                          defaultName={
+                            data.ticket.priority ? data.ticket.priority : ""
+                          }
+                        />
+
+                        <IconCombo
+                          value={ticketStatusMap}
+                          update={setTicketStatus}
+                          defaultName={
+                            data.ticket.status ? data.ticket.status : ""
+                          }
+                        />
                       </div>
-                      <ul role="list" className="mt-2 leading-8 space-x-2">
-                        {data.ticket.priority === "Low" && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-blue-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {data.ticket.priority} {t("priority")}
-                              </div>
-                            </div>
-                          </li>
-                        )}
-                        {data.ticket.priority === "Normal" && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-green-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {data.ticket.priority} {t("priority")}
-                              </div>
-                            </div>
-                          </li>
-                        )}
-                        {data.ticket.priority === "High" && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {data.ticket.priority} {t("priority")}
-                              </div>
-                            </div>
-                          </li>
-                        )}
-                        {data.ticket.status && (
-                          <li className="inline">
-                            <div className="relative inline-flex items-center rounded-full px-2.5 py-1 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                              <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full bg-rose-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <div className="ml-3 text-xs font-semibold text-gray-900">
-                                {ticketStatusMap[data.ticket.status]}
-                              </div>
-                            </div>
-                          </li>
-                        )}
-                      </ul>
                     </div>
                   </div>
                 </aside>
