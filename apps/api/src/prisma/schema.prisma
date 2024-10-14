@@ -22,6 +22,15 @@ model Provider {
   redirectUri  String?
 }
 
+model openIdConfig {
+  id           Int    @id @default(autoincrement())
+  clientId     String
+  clientSecret String
+  issuer       String
+  redirectUri  String
+  jwtSecret    String
+}
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
