@@ -55,7 +55,7 @@ export default function EmailQueues() {
                     <input
                       type="text"
                       className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Enter first name here..."
+                      placeholder="Enter the queue name here"
                       name="name"
                       onChange={(e) => setName(e.target.value)}
                     />
@@ -70,7 +70,7 @@ export default function EmailQueues() {
                     <input
                       type="email"
                       className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Enter first name here..."
+                      placeholder="Enter the email here"
                       name="name"
                       onChange={(e) => setUsername(e.target.value)}
                     />
@@ -85,7 +85,7 @@ export default function EmailQueues() {
                     <input
                       type="password"
                       className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Enter first name here..."
+                      placeholder="Enter the email password here"
                       name="name"
                       onChange={(e) => setPassword(e.target.value)}
                     />
@@ -100,7 +100,7 @@ export default function EmailQueues() {
                     <input
                       type="text"
                       className="shadow-sm w-1/2  focus:ring-indigo-500 focus:border-indigo-500 block  sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Enter first name here..."
+                      placeholder="Enter the email server hostname here"
                       name="name"
                       onChange={(e) => setHostname(e.target.value)}
                     />
