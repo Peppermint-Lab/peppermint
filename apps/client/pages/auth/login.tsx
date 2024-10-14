@@ -14,15 +14,15 @@ export default function Login({}) {
 
   async function postData() {
     if (auth === "oauth") {
-      await fetch(`/api/v1/auth/sso/check`, {
+      await fetch(`/api/v1/auth/check`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       })
         .then((res) => res.json())
-        .then(async (res) => {
-          if (res.success && res.oauth) {
-            router.push(res.ouath_url);
+        .then((res) => {
+          if (res.success) {
+            router.push(res.url);
           } else {
             if (!res.success) {
               notifications.show({

@@ -8,6 +8,9 @@ import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
 import { getConfig, getOAuthProvider } from "../lib/auth";
+import { getOidcClient } from "../lib/utils/oidc_client";
+import { getOAuthClient } from "../lib/utils/oauth_client";
+import { AuthorizationCode } from "simple-oauth2";
 
 export function authRoutes(fastify: FastifyInstance) {
   // Register a new user
@@ -384,7 +387,6 @@ export function authRoutes(fastify: FastifyInstance) {
             scope: "openid profile email",
           });
 
-          
           reply.send({
             type: "oidc",
             success: true,
@@ -393,6 +395,31 @@ export function authRoutes(fastify: FastifyInstance) {
 
           break;
         case "oauth":
+          const oauthProvider = await getOAuthProvider();
+
+          if (!oauthProvider) {
+            return reply.code(500).send({
+              error: `OAuth provider ${provider} configuration not found`,
+            });
+          }
+
+          const client = getOAuthClient({
+            ...oauthProvider,
+            name: oauthProvider.name,
+          });
+
+          // Generate authorization URL
+          const uri = client.authorizeURL({
+            redirect_uri: oauthProvider.redirectUri,
+            scope: oauthProvider.scope,
+          });
+
+          reply.send({
+            type: "oauth",
+            success: true,
+            url: uri,
+          });
+
           break;
         default:
           break;
@@ -473,42 +500,52 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/auth/oauth/callback",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { provider }: any = request.query;
-      const oauthProvider = await getOAuthProvider(provider);
+      const { code }: any = request.query;
+      const oauthProvider = await getOAuthProvider();
 
       if (!oauthProvider) {
         return reply.code(500).send({
-          error: `OAuth provider ${provider} configuration not found`,
+          error: `OAuth provider configuration not found`,
         });
       }
 
-      const client = getOAuthClient({ ...oauthProvider, name: provider });
-
+      const client = new AuthorizationCode({
+        client: {
+          id: oauthProvider.clientId,
+          secret: oauthProvider.clientSecret,
+        },
+        auth: {
+          tokenHost: 'https://github.com',
+          tokenPath: '/login/oauth/access_token',
+        },
+      });
+    
       const tokenParams = {
-        //@ts-expect-error
-        code: request.query.code,
+        code,
         redirect_uri: oauthProvider.redirectUri,
       };
+      
 
       try {
         // Exchange authorization code for an access token
         const accessToken = await client.getToken(tokenParams);
         const token = accessToken.token;
 
-        // Fetch user info from the provider
+        // // Fetch user info from the provider
         const userInfoResponse = await axios.get(oauthProvider.userInfoUrl, {
           headers: {
             Authorization: `Bearer ${token.access_token}`,
           },
         });
 
-        console.log(userInfoResponse);
+        request.log.debug(userInfoResponse.data)
+        console.log(userInfoResponse.data)
 
         // Issue JWT token
 
         // Send Response
         reply.send({
-          token: userInfoResponse,
+          // token: userInfoResponse,
           success: true,
         });
       } catch (error: any) {

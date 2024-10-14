@@ -75,9 +75,9 @@ export default function AdminLayout({ children }: any) {
       icon: Mailbox,
     },
     {
-      name: "SSO",
-      href: "/admin/sso",
-      current: location.pathname === "/admin/sso",
+      name: "authentication",
+      href: "/admin/authentication",
+      current: location.pathname === "/admin/authentication",
       icon: KeyRound,
     },
   ];

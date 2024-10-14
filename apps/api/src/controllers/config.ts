@@ -24,15 +24,13 @@ export function configRoutes(fastify: FastifyInstance) {
         const config = await prisma.config.findFirst();
 
         //@ts-expect-error
-        const { sso_active } = config;
+        const { sso_active, sso_provider } = config;
 
         if (sso_active) {
-          const provider = await prisma.provider.findFirst({});
-
           reply.send({
             success: true,
             sso: sso_active,
-            provider: provider,
+            provider: sso_provider,
           });
         }
 
@@ -45,103 +43,103 @@ export function configRoutes(fastify: FastifyInstance) {
   );
 
   // Update SSO Provider Settings
-  fastify.post(
-    "/api/v1/config/sso/provider",
+  // fastify.post(
+  //   "/api/v1/config/sso/provider",
 
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+  //   async (request: FastifyRequest, reply: FastifyReply) => {
+  //     const bearer = request.headers.authorization!.split(" ")[1];
+  //     const token = checkToken(bearer);
 
-      if (token) {
-        const {
-          name,
-          client_id,
-          client_secret,
-          redirect_uri,
-          tenantId,
-          issuer,
-        }: any = request.body;
+  //     if (token) {
+  //       const {
+  //         name,
+  //         client_id,
+  //         client_secret,
+  //         redirect_uri,
+  //         tenantId,
+  //         issuer,
+  //       }: any = request.body;
 
-        const conf = await prisma.config.findFirst();
+  //       const conf = await prisma.config.findFirst();
 
-        //update config to true
-        await prisma.config.update({
-          where: { id: conf!.id },
-          data: {
-            sso_active: true,
-            sso_provider: name,
-          },
-        });
+  //       //update config to true
+  //       await prisma.config.update({
+  //         where: { id: conf!.id },
+  //         data: {
+  //           sso_active: true,
+  //           sso_provider: name,
+  //         },
+  //       });
 
-        const check_provider = await prisma.provider.findFirst({});
+  //       const check_provider = await prisma.provider.findFirst({});
 
-        if (check_provider === null) {
-          await prisma.provider.create({
-            data: {
-              name: name,
-              clientId: client_id,
-              clientSecret: client_secret,
-              active: true,
-              redirectUri: redirect_uri,
-              tenantId: tenantId,
-              issuer: issuer,
-            },
-          });
-        } else {
-          await prisma.provider.update({
-            where: { id: check_provider.id },
-            data: {
-              name: name,
-              clientId: client_id,
-              clientSecret: client_secret,
-              active: true,
-              redirectUri: redirect_uri,
-              tenantId: tenantId,
-              issuer: issuer,
-            },
-          });
-        }
+  //       if (check_provider === null) {
+  //         await prisma.provider.create({
+  //           data: {
+  //             name: name,
+  //             clientId: client_id,
+  //             clientSecret: client_secret,
+  //             active: true,
+  //             redirectUri: redirect_uri,
+  //             tenantId: tenantId,
+  //             issuer: issuer,
+  //           },
+  //         });
+  //       } else {
+  //         await prisma.provider.update({
+  //           where: { id: check_provider.id },
+  //           data: {
+  //             name: name,
+  //             clientId: client_id,
+  //             clientSecret: client_secret,
+  //             active: true,
+  //             redirectUri: redirect_uri,
+  //             tenantId: tenantId,
+  //             issuer: issuer,
+  //           },
+  //         });
+  //       }
 
-        reply.send({
-          success: true,
-          message: "SSO Provider updated!",
-        });
-      }
-    }
-  );
+  //       reply.send({
+  //         success: true,
+  //         message: "SSO Provider updated!",
+  //       });
+  //     }
+  //   }
+  // );
 
-  // Delete SSO Provider
-  fastify.delete(
-    "/api/v1/config/sso/provider",
+  // // Delete SSO Provider
+  // fastify.delete(
+  //   "/api/v1/config/sso/provider",
 
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+  //   async (request: FastifyRequest, reply: FastifyReply) => {
+  //     const bearer = request.headers.authorization!.split(" ")[1];
+  //     const token = checkToken(bearer);
 
-      if (token) {
-        const conf = await prisma.config.findFirst();
+  //     if (token) {
+  //       const conf = await prisma.config.findFirst();
 
-        //update config to true
-        await prisma.config.update({
-          where: { id: conf!.id },
-          data: {
-            sso_active: false,
-            sso_provider: "",
-          },
-        });
+  //       //update config to true
+  //       await prisma.config.update({
+  //         where: { id: conf!.id },
+  //         data: {
+  //           sso_active: false,
+  //           sso_provider: "",
+  //         },
+  //       });
 
-        const provider = await prisma.provider.findFirst({});
-        await prisma.provider.delete({
-          where: { id: provider!.id },
-        });
+  //       const provider = await prisma.provider.findFirst({});
+  //       await prisma.provider.delete({
+  //         where: { id: provider!.id },
+  //       });
 
-        reply.send({
-          success: true,
-          message: "SSO Provider deleted!",
-        });
-      }
-    }
-  );
+  //       reply.send({
+  //         success: true,
+  //         message: "SSO Provider deleted!",
+  //       });
+  //     }
+  //   }
+  // );
 
   // Check if Emails are enabled & GET email settings
   fastify.get(

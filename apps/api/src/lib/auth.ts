@@ -3,19 +3,17 @@
 import { prisma } from "../prisma";
 
 export async function getConfig() {
-  const config = await prisma.openIdConfig.findFirst()
+  const config = await prisma.openIdConfig.findFirst();
   if (!config) {
-    throw new Error('Config not found in the database');
+    throw new Error("Config not found in the database");
   }
   return config;
 }
 
-export async function getOAuthProvider(providerName: any) {
-  const provider = await prisma.oAuthProvider.findUnique({
-    where: { name: providerName },
-  });
+export async function getOAuthProvider() {
+  const provider = await prisma.oAuthProvider.findFirst();
   if (!provider) {
-    throw new Error(`OAuth provider ${providerName} not found`);
+    throw new Error(`OAuth provider ${provider} not found`);
   }
   return provider;
 }
@@ -29,4 +27,3 @@ export async function getSAMLProvider(providerName: any) {
   }
   return provider;
 }
-
