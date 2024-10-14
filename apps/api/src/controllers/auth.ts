@@ -7,6 +7,7 @@ import { checkToken } from "../lib/jwt";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
+import { getConfig, getOAuthProvider } from "../lib/auth";
 
 export function authRoutes(fastify: FastifyInstance) {
   // Register a new user
@@ -169,7 +170,7 @@ export function authRoutes(fastify: FastifyInstance) {
         const max = Math.pow(10, length) - 1; // Maximum number for the given length
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
-      
+
       const code = generateRandomCode();
 
       const uuid = await prisma.passwordResetToken.create({
@@ -322,9 +323,9 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Checks if a user is SSO or password
+  // Checks if a user is password auth or other
   fastify.post(
-    "/api/v1/auth/sso/check",
+    "/api/v1/auth/check",
     async (request: FastifyRequest, reply: FastifyReply) => {
       let { email } = request.body as {
         email: string;
@@ -355,77 +356,52 @@ export function authRoutes(fastify: FastifyInstance) {
         },
       });
 
-      const provider = await prisma.provider.findMany();
-      const oauth = provider[0];
+      // Find out which config type it is, then action accordinly
 
-      if (authtype.length === 0) {
-        return reply.code(200).send({
-          success: true,
-          message: "SSO not enabled",
-          oauth: false,
-        });
-      }
+      // const provider = await prisma..findMany();
+      // const oauth = provider[0];
 
-      const url = "https://github.com/login/oauth/authorize";
+      // if (authtype.length === 0) {
+      //   return reply.code(200).send({
+      //     success: true,
+      //     message: "SSO not enabled",
+      //     oauth: false,
+      //   });
+      // }
 
-      reply.send({
-        oauth: true,
-        success: true,
-        ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&login=${email}&scope=user`,
-      });
+      // const url = "https://github.com/login/oauth/authorize"; // This needs to be generalised
+
+      // reply.send({
+      //   oauth: true,
+      //   success: true,
+      //   ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&login=${email}&scope=user`,
+      // });
     }
   );
 
-  // SSO api callback route
+  // oidc api callback route
   fastify.get(
-    "/api/v1/auth/sso/login/callback",
+    "/api/v1/auth/oidc/callback",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { code, state } = request.query as { code: string; state: string };
-
-      console.log("HIT");
-
       try {
-        const provider = await prisma.provider.findFirst({});
-        if (!provider) throw new Error("Provider not found");
+        const oidc = getConfig();
 
-        const { clientId, clientSecret, redirectUri } = provider;
+        const config = await getOAuthClient(oidc);
+        if (!config) {
+          return reply
+            .code(500)
+            .send({ error: "OIDC configuration not properly set" });
+        }
 
-        const { data: github_user } = await axios.post(
-          `https://github.com/login/oauth/access_token`,
-          {
-            client_id: clientId,
-            client_secret: clientSecret,
-            code: code,
-            redirect_uri: redirectUri,
-          },
-          {
-            headers: {
-              Accept: "application/json",
-            },
-          }
-        );
+        const oidcClient = await getOidcClient(config);
 
-        console.log(github_user);
+        const params = oidcClient.callbackParams(request.raw);
 
-        // await new Promise((r) => setTimeout(r, 2000));
-
-        const { data: emails } = await axios.get(
-          `https://api.github.com/user/emails`,
-          {
-            headers: {
-              Accept: "application/vnd.github+json",
-              Authorization: `Bearer ${github_user.access_token}`,
-            },
-          }
-        );
-
-        console.log(emails);
-
-        const primaryEmail = emails.find((e: any) => e.primary === true)?.email;
-        if (!primaryEmail) throw new Error("Primary email not found");
+        const tokenSet = await oidcClient.callback(config.redirectUri, params);
+        const userInfo = await oidcClient.userinfo(tokenSet.access_token);
 
         let user = await prisma.user.findUnique({
-          where: { email: primaryEmail },
+          where: { email: userInfo },
         });
 
         if (!user) {
@@ -438,6 +414,7 @@ export function authRoutes(fastify: FastifyInstance) {
         var b64string = process.env.SECRET;
         var secret = new Buffer(b64string!, "base64"); // Ta-da
 
+        // Issue JWT token
         let token = jwt.sign(
           {
             data: { id: user.id },
@@ -446,6 +423,7 @@ export function authRoutes(fastify: FastifyInstance) {
           { expiresIn: "8h" }
         );
 
+        // Create a session
         await prisma.session.create({
           data: {
             userId: user.id,
@@ -454,6 +432,7 @@ export function authRoutes(fastify: FastifyInstance) {
           },
         });
 
+        // Send Response
         reply.send({
           token,
           success: true,
@@ -462,11 +441,68 @@ export function authRoutes(fastify: FastifyInstance) {
         console.error("Authentication error:", error);
         reply.status(403).send({
           success: false,
-          message: error.message || "Authentication failed",
+          error: "OIDC callback error",
+          details: error.message,
         });
       }
     }
   );
+
+  // oauth api callback route
+  fastify.get(
+    "/api/v1/auth/sso/login/callback",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { provider }: any = request.query;
+      const oauthProvider = await getOAuthProvider(provider);
+
+      if (!oauthProvider) {
+        return reply.code(500).send({
+          error: `OAuth provider ${provider} configuration not found`,
+        });
+      }
+
+      const client = getOAuthClient({ ...oauthProvider, name: provider });
+
+      const tokenParams = {
+        code: request.query.code,
+        redirect_uri: oauthProvider.redirectUri,
+      };
+
+      try {
+        // Exchange authorization code for an access token
+        const accessToken = await client.getToken(tokenParams);
+        const token = accessToken.token;
+
+        // Fetch user info from the provider
+        const userInfoResponse = await axios.get(oauthProvider.userInfoUrl, {
+          headers: {
+            Authorization: `Bearer ${token.access_token}`,
+          },
+        });
+
+        console.log(userInfoResponse)
+
+        // Issue JWT token
+
+
+
+        // Send Response
+        reply.send({
+          token: userInfoResponse,
+          success: true,
+        });
+      } catch (error: any) {
+        console.error("Authentication error:", error);
+        reply.status(403).send({
+          success: false,
+          error: "OIDC callback error",
+          details: error.message,
+        });
+      }
+    }
+  );
+
+  // saml api callback route
 
   // Delete a user
   fastify.delete(
@@ -752,18 +788,18 @@ export function authRoutes(fastify: FastifyInstance) {
       if (token) {
         const { id, role } = request.body as { id: string; role: boolean };
         // check for atleast one admin on role downgrade
-				if (role === false) {
-					const admins = await prisma.user.findMany({
-						where: { isAdmin: true },
-					});
-					if (admins.length === 1) {
-						reply.code(400).send({
-							message: "Atleast one admin is required",
-							success: false
-						});
-						return;
-					}
-				}
+        if (role === false) {
+          const admins = await prisma.user.findMany({
+            where: { isAdmin: true },
+          });
+          if (admins.length === 1) {
+            reply.code(400).send({
+              message: "Atleast one admin is required",
+              success: false,
+            });
+            return;
+          }
+        }
         await prisma.user.update({
           where: { id },
           data: {

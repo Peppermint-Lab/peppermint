@@ -1,25 +1,39 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
-  engineType = "binary"
-  binaryTargets = ["native", "linux-musl-arm64-openssl-1.1.x"]
+  engineType      = "binary"
+  binaryTargets   = ["native", "linux-musl-arm64-openssl-1.1.x"]
 }
-
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Provider {
-  id           String  @id @default(uuid())
-  name         String
-  clientId     String
-  clientSecret String
-  active       Boolean
-  issuer       String?
-  tenantId     String?
-  redirectUri  String?
+model OAuthProvider {
+  id               Int    @id @default(autoincrement())
+  name             String @unique
+  clientId         String
+  clientSecret     String
+  authorizationUrl String
+  tokenUrl         String
+  userInfoUrl      String
+  redirectUri      String
+  scope            String
+}
+
+model SAMLProvider {
+  id           Int    @id @default(autoincrement())
+  name         String @unique
+  entryPoint   String
+  issuer       String
+  cert         String
+  ssoLoginUrl  String
+  ssoLogoutUrl String
+  audience     String
+  recipient    String
+  destination  String
+  acsUrl       String
 }
 
 model openIdConfig {
@@ -46,22 +60,26 @@ model PasswordResetToken {
 }
 
 model User {
-  id                           String   @id @default(uuid())
-  createdAt                    DateTime @default(now())
-  updatedAt                    DateTime @default(now())
+  id                           String    @id @default(uuid())
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @default(now())
   name                         String
   password                     String?
-  email                        String   @unique
+  email                        String    @unique
   image                        String?
   emailVerified                Boolean?
-  isAdmin                      Boolean  @default(false)
-  language                     String?  @default("en")
-  notify_ticket_created        Boolean  @default(true)
-  notify_ticket_status_changed Boolean  @default(true)
-  notify_ticket_comments       Boolean  @default(true)
-  notify_ticket_assigned       Boolean  @default(true)
-  firstLogin                   Boolean  @default(true)
-  external_user                Boolean  @default(false)
+  isAdmin                      Boolean   @default(false)
+  language                     String?   @default("en")
+  notify_ticket_created        Boolean   @default(true)
+  notify_ticket_status_changed Boolean   @default(true)
+  notify_ticket_comments       Boolean   @default(true)
+  notify_ticket_assigned       Boolean   @default(true)
+  firstLogin                   Boolean   @default(true)
+  external_user                Boolean   @default(false)
+  out_of_office                Boolean   @default(false)
+  out_of_office_message        String?
+  out_of_office_start          DateTime?
+  out_of_office_end            DateTime?
 
   todos         Todos[]
   tickets       Ticket[]
@@ -109,13 +127,12 @@ model Ticket {
   Comment      Comment[]
   TimeTracking TimeTracking[]
 
-  team          Team?           @relation(fields: [teamId], references: [id])
-  teamId        String?
-  assignedTo    User?           @relation(fields: [userId], references: [id])
-  client        Client?         @relation(fields: [clientId], references: [id])
-  clientId      String?
-  userId        String?
-
+  team       Team?   @relation(fields: [teamId], references: [id])
+  teamId     String?
+  assignedTo User?   @relation(fields: [userId], references: [id])
+  client     Client? @relation(fields: [clientId], references: [id])
+  clientId   String?
+  userId     String?
 
   knowledgeBase knowledgeBase[]
   notifications notifications[]
@@ -262,19 +279,15 @@ model Config {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  notifications         Json? // Array of service names and an active field of TRUE OR FALSE
-  sso_provider          String?
-  sso_active            Boolean   @default(false)
-  gh_version            String?
-  client_version        String?
-  portal_locale         String?
-  feature_previews      Boolean   @default(false)
-  out_of_office         Boolean   @default(false)
-  out_of_office_message String?
-  out_of_office_start   DateTime?
-  out_of_office_end     DateTime?
-  encryption_key        Bytes?
-  first_time_setup      Boolean   @default(true)
+  notifications    Json? // Array of service names and an active field of TRUE OR FALSE
+  sso_provider     String?
+  sso_active       Boolean @default(false)
+  gh_version       String?
+  client_version   String?
+  feature_previews Boolean @default(false)
+
+  encryption_key   Bytes?
+  first_time_setup Boolean @default(true)
 }
 
 model Uptime {
