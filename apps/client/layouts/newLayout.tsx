@@ -21,12 +21,13 @@ import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
-
+ 
 import CreateTicketModal from "../components/CreateTicketModal";
 import { AccountDropdown } from "../components/AccountDropdown";
 
 import { useUser } from "../store/session";
 import ThemeSettings from "../components/ThemeSettings";
+import { Bell, Building, Settings, SquareActivity, SquareKanban } from "lucide-react";
 
 const quickActions = [
   // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
@@ -76,7 +77,7 @@ export default function NewLayout({ children }: any) {
     {
       name: t("sl_dashboard"),
       href: `/${locale}/`,
-      icon: HomeIcon,
+      icon: Building,
       current: location.pathname === "/" ? true : false,
       initial: "h",
     },
@@ -95,39 +96,6 @@ export default function NewLayout({ children }: any) {
     //   children: queues,
     //   inital: null,
     // },
-  ];
-
-  const admin_settings = [
-    {
-      name: t("sl_users"),
-      href: "/admin/users/internal",
-      current: location.pathname === "/admin/users/internal",
-    },
-    {
-      name: t("sl_clients"),
-      href: "/admin/clients",
-      current: location.pathname === "/admin/clients",
-    },
-    {
-      name: "Email Queues",
-      href: "/admin/email-queues",
-      current: location.pathname === "/admin/email-queues",
-    },
-    {
-      name: "Webhooks",
-      href: "/admin/webhooks",
-      current: location.pathname === "/admin/webhooks",
-    },
-    {
-      name: "Outbound Emails",
-      href: "/admin/email",
-      current: location.pathname === "/admin/email",
-    },
-    {
-      name: "SSO",
-      href: "/admin/sso",
-      current: location.pathname === "/admin/sso",
-    },
   ];
 
   function handleKeyPress(event: any) {
@@ -414,7 +382,7 @@ export default function NewLayout({ children }: any) {
                             "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
-                          <TicketIcon className="h-4 w-4 ml-1 shrink-0 mt-1" />
+                          <SquareKanban className="h-4 w-4 ml-1 shrink-0 mt-1" />
                           <span className="whitespace-nowrap">Issues</span>
                           <div className="flex w-full justify-end float-right">
                             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
@@ -477,7 +445,7 @@ export default function NewLayout({ children }: any) {
                           )}
                         >
                           <>
-                            <Cog6ToothIcon
+                            <Settings
                               className="h-4 w-4 ml-1 shrink-0 mt-1"
                               aria-hidden="true"
                             />
@@ -540,7 +508,7 @@ export default function NewLayout({ children }: any) {
                   className="relative rounded-md p-2 text-gray-400 hover:text-gray-500 hover:cursor-pointer focus:outline-none"
                 >
                   <Link href="/notifications">
-                    <InboxStackIcon className="h-4 w-4 text-foreground" />
+                    <Bell className="h-4 w-4 text-foreground" />
                     {user.notifcations.filter(
                       (notification) => !notification.read
                     ).length > 0 && (

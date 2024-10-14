@@ -13,6 +13,7 @@ import { useUser } from "../../store/session";
 import { getCookie } from "cookies-next";
 
 import dynamic from "next/dynamic";
+import { ListPlus } from "lucide-react";
 
 const Editor = dynamic(() => import("../BlockEditor"), { ssr: false });
 
@@ -160,7 +161,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
             "group -mx-2 w-full flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
           )}
         >
-          <PlusIcon className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
+          <ListPlus className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
           <span className="whitespace-nowrap">New Issue</span>
           <div className="flex w-full justify-end float-right">
             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
