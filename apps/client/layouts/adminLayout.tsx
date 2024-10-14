@@ -2,7 +2,7 @@ import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useUser } from "../store/session";
-import { Dialog, Disclosure, Transition } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import {
   Bars3Icon,
@@ -18,14 +18,12 @@ import {
   Mail,
   Mailbox,
   MoveLeft,
-  User2,
   UserRound,
   Webhook,
 } from "lucide-react";
 
 export default function AdminLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
-  const router = useRouter();
 
   const { loading, user } = useUser();
 
@@ -141,7 +139,7 @@ export default function AdminLayout({ children }: any) {
                     </div>
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
-                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
+                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background px-6 pb-4">
                     <div className="flex align-middle flex-row h-14 items-center border-b-[1px]">
                       {/* <img className="h-8 w-auto" src="/logo.svg" alt="Workflow" /> */}
                       <Link href="https://peppermint.sh">
@@ -160,18 +158,13 @@ export default function AdminLayout({ children }: any) {
                                   href={item.href}
                                   className={classNames(
                                     item.current
-                                      ? "bg-gray-50 text-indigo-600"
-                                      : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
-                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                      ? "bg-secondary dark:bg-primary"
+                                      : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                                    "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                                   )}
                                 >
                                   <item.icon
-                                    className={classNames(
-                                      item.current
-                                        ? "text-indigo-600"
-                                        : "text-gray-400 group-hover:text-indigo-600",
-                                      "h-6 w-6 shrink-0"
-                                    )}
+                                    className="h-4 w-4 ml-1 shrink-0 mt-1"
                                     aria-hidden="true"
                                   />
                                   <span className="whitespace-nowrap">
@@ -213,9 +206,9 @@ export default function AdminLayout({ children }: any) {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
-                              : " hover:bg-[#F0F3F9] dark:hover:bg-gray-800 dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 text-xs rounded-md font-semibold leading-6"
+                              ? "bg-secondary dark:bg-primary"
+                              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                            "group -mx-2 flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
                           )}
                         >
                           <item.icon
@@ -259,30 +252,28 @@ export default function AdminLayout({ children }: any) {
             />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
-              <div className="flex w-full justify-start items-center space-x-6">
+              <div className="sm:flex hidden w-full justify-start items-center space-x-6">
                 {user.isAdmin && (
                   <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
                     <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                      Version 0.4.9
+                      Version 0.5.1
                     </span>
                   </Link>
                 )}
-
-                {/* <CommandModal /> */}
               </div>
 
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
                 <Button
                   variant="outline"
-                  className="relative rounded-md  p-2  text-gray-400 hover:text-gray-500 hover:cursor-pointer focus:outline-none"
+                  className="relative rounded-md p-2 text-gray-400 hover:text-gray-500 hover:cursor-pointer focus:outline-none"
                 >
                   <Link href="/notifications">
-                    <InboxStackIcon className="h-4 w-4 text-black" />
+                    <InboxStackIcon className="h-4 w-4 text-foreground" />
                     {user.notifcations.filter(
                       (notification) => !notification.read
                     ).length > 0 && (
                       <svg
-                        className="h-2.5 w-2.5 absolute bottom-6 left-6  animate-pulse fill-green-500"
+                        className="h-2.5 w-2.5 absolute bottom-6 left-6 animate-pulse fill-green-500"
                         viewBox="0 0 6 6"
                         aria-hidden="true"
                       >
@@ -300,7 +291,7 @@ export default function AdminLayout({ children }: any) {
                   >
                     <Button
                       variant="outline"
-                      className="hover:cursor-pointer whitespace-nowrap"
+                      className="text-foreground hover:cursor-pointer whitespace-nowrap"
                     >
                       Send Feedback
                     </Button>

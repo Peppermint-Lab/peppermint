@@ -427,18 +427,20 @@ export default function Ticket() {
                 <aside className="mt-4 xl:hidden">
                   <div className="py-3 border-b ">
                     <div className="border-t">
-                      <div className="flex flex-row space-x-2 mt-4">
-                        {users && (
-                          <UserCombo
-                            value={users}
-                            update={setN}
-                            defaultName={
-                              data.ticket.assignedTo
-                                ? data.ticket.assignedTo.name
-                                : ""
-                            }
-                          />
-                        )}
+                      <div className="flex flex-col sm:flex-row space-x-2 mt-4">
+                        <div className="ml-2">
+                          {users && (
+                            <UserCombo
+                              value={users}
+                              update={setN}
+                              defaultName={
+                                data.ticket.assignedTo
+                                  ? data.ticket.assignedTo.name
+                                  : ""
+                              }
+                            />
+                          )}
+                        </div>
 
                         <IconCombo
                           value={priorityOptions}

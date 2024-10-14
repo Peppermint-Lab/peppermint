@@ -104,8 +104,8 @@ export default function Home() {
       fetchTickets(),
       getOpenTickets(),
       getCompletedTickets(),
-      getUnassginedTickets()
-    ])
+      getUnassginedTickets(),
+    ]);
     await setLoading(false);
   }
 
@@ -117,6 +117,15 @@ export default function Home() {
   return (
     <div className="flex flex-col xl:flex-row p-8 justify-center w-full">
       <div className="w-full xl:w-[70%] max-w-5xl">
+        <div className="block sm:hidden mb-4">
+          {user.isAdmin && (
+            <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+              <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
+                Version 0.5.1
+              </span>
+            </Link>
+          )}
+        </div>
         {!loading && (
           <>
             <div>
@@ -168,9 +177,7 @@ export default function Home() {
                 </>
               ) : (
                 <>
-                  <span className="font-bold text-2xl">
-                    Recent Issues
-                  </span>
+                  <span className="font-bold text-2xl">Recent Issues</span>
                   <div className="-mx-4 sm:-mx-0 w-full">
                     <table className="min-w-full divide-y divide-gray-300">
                       <thead>
@@ -277,7 +284,6 @@ export default function Home() {
                               <td className="px-3 py-1 text-sm text-gray-500 w-[130px] dark:text-white truncate whitespace-nowrap">
                                 {item.assignedTo ? item.assignedTo.name : "-"}
                               </td>
-                             
                             </tr>
                           ))}
                       </tbody>
@@ -289,7 +295,6 @@ export default function Home() {
           </>
         )}
       </div>
-
     </div>
   );
 }

@@ -154,10 +154,10 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
         <button
           onClick={() => setOpen(true)}
           className={classNames(
-            open
-              ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
-              : " hover:bg-[#F0F3F9] dark:hover:bg-gray-800 dark:hover:text-gray-900 ",
-            "group -mx-2 w-full flex gap-x-3 p-1 text-xs rounded-md font-semibold leading-6"
+            location.pathname.includes("/admin")
+              ? "bg-secondary dark:bg-primary"
+              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+            "group -mx-2 w-full flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
           )}
         >
           <PlusIcon className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
@@ -201,20 +201,20 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="inline-block bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 align-middle md:max-w-3xl w-full ">
-                <div className="flex flex-row w-full">
+              <div className="inline-block bg-background rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 align-middle md:max-w-3xl w-full ">
+                <div className="flex flex-row w-full align-middle">
                   <span className="text-md pb-2 font-semibold text-sm">
                     New Issue
                   </span>
 
                   <button
                     type="button"
-                    className="ml-auto mb-1.5 bg-white text-xs rounded-md text-gray-400 hover:text-gray-500 "
+                    className="ml-auto mb-1.5 text-foreground font-bold text-xs rounded-md hover:text-primary outline-none"
                     onClick={() => setOpen(false)}
                   >
                     <span className="sr-only">Close</span>
                     <XMarkIcon
-                      className="h-4 w-4 text-black"
+                      className="h-5 w-5"
                       aria-hidden="true"
                     />
                   </button>
@@ -225,7 +225,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                   placeholder="Issue title"
                   maxLength={64}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full pl-0 pr-0 text-md text-gray-900  border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                  className="w-full pl-0 pr-0 text-md text-foreground bg-background border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                 />
 
                 <div className="">
@@ -235,7 +235,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                     placeholder={t("ticket_name_here")}
                     name="name"
                     onChange={(e) => setName(e.target.value)}
-                    className=" w-full pl-0 pr-0 text-gray-900 sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                    className=" w-full pl-0 pr-0text-foreground bg-background  sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                   />
 
                   <input
@@ -243,7 +243,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                     name="email"
                     placeholder={t("ticket_email_here")}
                     onChange={(e) => setEmail(e.target.value)}
-                    className=" w-full pl-0 pr-0 text-gray-900  sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                    className=" w-full pl-0 pr-0 text-foreground bg-background   sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                   />
 
                   <Editor setIssue={setIssue} />

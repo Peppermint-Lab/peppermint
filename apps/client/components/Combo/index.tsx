@@ -162,7 +162,7 @@ export function IconCombo({ value, update, defaultName, hideInitial }) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0" side="right" align="start">
+        <PopoverContent className="p-0" align="start">
           <Command>
             {/* <CommandInput placeholder="Change status..." /> */}
             <CommandList>

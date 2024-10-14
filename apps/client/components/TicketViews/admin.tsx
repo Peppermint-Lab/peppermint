@@ -9,7 +9,7 @@ import {
   usePagination,
   useTable,
 } from "react-table";
-import TicketsMobileList from "../../components/TicketsMobileList";
+import TicketsMobileList from "../TicketsMobileList";
 
 const fetchALLTIckets = async () => {
   const res = await fetch(`/api/v1/tickets/all/admin`, {
