@@ -356,26 +356,47 @@ export function authRoutes(fastify: FastifyInstance) {
         },
       });
 
+      if (authtype.length === 0) {
+        return reply.code(200).send({
+          success: true,
+          message: "SSO not enabled",
+          oauth: false,
+        });
+      }
+
+      const provider = authtype[0].sso_provider;
+
       // Find out which config type it is, then action accordinly
 
-      // const provider = await prisma..findMany();
-      // const oauth = provider[0];
+      switch (provider) {
+        case "oidc":
+          const config = await getConfig();
+          if (!config) {
+            return reply
+              .code(500)
+              .send({ error: "OIDC configuration not found" });
+          }
 
-      // if (authtype.length === 0) {
-      //   return reply.code(200).send({
-      //     success: true,
-      //     message: "SSO not enabled",
-      //     oauth: false,
-      //   });
-      // }
+          const oidcClient = await getOidcClient(config);
 
-      // const url = "https://github.com/login/oauth/authorize"; // This needs to be generalised
+          // Generate authorization URL
+          const url = oidcClient.authorizationUrl({
+            scope: "openid profile email",
+          });
 
-      // reply.send({
-      //   oauth: true,
-      //   success: true,
-      //   ouath_url: `${url}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&login=${email}&scope=user`,
-      // });
+          
+          reply.send({
+            type: "oidc",
+            success: true,
+            url: url,
+          });
+
+          break;
+        case "oauth":
+          break;
+        default:
+          break;
+      }
     }
   );
 
@@ -450,7 +471,7 @@ export function authRoutes(fastify: FastifyInstance) {
 
   // oauth api callback route
   fastify.get(
-    "/api/v1/auth/sso/login/callback",
+    "/api/v1/auth/oauth/callback",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { provider }: any = request.query;
       const oauthProvider = await getOAuthProvider(provider);
@@ -464,6 +485,7 @@ export function authRoutes(fastify: FastifyInstance) {
       const client = getOAuthClient({ ...oauthProvider, name: provider });
 
       const tokenParams = {
+        //@ts-expect-error
         code: request.query.code,
         redirect_uri: oauthProvider.redirectUri,
       };
@@ -480,11 +502,9 @@ export function authRoutes(fastify: FastifyInstance) {
           },
         });
 
-        console.log(userInfoResponse)
+        console.log(userInfoResponse);
 
         // Issue JWT token
-
-
 
         // Send Response
         reply.send({
