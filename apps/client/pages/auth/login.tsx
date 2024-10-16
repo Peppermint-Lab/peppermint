@@ -21,7 +21,7 @@ export default function Login({}) {
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.success) {
+          if (res.success && res.oauth) {
             router.push(res.url);
           } else {
             if (!res.success) {
@@ -118,9 +118,9 @@ export default function Login({}) {
                     required
                     onChange={(e) => setEmail(e.target.value)}
                     className="appearance-none block w-full px-3 py-2 border text-gray-900 border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                    onKeyPress={event => {
-                      if (event.key === 'Enter') {
-                        postData()
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        postData();
                       }
                     }}
                   />
@@ -144,9 +144,9 @@ export default function Login({}) {
                       required
                       onChange={(e) => setPassword(e.target.value)}
                       className="appearance-none block w-full px-3 py-2 border text-gray-900 border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                      onKeyPress={event => {
-                        if (event.key === 'Enter') {
-                          postData()
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          postData();
                         }
                       }}
                     />
@@ -224,8 +224,14 @@ export default function Login({}) {
         )}
 
         <div className="mt-8 text-center flex flex-col space-y-2">
-          <span className="font-bold text-foreground">Built with 💚 by Peppermint Labs</span>
-          <a href="https://docs.peppermint.sh/" target="_blank" className="text-foreground">
+          <span className="font-bold text-foreground">
+            Built with 💚 by Peppermint Labs
+          </span>
+          <a
+            href="https://docs.peppermint.sh/"
+            target="_blank"
+            className="text-foreground"
+          >
             Documentation
           </a>
         </div>

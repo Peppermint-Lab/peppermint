@@ -12,9 +12,9 @@ import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function configRoutes(fastify: FastifyInstance) {
-  // Check if SSO is enabled
+  // Check auth method
   fastify.get(
-    "/api/v1/config/sso/enabled",
+    "/api/v1/config/authentication/check",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
@@ -42,104 +42,156 @@ export function configRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Update SSO Provider Settings
-  // fastify.post(
-  //   "/api/v1/config/sso/provider",
+  // Update OIDC Provider
+  fastify.post(
+    "/api/v1/config/authentication/oidc/update",
 
-  //   async (request: FastifyRequest, reply: FastifyReply) => {
-  //     const bearer = request.headers.authorization!.split(" ")[1];
-  //     const token = checkToken(bearer);
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-  //     if (token) {
-  //       const {
-  //         name,
-  //         client_id,
-  //         client_secret,
-  //         redirect_uri,
-  //         tenantId,
-  //         issuer,
-  //       }: any = request.body;
+      if (token) {
+        const { clientId, clientSecret, redirectUri, issuer, jwtSecret }: any =
+          request.body;
 
-  //       const conf = await prisma.config.findFirst();
+        const conf = await prisma.config.findFirst();
 
-  //       //update config to true
-  //       await prisma.config.update({
-  //         where: { id: conf!.id },
-  //         data: {
-  //           sso_active: true,
-  //           sso_provider: name,
-  //         },
-  //       });
+        await prisma.config.update({
+          where: { id: conf!.id },
+          data: {
+            sso_active: true,
+            sso_provider: "oidc",
+          },
+        });
 
-  //       const check_provider = await prisma.provider.findFirst({});
+        const existingProvider = await prisma.openIdConfig.findFirst();
 
-  //       if (check_provider === null) {
-  //         await prisma.provider.create({
-  //           data: {
-  //             name: name,
-  //             clientId: client_id,
-  //             clientSecret: client_secret,
-  //             active: true,
-  //             redirectUri: redirect_uri,
-  //             tenantId: tenantId,
-  //             issuer: issuer,
-  //           },
-  //         });
-  //       } else {
-  //         await prisma.provider.update({
-  //           where: { id: check_provider.id },
-  //           data: {
-  //             name: name,
-  //             clientId: client_id,
-  //             clientSecret: client_secret,
-  //             active: true,
-  //             redirectUri: redirect_uri,
-  //             tenantId: tenantId,
-  //             issuer: issuer,
-  //           },
-  //         });
-  //       }
+        if (existingProvider === null) {
+          await prisma.openIdConfig.create({
+            data: {
+              clientId: clientId,
+              clientSecret: clientSecret,
+              redirectUri: redirectUri,
+              jwtSecret: jwtSecret,
+              issuer: issuer,
+            },
+          });
+        } else {
+          await prisma.openIdConfig.update({
+            where: { id: existingProvider.id },
+            data: {
+              clientId: clientId,
+              clientSecret: clientSecret,
+              redirectUri: redirectUri,
+              jwtSecret: jwtSecret,
+              issuer: issuer,
+            },
+          });
+        }
 
-  //       reply.send({
-  //         success: true,
-  //         message: "SSO Provider updated!",
-  //       });
-  //     }
-  //   }
-  // );
+        reply.send({
+          success: true,
+          message: "OIDC config Provider updated!",
+        });
+      }
+    }
+  );
 
-  // // Delete SSO Provider
-  // fastify.delete(
-  //   "/api/v1/config/sso/provider",
+  // Update Oauth Provider
+  fastify.post(
+    "/api/v1/config/authentication/oauth/update",
 
-  //   async (request: FastifyRequest, reply: FastifyReply) => {
-  //     const bearer = request.headers.authorization!.split(" ")[1];
-  //     const token = checkToken(bearer);
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
 
-  //     if (token) {
-  //       const conf = await prisma.config.findFirst();
+      if (token) {
+        const {
+          name,
+          clientId,
+          clientSecret,
+          redirectUri,
+          tenantId,
+          issuer,
+          jwtSecret,
+        }: any = request.body;
 
-  //       //update config to true
-  //       await prisma.config.update({
-  //         where: { id: conf!.id },
-  //         data: {
-  //           sso_active: false,
-  //           sso_provider: "",
-  //         },
-  //       });
+        const conf = await prisma.config.findFirst();
 
-  //       const provider = await prisma.provider.findFirst({});
-  //       await prisma.provider.delete({
-  //         where: { id: provider!.id },
-  //       });
+        // Update config to true
+        await prisma.config.update({
+          where: { id: conf!.id },
+          data: {
+            sso_active: true,
+            sso_provider: "oauth",
+          },
+        });
 
-  //       reply.send({
-  //         success: true,
-  //         message: "SSO Provider deleted!",
-  //       });
-  //     }
-  //   }
-  // );
+        // Check if the provider exists
+        const existingProvider = await prisma.oAuthProvider.findFirst();
+
+        if (existingProvider === null) {
+          await prisma.oAuthProvider.create({
+            data: {
+              name: name,
+              clientId: clientId,
+              clientSecret: clientSecret,
+              redirectUri: redirectUri,
+              scope: "", // Add appropriate scope if needed
+              authorizationUrl: "", // Add appropriate URL if needed
+              tokenUrl: "", // Add appropriate URL if needed
+              userInfoUrl: "", // Add appropriate URL if needed
+            },
+          });
+        } else {
+          await prisma.oAuthProvider.update({
+            where: { id: existingProvider.id },
+            data: {
+              clientId: clientId,
+              clientSecret: clientSecret,
+              redirectUri: redirectUri,
+            },
+          });
+        }
+
+        reply.send({
+          success: true,
+          message: "SSO Provider updated!",
+        });
+      }
+    }
+  );
+
+  // Delete auth config
+  fastify.delete(
+    "/api/v1/config/authentication",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const conf = await prisma.config.findFirst();
+
+        // Update config to false
+        await prisma.config.update({
+          where: { id: conf!.id },
+          data: {
+            sso_active: false,
+            sso_provider: "",
+          },
+        });
+
+        // Delete the OAuth provider
+        await prisma.oAuthProvider.deleteMany({});
+
+        reply.send({
+          success: true,
+          message: "SSO Provider deleted!",
+        });
+      }
+    }
+  );
 
   // Check if Emails are enabled & GET email settings
   fastify.get(

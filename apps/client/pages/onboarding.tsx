@@ -4,9 +4,6 @@ import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useUser } from "../store/session";
 
-// if admin -> set up a new user -> set up a new client -> set up a webhook -> set up an Email Queue
-// if user -> new password -> check user info like name etc
-
 export default function Home() {
   const router = useRouter();
 
