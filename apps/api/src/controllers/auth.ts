@@ -527,8 +527,7 @@ export function authRoutes(fastify: FastifyInstance) {
           secret: oauthProvider.clientSecret,
         },
         auth: {
-          tokenHost: "https://github.com",
-          tokenPath: "/login/oauth/access_token",
+          tokenHost: oauthProvider.authorizationUrl,
         },
       });
 
