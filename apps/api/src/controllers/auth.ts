@@ -12,6 +12,18 @@ import { getOidcClient } from "../lib/utils/oidc_client";
 import { getOAuthClient } from "../lib/utils/oauth_client";
 import { AuthorizationCode } from "simple-oauth2";
 
+async function getUserEmails(token: string) {
+  const res = await axios.get("https://api.github.com/user/emails", {
+    headers: {
+      Authorization: `token ${token}`,
+    },
+  });
+
+  // Return only the primary email address
+  const primaryEmail = res.data.find((email: { primary: boolean }) => email.primary);
+  return primaryEmail ? primaryEmail.email : null; // Return the email or null if not found
+}
+
 export function authRoutes(fastify: FastifyInstance) {
   // Register a new user
   fastify.post(
@@ -515,44 +527,73 @@ export function authRoutes(fastify: FastifyInstance) {
           secret: oauthProvider.clientSecret,
         },
         auth: {
-          tokenHost: 'https://github.com',
-          tokenPath: '/login/oauth/access_token',
+          tokenHost: "https://github.com",
+          tokenPath: "/login/oauth/access_token",
         },
       });
-    
+
       const tokenParams = {
         code,
         redirect_uri: oauthProvider.redirectUri,
       };
-      
 
       try {
         // Exchange authorization code for an access token
-        const accessToken = await client.getToken(tokenParams);
-        const token = accessToken.token;
+        const fetch_token = await client.getToken(tokenParams);
+        const access_token = fetch_token.token.access_token;
 
         // // Fetch user info from the provider
-        const userInfoResponse = await axios.get(oauthProvider.userInfoUrl, {
+        const userInfoResponse: any = await axios.get(oauthProvider.userInfoUrl, {
           headers: {
-            Authorization: `Bearer ${token.access_token}`,
+            Authorization: `Bearer ${access_token}`,
           },
         });
 
-        request.log.debug(userInfoResponse.data)
-        console.log(userInfoResponse.data)
+        const emails = oauthProvider.name === "github" ? await getUserEmails(access_token as string) : userInfoResponse.email
 
         // Issue JWT token
+        let user = await prisma.user.findUnique({
+          where: { email: emails },
+        });
+
+        if (!user) {
+          return reply.send({
+            success: false,
+            message: "Invalid email",
+          });
+        }
+
+        var b64string = process.env.SECRET;
+        var secret = new Buffer(b64string!, "base64"); // Ta-da
+
+        // Issue JWT token
+        let signed_token = jwt.sign(
+          {
+            data: { id: user.id },
+          },
+          secret,
+          { expiresIn: "8h" }
+        );
+
+        // Create a session
+        await prisma.session.create({
+          data: {
+            userId: user.id,
+            sessionToken: signed_token,
+            expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+          },
+        });
 
         // Send Response
         reply.send({
-          // token: userInfoResponse,
+          token: signed_token,
           success: true,
         });
       } catch (error: any) {
         console.error("Authentication error:", error);
         reply.status(403).send({
           success: false,
-          error: "OIDC callback error",
+          error: "OAuth callback error",
           details: error.message,
         });
       }
