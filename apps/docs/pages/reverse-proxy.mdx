@@ -263,6 +263,59 @@ You should now be able to see peppermint running on your choosen subdomain.
 
 I hope you found this guide usual :)
 
+## Enabling SSL
+
+To enable SSL, you will need to open some additional ports. You can do that by using the below command.
+
+```
+sudo ufw allow 'Nginx HTTPS'
+```
+
+We will be using Certbot to do the heavy listing. We are going to assume that this is a fresh new install of an OS of your choice.
+
+### Installing Certbot
+
+The below commands will install Python3, the Python VENV module, and the Augeas for the Apache plugin.
+
+For APT based systems (Debian, Ubuntu)
+```
+sudo apt update
+sudo apt install python3 python3-venv libaugeas0
+```
+
+For RPM based systems (Fedora, CentOS)
+```
+sudo dnf install python3 augeas-libs
+```
+
+We now need to set up a Python virtual environment using these commands
+```
+sudo python3 -m venv /opt/certbot/
+sudo /opt/certbot/bin/pip install --upgrade pip
+```
+
+Once that is done, we can install Certbot using this command
+```
+sudo /opt/certbot/bin/pip install certbot certbot-nginx
+```
+
+Next, we need to run this command to ensure that the certbot command can be run
+```
+sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+```
+
+Congrats! Certbot is now installed! Now we can automatically enable SSL by using the below command, and following all of the prompts!
+```
+sudo certbot --nginx
+```
+
+Certificates issued by Certbot do expire, so you can opt to either manually renew, or you can use cron.
+```
+echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && sudo certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
+```
+
+You should now be able to visit your site using https!
+
 ## Issues i discovered
 
 An issue i discovered was that the api was not able to serve requests if it wasnt HTTPS, just bear that in mind.
