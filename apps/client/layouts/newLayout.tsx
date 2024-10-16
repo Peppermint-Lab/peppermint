@@ -21,13 +21,19 @@ import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
- 
+
 import CreateTicketModal from "../components/CreateTicketModal";
 import { AccountDropdown } from "../components/AccountDropdown";
 
 import { useUser } from "../store/session";
 import ThemeSettings from "../components/ThemeSettings";
-import { Bell, Building, Settings, SquareActivity, SquareKanban } from "lucide-react";
+import {
+  Bell,
+  Building,
+  Settings,
+  SquareActivity,
+  SquareKanban,
+} from "lucide-react";
 
 const quickActions = [
   // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
@@ -494,7 +500,7 @@ export default function NewLayout({ children }: any) {
                 {user.isAdmin && (
                   <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
                     <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                      Version 0.5.1
+                      Version {process.env.NEXT_PUBLIC_CLIENT_VERSION}
                     </span>
                   </Link>
                 )}
