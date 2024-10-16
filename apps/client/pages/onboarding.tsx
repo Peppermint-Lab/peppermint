@@ -11,7 +11,21 @@ export default function Home() {
   const router = useRouter();
 
   const { user } = useUser();
-  const token = getCookie("session");
+
+  async function updateFirstLogin() {
+    await fetch(`/api/v1/auth/user/${user.id}/first-login`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          router.push("/");
+        }
+      });
+  }
 
   return (
     <div className="bg-background">
@@ -19,7 +33,9 @@ export default function Home() {
         <div className="bg-background shadow-xl rounded-lg lg:p-8 p-4 mx-4">
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
-              <h1 className="text-2xl text-foreground font-bold">Peppermint </h1>
+              <h1 className="text-2xl text-foreground font-bold">
+                Peppermint{" "}
+              </h1>
               <p className="text-foreground">
                 Welcome to Peppermint! A fully open sourced ticket management
                 system.
@@ -86,7 +102,7 @@ export default function Home() {
           <div className="float-right mt-4">
             <button
               className="bg-green-500 hover:bg-green-600 text-white px-2.5 py-1.5 mr-6 text-sm font-semibold rounded-lg"
-              onClick={() => router.push("/")}
+              onClick={() => updateFirstLogin()}
             >
               To Dashboard
             </button>

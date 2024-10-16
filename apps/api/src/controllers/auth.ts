@@ -20,7 +20,9 @@ async function getUserEmails(token: string) {
   });
 
   // Return only the primary email address
-  const primaryEmail = res.data.find((email: { primary: boolean }) => email.primary);
+  const primaryEmail = res.data.find(
+    (email: { primary: boolean }) => email.primary
+  );
   return primaryEmail ? primaryEmail.email : null; // Return the email or null if not found
 }
 
@@ -542,13 +544,19 @@ export function authRoutes(fastify: FastifyInstance) {
         const access_token = fetch_token.token.access_token;
 
         // // Fetch user info from the provider
-        const userInfoResponse: any = await axios.get(oauthProvider.userInfoUrl, {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        });
+        const userInfoResponse: any = await axios.get(
+          oauthProvider.userInfoUrl,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
 
-        const emails = oauthProvider.name === "github" ? await getUserEmails(access_token as string) : userInfoResponse.email
+        const emails =
+          oauthProvider.name === "github"
+            ? await getUserEmails(access_token as string)
+            : userInfoResponse.email;
 
         // Issue JWT token
         let user = await prisma.user.findUnique({
@@ -901,6 +909,27 @@ export function authRoutes(fastify: FastifyInstance) {
           where: { id },
           data: {
             isAdmin: role,
+          },
+        });
+
+        reply.send({ success: true });
+      }
+    }
+  );
+
+  // first login
+  fastify.post(
+    "/api/v1/auth/user/:id/first-login",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+      if (token) {
+        const { id } = request.params as { id: string };
+
+        await prisma.user.update({
+          where: { id },
+          data: {
+            firstLogin: false,
           },
         });
 
