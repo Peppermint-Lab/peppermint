@@ -18,6 +18,7 @@ export default function SSO() {
   );
   const [sso, setSSO] = useState<any>();
   const [providerType, setProviderType] = useState(""); // New state for provider type
+  const [jwtSecret, setJwtSecret] = useState(""); // Added state for jwtSecret
 
   async function postData() {
     await fetch(`/api/v1/config/sso/provider`, {
@@ -81,7 +82,6 @@ export default function SSO() {
       });
   }
 
-
   useEffect(() => {
     checkState();
   }, []);
@@ -109,7 +109,9 @@ export default function SSO() {
                 </option>
                 <option value="oidc">OIDC</option>
                 <option value="oauth">OAuth</option>
-                <option value="saml" disabled>SAML - coming soon</option>
+                <option value="saml" disabled>
+                  SAML - coming soon
+                </option>
               </select>
             </div>
             {/* Existing code for displaying provider settings based on selection */}
@@ -118,13 +120,13 @@ export default function SSO() {
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
                   {providerType.toUpperCase()} Settings
                 </h2>
-                {/* Existing input fields for clientId, clientSecret, etc. */}
-                {/* Adjust the input fields based on the selected provider type */}
-                {/* Example for OIDC */}
                 {providerType === "oidc" && (
                   <>
                     <div>
-                      <label htmlFor="issuer" className="block text-sm font-medium leading-6 text-gray-900">
+                      <label
+                        htmlFor="issuer"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
                         Issuer
                       </label>
                       <input
@@ -134,14 +136,11 @@ export default function SSO() {
                         onChange={(e) => setIssuer(e.target.value)}
                       />
                     </div>
-                    {/* Add other OIDC specific fields here */}
-                  </>
-                )}
-                {/* Example for OAuth */}
-                {providerType === "oauth" && (
-                  <>
                     <div>
-                      <label htmlFor="clientId" className="block text-sm font-medium leading-6 text-gray-900">
+                      <label
+                        htmlFor="clientId"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
                         Client Id
                       </label>
                       <input
@@ -151,7 +150,98 @@ export default function SSO() {
                         onChange={(e) => setClientId(e.target.value)}
                       />
                     </div>
-                    {/* Add other OAuth specific fields here */}
+                    <div>
+                      <label
+                        htmlFor="clientSecret"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Client Secret
+                      </label>
+                      <input
+                        type="text"
+                        id="clientSecret"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        onChange={(e) => setClientSecret(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="redirectUri"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Redirect URI
+                      </label>
+                      <input
+                        type="text"
+                        id="redirectUri"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        onChange={(e) => setRedirectUri(e.target.value)}
+                        value={redirectUri}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="jwtSecret"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        JWT Secret
+                      </label>
+                      <input
+                        type="text"
+                        id="jwtSecret"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        onChange={(e) => setJwtSecret(e.target.value)}
+                      />
+                    </div>
+                  </>
+                )}
+                {providerType === "oauth" && (
+                  <>
+                    <div className="space-y-4 mt-2">
+                      <div>
+                        <label
+                          htmlFor="clientId"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Client Id
+                        </label>
+                        <input
+                          type="text"
+                          id="clientId"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          onChange={(e) => setClientId(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="clientId"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Client Secret
+                        </label>
+                        <input
+                          type="text"
+                          id="clientId"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          onChange={(e) => setClientId(e.target.value)}
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="clientId"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Redirect URI
+                        </label>
+                        <input
+                          type="text"
+                          id="clientId"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          onChange={(e) => setClientId(e.target.value)}
+                        />
+                      </div>
+                    </div>
                   </>
                 )}
                 {/* Example for SAML */}
