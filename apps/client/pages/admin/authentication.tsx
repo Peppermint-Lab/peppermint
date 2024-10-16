@@ -44,7 +44,7 @@ export default function Authentication() {
 
   async function postData() {
     if (providerType === "oidc") {
-      await fetch(`/api/v1/config/auth/oidc`, {
+      await fetch(`/api/v1/config/authentication/oidc/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
