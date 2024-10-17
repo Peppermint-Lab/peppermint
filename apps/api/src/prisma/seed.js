@@ -39,7 +39,6 @@ async function main() {
       data: {
         gh_version: "0.4.3",
         client_version: "0.4.3",
-        portal_locale: "en",
         encryption_key: encryptionKey,
       },
     });
