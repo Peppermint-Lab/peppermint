@@ -463,7 +463,7 @@ export function authRoutes(fastify: FastifyInstance) {
         const userInfo = await oidcClient.userinfo(tokenSet.access_token);
 
         let user = await prisma.user.findUnique({
-          where: { email: userInfo },
+          where: { email: userInfo.email },
         });
 
         if (!user) {
