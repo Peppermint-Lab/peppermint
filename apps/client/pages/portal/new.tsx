@@ -63,6 +63,12 @@ export default function ClientTicketNew() {
         detail: description,
         priority: priority.name,
         type: selected.name,
+        createdBy: {
+          id: user.id,
+          name: user.name,
+          role: user.role,
+          email: user.email,
+        },
       }),
     })
       .then((res) => res.json())
