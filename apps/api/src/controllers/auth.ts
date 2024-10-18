@@ -384,7 +384,6 @@ export function authRoutes(fastify: FastifyInstance) {
       const provider = authtype[0].sso_provider;
 
       // Find out which config type it is, then action accordinly
-
       switch (provider) {
         case "oidc":
           const config = await getConfig();
