@@ -72,32 +72,73 @@ export default function Tickets() {
 
                 return (
                   <Link href={`/issue/${ticket.id}`}>
-                    <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
-                      <div className="flex flex-row space-x-2 items-center">
-                        <span className="text-xs font-semibold">
-                          #{ticket.Number}
-                        </span>
-                        <span className="text-xs font-semibold">
-                          {ticket.title}
-                        </span>
-                      </div>
-                      <div className="flex flex-row space-x-3 items-center">
-                        <span className="text-xs">
-                          created at{" "}
-                          {moment(ticket.createdAt).format("DD/MM/yyyy")}
-                        </span>
-                        <span
-                          className={`inline-flex items-center rounded-md px-2 justify-center w-16 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
-                        >
-                          {ticket.priority}
-                        </span>
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
-                          <span className="text-[11px] font-medium leading-none text-white uppercase">
-                            {ticket.assignedTo ? ticket.assignedTo.name[0] : ""}
-                          </span>
-                        </span>
-                      </div>
-                    </div>
+                   <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
+                          <div className="flex flex-row items-center space-x-4">
+                            <span className="text-xs font-semibold">
+                              #{ticket.Number}
+                            </span>
+                            <span className="text-xs font-semibold">
+                              {ticket.title}
+                            </span>
+                          </div>
+                          <div className="flex flex-row space-x-3 items-center">
+                            <div>
+                              <span className="text-xs">
+                                {moment(ticket.createdAt).format("DD/MM/yyyy")}
+                              </span>
+                            </div>
+                            <div>
+                              <span
+                                className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 bg-orange-400 text-white`}
+                              >
+                                {ticket.type}
+                              </span>
+                            </div>
+                            <div>
+                              {ticket.isComplete === true ? (
+                                <div>
+                                  <span className="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-2 w-20 justify-center py-1 text-xs ring-1 ring-inset ring-gray-500/10 font-medium text-red-700">
+                                    <svg
+                                      className="h-1.5 w-1.5 fill-red-500"
+                                      viewBox="0 0 6 6"
+                                      aria-hidden="true"
+                                    >
+                                      <circle cx={3} cy={3} r={3} />
+                                    </svg>
+                                    {t("closed")}
+                                  </span>
+                                </div>
+                              ) : (
+                                <>
+                                  <span className="inline-flex items-center gap-x-1.5  rounded-md w-20 justify-center font-medium bg-green-100 ring-1 ring-inset ring-gray-500/10 px-2 py-1 text-xs text-green-700">
+                                    <svg
+                                      className="h-1.5 w-1.5 fill-green-500"
+                                      viewBox="0 0 6 6"
+                                      aria-hidden="true"
+                                    >
+                                      <circle cx={3} cy={3} r={3} />
+                                    </svg>
+                                    {t("open")}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                            <div>
+                              <span
+                                className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${badge}`}
+                              >
+                                {ticket.priority}
+                              </span>
+                            </div>
+                            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
+                              <span className="text-[11px] font-medium leading-none text-white uppercase">
+                                {ticket.assignedTo
+                                  ? ticket.assignedTo.name[0]
+                                  : ""}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
                   </Link>
                 );
               })
