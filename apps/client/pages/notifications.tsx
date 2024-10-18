@@ -38,7 +38,7 @@ export default function Tickets() {
             .filter((e) => !e.read)
             .map((item) => {
               return (
-                <Link href={`/ticket/${item.ticketId}`}>
+                <Link href={`/issue/${item.ticketId}`}>
                   <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
                     <div className="flex flex-row space-x-2 items-center">
                       <span className="text-xs font-semibold">{item.text}</span>
