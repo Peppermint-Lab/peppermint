@@ -21,6 +21,7 @@ import {
   UserRound,
   Webhook,
 } from "lucide-react";
+import ThemeSettings from "../components/ThemeSettings";
 
 export default function AdminLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
@@ -227,6 +228,7 @@ export default function AdminLayout({ children }: any) {
                   </ul>
                 </li>
               </ul>
+              <ThemeSettings />
             </nav>
           </div>
         </div>

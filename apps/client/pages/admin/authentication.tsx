@@ -156,7 +156,7 @@ export default function Authentication() {
                   <CardFooter>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button className="w-full">
+                        <Button className="w-full bg-red-500">
                           <Check className="mr-2 h-4 w-4" /> delete
                         </Button>
                       </AlertDialogTrigger>

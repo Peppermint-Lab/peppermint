@@ -38,7 +38,7 @@ export default function EmailQueues() {
         <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
           <div className="pt-10 pb-16 divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
+              <h1 className="text-3xl font-extrabold text-foreground">
                 New Email Queue
               </h1>
             </div>
@@ -48,13 +48,13 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
+                      className="block text-sm font-medium leading-6 text-foreground"
                     >
                       Queue name
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm text-foreground bg-transparent focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 sm:text-sm border-gray-300 rounded-md"
                       placeholder="Enter the queue name here"
                       name="name"
                       onChange={(e) => setName(e.target.value)}
@@ -63,13 +63,13 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
+                      className="block text-sm font-medium leading-6 text-foreground"
                     >
                       Username (email)
                     </label>
                     <input
                       type="email"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm text-foreground bg-transparent focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
                       placeholder="Enter the email here"
                       name="name"
                       onChange={(e) => setUsername(e.target.value)}
@@ -78,13 +78,13 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
+                      className="block text-sm font-medium leading-6 text-foreground"
                     >
                       Password
                     </label>
                     <input
                       type="password"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm text-foreground bg-transparent focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
                       placeholder="Enter the email password here"
                       name="name"
                       onChange={(e) => setPassword(e.target.value)}
@@ -93,13 +93,13 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
+                      className="block text-sm font-medium leading-6 text-foreground"
                     >
                       Hostname
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm w-1/2  focus:ring-indigo-500 focus:border-indigo-500 block  sm:text-sm border-gray-300 rounded-md"
+                      className="shadow-sm text-foreground bg-transparent focus:ring-indigo-500 focus:border-indigo-500 block w-1/2  sm:text-sm border-gray-300 rounded-md"
                       placeholder="Enter the email server hostname here"
                       name="name"
                       onChange={(e) => setHostname(e.target.value)}
@@ -109,14 +109,14 @@ export default function EmailQueues() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900  dark:text-white"
+                      className="block text-sm font-medium leading-6 text-foreground"
                     >
                       TLS
                     </label>
                     <select
                       id="location"
                       name="location"
-                      className="mt-2 block w-1/2 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="mt-2 text-foreground bg-transparent block w-1/2 rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       defaultValue="True"
                       onChange={(e) => setTls(e.target.value)}
                     >

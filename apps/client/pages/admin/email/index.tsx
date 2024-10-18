@@ -113,14 +113,14 @@ export default function Notifications() {
         <div className="pt-10 pb-6">
           <div className="divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
+              <h1 className="text-3xl font-extrabold text-foreground">
                 Outbound Email Settings
               </h1>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center mt-4">
                 <div className="sm:flex-auto">
-                  <p className="mt-2 text-sm text-gray-700  dark:text-white">
+                  <p className="mt-2 text-sm text-foreground-muted">
                     Manage your outbound email settings. This is the mailbox
                     that will send all outbound emails. To either clients or
                     internal users for Notifications.
@@ -136,7 +136,7 @@ export default function Notifications() {
               <button
                 onClick={() => updateEmailConfig()}
                 type="button"
-                className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                className="rounded bg-transparent text-foreground px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
               >
                 Update Settings
               </button>
@@ -144,7 +144,7 @@ export default function Notifications() {
                 <button
                   onClick={testEmailConfig}
                   type="button"
-                  className="rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  className="rounded bg-transparent text-foreground px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
                 >
                   Test Settings
                 </button>
@@ -154,7 +154,7 @@ export default function Notifications() {
               <button
                 onClick={deleteEmailConfig}
                 type="button"
-                className="rounded bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400"
+                className="rounded bg-red-500 text-white px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
               >
                 Delete Settings
               </button>
@@ -207,109 +207,107 @@ export default function Notifications() {
                 </div>
               )}
             </div>
-            <div className="bg-white shadow sm:rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <div className="space-y-6">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label
-                        htmlFor="company_website"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        SMTP Host
-                      </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <input
-                          type="text"
-                          name="company_website"
-                          id="company_website"
-                          className="flex-1 focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
-                          placeholder="smtp.gmail.com"
-                          value={host}
-                          onChange={(e) => setHost(e.target.value)}
-                        />
-                      </div>
+            <div className="bg-background">
+              <div className="space-y-6">
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="col-span-3 sm:col-span-2">
+                    <label
+                      htmlFor="company_website"
+                      className="block text-sm font-medium text-foreground"
+                    >
+                      SMTP Host
+                    </label>
+                    <div className="mt-1 flex rounded-md shadow-sm">
+                      <input
+                        type="text"
+                        name="company_website"
+                        id="company_website"
+                        className="flex-1 text-foreground bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
+                        placeholder="smtp.gmail.com"
+                        value={host}
+                        onChange={(e) => setHost(e.target.value)}
+                      />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label
-                        htmlFor="company_website"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        SMTP Port
-                      </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <input
-                          type="text"
-                          name="company_website"
-                          id="company_website"
-                          className="flex-1 focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
-                          placeholder="587"
-                          value={port}
-                          onChange={(e) => setPort(e.target.value)}
-                        />
-                      </div>
+                </div>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="col-span-3 sm:col-span-2">
+                    <label
+                      htmlFor="company_website"
+                      className="block text-sm font-medium text-foreground"
+                    >
+                      SMTP Port
+                    </label>
+                    <div className="mt-1 flex rounded-md shadow-sm">
+                      <input
+                        type="text"
+                        name="company_website"
+                        id="company_website"
+                        className="flex-1 text-foreground bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
+                        placeholder="587"
+                        value={port}
+                        onChange={(e) => setPort(e.target.value)}
+                      />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label
-                        htmlFor="company_website"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        SMTP Username
-                      </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <input
-                          type="text"
-                          name="company_website"
-                          id="company_website"
-                          className="flex-1 focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                        />
-                      </div>
+                </div>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="col-span-3 sm:col-span-2">
+                    <label
+                      htmlFor="company_website"
+                      className="block text-sm font-medium text-foreground"
+                    >
+                      SMTP Username
+                    </label>
+                    <div className="mt-1 flex rounded-md shadow-sm">
+                      <input
+                        type="text"
+                        name="company_website"
+                        id="company_website"
+                        className="flex-1 text-foreground bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                      />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label
-                        htmlFor="company_website"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        SMTP Password
-                      </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <input
-                          type="text"
-                          name="company_website"
-                          id="company_website"
-                          className="flex-1 focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
-                      </div>
+                </div>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="col-span-3 sm:col-span-2">
+                    <label
+                      htmlFor="company_website"
+                      className="block text-sm font-medium text-foreground"
+                    >
+                      SMTP Password
+                    </label>
+                    <div className="mt-1 flex rounded-md shadow-sm">
+                      <input
+                        type="text"
+                        name="company_website"
+                        id="company_website"
+                        className="flex-1 text-foreground bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label
-                        htmlFor="company_website"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        reply-to
-                      </label>
-                      <div className="mt-1 flex rounded-md shadow-sm">
-                        <input
-                          type="text"
-                          name="company_website"
-                          id="company_website"
-                          className="flex-1 focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border"
-                          value={reply}
-                          onChange={(e) => setReply(e.target.value)}
-                        />
-                      </div>
+                </div>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="col-span-3 sm:col-span-2">
+                    <label
+                      htmlFor="company_website"
+                      className="block text-sm font-medium text-foreground"
+                    >
+                      reply-to
+                    </label>
+                    <div className="mt-1 flex rounded-md shadow-sm">
+                      <input
+                        type="text"
+                        name="company_website"
+                        id="company_website"
+                        className="flex-1 text-foreground bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
+                        value={reply}
+                        onChange={(e) => setReply(e.target.value)}
+                      />
                     </div>
                   </div>
                 </div>

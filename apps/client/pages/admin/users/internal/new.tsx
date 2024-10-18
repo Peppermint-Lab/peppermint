@@ -77,48 +77,48 @@ export default function CreateUser() {
         <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
           <div className="pt-10 pb-6 divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900  dark:text-white">
+              <h1 className="text-3xl font-extrabold text-foreground">
                 Add a new user
               </h1>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-md shadow-lg">
+          <div className="bg-background rounded-md shadow-lg">
             <Flex gap="4" direction="column" align="start">
               <div className="w-1/2">
-                <label className="text-gray-900 font-bold">Name</label>
+                <label className="text-foreground font-bold">Name</label>
                 <input
                   type="text"
-                  className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm"
+                  className="px-3 py-2 text-foreground bg-transparent border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm"
                   placeholder="John Doe"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="w-1/2">
-                <label className="text-gray-900 font-bold">Email</label>
+                <label className="text-foreground font-bold">Email</label>
                 <input
                   type="text"
-                  className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm"
-                  placeholder="John Doe"
+                  className="px-3 py-2 text-foreground bg-transparent border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm"
+                  placeholder="John.Doe@test.com"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               {!user.sso_active && (
                 <div className="w-1/2">
-                  <label className="text-gray-900 font-bold">Password</label>
+                  <label className="text-foreground font-bold">Password</label>
                   <input
                     type="text"
-                    className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm"
+                    className="px-3 py-2 text-foreground bg-transparent border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm"
                     placeholder=""
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               )}
               <div className="w-1/2 flex flex-col">
-                <label className="text-gray-900 font-bold">Language</label>
+                <label className="text-foreground font-bold">Language</label>
                 <select
                   id="language"
                   name="language"
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  className="mt-1 text-foreground bg-transparent block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
                 >
@@ -140,7 +140,7 @@ export default function CreateUser() {
                 </select>
               </div>
               <div>
-                <label className="text-gray-900 font-bold">Admin User</label>
+                <label className="text-foreground font-bold">Admin User</label>
                 <div className="flex flex-row space-x-2 items-center">
                   <Switch
                     checked={admin}
