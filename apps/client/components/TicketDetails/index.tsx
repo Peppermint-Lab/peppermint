@@ -73,7 +73,9 @@ export default function Ticket() {
     return res.json();
   };
 
-  const { data, status, refetch } = useQuery("fetchTickets", fetchTicketById);
+  const { data, status, refetch } = useQuery("fetchTickets", fetchTicketById, {
+    enabled: false,
+  });
 
   useEffect(() => {
     refetch();
@@ -401,10 +403,11 @@ export default function Ticket() {
                         name="title"
                         id="title"
                         style={{ fontSize: "1.5rem" }}
-                        className="border-none px-0 pl-0.5 w-1/2 m block text-foreground bg-transparent font-bold focus:outline-none focus:ring-0 placeholder:text-primary sm:text-sm sm:leading-6"
+                        className="border-none -mt-[1px] px-0 pl-0.5 w-1/2 m block text-foreground bg-transparent font-bold focus:outline-none focus:ring-0 placeholder:text-primary sm:text-sm sm:leading-6"
                         value={title}
                         defaultValue={data.ticket.title}
                         onChange={(e) => setTitle(e.target.value)}
+                        key={data.ticket.id}
                       />
                     </div>
                     <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
