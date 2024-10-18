@@ -39,10 +39,8 @@ model SAMLProvider {
 model openIdConfig {
   id           Int    @id @default(autoincrement())
   clientId     String
-  clientSecret String
   issuer       String
   redirectUri  String
-  jwtSecret    String
 }
 
 model Session {
