@@ -361,13 +361,9 @@ export function authRoutes(fastify: FastifyInstance) {
   );
 
   // Checks if a user is password auth or other
-  fastify.post(
+  fastify.get(
     "/api/v1/auth/check",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      let { email } = request.body as {
-        email: string;
-      };
-
       const authtype = await prisma.config.findMany({
         where: {
           sso_active: true,
@@ -385,21 +381,10 @@ export function authRoutes(fastify: FastifyInstance) {
       const provider = authtype[0].sso_provider;
       const sso_active = authtype[0].sso_active;
 
-      let user = await prisma.user.findUnique({
-        where: { email },
-      });
-
-      if (!user && !sso_active) {
-        return reply.code(401).send({
-          message: "Invalid email",
-          success: false,
-        });
-      }
-
-      if (user?.external_user) {
-        return reply.send({
+      if (!sso_active) {
+        return reply.code(200).send({
           success: true,
-          message: "External user",
+          message: "SSO not enabled",
           oauth: false,
         });
       }
@@ -426,7 +411,6 @@ export function authRoutes(fastify: FastifyInstance) {
           // Store codeVerifier in cache with s
           cache.set(state, {
             codeVerifier: codeVerifier,
-            email: email,
           });
 
           // Generate authorization URL
@@ -498,9 +482,12 @@ export function authRoutes(fastify: FastifyInstance) {
         // Parse the callback parameters
         const params = oidcClient.callbackParams(request.raw);
 
-        if (params.iss === 'undefined') {
+        if (params.iss === "undefined") {
           // Remove the trailing part and ensure a trailing slash
-          params.iss = oidc.issuer.replace(/\/\.well-known\/openid-configuration$/, '/');
+          params.iss = oidc.issuer.replace(
+            /\/\.well-known\/openid-configuration$/,
+            "/"
+          );
         }
 
         // Retrieve the state parameter from the callback
@@ -512,7 +499,7 @@ export function authRoutes(fastify: FastifyInstance) {
           return reply.status(400).send("Invalid or expired session");
         }
 
-        const { codeVerifier, email } = sessionData;
+        const { codeVerifier } = sessionData;
 
         // Handle the case where codeVerifier is not found
         if (!codeVerifier) {
@@ -538,17 +525,11 @@ export function authRoutes(fastify: FastifyInstance) {
 
         console.log(userInfo);
 
-        // After getting userInfo
-        if (userInfo.email.toLowerCase() !== email.toLowerCase()) {
-          return reply.status(403).send({
-            success: false,
-            message: "Authenticated user does not match the provided email",
-          });
-        }
-
         let user = await prisma.user.findUnique({
           where: { email: userInfo.email },
         });
+
+        console.log(user);
 
         if (!user) {
           // Create a new basic user

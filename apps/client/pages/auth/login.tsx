@@ -11,52 +11,50 @@ export default function Login({}) {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("idle");
   const [auth, setAuth] = useState("oauth");
+  const [url, setUrl] = useState("");
 
   async function postData() {
-    if (auth === "oauth") {
-      await fetch(`/api/v1/auth/check`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.success && res.url) {
-            router.push(res.url);
+    await fetch(`/api/v1/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((res) => res.json())
+      .then(async (res) => {
+        if (res.user) {
+          setCookie("session", res.token);
+          if (res.user.external_user) {
+            router.push("/portal");
           } else {
-            if (!res.success) {
-              notifications.show({
-                title: "Error",
-                message:
-                  "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
-                color: "red",
-                autoClose: 5000,
-              });
+            if (res.user.firstLogin) {
+              router.push("/onboarding");
             } else {
-              setAuth("password");
+              router.push("/");
             }
           }
-        });
-    } else {
-      await fetch(`/api/v1/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
-        .then((res) => res.json())
-        .then(async (res) => {
-          if (res.user) {
-            setCookie("session", res.token);
-            if (res.user.external_user) {
-              router.push("/portal");
-            } else {
-              if (res.user.firstLogin) {
-                router.push("/onboarding");
-              } else {
-                router.push("/");
-              }
-            }
-          } else {
+        } else {
+          notifications.show({
+            title: "Error",
+            message:
+              "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
+            color: "red",
+            autoClose: 5000,
+          });
+        }
+      });
+  }
+
+  async function oidcLogin() {
+    await fetch(`/api/v1/auth/check`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.url) {
+          setUrl(res.url);
+        } else {
+          if (!res.success) {
             notifications.show({
               title: "Error",
               message:
@@ -65,9 +63,13 @@ export default function Login({}) {
               autoClose: 5000,
             });
           }
-        });
-    }
+        }
+      });
   }
+
+  useEffect(() => {
+    oidcLogin();
+  }, []);
 
   useEffect(() => {
     if (router.query.error) {
@@ -84,15 +86,8 @@ export default function Login({}) {
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        {/* <a target="_blank" href="https://peppermint.sh/">
-          <img
-            className="mx-auto h-36 w-auto"
-            src="/login.svg"
-            alt="peppermint.sh logo"
-          />
-        </a> */}
         <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
-          Sign in to your account
+          Welcome to Peppermint
         </h2>
       </div>
 
@@ -127,32 +122,30 @@ export default function Login({}) {
                 </div>
               </div>
 
-              {auth !== "oauth" && (
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium text-foreground"
-                  >
-                    Password
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete="password"
-                      required
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="appearance-none block w-full px-3 py-2 border text-gray-900 border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                      onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          postData();
-                        }
-                      }}
-                    />
-                  </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-foreground"
+                >
+                  Password
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="password"
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border text-gray-900 border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        postData();
+                      }
+                    }}
+                  />
                 </div>
-              )}
+              </div>
 
               <div className="flex items-center justify-between">
                 <div className="text-sm">
@@ -165,7 +158,7 @@ export default function Login({}) {
                 </div>
               </div>
 
-              <div>
+              <div className="flex flex-col space-y-4">
                 <button
                   type="submit"
                   onClick={postData}
@@ -173,52 +166,17 @@ export default function Login({}) {
                 >
                   Sign In
                 </button>
-              </div>
 
-              {/* {providers.github &&
-                process.env.NEXT_PUBLIC_SSO_PROVIDER === "github" && (
-                  <div>
-                    <button
-                      onClick={() => signIn("github")}
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#212529] hover:bg-[#4d4d4d]"
-                    >
-                      Github
-                    </button>
-                  </div>
+                {url && (
+                  <button
+                    type="submit"
+                    onClick={() => router.push(url)}
+                    className="w-full flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  >
+                    Sign in with OIDC
+                  </button>
                 )}
-              {providers.gitlab &&
-                process.env.NEXT_PUBLIC_SSO_PROVIDER === "gitlab" && (
-                  <div>
-                    <button
-                      onClick={() => signIn("github")}
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#212529] hover:bg-[#4d4d4d]"
-                    >
-                      Gitlab
-                    </button>
-                  </div>
-                )}
-              {providers["azure-ad"] &&
-                process.env.NEXT_PUBLIC_SSO_PROVIDER === "azure-ad" && (
-                  <div>
-                    <button
-                      onClick={() => signIn("github")}
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#00a4ef] hover:bg-[#4d4d4d]"
-                    >
-                      Azure AD
-                    </button>
-                  </div>
-                )}
-              {providers.auth0 &&
-                process.env.NEXT_PUBLIC_SSO_PROVIDER === "auth0" && (
-                  <div>
-                    <button
-                      onClick={() => signIn("github")}
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#ee5b6f] hover:bg-[#4d4d4d]"
-                    >
-                      Auth0
-                    </button>
-                  </div>
-                )} */}
+              </div>
             </div>
           </div>
         )}
