@@ -64,7 +64,7 @@ export default function Tickets() {
             })
         ) : (
           <div className="min-h-screen flex items-center justify-center">
-            <span className="block text-sm font-semibold text-gray-900">
+            <span className="block text-sm font-semibold text-foreground">
               You have no notifcations
             </span>
           </div>
