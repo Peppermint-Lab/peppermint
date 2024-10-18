@@ -70,9 +70,7 @@ export function configRoutes(fastify: FastifyInstance) {
           await prisma.openIdConfig.create({
             data: {
               clientId: clientId,
-              clientSecret: clientSecret,
               redirectUri: redirectUri,
-              jwtSecret: jwtSecret,
               issuer: issuer,
             },
           });
@@ -81,9 +79,7 @@ export function configRoutes(fastify: FastifyInstance) {
             where: { id: existingProvider.id },
             data: {
               clientId: clientId,
-              clientSecret: clientSecret,
               redirectUri: redirectUri,
-              jwtSecret: jwtSecret,
               issuer: issuer,
             },
           });
