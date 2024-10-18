@@ -35,6 +35,17 @@ async function getUserEmails(token: string) {
   return primaryEmail ? primaryEmail.email : null; // Return the email or null if not found
 }
 
+function generateRandomPassword(length: number): string {
+  const charset =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+}
+
 export function authRoutes(fastify: FastifyInstance) {
   // Register a new user
   fastify.post(
@@ -509,8 +520,6 @@ export function authRoutes(fastify: FastifyInstance) {
           }
         );
 
-        console.log(tokens);
-
         // Clean up: Remove the codeVerifier from the cache
         cache.delete(state);
 
@@ -524,9 +533,17 @@ export function authRoutes(fastify: FastifyInstance) {
         });
 
         if (!user) {
-          return reply.send({
-            success: false,
-            message: "Invalid email",
+          // Create a new basic user
+          user = await prisma.user.create({
+            data: {
+              email: userInfo.email,
+              password: await bcrypt.hash(generateRandomPassword(12), 10), // Set a random password of length 12
+              name: userInfo.name || "New User", // Use the name from userInfo or a default
+              isAdmin: false, // Set isAdmin to false for basic users
+              language: "en", // Set a default language
+              external_user: false, // Mark as external user
+              firstLogin: true, // Set firstLogin to true
+            },
           });
         }
 
