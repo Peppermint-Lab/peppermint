@@ -368,11 +368,20 @@ export function authRoutes(fastify: FastifyInstance) {
         email: string;
       };
 
+      const authtype = await prisma.config.findMany({
+        where: {
+          sso_active: true,
+        },
+      });
+
+      const provider = authtype[0].sso_provider;
+      const sso_active = authtype[0].sso_active;
+
       let user = await prisma.user.findUnique({
         where: { email },
       });
 
-      if (!user) {
+      if (!user && !sso_active) {
         return reply.code(401).send({
           message: "Invalid email",
           success: false,
@@ -387,12 +396,6 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      const authtype = await prisma.config.findMany({
-        where: {
-          sso_active: true,
-        },
-      });
-
       if (authtype.length === 0) {
         return reply.code(200).send({
           success: true,
@@ -400,8 +403,6 @@ export function authRoutes(fastify: FastifyInstance) {
           oauth: false,
         });
       }
-
-      const provider = authtype[0].sso_provider;
 
       // Find out which config type it is, then action accordinly
       switch (provider) {
@@ -423,7 +424,10 @@ export function authRoutes(fastify: FastifyInstance) {
           const state = generators.state();
 
           // Store codeVerifier in cache with s
-          cache.set(state, codeVerifier);
+          cache.set(state, {
+            codeVerifier: codeVerifier,
+            email: email,
+          });
 
           // Generate authorization URL
           const url = oidcClient.authorizationUrl({
@@ -489,6 +493,10 @@ export function authRoutes(fastify: FastifyInstance) {
             .send({ error: "OIDC configuration not properly set" });
         }
 
+        cache.forEach((value, key) => {
+          console.log(`Key: ${key}, Value:`, value);
+        });
+
         const oidcClient = await getOidcClient(config);
 
         // Parse the callback parameters
@@ -499,10 +507,13 @@ export function authRoutes(fastify: FastifyInstance) {
         // Retrieve the state parameter from the callback
         const state = params.state;
 
-        // Retrieve the codeVerifier from the cache
-        const codeVerifier = cache.get(state);
+        const sessionData: any = cache.get(state);
 
-        console.log(codeVerifier);
+        if (!sessionData) {
+          return reply.status(400).send("Invalid or expired session");
+        }
+
+        const { codeVerifier, email } = sessionData;
 
         // Handle the case where codeVerifier is not found
         if (!codeVerifier) {
@@ -527,6 +538,14 @@ export function authRoutes(fastify: FastifyInstance) {
         const userInfo = await oidcClient.userinfo(tokens.access_token);
 
         console.log(userInfo);
+
+        // After getting userInfo
+        if (userInfo.email.toLowerCase() !== email.toLowerCase()) {
+          return reply.status(403).send({
+            success: false,
+            message: "Authenticated user does not match the provided email",
+          });
+        }
 
         let user = await prisma.user.findUnique({
           where: { email: userInfo.email },
