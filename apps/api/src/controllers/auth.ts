@@ -550,7 +550,7 @@ export function authRoutes(fastify: FastifyInstance) {
         var secret = new Buffer(b64string!, "base64"); // Ta-da
 
         // Issue JWT token
-        let token = jwt.sign(
+        let signed_token = jwt.sign(
           {
             data: { id: user.id },
           },
@@ -562,14 +562,15 @@ export function authRoutes(fastify: FastifyInstance) {
         await prisma.session.create({
           data: {
             userId: user.id,
-            sessionToken: token,
+            sessionToken: signed_token,
             expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
           },
         });
 
         // Send Response
         reply.send({
-          token,
+          token: signed_token,
+          onboarding: user.firstLogin,
           success: true,
         });
       } catch (error: any) {
@@ -667,6 +668,7 @@ export function authRoutes(fastify: FastifyInstance) {
         // Send Response
         reply.send({
           token: signed_token,
+          onboarding: user.firstLogin,
           success: true,
         });
       } catch (error: any) {
