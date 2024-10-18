@@ -24,8 +24,6 @@ import { BellRing, Check } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-type CardProps = React.ComponentProps<typeof Card>;
-
 export default function Authentication() {
   const router = useRouter();
 
@@ -36,9 +34,7 @@ export default function Authentication() {
   const [clientSecret, setClientSecret] = useState("");
   const [tenantId, setTenantId] = useState("");
   const [issuer, setIssuer] = useState("");
-  const [redirectUri, setRedirectUri] = useState(
-    `${window.location.origin}/auth/oauth`
-  );
+  const [redirectUri, setRedirectUri] = useState("");
   const [providerType, setProviderType] = useState("");
   const [jwtSecret, setJwtSecret] = useState("");
 
@@ -54,8 +50,6 @@ export default function Authentication() {
           issuer,
           redirectUri,
           clientId,
-          clientSecret,
-          jwtSecret,
         }),
       })
         .then((res) => res.json())
@@ -121,9 +115,21 @@ export default function Authentication() {
       });
   }
 
+  async function setUri() {
+    if (providerType === "oidc") {
+      setRedirectUri(`${window.location.origin}/auth/oidc`);
+    } else {
+      setRedirectUri(`${window.location.origin}/auth/oauth`);
+    }
+  }
+
   useEffect(() => {
     checkState();
   }, []);
+
+  useEffect(() => {
+    setUri();
+  }, [providerType]);
 
   return (
     <main className="flex-1">
@@ -233,20 +239,7 @@ export default function Authentication() {
                             onChange={(e) => setClientId(e.target.value)}
                           />
                         </div>
-                        <div>
-                          <label
-                            htmlFor="clientSecret"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Client Secret
-                          </label>
-                          <input
-                            type="text"
-                            id="clientSecret"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            onChange={(e) => setClientSecret(e.target.value)}
-                          />
-                        </div>
+
                         <div>
                           <label
                             htmlFor="redirectUri"
@@ -260,20 +253,6 @@ export default function Authentication() {
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             onChange={(e) => setRedirectUri(e.target.value)}
                             value={redirectUri}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="jwtSecret"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            JWT Secret
-                          </label>
-                          <input
-                            type="text"
-                            id="jwtSecret"
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            onChange={(e) => setJwtSecret(e.target.value)}
                           />
                         </div>
                       </>
