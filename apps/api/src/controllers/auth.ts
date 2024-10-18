@@ -493,16 +493,10 @@ export function authRoutes(fastify: FastifyInstance) {
             .send({ error: "OIDC configuration not properly set" });
         }
 
-        cache.forEach((value, key) => {
-          console.log(`Key: ${key}, Value:`, value);
-        });
-
         const oidcClient = await getOidcClient(config);
 
         // Parse the callback parameters
         const params = oidcClient.callbackParams(request.raw);
-
-        console.log(params);
 
         // Retrieve the state parameter from the callback
         const state = params.state;
