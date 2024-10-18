@@ -7,10 +7,19 @@ import { checkToken } from "../lib/jwt";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
-import { getConfig, getOAuthProvider } from "../lib/auth";
+import { getOidcConfig, getOAuthProvider } from "../lib/auth";
 import { getOidcClient } from "../lib/utils/oidc_client";
 import { getOAuthClient } from "../lib/utils/oauth_client";
 import { AuthorizationCode } from "simple-oauth2";
+import { generators } from "openid-client";
+import { LRUCache } from "lru-cache";
+
+const options = {
+  max: 500, // Maximum number of items in cache
+  ttl: 1000 * 60 * 5, // Items expire after 5 minutes
+};
+
+const cache = new LRUCache(options);
 
 async function getUserEmails(token: string) {
   const res = await axios.get("https://api.github.com/user/emails", {
@@ -386,7 +395,7 @@ export function authRoutes(fastify: FastifyInstance) {
       // Find out which config type it is, then action accordinly
       switch (provider) {
         case "oidc":
-          const config = await getConfig();
+          const config = await getOidcConfig();
           if (!config) {
             return reply
               .code(500)
@@ -395,9 +404,24 @@ export function authRoutes(fastify: FastifyInstance) {
 
           const oidcClient = await getOidcClient(config);
 
+          // Generate codeVerifier and codeChallenge
+          const codeVerifier = generators.codeVerifier();
+          const codeChallenge = generators.codeChallenge(codeVerifier);
+
+          // Generate a random state parameter
+          const state = generators.state();
+
+          // Store codeVerifier in cache with s
+          cache.set(state, codeVerifier);
+
           // Generate authorization URL
           const url = oidcClient.authorizationUrl({
-            scope: "openid profile email",
+            scope: "openid email profile",
+            response_type: "code",
+            redirect_uri: config.redirectUri,
+            code_challenge: codeChallenge,
+            code_challenge_method: "S256", // Use 'plain' if 'S256' is not supported
+            state: state,
           });
 
           reply.send({
@@ -445,9 +469,9 @@ export function authRoutes(fastify: FastifyInstance) {
     "/api/v1/auth/oidc/callback",
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        const oidc = getConfig();
+        const oidc = getOidcConfig();
 
-        const config = await getOAuthClient(oidc);
+        const config = await getOidcClient(oidc);
         if (!config) {
           return reply
             .code(500)
@@ -456,10 +480,44 @@ export function authRoutes(fastify: FastifyInstance) {
 
         const oidcClient = await getOidcClient(config);
 
+        // Parse the callback parameters
         const params = oidcClient.callbackParams(request.raw);
 
-        const tokenSet = await oidcClient.callback(config.redirectUri, params);
-        const userInfo = await oidcClient.userinfo(tokenSet.access_token);
+        console.log(params);
+
+        // Retrieve the state parameter from the callback
+        const state = params.state;
+
+        // Retrieve the codeVerifier from the cache
+        const codeVerifier = cache.get(state);
+
+        console.log(codeVerifier);
+
+        // Handle the case where codeVerifier is not found
+        if (!codeVerifier) {
+          return reply.status(400).send("Invalid or expired session");
+        }
+
+        let tokens = await oidcClient.callback(
+          (
+            await oidc
+          ).redirectUri,
+          params,
+          {
+            code_verifier: codeVerifier,
+            state: state,
+          }
+        );
+
+        console.log(tokens);
+
+        // Clean up: Remove the codeVerifier from the cache
+        cache.delete(state);
+
+        // Retrieve user information
+        const userInfo = await oidcClient.userinfo(tokens.access_token);
+
+        console.log(userInfo);
 
         let user = await prisma.user.findUnique({
           where: { email: userInfo.email },

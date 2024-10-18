@@ -21,7 +21,7 @@ export default function Login({}) {
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.success && res.oauth) {
+          if (res.success && res.url) {
             router.push(res.url);
           } else {
             if (!res.success) {

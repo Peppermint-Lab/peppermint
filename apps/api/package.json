@@ -47,6 +47,7 @@
     "i": "^0.3.7",
     "imap": "^0.8.19",
     "jsonwebtoken": "9.0.2",
+    "lru-cache": "^11.0.1",
     "mailparser": "^3.6.5",
     "nodemailer": "^6.9.7",
     "openid-client": "^5.7.0",

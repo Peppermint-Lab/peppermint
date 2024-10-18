@@ -2,7 +2,7 @@
 
 import { prisma } from "../prisma";
 
-export async function getConfig() {
+export async function getOidcConfig() {
   const config = await prisma.openIdConfig.findFirst();
   if (!config) {
     throw new Error("Config not found in the database");

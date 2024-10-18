@@ -8,7 +8,7 @@ export default function Login() {
   async function check() {
     if (router.query.code) {
       const sso = await fetch(
-        `/api/v1/auth/oidc/callback?code=${router.query.code}`
+        `/api/v1/auth/oidc/callback?state=${router.query.state}&code=${router.query.code}&session_state=${router.query.session_state}&iss=${router.query.iss}`
       ).then((res) => res.json());
 
       if (!sso.success) {
