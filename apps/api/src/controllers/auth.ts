@@ -374,6 +374,14 @@ export function authRoutes(fastify: FastifyInstance) {
         },
       });
 
+      if (authtype.length === 0) {
+        return reply.code(200).send({
+          success: true,
+          message: "SSO not enabled",
+          oauth: false,
+        });
+      }
+
       const provider = authtype[0].sso_provider;
       const sso_active = authtype[0].sso_active;
 
@@ -392,14 +400,6 @@ export function authRoutes(fastify: FastifyInstance) {
         return reply.send({
           success: true,
           message: "External user",
-          oauth: false,
-        });
-      }
-
-      if (authtype.length === 0) {
-        return reply.code(200).send({
-          success: true,
-          message: "SSO not enabled",
           oauth: false,
         });
       }
