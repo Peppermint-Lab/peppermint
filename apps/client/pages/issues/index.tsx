@@ -94,6 +94,13 @@ export default function Tickets() {
                               </span>
                             </div>
                             <div>
+                              <span
+                                className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 bg-orange-400 text-white`}
+                              >
+                                {ticket.type}
+                              </span>
+                            </div>
+                            <div>
                               {ticket.isComplete === true ? (
                                 <div>
                                   <span className="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-2 w-20 justify-center py-1 text-xs ring-1 ring-inset ring-gray-500/10 font-medium text-red-700">
@@ -140,8 +147,8 @@ export default function Tickets() {
                         </div>
                       </ContextMenu.Trigger>
                       <ContextMenu.Content>
-                        <ContextMenu.Item shortcut="⌘ E">Edit</ContextMenu.Item>
-                        <ContextMenu.Item shortcut="⌘ D">
+                        {/* <ContextMenu.Item shortcut="⌘ E">Edit</ContextMenu.Item> */}
+                        {/* <ContextMenu.Item shortcut="⌘ D">
                           Status
                         </ContextMenu.Item>
                         <ContextMenu.Separator />
@@ -153,7 +160,7 @@ export default function Tickets() {
                         </ContextMenu.Item>
                         <ContextMenu.Item shortcut="⌘ N">
                           Label
-                        </ContextMenu.Item>
+                        </ContextMenu.Item> */}
 
                         {/* <ContextMenu.Sub>
                           <ContextMenu.SubTrigger>More</ContextMenu.SubTrigger>
@@ -169,13 +176,13 @@ export default function Tickets() {
                           </ContextMenu.SubContent>
                         </ContextMenu.Sub> */}
 
-                        <ContextMenu.Separator />
+                        {/* <ContextMenu.Separator />
                         <ContextMenu.Item>Share</ContextMenu.Item>
                         <ContextMenu.Item>Add to favorites</ContextMenu.Item>
                         <ContextMenu.Separator />
                         <ContextMenu.Item shortcut="⌘ ⌫" color="red">
                           Delete
-                        </ContextMenu.Item>
+                        </ContextMenu.Item> */}
                       </ContextMenu.Content>
                     </ContextMenu.Root>
                   </Link>

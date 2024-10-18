@@ -388,7 +388,7 @@ export default function Ticket() {
       {status === "success" && (
         <main className="flex-1 min-h-[90vh] py-8">
           <div className="mx-auto max-w-7xl w-full px-4 flex flex-col xl:flex-row justify-center">
-            <div className="xl:border-r  xl:pr-8 xl:w-2/3">
+            <div className="xl:border-r xl:pr-8 xl:w-2/3">
               <div className="">
                 <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
                   <div className="w-full">
@@ -408,16 +408,30 @@ export default function Ticket() {
                       />
                     </div>
                     <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
-                      {!data.ticket.isComplete ? (
-                        <div className="flex items-center space-x-2">
-                          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            {t("open_issue")}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center space-x-2">
-                          <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                            {t("closed_issue")}
+                      <div>
+                        {!data.ticket.isComplete ? (
+                          <div className="flex items-center space-x-2">
+                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                              {t("open_issue")}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center space-x-2">
+                            <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                              {t("closed_issue")}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
+                          {data.ticket.type}
+                        </span>
+                      </div>
+                      {data.ticket.client && (
+                        <div>
+                          <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
+                            {data.ticket.client.name}
                           </span>
                         </div>
                       )}
@@ -425,9 +439,9 @@ export default function Ticket() {
                   </div>
                 </div>
                 <aside className="mt-4 xl:hidden">
-                  <div className="py-3 border-b ">
-                    <div className="border-t">
-                      <div className="flex flex-col sm:flex-row space-x-2 mt-4">
+                  <div className="border-b pb-1">
+                    <div className="border-t pt-1">
+                      <div className="flex flex-col sm:flex-row space-x-2">
                         <div className="ml-2">
                           {users && (
                             <UserCombo
