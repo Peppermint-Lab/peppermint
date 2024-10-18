@@ -484,7 +484,7 @@ export function authRoutes(fastify: FastifyInstance) {
     "/api/v1/auth/oidc/callback",
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        const oidc = getOidcConfig();
+        const oidc = await getOidcConfig();
 
         const config = await getOidcClient(oidc);
         if (!config) {
@@ -497,6 +497,11 @@ export function authRoutes(fastify: FastifyInstance) {
 
         // Parse the callback parameters
         const params = oidcClient.callbackParams(request.raw);
+
+        if (params.iss === 'undefined') {
+          // Remove the trailing part and ensure a trailing slash
+          params.iss = oidc.issuer.replace(/\/\.well-known\/openid-configuration$/, '/');
+        }
 
         // Retrieve the state parameter from the callback
         const state = params.state;
