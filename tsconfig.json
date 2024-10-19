@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "app/client/pages/index.js", "app/client/pages/_app.js", "app/client/pages/swagger.js", "apps/api/src/lib/imap.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "app/client/pages/index.js", "app/client/pages/_app.js", "app/client/pages/swagger.js", "apps/api/src/lib/imap.js", "apps/docs/pages/_app.jsx", "apps/docs/pages/index.mdx", "apps/docs/theme.config.jsx"],
   "exclude": ["node_modules"]
 }

@@ -131,8 +131,6 @@ services:
     container_name: peppermint_postgres
     image: postgres:latest
     restart: always
-    ports:
-      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
@@ -149,17 +147,11 @@ services:
     restart: always
     depends_on:
       - peppermint_postgres
-    healthcheck:
-      test: ["CMD", "sh", "-c", "wget --spider $$API_URL"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     environment:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
-      API_URL: "https://peppermintapi.example.com"
 
 volumes:
  pgdata:

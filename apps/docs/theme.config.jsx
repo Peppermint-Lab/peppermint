@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import seoConfig from './seo.config'
+import seoConfig from './seo.config.js'
 
 const config = {
   logo: "Peppermint",

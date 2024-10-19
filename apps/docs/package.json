@@ -1,21 +1,25 @@
 {
   "name": "docs",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next -p 3005",
+    "dev": "next",
     "build": "next build",
     "start": "next start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
-    "next": "13",
-    "nextra": "^2.13.2",
-    "nextra-theme-docs": "^2.13.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "next": "^14.2.15",
+    "nextra": "^3.0.15",
+    "nextra-theme-docs": "^3.0.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.38",
+    "@types/react-dom": "^18"
   }
 }
