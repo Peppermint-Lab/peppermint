@@ -15,7 +15,8 @@ const config = {
   },
   docsRepositoryBase: 'https://github.com/Peppermint-Lab/docs',
   sidebar: {
-    toggleButton: true,
+    defaultMenuCollapseLevel: 2,
+    toggleButton: false,
   },
   chat: {
     link: 'https://discord.gg/X9yFbcV2rF',
