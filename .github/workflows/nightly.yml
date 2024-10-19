@@ -1,4 +1,4 @@
-name: Main Client Build
+name: Nightly Build
 
 on:
   push:
