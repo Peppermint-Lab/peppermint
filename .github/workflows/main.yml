@@ -1,9 +1,9 @@
 name: Main Client Build
 
-# on:
-#   push:
-#     branches:
-#       - master
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
