@@ -11,7 +11,6 @@ export async function sendAssignedEmail(email: any) {
 
     if (emails.length > 0) {
       if (process.env.ENVIRONMENT === "development") {
-        // let testAccount = await nodeMailer.createTestAccount();
         mail = nodeMailer.createTransport({
           host: "localhost",
           port: 1025,

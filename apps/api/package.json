@@ -27,6 +27,7 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "@azure/identity": "^4.5.0",
     "@fastify/cookie": "^9.0.4",
     "@fastify/cors": "^8.3.0",
     "@fastify/multipart": "^8.2.0",
@@ -42,6 +43,7 @@
     "fastify-formidable": "^3.0.2",
     "fastify-multer": "^2.0.3",
     "formidable": "^3.5.1",
+    "google-auth-library": "^9.14.2",
     "got": "^13.0.0",
     "handlebars": "^4.7.8",
     "i": "^0.3.7",

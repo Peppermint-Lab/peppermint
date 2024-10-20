@@ -37,10 +37,10 @@ model SAMLProvider {
 }
 
 model openIdConfig {
-  id           Int    @id @default(autoincrement())
-  clientId     String
-  issuer       String
-  redirectUri  String
+  id          Int    @id @default(autoincrement())
+  clientId    String
+  issuer      String
+  redirectUri String
 }
 
 model Session {
@@ -260,16 +260,21 @@ model Slack {
 }
 
 model Email {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  active    Boolean  @default(false)
-  user      String
-  pass      String
-  secure    Boolean  @default(false)
-  host      String
-  reply     String
-  port      String
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  active       Boolean  @default(false)
+  user         String
+  pass         String?
+  secure       Boolean  @default(false)
+  host         String
+  reply        String
+  port         String
+  serviceType  String   @default("other")
+  clientId     String?
+  clientSecret String?
+  tenantId     String?
+  refreshToken String?
 }
 
 model Config {

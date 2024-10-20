@@ -305,17 +305,16 @@ export function configRoutes(fastify: FastifyInstance) {
           });
         }
 
-        const emails = await prisma.email.findMany();
-        const email = emails[0];
+        const email = await prisma.email.findFirst();
 
         const mail = nodeMailer.createTransport({
           // @ts-ignore
-          host: email.host,
-          port: email.port,
-          secure: email.port === "465" ? true : false,
+          host: email?.host,
+          port: email?.port,
+          secure: email?.port === "465" ? true : false,
           auth: {
-            user: email.user,
-            pass: email.pass,
+            user: email?.user,
+            pass: email?.pass,
           },
         });
 
