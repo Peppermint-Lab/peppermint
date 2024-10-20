@@ -4,41 +4,46 @@ const nodemailer = require("nodemailer");
 const { google } = require("google-auth-library");
 const { ConfidentialClientApplication } = require("@azure/identity");
 
-// Environment variables or configuration
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
-const TENANT_ID = process.env.TENANT_ID;
-
 export async function createTransportProvider() {
   const provider = await prisma.email.findFirst({});
 
-  if (CLIENT_ID && CLIENT_SECRET && (REFRESH_TOKEN || TENANT_ID)) {
+  if (!provider) {
+    throw new Error("No email provider configured.");
+  }
+
+  if (
+    provider?.clientId &&
+    provider?.clientSecret &&
+    (provider?.refreshToken || provider?.tenantId)
+  ) {
     // OAuth2 configuration
-    if (EMAIL_SERVICE === "gmail") {
+    if (provider?.serviceType === "gmail") {
       // Gmail
-      const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET);
-      oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+      const oAuth2Client = new google.auth.OAuth2(
+        provider?.clientId,
+        provider?.clientSecret
+      );
+      oAuth2Client.setCredentials({ refresh_token: provider?.refreshToken });
       const accessToken = await oAuth2Client.getAccessToken();
 
       return nodemailer.createTransport({
         service: "gmail",
         auth: {
           type: "OAuth2",
-          user: EMAIL_USER,
-          clientId: CLIENT_ID,
-          clientSecret: CLIENT_SECRET,
-          refreshToken: REFRESH_TOKEN,
+          user: provider?.user,
+          clientId: provider?.clientId,
+          clientSecret: provider?.clientSecret,
+          refreshToken: provider?.refreshToken,
           accessToken: accessToken.token,
         },
       });
-    } else if (EMAIL_SERVICE === "microsoft") {
+    } else if (provider?.serviceType === "microsoft") {
       // Microsoft
       const cca = new ConfidentialClientApplication({
         auth: {
-          clientId: CLIENT_ID,
-          authority: `https://login.microsoftonline.com/${TENANT_ID}`,
-          clientSecret: CLIENT_SECRET,
+          clientId: provider?.clientId,
+          authority: `https://login.microsoftonline.com/${provider?.tenantId}`,
+          clientSecret: provider?.clientSecret,
         },
       });
 
@@ -50,20 +55,20 @@ export async function createTransportProvider() {
         service: "hotmail",
         auth: {
           type: "OAuth2",
-          user: EMAIL_USER,
-          clientId: CLIENT_ID,
-          clientSecret: CLIENT_SECRET,
+          user: provider?.user,
+          clientId: provider?.clientId,
+          clientSecret: provider?.clientSecret,
           accessToken: result.accessToken,
         },
       });
     }
-  } else if (EMAIL_USER && EMAIL_PASS) {
+  } else if (provider?.user && provider?.pass) {
     // Username/password configuration
     return nodemailer.createTransport({
-      service: EMAIL_SERVICE,
+      service: provider?.serviceType,
       auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS,
+        user: provider?.user,
+        pass: provider?.pass,
       },
     });
   } else {

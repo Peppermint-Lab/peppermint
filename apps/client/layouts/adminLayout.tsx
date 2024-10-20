@@ -70,13 +70,13 @@ export default function AdminLayout({ children }: any) {
       icon: Webhook,
     },
     {
-      name: "Outbound Emails",
+      name: "SMTP Email",
       href: "/admin/email",
       current: location.pathname === "/admin/email",
       icon: Mailbox,
     },
     {
-      name: "authentication",
+      name: "Authentication",
       href: "/admin/authentication",
       current: location.pathname === "/admin/authentication",
       icon: KeyRound,
