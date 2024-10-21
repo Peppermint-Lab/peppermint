@@ -1,5 +1,6 @@
 import nodeMailer from "nodemailer";
 import { prisma } from "../../../prisma";
+import { createTransportProvider } from "../transport";
 
 export async function forgotPassword(
   email: string,
@@ -8,42 +9,17 @@ export async function forgotPassword(
   token: string
 ) {
   try {
-    let mail;
-    let replyto;
-
-    const email_config = await prisma.email.findFirst();
+    const email = await prisma.email.findFirst();
 
     const resetlink = `${link}/auth/reset-password?token=${token}`;
 
     if (email) {
-      if (process.env.ENVIRONMENT === "development") {
-        let testAccount = await nodeMailer.createTestAccount();
-        mail = nodeMailer.createTransport({
-          port: 1025,
-          secure: false, // true for 465, false for other ports
-          auth: {
-            user: testAccount.user,
-            pass: testAccount.pass,
-          },
-        });
-      } else {
-        replyto = email_config?.reply;
-        mail = nodeMailer.createTransport({
-          // @ts-ignore
-          host: email_config?.host,
-          port: email_config?.port,
-          secure: email_config?.port === "465" ? true : false, // true for 465, false for other ports
-          auth: {
-            user: email_config?.user,
-            pass: email_config?.pass,
-          },
-        });
-      }
+      const transport = await createTransportProvider();
 
       console.log("Sending email to: ", email);
 
-      let info = await mail.sendMail({
-        from: replyto,
+      let info = await transport.sendMail({
+        from: email?.reply,
         to: email,
         subject: `Password Reset Request`,
         text: `Password Reset Code: ${code}, follow this link to reset your password ${resetlink}`,

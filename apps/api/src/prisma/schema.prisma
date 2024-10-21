@@ -275,6 +275,8 @@ model Email {
   clientSecret String?
   tenantId     String?
   refreshToken String?
+  accessToken  String?
+  expiresIn    BigInt?
 }
 
 model Config {

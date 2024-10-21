@@ -10,52 +10,49 @@ export async function createTransportProvider() {
     throw new Error("No email provider configured.");
   }
 
-  if (
-    provider?.clientId &&
-    provider?.clientSecret &&
-    (provider?.refreshToken || provider?.tenantId)
-  ) {
-    // OAuth2 configuration
-    if (provider?.serviceType === "gmail") {
-      // Gmail
-      
-      return nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          type: "OAuth2",
-          user: provider?.user,
-          clientId: provider?.clientId,
-          clientSecret: provider?.clientSecret,
-          refreshToken: provider?.refreshToken,
-          // accessToken: accessToken.token,
-        },
-      });
-    } else if (provider?.serviceType === "microsoft") {
-      // Microsoft
-      const cca = new ConfidentialClientApplication({
-        auth: {
-          clientId: provider?.clientId,
-          authority: `https://login.microsoftonline.com/${provider?.tenantId}`,
-          clientSecret: provider?.clientSecret,
-        },
-      });
+  if (provider?.serviceType === "gmail") {
+    console.log("Gmail provider found");
+    console.log(provider);
+    return nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        type: "OAuth2",
+        user: provider?.user,
+        clientId: provider?.clientId,
+        clientSecret: provider?.clientSecret,
+        refreshToken: provider?.refreshToken,
+        accessToken: provider?.accessToken,
+        expiresIn: provider?.expiresIn,
+      },
+    });
+  } else if (provider?.serviceType === "microsoft") {
+    // Microsoft
+    const cca = new ConfidentialClientApplication({
+      auth: {
+        clientId: provider?.clientId,
+        authority: `https://login.microsoftonline.com/${provider?.tenantId}`,
+        clientSecret: provider?.clientSecret,
+      },
+    });
 
-      const result = await cca.acquireTokenByClientCredential({
-        scopes: ["https://graph.microsoft.com/.default"],
-      });
+    const result = await cca.acquireTokenByClientCredential({
+      scopes: ["https://graph.microsoft.com/.default"],
+    });
 
-      return nodemailer.createTransport({
-        service: "hotmail",
-        auth: {
-          type: "OAuth2",
-          user: provider?.user,
-          clientId: provider?.clientId,
-          clientSecret: provider?.clientSecret,
-          accessToken: result.accessToken,
-        },
-      });
-    }
-  } else if (provider?.user && provider?.pass) {
+    return nodemailer.createTransport({
+      service: "hotmail",
+      auth: {
+        type: "OAuth2",
+        user: provider?.user,
+        clientId: provider?.clientId,
+        clientSecret: provider?.clientSecret,
+        accessToken: result.accessToken,
+      },
+    });
+  } else if (provider?.serviceType === "other") {
     // Username/password configuration
     return nodemailer.createTransport({
       service: provider?.serviceType,

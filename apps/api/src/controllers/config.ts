@@ -268,6 +268,7 @@ export function configRoutes(fastify: FastifyInstance) {
               active: true,
               clientId: clientId,
               clientSecret: clientSecret,
+              serviceType: serviceType,
             },
           });
         } else {
@@ -282,6 +283,7 @@ export function configRoutes(fastify: FastifyInstance) {
               active: active,
               clientId: clientId,
               clientSecret: clientSecret,
+              serviceType: serviceType,
             },
           });
         }
@@ -298,7 +300,9 @@ export function configRoutes(fastify: FastifyInstance) {
 
           const authorizeUrl = google.generateAuthUrl({
             access_type: "offline",
-            scope: "https://www.googleapis.com/auth/gmail.send",
+            scope:
+              "https://mail.google.com",
+            prompt: "consent",
           });
 
           reply.send({
@@ -338,12 +342,15 @@ export function configRoutes(fastify: FastifyInstance) {
         );
 
         const r = await google.getToken(code);
-        // Make sure to set the credentials on the OAuth2 client.
+        // Make sure to set the credentials on the OAuth2 client
 
         await prisma.email.update({
           where: { id: email?.id },
           data: {
             refreshToken: r.tokens.refresh_token,
+            accessToken: r.tokens.access_token,
+            expiresIn: r.tokens.expiry_date,
+            serviceType: "gmail",
           },
         });
 
