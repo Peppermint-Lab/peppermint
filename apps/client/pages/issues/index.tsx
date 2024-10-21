@@ -1,6 +1,7 @@
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import Loader from "react-spinners/ClipLoader";
+import { useState } from "react";
 
 import { ContextMenu } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
@@ -8,10 +9,19 @@ import moment from "moment";
 import Link from "next/link";
 import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { CheckIcon, PlusCircle } from "lucide-react";
+import { Button } from "@/shadcn/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/shadcn/ui/command";
+import { cn } from "@/shadcn/lib/utils";
 
 async function getUserTickets(token: any) {
   const res = await fetch(`/api/v1/tickets/all`, {
@@ -37,6 +47,24 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
+
+  const handlePriorityToggle = (priority: string) => {
+    setSelectedPriorities((prev) =>
+      prev.includes(priority)
+        ? prev.filter((p) => p !== priority)
+        : [...prev, priority]
+    );
+  };
+
+  const filteredTickets = data
+    ? data.tickets.filter((ticket) =>
+        selectedPriorities.length > 0
+          ? selectedPriorities.includes(ticket.priority)
+          : true
+      )
+    : [];
+
   return (
     <div>
       {status === "loading" && (
@@ -49,18 +77,64 @@ export default function Tickets() {
         <div>
           <div className="flex flex-col">
             <div className="py-2 px-6 bg-gray-200 dark:bg-[#0A090C] border-b-[1px] flex flex-row items-center justify-between">
-              <span className="text-sm font-bold">All Tickets</span>
-              {/* <div>
-                <button
-                  type="button"
-                  className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  Assigned to Me
-                </button>
-              </div> */}
+              <div className="flex flex-row items-center space-x-4">
+                <span className="text-sm font-bold">All Tickets</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-6 bg-transparent border-dashed"
+                    >
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Priority
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search priority..." />
+                      <CommandList>
+                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandGroup>
+                          {["low", "medium", "high"].map((priority) => (
+                            <CommandItem
+                              key={priority}
+                              onSelect={() => handlePriorityToggle(priority)}
+                            >
+                              <div
+                                className={cn(
+                                  "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                  selectedPriorities.includes(priority)
+                                    ? "bg-primary text-primary-foreground"
+                                    : "opacity-50 [&_svg]:invisible"
+                                )}
+                              >
+                                <CheckIcon className={cn("h-4 w-4")} />
+                              </div>
+                              <span className="capitalize">{priority}</span>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                        <>
+                          <CommandSeparator />
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => setSelectedPriorities([])}
+                              className="justify-center text-center"
+                            >
+                              Clear filters
+                            </CommandItem>
+                          </CommandGroup>
+                        </>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div></div>
             </div>
-            {data.tickets.length > 0 ? (
-              data.tickets.map((ticket) => {
+            {filteredTickets.length > 0 ? (
+              filteredTickets.map((ticket) => {
                 let p = ticket.priority;
                 let badge;
 

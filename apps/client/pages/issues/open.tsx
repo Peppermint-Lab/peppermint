@@ -7,6 +7,21 @@ import moment from "moment";
 import Link from "next/link";
 import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
+import { useState } from "react";
+import { ContextMenu } from "@radix-ui/themes";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { CheckIcon, PlusCircle } from "lucide-react";
+import { Button } from "@/shadcn/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/shadcn/ui/command";
+import { cn } from "@/shadcn/lib/utils";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -36,6 +51,24 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
+
+  const handlePriorityToggle = (priority: string) => {
+    setSelectedPriorities((prev) =>
+      prev.includes(priority)
+        ? prev.filter((p) => p !== priority)
+        : [...prev, priority]
+    );
+  };
+
+  const filteredTickets = data
+    ? data.tickets.filter((ticket) =>
+        selectedPriorities.length > 0
+          ? selectedPriorities.includes(ticket.priority)
+          : true
+      )
+    : [];
+
   return (
     <div>
       {status === "loading" && (
@@ -47,14 +80,68 @@ export default function Tickets() {
       {status === "success" && (
         <div>
           <div className="flex flex-col">
-            <div className="py-2 px-6 flex flex-row items-center justify-between bg-gray-200 dark:bg-[#0A090C] border-b-[1px]">
-              <span className="text-sm font-bold">
-                You have {data.tickets.length} open ticket
-                {data.tickets.length > 1 ? "'s" : ""}
-              </span>
+            <div className="py-2 px-6 bg-gray-200 dark:bg-[#0A090C] border-b-[1px] flex flex-row items-center justify-between">
+              <div className="flex flex-row items-center space-x-4">
+                <span className="text-sm font-bold">
+                  You have {filteredTickets.length} open ticket
+                  {filteredTickets.length > 1 ? "'s" : ""}
+                </span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-6 bg-transparent border-dashed"
+                    >
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Priority
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search priority..." />
+                      <CommandList>
+                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandGroup>
+                          {["low", "medium", "high"].map((priority) => (
+                            <CommandItem
+                              key={priority}
+                              onSelect={() => handlePriorityToggle(priority)}
+                            >
+                              <div
+                                className={cn(
+                                  "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                  selectedPriorities.includes(priority)
+                                    ? "bg-primary text-primary-foreground"
+                                    : "opacity-50 [&_svg]:invisible"
+                                )}
+                              >
+                                <CheckIcon className={cn("h-4 w-4")} />
+                              </div>
+                              <span className="capitalize">{priority}</span>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                        <>
+                          <CommandSeparator />
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => setSelectedPriorities([])}
+                              className="justify-center text-center"
+                            >
+                              Clear filters
+                            </CommandItem>
+                          </CommandGroup>
+                        </>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div></div>
             </div>
-            {data.tickets.length > 0 ? (
-              data.tickets.map((ticket) => {
+            {filteredTickets.length > 0 ? (
+              filteredTickets.map((ticket) => {
                 let p = ticket.priority;
                 let badge;
 
@@ -70,7 +157,9 @@ export default function Tickets() {
 
                 return (
                   <Link href={`/issue/${ticket.id}`} key={ticket.id}>
-                    <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
+                    <ContextMenu.Root>
+                      <ContextMenu.Trigger>
+                        <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
                           <div className="flex flex-row items-center space-x-4">
                             <span className="text-xs font-semibold">
                               #{ticket.Number}
@@ -137,6 +226,11 @@ export default function Tickets() {
                             </span>
                           </div>
                         </div>
+                      </ContextMenu.Trigger>
+                      <ContextMenu.Content>
+                        {/* Context menu items can be added here */}
+                      </ContextMenu.Content>
+                    </ContextMenu.Root>
                   </Link>
                 );
               })
