@@ -1,7 +1,6 @@
 import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useUser } from "../../../store/session";
 
 export default function Login() {
   const router = useRouter();
