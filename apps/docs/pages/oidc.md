@@ -2,6 +2,12 @@
 
 This guide will walk you through the process of using OpenID Connect (OIDC) for authentication in your application. As an end user, you don't need to worry about the underlying code; just follow these steps to get started.
 
+## Requirements 
+- Set client type to PUBLIC in your oidc provider
+- OIDC well known config url
+- OIDC client ID
+
+
 #### Step 1: Logging In with OIDC
 
 - Go to the login page of the application. You should see options for logging in with different methods, including OIDC.
@@ -19,7 +25,6 @@ If you are an admin, you can manage OIDC settings in the admin panel.
 - Log in to the application with admin credentials and navigate to the admin panel.
 
 - In the authentication settings section, select "OIDC" as the provider type.
-
 - Enter the necessary details such as the Issuer, Client ID, and Redirect URI.
 - The Issuer is the URL of the OIDC provider, it needs to be the well known configuration endpoint of the OIDC provider.
 
