@@ -215,7 +215,9 @@ function MicrosoftSettings() {
 function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [refreshToken, setRefreshToken] = useState("");
+  const [redirectUri, setRedirectUri] = useState(
+    `${window.location.origin}/admin/smtp/oauth`
+  );
   const [user, setUser] = useState("");
 
   const router = useRouter();
@@ -235,6 +237,7 @@ function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
         username: user,
         reply: user,
         serviceType: "gmail",
+        redirectUri: redirectUri,
       }),
     })
       .then((res) => res.json())
@@ -310,6 +313,26 @@ function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
                   placeholder="Your Email"
                   value={user}
                   onChange={(e) => setUser(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="">
+              <label
+                htmlFor="user_email"
+                className="block text-sm font-medium text-foreground"
+              >
+                Redirect URI
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <input
+                  type="text"
+                  name="redirect_uri"
+                  id="redirect_uri"
+                  className="flex-1 text-foreground text-sm bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md"
+                  placeholder="Your Redirect URI"
+                  value={redirectUri}
+                  onChange={(e) => setRedirectUri(e.target.value)}
                 />
               </div>
             </div>

@@ -269,6 +269,7 @@ export function configRoutes(fastify: FastifyInstance) {
               clientId: clientId,
               clientSecret: clientSecret,
               serviceType: serviceType,
+              redirectUri: redirectUri,
             },
           });
         } else {
@@ -284,6 +285,7 @@ export function configRoutes(fastify: FastifyInstance) {
               clientId: clientId,
               clientSecret: clientSecret,
               serviceType: serviceType,
+              redirectUri: redirectUri,
             },
           });
         }
@@ -295,13 +297,12 @@ export function configRoutes(fastify: FastifyInstance) {
             //@ts-expect-error
             email?.clientId,
             email?.clientSecret,
-            "http://localhost:3000/admin/smtp/oauth"
+            email?.redirectUri
           );
 
           const authorizeUrl = google.generateAuthUrl({
             access_type: "offline",
-            scope:
-              "https://mail.google.com",
+            scope: "https://mail.google.com",
             prompt: "consent",
           });
 
@@ -330,15 +331,13 @@ export function configRoutes(fastify: FastifyInstance) {
       if (token) {
         const { code }: any = request.query;
 
-        console.log(code);
-
         const email = await prisma.email.findFirst();
 
         const google = new OAuth2Client(
           //@ts-expect-error
           email?.clientId,
           email?.clientSecret,
-          "http://localhost:3000/admin/smtp/oauth"
+          email?.redirectUri
         );
 
         const r = await google.getToken(code);

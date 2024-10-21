@@ -11,8 +11,6 @@ export async function createTransportProvider() {
   }
 
   if (provider?.serviceType === "gmail") {
-    console.log("Gmail provider found");
-    console.log(provider);
     return nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
