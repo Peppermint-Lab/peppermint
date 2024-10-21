@@ -1,7 +1,6 @@
 import { prisma } from "../../prisma";
 
 const nodemailer = require("nodemailer");
-const { google } = require("google-auth-library");
 const { ConfidentialClientApplication } = require("@azure/identity");
 
 export async function createTransportProvider() {
@@ -19,13 +18,7 @@ export async function createTransportProvider() {
     // OAuth2 configuration
     if (provider?.serviceType === "gmail") {
       // Gmail
-      const oAuth2Client = new google.auth.OAuth2(
-        provider?.clientId,
-        provider?.clientSecret
-      );
-      oAuth2Client.setCredentials({ refresh_token: provider?.refreshToken });
-      const accessToken = await oAuth2Client.getAccessToken();
-
+      
       return nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -34,7 +27,7 @@ export async function createTransportProvider() {
           clientId: provider?.clientId,
           clientSecret: provider?.clientSecret,
           refreshToken: provider?.refreshToken,
-          accessToken: accessToken.token,
+          // accessToken: accessToken.token,
         },
       });
     } else if (provider?.serviceType === "microsoft") {

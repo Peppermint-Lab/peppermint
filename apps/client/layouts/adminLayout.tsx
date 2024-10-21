@@ -71,8 +71,8 @@ export default function AdminLayout({ children }: any) {
     },
     {
       name: "SMTP Email",
-      href: "/admin/email",
-      current: location.pathname === "/admin/email",
+      href: "/admin/smtp",
+      current: location.pathname === "/admin/smtp",
       icon: Mailbox,
     },
     {

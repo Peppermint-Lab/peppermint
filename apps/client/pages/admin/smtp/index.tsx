@@ -19,6 +19,7 @@ import {
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Notifications() {
@@ -169,9 +170,7 @@ export default function Notifications() {
                                   <SelectItem disabled value="microsoft">
                                     Microsoft
                                   </SelectItem>
-                                  <SelectItem disabled value="gmail">
-                                    Google
-                                  </SelectItem>
+                                  <SelectItem value="gmail">Google</SelectItem>
                                   <SelectItem value="other">Other</SelectItem>
                                 </SelectContent>
                               </Select>
@@ -192,7 +191,9 @@ export default function Notifications() {
                     {step === 1 && provider === "microsoft" && (
                       <MicrosoftSettings />
                     )}
-                    {step === 1 && provider === "gmail" && <GmailSettings />}
+                    {step === 1 && provider === "gmail" && (
+                      <GmailSettings setStep={setStep} />
+                    )}
                     {step === 1 && provider === "other" && (
                       <SMTP setStep={setStep} />
                     )}
@@ -211,8 +212,124 @@ function MicrosoftSettings() {
   return <div>Microsoft</div>;
 }
 
-function GmailSettings() {
-  return <div>Gmail</div>;
+function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
+  const [clientId, setClientId] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
+  const [user, setUser] = useState("");
+
+  const router = useRouter();
+
+  async function submitGmailConfig() {
+    await fetch(`/api/v1/config/email`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+      body: JSON.stringify({
+        host: "smtp.gmail.com",
+        port: "465",
+        clientId,
+        clientSecret,
+        username: user,
+        reply: user,
+        serviceType: "gmail",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.authorizeUrl) {
+          router.push(res.authorizeUrl);
+        }
+      });
+  }
+
+  return (
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Gmail Settings</CardTitle>
+        <CardDescription>Configure your Gmail OAuth2 settings.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid w-full items-center gap-4">
+          <div className="flex flex-col space-y-4">
+            <div className="">
+              <label
+                htmlFor="client_id"
+                className="block text-sm font-medium text-foreground"
+              >
+                Client ID
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <input
+                  type="text"
+                  name="client_id"
+                  id="client_id"
+                  className="flex-1 text-foreground text-sm bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md"
+                  placeholder="Your Client ID"
+                  value={clientId}
+                  onChange={(e) => setClientId(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="">
+              <label
+                htmlFor="client_secret"
+                className="block text-sm font-medium text-foreground"
+              >
+                Client Secret
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <input
+                  type="text"
+                  name="client_secret"
+                  id="client_secret"
+                  className="flex-1 text-foreground text-sm bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md"
+                  placeholder="Your Client Secret"
+                  value={clientSecret}
+                  onChange={(e) => setClientSecret(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="">
+              <label
+                htmlFor="user_email"
+                className="block text-sm font-medium text-foreground"
+              >
+                User Email
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <input
+                  type="email"
+                  name="user_email"
+                  id="user_email"
+                  className="flex-1 text-foreground text-sm bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md"
+                  placeholder="Your Email"
+                  value={user}
+                  onChange={(e) => setUser(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button size="sm" variant="outline" onClick={() => setStep(0)}>
+          Back
+        </Button>
+        <Button
+          size="sm"
+          disabled={!clientId || !clientSecret || !user}
+          onClick={() => submitGmailConfig()}
+        >
+          Submit
+        </Button>
+      </CardFooter>
+    </Card>
+  );
 }
 
 function SMTP({ setStep }: { setStep: (step: number) => void }) {

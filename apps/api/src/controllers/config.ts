@@ -4,7 +4,7 @@
 // SSO Provider
 // Portal Locale
 // Feature Flags
-
+import { GoogleAuth, OAuth2Client } from "google-auth-library";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import nodeMailer from "nodemailer";
 
@@ -249,6 +249,10 @@ export function configRoutes(fastify: FastifyInstance) {
           reply: replyto,
           username,
           password,
+          serviceType,
+          clientId,
+          clientSecret,
+          redirectUri,
         }: any = request.body;
 
         const email = await prisma.email.findFirst();
@@ -262,6 +266,8 @@ export function configRoutes(fastify: FastifyInstance) {
               user: username,
               pass: password,
               active: true,
+              clientId: clientId,
+              clientSecret: clientSecret,
             },
           });
         } else {
@@ -274,9 +280,72 @@ export function configRoutes(fastify: FastifyInstance) {
               user: username,
               pass: password,
               active: active,
+              clientId: clientId,
+              clientSecret: clientSecret,
             },
           });
         }
+
+        if (serviceType === "gmail") {
+          const email = await prisma.email.findFirst();
+
+          const google = new OAuth2Client(
+            //@ts-expect-error
+            email?.clientId,
+            email?.clientSecret,
+            "http://localhost:3000/admin/smtp/oauth"
+          );
+
+          const authorizeUrl = google.generateAuthUrl({
+            access_type: "offline",
+            scope: "https://www.googleapis.com/auth/gmail.send",
+          });
+
+          reply.send({
+            success: true,
+            message: "SSO Provider updated!",
+            authorizeUrl: authorizeUrl,
+          });
+        }
+
+        reply.send({
+          success: true,
+          message: "SSO Provider updated!",
+        });
+      }
+    }
+  );
+
+  fastify.get(
+    "/api/v1/config/email/oauth/gmail",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const { code }: any = request.query;
+
+        console.log(code);
+
+        const email = await prisma.email.findFirst();
+
+        const google = new OAuth2Client(
+          //@ts-expect-error
+          email?.clientId,
+          email?.clientSecret,
+          "http://localhost:3000/admin/smtp/oauth"
+        );
+
+        const r = await google.getToken(code);
+        // Make sure to set the credentials on the OAuth2 client.
+
+        await prisma.email.update({
+          where: { id: email?.id },
+          data: {
+            refreshToken: r.tokens.refresh_token,
+          },
+        });
 
         reply.send({
           success: true,
