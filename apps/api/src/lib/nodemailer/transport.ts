@@ -53,7 +53,9 @@ export async function createTransportProvider() {
   } else if (provider?.serviceType === "other") {
     // Username/password configuration
     return nodemailer.createTransport({
-      service: provider?.serviceType,
+      host: provider.host,
+      port: provider?.port,
+      secure: provider?.port === "465" ? true : false, // true for 465, false for other ports
       auth: {
         user: provider?.user,
         pass: provider?.pass,
