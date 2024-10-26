@@ -26,6 +26,7 @@ import NoteBookLayout from "../layouts/notebook";
 import PortalLayout from "../layouts/portalLayout";
 import Settings from "../layouts/settings";
 import GlobalShortcut from "@/shadcn/block/GlobalShortcut";
+import { Toaster } from "@/shadcn/ui/toaster";
 
 const queryClient = new QueryClient();
 
@@ -48,12 +49,11 @@ function Auth({ children }: any) {
 function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   const router = useRouter();
 
- 
-
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
       <ThemeProvider attribute="class" defaultTheme="light">
         <Component {...pageProps} />
+        <Toaster />
       </ThemeProvider>
     );
   }
@@ -67,6 +67,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
               <Auth>
                 <AdminLayout>
                   <Component {...pageProps} />
+                  <Toaster />
                 </AdminLayout>
               </Auth>
             </QueryClientProvider>
@@ -86,6 +87,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
                 <NewLayout>
                   <Settings>
                     <Component {...pageProps} />
+                    <Toaster />
                   </Settings>
                 </NewLayout>
               </Auth>
@@ -104,6 +106,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
             <Auth>
               <PortalLayout>
                 <Component {...pageProps} />
+                <Toaster />
               </PortalLayout>
             </Auth>
           </QueryClientProvider>
@@ -116,12 +119,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
     return (
       <SessionProvider>
         <Component {...pageProps} />
+        <Toaster />
       </SessionProvider>
     );
   }
 
   if (router.pathname === "/submit") {
-    return <Component {...pageProps} />;
+    return (
+      <SessionProvider>
+        <Component {...pageProps} />
+        <Toaster />
+      </SessionProvider>
+    );
   }
 
   return (
@@ -132,6 +141,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
             <Auth>
               <NewLayout>
                 <Component {...pageProps} />
+                <Toaster />
               </NewLayout>
             </Auth>
           </QueryClientProvider>
