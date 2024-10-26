@@ -10,7 +10,7 @@ import {
   HomeIcon,
   TicketIcon,
 } from "@heroicons/react/24/outline";
-import { Notifications } from "@mantine/notifications";
+
 import { MantineProvider } from "@mantine/core";
 import { Theme } from "@radix-ui/themes";
 import { useRouter } from "next/router";
@@ -48,100 +48,30 @@ function Auth({ children }: any) {
 function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   const router = useRouter();
 
-  const actions = [
-    {
-      title: "Home",
-      description: "Get to home page",
-      onTrigger: () => router.push("/"),
-      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Notebook",
-      description: "Personal User Notes",
-      onTrigger: () => router.push("/notebook"),
-      icon: <FolderIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Tickets",
-      description:
-        "Central store for all company & user tickets, open or closed",
-      onTrigger: () => router.push("/tickets"),
-      icon: <TicketIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Documentation",
-      description: "Documentation for peppermint.sh",
-      onTrigger: () => router.push("https://docs.peppermint.sh"),
-      icon: <DocumentCheckIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Github",
-      description: "OSS codebase for peppermint",
-      onTrigger: () =>
-        router.push("https://github.com/Peppermint-Lab/peppermint"),
-      icon: (
-        <img className="h-7 ml-1 w-auto" src="/github.svg" alt="Workflow" />
-      ),
-    },
-    {
-      title: "Peppermint.sh",
-      description: "",
-      onTrigger: () => router.push("https://peppermint.sh"),
-      icon: <img className="h-7 ml-1 w-auto" src="/logo.svg" alt="Workflow" />,
-    },
-  ];
+ 
 
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
-      <MantineProvider>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Notifications position="top-right" />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </MantineProvider>
+      <ThemeProvider attribute="class" defaultTheme="light">
+        <Component {...pageProps} />
+      </ThemeProvider>
     );
   }
 
   if (router.pathname.includes("/admin")) {
     return (
       <SessionProvider>
-        <MantineProvider>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <Theme>
-              <QueryClientProvider client={queryClient}>
-                <Auth>
-                  <AdminLayout>
-                    <Notifications position="top-right" />
-                    <Component {...pageProps} />
-                  </AdminLayout>
-                </Auth>
-              </QueryClientProvider>
-            </Theme>
-          </ThemeProvider>
-        </MantineProvider>
-      </SessionProvider>
-    );
-  }
-
-  if (router.pathname.includes("/notebook")) {
-    return (
-      <SessionProvider>
-        <MantineProvider>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <Theme>
-              <QueryClientProvider client={queryClient}>
-                <Auth>
-                  <NewLayout>
-                    <NoteBookLayout>
-                      <Notifications position="top-right" />
-                      <Component {...pageProps} />
-                    </NoteBookLayout>
-                  </NewLayout>
-                </Auth>
-              </QueryClientProvider>
-            </Theme>
-          </ThemeProvider>
-        </MantineProvider>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Theme>
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <AdminLayout>
+                  <Component {...pageProps} />
+                </AdminLayout>
+              </Auth>
+            </QueryClientProvider>
+          </Theme>
+        </ThemeProvider>
       </SessionProvider>
     );
   }
@@ -149,22 +79,19 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.includes("/settings")) {
     return (
       <SessionProvider>
-        <MantineProvider>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <Theme>
-              <QueryClientProvider client={queryClient}>
-                <Auth>
-                  <NewLayout>
-                    <Settings>
-                      <Notifications position="top-right" />
-                      <Component {...pageProps} />
-                    </Settings>
-                  </NewLayout>
-                </Auth>
-              </QueryClientProvider>
-            </Theme>
-          </ThemeProvider>
-        </MantineProvider>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Theme>
+            <QueryClientProvider client={queryClient}>
+              <Auth>
+                <NewLayout>
+                  <Settings>
+                    <Component {...pageProps} />
+                  </Settings>
+                </NewLayout>
+              </Auth>
+            </QueryClientProvider>
+          </Theme>
+        </ThemeProvider>
       </SessionProvider>
     );
   }
@@ -172,18 +99,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname.startsWith("/portal")) {
     return (
       <SessionProvider>
-        <MantineProvider defaultColorScheme="light">
-          <Theme>
-            <QueryClientProvider client={queryClient}>
-              <Auth>
-                <PortalLayout>
-                  <Notifications position="top-right" />
-                  <Component {...pageProps} />
-                </PortalLayout>
-              </Auth>
-            </QueryClientProvider>
-          </Theme>
-        </MantineProvider>
+        <Theme>
+          <QueryClientProvider client={queryClient}>
+            <Auth>
+              <PortalLayout>
+                <Component {...pageProps} />
+              </PortalLayout>
+            </Auth>
+          </QueryClientProvider>
+        </Theme>
       </SessionProvider>
     );
   }
@@ -191,40 +115,28 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname === "/onboarding") {
     return (
       <SessionProvider>
-        <MantineProvider defaultColorScheme="light">
-          <Notifications position="top-right" />
-          <Component {...pageProps} />
-        </MantineProvider>
+        <Component {...pageProps} />
       </SessionProvider>
     );
   }
 
   if (router.pathname === "/submit") {
-    return (
-      <MantineProvider defaultColorScheme="light">
-        <Notifications position="top-right" />
-        <Component {...pageProps} />
-      </MantineProvider>
-    );
+    return <Component {...pageProps} />;
   }
 
   return (
     <SessionProvider>
-      <MantineProvider defaultColorScheme="dark">
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Theme>
-            <QueryClientProvider client={queryClient}>
-              <Auth>
-                <NewLayout>
-                  <GlobalShortcut />
-                  <Notifications position="top-right" />
-                  <Component {...pageProps} />
-                </NewLayout>
-              </Auth>
-            </QueryClientProvider>
-          </Theme>
-        </ThemeProvider>
-      </MantineProvider>
+      <ThemeProvider attribute="class" defaultTheme="light">
+        <Theme>
+          <QueryClientProvider client={queryClient}>
+            <Auth>
+              <NewLayout>
+                <Component {...pageProps} />
+              </NewLayout>
+            </Auth>
+          </QueryClientProvider>
+        </Theme>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

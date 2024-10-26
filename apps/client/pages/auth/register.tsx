@@ -1,4 +1,4 @@
-import { notifications } from "@mantine/notifications";
+import { toast } from "@/shadcn/hooks/use-toast";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -43,17 +43,17 @@ export default function Login({}) {
         router.push("/auth/login");
       } else {
         setStatus("idle");
-        notifications.show({
+        toast({
+          variant: "destructive",
           title: "Error",
-          message: response.message,
-          color: "red",
+          description: response.message,
         });
       }
     } else {
-      notifications.show({
+      toast({
+        variant: "destructive",
         title: "Error",
-        message: "Passwords do not match or email is invalid",
-        color: "red",
+        description: "Passwords do not match or email is invalid",
       });
     }
   }

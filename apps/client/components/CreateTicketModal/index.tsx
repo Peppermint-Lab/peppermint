@@ -2,7 +2,6 @@ import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import useTranslation from "next-translate/useTranslation";
-import { notifications } from "@mantine/notifications";
 import {
   ChevronUpDownIcon,
   PlusIcon,
@@ -14,6 +13,7 @@ import { getCookie } from "cookies-next";
 
 import dynamic from "next/dynamic";
 import { ListPlus } from "lucide-react";
+import { toast } from "@/shadcn/hooks/use-toast";
 
 const Editor = dynamic(() => import("../BlockEditor"), { ssr: false });
 
@@ -117,19 +117,19 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
-          notifications.show({
-            title: "Ticket Created",
-            message: "Ticket created succesfully",
-            color: "green",
-            autoClose: 5000,
+         
+          toast({
+            variant: "default",
+            title: "Success",
+            description: "Ticket created succesfully",
           });
           router.push("/issues");
         } else {
-          notifications.show({
-            title: "Error",
-            message: `Error: ${res.error}`,
-            color: "red",
-            autoClose: 5000,
+          
+          toast({
+            variant: "destructive",
+            title: `Error`,
+            description: res.error,
           });
         }
       });
@@ -214,10 +214,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                     onClick={() => setOpen(false)}
                   >
                     <span className="sr-only">Close</span>
-                    <XMarkIcon
-                      className="h-5 w-5"
-                      aria-hidden="true"
-                    />
+                    <XMarkIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                 </div>
                 <input

@@ -1,3 +1,4 @@
+import { toast } from "@/shadcn/hooks/use-toast";
 import { Button } from "@/shadcn/ui/button";
 import {
   Card,
@@ -17,7 +18,6 @@ import {
   SelectValue,
 } from "@/shadcn/ui/select";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
-import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -53,16 +53,16 @@ export default function Notifications() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          notifications.show({
-            title: "Email Config Test",
-            message: "Email Config Test was successful",
-            color: "teal",
+          toast({
+            variant: "default",
+            title: "Success",
+            description: "Email Config Test was successful",
           });
         } else {
-          notifications.show({
+          toast({
+            variant: "destructive",
             title: "Email Config Test",
-            message: "Email Config Test failed",
-            color: "red",
+            description: "Email Config Test failed",
           });
         }
       });

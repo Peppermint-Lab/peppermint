@@ -1,10 +1,10 @@
 import { Switch } from "@headlessui/react";
-import { notifications } from "@mantine/notifications";
 import { Flex } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useUser } from "../../../../store/session";
+import { toast } from "@/shadcn/hooks/use-toast";
 
 export default function CreateUser() {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,15 +39,16 @@ export default function CreateUser() {
       .then((res) => {
         if (res.success === true) {
           router.push("/admin/users/internal");
-          notifications.show({
-            title: "User created successfully",
-            message: "The action was processed correctly! 💚",
+          toast({
+            variant: "default",
+            title: "Success",
+            description: "User updated succesfully",
           });
         } else {
-          notifications.show({
+          toast({
+            variant: "destructive",
             title: "There has been an error ",
-            message: "Whoops! please wait and try again! 🤥",
-            color: "red",
+            description: "Whoops! please wait and try again!",
           });
         }
       });

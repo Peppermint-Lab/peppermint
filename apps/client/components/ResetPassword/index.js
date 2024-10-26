@@ -1,6 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import React, { Fragment, useState } from "react";
 
@@ -25,27 +24,26 @@ export default function ResetPassword({ user }) {
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {
-            notifications.show({
-              title: "Success",
-              message: `Password updated`,
-              color: "green",
+            toast({
+              variant: "success",
+              title: "Password Reset Successful",
+              description: "The password has been updated successfully.",
               autoClose: 5000,
             });
           } else {
-            notifications.show({
-              title: "Error",
-              message: `Error: failed to update password`,
-              color: "red",
-              autoClose: 5000,
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: "There was a problem with your request.",
+              action: <ToastAction altText="Try again">Try again</ToastAction>,
             });
           }
         });
     } else {
-      notifications.show({
+      toast({
+        variant: "destructive",
         title: "Error",
-        message: `Error: passwords do not match`,
-        color: "red",
-        autoClose: 5000,
+        description: "Passwords do not match",
       });
     }
   };

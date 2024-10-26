@@ -1,4 +1,4 @@
-import { notifications } from "@mantine/notifications";
+import { toast } from "@/shadcn/hooks/use-toast";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -17,20 +17,19 @@ export default function Login({}) {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          notifications.show({
+
+          toast({
+            variant: "default",
             title: "Success",
-            message: "A password reset email is on its way.",
-            color: "green",
-            autoClose: 5000,
+            description: "Password reset email is on its way.",
           });
           router.push("/auth/login");
         } else {
-          notifications.show({
-            title: "Error",
-            message:
+          toast({
+            variant: "destructive",
+            title: "Error", 
+            description:
               "There was an error with this request, please try again. If this issue persists, please contact support via the discord.",
-            color: "red",
-            autoClose: 5000,
           });
         }
       });

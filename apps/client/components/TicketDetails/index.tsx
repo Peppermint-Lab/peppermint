@@ -5,7 +5,6 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useQuery } from "react-query";
-import { notifications } from "@mantine/notifications";
 import { Text, Tooltip } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import useTranslation from "next-translate/useTranslation";
@@ -26,6 +25,7 @@ import {
   SignalLow,
   SignalMedium,
 } from "lucide-react";
+import { toast } from "@/shadcn/hooks/use-toast";
 
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
@@ -207,10 +207,10 @@ export default function Ticket() {
         if (res.success) {
           setTimeEdit(false);
           refetch();
-          notifications.show({
+          toast({
+            variant: "default",
             title: "Time Added",
-            message: "Time has been added to the ticket",
-            color: "blue",
+            description: "Time has been added to the ticket",
           });
         }
       });

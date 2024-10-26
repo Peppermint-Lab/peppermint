@@ -1,4 +1,4 @@
-import { notifications } from "@mantine/notifications";
+import { toast } from "@/shadcn/hooks/use-toast";
 import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -33,12 +33,11 @@ export default function Login({}) {
             }
           }
         } else {
-          notifications.show({
+          toast({
+            variant: "destructive",
             title: "Error",
-            message:
+            description:
               "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
-            color: "red",
-            autoClose: 5000,
           });
         }
       });
@@ -55,12 +54,11 @@ export default function Login({}) {
           setUrl(res.url);
         } else {
           if (!res.success) {
-            notifications.show({
+            toast({
+              variant: "destructive",
               title: "Error",
-              message:
+              description:
                 "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
-              color: "red",
-              autoClose: 5000,
             });
           }
         }
@@ -73,12 +71,11 @@ export default function Login({}) {
 
   useEffect(() => {
     if (router.query.error) {
-      notifications.show({
+      toast({
+        variant: "destructive",
         title: "Account Error - No Account Found",
-        color: "red",
-        message:
+        description:
           "It looks like you have tried to use SSO with an account that does not exist. Please try again or contact your admin to get you set up first.",
-        autoClose: false,
       });
     }
   }, [router]);
