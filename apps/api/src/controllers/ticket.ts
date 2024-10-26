@@ -9,9 +9,10 @@ import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
 import { sendComment } from "../lib/nodemailer/ticket/comment";
 import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
-import { createNotification } from "../lib/notifications";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
+import { assignedNotification } from "../lib/notifications/issue/assigned";
+import { commentNotification } from "../lib/notifications/issue/comment";
 
 const validateEmail = (email: string) => {
   return String(email)
@@ -83,7 +84,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         await sendAssignedEmail(assgined!.email);
 
-        await createNotification("ticket_assigned", engineer.id, ticket);
+        await assignedNotification(engineer.id, ticket);
       }
 
       const webhook = await prisma.webhooks.findMany({
@@ -541,6 +542,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
         if (public_comment && email) {
           sendComment(text, title, email);
         }
+
+        await commentNotification(user!.id, ticket, user!.name);
 
         const hog = track();
 
