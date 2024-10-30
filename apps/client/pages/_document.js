@@ -15,6 +15,10 @@ export default function Document() {
           content="Ticket management system selfhosted open source"
         />
         <meta name="keywords" content="Keywords" />
+
+        <meta name="theme-color" content="#ffffff" />
+        <link rel="manifest" href="/manifest.json" />
+
         <title>Peppermint</title>
 
         <link href="/favicon/favicon.ico" rel="icon" />
@@ -31,7 +35,6 @@ export default function Document() {
           sizes="32x32"
         />
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
-        <meta name="theme-color" content="#317EFB" />
       </Head>
       <body>
         <Main />
