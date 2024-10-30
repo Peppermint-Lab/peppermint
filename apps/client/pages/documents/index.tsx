@@ -1,15 +1,11 @@
 import { Button } from "@/shadcn/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shadcn/ui/dropdown-menu";
 import { getCookie } from "cookies-next";
 import { Ellipsis } from "lucide-react";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
+import { useUser } from "../../store/session";
 
 function groupDocumentsByDate(notebooks) {
   const today = new Date();
@@ -71,6 +67,8 @@ async function fetchNotebooks(token) {
 export default function NoteBooksIndex() {
   const { t } = useTranslation("peppermint");
 
+  const user = useUser()
+
   const token = getCookie("session");
   const { data, status, error, refetch } = useQuery("getUsersNotebooks", () =>
     fetchNotebooks(token)
@@ -98,6 +96,17 @@ export default function NoteBooksIndex() {
       });
   }
 
+  function checkCanView() {
+    if(data && data.note.userId !== user.id) {
+      router.back()
+    } 
+  }
+
+  useEffect(() => {
+    checkCanView()
+  }, [data])
+
+
   return (
     <div className="px-4 py-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -105,9 +114,9 @@ export default function NoteBooksIndex() {
           <h1 className="text-base font-semibold leading-6 text-foreground">
             Documents
           </h1>
-          <p className="mt-2 text-sm text-foreground">
+          {/* <p className="mt-2 text-sm text-foreground">
             Documents can be private, shared with others, or public.
-          </p>
+          </p> */}
         </div>
       </div>
       <div className="mt-8 w-full flex justify-center">
