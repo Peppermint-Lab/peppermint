@@ -67,10 +67,8 @@ async function fetchNotebooks(token) {
 export default function NoteBooksIndex() {
   const { t } = useTranslation("peppermint");
 
-  const user = useUser()
-
   const token = getCookie("session");
-  const { data, status, error, refetch } = useQuery("getUsersNotebooks", () =>
+  const { data, status, error } = useQuery("getUsersNotebooks", () =>
     fetchNotebooks(token)
   );
 
@@ -95,17 +93,6 @@ export default function NoteBooksIndex() {
         }
       });
   }
-
-  function checkCanView() {
-    if(data && data.note.userId !== user.id) {
-      router.back()
-    } 
-  }
-
-  useEffect(() => {
-    checkCanView()
-  }, [data])
-
 
   return (
     <div className="px-4 py-4 sm:px-6 lg:px-8">

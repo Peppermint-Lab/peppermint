@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
 } from "@/shadcn/ui/dropdown-menu";
 import { Ellipsis } from "lucide-react";
+import { useUser } from "../../store/session";
 
 function isHTML(str) {
   var a = document.createElement("div");
@@ -28,6 +29,8 @@ function isHTML(str) {
 export default function NotebookEditor() {
   const router = useRouter();
   const token = getCookie("session");
+
+  const user = useUser();
 
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | "loading"
@@ -145,6 +148,16 @@ export default function NotebookEditor() {
   const handleInputChange = (editor) => {
     setValue(editor.document);
   };
+
+  function checkCanView() {
+    if (data && data.note.userId !== user.user.id) {
+      router.back();
+    }
+  }
+
+  useEffect(() => {
+    checkCanView();
+  }, [data]);
 
   return (
     <>
