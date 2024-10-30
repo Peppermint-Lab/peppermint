@@ -4,6 +4,47 @@ import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 
+function groupDocumentsByDate(notebooks) {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  return notebooks.reduce((groups, notebook) => {
+    const updatedAt = new Date(notebook.updatedAt);
+    
+    if (updatedAt.toDateString() === today.toDateString()) {
+      groups.today.push(notebook);
+    } else if (updatedAt.toDateString() === yesterday.toDateString()) {
+      groups.yesterday.push(notebook);
+    } else if (isThisWeek(updatedAt, today)) {
+      groups.thisWeek.push(notebook);
+    } else if (isThisMonth(updatedAt, today)) {
+      groups.thisMonth.push(notebook);
+    } else {
+      groups.older.push(notebook);
+    }
+    
+    return groups;
+  }, {
+    today: [],
+    yesterday: [],
+    thisWeek: [],
+    thisMonth: [],
+    older: []
+  });
+}
+
+function isThisWeek(date, today) {
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - today.getDay());
+  return date >= weekStart;
+}
+
+function isThisMonth(date, today) {
+  return date.getMonth() === today.getMonth() && 
+         date.getFullYear() === today.getFullYear();
+}
+
 async function fetchNotebooks(token) {
   const res = await fetch(`/api/v1/notebooks/all`, {
     method: "GET",
@@ -63,8 +104,7 @@ export default function NoteBooksIndex() {
             Documents
           </h1>
           <p className="mt-2 text-sm text-foreground">
-            Documents are a collection of notes, notebooks, and other resources,
-            all in one place. They can be private, shared with others, or
+            Documents can be private, shared with others, or
             public.
           </p>
         </div>
@@ -75,29 +115,38 @@ export default function NoteBooksIndex() {
         {data && data.notebooks.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-sm text-gray-500">No documents found.</p>
-            <button
-              onClick={() => createNew()}
-              className="mt-4 text-blue-600 hover:text-blue-800"
-            >
-              Create
-            </button>
+            
           </div>
         ) : (
           <div className="flex flex-col w-full max-w-2xl justify-center space-y-4">
             <div className="flex flex-row justify-end mb-4">
-              <Button variant="outline" size="sm">New Document</Button>
+              <Button variant="outline" size="sm" onClick={() => createNew()}>New Document</Button>
             </div>
-            {data?.notebooks.map((item) => (
-              <button
-                key={item.id}
-                className="p-4 flex flex-row w-full justify-between items-center align-middle"
-                onClick={() => router.push(`/documents/${item.id}`)}
-              >
-                <h2 className="text-md font-semibold text-gray-900 dark:text-white">
-                  {item.title}
-                </h2>
-              </button>
-            ))}
+            {data?.notebooks && Object.entries(groupDocumentsByDate(data.notebooks)).map(([period, docs]) => 
+              Array.isArray(docs) && docs.length > 0 && (
+                <div key={period} className="space-y-2">
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
+                    {period.replace(/([A-Z])/g, ' $1').trim()}
+                  </h3>
+                  <div className="space-y-1">
+                    {docs.map((item) => (
+                      <button
+                        key={item.id}
+                        className="flex flex-row w-full justify-between items-center align-middle transition-colors"
+                        onClick={() => router.push(`/documents/${item.id}`)}
+                      >
+                        <h2 className="text-md font-semibold text-gray-900 dark:text-white">
+                          {item.title}
+                        </h2>
+                        <span className="text-sm text-gray-500">
+                          {new Date(item.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )
+            )}
           </div>
         )}
       </div>

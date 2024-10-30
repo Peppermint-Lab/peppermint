@@ -40,7 +40,8 @@ export default function NotebookEditor() {
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState();
 
-  const [debouncedValue] = useDebounce(value, 2000);
+  const [debouncedValue] = useDebounce(value, 500);
+  const [debounceTitle] = useDebounce(title, 500);
 
   async function fetchNotebook() {
     setValue(undefined);
@@ -69,6 +70,7 @@ export default function NotebookEditor() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        title: debounceTitle,
         content: JSON.stringify(debouncedValue),
       }),
     });
@@ -83,10 +85,10 @@ export default function NotebookEditor() {
   }, [router]);
 
   useEffect(() => {
-    if (value !== undefined && !loading) {
+    if (debouncedValue || debounceTitle) {
       updateNoteBook();
     }
-  }, [debouncedValue]);
+  }, [debouncedValue, debounceTitle]);
 
   async function loadFromStorage(val) {
     const storageString = val;

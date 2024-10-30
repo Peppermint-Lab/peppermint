@@ -100,7 +100,7 @@ export function notebookRoutes(fastify: FastifyInstance) {
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
-      const { content }: any = request.body;
+      const { content, title }: any = request.body;
 
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
@@ -111,6 +111,7 @@ export function notebookRoutes(fastify: FastifyInstance) {
         await prisma.notes.update({
           where: { id: id },
           data: {
+            title: title,
             note: content,
           },
         });
