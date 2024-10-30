@@ -122,8 +122,7 @@ export default function NotebookEditor() {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between border-b-[1px] py-1 px-4">
-        <h2 className="text-xl font-bold">{title}</h2>
+      <div className="flex flex-row items-center justify-end py-1 px-4">
         {saving ? (
           <span className="text-xs">saving ....</span>
         ) : (
@@ -133,13 +132,24 @@ export default function NotebookEditor() {
         )}
       </div>
       {!loading && (
-        <div className="m-h-[90vh] p-2">
-          <BlockNoteView
-            editor={editor}
-            sideMenu={false}
-            className="m-0 p-0"
-            onChange={handleInputChange}
-          />
+        <div className="m-h-[90vh] p-2 w-full flex justify-center">
+          <div className="w-full max-w-2xl">
+            <div className="flex flex-row items-center justify-between">
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="text-3xl px-0 font-bold w-full border-none outline-none focus:ring-0 focus:outline-none"
+              />
+            </div>
+
+            <BlockNoteView
+              editor={editor}
+              sideMenu={false}
+              className="m-0 p-0"
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
       )}
     </>

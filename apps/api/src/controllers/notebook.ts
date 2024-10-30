@@ -14,24 +14,20 @@ export function notebookRoutes(fastify: FastifyInstance) {
       const bearer = request.headers.authorization!.split(" ")[1];
       const token = checkToken(bearer);
 
-      if (!title) {
-        return reply.status(422).send({ error: "Please add a title" });
-      } else {
-        if (token) {
-          const user = await checkSession(bearer);
+      if (token) {
+        const user = await checkSession(bearer);
 
-          const data = await prisma.notes.create({
-            data: {
-              title,
-              note: content,
-              userId: user!.id,
-            },
-          });
+        const data = await prisma.notes.create({
+          data: {
+            title,
+            note: content,
+            userId: user!.id,
+          },
+        });
 
-          const { id } = data;
+        const { id } = data;
 
-          reply.status(200).send({ success: true, id });
-        }
+        reply.status(200).send({ success: true, id });
       }
     }
   );

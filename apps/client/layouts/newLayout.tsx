@@ -30,6 +30,7 @@ import ThemeSettings from "../components/ThemeSettings";
 import {
   Bell,
   Building,
+  FileText,
   Settings,
   SquareActivity,
   SquareKanban,
@@ -90,8 +91,8 @@ export default function NewLayout({ children }: any) {
     },
     {
       name: "Documents",
-      href: `/${locale}/notebook`,
-      icon: Text,
+      href: `/${locale}/documents`,
+      icon: FileText,
       current: location.pathname === "/documents" ? true : false,
       initial: "d",
     },
@@ -126,7 +127,7 @@ export default function NewLayout({ children }: any) {
         case "h":
           location.push("/");
           break;
-        case "n":
+        case "d":
           location.push("/documents");
           break;
         case "t":
