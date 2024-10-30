@@ -1,3 +1,4 @@
+import { Button } from "@/shadcn/ui/button";
 import { getCookie } from "cookies-next";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
@@ -42,7 +43,7 @@ export default function NoteBooksIndex() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        title: "",
+        title: "Untitled",
         content: "",
       }),
     })
@@ -58,7 +59,7 @@ export default function NoteBooksIndex() {
     <div className="px-4 py-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+          <h1 className="text-base font-semibold leading-6 text-foreground">
             Documents
           </h1>
           <p className="mt-2 text-sm text-foreground">
@@ -68,7 +69,7 @@ export default function NoteBooksIndex() {
           </p>
         </div>
       </div>
-      <div className="mt-8">
+      <div className="mt-8 w-full flex justify-center">
         {status === "loading" && <p>Loading...</p>}
         {status === "error" && <p>Error loading documents.</p>}
         {data && data.notebooks.length === 0 ? (
@@ -82,27 +83,19 @@ export default function NoteBooksIndex() {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col shadow-md">
+          <div className="flex flex-col w-full max-w-2xl justify-center space-y-4">
+            <div className="flex flex-row justify-end mb-4">
+              <Button variant="outline" size="sm">New Document</Button>
+            </div>
             {data?.notebooks.map((item) => (
               <button
                 key={item.id}
-                className="p-4 flex flex-row w-full bg-background justify-between items-center align-middle rounded-lg shadow "
+                className="p-4 flex flex-row w-full justify-between items-center align-middle"
                 onClick={() => router.push(`/documents/${item.id}`)}
               >
-                <div className="">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {item.title}
-                  </h2>
-                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    {item.description}
-                  </p>
-                </div>
-                <button
-                  onClick={() => deleteNotebook(item.id)}
-                  className="mt-4 text-red-600 hover:text-red-800"
-                >
-                  Delete
-                </button>
+                <h2 className="text-md font-semibold text-gray-900 dark:text-white">
+                  {item.title}
+                </h2>
               </button>
             ))}
           </div>
