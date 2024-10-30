@@ -76,7 +76,7 @@ export function notebookRoutes(fastify: FastifyInstance) {
 
   // Delete an entry
   fastify.delete(
-    "/api/v1/notebooks/note/:id/delete",
+    "/api/v1/documents/:id",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;

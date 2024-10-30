@@ -6,6 +6,13 @@ import moment from "moment";
 import { useDebounce } from "use-debounce";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/shadcn/ui/dropdown-menu";
+import { Ellipsis } from "lucide-react";
 
 function isHTML(str) {
   var a = document.createElement("div");
@@ -80,6 +87,23 @@ export default function NotebookEditor() {
     setLastSaved(new Date(date).getTime());
   }
 
+  async function deleteNotebook(id) {
+    if (window.confirm("Do you really want to delete this notebook?")) {
+      await fetch(`/api/v1/documents/${router.query.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            router.push("/documents");
+          }
+        });
+    }
+  }
+
   useEffect(() => {
     fetchNotebook();
   }, [router]);
@@ -124,14 +148,27 @@ export default function NotebookEditor() {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-end py-1 px-4">
+      <div className="flex flex-row items-center justify-end py-1 px-6 space-x-4 mt-2">
         {saving ? (
           <span className="text-xs">saving ....</span>
         ) : (
-          <span className="text-xs">
+          <span className="text-xs cursor-pointer">
             last saved: {moment(lastSaved).format("hh:mm:ss")}
           </span>
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Ellipsis />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="mr-6">
+            <DropdownMenuItem
+              className="hover:bg-red-600"
+              onClick={() => deleteNotebook()}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       {!loading && (
         <div className="m-h-[90vh] p-2 w-full flex justify-center">

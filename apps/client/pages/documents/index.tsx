@@ -1,5 +1,12 @@
 import { Button } from "@/shadcn/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shadcn/ui/dropdown-menu";
 import { getCookie } from "cookies-next";
+import { Ellipsis } from "lucide-react";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
@@ -8,30 +15,33 @@ function groupDocumentsByDate(notebooks) {
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
-  
-  return notebooks.reduce((groups, notebook) => {
-    const updatedAt = new Date(notebook.updatedAt);
-    
-    if (updatedAt.toDateString() === today.toDateString()) {
-      groups.today.push(notebook);
-    } else if (updatedAt.toDateString() === yesterday.toDateString()) {
-      groups.yesterday.push(notebook);
-    } else if (isThisWeek(updatedAt, today)) {
-      groups.thisWeek.push(notebook);
-    } else if (isThisMonth(updatedAt, today)) {
-      groups.thisMonth.push(notebook);
-    } else {
-      groups.older.push(notebook);
+
+  return notebooks.reduce(
+    (groups, notebook) => {
+      const updatedAt = new Date(notebook.updatedAt);
+
+      if (updatedAt.toDateString() === today.toDateString()) {
+        groups.today.push(notebook);
+      } else if (updatedAt.toDateString() === yesterday.toDateString()) {
+        groups.yesterday.push(notebook);
+      } else if (isThisWeek(updatedAt, today)) {
+        groups.thisWeek.push(notebook);
+      } else if (isThisMonth(updatedAt, today)) {
+        groups.thisMonth.push(notebook);
+      } else {
+        groups.older.push(notebook);
+      }
+
+      return groups;
+    },
+    {
+      today: [],
+      yesterday: [],
+      thisWeek: [],
+      thisMonth: [],
+      older: [],
     }
-    
-    return groups;
-  }, {
-    today: [],
-    yesterday: [],
-    thisWeek: [],
-    thisMonth: [],
-    older: []
-  });
+  );
 }
 
 function isThisWeek(date, today) {
@@ -41,8 +51,10 @@ function isThisWeek(date, today) {
 }
 
 function isThisMonth(date, today) {
-  return date.getMonth() === today.getMonth() && 
-         date.getFullYear() === today.getFullYear();
+  return (
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
 }
 
 async function fetchNotebooks(token) {
@@ -65,16 +77,6 @@ export default function NoteBooksIndex() {
   );
 
   const router = useRouter();
-
-  async function deleteNotebook(id) {
-    if (window.confirm("Do you really want to delete this notebook?")) {
-      const res = await fetch(`/api/v1/note/${id}/delete`).then((res) =>
-        res.json()
-      );
-      console.log(res);
-      refetch();
-    }
-  }
 
   async function createNew() {
     await fetch(`/api/v1/notebook/note/create`, {
@@ -104,8 +106,7 @@ export default function NoteBooksIndex() {
             Documents
           </h1>
           <p className="mt-2 text-sm text-foreground">
-            Documents can be private, shared with others, or
-            public.
+            Documents can be private, shared with others, or public.
           </p>
         </div>
       </div>
@@ -115,38 +116,50 @@ export default function NoteBooksIndex() {
         {data && data.notebooks.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-sm text-gray-500">No documents found.</p>
-            
           </div>
         ) : (
           <div className="flex flex-col w-full max-w-2xl justify-center space-y-4">
             <div className="flex flex-row justify-end mb-4">
-              <Button variant="outline" size="sm" onClick={() => createNew()}>New Document</Button>
+              <Button variant="outline" size="sm" onClick={() => createNew()}>
+                New Document
+              </Button>
             </div>
-            {data?.notebooks && Object.entries(groupDocumentsByDate(data.notebooks)).map(([period, docs]) => 
-              Array.isArray(docs) && docs.length > 0 && (
-                <div key={period} className="space-y-2">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
-                    {period.replace(/([A-Z])/g, ' $1').trim()}
-                  </h3>
-                  <div className="space-y-1">
-                    {docs.map((item) => (
-                      <button
-                        key={item.id}
-                        className="flex flex-row w-full justify-between items-center align-middle transition-colors"
-                        onClick={() => router.push(`/documents/${item.id}`)}
-                      >
-                        <h2 className="text-md font-semibold text-gray-900 dark:text-white">
-                          {item.title}
-                        </h2>
-                        <span className="text-sm text-gray-500">
-                          {new Date(item.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )
-            )}
+            {data?.notebooks &&
+              Object.entries(groupDocumentsByDate(data.notebooks)).map(
+                ([period, docs]) =>
+                  Array.isArray(docs) &&
+                  docs.length > 0 && (
+                    <div key={period} className="space-y-2">
+                      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
+                        {period.replace(/([A-Z])/g, " $1").trim()}
+                      </h3>
+                      <div className="space-y-1">
+                        {docs.map((item) => (
+                          <button
+                            key={item.id}
+                            className="flex flex-row w-full justify-between items-center align-middle transition-colors"
+                            onClick={() => router.push(`/documents/${item.id}`)}
+                          >
+                            <h2 className="text-md font-semibold text-gray-900 dark:text-white">
+                              {item.title}
+                            </h2>
+                            <div className="space-x-2 flex flex-row items-center">
+                              <span className="text-sm text-gray-500">
+                                {new Date(item.updatedAt).toLocaleTimeString(
+                                  [],
+                                  {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )
+              )}
           </div>
         )}
       </div>
