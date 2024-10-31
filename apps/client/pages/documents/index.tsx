@@ -112,6 +112,9 @@ export default function NoteBooksIndex() {
         {data && data.notebooks.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-sm text-gray-500">No documents found.</p>
+            <Button variant="outline" size="sm" onClick={() => createNew()}>
+              New Document
+            </Button>
           </div>
         ) : (
           <div className="flex flex-col w-full max-w-2xl justify-center space-y-4">
