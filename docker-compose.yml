@@ -19,6 +19,9 @@ services:
       - 1000:3000
       - 1001:5003
     restart: always
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     depends_on:
       - peppermint_postgres
     environment:
