@@ -347,7 +347,7 @@ export default function NewLayout({ children }: any) {
                       setKeyPressDown={setKeyPressDown}
                     />
                     {navigation.map((item: any) => (
-                      <li key={item.name} className={item.internal && !user.external_user ? 'hidden' : ''}>
+                      <li key={item.name} className={item.internal && !user.external_user ? '' : 'hidden'}>
                         <Link
                           href={item.href}
                           className={classNames(
