@@ -83,7 +83,7 @@ export default function CreateUser() {
               </h1>
             </div>
           </div>
-          <div className="bg-background rounded-md shadow-lg">
+          <div className="">
             <Flex gap="4" direction="column" align="start">
               <div className="w-1/2">
                 <label className="text-foreground font-bold">Name</label>
