@@ -30,9 +30,11 @@ import ThemeSettings from "../components/ThemeSettings";
 import {
   Bell,
   Building,
+  FileText,
   Settings,
   SquareActivity,
   SquareKanban,
+  Text,
 } from "lucide-react";
 
 const quickActions = [
@@ -87,13 +89,13 @@ export default function NewLayout({ children }: any) {
       current: location.pathname === "/" ? true : false,
       initial: "h",
     },
-    // {
-    //   name: t("sl_notebook"),
-    //   href: `/${locale}/notebook`,
-    //   icon: FolderIcon,
-    //   current: location.pathname === "/notebook" ? true : false,
-    //   initial: "n",
-    // },
+    {
+      name: "Documents",
+      href: `/${locale}/documents`,
+      icon: FileText,
+      current: location.pathname === "/documents" ? true : false,
+      initial: "d",
+    },
     // {
     //   name: "Email Queues",
     //   current: false,
@@ -106,6 +108,12 @@ export default function NewLayout({ children }: any) {
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
+  
+    // Check for Ctrl or Meta key to bypass the shortcut handler
+    if (event.ctrlKey || event.metaKey) {
+      return; // Don't override browser shortcuts
+    }
+  
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
@@ -119,8 +127,8 @@ export default function NewLayout({ children }: any) {
         case "h":
           location.push("/");
           break;
-        case "n":
-          location.push("/notebook");
+        case "d":
+          location.push("/documents");
           break;
         case "t":
           location.push("/issues");
@@ -134,14 +142,12 @@ export default function NewLayout({ children }: any) {
         case "f":
           location.push("/issues/closed");
           break;
-        // case "Escape":
-        //   location.push("/tickets");
-        //   break;
         default:
           break;
       }
     }
   }
+  
 
   useEffect(() => {
     // attach the event listener
