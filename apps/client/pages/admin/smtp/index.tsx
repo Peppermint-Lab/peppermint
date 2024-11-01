@@ -29,6 +29,7 @@ export default function Notifications() {
   const [step, setStep] = useState(0);
   const [config, setConfig] = useState();
   const [error, setError]: any = useState();
+  const [templates, setTemplates] = useState([]);
 
   async function deleteEmailConfig() {
     setLoading(true);
@@ -41,6 +42,23 @@ export default function Notifications() {
       .then((res) => res.json())
       .then(() => {
         fetchEmailConfig();
+      });
+  }
+
+  async function fetchTemplates() {
+    await fetch("/api/v1/ticket/templates", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          console.log(data.templates);
+          setTemplates(data.templates);
+        }
       });
   }
 
@@ -60,6 +78,8 @@ export default function Notifications() {
 
           if (res.verification !== true) {
             setError(res.verification);
+          } else {
+            fetchTemplates();
           }
         } else {
           setEnabled(false);
@@ -101,33 +121,58 @@ export default function Notifications() {
               {enabled ? (
                 <div>
                   {!error ? (
-                    <div className="rounded-md bg-green-50 p-4">
-                      <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center">
-                        <div className="flex">
-                          <div className="flex-shrink-0">
-                            <ExclamationTriangleIcon
-                              className="h-5 w-5 text-green-400"
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <div className="ml-3">
-                            <h3 className="text-sm font-medium text-green-800">
-                              SMTP Config Found & working
-                            </h3>
-                            <div className="mt-2 text-sm text-green-700">
-                              <p>
-                                The config you supplied is working as intended.
-                              </p>
+                    <div>
+                      <div className="rounded-md bg-green-50 p-4">
+                        <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center">
+                          <div className="flex">
+                            <div className="flex-shrink-0">
+                              <ExclamationTriangleIcon
+                                className="h-5 w-5 text-green-400"
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <div className="ml-3">
+                              <h3 className="text-sm font-medium text-green-800">
+                                SMTP Config Found & working
+                              </h3>
+                              <div className="mt-2 text-sm text-green-700">
+                                <p>
+                                  The config you supplied is working as
+                                  intended.
+                                </p>
+                              </div>
                             </div>
                           </div>
+                          <button
+                            onClick={() => deleteEmailConfig()}
+                            type="button"
+                            className="rounded bg-red-500 text-white px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
+                          >
+                            Delete Settings
+                          </button>
                         </div>
-                        <button
-                          onClick={() => deleteEmailConfig()}
-                          type="button"
-                          className="rounded bg-red-500 text-white px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
-                        >
-                          Delete Settings
-                        </button>
+                      </div>
+
+                      <div className="mt-4">
+                        <h1>Email Templates</h1>
+                        <table>
+                          <tbody>
+                            {templates.map((template) => (
+                              <tr key={template.id}>
+                                <td>{template.type}</td>
+                                <td>{template.subject}</td>
+                                <td>{template.html}</td>
+                                <td>
+                                  <a
+                                    href={`/admin/smtp/templates/${template.id}`}
+                                  >
+                                    Edit
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   ) : (
