@@ -6,10 +6,12 @@
 // Feature Flags
 import { GoogleAuth, OAuth2Client } from "google-auth-library";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import nodeMailer from "nodemailer";
+const nodemailer = require("nodemailer");
 
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
+import { emit } from "process";
+import { createTransportProvider } from "../lib/nodemailer/transport";
 
 export function configRoutes(fastify: FastifyInstance) {
   // Check auth method
@@ -217,10 +219,29 @@ export function configRoutes(fastify: FastifyInstance) {
         }
 
         if (config?.active) {
-          reply.send({
-            success: true,
-            active: true,
-            email: config,
+          const provider = await createTransportProvider();
+
+          await new Promise((resolve, reject) => {
+            provider.verify(function (error: any, success: any) {
+              if (error) {
+                console.log("ERROR", error);
+                reply.send({
+                  success: true,
+                  active: true,
+                  email: config,
+                  verification: error,
+                });
+              } else {
+                console.log("SUCCESS", success);
+                console.log("Server is ready to take our messages");
+                reply.send({
+                  success: true,
+                  active: true,
+                  email: config,
+                  verification: success,
+                });
+              }
+            });
           });
         } else {
           reply.send({
@@ -321,6 +342,7 @@ export function configRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Google oauth callback
   fastify.get(
     "/api/v1/config/email/oauth/gmail",
 
@@ -341,7 +363,6 @@ export function configRoutes(fastify: FastifyInstance) {
         );
 
         const r = await google.getToken(code);
-        // Make sure to set the credentials on the OAuth2 client
 
         await prisma.email.update({
           where: { id: email?.id },
@@ -353,60 +374,26 @@ export function configRoutes(fastify: FastifyInstance) {
           },
         });
 
+        const provider = nodemailer.createTransport({
+          service: "gmail",
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            type: "OAuth2",
+            user: email?.user,
+            clientId: email?.clientId,
+            clientSecret: email?.clientSecret,
+            refreshToken: r.tokens.refresh_token,
+            accessToken: r.tokens.access_token,
+            expiresIn: r.tokens.expiry_date,
+          },
+        });
+
         reply.send({
           success: true,
           message: "SSO Provider updated!",
         });
-      }
-    }
-  );
-
-  // Test email is working
-  fastify.get(
-    "/api/v1/config/email/verify",
-
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
-
-      if (token) {
-        // GET EMAIL SETTINGS
-        const config = await prisma.email.findFirst({});
-
-        if (config === null) {
-          return reply.send({
-            success: true,
-            active: false,
-          });
-        }
-
-        const email = await prisma.email.findFirst();
-
-        const mail = nodeMailer.createTransport({
-          // @ts-ignore
-          host: email?.host,
-          port: email?.port,
-          secure: email?.port === "465" ? true : false,
-          auth: {
-            user: email?.user,
-            pass: email?.pass,
-          },
-        });
-
-        const ver = await mail.verify();
-
-        if (ver) {
-          reply.send({
-            success: true,
-            message: "Email is working!",
-          });
-        } else {
-          reply.send({
-            success: false,
-            message:
-              "Incorrect settings or credentials provided. Please check and try again.",
-          });
-        }
       }
     }
   );
