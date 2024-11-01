@@ -594,7 +594,7 @@ export default function Ticket() {
                                             </span>
                                           </div>
                                           <div className=" flex flex-row space-x-1">
-                                            <span className="text-xs text-gray-500 dark:text-white">
+                                            <span className={`text-xs ${item.public ? 'text-primary font-semibold' : 'text-gray-500'} dark:text-white`}>
                                               {item.public
                                                 ? "Publicly"
                                                 : "Internally"}
