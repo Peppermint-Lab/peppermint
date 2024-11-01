@@ -152,16 +152,6 @@ export default function NotebookEditor() {
     setValue(editor.document);
   };
 
-  function checkCanView() {
-    if (data && data.note.userId !== user.user.id) {
-      router.back();
-    }
-  }
-
-  useEffect(() => {
-    checkCanView();
-  }, [data]);
-
   return (
     <>
       <div className="flex flex-row items-center justify-end py-1 px-6 space-x-4 mt-2">
