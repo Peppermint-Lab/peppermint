@@ -54,7 +54,6 @@ export default function NewLayout({ children }: any) {
   const { loading, user, fetchUserProfile } = useUser();
   const locale = user ? user.language : "en";
 
-  const [queues, setQueues] = useState([]);
   const [keypressdown, setKeyPressDown] = useState(false);
 
   const { t, lang } = useTranslation("peppermint");
@@ -75,13 +74,6 @@ export default function NewLayout({ children }: any) {
   }
 
   const navigation = [
-    // {
-    //   name: t("create_ticket"),
-    //   href: `/${locale}/new`,
-    //   icon: PlusIcon,
-    //   current: location.pathname === "/new" ? true : false,
-    //   initial: "c",
-    // },
     {
       name: t("sl_dashboard"),
       href: `/${locale}/`,
@@ -95,16 +87,11 @@ export default function NewLayout({ children }: any) {
       icon: FileText,
       current: location.pathname === "/documents" ? true : false,
       initial: "d",
+      internal: true
     },
-    // {
-    //   name: "Email Queues",
-    //   current: false,
-    //   icon: InboxStackIcon,
-    //   href: `/${locale}/tickets`,
-    //   children: queues,
-    //   inital: null,
-    // },
   ];
+
+  console.log(user)
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
@@ -360,7 +347,7 @@ export default function NewLayout({ children }: any) {
                       setKeyPressDown={setKeyPressDown}
                     />
                     {navigation.map((item: any) => (
-                      <li key={item.name}>
+                      <li key={item.name} className={item.internal && !user.external_user ? 'hidden' : ''}>
                         <Link
                           href={item.href}
                           className={classNames(
@@ -495,7 +482,6 @@ export default function NewLayout({ children }: any) {
               />
             </button>
 
-            {/* Separator */}
             <div
               className="h-6 w-px bg-gray-400 lg:hidden"
               aria-hidden="true"
@@ -511,7 +497,6 @@ export default function NewLayout({ children }: any) {
                   </Link>
                 )}
 
-                {/* <CommandModal /> */}
               </div>
 
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
