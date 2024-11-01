@@ -126,10 +126,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 
   if (router.pathname === "/submit") {
     return (
-      <SessionProvider>
+      <>
         <Component {...pageProps} />
         <Toaster />
-      </SessionProvider>
+      </>
     );
   }
 
