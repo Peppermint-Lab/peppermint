@@ -52,6 +52,9 @@ export default function NotebookEditor() {
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => res.json());
+    if (res.note.userId !== user.user.id) {
+      router.back();
+    }
     await loadFromStorage(res.note.note).then((content) => {
       setInitialContent(content);
     });
