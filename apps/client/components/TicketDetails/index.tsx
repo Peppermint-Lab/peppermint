@@ -403,7 +403,7 @@ export default function Ticket() {
                         name="title"
                         id="title"
                         style={{ fontSize: "1.5rem" }}
-                        className="border-none -mt-[1px] px-0 pl-0.5 w-1/2 m block text-foreground bg-transparent font-bold focus:outline-none focus:ring-0 placeholder:text-primary sm:text-sm sm:leading-6"
+                        className="border-none -mt-[1px] px-0 pl-0.5 w-3/4 truncated m block text-foreground bg-transparent font-bold focus:outline-none focus:ring-0 placeholder:text-primary sm:text-sm sm:leading-6"
                         value={title}
                         defaultValue={data.ticket.title}
                         onChange={(e) => setTitle(e.target.value)}
