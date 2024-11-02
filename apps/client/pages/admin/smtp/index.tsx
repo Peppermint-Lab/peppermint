@@ -115,7 +115,7 @@ export default function Notifications() {
           </div>
         </div>
 
-        {!loading && (
+        {!loading ? (
           <div className="px-4 sm:px-6 md:px-0">
             <div className="mb-6">
               {enabled ? (
@@ -286,6 +286,8 @@ export default function Notifications() {
               )}
             </div>
           </div>
+        ) : (
+          <div>Loading...</div>
         )}
       </div>
     </main>
