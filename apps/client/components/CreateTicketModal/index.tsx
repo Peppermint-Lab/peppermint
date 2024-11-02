@@ -45,7 +45,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
   const [company, setCompany] = useState<any>();
   const [engineer, setEngineer] = useState<any>();
   const [email, setEmail] = useState("");
-  const [issue, setIssue] = useState<any>("");
+  const [issue, setIssue] = useState<any>();
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("medium");
   const [options, setOptions] = useState<any>();
