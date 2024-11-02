@@ -156,8 +156,10 @@ model Comment {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
-  text   String
-  public Boolean @default(false)
+  text       String
+  public     Boolean @default(false)
+  reply      Boolean @default(false)
+  replyEmail String?
 
   userId   String?
   user     User?   @relation(fields: [userId], references: [id])

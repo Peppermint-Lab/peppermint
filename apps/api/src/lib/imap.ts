@@ -53,16 +53,29 @@ export const getEmails = async () => {
                 simpleParser(stream, async (err: any, parsed: any) => {
                   const { from, subject, textAsHtml, text, html } = parsed;
 
-                  console.log("from", from);
+                  // Handle reply emails
+                  if (subject?.includes("Re:")) {
+                    // Extract ticket number from subject (e.g., "Re: Ticket #123")
+                    const ticketIdMatch = subject.match(/#(\d+)/);
+                    if (!ticketIdMatch) {
+                      console.log(
+                        "Could not extract ticket ID from subject:",
+                        subject
+                      );
+                      return;
+                    }
 
-                  // const parsedData = parseEmailContent(textAsHtml);
+                    const ticketId = ticketIdMatch[1];
 
-                  if (subject !== undefined && subject.includes("Re:")) {
+                    // Create comment with the reply
                     return await client.comment.create({
                       data: {
                         text: text ? text : "No Body",
                         userId: null,
-                        ticketId: subject.split(" ")[1].split("#")[1],
+                        ticketId: ticketId,
+                        reply: true,
+                        replyEmail: from.value[0].address,
+                        public: true,
                       },
                     });
                   } else {
@@ -125,3 +138,10 @@ export const getEmails = async () => {
     console.log("an error occurred ", error);
   }
 };
+
+// Helper function to extract reply text
+function extractReplyText(emailBody: string): string {
+  // Implement logic to extract reply text from the email body
+  // This might involve removing quoted text from previous emails
+  return emailBody; // Placeholder, replace with actual logic
+}
