@@ -4,14 +4,11 @@ import { createTransportProvider } from "../transport";
 
 export async function sendAssignedEmail(email: any) {
   try {
-    let replyto;
 
     const provider = await prisma.email.findFirst();
 
     if (provider) {
       const mail = await createTransportProvider();
-
-      replyto = email.reply;
 
       console.log("Sending email to: ", email);
 
@@ -26,10 +23,10 @@ export async function sendAssignedEmail(email: any) {
 
       await mail
         .sendMail({
-          from: replyto, // sender address
-          to: email, // list of receivers
-          subject: `A new ticket has been assigned to you`, // Subject line
-          text: `Hello there, a ticket has been assigned to you`, // plain text body
+          from: provider?.reply, 
+          to: email, 
+          subject: `A new ticket has been assigned to you`, 
+          text: `Hello there, a ticket has been assigned to you`, 
           html: htmlToSend,
         })
         .then((info: any) => {
