@@ -9,10 +9,6 @@ import Link from "next/link";
 import { useQuery } from "react-query";
 import { useUser } from "../../../store/session";
 
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
-
 async function getUserTickets(token: any) {
   const res = await fetch(`/api/v1/tickets/user/external`, {
     headers: {
@@ -50,14 +46,7 @@ export default function Tickets() {
           <div className="flex flex-col">
             <div className="py-2 px-6 bg-gray-200 dark:bg-[#0A090C] border-b-[1px] flex flex-row items-center justify-between">
               <span className="text-sm font-bold">All Tickets</span>
-              {/* <div>
-                <button
-                  type="button"
-                  className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  Assigned to Me
-                </button>
-              </div> */}
+            
             </div>
             {data.tickets.length > 0 ? (
               data.tickets.map((ticket) => {
@@ -75,7 +64,7 @@ export default function Tickets() {
                 }
 
                 return (
-                  <Link href={`/portal/ticket/${ticket.id}`}>
+                  <Link href={`/portal/issue/${ticket.id}`}>
                     <ContextMenu.Root>
                       <ContextMenu.Trigger>
                         <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">

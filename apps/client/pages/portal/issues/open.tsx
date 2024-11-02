@@ -13,7 +13,7 @@ function classNames(...classes: any) {
 }
 
 async function getUserTickets(token: any) {
-  const res = await fetch(`/api/v1/tickets/user/closed/external`, {
+  const res = await fetch(`/api/v1/tickets/user/open/external`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -49,7 +49,7 @@ export default function Tickets() {
           <div className="flex flex-col">
             <div className="py-2 px-6 flex flex-row items-center justify-between bg-gray-200 dark:bg-[#0A090C] border-b-[1px]">
               <span className="text-sm font-bold">
-                You have {data.tickets.length} closed ticket
+                You have {data.tickets.length} open ticket
                 {data.tickets.length > 1 ? "'s" : ""}
               </span>
             </div>
@@ -69,7 +69,7 @@ export default function Tickets() {
                 }
 
                 return (
-                  <Link href={`/portal/ticket/${ticket.id}`}>
+                  <Link href={`/portal/issue/${ticket.id}`}>
                     <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-2 justify-between px-6 hover:bg-gray-100">
                       <div className="flex flex-row space-x-2 items-center">
                         <span className="text-xs font-semibold">
