@@ -1,5 +1,4 @@
 import handlebars from "handlebars";
-import nodeMailer from "nodemailer";
 import { prisma } from "../../../prisma";
 import { createTransportProvider } from "../transport";
 

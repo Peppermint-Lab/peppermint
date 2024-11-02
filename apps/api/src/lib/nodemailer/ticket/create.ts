@@ -1,5 +1,4 @@
 import handlebars from "handlebars";
-import nodeMailer from "nodemailer";
 import { prisma } from "../../../prisma";
 import { createTransportProvider } from "../transport";
 
@@ -24,10 +23,10 @@ export async function sendTicketCreate(ticket: any) {
 
       await transport
         .sendMail({
-          from: email?.reply, // sender address
+          from: email?.reply,
           to: ticket.email,
-          subject: `Ticket ${ticket.id} has just been created & logged`, // Subject line
-          text: `Hello there, Ticket ${ticket.id}, which you reported on ${ticket.createdAt}, has now been created and logged`, // plain text body
+          subject: `Ticket ${ticket.id} has just been created & logged`,
+          text: `Hello there, Ticket ${ticket.id}, which you reported on ${ticket.createdAt}, has now been created and logged`,
           html: htmlToSend,
         })
         .then((info: any) => {
