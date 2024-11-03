@@ -91,8 +91,6 @@ export default function NewLayout({ children }: any) {
     },
   ];
 
-  console.log(user)
-
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
   

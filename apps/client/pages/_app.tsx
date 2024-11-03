@@ -25,8 +25,11 @@ import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
 import PortalLayout from "../layouts/portalLayout";
 import Settings from "../layouts/settings";
+import ShadLayout from "../layouts/shad";
 import GlobalShortcut from "@/shadcn/block/GlobalShortcut";
 import { Toaster } from "@/shadcn/ui/toaster";
+
+import { SidebarProvider } from "@/shadcn/ui/sidebar";
 
 const queryClient = new QueryClient();
 
@@ -139,10 +142,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
         <Theme>
           <QueryClientProvider client={queryClient}>
             <Auth>
-              <NewLayout>
+              <ShadLayout>
                 <Component {...pageProps} />
                 <Toaster />
-              </NewLayout>
+                </ShadLayout>
             </Auth>
           </QueryClientProvider>
         </Theme>

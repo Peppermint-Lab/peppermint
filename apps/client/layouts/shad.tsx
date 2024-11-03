@@ -37,29 +37,15 @@ import {
   import { AppSidebar } from "@/shadcn/components/app-sidebar";
   import { SidebarProvider, SidebarTrigger } from "@/shadcn/ui/sidebar";
   
-  const quickActions = [
-    // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
-    // { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
-    // { name: "Add hashtag...", icon: HashtagIcon, shortcut: "H", url: "#" },
-    // { name: "Add label...", icon: TagIcon, shortcut: "L", url: "#" },
-  ];
-  
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-  
-  export default function NewLayout({ children }: any) {
+  export default function ShadLayout({ children }: any) {
     const location = useRouter();
   
     const { loading, user, fetchUserProfile } = useUser();
     const locale = user ? user.language : "en";
   
-    const [queues, setQueues] = useState([]);
     const [keypressdown, setKeyPressDown] = useState(false);
   
     const { t, lang } = useTranslation("peppermint");
-  
-    const [sidebarOpen, setSidebarOpen] = useState(false);
   
     if (!user) {
       location.push("/auth/login");
@@ -89,21 +75,6 @@ import {
         current: location.pathname === "/" ? true : false,
         initial: "h",
       },
-      // {
-      //   name: t("sl_notebook"),
-      //   href: `/${locale}/notebook`,
-      //   icon: FolderIcon,
-      //   current: location.pathname === "/notebook" ? true : false,
-      //   initial: "n",
-      // },
-      // {
-      //   name: "Email Queues",
-      //   current: false,
-      //   icon: InboxStackIcon,
-      //   href: `/${locale}/tickets`,
-      //   children: queues,
-      //   inital: null,
-      // },
     ];
   
     function handleKeyPress(event: any) {
@@ -121,8 +92,8 @@ import {
           case "h":
             location.push("/");
             break;
-          case "n":
-            location.push("/notebook");
+          case "d":
+            location.push("/documents");
             break;
           case "t":
             location.push("/issues");
@@ -136,9 +107,7 @@ import {
           case "f":
             location.push("/issues/closed");
             break;
-          // case "Escape":
-          //   location.push("/tickets");
-          //   break;
+
           default:
             break;
         }
@@ -159,7 +128,7 @@ import {
       !loading &&
       user && (
         <div className="min-h-screen overflow-hidden ">
-          <SidebarProvider>
+          <SidebarProvider>  
             <AppSidebar />
             <div className="w-full">
               <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b bg-background px-4 sm:gap-x-6">
@@ -174,7 +143,6 @@ import {
                       </Link>
                     )}
   
-                    {/* <CommandModal /> */}
                   </div>
   
                   <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
@@ -213,7 +181,6 @@ import {
                       </Link>
                     )}
   
-                    {/* Profile dropdown */}
                     <AccountDropdown />
                   </div>
                 </div>

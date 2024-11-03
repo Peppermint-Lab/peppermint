@@ -149,25 +149,18 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
 
   return (
     <>
-      <li className="w-[calc(100%+15px)]">
-        <button
-          onClick={() => setOpen(true)}
-          className={classNames(
-            location.pathname.includes("/admin")
-              ? "bg-secondary dark:bg-primary"
-              : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
-            "group -mx-2 w-full flex gap-x-3 p-1 rounded-md text-xs font-semibold leading-6"
-          )}
-        >
-          <ListPlus className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
-          <span className="whitespace-nowrap">New Issue</span>
-          <div className="flex w-full justify-end float-right">
-            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-              c
-            </span>
-          </div>
-        </button>
-      </li>
+      <button
+        onClick={() => setOpen(true)}
+        className="group gap-x-3 w-[93%] mx-3 p-0.5 flex rounded-md text-xs font-semibold leading-6 hover:bg-secondary"
+      >
+        <ListPlus className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
+        <span className="whitespace-nowrap">New Issue</span>
+        <div className="flex w-full justify-end float-right">
+          <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+            c
+          </span>
+        </div>
+      </button>
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="fixed z-10 inset-0" onClose={setOpen}>
@@ -584,7 +577,6 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                       </button>
                     </div>
                   </div>
-
                 </div>
               </div>
             </Transition.Child>
