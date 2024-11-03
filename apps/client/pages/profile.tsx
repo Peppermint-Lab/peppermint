@@ -68,7 +68,7 @@ export default function UserProfile() {
                     name="name"
                     id="name"
                     autoComplete="name"
-                    className="focus:ring-light-blue-500 text-secondary focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    className="text-foreground bg-background flex-grow block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
@@ -84,7 +84,7 @@ export default function UserProfile() {
                     type="email"
                     name="email"
                     autoComplete="email"
-                    className="focus:ring-light-blue-500 text-secondary focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    className="text-foreground bg-background flex-grow block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -98,7 +98,7 @@ export default function UserProfile() {
                   <select
                     id="language"
                     name="language"
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-secondary text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    className="text-foreground bg-background flex-grow block w-full min-w-0 rounded-md sm:text-sm border-gray-300"
                     value={language}
                     onChange={(e) => changeLanguage(e.target.value)}
                   >

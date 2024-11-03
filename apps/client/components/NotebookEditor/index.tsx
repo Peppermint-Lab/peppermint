@@ -184,7 +184,7 @@ export default function NotebookEditor() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="text-3xl px-0 font-bold w-full border-none outline-none focus:ring-0 focus:outline-none"
+                className="text-3xl px-0 font-bold w-full border-none bg-transparent outline-none focus:ring-0 focus:outline-none"
               />
             </div>
 

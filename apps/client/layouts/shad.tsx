@@ -44,7 +44,7 @@ export default function ShadLayout({ children }: any) {
           <div className="w-full">
             <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b bg-background px-4 sm:gap-x-6">
               <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
-                <SidebarTrigger />
+                <SidebarTrigger title="[" />
                 <div className="sm:flex hidden w-full justify-start items-center space-x-6">
                   {user.isAdmin && (
                     <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
