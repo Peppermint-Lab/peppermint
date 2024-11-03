@@ -1,25 +1,13 @@
 import * as React from "react";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
   Building,
-  Command,
   FileText,
-  Frame,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
   Settings,
-  Settings2,
   SquareKanban,
-  SquareTerminal,
 } from "lucide-react";
 
 import { NavMain } from "@/shadcn/components/nav-main";
-import { NavProjects } from "@/shadcn/components/nav-projects";
-import { NavUser } from "@/shadcn/components/nav-user";
-import { TeamSwitcher } from "@/shadcn/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -43,8 +31,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [keypressdown, setKeyPressDown] = useState(false);
 
   const { t, lang } = useTranslation("peppermint");
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (!user) {
     location.push("/auth/login");

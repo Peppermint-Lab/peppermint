@@ -1,38 +1,15 @@
-import {
-    Combobox,
-    Dialog,
-    Disclosure,
-    Menu,
-    Transition,
-  } from "@headlessui/react";
-  import {
-    Bars3Icon,
-    Cog6ToothIcon,
-    FolderIcon,
-    HomeIcon,
-    InboxStackIcon,
-    MagnifyingGlassIcon,
-    TicketIcon,
-    XMarkIcon,
-  } from "@heroicons/react/24/outline";
-  import { getCookie } from "cookies-next";
+
   import Link from "next/link";
   import { useRouter } from "next/router";
   import { Fragment, useEffect, useState } from "react";
   import { Button } from "@radix-ui/themes";
   import useTranslation from "next-translate/useTranslation";
   
-  import CreateTicketModal from "../components/CreateTicketModal";
   import { AccountDropdown } from "../components/AccountDropdown";
   
   import { useUser } from "../store/session";
-  import ThemeSettings from "../components/ThemeSettings";
   import {
     Bell,
-    Building,
-    Settings,
-    SquareActivity,
-    SquareKanban,
   } from "lucide-react";
   import { AppSidebar } from "@/shadcn/components/app-sidebar";
   import { SidebarProvider, SidebarTrigger } from "@/shadcn/ui/sidebar";
@@ -41,7 +18,6 @@ import {
     const location = useRouter();
   
     const { loading, user, fetchUserProfile } = useUser();
-    const locale = user ? user.language : "en";
   
     const [keypressdown, setKeyPressDown] = useState(false);
   
@@ -59,23 +35,6 @@ import {
     if (user && user.external_user) {
       location.push("/portal");
     }
-  
-    const navigation = [
-      // {
-      //   name: t("create_ticket"),
-      //   href: `/${locale}/new`,
-      //   icon: PlusIcon,
-      //   current: location.pathname === "/new" ? true : false,
-      //   initial: "c",
-      // },
-      {
-        name: t("sl_dashboard"),
-        href: `/${locale}/`,
-        icon: Building,
-        current: location.pathname === "/" ? true : false,
-        initial: "h",
-      },
-    ];
   
     function handleKeyPress(event: any) {
       const pathname = location.pathname;

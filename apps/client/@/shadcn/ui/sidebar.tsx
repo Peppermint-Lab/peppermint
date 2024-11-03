@@ -18,12 +18,12 @@ import {
   TooltipTrigger,
 } from "@/shadcn/ui/tooltip"
 
-const SIDEBAR_COOKIE_NAME = "sidebar:state"
+const SIDEBAR_STORAGE_KEY = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
-const SIDEBAR_KEYBOARD_SHORTCUT = "b"
+const SIDEBAR_KEYBOARD_SHORTCUT = "["
 
 type SidebarContext = {
   state: "expanded" | "collapsed"
@@ -69,10 +69,18 @@ const SidebarProvider = React.forwardRef<
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
-    // This is the internal state of the sidebar.
-    // We use openProp and setOpenProp for control from outside the component.
-    const [_open, _setOpen] = React.useState(defaultOpen)
+    // Initialize state from localStorage
+    const [_open, _setOpen] = React.useState(() => {
+      try {
+        const storedValue = localStorage.getItem(SIDEBAR_STORAGE_KEY)
+        return storedValue ? JSON.parse(storedValue) : defaultOpen
+      } catch (e) {
+        return defaultOpen
+      }
+    })
+    
     const open = openProp ?? _open
+
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
         if (setOpenProp) {
@@ -81,10 +89,15 @@ const SidebarProvider = React.forwardRef<
           )
         }
 
-        _setOpen(value)
+        const newValue = typeof value === "function" ? value(open) : value
+        _setOpen(newValue)
 
-        // This sets the cookie to keep the sidebar state.
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+        // Save to localStorage
+        try {
+          localStorage.setItem(SIDEBAR_STORAGE_KEY, JSON.stringify(newValue))
+        } catch (e) {
+          console.warn('Failed to save sidebar state to localStorage:', e)
+        }
       },
       [setOpenProp, open]
     )

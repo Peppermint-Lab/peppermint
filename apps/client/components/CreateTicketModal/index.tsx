@@ -1,12 +1,8 @@
-import React, { useState, useEffect, Fragment, useRef } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import useTranslation from "next-translate/useTranslation";
-import {
-  ChevronUpDownIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronUpDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useUser } from "../../store/session";
 import { getCookie } from "cookies-next";
@@ -14,6 +10,7 @@ import { getCookie } from "cookies-next";
 import dynamic from "next/dynamic";
 import { ListPlus } from "lucide-react";
 import { toast } from "@/shadcn/hooks/use-toast";
+import { useSidebar } from "@/shadcn/ui/sidebar";
 
 const Editor = dynamic(() => import("../BlockEditor"), { ssr: false });
 
@@ -40,6 +37,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
   const token = getCookie("session");
 
   const { user } = useUser();
+  const { state } = useSidebar();
 
   const [name, setName] = useState("");
   const [company, setCompany] = useState<any>();
@@ -151,15 +149,23 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="group gap-x-3 w-[93%] mx-3 p-0.5 flex rounded-md text-xs font-semibold leading-6 hover:bg-secondary"
+        className={
+          state === "expanded"
+            ? "group gap-x-3 w-[93%] mt-2 mx-3 p-0.5 flex rounded-md text-xs font-semibold leading-6 hover:bg-secondary outline-none"
+            : "flex mx-auto p-1.5 rounded-md text-xs font-semibold leading-6 hover:bg-secondary outline-none"
+        }
       >
         <ListPlus className="h-4 w-4 ml-1 shrink-0 mt-1" aria-hidden="true" />
-        <span className="whitespace-nowrap">New Issue</span>
-        <div className="flex w-full justify-end float-right">
-          <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-            c
-          </span>
-        </div>
+        {state === "expanded" && (
+          <>
+            <span className="whitespace-nowrap">New Issue</span>
+            <div className="flex w-full justify-end float-right">
+              <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                c
+              </span>
+            </div>
+          </>
+        )}
       </button>
 
       <Transition.Root show={open} as={Fragment}>
