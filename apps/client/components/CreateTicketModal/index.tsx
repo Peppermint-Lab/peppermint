@@ -145,6 +145,9 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
 
   useEffect(() => checkPress(), [keypress]);
 
+  const showKeyboardShortcuts =
+    localStorage.getItem("hide-keyboard-shortcuts") === "true";
+
   return (
     <>
       <button
@@ -159,11 +162,13 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
         {state === "expanded" && (
           <>
             <span className="whitespace-nowrap">New Issue</span>
-            <div className="flex w-full justify-end float-right">
-              <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-                c
-              </span>
-            </div>
+            {showKeyboardShortcuts && (
+              <div className="flex w-full justify-end float-right">
+                <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                  c
+                </span>
+              </div>
+            )}
           </>
         )}
       </button>

@@ -28,8 +28,6 @@ export default function PortalLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [tab, setTab] = useState("unread");
-  const [currentPath, setCurrentPath] = useState();
 
   if (!user) {
     location.push("/auth/login");
@@ -72,15 +70,6 @@ export default function PortalLayout({ children }: any) {
     }
   }
 
-  //   async function markasread(id) {
-  //     await fetch(`/api/v1/user/notifcation/${id}`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${getCookie("session")}`,
-  //       },
-  //     }).then((res) => res.json());
-  //     await fetchUserProfile();
-  //   }
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
@@ -373,107 +362,8 @@ export default function PortalLayout({ children }: any) {
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
-                {/* <Popover className="relative">
-                  <Popover.Button className="relative border rounded-md  p-2 shadow-md text-gray-400 hover:text-gray-500 focus:outline-none">
-                    <InboxStackIcon className="h-4 w-4 text-black" />
-                    {user.notifcations.filter(
-                      (notification) => !notification.read
-                    ).length > 0 && (
-                      <svg
-                        className="h-2.5 w-2.5 absolute bottom-6 left-6  animate-pulse fill-green-500"
-                        viewBox="0 0 6 6"
-                        aria-hidden="true"
-                      >
-                        <circle cx={3} cy={3} r={3} />
-                      </svg>
-                    )}
-                  </Popover.Button>
-
-                  <Popover.Panel className="absolute z-10 mt-1 sm:min-w-[400px] right-1 overflow-hidden rounded-lg bg-white shadow">
-                    <div className="px-6 p-6">
-                      <div className="border-b border-gray-200">
-                        <nav
-                          className="-mb-px flex space-x-8"
-                          aria-label="Tabs"
-                        >
-                          <button
-                            onClick={() => setTab("unread")}
-                            className={classNames(
-                              tab === "unread"
-                                ? "border-indigo-500 text-indigo-600"
-                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                              "whitespace-nowrap border-b-2  px-1 text-sm font-medium"
-                            )}
-                          >
-                            Unread
-                          </button>
-                          <button
-                            onClick={() => setTab("archive")}
-                            className={classNames(
-                              tab === "archive"
-                                ? "border-indigo-500 text-indigo-600"
-                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                              "whitespace-nowrap border-b-2 px-1 text-sm font-medium"
-                            )}
-                          >
-                            Archive
-                          </button>
-                        </nav>
-                      </div>
-                      <div className="mt-2">
-                        {user !== undefined ? (
-                          tab === "unread" ? (
-                            user.notifcations
-                              .filter((notification) => !notification.read)
-                              .map((notification: any) => (
-                                <div className="w-full items-start border-b py-3">
-                                  <div className="flex justify-between flex-row w-full">
-                                    <p className="text-md font-medium text-gray-900">
-                                      {notification.text}
-                                    </p>
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        markasread(notification.id)
-                                      }
-                                      className="rounded bg-transparent  text-sm font-semibold"
-                                    >
-                                      <ArchiveBoxIcon className="h-5 w-5 text-green-500 hover:text-green-600" />
-                                    </button>
-                                  </div>
-                                </div>
-                              ))
-                          ) : (
-                            user.notifcations
-                              .filter((notification) => notification.read)
-                              .map((notification: any) => (
-                                <div className="w-full items-start border-b py-3">
-                                  <div className="flex justify-between flex-row w-full">
-                                    <p className="text-md font-medium text-gray-900">
-                                      {notification.text}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))
-                          )
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </div>
-                  </Popover.Panel>
-                </Popover>
-
-                <Link
-                  href="https://github.com/Peppermint-Lab/peppermint/discussions"
-                  target="_blank"
-                  className="hover:cursor-pointer"
-                >
-                  <Button variant="outline" className="hover:cursor-pointer">
-                    Send Feedback
-                  </Button>
-                </Link> */}
-
+                
+              
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="z-50 flex items-center p-1.5">
@@ -494,19 +384,7 @@ export default function PortalLayout({ children }: any) {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="bg-white absolute right-0 z-50 w-40 origin-top-right rounded-md  shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                      {/* <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            href="/settings/profile"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-3 text-sm font-bold h-full p-2 w-full rounded-md text-gray-900"
-                            )}
-                          >
-                            {t("profile")}
-                          </Link>
-                        )}
-                      </Menu.Item> */}
+                     
                       <Menu.Item>
                         {({ active }) => (
                           <button

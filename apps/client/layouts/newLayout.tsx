@@ -87,18 +87,18 @@ export default function NewLayout({ children }: any) {
       icon: FileText,
       current: location.pathname === "/documents" ? true : false,
       initial: "d",
-      internal: true
+      internal: true,
     },
   ];
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
-  
+
     // Check for Ctrl or Meta key to bypass the shortcut handler
     if (event.ctrlKey || event.metaKey) {
       return; // Don't override browser shortcuts
     }
-  
+
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
@@ -132,7 +132,6 @@ export default function NewLayout({ children }: any) {
       }
     }
   }
-  
 
   useEffect(() => {
     // attach the event listener
@@ -345,7 +344,12 @@ export default function NewLayout({ children }: any) {
                       setKeyPressDown={setKeyPressDown}
                     />
                     {navigation.map((item: any) => (
-                      <li key={item.name} className={item.internal && !user.external_user ? '' : 'hidden'}>
+                      <li
+                        key={item.name}
+                        className={
+                          item.internal && !user.external_user ? "" : "hidden"
+                        }
+                      >
                         <Link
                           href={item.href}
                           className={classNames(
@@ -416,16 +420,16 @@ export default function NewLayout({ children }: any) {
                             location.pathname === "/issues/closed"
                               ? "bg-secondary dark:bg-primary"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"
+                            "group -mx-2 flex gap-x-3 p-1 pl-3 justify-between w-full rounded-md text-xs font-semibold leading-6"
                           )}
                         >
-                          <span className="whitespace-nowrap">
-                            {user.name}'s closed
-                          </span>
-                          <div className="flex w-full justify-end float-right">
-                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-                              f
+                            <span className="whitespace-nowrap">
+                              {user.name}'s closed
                             </span>
+                            <div className="flex w-full justify-end float-right">
+                              <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                                f
+                              </span>
                           </div>
                         </Link>
                       </li>
@@ -494,7 +498,6 @@ export default function NewLayout({ children }: any) {
                     </span>
                   </Link>
                 )}
-
               </div>
 
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">

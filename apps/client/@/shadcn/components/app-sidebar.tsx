@@ -51,7 +51,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     teams: [
       {
         name: "Peppermint",
-        logo: GalleryVerticalEnd,
         plan: `version: ${process.env.NEXT_PUBLIC_CLIENT_VERSION}`,
       },
     ],
@@ -81,10 +80,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {
             title: "Open",
             url: "/issues/open",
+            initial: "o",
           },
           {
             title: "Closed",
             url: "/issues/closed",
+            initial: "f",
           },
         ],
       },
@@ -93,6 +94,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/admin",
         icon: Settings,
         isActive: true,
+        initial: "a",
       },
     ],
   };

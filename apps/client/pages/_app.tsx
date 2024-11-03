@@ -37,7 +37,7 @@ function Auth({ children }: any) {
   const { loading, user } = useUser();
 
   React.useEffect(() => {
-    if (loading) return; // Do nothing while loading
+    if (loading) return; 
   }, [user, loading]);
 
   if (user) {
@@ -87,12 +87,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
           <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
-                <NewLayout>
+                <ShadLayout>
                   <Settings>
                     <Component {...pageProps} />
                     <Toaster />
                   </Settings>
-                </NewLayout>
+                </ShadLayout>
               </Auth>
             </QueryClientProvider>
           </Theme>
