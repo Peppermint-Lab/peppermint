@@ -99,12 +99,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
-  
+
     // Check for Ctrl or Meta key to bypass the shortcut handler
     if (event.ctrlKey || event.metaKey) {
       return; // Don't override browser shortcuts
     }
-  
+
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
@@ -152,7 +152,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [handleKeyPress, location]);
-
 
   return (
     <Sidebar collapsible="icon" {...props}>
