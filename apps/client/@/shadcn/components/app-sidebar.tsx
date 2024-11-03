@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "@/shadcn/ui/sidebar";
 import ThemeSettings from "../../../components/ThemeSettings";
 import { useRouter } from "next/router";
@@ -31,6 +32,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [keypressdown, setKeyPressDown] = useState(false);
 
   const { t, lang } = useTranslation("peppermint");
+  const sidebar = useSidebar();
 
   if (!user) {
     location.push("/auth/login");
@@ -97,12 +99,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
-
-    // Don't override browser shortcuts
+  
+    // Check for Ctrl or Meta key to bypass the shortcut handler
     if (event.ctrlKey || event.metaKey) {
-      return;
+      return; // Don't override browser shortcuts
     }
-
+  
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
@@ -131,6 +133,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         case "f":
           location.push("/issues/closed");
           break;
+        case "[":
+          sidebar.toggleSidebar();
+          break;
+
         default:
           break;
       }
@@ -146,6 +152,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [handleKeyPress, location]);
+
 
   return (
     <Sidebar collapsible="icon" {...props}>
