@@ -80,6 +80,7 @@ admin@admin.com
 ## One click installers
 
 - We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>
+- We have a one line installer for Ubuntu and Debian (for the moment) and can be viewed here <a href="https://spearmint.sh/">here</a>
 
 ## Documentation
 
