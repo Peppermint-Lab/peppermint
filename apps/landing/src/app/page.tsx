@@ -1,8 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-// @ts-nocheck
-"use client"
 import { Bell, ChevronRight, Globe, Inbox, Lightbulb, Lock, User } from "lucide-react";
-import { useState } from "react";
 
 const navigation = [
   { name: "Github", href: "https://github.com/Peppermint-Lab/peppermint" },
@@ -158,7 +155,6 @@ const features2 = [
 ];
 
 export default function Home() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="sm:min-h-screen mx-6 sm:mx-0">
