@@ -62,6 +62,19 @@ export default function Notifications() {
       });
   }
 
+  async function resetSMTP() {
+    await fetch(`/api/v1/config/email`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(() => {
+        fetchEmailConfig();
+      });
+  }
+
   async function fetchEmailConfig() {
     await fetch(`/api/v1/config/email`, {
       method: "GET",
@@ -97,10 +110,14 @@ export default function Notifications() {
       <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
         <div className="pt-10 pb-6">
           <div className="divide-y-2">
-            <div className="px-4 sm:px-6 md:px-0">
+            <div className="px-4 sm:px-6 md:px-0 flex flex-row justify-between">
               <h1 className="text-3xl font-extrabold text-foreground">
                 SMTP Email Settings
               </h1>
+
+              <button className="text-xs" onClick={() => resetSMTP()}>
+                Reset SMTP
+              </button>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center mt-4">
