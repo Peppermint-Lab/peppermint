@@ -236,13 +236,7 @@ export default function Home() {
                 >
                   Get started
                 </a>
-                <a
-                  href="/contact"
-                  className="px-3.5 py-2.5 text-sm font-semibold text-gray-900  hover:underline "
-                  target="_blank"
-                >
-                  Get in touch
-                </a>
+                
               </div>
             </div>
           </div>
