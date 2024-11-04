@@ -1,14 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 // @ts-nocheck
-import {
-  BellAlertIcon,
-  ChevronRightIcon,
-  GlobeEuropeAfricaIcon,
-  InboxIcon,
-  LightBulbIcon,
-  LockClosedIcon,
-  UserIcon,
-} from "@heroicons/react/20/solid";
+"use client"
+import { Bell, ChevronRight, Globe, Inbox, Lightbulb, Lock, User } from "lucide-react";
 import { useState } from "react";
 
 const navigation = [
@@ -119,21 +112,21 @@ const features = [
     description:
       "Connect Peppermint to third-party services using webhooks and various providers, including email integration.",
     href: "#",
-    icon: BellAlertIcon,
+    icon: Bell,
   },
   {
     name: "Email Fetching",
     description:
       "Configure mailboxes to facilitate direct customer emails, automatically converting them into tickets for efficient management.",
     href: "#",
-    icon: InboxIcon,
+    icon: Inbox,
   },
   {
     name: "Single Sign On",
     description:
       "Implement single sign-on (SSO) for all users to enable shared authentication across multiple providers.",
     href: "#",
-    icon: LockClosedIcon,
+    icon: Lock,
   },
 ];
 
@@ -142,25 +135,25 @@ const features2 = [
     name: "Location",
     description:
       "Peppermint is designed to be hosted in any environment, offering all of its core features without requiring an internet connection.",
-    icon: GlobeEuropeAfricaIcon,
+    icon: Globe,
   },
   {
     name: "Data Ownership",
     description:
       "Peppermint ensures customer app data remains private by never transferring it to external servers. All data is securely stored locally on your server.",
-    icon: LockClosedIcon,
+    icon: Lock,
   },
   {
     name: "Lightweight",
     description:
       "Peppermint is designed to be lightweight and fast, making it suitable for running on low-end hardware with minimal resource usage. This allows for cost-effective hosting on a low-end VPS or even a Raspberry Pi.",
-    icon: LightBulbIcon,
+    icon: Lightbulb,
   },
   {
     name: "Customer First",
     description:
       "Peppermint is customer-centric, enabling us to provide the best features by actively listening to and addressing our customer's needs.",
-    icon: UserIcon,
+    icon: User,
   },
 ];
 
@@ -207,7 +200,7 @@ export default function Home() {
                   What's new -
                   <span className="ml-1 inline-flex items-center space-x-2 text-sm font-medium leading-6 ">
                     <span>Version 0.5.3 is live! 🚀</span>
-                    <ChevronRightIcon
+                    <ChevronRight
                       className="h-5 w-5 text-gray-500"
                       aria-hidden="true"
                     />
