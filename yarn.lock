@@ -1392,35 +1392,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@calcom/embed-core@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@calcom/embed-core@npm:1.5.1"
-  checksum: 10c0/81989844b468b33a1f126e1aab17dda8ae46f201d4d2a0a7ea4cd2b7f71fa8f6201c262d5b1d600c51d68b086c08478bfa7a881681687a50eb758e3b55a5c12a
-  languageName: node
-  linkType: hard
-
-"@calcom/embed-react@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@calcom/embed-react@npm:1.5.1"
-  dependencies:
-    "@calcom/embed-core": "npm:1.5.1"
-    "@calcom/embed-snippet": "npm:1.3.1"
-  peerDependencies:
-    react: ^18.2.0
-    react-dom: ^18.2.0
-  checksum: 10c0/a839c19057c8441ea3e2492d001a0b1fce41f8f95ac0ba95904e02c0ccc2a18deac2484b5e3d02998b276a01ac2133ec3e2e2257fa2f809f8a67ad9509df4561
-  languageName: node
-  linkType: hard
-
-"@calcom/embed-snippet@npm:1.3.1":
-  version: 1.3.1
-  resolution: "@calcom/embed-snippet@npm:1.3.1"
-  dependencies:
-    "@calcom/embed-core": "npm:1.5.1"
-  checksum: 10c0/23ccab30c948b7921a172c28ad3fa826ee0753c38dcf65c30263717334f80d241819b46eab112fd955982b0d608b70c0e66c328d44a662f52adddd9e64a34547
-  languageName: node
-  linkType: hard
-
 "@chevrotain/cst-dts-gen@npm:11.0.3":
   version: 11.0.3
   resolution: "@chevrotain/cst-dts-gen@npm:11.0.3"
@@ -13585,7 +13556,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "my-project@workspace:apps/site"
   dependencies:
-    "@calcom/embed-react": "npm:^1.5.1"
     "@headlessui/react": "npm:^1.7.13"
     "@heroicons/react": "npm:^2.0.17"
     "@types/node": "npm:18.15.11"

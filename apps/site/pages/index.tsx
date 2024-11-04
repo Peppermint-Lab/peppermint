@@ -12,8 +12,6 @@ import {
 import { useState } from "react";
 
 const navigation = [
-  // { name: "About Us", href: "#" },
-  // { name: "Features", href: "#" },
   { name: "Github", href: "https://github.com/Peppermint-Lab/peppermint" },
   { name: "Docs", href: "https://docs.peppermint.sh/" },
   { name: "Discord", href: "https://discord.gg/cyj86Ncygn" },
