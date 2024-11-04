@@ -77,7 +77,11 @@ export function NavMain({
                     </span>
                   </div>
                   {!hideKeyboardShortcuts && (
-                    <span className="">{item.initial}</span>
+                    <span
+                      className={sidebar.state === "collapsed" ? "hidden" : ""}
+                    >
+                      {item.initial}
+                    </span>
                   )}
                 </div>
               </SidebarMenuButton>
@@ -117,7 +121,11 @@ export function NavMain({
                     </span>
                   </div>
                   {!hideKeyboardShortcuts && (
-                    <span className="">{item.initial}</span>
+                    <span
+                      className={sidebar.state === "collapsed" ? "hidden" : ""}
+                    >
+                      {item.initial}
+                    </span>
                   )}
                 </div>
               </SidebarMenuButton>
