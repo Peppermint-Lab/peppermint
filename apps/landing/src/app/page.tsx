@@ -157,7 +157,7 @@ const features2 = [
 export default function Home() {
 
   return (
-    <div className="sm:min-h-screen mx-6 sm:mx-0">
+    <div className="sm:min-h-screen mx-6 sm:mx-0 bg-white">
       <header className="bg-white mx-auto text-base max-w-xl">
         <nav className="flex justify-between py-8" aria-label="Global">
           <div className="flex justify-between lg:flex-1">
