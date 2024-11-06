@@ -168,14 +168,16 @@ export default function Home() {
     <div className="sm:min-h-screen mx-6 sm:mx-0 bg-white">
       <header className="bg-white mx-auto text-base max-w-xl">
         <nav className="flex justify-between py-8" aria-label="Global">
-          <div className="flex justify-between lg:flex-1">
+          <div className="flex justify-between items-center align-middle lg:flex-1">
             <div className="-m-1.5 p-1.5">
               <span className="sm:hidden">🍵</span>
-              <span className="hidden sm:block font-bold text-xl">🍵</span>
+              <span className="hidden sm:block font-bold text-xl">
+                🍵
+              </span>
             </div>
           </div>
 
-          <div className="flex gap-x-12">
+          <div className="flex gap-x-12 align-middle">
             {navigation.map((item) => (
               <a
                 key={item.name}
