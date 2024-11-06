@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function EmailQueues() {
-  const [queues, setQueues] = useState();
+  const [queues, setQueues]: any = useState();
 
   async function fetchQueues() {
     const res = await fetch(`/api/v1/email-queues/all`, {
@@ -63,7 +63,7 @@ export default function EmailQueues() {
                 </div>
               </div>
               <div className="-mx-4 mt-8 sm:-mx-0">
-                {queues !== undefined && queues.length > 0 && (
+                {queues && queues.length > 0 && (
                   <table className="min-w-full divide-y divide-gray-300">
                     <thead>
                       <tr>
@@ -94,7 +94,7 @@ export default function EmailQueues() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {queues.map((item) => (
+                      {queues && queues.map((item) => (
                         <tr key={item.id}>
                           <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
                             {item.name}
