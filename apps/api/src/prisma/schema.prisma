@@ -120,6 +120,7 @@ model Ticket {
   type       TicketType   @default(support)
   hidden     Boolean      @default(false)
   createdBy  Json?
+  locked     Boolean      @default(false)
 
   TicketFile   TicketFile[]
   Comment      Comment[]
@@ -164,7 +165,7 @@ model Comment {
   userId   String?
   user     User?   @relation(fields: [userId], references: [id])
   ticketId String
-  ticket   Ticket  @relation(fields: [ticketId], references: [id])
+  ticket   Ticket  @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 }
 
 model Client {

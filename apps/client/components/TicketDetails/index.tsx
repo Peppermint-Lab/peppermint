@@ -18,14 +18,31 @@ import { IconCombo, UserCombo } from "../Combo";
 import {
   CircleCheck,
   CircleDotDashed,
+  Ellipsis,
+  Eye,
+  EyeClosed,
+  EyeOff,
   LifeBuoy,
   Loader,
   LoaderCircle,
+  Lock,
   SignalHigh,
   SignalLow,
   SignalMedium,
+  Trash,
+  Trash2,
+  Unlock,
 } from "lucide-react";
 import { toast } from "@/shadcn/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/shadcn/ui/dropdown-menu";
+import { IconKeyboardHide } from "@tabler/icons-react";
 
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
@@ -169,6 +186,46 @@ export default function Ticket() {
     })
       .then((res) => res.json())
       .then(() => refetch());
+  }
+
+  async function lock(locked) {
+    await fetch(`/api/v1/ticket/status/lock`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        locked,
+        id,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => refetch());
+  }
+
+  async function deleteIssue(locked) {
+    await fetch(`/api/v1/ticket/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          toast({
+            variant: "default",
+            title: "Issue Deleted",
+            description: "The issue has been deleted",
+          });
+          router.push("/issues");
+        }
+      });
   }
 
   async function addComment() {
@@ -410,34 +467,106 @@ export default function Ticket() {
                         key={data.ticket.id}
                       />
                     </div>
-                    <div className="mt-2 text-xs flex flex-row items-center space-x-1 text-gray-500 dark:text-white">
-                      <div>
-                        {!data.ticket.isComplete ? (
-                          <div className="flex items-center space-x-2">
-                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                              {t("open_issue")}
+                    <div className="mt-2 text-xs flex flex-row justify-between items-center space-x-1 text-gray-500 dark:text-white">
+                      <div className="flex flex-row space-x-1 items-center">
+                        <div>
+                          {!data.ticket.isComplete ? (
+                            <div className="flex items-center space-x-2">
+                              <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                {t("open_issue")}
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center space-x-2">
+                              <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                {t("closed_issue")}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
+                            {data.ticket.type}
+                          </span>
+                        </div>
+                        {data.ticket.hidden && (
+                          <div>
+                            <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                              Hidden
                             </span>
                           </div>
-                        ) : (
-                          <div className="flex items-center space-x-2">
-                            <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                              {t("closed_issue")}
+                        )}
+                        {data.ticket.locked && (
+                          <div>
+                            <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                              Locked
                             </span>
                           </div>
                         )}
                       </div>
-                      <div>
-                        <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
-                          {data.ticket.type}
-                        </span>
-                      </div>
-                      {data.ticket.client && (
-                        <div>
+                      {user.isAdmin && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger className="inline-flex items-center px-2 py-1 text-xs font-medium text-foreground ring-none outline-none ">
+                            <Ellipsis className="h-4 w-4" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            align="end"
+                            className="min-w-[160px]"
+                          >
+                            <DropdownMenuLabel>
+                              <span>Issue Actions</span>
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            {data.ticket.hidden ? (
+                              <DropdownMenuItem
+                                className="flex flex-row space-x-3 items-center"
+                                onClick={() => hide(false)}
+                              >
+                                <Eye className="h-4 w-4" />
+                                <span>Show Issue</span>
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem
+                                className="flex flex-row space-x-3 items-center"
+                                onClick={() => hide(true)}
+                              >
+                                <EyeOff className="h-4 w-4" />
+                                <span>Hide Issue</span>
+                              </DropdownMenuItem>
+                            )}
+                            {data.ticket.locked ? (
+                              <DropdownMenuItem
+                                className="flex flex-row space-x-3 items-center"
+                                onClick={() => lock(false)}
+                              >
+                                <Unlock className="h-4 w-4" />
+                                <span>Unlock Issue</span>
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem
+                                className="flex flex-row space-x-3 items-center"
+                                onClick={() => lock(true)}
+                              >
+                                <Lock className="h-4 w-4" />
+                                <span>Lock Issue</span>
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="flex flex-row space-x-3 items-center transition-colors duration-200 focus:bg-red-500 focus:text-white"
+                              onClick={() => deleteIssue()}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span className="">Delete Issue</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
+                      {/* <div>
                           <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
                             {data.ticket.client.name}
                           </span>
-                        </div>
-                      )}
+                        </div> */}
                     </div>
                   </div>
                 </div>

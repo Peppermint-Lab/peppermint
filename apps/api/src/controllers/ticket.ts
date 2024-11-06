@@ -638,16 +638,59 @@ export function ticketRoutes(fastify: FastifyInstance) {
       if (token) {
         const { hidden, id }: any = request.body;
 
-        await prisma.ticket
-          .update({
-            where: { id: id },
-            data: {
-              hidden: hidden,
-            },
-          })
-          .then(async (ticket) => {
-            // await sendTicketStatus(ticket);
-          });
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            hidden: hidden,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  // Lock a ticket
+  fastify.put(
+    "/api/v1/ticket/status/lock",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const { locked, id }: any = request.body;
+
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            locked: locked,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  // Delete a ticket
+  fastify.post(
+    "/api/v1/ticket/delete",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const { id }: any = request.body;
+
+        await prisma.ticket.delete({
+          where: { id: id },
+        });
 
         reply.send({
           success: true,
