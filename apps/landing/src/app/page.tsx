@@ -1,5 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Bell, ChevronRight, Globe, Inbox, Lightbulb, Lock, User } from "lucide-react";
+"use-client";
+import {
+  Bell,
+  ChevronRight,
+  Cloud,
+  Globe,
+  Inbox,
+  Lightbulb,
+  Lock,
+  User,
+} from "lucide-react";
 
 const navigation = [
   { name: "Github", href: "https://github.com/Peppermint-Lab/peppermint" },
@@ -98,9 +108,8 @@ const posts = [
 ];
 
 const stats = [
-  { label: "Docker Pulls", value: "120k+" },
-  { label: "Github Stars", value: "1.3k" },
-  { label: "Weekly Active Users", value: "550" },
+  { label: "Docker Pulls", value: "190k" },
+  { label: "Github Stars", value: "2k" },
 ];
 
 const features = [
@@ -112,16 +121,16 @@ const features = [
     icon: Bell,
   },
   {
-    name: "Email Fetching",
+    name: "Mailbox Integration",
     description:
-      "Configure mailboxes to facilitate direct customer emails, automatically converting them into tickets for efficient management.",
+      "Configure mailboxes to use SMTP/IMAP to fetch emails and convert them into tickets for efficient management.",
     href: "#",
     icon: Inbox,
   },
   {
-    name: "Single Sign On",
+    name: "OIDC Authentication",
     description:
-      "Implement single sign-on (SSO) for all users to enable shared authentication across multiple providers.",
+      "Use OIDC for authentication, allowing you to connect to your existing identity provider.",
     href: "#",
     icon: Lock,
   },
@@ -149,13 +158,12 @@ const features2 = [
   {
     name: "Customer First",
     description:
-      "Peppermint is customer-centric, enabling us to provide the best features by actively listening to and addressing our customer's needs.",
+      "Peppermint is an open source customer-centric product, enabling us to provide the best features by actively listening to and addressing our customer's needs in order to improve.",
     icon: User,
   },
 ];
 
 export default function Home() {
-
   return (
     <div className="sm:min-h-screen mx-6 sm:mx-0 bg-white">
       <header className="bg-white mx-auto text-base max-w-xl">
@@ -163,9 +171,7 @@ export default function Home() {
           <div className="flex justify-between lg:flex-1">
             <div className="-m-1.5 p-1.5">
               <span className="sm:hidden">🍵</span>
-              <span className="hidden sm:block font-bold text-xl">
-                🍵 Peppermint Labs
-              </span>
+              <span className="hidden sm:block font-bold text-xl">🍵</span>
             </div>
           </div>
 
@@ -182,10 +188,9 @@ export default function Home() {
           </div>
         </nav>
       </header>
-
       <div className="relative isolate overflow-hidden bg-white mx-auto max-w-xl">
         <div className="max-w-xl">
-          <div className="hidden sm:mb-4 sm:flex">
+          <div className="hidden sm:mb-4 sm:flex sm:flex-col">
             <div className="">
               <a
                 href="https://github.com/Peppermint-Lab/peppermint/releases"
@@ -195,7 +200,7 @@ export default function Home() {
                 <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-400 ring-1 ring-inset ring-indigo-500/20">
                   What's new -
                   <span className="ml-1 inline-flex items-center space-x-2 text-sm font-medium leading-6 ">
-                    <span>Version 0.5.3 is live! 🚀</span>
+                    <span className="text-sm">Version 0.5.4 is live! 🚀</span>
                     <ChevronRight
                       className="h-5 w-5 text-gray-500"
                       aria-hidden="true"
@@ -208,25 +213,43 @@ export default function Home() {
 
           <div className="">
             <span className="text-2xl font-bold tracking-tight text-gray-900 ">
-              Elevate Your Customer Support
+              Peppermint - Open Source Issue Managment
             </span>
             <div className="mt-4 flex flex-col ">
               <div className="">
                 <p className="text-base text-gray-800">
-                  Peppermint offers a refreshing approach to customer support in
-                  a cost-conscious world.
+                  We offer an innovative issue management and helpdesk solution
+                  that serves as an open alternative to Jira and Zendesk. Our
+                  platform is designed to streamline customer support processes
+                  while being cost-effective, empowering teams to manage
+                  projects and support requests efficiently.
                 </p>
               </div>
               <div className="my-6 space-x-4 flex flex-row">
                 <a
                   href="https://docs.peppermint.sh/docker"
-                  className="rounded-md px-3.5 py-2.5 text-sm bg-green-600  text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                  className="rounded-md w-full px-3.5 py-2.5 text-sm font-semibold bg-green-600  text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
                   target="_blank"
                 >
-                  Get started
+                  Install within a minute via Docker
                 </a>
-                
               </div>
+
+              <span className="text-sm  font-semibold">
+                Or use one command to deploy on any VPS
+              </span>
+
+              <code className="text-sm sm:text-base inline-flex text-left items-center space-x-4 bg-gray-800 text-white rounded-lg p-4 pl-6">
+                <span className="flex gap-4">
+                  <span className="shrink-0 text-gray-500">$</span>
+                  <span className="flex-1">
+                    <span className="text-xs">
+                      curl -sSL -o deployer.sh https://deploy.spearmint.sh &&
+                      chmod +x deployer.sh && ./deployer.sh
+                    </span>
+                  </span>
+                </span>
+              </code>
             </div>
           </div>
         </div>
@@ -239,7 +262,6 @@ export default function Home() {
           />
         </div>
       </div>
-
       <div className="max-w-xl mx-auto mt-4">
         <div className="mx-auto max-w-xl mt-4 lg:max-w-none">
           <dl className="">
@@ -262,7 +284,6 @@ export default function Home() {
           </dl>
         </div>
       </div>
-
       <div className="max-w-xl mx-auto mt-4">
         <dl className="space-y-4 flex flex-col md:flex-row md:space-x-12">
           {stats.map((stat) => (
@@ -277,7 +298,6 @@ export default function Home() {
           ))}
         </dl>
       </div>
-
       <div className="bg-white py-4 max-w-xl mx-auto">
         <dl className="mx-auto mt-4 flex flex-col  text-base leading-7 text-gray-300 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:gap-x-16">
           {features2.map((feature) => (
@@ -298,15 +318,14 @@ export default function Home() {
           ))}
         </dl>
       </div>
-
-      <div className="bg-white py-12 mx-auto max-w-xl ">
+      <div className="bg-white mb-4 mx-auto max-w-xl ">
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
           <h2 className="text-xl font-bold tracking-tight text-gray-900 ">
             Our mission
           </h2>
-          <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
+          <div className="mt-2 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
             <div className="lg:w-full lg:max-w-2xl lg:flex-auto">
-              <p className="text-base text-gray-600">
+              <p className="text-base text-gray-800">
                 Peppermint aims to bridge the gap between rich features and
                 affordability. We strive to provide a wide range of tools,
                 functionalities, and user experiences without imposing excessive
@@ -325,84 +344,51 @@ export default function Home() {
         </div>
       </div>
 
-      {/* <div className="overflow-hidden bg-gray-900 py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            <div className="lg:pr-8 lg:pt-4">
-              <div className="lg:max-w-lg">
-                <h2 className="text-base font-semibold leading-7 text-indigo-400">
-                  Deploy faster
-                </h2>
-                <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                  One click installs in the cloud
-                </p>
-                <p className="mt-6 text-lg leading-8 text-gray-300">
-                  Peppermint is built to be hosted in a docker container, which
-                  can be easily scaled through k8's. In addition to this you can
-                  host peppermint through pm2 or even locally with NodeJS
-                </p>
-                <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-300 lg:max-w-none">
-                  <div className="relative pl-9">
-                    <dt className="inline font-semibold text-white">
-                      <CloudArrowUpIcon
-                        className="absolute left-1 top-1 h-5 w-5 text-indigo-500"
-                        aria-hidden="true"
-                      />
-                      Linode
-                    </dt>
-                    <dd className="">
-                      Linode is a great cloud provider that offers the
-                      installilation of peppermint through the click of a
-                      button.
-                    </dd>
-                  </div>
-                </dl>
-                <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-300 lg:max-w-none">
-                  <div className="relative pl-9">
-                    <dt className="inline font-semibold text-white">
-                      <CloudArrowUpIcon
-                        className="absolute left-1 top-1 h-5 w-5 text-indigo-500"
-                        aria-hidden="true"
-                      />
-                      Hostinger VPS
-                    </dt>
-                    <dd className="">
-                      Hostinger VPS offers peak performance with AMD CPU, and
-                      NVMe storage, competitive pricing, automatic backups, and
-                      manual snapshots.
-                    </dd>
-                  </div>
-                </dl>
-                <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-300 lg:max-w-none">
-                  <div className="relative pl-9">
-                    <dt className="inline font-semibold text-white">
-                      <CloudArrowUpIcon
-                        className="absolute left-1 top-1 h-5 w-5 text-indigo-500"
-                        aria-hidden="true"
-                      />
-                      Roqitt Hosting
-                    </dt>
-                    <dd className="">
-                      Roqitt Hosting offer lightning fast & secure ssd web
-                      hosting. The UK based enterprise offer peppermint through
-                      there new one click marketplace.
-                    </dd>
-                  </div>
-                </dl>
-              </div>
+      <div className="bg-white mb-4 mx-auto max-w-xl ">
+        <div className="lg:max-w-lg">
+          <h2 className="text-lg font-semibold leading-7 ">
+            Deploy faster with one click
+          </h2>
+          <p className="mt-3 text-base">
+            Peppermint is built to be hosted in a docker container, which can be
+            easily scaled through k8's. In addition to this you can host
+            peppermint through pm2 or even locally with NodeJS
+          </p>
+          <dl className="mt-6 max-w-xl space-y-8 text-base leading-7 lg:max-w-none">
+            <div className="relative pl-9">
+              <dt className="inline font-semibold">
+                <Cloud
+                  className="absolute left-1 top-1 h-5 w-5 "
+                  aria-hidden="true"
+                />
+                Linode
+              </dt>
+              <dd className="">
+                Linode is a great cloud provider that offers the installilation
+                of peppermint through the click of a button.
+              </dd>
             </div>
-            <img
-              src="/dash.png"
-              alt="Product screenshot"
-              className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-white/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-              width={2432}
-              height={1442}
-            />
-          </div>
+          </dl>
+          <dl className="mt-6 max-w-xl text-base leading-7 lg:max-w-none">
+            <div className="relative pl-9">
+              <dt className="inline font-semibold ">
+                <Cloud
+                  className="absolute left-1 top-1 h-5 w-5 "
+                  aria-hidden="true"
+                />
+                Hostinger VPS
+              </dt>
+              <dd className="">
+                Hostinger VPS offers peak performance with AMD CPU, and NVMe
+                storage, competitive pricing, automatic backups, and manual
+                snapshots.
+              </dd>
+            </div>
+          </dl>
         </div>
-      </div> */}
+      </div>
 
-      <div className="bg-white">
+      <div className="bg-white mt-8">
         <div className="mx-auto max-w-xl">
           <div className="">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 ">
@@ -459,7 +445,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
       <footer className="bg-white" aria-labelledby="footer-heading">
         <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
           <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
