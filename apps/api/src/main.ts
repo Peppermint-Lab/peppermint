@@ -129,7 +129,7 @@ const start = async () => {
       }
     );
 
-    setInterval(() => getEmails(), 60000); // Call getEmails every minute
+    setInterval(() => getEmails(), 10000); // Call getEmails every minute
   } catch (err) {
     server.log.error(err);
     await prisma.$disconnect();

@@ -1,4 +1,7 @@
 const Imap = require("imap");
+var EmailReplyParser = require("email-reply-parser");
+
+import { GoogleAuth } from "google-auth-library";
 import { prisma } from "../prisma";
 
 const { simpleParser } = require("mailparser");
@@ -14,19 +17,103 @@ const year = date.getFullYear();
 //@ts-ignore
 const d = new Date([year, month, today]);
 
+// Function to get or refresh the access token
+async function getValidAccessToken(queue: any) {
+  const {
+    clientId,
+    clientSecret,
+    refreshToken,
+    accessToken,
+    expiresIn,
+    username,
+  } = queue;
+
+  // Check if token is still valid
+  const now = Math.floor(Date.now() / 1000);
+  if (accessToken && expiresIn && now < expiresIn) {
+    return accessToken;
+  }
+
+  // Initialize GoogleAuth client
+  const auth = new GoogleAuth({
+    clientOptions: {
+      clientId: clientId,
+      clientSecret: clientSecret,
+    },
+  });
+
+  const oauth2Client = auth.fromJSON({
+    client_id: clientId,
+    client_secret: clientSecret,
+    refresh_token: refreshToken,
+  });
+
+  // Refresh the token if expired
+  const tokenInfo = await oauth2Client.getAccessToken();
+
+  const expiryDate = queue.expiresIn + 3600;
+
+  if (tokenInfo.token) {
+    await prisma.emailQueue.update({
+      where: { id: queue.id },
+      data: {
+        accessToken: tokenInfo.token,
+        expiresIn: expiryDate,
+      },
+    });
+    return tokenInfo.token;
+  } else {
+    throw new Error("Unable to refresh access token.");
+  }
+}
+
+// Function to generate XOAUTH2 string
+function generateXOAuth2Token(user: string, accessToken: string) {
+  const authString = [
+    "user=" + user,
+    "auth=Bearer " + accessToken,
+    "",
+    "",
+  ].join("\x01");
+  return Buffer.from(authString).toString("base64");
+}
+
+async function returnImapConfig(queue: any) {
+  switch (queue.serviceType) {
+    case "gmail":
+      const validatedAccessToken = await getValidAccessToken(queue);
+      return {
+        user: queue.username,
+        host: queue.hostname,
+        port: 993,
+        tls: true,
+        xoauth2: generateXOAuth2Token(queue.username, validatedAccessToken),
+        tlsOptions: { rejectUnauthorized: false, servername: queue.hostname },
+      };
+    case "other":
+      return {
+        user: queue.username,
+        password: queue.password,
+        host: queue.hostname,
+        port: queue.tls ? 993 : 143,
+        tls: queue.tls,
+        tlsOptions: { rejectUnauthorized: false, servername: queue.hostname },
+      };
+    default:
+      throw new Error("Unsupported service type");
+  }
+}
+
 export const getEmails = async () => {
   try {
     const queues = await client.emailQueue.findMany({});
 
     for (let i = 0; i < queues.length; i++) {
-      var imapConfig = {
-        user: queues[i].username,
-        password: queues[i].password,
-        host: queues[i].hostname,
-        port: queues[i].tls ? 993 : 110,
-        tls: queues[i].tls,
-        tlsOptions: { servername: queues[i].hostname },
-      };
+      var imapConfig = await returnImapConfig(queues[i]);
+
+      if (!imapConfig) {
+        continue;
+      }
 
       const imap = new Imap(imapConfig);
       imap.connect();
@@ -53,9 +140,9 @@ export const getEmails = async () => {
                 simpleParser(stream, async (err: any, parsed: any) => {
                   const { from, subject, textAsHtml, text, html } = parsed;
 
-                  // Handle reply emails
+                  var reply_text = new EmailReplyParser().read(text);
+
                   if (subject?.includes("Re:")) {
-                    // Extract ticket number from subject (e.g., "Re: Ticket #123")
                     const ticketIdMatch = subject.match(/#(\d+)/);
                     if (!ticketIdMatch) {
                       console.log(
@@ -67,17 +154,28 @@ export const getEmails = async () => {
 
                     const ticketId = ticketIdMatch[1];
 
-                    // Create comment with the reply
-                    return await client.comment.create({
-                      data: {
-                        text: text ? text : "No Body",
-                        userId: null,
-                        ticketId: ticketId,
-                        reply: true,
-                        replyEmail: from.value[0].address,
-                        public: true,
+                    const find = await client.ticket.findFirst({
+                      where: {
+                        Number: Number(ticketId),
                       },
                     });
+
+                    if (find) {
+                      return await client.comment.create({
+                        data: {
+                          text: text
+                            ? reply_text.fragments[0]._content
+                            : "No Body",
+                          userId: null,
+                          ticketId: find.id,
+                          reply: true,
+                          replyEmail: from.value[0].address,
+                          public: true,
+                        },
+                      });
+                    } else {
+                      console.log("Ticket not found");
+                    }
                   } else {
                     const imap = await client.imap_Email.create({
                       data: {

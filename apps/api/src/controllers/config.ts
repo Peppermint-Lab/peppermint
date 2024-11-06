@@ -4,7 +4,7 @@
 // SSO Provider
 // Portal Locale
 // Feature Flags
-import { GoogleAuth, OAuth2Client } from "google-auth-library";
+import { OAuth2Client } from "google-auth-library";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 const nodemailer = require("nodemailer");
 

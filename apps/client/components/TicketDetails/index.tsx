@@ -582,7 +582,9 @@ export default function Ticket() {
                                       <div className="relative">
                                         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
                                           <span className="font-medium leading-none text-xs text-white uppercase">
-                                            {item.user.name[0]}
+                                            {item.user
+                                              ? item.user.name[0]
+                                              : item.replyEmail[0]}
                                           </span>
                                         </span>
                                       </div>
@@ -590,11 +592,19 @@ export default function Ticket() {
                                         <div>
                                           <div className="text-sm">
                                             <span className="font-medium text-gray-900 dark:text-white ">
-                                              {item.user.name}
+                                              {item.user
+                                                ? item.user.name
+                                                : item.replyEmail}
                                             </span>
                                           </div>
                                           <div className=" flex flex-row space-x-1">
-                                            <span className={`text-xs ${item.public ? 'text-primary font-semibold' : 'text-gray-500'} dark:text-white`}>
+                                            <span
+                                              className={`text-xs ${
+                                                item.public
+                                                  ? "text-primary font-semibold"
+                                                  : "text-gray-500"
+                                              } dark:text-white`}
+                                            >
                                               {item.public
                                                 ? "Publicly"
                                                 : "Internally"}

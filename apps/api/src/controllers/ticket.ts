@@ -37,7 +37,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         email,
         engineer,
         type,
-        createdBy
+        createdBy,
       }: any = request.body;
 
       const ticket: any = await prisma.ticket.create({
@@ -48,12 +48,14 @@ export function ticketRoutes(fastify: FastifyInstance) {
           priority: priority ? priority : "low",
           email,
           type: type ? type.toLowerCase() : "support",
-          createdBy: createdBy ?  {
-            id: createdBy.id,
-            name: createdBy.name,
-            role: createdBy.role,
-            email: createdBy.email
-          } : undefined,
+          createdBy: createdBy
+            ? {
+                id: createdBy.id,
+                name: createdBy.name,
+                role: createdBy.role,
+                email: createdBy.email,
+              }
+            : undefined,
           client:
             company !== undefined
               ? {
@@ -538,9 +540,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         //@ts-expect-error
         const { email, title } = ticket;
-
         if (public_comment && email) {
-          sendComment(text, title, email);
+          sendComment(text, title, ticket!.id, email!);
         }
 
         await commentNotification(user!.id, ticket, user!.name);

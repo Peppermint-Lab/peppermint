@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
+import { OAuth2Client } from "google-auth-library";
 
 export function emailQueueRoutes(fastify: FastifyInstance) {
   // Create a new email queue
@@ -13,17 +14,49 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
       const token = checkToken(bearer);
 
       if (token) {
-        const { name, username, password, hostname, tls }: any = request.body;
+        const {
+          name,
+          username,
+          password,
+          hostname,
+          tls,
+          serviceType,
+          clientId,
+          clientSecret,
+          redirectUri,
+        }: any = request.body;
 
-        await prisma.emailQueue.create({
+        const mailbox = await prisma.emailQueue.create({
           data: {
-            name,
+            name: name,
             username,
             password,
             hostname,
             tls,
+            serviceType,
+            clientId,
+            clientSecret,
+            redirectUri,
           },
         });
+
+        // generate redirect uri
+        if (serviceType === "gmail") {
+          const google = new OAuth2Client(clientId, clientSecret, redirectUri);
+
+          const authorizeUrl = google.generateAuthUrl({
+            access_type: "offline",
+            scope: "https://mail.google.com",
+            prompt: "consent",
+            state: mailbox.id,
+          });
+
+          reply.send({
+            success: true,
+            message: "Gmail imap provider created!",
+            authorizeUrl: authorizeUrl,
+          });
+        }
 
         reply.send({
           success: true,
@@ -32,8 +65,53 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Get all email queues
+  // Google oauth callback
+  fastify.get(
+    "/api/v1/email-queue/oauth/gmail",
 
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const { code, mailboxId }: any = request.query;
+
+        const mailbox = await prisma.emailQueue.findFirst({
+          where: {
+            id: mailboxId,
+          },
+        });
+
+        const google = new OAuth2Client(
+          //@ts-expect-error
+          mailbox?.clientId,
+          mailbox?.clientSecret,
+          mailbox?.redirectUri
+        );
+
+        console.log(google);
+
+        const r = await google.getToken(code);
+
+        await prisma.emailQueue.update({
+          where: { id: mailbox?.id },
+          data: {
+            refreshToken: r.tokens.refresh_token,
+            accessToken: r.tokens.access_token,
+            expiresIn: r.tokens.expiry_date,
+            serviceType: "gmail",
+          },
+        });
+
+        reply.send({
+          success: true,
+          message: "Mailbox updated!",
+        });
+      }
+    }
+  );
+
+  // Get all email queue's
   fastify.get(
     "/api/v1/email-queues/all",
 
@@ -42,7 +120,20 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
       const token = checkToken(bearer);
 
       if (token) {
-        const queues = await prisma.emailQueue.findMany({});
+        const queues = await prisma.emailQueue.findMany({
+          select: {
+            id: true,
+            name: true,
+            serviceType: true,
+            active: true,
+            teams: true,
+            username: true,
+            hostname: true,
+            tls: true,
+            clientId: true,
+            redirectUri: true,
+          },
+        });
 
         reply.send({
           success: true,

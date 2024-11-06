@@ -346,12 +346,21 @@ model EmailQueue {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  name     String
-  username String
-  password String
-  hostname String
-  tls      Boolean @default(true)
-  teams    Json?
+  name         String
+  username     String
+  password     String?
+  hostname     String
+  tls          Boolean @default(true)
+  active       Boolean @default(true)
+  teams        Json?
+  serviceType  String  @default("other")
+  clientId     String?
+  clientSecret String?
+  tenantId     String?
+  refreshToken String?
+  accessToken  String?
+  expiresIn    BigInt?
+  redirectUri  String?
 
   imap Imap_Email[]
 }
