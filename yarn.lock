@@ -7887,6 +7887,7 @@ __metadata:
     nextra-theme-docs: "npm:^3.0.15"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
+    react-spinners: "npm:^0.13.8"
   languageName: unknown
   linkType: soft
 
@@ -8984,6 +8985,13 @@ __metadata:
   dependencies:
     reusify: "npm:^1.0.4"
   checksum: 10c0/1095f16cea45fb3beff558bb3afa74ca7a9250f5a670b65db7ed585f92b4b48381445cd328b3d87323da81e43232b5d5978a8201bde84e0cd514310f1ea6da34
+  languageName: node
+  linkType: hard
+
+"fathom-client@npm:^3.7.2":
+  version: 3.7.2
+  resolution: "fathom-client@npm:3.7.2"
+  checksum: 10c0/f198669fba3aa14c4f1adc2b5afdce282503945fe3ac3d842ab7a6d46c90cf4a703ccad99abcbc71faa095348d9940a2d1aa0cf718c58e4d8479fa5dcb88aff2
   languageName: node
   linkType: hard
 
@@ -11287,6 +11295,7 @@ __metadata:
     "@types/react-dom": "npm:^18"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.2"
+    fathom-client: "npm:^3.7.2"
     lucide-react: "npm:^0.454.0"
     next: "npm:15.0.2"
     postcss: "npm:^8"
@@ -15168,6 +15177,16 @@ __metadata:
     react: ^16.0.0 || ^17.0.0
     react-dom: ^16.0.0 || ^17.0.0
   checksum: 10c0/5a6d46156f2a4fd64e30b5fb6199818135b0048f7a6ed59426fd62a69e99f67d92b184ee1f0b2350cdd42fa968a708ec5ff57b09287676e9856b9eebbf5022a1
+  languageName: node
+  linkType: hard
+
+"react-spinners@npm:^0.13.8":
+  version: 0.13.8
+  resolution: "react-spinners@npm:0.13.8"
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/59a030ece288f045a443e0b720c94636fc00667bcb8cd5a36ed8342cc2bc52a98106a676875551b3389ae5943bd7c4d4aa2ede0fb914bbde4322211f0f0120a8
   languageName: node
   linkType: hard
 
