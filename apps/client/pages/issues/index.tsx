@@ -1,7 +1,7 @@
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import Loader from "react-spinners/ClipLoader";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { ContextMenu } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
-import { CheckIcon, PlusCircle } from "lucide-react";
+import { CheckIcon, Filter, PlusCircle, X } from "lucide-react";
 import { Button } from "@/shadcn/ui/button";
 import {
   Command,
@@ -32,6 +32,28 @@ async function getUserTickets(token: any) {
   return res.json();
 }
 
+// Add this new component for the filter badge
+const FilterBadge = ({
+  text,
+  onRemove,
+}: {
+  text: string;
+  onRemove: () => void;
+}) => (
+  <div className="flex items-center gap-1 bg-accent rounded-md px-2 py-1 text-xs">
+    <span>{text}</span>
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        onRemove();
+      }}
+      className="hover:bg-muted rounded-full p-0.5"
+    >
+      <X className="h-3 w-3" />
+    </button>
+  </div>
+);
+
 export default function Tickets() {
   const router = useRouter();
   const { t } = useTranslation("peppermint");
@@ -47,7 +69,10 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
+  const [filterSelected, setFilterSelected] = useState();
   const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
 
   const handlePriorityToggle = (priority: string) => {
     setSelectedPriorities((prev) =>
@@ -57,13 +82,64 @@ export default function Tickets() {
     );
   };
 
+  const handleStatusToggle = (status: string) => {
+    setSelectedStatuses((prev) =>
+      prev.includes(status)
+        ? prev.filter((s) => s !== status)
+        : [...prev, status]
+    );
+  };
+
+  const handleAssigneeToggle = (assignee: string) => {
+    setSelectedAssignees((prev) =>
+      prev.includes(assignee)
+        ? prev.filter((a) => a !== assignee)
+        : [...prev, assignee]
+    );
+  };
+
   const filteredTickets = data
-    ? data.tickets.filter((ticket) =>
-        selectedPriorities.length > 0
-          ? selectedPriorities.includes(ticket.priority)
-          : true
-      )
+    ? data.tickets.filter((ticket) => {
+        const priorityMatch =
+          selectedPriorities.length === 0 ||
+          selectedPriorities.includes(ticket.priority);
+        const statusMatch =
+          selectedStatuses.length === 0 ||
+          selectedStatuses.includes(ticket.isComplete ? "closed" : "open");
+        const assigneeMatch =
+          selectedAssignees.length === 0 ||
+          selectedAssignees.includes(ticket.assignedTo?.name || "Unassigned");
+
+        return priorityMatch && statusMatch && assigneeMatch;
+      })
     : [];
+
+  type FilterType = "priority" | "status" | "assignee" | null;
+  const [activeFilter, setActiveFilter] = useState<FilterType>(null);
+  const [filterSearch, setFilterSearch] = useState("");
+
+  const filteredPriorities = useMemo(() => {
+    const priorities = ["low", "medium", "high"];
+    return priorities.filter((priority) =>
+      priority.toLowerCase().includes(filterSearch.toLowerCase())
+    );
+  }, [filterSearch]);
+
+  const filteredStatuses = useMemo(() => {
+    const statuses = ["open", "closed"];
+    return statuses.filter((status) =>
+      status.toLowerCase().includes(filterSearch.toLowerCase())
+    );
+  }, [filterSearch]);
+
+  const filteredAssignees = useMemo(() => {
+    const assignees = data?.tickets
+      .map((t) => t.assignedTo?.name || "Unassigned")
+      .filter((name, index, self) => self.indexOf(name) === index);
+    return assignees?.filter((assignee) =>
+      assignee.toLowerCase().includes(filterSearch.toLowerCase())
+    );
+  }, [data?.tickets, filterSearch]);
 
   return (
     <div>
@@ -76,60 +152,221 @@ export default function Tickets() {
       {status === "success" && (
         <div>
           <div className="flex flex-col">
-            <div className="py-2 px-6 bg-gray-200 dark:bg-[#0A090C] border-b-[1px] flex flex-row items-center justify-between">
-              <div className="flex flex-row items-center space-x-4">
-                <span className="text-sm font-bold">All Tickets</span>
+            <div className="py-2 px-3 bg-background border-b-[1px] flex flex-row items-center justify-between">
+              <div className="flex flex-row items-center gap-2">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
-                      className="h-6 bg-transparent border-dashed"
+                      className="h-6 bg-transparent"
                     >
-                      <PlusCircle className="mr-2 h-4 w-4" />
-                      Priority
+                      <Filter className="mr-2 h-4 w-4" />
+                      <span className="hidden sm:block">Filters</span>
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0" align="start">
-                    <Command>
-                      <CommandInput placeholder="Search priority..." />
-                      <CommandList>
-                        <CommandEmpty>No results found.</CommandEmpty>
-                        <CommandGroup>
-                          {["low", "medium", "high"].map((priority) => (
+                  <PopoverContent className="w-[300px] p-0" align="start">
+                    {!activeFilter ? (
+                      <Command>
+                        <CommandInput placeholder="Search filters..." />
+                        <CommandList>
+                          <CommandEmpty>No results found.</CommandEmpty>
+                          <CommandGroup>
                             <CommandItem
-                              key={priority}
-                              onSelect={() => handlePriorityToggle(priority)}
+                              onSelect={() => setActiveFilter("priority")}
                             >
-                              <div
-                                className={cn(
-                                  "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                  selectedPriorities.includes(priority)
-                                    ? "bg-primary text-primary-foreground"
-                                    : "opacity-50 [&_svg]:invisible"
-                                )}
-                              >
-                                <CheckIcon className={cn("h-4 w-4")} />
-                              </div>
-                              <span className="capitalize">{priority}</span>
+                              Priority
                             </CommandItem>
-                          ))}
-                        </CommandGroup>
-                        <>
+                            <CommandItem
+                              onSelect={() => setActiveFilter("status")}
+                            >
+                              Status
+                            </CommandItem>
+                            <CommandItem
+                              onSelect={() => setActiveFilter("assignee")}
+                            >
+                              Assigned To
+                            </CommandItem>
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    ) : activeFilter === "priority" ? (
+                      <Command>
+                        <CommandInput
+                          placeholder="Search priority..."
+                          value={filterSearch}
+                          onValueChange={setFilterSearch}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No priorities found.</CommandEmpty>
+                          <CommandGroup heading="Priority">
+                            {filteredPriorities.map((priority) => (
+                              <CommandItem
+                                key={priority}
+                                onSelect={() => handlePriorityToggle(priority)}
+                              >
+                                <div
+                                  className={cn(
+                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                    selectedPriorities.includes(priority)
+                                      ? "bg-primary text-primary-foreground"
+                                      : "opacity-50 [&_svg]:invisible"
+                                  )}
+                                >
+                                  <CheckIcon className={cn("h-4 w-4")} />
+                                </div>
+                                <span className="capitalize">{priority}</span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
                           <CommandSeparator />
                           <CommandGroup>
                             <CommandItem
-                              onSelect={() => setSelectedPriorities([])}
+                              onSelect={() => {
+                                setActiveFilter(null);
+                                setFilterSearch("");
+                              }}
                               className="justify-center text-center"
                             >
-                              Clear filters
+                              Back to filters
                             </CommandItem>
                           </CommandGroup>
-                        </>
-                      </CommandList>
-                    </Command>
+                        </CommandList>
+                      </Command>
+                    ) : activeFilter === "status" ? (
+                      <Command>
+                        <CommandInput
+                          placeholder="Search status..."
+                          value={filterSearch}
+                          onValueChange={setFilterSearch}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No statuses found.</CommandEmpty>
+                          <CommandGroup heading="Status">
+                            {filteredStatuses.map((status) => (
+                              <CommandItem
+                                key={status}
+                                onSelect={() => handleStatusToggle(status)}
+                              >
+                                <div
+                                  className={cn(
+                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                    selectedStatuses.includes(status)
+                                      ? "bg-primary text-primary-foreground"
+                                      : "opacity-50 [&_svg]:invisible"
+                                  )}
+                                >
+                                  <CheckIcon className={cn("h-4 w-4")} />
+                                </div>
+                                <span className="capitalize">{status}</span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                          <CommandSeparator />
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => {
+                                setActiveFilter(null);
+                                setFilterSearch("");
+                              }}
+                              className="justify-center text-center"
+                            >
+                              Back to filters
+                            </CommandItem>
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    ) : activeFilter === "assignee" ? (
+                      <Command>
+                        <CommandInput
+                          placeholder="Search assignee..."
+                          value={filterSearch}
+                          onValueChange={setFilterSearch}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No assignees found.</CommandEmpty>
+                          <CommandGroup heading="Assigned To">
+                            {filteredAssignees?.map((name) => (
+                              <CommandItem
+                                key={name}
+                                onSelect={() => handleAssigneeToggle(name)}
+                              >
+                                <div
+                                  className={cn(
+                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                    selectedAssignees.includes(name)
+                                      ? "bg-primary text-primary-foreground"
+                                      : "opacity-50 [&_svg]:invisible"
+                                  )}
+                                >
+                                  <CheckIcon className={cn("h-4 w-4")} />
+                                </div>
+                                <span>{name}</span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                          <CommandSeparator />
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => {
+                                setActiveFilter(null);
+                                setFilterSearch("");
+                              }}
+                              className="justify-center text-center"
+                            >
+                              Back to filters
+                            </CommandItem>
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    ) : null}
                   </PopoverContent>
                 </Popover>
+
+                {/* Display selected filters */}
+                <div className="flex flex-wrap gap-2">
+                  {selectedPriorities.map((priority) => (
+                    <FilterBadge
+                      key={`priority-${priority}`}
+                      text={`Priority: ${priority}`}
+                      onRemove={() => handlePriorityToggle(priority)}
+                    />
+                  ))}
+
+                  {selectedStatuses.map((status) => (
+                    <FilterBadge
+                      key={`status-${status}`}
+                      text={`Status: ${status}`}
+                      onRemove={() => handleStatusToggle(status)}
+                    />
+                  ))}
+
+                  {selectedAssignees.map((assignee) => (
+                    <FilterBadge
+                      key={`assignee-${assignee}`}
+                      text={`Assignee: ${assignee}`}
+                      onRemove={() => handleAssigneeToggle(assignee)}
+                    />
+                  ))}
+
+                  {/* Clear all filters button - only show if there are filters */}
+                  {(selectedPriorities.length > 0 ||
+                    selectedStatuses.length > 0 ||
+                    selectedAssignees.length > 0) && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 px-2 text-xs"
+                      onClick={() => {
+                        setSelectedPriorities([]);
+                        setSelectedStatuses([]);
+                        setSelectedAssignees([]);
+                      }}
+                    >
+                      Clear all
+                    </Button>
+                  )}
+                </div>
               </div>
               <div></div>
             </div>
