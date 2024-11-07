@@ -483,6 +483,13 @@ export default function Ticket() {
                     </div>
                     <div className="mt-2 text-xs flex flex-row justify-between items-center space-x-1 text-gray-500 dark:text-white">
                       <div className="flex flex-row space-x-1 items-center">
+                        {data.ticket.client && (
+                          <div>
+                            <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
+                              {data.ticket.client.name}
+                            </span>
+                          </div>
+                        )}
                         <div>
                           {!data.ticket.isComplete ? (
                             <div className="flex items-center space-x-2">
@@ -576,11 +583,6 @@ export default function Ticket() {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       )}
-                      {/* <div>
-                          <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
-                            {data.ticket.client.name}
-                          </span>
-                        </div> */}
                     </div>
                   </div>
                 </div>
@@ -637,23 +639,29 @@ export default function Ticket() {
                     ) : (
                       <>
                         {data.ticket.createdBy ? (
-                          <>
+                          <div className="flex flex-row space-x-1">
                             <span>
-                              Created by{" "}
-                              <strong>{data.ticket.createdBy.name}</strong> at{" "}
+                              Created by
+                              <strong>
+                                {data.ticket.createdBy.name}
+                              </strong> at{" "}
                             </span>
                             <span className="">
                               {moment(data.ticket.createdAt).format("LLL")}
-                              {data.ticket.client && (
-                                <span>
-                                  {" "}
-                                  for <strong>{data.ticket.client.name}</strong>
-                                </span>
-                              )}
                             </span>
-                          </>
+                            {data.ticket.name && (
+                              <span>
+                                for <strong>{data.ticket.name}</strong>
+                              </span>
+                            )}
+                            {data.ticket.email && (
+                              <span>
+                                ( <strong>{data.ticket.email}</strong> )
+                              </span>
+                            )}
+                          </div>
                         ) : (
-                          <>
+                          <div className="flex flex-row space-x-1">
                             <span>Created at </span>
                             <span className="">
                               <strong>
@@ -661,12 +669,11 @@ export default function Ticket() {
                               </strong>
                               {data.ticket.client && (
                                 <span>
-                                  {" "}
                                   for <strong>{data.ticket.client.name}</strong>
                                 </span>
                               )}
                             </span>
-                          </>
+                          </div>
                         )}
                       </>
                     )}
@@ -841,7 +848,9 @@ export default function Ticket() {
                                     }}
                                     disabled={data.ticket.locked}
                                     className={`inline-flex justify-center items-center gap-x-1.5 rounded-md ${
-                                      data.ticket.locked ? "bg-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-50"
+                                      data.ticket.locked
+                                        ? "bg-gray-300 cursor-not-allowed"
+                                        : "bg-white hover:bg-gray-50"
                                     } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
                                   >
                                     <CheckCircleIcon
@@ -862,7 +871,9 @@ export default function Ticket() {
                                     }}
                                     disabled={data.ticket.locked}
                                     className={`inline-flex justify-center gap-x-1.5 rounded-md ${
-                                      data.ticket.locked ? "bg-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-50"
+                                      data.ticket.locked
+                                        ? "bg-gray-300 cursor-not-allowed"
+                                        : "bg-white hover:bg-gray-50"
                                     } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
                                   >
                                     <CheckCircleIcon
