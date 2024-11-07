@@ -3,9 +3,17 @@ import { getCookie } from "cookies-next";
 import { Ellipsis } from "lucide-react";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shadcn/ui/select";
+import { Input } from "@/shadcn/ui/input";
 
 function groupDocumentsByDate(notebooks) {
   const today = new Date();
@@ -66,6 +74,8 @@ async function fetchNotebooks(token) {
 
 export default function NoteBooksIndex() {
   const { t } = useTranslation("peppermint");
+  const [sortBy, setSortBy] = useState("updatedAt");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const token = getCookie("session");
   const { data, status, error } = useQuery("getUsersNotebooks", () =>
@@ -94,6 +104,23 @@ export default function NoteBooksIndex() {
       });
   }
 
+  const sortedAndFilteredNotebooks = (notebooks) => {
+    if (!notebooks) return [];
+
+    // First filter by search query
+    let filtered = notebooks.filter((notebook) =>
+      notebook.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Then sort
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a[sortBy]);
+      const dateB = new Date(b[sortBy]);
+      //@ts-ignore
+      return dateB - dateA;
+    });
+  };
+
   return (
     <div className="px-4 py-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -101,6 +128,23 @@ export default function NoteBooksIndex() {
           <h1 className="text-base font-semibold leading-6 text-foreground">
             Documents
           </h1>
+          <div className="flex items-center w-full justify-center flex-row space-x-2 flex-1 mr-2">
+            <Input
+              placeholder="Search documents..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="max-w-xs"
+            />
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="updatedAt">Last Updated</SelectItem>
+                <SelectItem value="createdAt">Created Date</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           {/* <p className="mt-2 text-sm text-foreground">
             Documents can be private, shared with others, or public.
           </p> */}
@@ -118,13 +162,18 @@ export default function NoteBooksIndex() {
           </div>
         ) : (
           <div className="flex flex-col w-full max-w-2xl justify-center space-y-4">
-            <div className="flex flex-row justify-end mb-4">
-              <Button variant="outline" size="sm" onClick={() => createNew()}>
-                New Document
-              </Button>
+            <div className="flex flex-col mb-4">
+              <div className="flex w-full justify-end">
+                <Button variant="outline" size="sm" onClick={() => createNew()}>
+                  New Document
+                </Button>
+              </div>
             </div>
+
             {data?.notebooks &&
-              Object.entries(groupDocumentsByDate(data.notebooks)).map(
+              Object.entries(
+                groupDocumentsByDate(sortedAndFilteredNotebooks(data.notebooks))
+              ).map(
                 ([period, docs]) =>
                   Array.isArray(docs) &&
                   docs.length > 0 && (
