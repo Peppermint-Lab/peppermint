@@ -41,8 +41,12 @@ export default function Tickets() {
   const { t } = useTranslation("peppermint");
 
   const token = getCookie("session");
-  const { data, status, error } = useQuery("allusertickets", () =>
-    getUserTickets(token)
+  const { data, status, error } = useQuery(
+    "allusertickets",
+    () => getUserTickets(token),
+    {
+      refetchInterval: 1000,
+    }
   );
 
   const user = useUser();
