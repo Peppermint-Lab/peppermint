@@ -33,6 +33,7 @@ export function UserCombo({
   defaultName,
   hideInitial,
   showIcon,
+  disabled,
 }) {
   const [open, setOpen] = React.useState(false);
   const [selectedStatus, setSelectedStatus] = React.useState<any | null>(null);
@@ -45,6 +46,7 @@ export function UserCombo({
             variant="outline"
             size="sm"
             className="w-[180px] justify-start border-none"
+            disabled={disabled}
           >
             {selectedStatus ? (
               <div className="flex flex-row space-x-2 w-[120px]">
@@ -117,10 +119,18 @@ export function UserCombo({
   );
 }
 
-export function IconCombo({ value, update, defaultName, hideInitial }) {
+export function IconCombo({
+  value,
+  update,
+  defaultName,
+  hideInitial,
+  disabled,
+}) {
   const [open, setOpen] = React.useState(false);
   const [selectedStatus, setSelectedStatus] = React.useState<any | null>(null);
   const defaultIcon = value.find((k) => k.value === defaultName);
+
+  console.log(disabled);
 
   return (
     <div className="flex items-center space-x-4">
@@ -130,16 +140,17 @@ export function IconCombo({ value, update, defaultName, hideInitial }) {
             variant="outline"
             size="sm"
             className="w-[180px] justify-start border-none"
+            disabled={disabled}
           >
             {selectedStatus ? (
               <div className="flex flex-row space-x-2 w-[120px]">
                 {!hideInitial && (
                   <div className="flex-shrink-0">
-                     <span className="inline-flex h-6 w-6 pl-2.5 items-center justify-center ">
-                    <span className="text-xs font-medium leading-none text-foreground uppercase ">
-                      <selectedStatus.icon className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="inline-flex h-6 w-6 pl-2.5 items-center justify-center ">
+                      <span className="text-xs font-medium leading-none text-foreground uppercase ">
+                        <selectedStatus.icon className="mr-2 h-4 w-4 shrink-0" />
+                      </span>
                     </span>
-                  </span>
                   </div>
                 )}
                 <span className="mt-[2.5px] capitalize">
@@ -151,7 +162,9 @@ export function IconCombo({ value, update, defaultName, hideInitial }) {
                 <div className="flex-shrink-0">
                   <span className="inline-flex h-6 w-6 pl-2.5 items-center justify-center ">
                     <span className="text-xs font-medium leading-none text-foreground uppercase ">
-                     {defaultIcon && <defaultIcon.icon className="mr-2 h-4 w-4 shrink-0" />}
+                      {defaultIcon && (
+                        <defaultIcon.icon className="mr-2 h-4 w-4 shrink-0" />
+                      )}
                     </span>
                   </span>
                 </div>

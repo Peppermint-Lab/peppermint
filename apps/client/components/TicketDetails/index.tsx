@@ -134,6 +134,8 @@ export default function Ticket() {
   const { id } = history.query;
 
   async function update() {
+    if (data && data.ticket && data.ticket.locked) return;
+
     await fetch(`/api/v1/ticket/update`, {
       method: "PUT",
       headers: {
@@ -157,6 +159,8 @@ export default function Ticket() {
   }
 
   async function updateStatus() {
+    if (data && data.ticket && data.ticket.locked) return;
+
     await fetch(`/api/v1/ticket/status/update`, {
       method: "PUT",
       headers: {
@@ -173,6 +177,8 @@ export default function Ticket() {
   }
 
   async function hide(hidden) {
+    if (data && data.ticket && data.ticket.locked) return;
+
     await fetch(`/api/v1/ticket/status/hide`, {
       method: "PUT",
       headers: {
@@ -229,6 +235,8 @@ export default function Ticket() {
   }
 
   async function addComment() {
+    if (data && data.ticket && data.ticket.locked) return;
+
     await fetch(`/api/v1/ticket/comment`, {
       method: "POST",
       headers: {
@@ -246,6 +254,8 @@ export default function Ticket() {
   }
 
   async function addTime() {
+    if (data && data.ticket && data.ticket.locked) return;
+
     await fetch(`/api/v1/time/new`, {
       method: "POST",
       headers: {
@@ -290,6 +300,8 @@ export default function Ticket() {
   }
 
   async function transferTicket() {
+    if (data && data.ticket && data.ticket.locked) return;
+
     if (n !== undefined) {
       await fetch(`/api/v1/ticket/transfer`, {
         method: "POST",
@@ -426,6 +438,7 @@ export default function Ticket() {
   }
 
   const handleInputChange = (editor) => {
+    if (data.ticket.locked) return;
     setIssue(editor.document);
   };
 
@@ -465,6 +478,7 @@ export default function Ticket() {
                         defaultValue={data.ticket.title}
                         onChange={(e) => setTitle(e.target.value)}
                         key={data.ticket.id}
+                        disabled={data.ticket.locked}
                       />
                     </div>
                     <div className="mt-2 text-xs flex flex-row justify-between items-center space-x-1 text-gray-500 dark:text-white">
@@ -584,6 +598,7 @@ export default function Ticket() {
                                   ? data.ticket.assignedTo.name
                                   : ""
                               }
+                              disabled={data.ticket.locked}
                             />
                           )}
                         </div>
@@ -594,6 +609,7 @@ export default function Ticket() {
                           defaultName={
                             data.ticket.priority ? data.ticket.priority : ""
                           }
+                          disabled={data.ticket.locked}
                         />
 
                         <IconCombo
@@ -602,6 +618,7 @@ export default function Ticket() {
                           defaultName={
                             data.ticket.status ? data.ticket.status : ""
                           }
+                          disabled={data.ticket.locked}
                         />
                       </div>
                     </div>
@@ -662,6 +679,7 @@ export default function Ticket() {
                           sideMenu={false}
                           className="m-0 p-0 bg-transparent dark:text-white"
                           onChange={handleInputChange}
+                          editable={!data.ticket.locked}
                         />
                       </>
                     ) : (
@@ -773,9 +791,14 @@ export default function Ticket() {
                                   name="comment"
                                   rows={3}
                                   className="block w-full bg-transparent rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
-                                  placeholder="Leave a comment"
+                                  placeholder={
+                                    data.ticket.locked
+                                      ? "This ticket is locked"
+                                      : "Leave a comment"
+                                  }
                                   defaultValue={""}
                                   onChange={(e) => setComment(e.target.value)}
+                                  disabled={data.ticket.locked}
                                 />
                               </div>
                               <div className="mt-4 flex justify-end">
@@ -811,8 +834,15 @@ export default function Ticket() {
                                 {data.ticket.isComplete ? (
                                   <button
                                     type="button"
-                                    onClick={() => updateStatus()}
-                                    className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    onClick={() => {
+                                      if (!data.ticket.locked) {
+                                        updateStatus();
+                                      }
+                                    }}
+                                    disabled={data.ticket.locked}
+                                    className={`inline-flex justify-center items-center gap-x-1.5 rounded-md ${
+                                      data.ticket.locked ? "bg-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-50"
+                                    } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
                                   >
                                     <CheckCircleIcon
                                       className="-ml-0.5 h-5 w-5 text-red-500"
@@ -825,8 +855,15 @@ export default function Ticket() {
                                 ) : (
                                   <button
                                     type="button"
-                                    onClick={() => updateStatus()}
-                                    className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    onClick={() => {
+                                      if (!data.ticket.locked) {
+                                        updateStatus();
+                                      }
+                                    }}
+                                    disabled={data.ticket.locked}
+                                    className={`inline-flex justify-center gap-x-1.5 rounded-md ${
+                                      data.ticket.locked ? "bg-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-50"
+                                    } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
                                   >
                                     <CheckCircleIcon
                                       className="-ml-0.5 h-5 w-5 text-green-500"
@@ -838,7 +875,12 @@ export default function Ticket() {
                                 <button
                                   onClick={() => addComment()}
                                   type="submit"
-                                  className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                                  disabled={data.ticket.locked}
+                                  className={`inline-flex items-center justify-center rounded-md px-4 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 ${
+                                    data.ticket.locked
+                                      ? "bg-gray-400 cursor-not-allowed"
+                                      : "bg-gray-900 hover:bg-gray-700"
+                                  }`}
                                 >
                                   {t("comment")}
                                 </button>
@@ -862,6 +904,7 @@ export default function Ticket() {
                     defaultName={
                       data.ticket.assignedTo ? data.ticket.assignedTo.name : ""
                     }
+                    disabled={data.ticket.locked}
                   />
                 )}
 
@@ -869,12 +912,14 @@ export default function Ticket() {
                   value={priorityOptions}
                   update={setPriority}
                   defaultName={data.ticket.priority ? data.ticket.priority : ""}
+                  disabled={data.ticket.locked}
                 />
 
                 <IconCombo
                   value={ticketStatusMap}
                   update={setTicketStatus}
                   defaultName={data.ticket.status ? data.ticket.status : ""}
+                  disabled={data.ticket.locked}
                 />
 
                 {/* <div className="border-t border-gray-200">
