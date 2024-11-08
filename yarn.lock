@@ -3024,7 +3024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-context-menu@npm:^2.1.5":
+"@radix-ui/react-context-menu@npm:^2.1.5, @radix-ui/react-context-menu@npm:^2.2.2":
   version: 2.2.2
   resolution: "@radix-ui/react-context-menu@npm:2.2.2"
   dependencies:
@@ -6787,6 +6787,7 @@ __metadata:
     "@radix-ui/react-alert-dialog": "npm:^1.1.2"
     "@radix-ui/react-avatar": "npm:^1.1.1"
     "@radix-ui/react-collapsible": "npm:^1.1.1"
+    "@radix-ui/react-context-menu": "npm:^2.2.2"
     "@radix-ui/react-dialog": "npm:^1.1.2"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.2"
     "@radix-ui/react-label": "npm:^2.1.0"
