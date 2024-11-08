@@ -211,14 +211,7 @@ export function configRoutes(fastify: FastifyInstance) {
           },
         });
 
-        if (config === null) {
-          reply.send({
-            success: true,
-            active: false,
-          });
-        }
-
-        if (config?.active) {
+        if (config && config?.active) {
           const provider = await createTransportProvider();
 
           await new Promise((resolve, reject) => {
@@ -247,7 +240,6 @@ export function configRoutes(fastify: FastifyInstance) {
           reply.send({
             success: true,
             active: false,
-            email: config,
           });
         }
       }
