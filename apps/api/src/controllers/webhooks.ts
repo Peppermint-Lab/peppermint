@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
+import { track } from "../lib/hog";
 
 export function webhookRoutes(fastify: FastifyInstance) {
   // Create a new webhook
@@ -23,6 +24,16 @@ export function webhookRoutes(fastify: FastifyInstance) {
             createdBy: "375f7799-5485-40ff-ba8f-0a28e0855ecf",
           },
         });
+
+        const client = track();
+
+        client.capture({
+          event: "webhook_created",
+          distinctId: "uuid",
+        });
+
+        client.shutdownAsync();
+        
         reply.status(200).send({ message: "Hook created!", success: true });
       }
     }

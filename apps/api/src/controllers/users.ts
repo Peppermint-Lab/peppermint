@@ -3,6 +3,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
+import { track } from "../lib/hog";
 
 export function userRoutes(fastify: FastifyInstance) {
   // All users
@@ -68,6 +69,16 @@ export function userRoutes(fastify: FastifyInstance) {
               isAdmin: admin,
             },
           });
+
+
+          const client = track();
+
+          client.capture({
+            event: "user_created",
+            distinctId: "uuid",
+          });
+
+          client.shutdownAsync();
 
           reply.send({
             success: true,

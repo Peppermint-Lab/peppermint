@@ -67,7 +67,7 @@ export function dataRoutes(fastify: FastifyInstance) {
 
       if (token) {
         const result = await prisma.ticket.count({
-          where: { userId: null, hidden: false },
+          where: { userId: null, hidden: false, isComplete: false },
         });
 
         reply.send({ count: result });

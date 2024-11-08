@@ -3,6 +3,19 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 import { OAuth2Client } from "google-auth-library";
+import { track } from "../lib/hog";
+
+async function tracking(event: string, properties: any) {
+  const client = track();
+
+  client.capture({
+    event: event,
+    properties: properties,
+    distinctId: "uuid",
+  });
+
+  client.shutdownAsync();
+}
 
 export function emailQueueRoutes(fastify: FastifyInstance) {
   // Create a new email queue
@@ -41,26 +54,47 @@ export function emailQueueRoutes(fastify: FastifyInstance) {
         });
 
         // generate redirect uri
-        if (serviceType === "gmail") {
-          const google = new OAuth2Client(clientId, clientSecret, redirectUri);
+        switch (serviceType) {
+          case "gmail":
+            const google = new OAuth2Client(
+              clientId,
+              clientSecret,
+              redirectUri
+            );
 
-          const authorizeUrl = google.generateAuthUrl({
-            access_type: "offline",
-            scope: "https://mail.google.com",
-            prompt: "consent",
-            state: mailbox.id,
-          });
+            const authorizeUrl = google.generateAuthUrl({
+              access_type: "offline",
+              scope: "https://mail.google.com",
+              prompt: "consent",
+              state: mailbox.id,
+            });
 
-          reply.send({
-            success: true,
-            message: "Gmail imap provider created!",
-            authorizeUrl: authorizeUrl,
-          });
+            tracking("gmail_provider_created", {
+              provider: "gmail",
+            });
+
+            reply.send({
+              success: true,
+              message: "Gmail imap provider created!",
+              authorizeUrl: authorizeUrl,
+            });
+            break;
+          case "other":
+            tracking("imap_provider_created", {
+              provider: "other",
+            });
+
+            reply.send({
+              success: true,
+              message: "Other service type created!",
+            });
+            break;
+          default:
+            reply.send({
+              success: false,
+              message: "Unsupported service type",
+            });
         }
-
-        reply.send({
-          success: true,
-        });
       }
     }
   );
