@@ -145,8 +145,37 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
 
   useEffect(() => checkPress(), [keypress]);
 
-  const showKeyboardShortcuts =
-    localStorage.getItem("hide-keyboard-shortcuts") === "true";
+  const [hideKeyboardShortcuts, setHideKeyboardShortcuts] = useState(false);
+  const [hideName, setHideName] = useState(false);
+  const [hideEmail, setHideEmail] = useState(false);
+
+  useEffect(() => {
+    const loadFlags = () => {
+      const savedFlags = localStorage.getItem("featureFlags");
+      if (savedFlags) {
+        const flags = JSON.parse(savedFlags);
+        const hideShortcuts = flags.find(
+          (f: any) => f.name === "Hide Keyboard Shortcuts"
+        )?.enabled;
+
+        const hideName = flags.find(
+          (f: any) => f.name === "Hide Name in Create"
+        )?.enabled;
+
+        const hideEmail = flags.find(
+          (f: any) => f.name === "Hide Email in Create"
+        )?.enabled;
+
+        setHideKeyboardShortcuts(hideShortcuts || false);
+        setHideName(hideName || false);
+        setHideEmail(hideEmail || false);
+      }
+    };
+
+    loadFlags();
+    window.addEventListener("storage", loadFlags);
+    return () => window.removeEventListener("storage", loadFlags);
+  }, []);
 
   return (
     <>
@@ -162,7 +191,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
         {state === "expanded" && (
           <>
             <span className="whitespace-nowrap">New Issue</span>
-            {showKeyboardShortcuts && (
+            {!hideKeyboardShortcuts && (
               <div className="flex w-full justify-end float-right">
                 <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
                   c
@@ -225,26 +254,30 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                   placeholder="Issue title"
                   maxLength={64}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full pl-0 pr-0 text-md text-foreground bg-background border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                  className="w-full pl-0 pr-0 pt-0 text-md text-foreground bg-background border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
                 />
 
                 <div className="">
-                  <input
-                    type="text"
-                    id="name"
-                    placeholder={t("ticket_name_here")}
-                    name="name"
-                    onChange={(e) => setName(e.target.value)}
-                    className=" w-full pl-0 pr-0text-foreground bg-background  sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-                  />
+                  {!hideName && (
+                    <input
+                      type="text"
+                      id="name"
+                      placeholder={t("ticket_name_here")}
+                      name="name"
+                      onChange={(e) => setName(e.target.value)}
+                      className=" w-full pl-0 pr-0text-foreground bg-background  sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                    />
+                  )}
 
-                  <input
-                    type="text"
-                    name="email"
-                    placeholder={t("ticket_email_here")}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className=" w-full pl-0 pr-0 text-foreground bg-background   sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
-                  />
+                  {!hideEmail && (
+                    <input
+                      type="text"
+                      name="email"
+                      placeholder={t("ticket_email_here")}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className=" w-full pl-0 pr-0 text-foreground bg-background   sm:text-sm border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
+                    />
+                  )}
 
                   <Editor setIssue={setIssue} />
 
