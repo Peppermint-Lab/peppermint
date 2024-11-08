@@ -2,6 +2,19 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { checkToken } from "../lib/jwt";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
+import { track } from "../lib/hog";
+
+async function tracking(event: string, properties: any) {
+  const client = track();
+
+  client.capture({
+    event: event,
+    properties: properties,
+    distinctId: "uuid",
+  });
+
+  client.shutdownAsync();
+}
 
 export function notebookRoutes(fastify: FastifyInstance) {
   // Create a new entry
@@ -24,6 +37,8 @@ export function notebookRoutes(fastify: FastifyInstance) {
             userId: user!.id,
           },
         });
+
+        await tracking("note_created", {});
 
         const { id } = data;
 
