@@ -10,8 +10,18 @@ const nodemailer = require("nodemailer");
 
 import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
-import { emit } from "process";
 import { createTransportProvider } from "../lib/nodemailer/transport";
+import { track } from "../lib/hog";
+
+async function tracking(event: string, properties: any) {
+  const client = track();
+
+  client.capture({
+    event: event,
+    properties: properties,
+    distinctId: "uuid",
+  });
+}
 
 export function configRoutes(fastify: FastifyInstance) {
   // Check auth method
@@ -87,6 +97,8 @@ export function configRoutes(fastify: FastifyInstance) {
           });
         }
 
+        await tracking("oidc_provider_updated", {});
+
         reply.send({
           success: true,
           message: "OIDC config Provider updated!",
@@ -152,6 +164,8 @@ export function configRoutes(fastify: FastifyInstance) {
           });
         }
 
+        await tracking("oauth_provider_updated", {});
+
         reply.send({
           success: true,
           message: "SSO Provider updated!",
@@ -182,6 +196,8 @@ export function configRoutes(fastify: FastifyInstance) {
 
         // Delete the OAuth provider
         await prisma.oAuthProvider.deleteMany({});
+
+        await tracking("sso_provider_deleted", {});
 
         reply.send({
           success: true,
