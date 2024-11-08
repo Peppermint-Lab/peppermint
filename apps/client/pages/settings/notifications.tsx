@@ -48,14 +48,14 @@ export default function UserNotifications() {
                   <span className="flex-grow flex flex-col">
                     <Switch.Label
                       as="span"
-                      className="text-sm font-medium text-gray-900"
+                      className="text-sm font-medium text-foreground"
                       passive
                     >
                       Ticket Creation
                     </Switch.Label>
                     <Switch.Description
                       as="span"
-                      className="text-sm text-gray-500"
+                      className="text-sm text-foreground-muted"
                     >
                       Get emailed when a new ticket is created
                     </Switch.Description>
@@ -64,7 +64,7 @@ export default function UserNotifications() {
                     checked={ticket_creation}
                     onChange={setTicket_creation}
                     className={classNames(
-                      ticket_creation ? "bg-teal-600" : "bg-gray-200",
+                      ticket_creation ? "bg-primary" : "bg-gray-200",
                       "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     )}
                   >
@@ -72,7 +72,7 @@ export default function UserNotifications() {
                       aria-hidden="true"
                       className={classNames(
                         ticket_creation ? "translate-x-5" : "translate-x-0",
-                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-foreground shadow transform ring-0 transition ease-in-out duration-200"
                       )}
                     />
                   </Switch>
@@ -85,14 +85,14 @@ export default function UserNotifications() {
                   <span className="flex-grow flex flex-col">
                     <Switch.Label
                       as="span"
-                      className="text-sm font-medium text-gray-900"
+                      className="text-sm font-medium text-foreground"
                       passive
                     >
                       Ticket Status Change
                     </Switch.Label>
                     <Switch.Description
                       as="span"
-                      className="text-sm text-gray-500"
+                      className="text-sm text-foreground-muted"
                     >
                       Get emailed when a ticket you're assigned to has it's
                       status changed
@@ -102,7 +102,7 @@ export default function UserNotifications() {
                     checked={ticket_status}
                     onChange={setTicket_status}
                     className={classNames(
-                      ticket_status ? "bg-teal-600" : "bg-gray-200",
+                      ticket_status ? "bg-primary" : "bg-gray-200",
                       "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     )}
                   >
@@ -110,7 +110,7 @@ export default function UserNotifications() {
                       aria-hidden="true"
                       className={classNames(
                         ticket_status ? "translate-x-5" : "translate-x-0",
-                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-foreground shadow transform ring-0 transition ease-in-out duration-200"
                       )}
                     />
                   </Switch>
@@ -123,14 +123,14 @@ export default function UserNotifications() {
                   <span className="flex-grow flex flex-col">
                     <Switch.Label
                       as="span"
-                      className="text-sm font-medium text-gray-900"
+                      className="text-sm font-medium text-foreground"
                       passive
                     >
                       Assgined new ticket
                     </Switch.Label>
                     <Switch.Description
                       as="span"
-                      className="text-sm text-gray-500"
+                      className="text-sm text-foreground-muted"
                     >
                       Get emailed when you get assigned a new ticket
                     </Switch.Description>
@@ -139,7 +139,7 @@ export default function UserNotifications() {
                     checked={ticket_assigned}
                     onChange={setTicket_assigned}
                     className={classNames(
-                      ticket_assigned ? "bg-teal-600" : "bg-gray-200",
+                      ticket_assigned ? "bg-primary" : "bg-gray-200",
                       "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     )}
                   >
@@ -147,7 +147,7 @@ export default function UserNotifications() {
                       aria-hidden="true"
                       className={classNames(
                         ticket_assigned ? "translate-x-5" : "translate-x-0",
-                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-foreground shadow transform ring-0 transition ease-in-out duration-200"
                       )}
                     />
                   </Switch>
@@ -160,14 +160,14 @@ export default function UserNotifications() {
                   <span className="flex-grow flex flex-col">
                     <Switch.Label
                       as="span"
-                      className="text-sm font-medium text-gray-900"
+                      className="text-sm font-medium text-foreground"
                       passive
                     >
                       Ticket Comment
                     </Switch.Label>
                     <Switch.Description
                       as="span"
-                      className="text-sm text-gray-500"
+                      className="text-sm text-foreground-muted"
                     >
                       Get emailed when a comment is added to your ticket
                     </Switch.Description>
@@ -176,7 +176,7 @@ export default function UserNotifications() {
                     checked={ticket_comments}
                     onChange={setTicket_comments}
                     className={classNames(
-                      ticket_comments ? "bg-teal-600" : "bg-gray-200",
+                      ticket_comments ? "bg-primary" : "bg-gray-200",
                       "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     )}
                   >
@@ -184,7 +184,7 @@ export default function UserNotifications() {
                       aria-hidden="true"
                       className={classNames(
                         ticket_comments ? "translate-x-5" : "translate-x-0",
-                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                        "pointer-events-none inline-block h-5 w-5 rounded-full bg-foreground shadow transform ring-0 transition ease-in-out duration-200"
                       )}
                     />
                   </Switch>
@@ -195,7 +195,7 @@ export default function UserNotifications() {
                 <button
                   onClick={() => updateNotifications()}
                   type="button"
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 >
                   save
                 </button>

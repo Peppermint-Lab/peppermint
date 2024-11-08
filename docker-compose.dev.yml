@@ -5,8 +5,6 @@ services:
     container_name: peppermint_postgres
     image: postgres:latest
     restart: always
-    ports:
-      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:

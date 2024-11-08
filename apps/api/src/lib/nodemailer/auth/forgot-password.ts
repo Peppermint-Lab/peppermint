@@ -1,5 +1,6 @@
 import nodeMailer from "nodemailer";
 import { prisma } from "../../../prisma";
+import { createTransportProvider } from "../transport";
 
 export async function forgotPassword(
   email: string,
@@ -8,46 +9,20 @@ export async function forgotPassword(
   token: string
 ) {
   try {
-    let mail;
-    let replyto;
-
-    const emails = await prisma.email.findMany();
+    const email = await prisma.email.findFirst();
 
     const resetlink = `${link}/auth/reset-password?token=${token}`;
 
-    if (emails.length > 0) {
-      if (process.env.ENVIRONMENT === "development") {
-        let testAccount = await nodeMailer.createTestAccount();
-        mail = nodeMailer.createTransport({
-          port: 1025,
-          secure: false, // true for 465, false for other ports
-          auth: {
-            user: testAccount.user, // generated ethereal user
-            pass: testAccount.pass, // generated ethereal password
-          },
-        });
-      } else {
-        const email = emails[0];
-        replyto = email.reply;
-        mail = nodeMailer.createTransport({
-          // @ts-ignore
-          host: email.host,
-          port: email.port,
-          secure: email.port === "465" ? true : false, // true for 465, false for other ports
-          auth: {
-            user: email.user, // generated ethereal user
-            pass: email.pass, // generated ethereal password
-          },
-        });
-      }
+    if (email) {
+      const transport = await createTransportProvider();
 
       console.log("Sending email to: ", email);
 
-      let info = await mail.sendMail({
-        from: replyto, // sender address
-        to: email, // list of receivers
-        subject: `Password Reset Request`, // Subject line
-        text: `Password Reset Code: ${code}, follow this link to reset your password ${resetlink}`, // plain text body
+      let info = await transport.sendMail({
+        from: email?.reply,
+        to: email,
+        subject: `Password Reset Request`,
+        text: `Password Reset Code: ${code}, follow this link to reset your password ${resetlink}`,
         html: `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html lang="en">
@@ -92,7 +67,7 @@ export async function forgotPassword(
       console.log("Message sent: %s", info.messageId);
 
       // Preview only available when sending through an Ethereal account
-      console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
+      // console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
     }
   } catch (error) {
     console.log(error);

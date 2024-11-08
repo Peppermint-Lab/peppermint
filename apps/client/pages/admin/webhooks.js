@@ -71,14 +71,14 @@ export default function Notifications() {
         <div className="pt-10 pb-16 ">
           <div className="divide-y-2">
             <div className="px-4 sm:px-6 md:px-0">
-              <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-extrabold text-foreground">
                 Webhook Settings
               </h1>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center mt-4">
                 <div className="sm:flex-auto">
-                  <p className="mt-2 text-sm text-gray-700  dark:text-white">
+                  <p className="mt-2 text-sm text-foreground">
                     Webhooks allow external services to be notified when certain
                     events happen. When the specified events happen, we'll send
                     a POST request to each of the URLs you provide.
@@ -127,10 +127,10 @@ export default function Notifications() {
                               className="rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3"
                             >
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900  dark:text-white">
+                                <p className="text-sm font-medium text-foreground">
                                   {hook.name}
                                 </p>
-                                <p className="text-sm text-gray-500 truncate  dark:text-white">
+                                <p className="text-sm text-foreground truncate">
                                   {hook.url} | {hook.type}
                                 </p>
                               </div>
@@ -147,7 +147,7 @@ export default function Notifications() {
                           ))}
                         </div>
                       ) : (
-                        <p className=" dark:text-white">
+                        <p className="text-foreground">
                           You currently have no web hooks added
                         </p>
                       )}
@@ -161,7 +161,7 @@ export default function Notifications() {
                       <div className="space-y-4">
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-700  dark:text-white"
+                          className="block text-sm font-medium text-foreground"
                         >
                           Webhook Name
                         </label>
@@ -170,7 +170,7 @@ export default function Notifications() {
                             type="text"
                             name="url"
                             id="url"
-                            className="shadow-sm focus:ring-green\-500 dark:text-black  focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
+                            className="shadow-sm bg-transparent text-foreground border focus:ring-green\-500 focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
                             required
                             onChange={(e) => setName(e.target.value)}
                           />
@@ -178,7 +178,7 @@ export default function Notifications() {
 
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-700  dark:text-white PT-4"
+                          className="block text-sm font-medium text-foreground pt-4"
                         >
                           Payload Url
                         </label>
@@ -187,7 +187,7 @@ export default function Notifications() {
                             type="text"
                             name="url"
                             id="url"
-                            className="shadow-sm focus:ring-green\-500 dark:text-black focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
+                            className="shadow-sm bg-transparent text-foreground border focus:ring-green\-500  focus:border-green-500 block w-full sm:w-1/2 md:w-3/4 sm:text-sm border-gray-300 rounded-md"
                             required
                             onChange={(e) => setUrl(e.target.value)}
                           />
@@ -196,14 +196,14 @@ export default function Notifications() {
                         <div className="w-3/4">
                           <label
                             htmlFor="location"
-                            className="mt-4 block text-sm font-medium text-gray-700  dark:text-white"
+                            className="mt-4 block text-sm font-medium text-foreground"
                           >
                             Type
                           </label>
                           <select
                             id="location"
                             name="location"
-                            className="mt-1 block w-full pl-3 pr-10 py-2 dark:text-black text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                            className="mt-1 block w-full pl-3 pr-10 bg-transparent border py-2 text-foreground text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                             defaultValue="ticket_created"
                             onChange={(e) => setType(e.target.value)}
                           >
@@ -224,7 +224,7 @@ export default function Notifications() {
                             <span className="flex-grow flex flex-row">
                               <Switch.Label
                                 as="span"
-                                className="text-sm font-medium text-gray-900  dark:text-white w-1/6"
+                                className="text-sm font-medium text-foreground w-1/6"
                                 passive
                               >
                                 Active

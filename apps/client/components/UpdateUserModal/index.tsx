@@ -1,6 +1,6 @@
+import { toast } from "@/shadcn/hooks/use-toast";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
@@ -27,21 +27,19 @@ export default function UpdateUserModal({ user }) {
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
-          notifications.show({
-            title: "User Updated",
-            message: "User updated succesfully",
-            color: "green",
-            autoClose: 5000,
+          toast({
+            variant: "default",
+            title: "Success",
+            description: "User updated succesfully",
           });
-    		} else {
-          notifications.show({
+        } else {
+          toast({
+            variant: "destructive",
             title: "Error",
-            message: res.message,
-            color: "red",
-            autoClose: 5000,
+            description: res.message,
           });
         }
-    });
+      });
     // .then(() => router.reload());
   }
 

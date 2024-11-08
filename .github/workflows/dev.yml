@@ -36,4 +36,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            pepperlabs/peppermint:nightly
+            pepperlabs/peppermint:dev

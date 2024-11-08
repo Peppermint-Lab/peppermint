@@ -9,9 +9,10 @@ import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
 import { sendComment } from "../lib/nodemailer/ticket/comment";
 import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
-import { createNotification } from "../lib/notifications";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
+import { assignedNotification } from "../lib/notifications/issue/assigned";
+import { commentNotification } from "../lib/notifications/issue/comment";
 
 const validateEmail = (email: string) => {
   return String(email)
@@ -36,16 +37,25 @@ export function ticketRoutes(fastify: FastifyInstance) {
         email,
         engineer,
         type,
+        createdBy,
       }: any = request.body;
 
       const ticket: any = await prisma.ticket.create({
         data: {
           name,
           title,
-          detail,
+          detail: JSON.stringify(detail),
           priority: priority ? priority : "low",
           email,
           type: type ? type.toLowerCase() : "support",
+          createdBy: createdBy
+            ? {
+                id: createdBy.id,
+                name: createdBy.name,
+                role: createdBy.role,
+                email: createdBy.email,
+              }
+            : undefined,
           client:
             company !== undefined
               ? {
@@ -76,7 +86,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         await sendAssignedEmail(assgined!.email);
 
-        await createNotification("ticket_assigned", engineer.id, ticket);
+        await assignedNotification(engineer.id, ticket);
       }
 
       const webhook = await prisma.webhooks.findMany({
@@ -530,10 +540,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         //@ts-expect-error
         const { email, title } = ticket;
-
         if (public_comment && email) {
-          sendComment(text, title, email);
+          sendComment(text, title, ticket!.id, email!);
         }
+
+        await commentNotification(user!.id, ticket, user!.name);
 
         const hog = track();
 
@@ -627,16 +638,59 @@ export function ticketRoutes(fastify: FastifyInstance) {
       if (token) {
         const { hidden, id }: any = request.body;
 
-        await prisma.ticket
-          .update({
-            where: { id: id },
-            data: {
-              hidden: hidden,
-            },
-          })
-          .then(async (ticket) => {
-            // await sendTicketStatus(ticket);
-          });
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            hidden: hidden,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  // Lock a ticket
+  fastify.put(
+    "/api/v1/ticket/status/lock",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const { locked, id }: any = request.body;
+
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            locked: locked,
+          },
+        });
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  // Delete a ticket
+  fastify.post(
+    "/api/v1/ticket/delete",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+      const token = checkToken(bearer);
+
+      if (token) {
+        const { id }: any = request.body;
+
+        await prisma.ticket.delete({
+          where: { id: id },
+        });
 
         reply.send({
           success: true,

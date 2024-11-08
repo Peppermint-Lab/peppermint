@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
+import { toast } from "@/shadcn/hooks/use-toast";
 
 export default function PasswordChange({ children }) {
   const token = getCookie("session");
@@ -24,27 +24,24 @@ export default function PasswordChange({ children }) {
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {
-            notifications.show({
+            toast({
+              variant: "default",
               title: "Success",
-              message: `Password updated :)`,
-              color: "green",
-              autoClose: 5000,
+              description: "Password updated successfully.",
             });
           } else {
-            notifications.show({
+            toast({
+              variant: "destructive",
               title: "Error",
-              message: `Error: Failed to update password`,
-              color: "red",
-              autoClose: 5000,
+              description: "Error: Failed to update password",
             });
           }
         });
     } else {
-      notifications.show({
+      toast({
+        variant: "destructive",
         title: "Error",
-        message: `Error: passwords do not match`,
-        color: "red",
-        autoClose: 5000,
+        description: "Error: passwords do not match",
       });
     }
   };
@@ -56,14 +53,14 @@ export default function PasswordChange({ children }) {
           <div className="m-2 space-y-4 p-4">
             <input
               type="password"
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              className="shadow-sm text-foreground bg-transparent focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter users new password"
             />
 
             <input
               type="password"
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              className="shadow-sm text-foreground bg-transparent focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               onChange={(e) => setCheck(e.target.value)}
               placeholder="Confirm users password"
             />
@@ -75,7 +72,7 @@ export default function PasswordChange({ children }) {
               await postData();
             }}
             type="submit"
-            className="inline-flex items-center px-4 py-2 border font-semibold border-gray-300 shadow-sm text-xs rounded text-gray-700 bg-white hover:bg-gray-50 "
+            className="inline-flex bg-primary items-center px-4 py-2 border font-semibold border-gray-300 shadow-sm text-xs rounded text-white"
           >
             Update Password
           </button>

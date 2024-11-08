@@ -1,7 +1,8 @@
 //@ts-nocheck
 import "@radix-ui/themes/styles.css";
-import { ThemeProvider } from "next-themes";
 import "../styles/globals.css";
+
+import { ThemeProvider } from "next-themes";
 
 import {
   DocumentCheckIcon,
@@ -9,7 +10,8 @@ import {
   HomeIcon,
   TicketIcon,
 } from "@heroicons/react/24/outline";
-import { Notifications } from "@mantine/notifications";
+
+import { MantineProvider } from "@mantine/core";
 import { Theme } from "@radix-ui/themes";
 import { useRouter } from "next/router";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -23,6 +25,11 @@ import NewLayout from "../layouts/newLayout";
 import NoteBookLayout from "../layouts/notebook";
 import PortalLayout from "../layouts/portalLayout";
 import Settings from "../layouts/settings";
+import ShadLayout from "../layouts/shad";
+import GlobalShortcut from "@/shadcn/block/GlobalShortcut";
+import { Toaster } from "@/shadcn/ui/toaster";
+
+import { SidebarProvider } from "@/shadcn/ui/sidebar";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +37,7 @@ function Auth({ children }: any) {
   const { loading, user } = useUser();
 
   React.useEffect(() => {
-    if (loading) return; // Do nothing while loading
+    if (loading) return; 
   }, [user, loading]);
 
   if (user) {
@@ -45,55 +52,12 @@ function Auth({ children }: any) {
 function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   const router = useRouter();
 
-  const actions = [
-    {
-      title: "Home",
-      description: "Get to home page",
-      onTrigger: () => router.push("/"),
-      icon: <HomeIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Notebook",
-      description: "Personal User Notes",
-      onTrigger: () => router.push("/notebook"),
-      icon: <FolderIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Tickets",
-      description:
-        "Central store for all company & user tickets, open or closed",
-      onTrigger: () => router.push("/tickets"),
-      icon: <TicketIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Documentation",
-      description: "Documentation for peppermint.sh",
-      onTrigger: () => router.push("https://docs.peppermint.sh"),
-      icon: <DocumentCheckIcon className="h-8 w-8 text-gray-900" />,
-    },
-    {
-      title: "Github",
-      description: "OSS codebase for peppermint",
-      onTrigger: () =>
-        router.push("https://github.com/Peppermint-Lab/peppermint"),
-      icon: (
-        <img className="h-7 ml-1 w-auto" src="/github.svg" alt="Workflow" />
-      ),
-    },
-    {
-      title: "Peppermint.sh",
-      description: "",
-      onTrigger: () => router.push("https://peppermint.sh"),
-      icon: <img className="h-7 ml-1 w-auto" src="/logo.svg" alt="Workflow" />,
-    },
-  ];
-
   if (router.asPath.slice(0, 5) === "/auth") {
     return (
-      <>
-        <Notifications position="top-right" />
+      <ThemeProvider attribute="class" defaultTheme="light">
         <Component {...pageProps} />
-      </>
+        <Toaster />
+      </ThemeProvider>
     );
   }
 
@@ -104,33 +68,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
           <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
-                <NewLayout>
-                  <AdminLayout>
-                    <Notifications position="top-right" />
-                    <Component {...pageProps} />
-                  </AdminLayout>
-                </NewLayout>
-              </Auth>
-            </QueryClientProvider>
-          </Theme>
-        </ThemeProvider>
-      </SessionProvider>
-    );
-  }
-
-  if (router.pathname.includes("/notebook")) {
-    return (
-      <SessionProvider>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Theme>
-            <QueryClientProvider client={queryClient}>
-              <Auth>
-                <NewLayout>
-                  <NoteBookLayout>
-                    <Notifications position="top-right" />
-                    <Component {...pageProps} />
-                  </NoteBookLayout>
-                </NewLayout>
+                <AdminLayout>
+                  <Component {...pageProps} />
+                  <Toaster />
+                </AdminLayout>
               </Auth>
             </QueryClientProvider>
           </Theme>
@@ -146,12 +87,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
           <Theme>
             <QueryClientProvider client={queryClient}>
               <Auth>
-                <NewLayout>
+                <ShadLayout>
                   <Settings>
-                    <Notifications position="top-right" />
                     <Component {...pageProps} />
+                    <Toaster />
                   </Settings>
-                </NewLayout>
+                </ShadLayout>
               </Auth>
             </QueryClientProvider>
           </Theme>
@@ -167,8 +108,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
           <QueryClientProvider client={queryClient}>
             <Auth>
               <PortalLayout>
-                <Notifications position="top-right" />
                 <Component {...pageProps} />
+                <Toaster />
               </PortalLayout>
             </Auth>
           </QueryClientProvider>
@@ -180,8 +121,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname === "/onboarding") {
     return (
       <SessionProvider>
-        <Notifications position="top-right" />
         <Component {...pageProps} />
+        <Toaster />
       </SessionProvider>
     );
   }
@@ -189,8 +130,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
   if (router.pathname === "/submit") {
     return (
       <>
-        <Notifications position="top-right" />
         <Component {...pageProps} />
+        <Toaster />
       </>
     );
   }
@@ -201,10 +142,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
         <Theme>
           <QueryClientProvider client={queryClient}>
             <Auth>
-              <NewLayout>
-                <Notifications position="top-right" />
+              <ShadLayout>
                 <Component {...pageProps} />
-              </NewLayout>
+                <Toaster />
+                </ShadLayout>
             </Auth>
           </QueryClientProvider>
         </Theme>

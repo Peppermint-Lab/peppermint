@@ -28,7 +28,9 @@ RUN cd apps/client && yarn build
 FROM node:lts AS runner
 
 COPY --from=builder /app/apps/api/ ./apps/api/
-COPY --from=builder /app/apps/client ./apps/client
+COPY --from=builder /app/apps/client/.next/standalone ./apps/client
+COPY --from=builder /app/apps/client/.next/static ./apps/client/.next/static
+COPY --from=builder /app/apps/client/public ./apps/client/public
 COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
 
 # Expose the ports for both apps

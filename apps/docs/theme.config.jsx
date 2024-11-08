@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import seoConfig from './seo.config'
+import seoConfig from './seo.config.js'
 
 const config = {
   logo: "Peppermint",
@@ -15,7 +15,8 @@ const config = {
   },
   docsRepositoryBase: 'https://github.com/Peppermint-Lab/docs',
   sidebar: {
-    toggleButton: true,
+    defaultMenuCollapseLevel: 2,
+    toggleButton: false,
   },
   chat: {
     link: 'https://discord.gg/X9yFbcV2rF',

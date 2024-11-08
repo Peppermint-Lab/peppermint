@@ -64,12 +64,6 @@ server.register(require("@fastify/swagger"), {
 
 server.register(multer.contentParser);
 
-// server.register(import("@fastify/rate-limit"), {
-//   max: 20,
-//   timeWindow: "1 minute",
-// });
-
-// register all routes
 registerRoutes(server);
 
 server.get("/", async function (request, response) {
@@ -113,7 +107,7 @@ const start = async () => {
     await prisma.$connect();
     server.log.info("Connected to Prisma");
 
-    const port = process.env.PORT || 5003;
+    const port = 5003;
 
     server.listen(
       { port: Number(port), host: "0.0.0.0" },
@@ -135,7 +129,7 @@ const start = async () => {
       }
     );
 
-    setInterval(() => getEmails(), 60000); // Call getEmails every minute
+    setInterval(() => getEmails(), 10000); // Call getEmails every minute
   } catch (err) {
     server.log.error(err);
     await prisma.$disconnect();

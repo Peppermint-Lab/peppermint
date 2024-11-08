@@ -1,8 +1,5 @@
 <h1 align="center">Welcome to Peppermint Ticket Management 🍵</h1>
 <p align="center">
-  <a href='https://ko-fi.com/peppermintsh' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />
- </p>
-<p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.2-blue.svg?cacheSeconds=2592000" />
   <a target="_blank">
     <img alt="Github Stars: " src="https://img.shields.io/github/stars/jwandrews99/winter?style=social" />
@@ -20,12 +17,6 @@
 </p>
 
 > Ticket Management System in order to help helpdesks & service desks manage internal staff & customer requests
-
-## Introduction
-
-<p align="center">
-It's a self hosted alternative to popular services such as zendesk
-</p>
 
 ## ✨ Features
 
@@ -66,11 +57,6 @@ services:
     restart: always
     depends_on:
       - peppermint_postgres
-    healthcheck:
-      test: ["CMD", "sh", "-c", "wget --spider $$API_URL"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     environment:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
@@ -94,6 +80,7 @@ admin@admin.com
 ## One click installers
 
 - We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>
+- We have a one line installer for Ubuntu and Debian (for the moment) and can be viewed here <a href="https://spearmint.sh/">here</a>
 
 ## Documentation
 

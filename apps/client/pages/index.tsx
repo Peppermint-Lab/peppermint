@@ -86,24 +86,26 @@ export default function Home() {
   }
 
   const stats = [
-    { name: t("open_tickets"), stat: openTickets, href: "/tickets" },
+    { name: "Open Issues", stat: openTickets, href: "/issues" },
     {
-      name: t("completed_tickets"),
+      name: "Completed Issues",
       stat: completedTickets,
-      href: "/tickets?filter=closed",
+      href: "/issues?filter=closed",
     },
     {
-      name: t("unassigned_tickets"),
+      name: "Unassigned Issues",
       stat: unassigned,
-      href: "/tickets?filter=unassigned",
+      href: "/issues?filter=unassigned",
     },
   ];
 
   async function datafetch() {
-    fetchTickets();
-    getOpenTickets();
-    getCompletedTickets();
-    getUnassginedTickets();
+    Promise.all([
+      fetchTickets(),
+      getOpenTickets(),
+      getCompletedTickets(),
+      getUnassginedTickets(),
+    ]);
     await setLoading(false);
   }
 
@@ -115,6 +117,15 @@ export default function Home() {
   return (
     <div className="flex flex-col xl:flex-row p-8 justify-center w-full">
       <div className="w-full xl:w-[70%] max-w-5xl">
+        <div className="block sm:hidden mb-4">
+          {user.isAdmin && (
+            <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+              <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
+                Version {process.env.NEXT_PUBLIC_CLIENT_VERSION}
+              </span>
+            </Link>
+          )}
+        </div>
         {!loading && (
           <>
             <div>
@@ -143,7 +154,6 @@ export default function Home() {
                   <button
                     type="button"
                     className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => router.push("/new")}
                   >
                     <svg
                       className="mx-auto h-12 w-12 text-gray-400 dark:text-white"
@@ -160,15 +170,13 @@ export default function Home() {
                       />
                     </svg>
                     <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-white">
-                      Create your first ticket
+                      Create your first Issue
                     </span>
                   </button>
                 </>
               ) : (
                 <>
-                  <span className="font-bold text-2xl">
-                    {t("recent_tickets")}
-                  </span>
+                  <span className="font-bold text-2xl">Recent Issues</span>
                   <div className="-mx-4 sm:-mx-0 w-full">
                     <table className="min-w-full divide-y divide-gray-300">
                       <thead>
@@ -212,7 +220,7 @@ export default function Home() {
                             <tr
                               key={item.id}
                               className="hover:bg-gray-300 dark:hover:bg-green-600 hover:cursor-pointer"
-                              onClick={() => router.push(`/ticket/${item.id}`)}
+                              onClick={() => router.push(`/issue/${item.id}`)}
                             >
                               <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-0">
                                 {item.title}
@@ -275,176 +283,6 @@ export default function Home() {
                               <td className="px-3 py-1 text-sm text-gray-500 w-[130px] dark:text-white truncate whitespace-nowrap">
                                 {item.assignedTo ? item.assignedTo.name : "-"}
                               </td>
-                              {/* <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                          <Menu
-                            as="div"
-                            className="relative inline-block text-left"
-                          >
-                            <div>
-                              <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                Options
-                                <ChevronDownIcon
-                                  className="-mr-1 h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                              </Menu.Button>
-                            </div>
-
-                            <Transition
-                              as={Fragment}
-                              enter="transition ease-out duration-100"
-                              enterFrom="transform opacity-0 scale-95"
-                              enterTo="transform opacity-100 scale-100"
-                              leave="transition ease-in duration-75"
-                              leaveFrom="transform opacity-100 scale-100"
-                              leaveTo="transform opacity-0 scale-95"
-                            >
-                              <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <div className="py-1">
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <PencilSquareIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Edit
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <DocumentDuplicateIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Duplicate
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                </div>
-                                <div className="py-1">
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <ArchiveBoxIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Archive
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <ArrowRightCircleIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Move
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                </div>
-                                <div className="py-1">
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <UserPlusIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Share
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <HeartIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Add to favorites
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                </div>
-                                <div className="py-1">
-                                  <Menu.Item>
-                                    {({ active }) => (
-                                      <a
-                                        href="#"
-                                        className={classNames(
-                                          active
-                                            ? "bg-gray-100 text-gray-900"
-                                            : "text-gray-700",
-                                          "group flex items-center px-4 py-2 text-sm"
-                                        )}
-                                      >
-                                        <TrashIcon
-                                          className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                          aria-hidden="true"
-                                        />
-                                        Delete
-                                      </a>
-                                    )}
-                                  </Menu.Item>
-                                </div>
-                              </Menu.Items>
-                            </Transition>
-                          </Menu>
-                        </td> */}
                             </tr>
                           ))}
                       </tbody>
@@ -456,10 +294,6 @@ export default function Home() {
           </>
         )}
       </div>
-      {/* <div className="flex-1 xl:ml-4 bg-white px-2 rounded-lg shadow-md pt-2 2xl:max-h-[53vh]">
-        <span className="font-bold text-2xl ml-1">{t("reminders")}</span>
-        <ListTodo />
-      </div> */}
     </div>
   );
 }

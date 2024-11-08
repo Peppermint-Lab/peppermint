@@ -11,10 +11,10 @@ import {
   CheckIcon,
   ChevronUpDownIcon,
 } from "@heroicons/react/20/solid";
-import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import { useUser } from "../../store/session";
+import { toast } from "@/shadcn/hooks/use-toast";
 
 const type = [
   { id: 5, name: "Incident" },
@@ -63,25 +63,29 @@ export default function ClientTicketNew() {
         detail: description,
         priority: priority.name,
         type: selected.name,
+        createdBy: {
+          id: user.id,
+          name: user.name,
+          role: user.role,
+          email: user.email,
+        },
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.success === true) {
-          notifications.show({
+        if (res.success) {
+          toast({
+            variant: "default",
             title: "Ticket Created",
-            message: "Ticket created succesfully",
-            color: "green",
-            autoClose: 5000,
+            description: "Ticket created successfully",
           });
           setView("success");
           setTicketID(res.id);
         } else {
-          notifications.show({
+          toast({
+            variant: "destructive",
             title: "Error",
-            message: `Please fill out all information and try again`,
-            color: "red",
-            autoClose: 5000,
+            description: "Please fill out all information and try again",
           });
         }
       });

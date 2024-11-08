@@ -4,23 +4,36 @@ import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useUser } from "../store/session";
 
-// if admin -> set up a new user -> set up a new client -> set up a webhook -> set up an Email Queue
-// if user -> new password -> check user info like name etc
-
 export default function Home() {
   const router = useRouter();
 
   const { user } = useUser();
-  const token = getCookie("session");
+
+  async function updateFirstLogin() {
+    await fetch(`/api/v1/auth/user/${user.id}/first-login`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          router.push("/");
+        }
+      });
+  }
 
   return (
-    <div className="bg-gray-200">
+    <div className="bg-background">
       <div className="flex justify-center align-center h-screen items-center">
-        <div className="bg-white shadow-xl rounded-lg lg:p-8 p-4 mx-4">
+        <div className="bg-background shadow-xl rounded-lg lg:p-8 p-4 mx-4">
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
-              <h1 className="text-2xl font-bold">Peppermint </h1>
-              <p className="text-gray-600">
+              <h1 className="text-2xl text-foreground font-bold">
+                Peppermint{" "}
+              </h1>
+              <p className="text-foreground">
                 Welcome to Peppermint! A fully open sourced ticket management
                 system.
               </p>
@@ -32,7 +45,7 @@ export default function Home() {
                 <img src="/github.svg" className="h-10 w-10" />
                 <div className="flex flex-col align-center lg:w-[36em]">
                   <span className="font-bold text-lg">Github</span>
-                  <span className="max-w-md lg:max-w-lg text-xs md:text-md">
+                  <span className="max-w-lg  text-xs md:text-md">
                     Being an open source project, all of our source code can be
                     housed here. If you ever face a bug or are unsure about
                     something.
@@ -85,8 +98,8 @@ export default function Home() {
           </div>
           <div className="float-right mt-4">
             <button
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg"
-              onClick={() => router.push("/")}
+              className="bg-green-500 hover:bg-green-600 text-white px-2.5 py-1.5 mr-6 text-sm font-semibold rounded-lg"
+              onClick={() => updateFirstLogin()}
             >
               To Dashboard
             </button>
