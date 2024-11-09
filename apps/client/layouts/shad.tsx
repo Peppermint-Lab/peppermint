@@ -1,18 +1,17 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { AccountDropdown } from "../components/AccountDropdown";
 
-import { useUser } from "../store/session";
-import { Bell } from "lucide-react";
 import { AppSidebar } from "@/shadcn/components/app-sidebar";
 import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/shadcn/ui/sidebar";
+import { Bell } from "lucide-react";
+import { useUser } from "../store/session";
 
 export default function ShadLayout({ children }: any) {
   const location = useRouter();

@@ -8,17 +8,16 @@ import {
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { Button } from "@radix-ui/themes";
+import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { Button } from "@radix-ui/themes";
-import useTranslation from "next-translate/useTranslation";
 
-import CreateTicketModal from "../components/CreateTicketModal";
 import { AccountDropdown } from "../components/AccountDropdown";
+import CreateTicketModal from "../components/CreateTicketModal";
 
-import { useUser } from "../store/session";
-import ThemeSettings from "../components/ThemeSettings";
+import { classNames } from "@/shadcn/lib/utils";
 import {
   Bell,
   Building,
@@ -26,7 +25,8 @@ import {
   Settings,
   SquareKanban,
 } from "lucide-react";
-import { classNames } from "@/shadcn/lib/utils";
+import ThemeSettings from "../components/ThemeSettings";
+import { useUser } from "../store/session";
 
 export default function NewLayout({ children }: any) {
   const location = useRouter();
