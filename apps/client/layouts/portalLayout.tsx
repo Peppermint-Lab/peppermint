@@ -301,7 +301,7 @@ export default function PortalLayout({ children }: any) {
                           )}
                         >
                           <span className="whitespace-nowrap">
-                            {user.name}'s open
+                            open
                           </span>
                           <div className="flex w-full justify-end float-right">
                             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
@@ -322,7 +322,7 @@ export default function PortalLayout({ children }: any) {
                           )}
                         >
                           <span className="whitespace-nowrap">
-                            {user.name}'s closed
+                            closed
                           </span>
                           <div className="flex w-full justify-end float-right">
                             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">

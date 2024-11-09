@@ -1,21 +1,13 @@
 import {
-  Combobox,
   Dialog,
-  Disclosure,
-  Menu,
   Transition,
 } from "@headlessui/react";
 import {
   Bars3Icon,
   Cog6ToothIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxStackIcon,
-  MagnifyingGlassIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
@@ -32,21 +24,9 @@ import {
   Building,
   FileText,
   Settings,
-  SquareActivity,
   SquareKanban,
-  Text,
 } from "lucide-react";
-
-const quickActions = [
-  // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
-  // { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
-  // { name: "Add hashtag...", icon: HashtagIcon, shortcut: "H", url: "#" },
-  // { name: "Add label...", icon: TagIcon, shortcut: "L", url: "#" },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "@/shadcn/lib/utils";
 
 export default function NewLayout({ children }: any) {
   const location = useRouter();
