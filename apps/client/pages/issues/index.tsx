@@ -1,25 +1,10 @@
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import Loader from "react-spinners/ClipLoader";
-import { useState, useMemo, useEffect } from "react";
 
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-  ContextMenuSub,
-  ContextMenuSubTrigger,
-  ContextMenuSubContent,
-} from "@/shadcn/ui/context-menu";
-import { getCookie } from "cookies-next";
-import moment from "moment";
-import Link from "next/link";
-import { useQuery } from "react-query";
-import { useUser } from "../../store/session";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
-import { CheckIcon, Filter, X } from "lucide-react";
+import { toast } from "@/shadcn/hooks/use-toast";
+import { cn } from "@/shadcn/lib/utils";
 import { Button } from "@/shadcn/ui/button";
 import {
   Command,
@@ -30,8 +15,23 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/shadcn/ui/command";
-import { cn } from "@/shadcn/lib/utils";
-import { toast } from "@/shadcn/hooks/use-toast";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/shadcn/ui/context-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { getCookie } from "cookies-next";
+import { CheckIcon, Filter, X } from "lucide-react";
+import moment from "moment";
+import Link from "next/link";
+import { useQuery } from "react-query";
+import { useUser } from "../../store/session";
 
 async function getUserTickets(token: any) {
   const res = await fetch(`/api/v1/tickets/all`, {
@@ -82,7 +82,6 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  const [filterSelected, setFilterSelected] = useState();
   const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
