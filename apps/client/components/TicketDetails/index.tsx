@@ -1276,14 +1276,7 @@ export default function Ticket() {
               onClick={(e) => {
                 e.preventDefault();
                 if (confirm("Are you sure you want to delete this ticket?")) {
-                  fetch(`/api/v1/ticket/delete`, {
-                    method: "POST",
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ id: data.ticket.id }),
-                  });
+                  deleteIssue(data.ticket.id);
                 }
               }}
             >
