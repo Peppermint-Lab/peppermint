@@ -215,7 +215,7 @@ export default function Home() {
 
           <div className="">
             <span className="text-2xl font-bold tracking-tight text-gray-900 ">
-              Peppermint - Open Source Issue Managment
+              Peppermint - Open Source Issue management
             </span>
             <div className="mt-4 flex flex-col ">
               <div className="">
