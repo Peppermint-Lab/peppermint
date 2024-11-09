@@ -70,7 +70,6 @@ export default function PortalLayout({ children }: any) {
     }
   }
 
-
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
     console.log(pathname);
@@ -88,13 +87,13 @@ export default function PortalLayout({ children }: any) {
           location.push("/portal/");
           break;
         case "t":
-          location.push("/portal/tickets");
+          location.push("/portal/issues");
           break;
         case "o":
-          location.push("/portal/tickets/open");
+          location.push("/portal/issues/open");
           break;
         case "f":
-          location.push("/portal/tickets/closed");
+          location.push("/portal/issues/closed");
           break;
         default:
           break;
@@ -274,16 +273,16 @@ export default function PortalLayout({ children }: any) {
                     <ul className="w-full space-y-1">
                       <li>
                         <Link
-                          href="/portal/tickets"
+                          href="/portal/issues"
                           className={classNames(
-                            location.pathname === "/portal/tickets"
+                            location.pathname === "/portal/issues"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
                           )}
                         >
                           <TicketIcon className="h-4 w-4 shrink-0 mt-1" />
-                          <span className="whitespace-nowrap">Tickets</span>
+                          <span className="whitespace-nowrap">Issues</span>
                           <div className="flex w-full justify-end float-right">
                             <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
                               t
@@ -293,9 +292,9 @@ export default function PortalLayout({ children }: any) {
                       </li>
                       <li className="ml-8">
                         <Link
-                          href="/portal/tickets/open"
+                          href="/portal/issues/open"
                           className={classNames(
-                            location.pathname === "/portal/tickets/open"
+                            location.pathname === "/portal/issues/open"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 mll-2 text-xs font-semibold leading-6"
@@ -314,9 +313,9 @@ export default function PortalLayout({ children }: any) {
 
                       <li className="ml-8 ">
                         <Link
-                          href="/portal/tickets/closed"
+                          href="/portal/issues/closed"
                           className={classNames(
-                            location.pathname === "/portal/tickets/closed"
+                            location.pathname === "/portal/issues/closed"
                               ? "bg-[#F0F3F9] dark:bg-gray-800 dark:text-green-600"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
                             "group -mx-2 flex gap-x-3 p-1 text-xs font-semibold leading-6"
@@ -362,8 +361,6 @@ export default function PortalLayout({ children }: any) {
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
-                
-              
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="z-50 flex items-center p-1.5">
@@ -384,7 +381,6 @@ export default function PortalLayout({ children }: any) {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="bg-white absolute right-0 z-50 w-40 origin-top-right rounded-md  shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                     
                       <Menu.Item>
                         {({ active }) => (
                           <button
