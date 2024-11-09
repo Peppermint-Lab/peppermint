@@ -1,9 +1,8 @@
-import { ChevronRight, type LucideIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { type LucideIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -59,7 +58,6 @@ export function NavMain({
             <SidebarMenuItem>
               <SidebarMenuButton
                 tooltip={!hideKeyboardShortcuts ? item.initial : item.title}
-                size="sm"
                 onClick={() => router.push(item.url)}
               >
                 <div className="flex flex-row items-center justify-between w-full">
@@ -84,7 +82,6 @@ export function NavMain({
                 {item.items?.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.title}>
                     <SidebarMenuSubButton
-                      size="sm"
                       onClick={() => router.push(subItem.url)}
                       className="cursor-pointer flex flex-row items-center justify-between w-full px-0 pl-2.5"
                     >
@@ -102,9 +99,17 @@ export function NavMain({
           ) : (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
-                size="sm"
                 tooltip={!hideKeyboardShortcuts ? item.initial : item.title}
-                onClick={() => router.push(item.url)}
+                onClick={() => {
+                  if (item.url) {
+                    router.push(item.url);
+                  } else {
+                    const event = new KeyboardEvent("keydown", {
+                      key: item.initial,
+                    });
+                    document.dispatchEvent(event);
+                  }
+                }}
               >
                 <div className="flex flex-row items-center justify-between w-full">
                   <div className="flex flex-row items-center gap-x-2 w-full">

@@ -1,11 +1,11 @@
-import * as React from "react";
 import {
   Building,
   FileText,
-  GalleryVerticalEnd,
+  ListPlus,
   Settings,
-  SquareKanban,
+  SquareKanban
 } from "lucide-react";
+import * as React from "react";
 
 import { NavMain } from "@/shadcn/components/nav-main";
 import {
@@ -16,12 +16,12 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/shadcn/ui/sidebar";
-import ThemeSettings from "../../../components/ThemeSettings";
-import { useRouter } from "next/router";
-import { useUser } from "../../../store/session";
-import { useEffect, useState } from "react";
 import useTranslation from "next-translate/useTranslation";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import CreateTicketModal from "../../../components/CreateTicketModal";
+import ThemeSettings from "../../../components/ThemeSettings";
+import { useUser } from "../../../store/session";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useRouter();
@@ -55,6 +55,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
     ],
     navMain: [
+      {
+        title: "New Issue",
+        url: ``,
+        icon: ListPlus,
+        isActive: location.pathname === "/" ? true : false,
+        initial: "c",
+      },
       {
         title: t("sl_dashboard"),
         url: `/${locale}/`,
