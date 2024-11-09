@@ -1,17 +1,12 @@
-import useTranslation from "next-translate/useTranslation";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useUser } from "../store/session";
+import { classNames } from "@/shadcn/lib/utils";
+import { SidebarProvider } from "@/shadcn/ui/sidebar";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
 import {
   Bars3Icon,
   InboxStackIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "@radix-ui/themes";
-import { AccountDropdown } from "../components/AccountDropdown";
-import { classNames } from "@/shadcn/lib/utils";
 import {
   ContactIcon,
   KeyRound,
@@ -21,8 +16,12 @@ import {
   UserRound,
   Webhook,
 } from "lucide-react";
+import useTranslation from "next-translate/useTranslation";
+import Link from "next/link";
+import { Fragment, useState } from "react";
+import { AccountDropdown } from "../components/AccountDropdown";
 import ThemeSettings from "../components/ThemeSettings";
-import { SidebarProvider } from "@/shadcn/ui/sidebar";
+import { useUser } from "../store/session";
 
 export default function AdminLayout({ children }: any) {
   const { t, lang } = useTranslation("peppermint");

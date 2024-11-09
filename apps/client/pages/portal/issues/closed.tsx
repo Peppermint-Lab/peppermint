@@ -104,6 +104,9 @@ export default function Tickets() {
                 <button
                   type="button"
                   className="relative block w-[400px] rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  onClick={() => {
+                    router.push("/portal/new");
+                  }}
                 >
                   <svg
                     className="mx-auto h-12 w-12 text-gray-400"
@@ -120,7 +123,7 @@ export default function Tickets() {
                     />
                   </svg>
                   <span className="mt-2 block text-sm font-semibold text-gray-900">
-                    Create your first ticket
+                    Create your first issue
                   </span>
                 </button>
               </div>

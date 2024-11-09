@@ -5,6 +5,7 @@ interface FeatureFlag {
   name: string;
   enabled: boolean;
   description: string;
+  flagKey: string;
 }
 
 const defaultFlags: FeatureFlag[] = [
@@ -12,6 +13,19 @@ const defaultFlags: FeatureFlag[] = [
     name: "Hide Keyboard Shortcuts",
     enabled: false,
     description: "Hide keyboard shortcuts",
+    flagKey: "keyboard_shortcuts_hide", // Added flag key for this feature
+  },
+  {
+    name: "Hide Name in Create",
+    enabled: false,
+    description: "Hide name field in create a new issue",
+    flagKey: "name_hide", // Added flag key for this feature
+  },
+  {
+    name: "Hide Email in Create",
+    enabled: false,
+    description: "Hide email field in create a new issue",
+    flagKey: "email_hide", // Added flag key for this feature
   },
 ];
 
@@ -23,7 +37,14 @@ export default function FeatureFlags() {
     // Load flags from localStorage on component mount
     const savedFlags = localStorage.getItem("featureFlags");
     if (savedFlags) {
-      setFlags(JSON.parse(savedFlags));
+      const parsedFlags = JSON.parse(savedFlags);
+      // Merge saved flags with default flags, adding any new flags
+      const mergedFlags = defaultFlags.map(defaultFlag => {
+        const savedFlag = parsedFlags.find((f: FeatureFlag) => f.name === defaultFlag.name);
+        return savedFlag || defaultFlag;
+      });
+      setFlags(mergedFlags);
+      localStorage.setItem("featureFlags", JSON.stringify(mergedFlags));
     } else {
       setFlags(defaultFlags);
       localStorage.setItem("featureFlags", JSON.stringify(defaultFlags));

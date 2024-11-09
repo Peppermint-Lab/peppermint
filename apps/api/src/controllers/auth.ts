@@ -46,6 +46,16 @@ function generateRandomPassword(length: number): string {
   return password;
 }
 
+async function tracking(event: string, properties: any) {
+  const client = track();
+
+  client.capture({
+    event: event,
+    properties: properties,
+    distinctId: "uuid",
+  });
+}
+
 export function authRoutes(fastify: FastifyInstance) {
   // Register a new user
   fastify.post(
@@ -175,7 +185,7 @@ export function authRoutes(fastify: FastifyInstance) {
       const hog = track();
 
       hog.capture({
-        event: "user_registered",
+        event: "user_registered_external",
         distinctId: user.id,
       });
 
@@ -338,6 +348,8 @@ export function authRoutes(fastify: FastifyInstance) {
           expires: new Date(Date.now() + 60 * 60 * 1000),
         },
       });
+
+      await tracking("user_logged_in_password", {});
 
       const data = {
         id: user!.id,
@@ -523,13 +535,11 @@ export function authRoutes(fastify: FastifyInstance) {
         // Retrieve user information
         const userInfo = await oidcClient.userinfo(tokens.access_token);
 
-        console.log(userInfo);
-
         let user = await prisma.user.findUnique({
           where: { email: userInfo.email },
         });
 
-        console.log(user);
+        await tracking("user_logged_in_oidc", {});
 
         if (!user) {
           // Create a new basic user
@@ -665,6 +675,8 @@ export function authRoutes(fastify: FastifyInstance) {
           },
         });
 
+        await tracking("user_logged_in_oauth", {});
+
         // Send Response
         reply.send({
           token: signed_token,
@@ -756,6 +768,8 @@ export function authRoutes(fastify: FastifyInstance) {
           notifcations,
           external_user: user!.external_user,
         };
+
+        await tracking("user_profile", {});
 
         reply.send({
           user: data,
@@ -1007,6 +1021,8 @@ export function authRoutes(fastify: FastifyInstance) {
             firstLogin: false,
           },
         });
+
+        await tracking("user_first_login", {});
 
         reply.send({ success: true });
       }

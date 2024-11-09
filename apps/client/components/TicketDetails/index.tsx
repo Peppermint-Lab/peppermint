@@ -154,7 +154,6 @@ export default function Ticket() {
       .then((res) => res.json())
       .then(() => {
         setEdit(false);
-        // refetch();
       });
   }
 

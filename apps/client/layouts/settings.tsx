@@ -1,9 +1,9 @@
+import { classNames } from "@/shadcn/lib/utils";
+import { SidebarProvider } from "@/shadcn/ui/sidebar";
+import { Bell, Flag, KeyRound } from "lucide-react";
 import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Bell, Flag, KeyRound } from "lucide-react";
-import { classNames } from "@/shadcn/lib/utils";
-import { SidebarProvider } from "@/shadcn/ui/sidebar";
 
 export default function Settings({ children }) {
   const router = useRouter();
