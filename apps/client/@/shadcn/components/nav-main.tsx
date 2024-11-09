@@ -2,11 +2,6 @@ import { ChevronRight, type LucideIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/shadcn/ui/collapsible";
-import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,

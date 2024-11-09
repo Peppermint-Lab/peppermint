@@ -1,52 +1,32 @@
 import {
-  Combobox,
   Dialog,
-  Disclosure,
-  Menu,
   Transition,
 } from "@headlessui/react";
 import {
   Bars3Icon,
   Cog6ToothIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxStackIcon,
-  MagnifyingGlassIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { getCookie } from "cookies-next";
+import { Button } from "@radix-ui/themes";
+import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { Button } from "@radix-ui/themes";
-import useTranslation from "next-translate/useTranslation";
 
-import CreateTicketModal from "../components/CreateTicketModal";
 import { AccountDropdown } from "../components/AccountDropdown";
+import CreateTicketModal from "../components/CreateTicketModal";
 
-import { useUser } from "../store/session";
-import ThemeSettings from "../components/ThemeSettings";
+import { classNames } from "@/shadcn/lib/utils";
 import {
   Bell,
   Building,
   FileText,
   Settings,
-  SquareActivity,
   SquareKanban,
-  Text,
 } from "lucide-react";
-
-const quickActions = [
-  // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
-  // { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
-  // { name: "Add hashtag...", icon: HashtagIcon, shortcut: "H", url: "#" },
-  // { name: "Add label...", icon: TagIcon, shortcut: "L", url: "#" },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import ThemeSettings from "../components/ThemeSettings";
+import { useUser } from "../store/session";
 
 export default function NewLayout({ children }: any) {
   const location = useRouter();

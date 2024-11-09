@@ -2,6 +2,7 @@ import cors from "@fastify/cors";
 import "dotenv/config";
 import Fastify, { FastifyInstance } from "fastify";
 import multer from "fastify-multer";
+import fs from "fs";
 
 import { exec } from "child_process";
 import { track } from "./lib/hog";
@@ -9,12 +10,23 @@ import { getEmails } from "./lib/imap";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
-const server: FastifyInstance = Fastify({
-  logger: true,
-});
+// Ensure the directory exists
+const logFilePath = './logs.log'; // Update this path to a writable location
 
+// Create a writable stream
+const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+
+// Initialize Fastify with logger
+const server: FastifyInstance = Fastify({
+  logger: {
+    stream: logStream, // Use the writable stream
+  },
+  disableRequestLogging: true,
+  trustProxy: true,
+});
 server.register(cors, {
   origin: "*",
+  
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 });

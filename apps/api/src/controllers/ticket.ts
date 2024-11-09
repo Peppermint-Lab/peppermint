@@ -443,20 +443,29 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const { user, id }: any = request.body;
 
       if (token) {
-        const assigned = await prisma.user.update({
-          where: { id: user },
-          data: {
-            tickets: {
-              connect: {
-                id: id,
+        if (user) {
+          const assigned = await prisma.user.update({
+            where: { id: user },
+            data: {
+              tickets: {
+                connect: {
+                  id: id,
+                },
               },
             },
-          },
-        });
+          });
 
-        const { email } = assigned;
+          const { email } = assigned;
 
-        await sendAssignedEmail(email);
+          await sendAssignedEmail(email);
+        } else {
+          await prisma.ticket.update({
+            where: { id: id },
+            data: {
+              userId: null,
+            },
+          });
+        }
 
         reply.send({
           success: true,
