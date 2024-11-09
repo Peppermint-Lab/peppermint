@@ -9,10 +9,11 @@ import { sendAssignedEmail } from "../lib/nodemailer/ticket/assigned";
 import { sendComment } from "../lib/nodemailer/ticket/comment";
 import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
-import { checkSession } from "../lib/session";
-import { prisma } from "../prisma";
 import { assignedNotification } from "../lib/notifications/issue/assigned";
 import { commentNotification } from "../lib/notifications/issue/comment";
+import { sendWebhookNotification } from "../lib/notifications/webhook";
+import { checkSession } from "../lib/session";
+import { prisma } from "../prisma";
 
 const validateEmail = (email: string) => {
   return String(email)
@@ -97,33 +98,20 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
       for (let i = 0; i < webhook.length; i++) {
         if (webhook[i].active === true) {
-          const url = webhook[i].url;
-          if (url.includes("discord.com")) {
-            const message = {
-              content: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
-              avatar_url:
-                "https://avatars.githubusercontent.com/u/76014454?s=200&v=4",
-              username: "Peppermint.sh",
-            };
-            axios
-              .post(url, message)
-              .then((response) => {
-                console.log("Message sent successfully!");
-                console.log("Discord API response:", response.data);
-              })
-              .catch((error) => {
-                console.error("Error sending message:", error);
-              });
-          } else {
-            await axios.post(`${webhook[i].url}`, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                data: `Ticket ${ticket.id} created by ${ticket.name} -> ${ticket.email}. Priority -> ${ticket.priority}`,
-              }),
-            });
-          }
+          const message = {
+            event: "ticket_created",
+            id: ticket.id,
+            title: ticket.title,
+            priority: ticket.priority,
+            email: ticket.email,
+            name: ticket.name,
+            type: ticket.type,
+            createdBy: ticket.createdBy,
+            assignedTo: ticket.assignedTo,
+            client: ticket.client,
+          };
+
+          await sendWebhookNotification(webhook[i], message);
         }
       }
 

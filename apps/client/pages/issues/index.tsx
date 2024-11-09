@@ -1,25 +1,10 @@
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import Loader from "react-spinners/ClipLoader";
-import { useState, useMemo, useEffect } from "react";
 
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-  ContextMenuSub,
-  ContextMenuSubTrigger,
-  ContextMenuSubContent,
-} from "@/shadcn/ui/context-menu";
-import { getCookie } from "cookies-next";
-import moment from "moment";
-import Link from "next/link";
-import { useQuery } from "react-query";
-import { useUser } from "../../store/session";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
-import { CheckIcon, Filter, X } from "lucide-react";
+import { toast } from "@/shadcn/hooks/use-toast";
+import { cn } from "@/shadcn/lib/utils";
 import { Button } from "@/shadcn/ui/button";
 import {
   Command,
@@ -30,8 +15,23 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/shadcn/ui/command";
-import { cn } from "@/shadcn/lib/utils";
-import { toast } from "@/shadcn/hooks/use-toast";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/shadcn/ui/context-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { getCookie } from "cookies-next";
+import { CheckIcon, Filter, X } from "lucide-react";
+import moment from "moment";
+import Link from "next/link";
+import { useQuery } from "react-query";
+import { useUser } from "../../store/session";
 
 async function getUserTickets(token: any) {
   const res = await fetch(`/api/v1/tickets/all`, {
@@ -712,6 +712,8 @@ export default function Tickets() {
                                 "Content-Type": "application/json",
                               },
                               body: JSON.stringify({ id: ticket.id }),
+                            }).then(() => {
+                              refetch();
                             });
                           }
                         }}
@@ -728,7 +730,7 @@ export default function Tickets() {
                   type="button"
                   className="relative block w-[400px] rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   onClick={() => {
-                    const event = new KeyboardEvent('keydown', { key: 'c' });
+                    const event = new KeyboardEvent("keydown", { key: "c" });
                     document.dispatchEvent(event);
                   }}
                 >
