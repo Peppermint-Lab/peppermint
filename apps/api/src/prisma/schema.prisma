@@ -161,6 +161,9 @@ model Comment {
   public     Boolean @default(false)
   reply      Boolean @default(false)
   replyEmail String?
+  edited     Boolean @default(false)
+  editedAt   DateTime?
+  previous   String?
 
   userId   String?
   user     User?   @relation(fields: [userId], references: [id])
