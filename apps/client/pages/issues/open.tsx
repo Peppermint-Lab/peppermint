@@ -83,10 +83,40 @@ export default function Tickets() {
   const normal = "bg-green-100 text-green-800";
 
   const [filterSelected, setFilterSelected] = useState();
-  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>(() => {
+    const saved = localStorage.getItem('open_selectedPriorities');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(() => {
+    const saved = localStorage.getItem('open_selectedStatuses');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>(() => {
+    const saved = localStorage.getItem('open_selectedAssignees');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [users, setUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    localStorage.setItem('open_selectedPriorities', JSON.stringify(selectedPriorities));
+  }, [selectedPriorities]);
+
+  useEffect(() => {
+    localStorage.setItem('open_selectedStatuses', JSON.stringify(selectedStatuses));
+  }, [selectedStatuses]);
+
+  useEffect(() => {
+    localStorage.setItem('open_selectedAssignees', JSON.stringify(selectedAssignees));
+  }, [selectedAssignees]);
+
+  const clearAllFilters = () => {
+    setSelectedPriorities([]);
+    setSelectedStatuses([]);
+    setSelectedAssignees([]);
+    localStorage.removeItem('open_selectedPriorities');
+    localStorage.removeItem('open_selectedStatuses');
+    localStorage.removeItem('open_selectedAssignees');
+  };
 
   const handlePriorityToggle = (priority: string) => {
     setSelectedPriorities((prev) =>
@@ -480,11 +510,7 @@ export default function Tickets() {
                       variant="ghost"
                       size="sm"
                       className="h-6 px-2 text-xs"
-                      onClick={() => {
-                        setSelectedPriorities([]);
-                        setSelectedStatuses([]);
-                        setSelectedAssignees([]);
-                      }}
+                      onClick={clearAllFilters}
                     >
                       Clear all
                     </Button>

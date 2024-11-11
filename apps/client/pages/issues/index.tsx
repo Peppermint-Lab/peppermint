@@ -82,9 +82,28 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>(() => {
+    const saved = localStorage.getItem('all_selectedPriorities');
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(() => {
+    const saved = localStorage.getItem('all_selectedStatuses');
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>(() => {
+    const saved = localStorage.getItem('all_selectedAssignees');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Update local storage when filters change
+  useEffect(() => {
+    localStorage.setItem('all_selectedPriorities', JSON.stringify(selectedPriorities));
+    localStorage.setItem('all_selectedStatuses', JSON.stringify(selectedStatuses));
+    localStorage.setItem('all_selectedAssignees', JSON.stringify(selectedAssignees));
+  }, [selectedPriorities, selectedStatuses, selectedAssignees]);
+
   const [users, setUsers] = useState<any[]>([]);
 
   const handlePriorityToggle = (priority: string) => {
