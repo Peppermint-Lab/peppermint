@@ -31,6 +31,7 @@ import { useDebounce } from "use-debounce";
 
 import { toast } from "@/shadcn/hooks/use-toast";
 import { cn } from "@/shadcn/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shadcn/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -733,59 +734,7 @@ export default function Ticket() {
                       </div>
                     </div>
                   </aside>
-                  <div className="py-3 xl:pb-0 xl:pt-2">
-                    <div className="flex flex-row items-center text-sm space-x-1">
-                      {data.ticket.fromImap ? (
-                        <>
-                          <span className="font-bold">{data.ticket.email}</span>
-                          <span>created via email at </span>
-                          <span className="font-bold">
-                            {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          {data.ticket.createdBy ? (
-                            <div className="flex flex-row space-x-1">
-                              <span>
-                                Created by
-                                <strong>
-                                  {data.ticket.createdBy.name}
-                                </strong> at{" "}
-                              </span>
-                              <span className="">
-                                {moment(data.ticket.createdAt).format("LLL")}
-                              </span>
-                              {data.ticket.name && (
-                                <span>
-                                  for <strong>{data.ticket.name}</strong>
-                                </span>
-                              )}
-                              {data.ticket.email && (
-                                <span>
-                                  ( <strong>{data.ticket.email}</strong> )
-                                </span>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="flex flex-row space-x-1">
-                              <span>Created at </span>
-                              <span className="">
-                                <strong>
-                                  {moment(data.ticket.createdAt).format("LLL")}
-                                </strong>
-                                {data.ticket.client && (
-                                  <span>
-                                    for{" "}
-                                    <strong>{data.ticket.client.name}</strong>
-                                  </span>
-                                )}
-                              </span>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
+                  <div className="py-3 xl:pb-0 xl:pt-2 ">
                     <div className="prose max-w-none mt-2">
                       {!data.ticket.fromImap ? (
                         <>
@@ -810,205 +759,230 @@ export default function Ticket() {
                     </div>
                   </div>
                   <section
-                    aria-labelledby="activity-title"
-                    className="mt-8 xl:mt-10"
+                    aria-labelledby="activity-title "
+                    className="border-t mt-4"
                   >
-                    <div>
-                      <div className="divide-y">
-                        <div className="pb-2">
-                          <span
-                            id="activity-title"
-                            className="text-lg font-medium text-gray-900 dark:text-white"
-                          >
-                            {t("comments")}
-                          </span>
-                        </div>
-                        <div className="pt-2">
-                          {/* Activity feed*/}
-                          <div className="flow-root">
-                            <ul role="list" className="-mb-8">
-                              {data.ticket.comments.length > 0 &&
-                                data.ticket.comments.map(
-                                  (item: any, itemIdx: any) => (
-                                    <li key={item.id}>
-                                      <div className="relative pb-8">
-                                        {itemIdx !==
-                                        data.ticket.comments.length - 1 ? (
-                                          <span
-                                            className="absolute left-3 top-5 -ml-px h-full w-0.5 bg-gray-200"
-                                            aria-hidden="true"
-                                          />
-                                        ) : null}
-                                        <div className="relative flex items-start space-x-3">
-                                          <div className="relative">
-                                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                                              <span className="font-medium leading-none text-xs text-white uppercase">
-                                                {item.user
-                                                  ? item.user.name[0]
-                                                  : item.replyEmail[0]}
-                                              </span>
-                                            </span>
-                                          </div>
-                                          <div className="min-w-0 flex-1">
-                                            <div>
-                                              <div className="text-sm">
-                                                <span className="font-medium text-gray-900 dark:text-white ">
-                                                  {item.user
-                                                    ? item.user.name
-                                                    : item.replyEmail}
-                                                </span>
-                                              </div>
-                                              <div className=" flex flex-row space-x-1">
-                                                <span
-                                                  className={`text-xs ${
-                                                    item.public
-                                                      ? "text-primary font-semibold"
-                                                      : "text-gray-500"
-                                                  } dark:text-white`}
-                                                >
-                                                  {item.public
-                                                    ? "Publicly"
-                                                    : "Internally"}
-                                                </span>
-                                                <span className="text-xs text-gray-500 dark:text-white">
-                                                  commented at
-                                                </span>
-
-                                                <span className="text-xs text-gray-500 dark:text-white">
-                                                  {moment(
-                                                    item.createdAt
-                                                  ).format("DD/MM/YYYY hh:mm")}
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <div className="text-sm  text-gray-900 dark:text-white">
-                                              <span>{item.text}</span>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </li>
-                                  )
+                    <div className="p-2 flex flex-col space-y-1">
+                      <div>
+                        <span
+                          id="activity-title"
+                          className="text-base font-medium "
+                        >
+                          Activity
+                        </span>
+                      </div>
+                      <div>
+                        <div className="flex flex-row items-center text-sm space-x-1">
+                          {data.ticket.fromImap ? (
+                            <>
+                              <span className="font-bold">
+                                {data.ticket.email}
+                              </span>
+                              <span>created via email at </span>
+                              <span className="font-bold">
+                                {moment(data.ticket.createdAt).format(
+                                  "DD/MM/YYYY"
                                 )}
-                            </ul>
-                          </div>
-                          <div className="mt-6">
-                            <div className="flex space-x-3">
-                              <div className="min-w-0 flex-1">
-                                <div>
-                                  <div>
-                                    <label
-                                      htmlFor="comment"
-                                      className="sr-only"
-                                    >
-                                      {t("comment")}
-                                    </label>
-                                    <textarea
-                                      id="comment"
-                                      name="comment"
-                                      rows={3}
-                                      className="block w-full bg-transparent rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
-                                      placeholder={
-                                        data.ticket.locked
-                                          ? "This ticket is locked"
-                                          : "Leave a comment"
-                                      }
-                                      defaultValue={""}
-                                      onChange={(e) =>
-                                        setComment(e.target.value)
-                                      }
-                                      disabled={data.ticket.locked}
-                                    />
-                                  </div>
-                                  <div className="mt-4 flex justify-end">
-                                    <Text as="label" size="2">
-                                      <div className="flex flex-row items-center space-x-2">
-                                        <Switch
-                                          checked={publicComment}
-                                          onChange={setPublicComment}
-                                          className={`${
-                                            publicComment
-                                              ? "bg-blue-600"
-                                              : "bg-gray-200"
-                                          } relative inline-flex h-6 w-11 items-center rounded-full`}
-                                        >
-                                          <span className="sr-only">
-                                            Enable notifications
-                                          </span>
-                                          <span
-                                            className={`${
-                                              publicComment
-                                                ? "translate-x-6"
-                                                : "translate-x-1"
-                                            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                          />
-                                        </Switch>
-                                        <Tooltip content="Enabling this will mean the email registered to the ticket will get a reply based on your comment.">
-                                          <Text> Public Reply</Text>
-                                        </Tooltip>
-                                      </div>
-                                    </Text>
-                                  </div>
-                                  <div className="mt-4 flex items-center justify-end space-x-4">
-                                    {data.ticket.isComplete ? (
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          if (!data.ticket.locked) {
-                                            updateStatus();
-                                          }
-                                        }}
-                                        disabled={data.ticket.locked}
-                                        className={`inline-flex justify-center items-center gap-x-1.5 rounded-md ${
-                                          data.ticket.locked
-                                            ? "bg-gray-300 cursor-not-allowed"
-                                            : "bg-white hover:bg-gray-50"
-                                        } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
-                                      >
-                                        <CheckCircleIcon
-                                          className="-ml-0.5 h-5 w-5 text-red-500"
-                                          aria-hidden="true"
-                                        />
-                                        <span className="">
-                                          {t("reopen_issue")}
-                                        </span>
-                                      </button>
-                                    ) : (
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          if (!data.ticket.locked) {
-                                            updateStatus();
-                                          }
-                                        }}
-                                        disabled={data.ticket.locked}
-                                        className={`inline-flex justify-center gap-x-1.5 rounded-md ${
-                                          data.ticket.locked
-                                            ? "bg-gray-300 cursor-not-allowed"
-                                            : "bg-white hover:bg-gray-50"
-                                        } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
-                                      >
-                                        <CheckCircleIcon
-                                          className="-ml-0.5 h-5 w-5 text-green-500"
-                                          aria-hidden="true"
-                                        />
-                                        {t("close_issue")}
-                                      </button>
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              {data.ticket.createdBy ? (
+                                <div className="flex flex-row space-x-1">
+                                  <span>
+                                    Created by
+                                    <strong className="ml-1">
+                                      {data.ticket.createdBy.name}
+                                    </strong>{" "}
+                                    at{" "}
+                                  </span>
+                                  <span className="">
+                                    {moment(data.ticket.createdAt).format(
+                                      "LLL"
                                     )}
-                                    <button
-                                      onClick={() => addComment()}
-                                      type="submit"
-                                      disabled={data.ticket.locked}
-                                      className={`inline-flex items-center justify-center rounded-md px-4 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 ${
-                                        data.ticket.locked
-                                          ? "bg-gray-400 cursor-not-allowed"
-                                          : "bg-gray-900 hover:bg-gray-700"
-                                      }`}
-                                    >
-                                      {t("comment")}
-                                    </button>
-                                  </div>
+                                  </span>
+                                  {data.ticket.name && (
+                                    <span>
+                                      for <strong>{data.ticket.name}</strong>
+                                    </span>
+                                  )}
+                                  {data.ticket.email && (
+                                    <span>
+                                      ( <strong>{data.ticket.email}</strong> )
+                                    </span>
+                                  )}
                                 </div>
+                              ) : (
+                                <div className="flex flex-row space-x-1">
+                                  <span>Created at </span>
+                                  <span className="">
+                                    <strong>
+                                      {moment(data.ticket.createdAt).format(
+                                        "LLL"
+                                      )}
+                                    </strong>
+                                    {data.ticket.client && (
+                                      <span>
+                                        for{" "}
+                                        <strong>
+                                          {data.ticket.client.name}
+                                        </strong>
+                                      </span>
+                                    )}
+                                  </span>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="">
+                        <ul role="list" className="space-y-2">
+                          {data.ticket.comments.length > 0 &&
+                            data.ticket.comments.map((comment: any) => (
+                              <li
+                                key={comment.id}
+                                className="flex flex-col space-y-1 text-sm bg-secondary/50 px-4 py-2 rounded-lg shadow-xl"
+                              >
+                                <div className="flex flex-row space-x-2 items-center">
+                                  <Avatar className="w-6 h-6">
+                                    <AvatarImage
+                                      src={
+                                        comment.user ? comment.user.image : ""
+                                      }
+                                    />
+                                    <AvatarFallback>
+                                      {comment.user
+                                        ? comment.user.name.slice(0, 1)
+                                        : comment.replyEmail.slice(0, 1)}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <span className="font-bold">
+                                    {comment.user
+                                      ? comment.user.name
+                                      : comment.replyEmail}
+                                  </span>
+                                  <span className="text-xs lowercase">
+                                    {moment(comment.createdAt).format("LLL")}
+                                  </span>
+                                </div>
+                                <span className="ml-1">{comment.text}</span>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="mt-6">
+                        <div className="flex space-x-3">
+                          <div className="min-w-0 flex-1">
+                            <div>
+                              <div>
+                                <label htmlFor="comment" className="sr-only">
+                                  {t("comment")}
+                                </label>
+                                <textarea
+                                  id="comment"
+                                  name="comment"
+                                  rows={3}
+                                  className="block w-full bg-transparent rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                  placeholder={
+                                    data.ticket.locked
+                                      ? "This ticket is locked"
+                                      : "Leave a comment"
+                                  }
+                                  defaultValue={""}
+                                  onChange={(e) => setComment(e.target.value)}
+                                  disabled={data.ticket.locked}
+                                />
+                              </div>
+                              <div className="mt-4 flex justify-end">
+                                <Text as="label" size="2">
+                                  <div className="flex flex-row items-center space-x-2">
+                                    <Switch
+                                      checked={publicComment}
+                                      onChange={setPublicComment}
+                                      className={`${
+                                        publicComment
+                                          ? "bg-blue-600"
+                                          : "bg-gray-200"
+                                      } relative inline-flex h-6 w-11 items-center rounded-full`}
+                                    >
+                                      <span className="sr-only">
+                                        Enable notifications
+                                      </span>
+                                      <span
+                                        className={`${
+                                          publicComment
+                                            ? "translate-x-6"
+                                            : "translate-x-1"
+                                        } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                                      />
+                                    </Switch>
+                                    <Tooltip content="Enabling this will mean the email registered to the ticket will get a reply based on your comment.">
+                                      <Text> Public Reply</Text>
+                                    </Tooltip>
+                                  </div>
+                                </Text>
+                              </div>
+                              <div className="mt-4 flex items-center justify-end space-x-4">
+                                {data.ticket.isComplete ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (!data.ticket.locked) {
+                                        updateStatus();
+                                      }
+                                    }}
+                                    disabled={data.ticket.locked}
+                                    className={`inline-flex justify-center items-center gap-x-1.5 rounded-md ${
+                                      data.ticket.locked
+                                        ? "bg-gray-300 cursor-not-allowed"
+                                        : "bg-white hover:bg-gray-50"
+                                    } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
+                                  >
+                                    <CheckCircleIcon
+                                      className="-ml-0.5 h-5 w-5 text-red-500"
+                                      aria-hidden="true"
+                                    />
+                                    <span className="">
+                                      {t("reopen_issue")}
+                                    </span>
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (!data.ticket.locked) {
+                                        updateStatus();
+                                      }
+                                    }}
+                                    disabled={data.ticket.locked}
+                                    className={`inline-flex justify-center gap-x-1.5 rounded-md ${
+                                      data.ticket.locked
+                                        ? "bg-gray-300 cursor-not-allowed"
+                                        : "bg-white hover:bg-gray-50"
+                                    } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
+                                  >
+                                    <CheckCircleIcon
+                                      className="-ml-0.5 h-5 w-5 text-green-500"
+                                      aria-hidden="true"
+                                    />
+                                    {t("close_issue")}
+                                  </button>
+                                )}
+                                <button
+                                  onClick={() => addComment()}
+                                  type="submit"
+                                  disabled={data.ticket.locked}
+                                  className={`inline-flex items-center justify-center rounded-md px-4 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 ${
+                                    data.ticket.locked
+                                      ? "bg-gray-400 cursor-not-allowed"
+                                      : "bg-gray-900 hover:bg-gray-700"
+                                  }`}
+                                >
+                                  {t("comment")}
+                                </button>
                               </div>
                             </div>
                           </div>
