@@ -750,7 +750,7 @@ export default function Ticket() {
                         <div className="">
                           <div className="break-words bg-white rounded-md text-black">
                             <Frame
-                              className="min-h-[60vh] h-full w-full"
+                              className="min-h-[60vh] h-full max-h-[80vh] overflow-y-auto w-full"
                               initialContent={data.ticket.detail}
                             />
                           </div>
@@ -842,7 +842,7 @@ export default function Ticket() {
                             data.ticket.comments.map((comment: any) => (
                               <li
                                 key={comment.id}
-                                className="flex flex-col space-y-1 text-sm bg-secondary/50 px-4 py-2 rounded-lg shadow-xl"
+                                className="flex flex-col space-y-1 text-sm bg-secondary/50 dark:bg-secondary/50 px-4 py-2 rounded-lg "
                               >
                                 <div className="flex flex-row space-x-2 items-center">
                                   <Avatar className="w-6 h-6">
@@ -871,8 +871,6 @@ export default function Ticket() {
                             ))}
                         </ul>
                       </div>
-                    </div>
-                    <div>
                       <div className="mt-6">
                         <div className="flex space-x-3">
                           <div className="min-w-0 flex-1">
@@ -885,7 +883,7 @@ export default function Ticket() {
                                   id="comment"
                                   name="comment"
                                   rows={3}
-                                  className="block w-full bg-transparent rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                  className="block w-full bg-secondary/50 dark:bg-secondary/50 rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                   placeholder={
                                     data.ticket.locked
                                       ? "This ticket is locked"
