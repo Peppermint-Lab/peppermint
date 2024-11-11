@@ -14,33 +14,43 @@ export default function Login({}) {
   const [url, setUrl] = useState("");
 
   async function postData() {
-    await fetch(`/api/v1/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((res) => res.json())
-      .then(async (res) => {
-        if (res.user) {
-          setCookie("session", res.token);
-          if (res.user.external_user) {
-            router.push("/portal");
-          } else {
-            if (res.user.firstLogin) {
-              router.push("/onboarding");
+    try {
+      await fetch(`/api/v1/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((res) => res.json())
+        .then(async (res) => {
+          if (res.user) {
+            setCookie("session", res.token);
+            if (res.user.external_user) {
+              router.push("/portal");
             } else {
-              router.push("/");
+              if (res.user.firstLogin) {
+                router.push("/onboarding");
+              } else {
+                router.push("/");
+              }
             }
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description:
+                "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
+            });
           }
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description:
-              "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
-          });
-        }
+        });
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Database Error",
+        description:
+          "This is an issue with the database, please check the docker logs or contact support via discord.",
       });
+    }
   }
 
   async function oidcLogin() {
