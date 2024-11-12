@@ -5206,6 +5206,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/imap@npm:^0.8.42":
+  version: 0.8.42
+  resolution: "@types/imap@npm:0.8.42"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/ae5fe37b39320255a7ca0fb7b6b14214e481098e191a83abb07a26fdeea6fc2f6eb1a2565017649bae8425ae80dea83dfa9bb7a8e5a0aab0d78915c407974c94
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -5256,6 +5265,16 @@ __metadata:
   version: 4.17.13
   resolution: "@types/lodash@npm:4.17.13"
   checksum: 10c0/c3d0b7efe7933ac0369b99f2f7bff9240d960680fdb74b41ed4bd1b3ca60cca1e31fe4046d9abbde778f941a41bc2a75eb629abf8659fa6c27b66efbbb0802a9
+  languageName: node
+  linkType: hard
+
+"@types/mailparser@npm:^3.4.5":
+  version: 3.4.5
+  resolution: "@types/mailparser@npm:3.4.5"
+  dependencies:
+    "@types/node": "npm:*"
+    iconv-lite: "npm:^0.6.3"
+  checksum: 10c0/60cb65e8d735a16d53ea84b5347a590464fa373b3a3c405fc2f12c97498bbeaa1857e5c9e182f60e8a05da307a7752df7228c5722e9865f8e758a1febc199620
   languageName: node
   linkType: hard
 
@@ -6083,7 +6102,9 @@ __metadata:
     "@types/bcrypt": "npm:^5.0.0"
     "@types/email-reply-parser": "npm:^1"
     "@types/formidable": "npm:^3.4.5"
+    "@types/imap": "npm:^0.8.42"
     "@types/jsonwebtoken": "npm:^8.5.8"
+    "@types/mailparser": "npm:^3.4.5"
     "@types/node": "npm:^17.0.23"
     "@types/nodemailer": "npm:^6.4.14"
     "@types/passport-local": "npm:^1.0.35"
@@ -12231,7 +12252,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.6, iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2":
+"iconv-lite@npm:0.6, iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2, iconv-lite@npm:^0.6.3":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:
