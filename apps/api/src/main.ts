@@ -7,7 +7,6 @@ import fs from "fs";
 import { exec } from "child_process";
 import { track } from "./lib/hog";
 import { getEmails } from "./lib/imap";
-import { checkToken } from "./lib/jwt";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
@@ -51,23 +50,6 @@ server.get("/", {
   }
 }, async function (request, response) {
   response.send({ healthy: true });
-});
-
-server.addHook("preHandler", async (request, reply) => {
-  if (request.url.startsWith("/api/public") || request.url.startsWith("/documentation")) {
-    return;
-  }
-
-  try {
-    const bearer = request.headers.authorization?.split(" ")[1];
-    if (!bearer) throw new Error("No authorization token provided");
-    await checkToken(bearer);
-  } catch (error) {
-    reply.status(401).send({
-      error: "Authentication failed",
-      success: false,
-    });
-  }
 });
 
 const start = async () => {
