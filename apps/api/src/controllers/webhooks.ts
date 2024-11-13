@@ -1,95 +1,64 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { track } from "../lib/hog";
-import { Hook, prisma } from "../prisma";
-
-// Type definitions
-interface WebhookPayload {
-  name: string;
-  url: string;
-  type: Hook;
-  active: boolean;
-  secret: string;
-}
+import { prisma } from "../prisma";
 
 export function webhookRoutes(fastify: FastifyInstance) {
   // Create a new webhook
-  fastify.post<{ Body: WebhookPayload }>(
+  fastify.post(
     "/api/v1/webhook/create",
-    async (request, reply) => {
-      try {
-        const { name, url, type, active, secret } = request.body;
 
-        const webhook = await prisma.webhooks.create({
-          data: {
-            name,
-            url,
-            type,
-            active,
-            secret,
-            createdBy: "375f7799-5485-40ff-ba8f-0a28e0855ecf", // TODO: Get from authenticated user
-          },
-        });
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { name, url, type, active, secret }: any = request.body;
+      await prisma.webhooks.create({
+        data: {
+          name,
+          url,
+          type,
+          active,
+          secret,
+          createdBy: "375f7799-5485-40ff-ba8f-0a28e0855ecf",
+        },
+      });
 
-        const client = track();
-        await client.capture({
-          event: "webhook_created",
-          distinctId: webhook.id, // Use actual webhook ID
-        });
-        await client.shutdownAsync();
+      const client = track();
 
-        return reply.status(201).send({
-          data: webhook,
-          success: true,
-        });
-      } catch (error) {
-        return reply.status(400).send({
-          error:
-            error instanceof Error ? error.message : "Failed to create webhook",
-          success: false,
-        });
-      }
+      client.capture({
+        event: "webhook_created",
+        distinctId: "uuid",
+      });
+
+      client.shutdownAsync();
+
+      reply.status(200).send({ message: "Hook created!", success: true });
     }
   );
 
   // Get all webhooks
-  fastify.get("/api/v1/webhooks/all", async (request, reply) => {
-    try {
-      const webhooks = await prisma.webhooks.findMany();
+  fastify.get(
+    "/api/v1/webhooks/all",
 
-      return reply.status(200).send({
-        data: webhooks,
-        success: true,
-      });
-    } catch (error) {
-      return reply.status(400).send({
-        error:
-          error instanceof Error ? error.message : "Failed to fetch webhooks",
-        success: false,
-      });
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const webhooks = await prisma.webhooks.findMany({});
+
+      reply.status(200).send({ webhooks: webhooks, success: true });
     }
-  });
+  );
 
   // Delete a webhook
-  fastify.delete<{ Params: { id: string } }>(
+
+  fastify.delete(
     "/api/v1/admin/webhook/:id/delete",
-    async (request, reply) => {
-      try {
-        const { id } = request.params;
 
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const bearer = request.headers.authorization!.split(" ")[1];
+       const { id }: any = request.params;
         await prisma.webhooks.delete({
-          where: { id },
+          where: {
+            id: id,
+          },
         });
 
-        return reply.status(200).send({
-          success: true,
-        });
-      } catch (error) {
-        return reply.status(400).send({
-          error:
-            error instanceof Error ? error.message : "Failed to delete webhook",
-          success: false,
-        });
-      }
+        reply.status(200).send({ success: true });
     }
   );
 }

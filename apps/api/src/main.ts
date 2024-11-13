@@ -7,6 +7,7 @@ import fs from "fs";
 import { exec } from "child_process";
 import { track } from "./lib/hog";
 import { getEmails } from "./lib/imap";
+import { checkToken } from "./lib/jwt";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
@@ -50,6 +51,22 @@ server.get("/", {
   }
 }, async function (request, response) {
   response.send({ healthy: true });
+});
+
+// JWT authentication hook
+server.addHook("preHandler", async function (request: any, reply: any) {
+  try {
+    if (request.url === "/api/v1/auth/login" && request.method === "POST") {
+      return true;
+    }
+    const bearer = request.headers.authorization!.split(" ")[1];
+    checkToken(bearer);
+  } catch (err) {
+    reply.status(401).send({
+      message: "Unauthorized",
+      success: false,
+    });
+  }
 });
 
 const start = async () => {

@@ -237,7 +237,7 @@ export default function Home() {
                 </a>
               </div>
 
-              <span className="text-sm  font-semibold">
+              <span className="text-sm text-gray-900 font-semibold">
                 Or use one command to deploy on any VPS
               </span>
 

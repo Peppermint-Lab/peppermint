@@ -2,17 +2,16 @@ import axios from "axios";
 import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
+import { LRUCache } from "lru-cache";
+import { generators } from "openid-client";
+import { AuthorizationCode } from "simple-oauth2";
+import { getOAuthProvider, getOidcConfig } from "../lib/auth";
 import { track } from "../lib/hog";
-import { checkToken } from "../lib/jwt";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { checkSession } from "../lib/session";
-import { prisma } from "../prisma";
-import { getOidcConfig, getOAuthProvider } from "../lib/auth";
-import { getOidcClient } from "../lib/utils/oidc_client";
 import { getOAuthClient } from "../lib/utils/oauth_client";
-import { AuthorizationCode } from "simple-oauth2";
-import { generators } from "openid-client";
-import { LRUCache } from "lru-cache";
+import { getOidcClient } from "../lib/utils/oidc_client";
+import { prisma } from "../prisma";
 
 const options = {
   max: 500, // Maximum number of items in cache
@@ -75,8 +74,6 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-
       let { email, password, admin, name } = request.body as {
         email: string;
         password: string;
@@ -84,50 +81,45 @@ export function authRoutes(fastify: FastifyInstance) {
         name: string;
       };
 
-      if (bearer) {
-        const token = checkToken(bearer);
-        if (token) {
-          const requester = await checkSession(bearer);
+      const requester = await checkSession(request);
 
-          if (!requester?.isAdmin) {
-            return reply.code(401).send({
-              message: "Unauthorized",
-            });
-          }
-
-          // Checks if email already exists
-          let record = await prisma.user.findUnique({
-            where: { email },
-          });
-
-          // if exists, return 400
-          if (record) {
-            return reply.code(400).send({
-              message: "Email already exists",
-            });
-          }
-
-          const user = await prisma.user.create({
-            data: {
-              email,
-              password: await bcrypt.hash(password, 10),
-              name,
-              isAdmin: admin,
-            },
-          });
-
-          const hog = track();
-
-          hog.capture({
-            event: "user_registered",
-            distinctId: user.id,
-          });
-
-          reply.send({
-            success: true,
-          });
-        }
+      if (!requester?.isAdmin) {
+        return reply.code(401).send({
+          message: "Unauthorized",
+        });
       }
+
+      // Checks if email already exists
+      let record = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      // if exists, return 400
+      if (record) {
+        return reply.code(400).send({
+          message: "Email already exists",
+        });
+      }
+
+      const user = await prisma.user.create({
+        data: {
+          email,
+          password: await bcrypt.hash(password, 10),
+          name,
+          isAdmin: admin,
+        },
+      });
+
+      const hog = track();
+
+      hog.capture({
+        event: "user_registered",
+        distinctId: user.id,
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -149,8 +141,6 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // const bearer = request.headers.authorization!.split(" ")[1];
-
       let { email, password, name, language } = request.body as {
         email: string;
         password: string;
@@ -694,28 +684,21 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // saml api callback route
-
   // Delete a user
   fastify.delete(
     "/api/v1/auth/user/:id",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const { id } = request.params as { id: string };
 
-      if (token) {
-        const { id } = request.params as { id: string };
+      await prisma.notes.deleteMany({ where: { userId: id } });
+      await prisma.session.deleteMany({ where: { userId: id } });
+      await prisma.notifications.deleteMany({ where: { userId: id } });
 
-        await prisma.notes.deleteMany({ where: { userId: id } });
-        await prisma.session.deleteMany({ where: { userId: id } });
-        await prisma.notifications.deleteMany({ where: { userId: id } });
+      await prisma.user.delete({
+        where: { id },
+      });
 
-        await prisma.user.delete({
-          where: { id },
-        });
-
-        reply.send({ success: true });
-      }
+      reply.send({ success: true });
     }
   );
 
@@ -723,60 +706,52 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/auth/profile",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
+      let session = await prisma.session.findUnique({
+        where: {
+          sessionToken: request.headers.authorization!.split(" ")[1],
+        },
+      });
 
-      const token = checkToken(bearer);
+      let user = await prisma.user.findUnique({
+        where: { id: session!.userId },
+      });
 
-      if (token) {
-        let session = await prisma.session.findUnique({
-          where: {
-            sessionToken: request.headers.authorization!.split(" ")[1],
-          },
+      if (!user) {
+        return reply.code(401).send({
+          message: "Invalid user",
         });
-
-        let user = await prisma.user.findUnique({
-          where: { id: session!.userId },
-        });
-
-        if (!user) {
-          return reply.code(401).send({
-            message: "Invalid user",
-          });
-        }
-
-        const config = await prisma.config.findFirst();
-
-        const notifcations = await prisma.notifications.findMany({
-          where: { userId: user!.id },
-          orderBy: {
-            createdAt: "desc",
-          },
-        });
-
-        const data = {
-          id: user!.id,
-          email: user!.email,
-          name: user!.name,
-          isAdmin: user!.isAdmin,
-          language: user!.language,
-          ticket_created: user!.notify_ticket_created,
-          ticket_status_changed: user!.notify_ticket_status_changed,
-          ticket_comments: user!.notify_ticket_comments,
-          ticket_assigned: user!.notify_ticket_assigned,
-          sso_status: config!.sso_active,
-          version: config!.client_version,
-          notifcations,
-          external_user: user!.external_user,
-        };
-
-        await tracking("user_profile", {});
-
-        reply.send({
-          user: data,
-        });
-      } else {
-        throw new Error("Invalid token");
       }
+
+      const config = await prisma.config.findFirst();
+
+      const notifcations = await prisma.notifications.findMany({
+        where: { userId: user!.id },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      const data = {
+        id: user!.id,
+        email: user!.email,
+        name: user!.name,
+        isAdmin: user!.isAdmin,
+        language: user!.language,
+        ticket_created: user!.notify_ticket_created,
+        ticket_status_changed: user!.notify_ticket_status_changed,
+        ticket_comments: user!.notify_ticket_comments,
+        ticket_assigned: user!.notify_ticket_assigned,
+        sso_status: config!.sso_active,
+        version: config!.client_version,
+        notifcations,
+        external_user: user!.external_user,
+      };
+
+      await tracking("user_profile", {});
+
+      reply.send({
+        user: data,
+      });
     }
   );
 
@@ -789,32 +764,25 @@ export function authRoutes(fastify: FastifyInstance) {
       };
 
       const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
 
-      if (token) {
-        let session = await prisma.session.findUnique({
-          where: {
-            sessionToken: bearer,
-          },
-        });
+      let session = await prisma.session.findUnique({
+        where: {
+          sessionToken: bearer,
+        },
+      });
 
-        const hashedPass = await bcrypt.hash(password, 10);
+      const hashedPass = await bcrypt.hash(password, 10);
 
-        await prisma.user.update({
-          where: { id: session?.userId },
-          data: {
-            password: hashedPass,
-          },
-        });
+      await prisma.user.update({
+        where: { id: session?.userId },
+        data: {
+          password: hashedPass,
+        },
+      });
 
-        reply.send({
-          success: true,
-        });
-      } else {
-        reply.send({
-          success: false,
-        });
-      }
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -827,45 +795,35 @@ export function authRoutes(fastify: FastifyInstance) {
         user: string;
       };
 
-      console.log(user);
-
       const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      let session = await prisma.session.findUnique({
+        where: {
+          sessionToken: bearer,
+        },
+      });
 
-      if (token) {
-        let session = await prisma.session.findUnique({
-          where: {
-            sessionToken: bearer,
-          },
-        });
+      const check = await prisma.user.findUnique({
+        where: { id: session?.userId },
+      });
 
-        const check = await prisma.user.findUnique({
-          where: { id: session?.userId },
-        });
-
-        if (check?.isAdmin === false) {
-          return reply.code(401).send({
-            message: "Unauthorized",
-          });
-        }
-
-        const hashedPass = await bcrypt.hash(password, 10);
-
-        await prisma.user.update({
-          where: { id: user },
-          data: {
-            password: hashedPass,
-          },
-        });
-
-        reply.send({
-          success: true,
-        });
-      } else {
-        reply.send({
-          success: false,
+      if (check?.isAdmin === false) {
+        return reply.code(401).send({
+          message: "Unauthorized",
         });
       }
+
+      const hashedPass = await bcrypt.hash(password, 10);
+
+      await prisma.user.update({
+        where: { id: user },
+        data: {
+          password: hashedPass,
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -875,39 +833,30 @@ export function authRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
 
-      //checks if token is valid and returns valid token
-      const token = checkToken(bearer);
+      let session = await prisma.session.findUnique({
+        where: {
+          sessionToken: bearer,
+        },
+      });
 
-      if (token) {
-        let session = await prisma.session.findUnique({
-          where: {
-            sessionToken: bearer,
-          },
-        });
+      const { name, email, language } = request.body as {
+        name: string;
+        email: string;
+        language: string;
+      };
 
-        const { name, email, language } = request.body as {
-          name: string;
-          email: string;
-          language: string;
-        };
+      let user = await prisma.user.update({
+        where: { id: session?.userId },
+        data: {
+          name: name,
+          email: email,
+          language: language,
+        },
+      });
 
-        let user = await prisma.user.update({
-          where: { id: session?.userId },
-          data: {
-            name: name,
-            email: email,
-            language: language,
-          },
-        });
-
-        reply.send({
-          user,
-        });
-      } else {
-        reply.send({
-          sucess: false,
-        });
-      }
+      reply.send({
+        user,
+      });
     }
   );
 
@@ -916,42 +865,32 @@ export function authRoutes(fastify: FastifyInstance) {
     "/api/v1/auth/profile/notifcations/emails",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const bearer = request.headers.authorization!.split(" ")[1];
+      let session = await prisma.session.findUnique({
+        where: {
+          sessionToken: bearer,
+        },
+      });
 
-      //checks if token is valid and returns valid token
-      const token = checkToken(bearer);
+      const {
+        notify_ticket_created,
+        notify_ticket_assigned,
+        notify_ticket_comments,
+        notify_ticket_status_changed,
+      } = request.body as any;
 
-      if (token) {
-        let session = await prisma.session.findUnique({
-          where: {
-            sessionToken: bearer,
-          },
-        });
+      let user = await prisma.user.update({
+        where: { id: session?.userId },
+        data: {
+          notify_ticket_created: notify_ticket_created,
+          notify_ticket_assigned: notify_ticket_assigned,
+          notify_ticket_comments: notify_ticket_comments,
+          notify_ticket_status_changed: notify_ticket_status_changed,
+        },
+      });
 
-        const {
-          notify_ticket_created,
-          notify_ticket_assigned,
-          notify_ticket_comments,
-          notify_ticket_status_changed,
-        } = request.body as any;
-
-        let user = await prisma.user.update({
-          where: { id: session?.userId },
-          data: {
-            notify_ticket_created: notify_ticket_created,
-            notify_ticket_assigned: notify_ticket_assigned,
-            notify_ticket_comments: notify_ticket_comments,
-            notify_ticket_status_changed: notify_ticket_status_changed,
-          },
-        });
-
-        reply.send({
-          user,
-        });
-      } else {
-        reply.send({
-          sucess: false,
-        });
-      }
+      reply.send({
+        user,
+      });
     }
   );
 
@@ -959,17 +898,13 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/auth/user/:id/logout",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
-      if (token) {
-        const { id } = request.params as { id: string };
+      const { id } = request.params as { id: string };
 
-        await prisma.session.deleteMany({
-          where: { userId: id },
-        });
+      await prisma.session.deleteMany({
+        where: { userId: id },
+      });
 
-        reply.send({ success: true });
-      }
+      reply.send({ success: true });
     }
   );
 
@@ -977,32 +912,28 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/auth/user/role",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
-      if (token) {
-        const { id, role } = request.body as { id: string; role: boolean };
-        // check for atleast one admin on role downgrade
-        if (role === false) {
-          const admins = await prisma.user.findMany({
-            where: { isAdmin: true },
-          });
-          if (admins.length === 1) {
-            reply.code(400).send({
-              message: "Atleast one admin is required",
-              success: false,
-            });
-            return;
-          }
-        }
-        await prisma.user.update({
-          where: { id },
-          data: {
-            isAdmin: role,
-          },
+      const { id, role } = request.body as { id: string; role: boolean };
+      // check for atleast one admin on role downgrade
+      if (role === false) {
+        const admins = await prisma.user.findMany({
+          where: { isAdmin: true },
         });
-
-        reply.send({ success: true });
+        if (admins.length === 1) {
+          reply.code(400).send({
+            message: "Atleast one admin is required",
+            success: false,
+          });
+          return;
+        }
       }
+      await prisma.user.update({
+        where: { id },
+        data: {
+          isAdmin: role,
+        },
+      });
+
+      reply.send({ success: true });
     }
   );
 
@@ -1010,22 +941,18 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/auth/user/:id/first-login",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
-      if (token) {
-        const { id } = request.params as { id: string };
+      const { id } = request.params as { id: string };
 
-        await prisma.user.update({
-          where: { id },
-          data: {
-            firstLogin: false,
-          },
-        });
+      await prisma.user.update({
+        where: { id },
+        data: {
+          firstLogin: false,
+        },
+      });
 
-        await tracking("user_first_login", {});
+      await tracking("user_first_login", {});
 
-        reply.send({ success: true });
-      }
+      reply.send({ success: true });
     }
   );
 }
