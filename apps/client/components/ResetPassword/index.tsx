@@ -1,7 +1,8 @@
+import { toast } from "@/shadcn/hooks/use-toast";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { getCookie } from "cookies-next";
-import React, { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 
 export default function ResetPassword({ user }) {
   const [open, setOpen] = useState(false);
@@ -25,17 +26,15 @@ export default function ResetPassword({ user }) {
         .then((res) => {
           if (res.success) {
             toast({
-              variant: "success",
+              variant: "default",
               title: "Password Reset Successful",
               description: "The password has been updated successfully.",
-              autoClose: 5000,
             });
           } else {
             toast({
               variant: "destructive",
               title: "Uh oh! Something went wrong.",
               description: "There was a problem with your request.",
-              action: <ToastAction altText="Try again">Try again</ToastAction>,
             });
           }
         });

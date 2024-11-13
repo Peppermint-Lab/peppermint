@@ -8,7 +8,7 @@ import {
   usePagination,
   useTable,
 } from "react-table";
-import ResetPassword from "../../../../components/ResetPassword";
+import ResetPassword from "../../../../components//ResetPassword";
 import UpdateUserModal from "../../../../components/UpdateUserModal";
 
 const fetchUsers = async (token) => {
