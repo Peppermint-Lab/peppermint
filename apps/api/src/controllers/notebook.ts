@@ -1,8 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { checkToken } from "../lib/jwt";
+import { track } from "../lib/hog";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
-import { track } from "../lib/hog";
 
 async function tracking(event: string, properties: any) {
   const client = track();
@@ -23,27 +22,21 @@ export function notebookRoutes(fastify: FastifyInstance) {
 
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { content, title }: any = request.body;
+      const user = await checkSession(request);
 
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const data = await prisma.notes.create({
+        data: {
+          title,
+          note: content,
+          userId: user!.id,
+        },
+      });
 
-      if (token) {
-        const user = await checkSession(bearer);
+      await tracking("note_created", {});
 
-        const data = await prisma.notes.create({
-          data: {
-            title,
-            note: content,
-            userId: user!.id,
-          },
-        });
+      const { id } = data;
 
-        await tracking("note_created", {});
-
-        const { id } = data;
-
-        reply.status(200).send({ success: true, id });
-      }
+      reply.status(200).send({ success: true, id });
     }
   );
 
@@ -52,18 +45,13 @@ export function notebookRoutes(fastify: FastifyInstance) {
     "/api/v1/notebooks/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const user = await checkSession(request);
 
-      if (token) {
-        const user = await checkSession(bearer);
+      const notebooks = await prisma.notes.findMany({
+        where: { userId: user!.id },
+      });
 
-        const notebooks = await prisma.notes.findMany({
-          where: { userId: user!.id },
-        });
-
-        reply.status(200).send({ success: true, notebooks: notebooks });
-      }
+      reply.status(200).send({ success: true, notebooks: notebooks });
     }
   );
 
@@ -72,67 +60,60 @@ export function notebookRoutes(fastify: FastifyInstance) {
     "/api/v1/notebooks/note/:id",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const user = await checkSession(request);
 
-      if (token) {
-        const user = await checkSession(bearer);
+      const { id }: any = request.params;
 
-        const { id }: any = request.params;
+      const note = await prisma.notes.findUnique({
+        where: { userId: user!.id, id: id },
+      });
 
-        const note = await prisma.notes.findUnique({
-          where: { userId: user!.id, id: id },
-        });
-
-        reply.status(200).send({ success: true, note });
-      }
+      reply.status(200).send({ success: true, note });
     }
   );
 
   // Delete an entry
   fastify.delete(
-    "/api/v1/documents/:id",
-
+    "/api/v1/notebooks/note/:id",
     async (request: FastifyRequest, reply: FastifyReply) => {
+      const user = await checkSession(request);
       const { id }: any = request.params;
 
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      await prisma.notes.delete({
+        where: { 
+          id: id,
+          userId: user!.id 
+        },
+      });
 
-      if (token) {
-        await prisma.notes.delete({
-          where: { id: id },
-        });
+      await tracking("note_deleted", {});
 
-        reply.status(200).send({ success: true });
-      }
+      reply.status(200).send({ success: true });
     }
   );
 
   // Update an entry
   fastify.put(
     "/api/v1/notebooks/note/:id/update",
-
     async (request: FastifyRequest, reply: FastifyReply) => {
+      const user = await checkSession(request);
       const { id }: any = request.params;
       const { content, title }: any = request.body;
 
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      await prisma.notes.update({
+        where: { 
+          id: id,
+          userId: user!.id 
+        },
+        data: {
+          title: title,
+          note: content,
+        },
+      });
 
-      if (token) {
-        await checkSession(bearer);
+      await tracking("note_updated", {});
 
-        await prisma.notes.update({
-          where: { id: id },
-          data: {
-            title: title,
-            note: content,
-          },
-        });
-
-        reply.status(200).send({ success: true });
-      }
+      reply.status(200).send({ success: true });
     }
   );
 }

@@ -7,14 +7,15 @@ import fs from "fs";
 import { exec } from "child_process";
 import { track } from "./lib/hog";
 import { getEmails } from "./lib/imap";
+import { checkToken } from "./lib/jwt";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
 // Ensure the directory exists
-const logFilePath = './logs.log'; // Update this path to a writable location
+const logFilePath = "./logs.log"; // Update this path to a writable location
 
 // Create a writable stream
-const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+const logStream = fs.createWriteStream(logFilePath, { flags: "a" });
 
 // Initialize Fastify with logger
 const server: FastifyInstance = Fastify({
@@ -26,7 +27,7 @@ const server: FastifyInstance = Fastify({
 });
 server.register(cors, {
   origin: "*",
-  
+
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 });
@@ -80,6 +81,19 @@ registerRoutes(server);
 
 server.get("/", async function (request, response) {
   response.send({ healthy: true });
+});
+
+// JWT authentication hook
+server.addHook("preHandler", async function (request: any, reply: any) {
+  try {
+    const bearer = request.headers.authorization!.split(" ")[1];
+    return checkToken(bearer);
+  } catch (err) {
+    reply.send({
+      message: "Unauthorized",
+      success: false,
+    });
+  }
 });
 
 const start = async () => {

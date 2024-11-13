@@ -1,5 +1,4 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function dataRoutes(fastify: FastifyInstance) {
@@ -8,16 +7,11 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const result = await prisma.ticket.count({
+        where: { hidden: false },
+      });
 
-      if (token) {
-        const result = await prisma.ticket.count({
-          where: { hidden: false },
-        });
-
-        reply.send({ count: result });
-      }
+      reply.send({ count: result });
     }
   );
 
@@ -26,16 +20,11 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/completed",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const result = await prisma.ticket.count({
+        where: { isComplete: true, hidden: false },
+      });
 
-      if (token) {
-        const result = await prisma.ticket.count({
-          where: { isComplete: true, hidden: false },
-        });
-
-        reply.send({ count: result });
-      }
+      reply.send({ count: result });
     }
   );
 
@@ -44,16 +33,11 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/open",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const result = await prisma.ticket.count({
+        where: { isComplete: false, hidden: false },
+      });
 
-      if (token) {
-        const result = await prisma.ticket.count({
-          where: { isComplete: false, hidden: false },
-        });
-
-        reply.send({ count: result });
-      }
+      reply.send({ count: result });
     }
   );
 
@@ -62,16 +46,11 @@ export function dataRoutes(fastify: FastifyInstance) {
     "/api/v1/data/tickets/unassigned",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const result = await prisma.ticket.count({
+        where: { userId: null, hidden: false, isComplete: false },
+      });
 
-      if (token) {
-        const result = await prisma.ticket.count({
-          where: { userId: null, hidden: false, isComplete: false },
-        });
-
-        reply.send({ count: result });
-      }
+      reply.send({ count: result });
     }
   );
 }

@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { track } from "../lib/hog";
-import { checkToken } from "../lib/jwt";
 import { prisma } from "../prisma";
 
 export function clientRoutes(fastify: FastifyInstance) {
@@ -9,32 +8,27 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/client/create",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const { name, email, number, contactName }: any = request.body;
 
-      if (token) {
-        const { name, email, number, contactName }: any = request.body;
+      const client = await prisma.client.create({
+        data: {
+          name,
+          contactName,
+          email,
+          number: String(number),
+        },
+      });
 
-        const client = await prisma.client.create({
-          data: {
-            name,
-            contactName,
-            email,
-            number: String(number),
-          },
-        });
+      const hog = track();
 
-        const hog = track();
+      hog.capture({
+        event: "client_created",
+        distinctId: client.id,
+      });
 
-        hog.capture({
-          event: "client_created",
-          distinctId: client.id,
-        });
-
-        reply.send({
-          success: true,
-        });
-      }
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -43,26 +37,21 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/client/update",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const { name, email, number, contactName, id }: any = request.body;
 
-      if (token) {
-        const { name, email, number, contactName, id }: any = request.body;
+      await prisma.client.update({
+        where: { id: id },
+        data: {
+          name,
+          contactName,
+          email,
+          number: String(number),
+        },
+      });
 
-        await prisma.client.update({
-          where: { id: id },
-          data: {
-            name,
-            contactName,
-            email,
-            number: String(number),
-          },
-        });
-
-        reply.send({
-          success: true,
-        });
-      }
+      reply.send({
+        success: true,
+      });
     }
   );
 
@@ -71,17 +60,12 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/clients/all",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const clients = await prisma.client.findMany({});
 
-      if (token) {
-        const clients = await prisma.client.findMany({});
-
-        reply.send({
-          success: true,
-          clients: clients,
-        });
-      }
+      reply.send({
+        success: true,
+        clients: clients,
+      });
     }
   );
 
@@ -90,20 +74,15 @@ export function clientRoutes(fastify: FastifyInstance) {
     "/api/v1/clients/:id/delete-client",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      const { id }: any = request.params;
 
-      if (token) {
-        const { id }: any = request.params;
+      await prisma.client.delete({
+        where: { id: id },
+      });
 
-        await prisma.client.delete({
-          where: { id: id },
-        });
-
-        reply.send({
-          success: true,
-        });
-      }
+      reply.send({
+        success: true,
+      });
     }
   );
 }
