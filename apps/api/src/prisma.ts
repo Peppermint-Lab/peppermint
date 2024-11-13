@@ -1,3 +1,3 @@
-import { PrismaClient } from "@prisma/client";
+import { Hook, Permission, PrismaClient, Role, User } from "@prisma/client";
 export const prisma: PrismaClient = new PrismaClient();
-export type Hook = "ticket_created" | "ticket_status_changed";
+export { Hook, Permission, Role, User };

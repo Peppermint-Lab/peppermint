@@ -57,6 +57,17 @@ model PasswordResetToken {
   userId String
 }
 
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  permissions Json[]
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  users       User[]
+}
+
 model User {
   id                           String    @id @default(uuid())
   createdAt                    DateTime  @default(now())
@@ -90,6 +101,7 @@ model User {
   TimeTracking  TimeTracking[]
   notifications notifications[]
   TicketFile    TicketFile[]
+  roles         Role[]
 }
 
 model Team {
@@ -158,10 +170,10 @@ model Comment {
   createdAt DateTime @default(now())
 
   text       String
-  public     Boolean @default(false)
-  reply      Boolean @default(false)
+  public     Boolean   @default(false)
+  reply      Boolean   @default(false)
   replyEmail String?
-  edited     Boolean @default(false)
+  edited     Boolean   @default(false)
   editedAt   DateTime?
   previous   String?
 
@@ -297,6 +309,7 @@ model Config {
   gh_version       String?
   client_version   String?
   feature_previews Boolean @default(false)
+  roles_active     Boolean @default(false)
 
   encryption_key   Bytes?
   first_time_setup Boolean @default(true)

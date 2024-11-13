@@ -58,19 +58,10 @@ export function dataRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/data/logs",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
-
-      if (token) {
-        try {
-          const logs = await import("fs/promises").then((fs) =>
-            fs.readFile("logs.log", "utf-8")
-          );
-          reply.send({ logs: logs });
-        } catch (error) {
-          reply.code(500).send({ error: "Failed to read logs file" });
-        }
-      }
+      const logs = await import("fs/promises").then((fs) =>
+        fs.readFile("logs.log", "utf-8")
+      );
+      reply.send({ logs: logs });
     }
   );
 }
