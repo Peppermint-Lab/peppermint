@@ -229,6 +229,11 @@ export function configRoutes(fastify: FastifyInstance) {
           });
         });
       }
+
+      reply.send({
+        success: true,
+        active: false,
+      });
     }
   );
 
