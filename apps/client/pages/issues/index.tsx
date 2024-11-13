@@ -82,7 +82,6 @@ export default function Tickets() {
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
-  const [filterSelected, setFilterSelected] = useState();
   const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);

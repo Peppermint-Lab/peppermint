@@ -1,39 +1,36 @@
-//@ts-nocheck
-import { Switch } from "@headlessui/react";
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import moment from "moment";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState, useMemo } from "react";
-import { useQuery } from "react-query";
-import { Text, Tooltip } from "@radix-ui/themes";
-import { getCookie } from "cookies-next";
-import useTranslation from "next-translate/useTranslation";
-import Frame from "react-frame-component";
-import { useDebounce } from "use-debounce";
+// @ts-nocheck
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "@/shadcn/ui/command";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/shadcn/ui/context-menu";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
+import { Switch } from "@headlessui/react";
+import { CheckCircleIcon } from "@heroicons/react/20/solid";
+import { Text, Tooltip } from "@radix-ui/themes";
+import { getCookie } from "cookies-next";
+import moment from "moment";
+import useTranslation from "next-translate/useTranslation";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Frame from "react-frame-component";
+import { useQuery } from "react-query";
+import { useDebounce } from "use-debounce";
 
-import { useUser } from "../../store/session";
-import { IconCombo, UserCombo } from "../Combo";
-import {
-  CircleCheck,
-  CircleDotDashed,
-  Ellipsis,
-  Eye,
-  EyeClosed,
-  EyeOff,
-  LifeBuoy,
-  Loader,
-  LoaderCircle,
-  Lock,
-  SignalHigh,
-  SignalLow,
-  SignalMedium,
-  Trash,
-  Trash2,
-  Unlock,
-} from "lucide-react";
 import { toast } from "@/shadcn/hooks/use-toast";
+import { cn } from "@/shadcn/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,7 +39,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcn/ui/dropdown-menu";
-import { IconKeyboardHide } from "@tabler/icons-react";
+import {
+  CheckIcon,
+  CircleCheck,
+  CircleDotDashed,
+  Ellipsis,
+  Eye,
+  EyeOff,
+  LifeBuoy,
+  Loader,
+  LoaderCircle,
+  Lock,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
+  Trash2,
+  Unlock,
+} from "lucide-react";
+import { useUser } from "../../store/session";
+import { IconCombo, UserCombo } from "../Combo";
 
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
@@ -396,6 +411,7 @@ export default function Ticket() {
     //   return undefined;
     // }
     try {
+      // @ts-ignore
       return JSON.parse(storageString) as PartialBlock[];
     } catch (e) {
       return undefined;
@@ -441,6 +457,97 @@ export default function Ticket() {
     setIssue(editor.document);
   };
 
+  async function updateTicketStatus(e: any, ticket: any) {
+    await fetch(`/api/v1/ticket/status/update`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: ticket.id, status: !ticket.isComplete }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        toast({
+          title: ticket.isComplete ? "Issue re-opened" : "Issue closed",
+          description: "The status of the issue has been updated.",
+          duration: 3000,
+        });
+        refetch();
+      });
+  }
+
+  // Add these new functions
+  async function updateTicketAssignee(ticketId: string, user: any) {
+    try {
+      const response = await fetch(`/api/v1/ticket/transfer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user: user ? user.id : undefined,
+          id: ticketId,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update assignee");
+
+      toast({
+        title: "Assignee updated",
+        description: `Transferred issue successfully`,
+        duration: 3000,
+      });
+      refetch();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update assignee",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
+  }
+
+  async function updateTicketPriority(ticket: any, priority: string) {
+    try {
+      const response = await fetch(`/api/v1/ticket/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: ticket.id,
+          detail: ticket.detail,
+          note: ticket.note,
+          title: ticket.title,
+          priority: priority,
+          status: ticket.status,
+        }),
+      }).then((res) => res.json());
+
+      if (!response.success) throw new Error("Failed to update priority");
+
+      toast({
+        title: "Priority updated",
+        description: `Ticket priority set to ${priority}`,
+        duration: 3000,
+      });
+      refetch();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update priority",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
+  }
+
+  const priorities = ["low", "medium", "high"];
+
   return (
     <div>
       {status === "loading" && (
@@ -457,482 +564,501 @@ export default function Ticket() {
       )}
 
       {status === "success" && (
-        <main className="flex-1 min-h-[90vh] py-8">
-          <div className="mx-auto max-w-7xl w-full px-4 flex flex-col xl:flex-row justify-center">
-            <div className="xl:border-r xl:pr-8 xl:w-2/3">
-              <div className="">
-                <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
-                  <div className="w-full">
-                    <div className="flex flex-row space-x-1">
-                      <h1 className="text-2xl mt-[5px] font-bold text-foreground">
-                        #{data.ticket.Number} -
-                      </h1>
-                      <input
-                        type="text"
-                        name="title"
-                        id="title"
-                        style={{ fontSize: "1.5rem" }}
-                        className="border-none -mt-[1px] px-0 pl-0.5 w-3/4 truncated m block text-foreground bg-transparent font-bold focus:outline-none focus:ring-0 placeholder:text-primary sm:text-sm sm:leading-6"
-                        value={title}
-                        defaultValue={data.ticket.title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        key={data.ticket.id}
-                        disabled={data.ticket.locked}
-                      />
-                    </div>
-                    <div className="mt-2 text-xs flex flex-row justify-between items-center space-x-1 text-gray-500 dark:text-white">
-                      <div className="flex flex-row space-x-1 items-center">
-                        {data.ticket.client && (
-                          <div>
-                            <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
-                              {data.ticket.client.name}
-                            </span>
+        <ContextMenu>
+          <ContextMenuTrigger>
+            <main className="flex-1 min-h-[90vh] py-8">
+              <div className="mx-auto max-w-7xl w-full px-4 flex flex-col xl:flex-row justify-center">
+                <div className="xl:border-r xl:pr-8 xl:w-2/3">
+                  <div className="">
+                    <div className="md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-4">
+                      <div className="w-full">
+                        <div className="flex flex-row space-x-1">
+                          <h1 className="text-2xl mt-[5px] font-bold text-foreground">
+                            #{data.ticket.Number} -
+                          </h1>
+                          <input
+                            type="text"
+                            name="title"
+                            id="title"
+                            style={{ fontSize: "1.5rem" }}
+                            className="border-none -mt-[1px] px-0 pl-0.5 w-3/4 truncated m block text-foreground bg-transparent font-bold focus:outline-none focus:ring-0 placeholder:text-primary sm:text-sm sm:leading-6"
+                            value={title}
+                            defaultValue={data.ticket.title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            key={data.ticket.id}
+                            disabled={data.ticket.locked}
+                          />
+                        </div>
+                        <div className="mt-2 text-xs flex flex-row justify-between items-center space-x-1 text-gray-500 dark:text-white">
+                          <div className="flex flex-row space-x-1 items-center">
+                            {data.ticket.client && (
+                              <div>
+                                <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
+                                  {data.ticket.client.name}
+                                </span>
+                              </div>
+                            )}
+                            <div>
+                              {!data.ticket.isComplete ? (
+                                <div className="flex items-center space-x-2">
+                                  <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                    {t("open_issue")}
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center space-x-2">
+                                  <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                    {t("closed_issue")}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
+                                {data.ticket.type}
+                              </span>
+                            </div>
+                            {data.ticket.hidden && (
+                              <div>
+                                <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                                  Hidden
+                                </span>
+                              </div>
+                            )}
+                            {data.ticket.locked && (
+                              <div>
+                                <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                                  Locked
+                                </span>
+                              </div>
+                            )}
                           </div>
-                        )}
-                        <div>
-                          {!data.ticket.isComplete ? (
-                            <div className="flex items-center space-x-2">
-                              <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                {t("open_issue")}
-                              </span>
-                            </div>
-                          ) : (
-                            <div className="flex items-center space-x-2">
-                              <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                                {t("closed_issue")}
-                              </span>
-                            </div>
+                          {user.isAdmin && (
+                            <DropdownMenu>
+                              <DropdownMenuTrigger className="inline-flex items-center px-2 py-1 text-xs font-medium text-foreground ring-none outline-none ">
+                                <Ellipsis className="h-4 w-4" />
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent
+                                align="end"
+                                className="min-w-[160px]"
+                              >
+                                <DropdownMenuLabel>
+                                  <span>Issue Actions</span>
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                {data.ticket.hidden ? (
+                                  <DropdownMenuItem
+                                    className="flex flex-row space-x-3 items-center"
+                                    onClick={() => hide(false)}
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                    <span>Show Issue</span>
+                                  </DropdownMenuItem>
+                                ) : (
+                                  <DropdownMenuItem
+                                    className="flex flex-row space-x-3 items-center"
+                                    onClick={() => hide(true)}
+                                  >
+                                    <EyeOff className="h-4 w-4" />
+                                    <span>Hide Issue</span>
+                                  </DropdownMenuItem>
+                                )}
+                                {data.ticket.locked ? (
+                                  <DropdownMenuItem
+                                    className="flex flex-row space-x-3 items-center"
+                                    onClick={() => lock(false)}
+                                  >
+                                    <Unlock className="h-4 w-4" />
+                                    <span>Unlock Issue</span>
+                                  </DropdownMenuItem>
+                                ) : (
+                                  <DropdownMenuItem
+                                    className="flex flex-row space-x-3 items-center"
+                                    onClick={() => lock(true)}
+                                  >
+                                    <Lock className="h-4 w-4" />
+                                    <span>Lock Issue</span>
+                                  </DropdownMenuItem>
+                                )}
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  className="flex flex-row space-x-3 items-center transition-colors duration-200 focus:bg-red-500 focus:text-white"
+                                  onClick={() => deleteIssue()}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  <span className="">Delete Issue</span>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           )}
                         </div>
-                        <div>
-                          <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 ring-1 ring-inset ring-orange-600/20">
-                            {data.ticket.type}
-                          </span>
-                        </div>
-                        {data.ticket.hidden && (
-                          <div>
-                            <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
-                              Hidden
-                            </span>
-                          </div>
-                        )}
-                        {data.ticket.locked && (
-                          <div>
-                            <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                              Locked
-                            </span>
-                          </div>
-                        )}
                       </div>
-                      {user.isAdmin && (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="inline-flex items-center px-2 py-1 text-xs font-medium text-foreground ring-none outline-none ">
-                            <Ellipsis className="h-4 w-4" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="end"
-                            className="min-w-[160px]"
-                          >
-                            <DropdownMenuLabel>
-                              <span>Issue Actions</span>
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            {data.ticket.hidden ? (
-                              <DropdownMenuItem
-                                className="flex flex-row space-x-3 items-center"
-                                onClick={() => hide(false)}
-                              >
-                                <Eye className="h-4 w-4" />
-                                <span>Show Issue</span>
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem
-                                className="flex flex-row space-x-3 items-center"
-                                onClick={() => hide(true)}
-                              >
-                                <EyeOff className="h-4 w-4" />
-                                <span>Hide Issue</span>
-                              </DropdownMenuItem>
-                            )}
-                            {data.ticket.locked ? (
-                              <DropdownMenuItem
-                                className="flex flex-row space-x-3 items-center"
-                                onClick={() => lock(false)}
-                              >
-                                <Unlock className="h-4 w-4" />
-                                <span>Unlock Issue</span>
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem
-                                className="flex flex-row space-x-3 items-center"
-                                onClick={() => lock(true)}
-                              >
-                                <Lock className="h-4 w-4" />
-                                <span>Lock Issue</span>
-                              </DropdownMenuItem>
-                            )}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="flex flex-row space-x-3 items-center transition-colors duration-200 focus:bg-red-500 focus:text-white"
-                              onClick={() => deleteIssue()}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              <span className="">Delete Issue</span>
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      )}
                     </div>
-                  </div>
-                </div>
-                <aside className="mt-4 xl:hidden">
-                  <div className="border-b pb-1">
-                    <div className="border-t pt-1">
-                      <div className="flex flex-col sm:flex-row space-x-2">
-                        <div className="ml-2">
-                          {users && (
-                            <UserCombo
-                              value={users}
-                              update={setN}
+                    <aside className="mt-4 xl:hidden">
+                      <div className="border-b pb-1">
+                        <div className="border-t pt-1">
+                          <div className="flex flex-col sm:flex-row space-x-2">
+                            <div className="ml-2">
+                              {users && (
+                                <UserCombo
+                                  value={users}
+                                  update={setN}
+                                  defaultName={
+                                    data.ticket.assignedTo
+                                      ? data.ticket.assignedTo.name
+                                      : ""
+                                  }
+                                  disabled={data.ticket.locked}
+                                />
+                              )}
+                            </div>
+
+                            <IconCombo
+                              value={priorityOptions}
+                              update={setPriority}
                               defaultName={
-                                data.ticket.assignedTo
-                                  ? data.ticket.assignedTo.name
-                                  : ""
+                                data.ticket.priority ? data.ticket.priority : ""
                               }
                               disabled={data.ticket.locked}
                             />
-                          )}
-                        </div>
 
-                        <IconCombo
-                          value={priorityOptions}
-                          update={setPriority}
-                          defaultName={
-                            data.ticket.priority ? data.ticket.priority : ""
-                          }
-                          disabled={data.ticket.locked}
-                        />
-
-                        <IconCombo
-                          value={ticketStatusMap}
-                          update={setTicketStatus}
-                          defaultName={
-                            data.ticket.status ? data.ticket.status : ""
-                          }
-                          disabled={data.ticket.locked}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </aside>
-                <div className="py-3 xl:pb-0 xl:pt-2">
-                  <div className="flex flex-row items-center text-sm space-x-1">
-                    {data.ticket.fromImap ? (
-                      <>
-                        <span className="font-bold">{data.ticket.email}</span>
-                        <span>created via email at </span>
-                        <span className="font-bold">
-                          {moment(data.ticket.createdAt).format("DD/MM/YYYY")}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        {data.ticket.createdBy ? (
-                          <div className="flex flex-row space-x-1">
-                            <span>
-                              Created by
-                              <strong>
-                                {data.ticket.createdBy.name}
-                              </strong> at{" "}
-                            </span>
-                            <span className="">
-                              {moment(data.ticket.createdAt).format("LLL")}
-                            </span>
-                            {data.ticket.name && (
-                              <span>
-                                for <strong>{data.ticket.name}</strong>
-                              </span>
-                            )}
-                            {data.ticket.email && (
-                              <span>
-                                ( <strong>{data.ticket.email}</strong> )
-                              </span>
-                            )}
+                            <IconCombo
+                              value={ticketStatusMap}
+                              update={setTicketStatus}
+                              defaultName={
+                                data.ticket.status ? data.ticket.status : ""
+                              }
+                              disabled={data.ticket.locked}
+                            />
                           </div>
-                        ) : (
-                          <div className="flex flex-row space-x-1">
-                            <span>Created at </span>
-                            <span className="">
-                              <strong>
-                                {moment(data.ticket.createdAt).format("LLL")}
-                              </strong>
-                              {data.ticket.client && (
-                                <span>
-                                  for <strong>{data.ticket.client.name}</strong>
-                                </span>
+                        </div>
+                      </div>
+                    </aside>
+                    <div className="py-3 xl:pb-0 xl:pt-2">
+                      <div className="flex flex-row items-center text-sm space-x-1">
+                        {data.ticket.fromImap ? (
+                          <>
+                            <span className="font-bold">
+                              {data.ticket.email}
+                            </span>
+                            <span>created via email at </span>
+                            <span className="font-bold">
+                              {moment(data.ticket.createdAt).format(
+                                "DD/MM/YYYY"
                               )}
                             </span>
+                          </>
+                        ) : (
+                          <>
+                            {data.ticket.createdBy ? (
+                              <div className="flex flex-row space-x-1">
+                                <span>
+                                  Created by
+                                  <strong>
+                                    {data.ticket.createdBy.name}
+                                  </strong>{" "}
+                                  at{" "}
+                                </span>
+                                <span className="">
+                                  {moment(data.ticket.createdAt).format("LLL")}
+                                </span>
+                                {data.ticket.name && (
+                                  <span>
+                                    for <strong>{data.ticket.name}</strong>
+                                  </span>
+                                )}
+                                {data.ticket.email && (
+                                  <span>
+                                    ( <strong>{data.ticket.email}</strong> )
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="flex flex-row space-x-1">
+                                <span>Created at </span>
+                                <span className="">
+                                  <strong>
+                                    {moment(data.ticket.createdAt).format(
+                                      "LLL"
+                                    )}
+                                  </strong>
+                                  {data.ticket.client && (
+                                    <span>
+                                      for{" "}
+                                      <strong>{data.ticket.client.name}</strong>
+                                    </span>
+                                  )}
+                                </span>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                      <div className="prose max-w-none mt-2">
+                        {!data.ticket.fromImap ? (
+                          <>
+                            <BlockNoteView
+                              editor={editor}
+                              sideMenu={false}
+                              className="m-0 p-0 bg-transparent dark:text-white"
+                              onChange={handleInputChange}
+                              editable={!data.ticket.locked}
+                            />
+                          </>
+                        ) : (
+                          <div className="">
+                            <div className="break-words bg-white rounded-md text-black">
+                              <Frame
+                                className="min-h-[60vh] h-full w-full"
+                                initialContent={data.ticket.detail}
+                              />
+                            </div>
                           </div>
                         )}
-                      </>
-                    )}
-                  </div>
-                  <div className="prose max-w-none mt-2">
-                    {!data.ticket.fromImap ? (
-                      <>
-                        <BlockNoteView
-                          editor={editor}
-                          sideMenu={false}
-                          className="m-0 p-0 bg-transparent dark:text-white"
-                          onChange={handleInputChange}
-                          editable={!data.ticket.locked}
-                        />
-                      </>
-                    ) : (
-                      <div className="">
-                        <div className="break-words bg-white rounded-md text-black">
-                          <Frame
-                            className="min-h-[60vh] h-full w-full"
-                            initialContent={data.ticket.detail}
-                          />
-                        </div>
                       </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <section
-                aria-labelledby="activity-title"
-                className="mt-8 xl:mt-10"
-              >
-                <div>
-                  <div className="divide-y">
-                    <div className="pb-2">
-                      <span
-                        id="activity-title"
-                        className="text-lg font-medium text-gray-900 dark:text-white"
-                      >
-                        {t("comments")}
-                      </span>
                     </div>
-                    <div className="pt-2">
-                      {/* Activity feed*/}
-                      <div className="flow-root">
-                        <ul role="list" className="-mb-8">
-                          {data.ticket.comments.length > 0 &&
-                            data.ticket.comments.map(
-                              (item: any, itemIdx: any) => (
-                                <li key={item.id}>
-                                  <div className="relative pb-8">
-                                    {itemIdx !==
-                                    data.ticket.comments.length - 1 ? (
-                                      <span
-                                        className="absolute left-3 top-5 -ml-px h-full w-0.5 bg-gray-200"
-                                        aria-hidden="true"
-                                      />
-                                    ) : null}
-                                    <div className="relative flex items-start space-x-3">
-                                      <div className="relative">
-                                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                                          <span className="font-medium leading-none text-xs text-white uppercase">
-                                            {item.user
-                                              ? item.user.name[0]
-                                              : item.replyEmail[0]}
-                                          </span>
-                                        </span>
-                                      </div>
-                                      <div className="min-w-0 flex-1">
-                                        <div>
-                                          <div className="text-sm">
-                                            <span className="font-medium text-gray-900 dark:text-white ">
-                                              {item.user
-                                                ? item.user.name
-                                                : item.replyEmail}
+                  </div>
+                  <section
+                    aria-labelledby="activity-title"
+                    className="mt-8 xl:mt-10"
+                  >
+                    <div>
+                      <div className="divide-y">
+                        <div className="pb-2">
+                          <span
+                            id="activity-title"
+                            className="text-lg font-medium text-gray-900 dark:text-white"
+                          >
+                            {t("comments")}
+                          </span>
+                        </div>
+                        <div className="pt-2">
+                          {/* Activity feed*/}
+                          <div className="flow-root">
+                            <ul role="list" className="-mb-8">
+                              {data.ticket.comments.length > 0 &&
+                                data.ticket.comments.map(
+                                  (item: any, itemIdx: any) => (
+                                    <li key={item.id}>
+                                      <div className="relative pb-8">
+                                        {itemIdx !==
+                                        data.ticket.comments.length - 1 ? (
+                                          <span
+                                            className="absolute left-3 top-5 -ml-px h-full w-0.5 bg-gray-200"
+                                            aria-hidden="true"
+                                          />
+                                        ) : null}
+                                        <div className="relative flex items-start space-x-3">
+                                          <div className="relative">
+                                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                                              <span className="font-medium leading-none text-xs text-white uppercase">
+                                                {item.user
+                                                  ? item.user.name[0]
+                                                  : item.replyEmail[0]}
+                                              </span>
                                             </span>
                                           </div>
-                                          <div className=" flex flex-row space-x-1">
-                                            <span
-                                              className={`text-xs ${
-                                                item.public
-                                                  ? "text-primary font-semibold"
-                                                  : "text-gray-500"
-                                              } dark:text-white`}
-                                            >
-                                              {item.public
-                                                ? "Publicly"
-                                                : "Internally"}
-                                            </span>
-                                            <span className="text-xs text-gray-500 dark:text-white">
-                                              commented at
-                                            </span>
+                                          <div className="min-w-0 flex-1">
+                                            <div>
+                                              <div className="text-sm">
+                                                <span className="font-medium text-gray-900 dark:text-white ">
+                                                  {item.user
+                                                    ? item.user.name
+                                                    : item.replyEmail}
+                                                </span>
+                                              </div>
+                                              <div className=" flex flex-row space-x-1">
+                                                <span
+                                                  className={`text-xs ${
+                                                    item.public
+                                                      ? "text-primary font-semibold"
+                                                      : "text-gray-500"
+                                                  } dark:text-white`}
+                                                >
+                                                  {item.public
+                                                    ? "Publicly"
+                                                    : "Internally"}
+                                                </span>
+                                                <span className="text-xs text-gray-500 dark:text-white">
+                                                  commented at
+                                                </span>
 
-                                            <span className="text-xs text-gray-500 dark:text-white">
-                                              {moment(item.createdAt).format(
-                                                "DD/MM/YYYY hh:mm"
-                                              )}
-                                            </span>
+                                                <span className="text-xs text-gray-500 dark:text-white">
+                                                  {moment(
+                                                    item.createdAt
+                                                  ).format("DD/MM/YYYY hh:mm")}
+                                                </span>
+                                              </div>
+                                            </div>
+                                            <div className="text-sm  text-gray-900 dark:text-white">
+                                              <span>{item.text}</span>
+                                            </div>
                                           </div>
                                         </div>
-                                        <div className="text-sm  text-gray-900 dark:text-white">
-                                          <span>{item.text}</span>
-                                        </div>
                                       </div>
-                                    </div>
-                                  </div>
-                                </li>
-                              )
-                            )}
-                        </ul>
-                      </div>
-                      <div className="mt-6">
-                        <div className="flex space-x-3">
-                          <div className="min-w-0 flex-1">
-                            <div>
-                              <div>
-                                <label htmlFor="comment" className="sr-only">
-                                  {t("comment")}
-                                </label>
-                                <textarea
-                                  id="comment"
-                                  name="comment"
-                                  rows={3}
-                                  className="block w-full bg-transparent rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
-                                  placeholder={
-                                    data.ticket.locked
-                                      ? "This ticket is locked"
-                                      : "Leave a comment"
-                                  }
-                                  defaultValue={""}
-                                  onChange={(e) => setComment(e.target.value)}
-                                  disabled={data.ticket.locked}
-                                />
-                              </div>
-                              <div className="mt-4 flex justify-end">
-                                <Text as="label" size="2">
-                                  <div className="flex flex-row items-center space-x-2">
-                                    <Switch
-                                      checked={publicComment}
-                                      onChange={setPublicComment}
-                                      className={`${
-                                        publicComment
-                                          ? "bg-blue-600"
-                                          : "bg-gray-200"
-                                      } relative inline-flex h-6 w-11 items-center rounded-full`}
-                                    >
-                                      <span className="sr-only">
-                                        Enable notifications
-                                      </span>
-                                      <span
-                                        className={`${
-                                          publicComment
-                                            ? "translate-x-6"
-                                            : "translate-x-1"
-                                        } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                      />
-                                    </Switch>
-                                    <Tooltip content="Enabling this will mean the email registered to the ticket will get a reply based on your comment.">
-                                      <Text> Public Reply</Text>
-                                    </Tooltip>
-                                  </div>
-                                </Text>
-                              </div>
-                              <div className="mt-4 flex items-center justify-end space-x-4">
-                                {data.ticket.isComplete ? (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      if (!data.ticket.locked) {
-                                        updateStatus();
-                                      }
-                                    }}
-                                    disabled={data.ticket.locked}
-                                    className={`inline-flex justify-center items-center gap-x-1.5 rounded-md ${
-                                      data.ticket.locked
-                                        ? "bg-gray-300 cursor-not-allowed"
-                                        : "bg-white hover:bg-gray-50"
-                                    } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
-                                  >
-                                    <CheckCircleIcon
-                                      className="-ml-0.5 h-5 w-5 text-red-500"
-                                      aria-hidden="true"
-                                    />
-                                    <span className="">
-                                      {t("reopen_issue")}
-                                    </span>
-                                  </button>
-                                ) : (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      if (!data.ticket.locked) {
-                                        updateStatus();
-                                      }
-                                    }}
-                                    disabled={data.ticket.locked}
-                                    className={`inline-flex justify-center gap-x-1.5 rounded-md ${
-                                      data.ticket.locked
-                                        ? "bg-gray-300 cursor-not-allowed"
-                                        : "bg-white hover:bg-gray-50"
-                                    } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
-                                  >
-                                    <CheckCircleIcon
-                                      className="-ml-0.5 h-5 w-5 text-green-500"
-                                      aria-hidden="true"
-                                    />
-                                    {t("close_issue")}
-                                  </button>
+                                    </li>
+                                  )
                                 )}
-                                <button
-                                  onClick={() => addComment()}
-                                  type="submit"
-                                  disabled={data.ticket.locked}
-                                  className={`inline-flex items-center justify-center rounded-md px-4 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 ${
-                                    data.ticket.locked
-                                      ? "bg-gray-400 cursor-not-allowed"
-                                      : "bg-gray-900 hover:bg-gray-700"
-                                  }`}
-                                >
-                                  {t("comment")}
-                                </button>
+                            </ul>
+                          </div>
+                          <div className="mt-6">
+                            <div className="flex space-x-3">
+                              <div className="min-w-0 flex-1">
+                                <div>
+                                  <div>
+                                    <label
+                                      htmlFor="comment"
+                                      className="sr-only"
+                                    >
+                                      {t("comment")}
+                                    </label>
+                                    <textarea
+                                      id="comment"
+                                      name="comment"
+                                      rows={3}
+                                      className="block w-full bg-transparent rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-background focus:ring-0 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                      placeholder={
+                                        data.ticket.locked
+                                          ? "This ticket is locked"
+                                          : "Leave a comment"
+                                      }
+                                      defaultValue={""}
+                                      onChange={(e) =>
+                                        setComment(e.target.value)
+                                      }
+                                      disabled={data.ticket.locked}
+                                    />
+                                  </div>
+                                  <div className="mt-4 flex justify-end">
+                                    <Text as="label" size="2">
+                                      <div className="flex flex-row items-center space-x-2">
+                                        <Switch
+                                          checked={publicComment}
+                                          onChange={setPublicComment}
+                                          className={`${
+                                            publicComment
+                                              ? "bg-blue-600"
+                                              : "bg-gray-200"
+                                          } relative inline-flex h-6 w-11 items-center rounded-full`}
+                                        >
+                                          <span className="sr-only">
+                                            Enable notifications
+                                          </span>
+                                          <span
+                                            className={`${
+                                              publicComment
+                                                ? "translate-x-6"
+                                                : "translate-x-1"
+                                            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                                          />
+                                        </Switch>
+                                        <Tooltip content="Enabling this will mean the email registered to the ticket will get a reply based on your comment.">
+                                          <Text> Public Reply</Text>
+                                        </Tooltip>
+                                      </div>
+                                    </Text>
+                                  </div>
+                                  <div className="mt-4 flex items-center justify-end space-x-4">
+                                    {data.ticket.isComplete ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          if (!data.ticket.locked) {
+                                            updateStatus();
+                                          }
+                                        }}
+                                        disabled={data.ticket.locked}
+                                        className={`inline-flex justify-center items-center gap-x-1.5 rounded-md ${
+                                          data.ticket.locked
+                                            ? "bg-gray-300 cursor-not-allowed"
+                                            : "bg-white hover:bg-gray-50"
+                                        } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
+                                      >
+                                        <CheckCircleIcon
+                                          className="-ml-0.5 h-5 w-5 text-red-500"
+                                          aria-hidden="true"
+                                        />
+                                        <span className="">
+                                          {t("reopen_issue")}
+                                        </span>
+                                      </button>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          if (!data.ticket.locked) {
+                                            updateStatus();
+                                          }
+                                        }}
+                                        disabled={data.ticket.locked}
+                                        className={`inline-flex justify-center gap-x-1.5 rounded-md ${
+                                          data.ticket.locked
+                                            ? "bg-gray-300 cursor-not-allowed"
+                                            : "bg-white hover:bg-gray-50"
+                                        } px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300`}
+                                      >
+                                        <CheckCircleIcon
+                                          className="-ml-0.5 h-5 w-5 text-green-500"
+                                          aria-hidden="true"
+                                        />
+                                        {t("close_issue")}
+                                      </button>
+                                    )}
+                                    <button
+                                      onClick={() => addComment()}
+                                      type="submit"
+                                      disabled={data.ticket.locked}
+                                      className={`inline-flex items-center justify-center rounded-md px-4 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 ${
+                                        data.ticket.locked
+                                          ? "bg-gray-400 cursor-not-allowed"
+                                          : "bg-gray-900 hover:bg-gray-700"
+                                      }`}
+                                    >
+                                      {t("comment")}
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </section>
                 </div>
-              </section>
-            </div>
-            <div className="hidden xl:block xl:pl-8 xl:order-2 order-1">
-              <h2 className="sr-only">{t("details")}</h2>
-              <div className="space-y-1   py-2">
-                {users && (
-                  <UserCombo
-                    value={users}
-                    update={setN}
-                    defaultName={
-                      data.ticket.assignedTo ? data.ticket.assignedTo.name : ""
-                    }
-                    disabled={data.ticket.locked}
-                  />
-                )}
+                <div className="hidden xl:block xl:pl-8 xl:order-2 order-1">
+                  <h2 className="sr-only">{t("details")}</h2>
+                  <div className="space-y-1   py-2">
+                    {users && (
+                      <UserCombo
+                        value={users}
+                        update={setN}
+                        defaultName={
+                          data.ticket.assignedTo
+                            ? data.ticket.assignedTo.name
+                            : ""
+                        }
+                        disabled={data.ticket.locked}
+                      />
+                    )}
 
-                <IconCombo
-                  value={priorityOptions}
-                  update={setPriority}
-                  defaultName={data.ticket.priority ? data.ticket.priority : ""}
-                  disabled={data.ticket.locked}
-                />
+                    <IconCombo
+                      value={priorityOptions}
+                      update={setPriority}
+                      defaultName={
+                        data.ticket.priority ? data.ticket.priority : ""
+                      }
+                      disabled={data.ticket.locked}
+                    />
 
-                <IconCombo
-                  value={ticketStatusMap}
-                  update={setTicketStatus}
-                  defaultName={data.ticket.status ? data.ticket.status : ""}
-                  disabled={data.ticket.locked}
-                />
+                    <IconCombo
+                      value={ticketStatusMap}
+                      update={setTicketStatus}
+                      defaultName={data.ticket.status ? data.ticket.status : ""}
+                      disabled={data.ticket.locked}
+                    />
 
-                {/* <div className="border-t border-gray-200">
+                    {/* <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
                       Time Tracking
@@ -997,7 +1123,7 @@ export default function Ticket() {
                     </div>
                   )}
                 </div> */}
-                {/* <div className="border-t border-gray-200">
+                    {/* <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
                     <span className="text-sm font-medium text-gray-500 dark:text-white">
                       Attachments
@@ -1031,10 +1157,140 @@ export default function Ticket() {
                     )}
                   </>
                 </div> */}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </main>
+            </main>
+          </ContextMenuTrigger>
+          <ContextMenuContent className="w-52">
+            <ContextMenuItem
+              onClick={(e) => updateTicketStatus(e, data.ticket)}
+            >
+              {data.ticket.isComplete ? "Re-open Issue" : "Close Issue"}
+            </ContextMenuItem>
+            <ContextMenuSeparator />
+
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>Assign To</ContextMenuSubTrigger>
+              <ContextMenuSubContent className="w-64 ml-1 -mt-1/2">
+                <Command>
+                  <CommandList>
+                    <CommandGroup heading="Assigned To">
+                      <CommandItem
+                        onSelect={() =>
+                          updateTicketAssignee(data.ticket.id, undefined)
+                        }
+                      >
+                        <div
+                          className={cn(
+                            "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                            data.ticket.assignedTo === null
+                              ? "bg-primary text-primary-foreground"
+                              : "opacity-50 [&_svg]:invisible"
+                          )}
+                        >
+                          <CheckIcon className={cn("h-4 w-4")} />
+                        </div>
+                        <span>Unassigned</span>
+                      </CommandItem>
+                      {users?.map((user) => (
+                        <CommandItem
+                          key={user.id}
+                          onSelect={() =>
+                            updateTicketAssignee(data.ticket.id, user)
+                          }
+                        >
+                          <div
+                            className={cn(
+                              "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                              data.ticket.assignedTo?.name === user.name
+                                ? "bg-primary text-primary-foreground"
+                                : "opacity-50 [&_svg]:invisible"
+                            )}
+                          >
+                            <CheckIcon className={cn("h-4 w-4")} />
+                          </div>
+                          <span>{user.name}</span>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>Change Priority</ContextMenuSubTrigger>
+              <ContextMenuSubContent className="w-64 ml-1">
+                <Command>
+                  <CommandList>
+                    <CommandGroup heading="Priority">
+                      {priorities.map((priority) => (
+                        <CommandItem
+                          key={priority}
+                          onSelect={() =>
+                            updateTicketPriority(data.ticket, priority)
+                          }
+                        >
+                          <div
+                            className={cn(
+                              "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                              data.ticket.priority.toLowerCase() === priority
+                                ? "bg-primary text-primary-foreground"
+                                : "opacity-50 [&_svg]:invisible"
+                            )}
+                          >
+                            <CheckIcon className={cn("h-4 w-4")} />
+                          </div>
+                          <span className="capitalize">{priority}</span>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+
+            <ContextMenuSeparator />
+
+            <ContextMenuItem
+              onClick={(e) => {
+                e.preventDefault();
+                toast({
+                  title: "Link copied to clipboard",
+                  description: "You can now share the link with others.",
+                  duration: 3000,
+                });
+                navigator.clipboard.writeText(
+                  `${window.location.origin}/issue/${data.ticket.id}`
+                );
+              }}
+            >
+              Share Link
+            </ContextMenuItem>
+
+            <ContextMenuSeparator />
+
+            <ContextMenuItem
+              className="text-red-600"
+              onClick={(e) => {
+                e.preventDefault();
+                if (confirm("Are you sure you want to delete this ticket?")) {
+                  fetch(`/api/v1/ticket/delete`, {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id: data.ticket.id }),
+                  });
+                }
+              }}
+            >
+              Delete Ticket
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
       )}
     </div>
   );
