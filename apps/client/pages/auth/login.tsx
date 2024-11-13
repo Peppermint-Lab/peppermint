@@ -52,15 +52,6 @@ export default function Login({}) {
       .then((res) => {
         if (res.success && res.url) {
           setUrl(res.url);
-        } else {
-          if (!res.success) {
-            toast({
-              variant: "destructive",
-              title: "Error",
-              description:
-                "There was an error logging in, please try again. If this issue persists, please contact support via the discord.",
-            });
-          }
         }
       });
   }

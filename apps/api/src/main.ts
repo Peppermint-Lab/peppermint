@@ -86,10 +86,13 @@ server.get("/", async function (request, response) {
 // JWT authentication hook
 server.addHook("preHandler", async function (request: any, reply: any) {
   try {
+    if (request.url === "/api/v1/auth/login" && request.method === "POST") {
+      return true;
+    }
     const bearer = request.headers.authorization!.split(" ")[1];
-    return checkToken(bearer);
+    checkToken(bearer);
   } catch (err) {
-    reply.send({
+    reply.status(401).send({
       message: "Unauthorized",
       success: false,
     });
