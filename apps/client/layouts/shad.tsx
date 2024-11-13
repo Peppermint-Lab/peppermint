@@ -37,7 +37,7 @@ export default function ShadLayout({ children }: any) {
   return (
     !loading &&
     user && (
-      <div className="min-h-screen overflow-hidden ">
+      <div className="min-h-screen overflow-hidden">
         <SidebarProvider>
           <AppSidebar />
           <div className="w-full">
@@ -54,7 +54,7 @@ export default function ShadLayout({ children }: any) {
                   )}
                 </div>
 
-                <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">
+                <div className="flex w-full sticky right-0 justify-end items-center gap-x-2 lg:gap-x-2 ">
                   <Button
                     variant="outline"
                     className="relative rounded-md p-2 text-gray-400 hover:text-gray-500 hover:cursor-pointer focus:outline-none"

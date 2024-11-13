@@ -9,10 +9,12 @@ import {
 import { Button } from "@radix-ui/themes";
 import {
   ContactIcon,
+  FileText,
   KeyRound,
   Mail,
   Mailbox,
   MoveLeft,
+  RollerCoaster,
   UserRound,
   Webhook,
 } from "lucide-react";
@@ -80,6 +82,18 @@ export default function AdminLayout({ children }: any) {
       href: "/admin/authentication",
       current: location.pathname === "/admin/authentication",
       icon: KeyRound,
+    },
+    {
+      name: "Roles",
+      href: "/admin/roles",
+      current: location.pathname === "/admin/roles",
+      icon: RollerCoaster,
+    },
+    {
+      name: "Logs",
+      href: "/admin/logs",
+      current: location.pathname === "/admin/logs",
+      icon: FileText,
     },
   ];
 

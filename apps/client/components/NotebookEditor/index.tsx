@@ -1,18 +1,19 @@
 //@ts-nocheck
-import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
-import { getCookie } from "cookies-next";
-import moment from "moment";
-import { useDebounce } from "use-debounce";
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { BlockNoteView } from "@blocknote/mantine";
+import { toast } from "@/shadcn/hooks/use-toast";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/shadcn/ui/dropdown-menu";
+import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { BlockNoteView } from "@blocknote/mantine";
+import { getCookie } from "cookies-next";
 import { Ellipsis } from "lucide-react";
+import moment from "moment";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
 import { useUser } from "../../store/session";
 
 function isHTML(str) {
@@ -76,7 +77,7 @@ export default function NotebookEditor() {
 
   async function updateNoteBook() {
     setSaving(true);
-    await fetch(`/api/v1/notebooks/note/${router.query.id}/update`, {
+    const res = await fetch(`/api/v1/notebooks/note/${router.query.id}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -87,15 +88,23 @@ export default function NotebookEditor() {
         content: JSON.stringify(debouncedValue),
       }),
     });
+    const data = await res.json();
     setSaving(false);
     let date = new Date();
     // @ts-ignore
     setLastSaved(new Date(date).getTime());
+    if(data.status) {
+      toast({
+        variant: "destructive",
+        title: "Error -> Unable to update",
+        description: data.message,
+      });
+    }
   }
 
   async function deleteNotebook(id) {
     if (window.confirm("Do you really want to delete this notebook?")) {
-      await fetch(`/api/v1/documents/${router.query.id}`, {
+      await fetch(`/api/v1/notebooks/note/${router.query.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -105,6 +114,12 @@ export default function NotebookEditor() {
         .then((res) => {
           if (res.success) {
             router.push("/documents");
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Error -> Unable to delete",
+              description: res.message,
+            });
           }
         });
     }

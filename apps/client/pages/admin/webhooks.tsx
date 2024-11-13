@@ -1,3 +1,5 @@
+import { toast } from "@/shadcn/hooks/use-toast";
+import { hasAccess } from "@/shadcn/lib/hasAccess";
 import { Switch } from "@headlessui/react";
 import { getCookie } from "cookies-next";
 import { useState } from "react";
@@ -11,7 +13,10 @@ async function getHooks() {
       Authorization: `Bearer ${getCookie("session")}`,
     },
   });
-  return res.json();
+
+  hasAccess(res);
+
+  return res.json(); // Return the parsed JSON response
 }
 
 function classNames(...classes) {
@@ -45,7 +50,16 @@ export default function Notifications() {
     })
       .then((res) => res.json())
       .then((res) => {
-        refetch();
+        if (res.success) {
+          refetch();
+          setShow("main");
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error -> Unable to add",
+            description: res.message,
+          });
+        }
       });
   }
 
@@ -75,49 +89,51 @@ export default function Notifications() {
                 Webhook Settings
               </h1>
             </div>
-            <div className="px-4 sm:px-6 md:px-0">
-              <div className="sm:flex sm:items-center mt-4">
-                <div className="sm:flex-auto">
-                  <p className="mt-2 text-sm text-foreground">
-                    Webhooks allow external services to be notified when certain
-                    events happen. When the specified events happen, we'll send
-                    a POST request to each of the URLs you provide.
-                  </p>
-                </div>
-                <div className="sm:ml-16 sm:flex-none">
-                  <>
-                    <button
-                      onClick={() => setShow("create")}
-                      type="button"
-                      className={
-                        show === "main"
-                          ? "rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                          : "hidden"
-                      }
-                    >
-                      Add Webhook
-                    </button>
-                    <button
-                      onClick={() => setShow("main")}
-                      type="button"
-                      className={
-                        show === "main"
-                          ? "hidden"
-                          : "rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      }
-                    >
-                      Cancel
-                    </button>
-                  </>
-                </div>
-              </div>
-            </div>
+           
           </div>
           <div className="px-4 sm:px-6 md:px-0">
             <div className="py-6">
               <div className="mt-4">
                 <div className={show === "main" ? "" : "hidden"}>
                   {status === "success" && (
+                     <>
+                     <div className="px-4 sm:px-6 md:px-0">
+                     <div className="sm:flex sm:items-center mt-4">
+                       <div className="sm:flex-auto">
+                         <p className="mt-2 text-sm text-foreground">
+                           Webhooks allow external services to be notified when certain
+                           events happen. When the specified events happen, we'll send
+                           a POST request to each of the URLs you provide.
+                         </p>
+                       </div>
+                       <div className="sm:ml-16 sm:flex-none">
+                         <>
+                           <button
+                             onClick={() => setShow("create")}
+                             type="button"
+                             className={
+                               show === "main"
+                                 ? "rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                 : "hidden"
+                             }
+                           >
+                             Add Webhook
+                           </button>
+                           <button
+                             onClick={() => setShow("main")}
+                             type="button"
+                             className={
+                               show === "main"
+                                 ? "hidden"
+                                 : "rounded bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                             }
+                           >
+                             Cancel
+                           </button>
+                         </>
+                       </div>
+                     </div>
+                   </div>
                     <div className="mt-4">
                       {data !== undefined && data.webhooks.length > 0 ? (
                         <div className="flex flex-col gap-4">
@@ -152,6 +168,7 @@ export default function Notifications() {
                         </p>
                       )}
                     </div>
+                    </>
                   )}
                 </div>
 
@@ -252,7 +269,6 @@ export default function Notifications() {
                         <button
                           onClick={() => {
                             addHook();
-                            setShow("main");
                           }}
                           type="button"
                           className="mt-8 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

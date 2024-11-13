@@ -1,25 +1,10 @@
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import Loader from "react-spinners/ClipLoader";
-import { useState, useMemo, useEffect } from "react";
 
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-  ContextMenuSub,
-  ContextMenuSubTrigger,
-  ContextMenuSubContent,
-} from "@/shadcn/ui/context-menu";
-import { getCookie } from "cookies-next";
-import moment from "moment";
-import Link from "next/link";
-import { useQuery } from "react-query";
-import { useUser } from "../../store/session";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
-import { CheckIcon, Filter, X } from "lucide-react";
+import { toast } from "@/shadcn/hooks/use-toast";
+import { cn } from "@/shadcn/lib/utils";
 import { Button } from "@/shadcn/ui/button";
 import {
   Command,
@@ -30,11 +15,26 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/shadcn/ui/command";
-import { cn } from "@/shadcn/lib/utils";
-import { toast } from "@/shadcn/hooks/use-toast";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/shadcn/ui/context-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { getCookie } from "cookies-next";
+import { CheckIcon, Filter, X } from "lucide-react";
+import moment from "moment";
+import Link from "next/link";
+import { useQuery } from "react-query";
+import { useUser } from "../../store/session";
 
 async function getUserTickets(token: any) {
-  const res = await fetch(`/api/v1/tickets/open`, {
+  const res = await fetch(`/api/v1/tickets/user/open`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -83,10 +83,40 @@ export default function Tickets() {
   const normal = "bg-green-100 text-green-800";
 
   const [filterSelected, setFilterSelected] = useState();
-  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>(() => {
+    const saved = localStorage.getItem('open_selectedPriorities');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(() => {
+    const saved = localStorage.getItem('open_selectedStatuses');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>(() => {
+    const saved = localStorage.getItem('open_selectedAssignees');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [users, setUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    localStorage.setItem('open_selectedPriorities', JSON.stringify(selectedPriorities));
+  }, [selectedPriorities]);
+
+  useEffect(() => {
+    localStorage.setItem('open_selectedStatuses', JSON.stringify(selectedStatuses));
+  }, [selectedStatuses]);
+
+  useEffect(() => {
+    localStorage.setItem('open_selectedAssignees', JSON.stringify(selectedAssignees));
+  }, [selectedAssignees]);
+
+  const clearAllFilters = () => {
+    setSelectedPriorities([]);
+    setSelectedStatuses([]);
+    setSelectedAssignees([]);
+    localStorage.removeItem('open_selectedPriorities');
+    localStorage.removeItem('open_selectedStatuses');
+    localStorage.removeItem('open_selectedAssignees');
+  };
 
   const handlePriorityToggle = (priority: string) => {
     setSelectedPriorities((prev) =>
@@ -480,11 +510,7 @@ export default function Tickets() {
                       variant="ghost"
                       size="sm"
                       className="h-6 px-2 text-xs"
-                      onClick={() => {
-                        setSelectedPriorities([]);
-                        setSelectedStatuses([]);
-                        setSelectedAssignees([]);
-                      }}
+                      onClick={clearAllFilters}
                     >
                       Clear all
                     </Button>
