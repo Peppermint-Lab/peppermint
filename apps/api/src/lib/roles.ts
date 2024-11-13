@@ -26,9 +26,9 @@ export function hasPermission(
   requireAll: boolean = true
 ): boolean {
   // Admins have all permissions
-  //   if (user?.isAdmin) {
-  //     return true;
-  //   }
+    if (user?.isAdmin) {
+      return true;
+    }
 
   // Convert single permission to array for consistent handling
   const permissions = Array.isArray(requiredPermissions)
