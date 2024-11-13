@@ -98,7 +98,7 @@ export function roleRoutes(fastify: FastifyInstance) {
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
-      const { name, description, permissions, isDefault }: any = request.body;
+      const { name, description, permissions, isDefault, users }: any = request.body;
 
       try {
         const updatedRole = await prisma.role.update({
@@ -109,6 +109,9 @@ export function roleRoutes(fastify: FastifyInstance) {
             permissions,
             isDefault,
             updatedAt: new Date(),
+            users: {
+              set: Array.isArray(users) ? users.map(userId => ({ id: userId })) : [{ id: users }], // Ensure users is an array of objects with unique IDs when updating
+            },
           },
         });
 
@@ -156,7 +159,7 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/role/assign",
     {
-    //   preHandler: requirePermission(['role::assign']),
+      preHandler: requirePermission(['role::update']),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { userId, roleId }: any = request.body;

@@ -17,6 +17,7 @@ const fetchUsers = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  
   return res.json();
 };
 

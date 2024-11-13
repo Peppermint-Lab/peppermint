@@ -30,6 +30,7 @@ import { useQuery } from "react-query";
 import { useDebounce } from "use-debounce";
 
 import { toast } from "@/shadcn/hooks/use-toast";
+import { hasAccess } from "@/shadcn/lib/hasAccess";
 import { cn } from "@/shadcn/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shadcn/ui/avatar";
 import {
@@ -103,6 +104,9 @@ export default function Ticket() {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    hasAccess(res);
+
     return res.json();
   };
 

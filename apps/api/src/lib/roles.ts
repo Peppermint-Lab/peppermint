@@ -25,6 +25,11 @@ export function hasPermission(
   requiredPermissions: Permission | Permission[],
   requireAll: boolean = true
 ): boolean {
+  // Admins have all permissions
+  //   if (user?.isAdmin) {
+  //     return true;
+  //   }
+
   // Convert single permission to array for consistent handling
   const permissions = Array.isArray(requiredPermissions)
     ? requiredPermissions
@@ -69,33 +74,35 @@ export function requirePermission(
       const user = await checkSession(req);
       const config = await prisma.config.findFirst();
 
-      if (!config?.roles_active) {
+      if (config?.roles_active) {
+        const userWithRoles = user
+          ? await prisma.user.findUnique({
+              where: { id: user.id },
+              include: {
+                roles: true,
+              },
+            })
+          : null;
+
+        if (!userWithRoles) {
+          return res.status(401).send({
+            message: "Unauthorized",
+            success: false,
+          });
+        }
+
+        if (!hasPermission(userWithRoles, requiredPermissions, requireAll)) {
+          return res.status(401).send({
+            message: "You do not have the required permission to access this resource.",
+            success: false,
+            status: 403,
+          });
+        }
+
+        next();
+      } else {
         next();
       }
-
-      const userWithRoles = user
-        ? await prisma.user.findUnique({
-            where: { id: user.id },
-            include: {
-              roles: true,
-            },
-          })
-        : null;
-
-      // Admins have all permissions
-      if (user?.isAdmin) {
-        next();
-      }
-
-      if (!userWithRoles) {
-        throw new Error("User not authenticated");
-      }
-
-      if (!hasPermission(userWithRoles, requiredPermissions, requireAll)) {
-        throw new InsufficientPermissionsError();
-      }
-
-      next();
     } catch (error) {
       next(error);
     }

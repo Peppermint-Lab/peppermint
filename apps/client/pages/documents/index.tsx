@@ -1,11 +1,6 @@
+import { toast } from "@/shadcn/hooks/use-toast";
 import { Button } from "@/shadcn/ui/button";
-import { getCookie } from "cookies-next";
-import { Ellipsis } from "lucide-react";
-import useTranslation from "next-translate/useTranslation";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useUser } from "../../store/session";
+import { Input } from "@/shadcn/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,7 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shadcn/ui/select";
-import { Input } from "@/shadcn/ui/input";
+import { getCookie } from "cookies-next";
+import useTranslation from "next-translate/useTranslation";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useQuery } from "react-query";
 
 function groupDocumentsByDate(notebooks) {
   const today = new Date();
@@ -68,8 +67,16 @@ async function fetchNotebooks(token) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-  });
-  return res.json();
+  }).then((res) => res.json());
+
+  if (res.status) {
+    toast({
+      title: "Error",
+      description: "You do not have permission to view this resource.",
+    });
+  }
+
+  return res;
 }
 
 export default function NoteBooksIndex() {
@@ -153,7 +160,7 @@ export default function NoteBooksIndex() {
       <div className="mt-8 w-full flex justify-center">
         {status === "loading" && <p>Loading...</p>}
         {status === "error" && <p>Error loading documents.</p>}
-        {data && data.notebooks.length === 0 ? (
+        {data && data.notebooks && data.notebooks.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-sm text-gray-500">No documents found.</p>
             <Button variant="outline" size="sm" onClick={() => createNew()}>
@@ -162,13 +169,13 @@ export default function NoteBooksIndex() {
           </div>
         ) : (
           <div className="flex flex-col w-full max-w-2xl justify-center space-y-4">
-            <div className="flex flex-col mb-4">
+            {data && data.notebooks && data.notebooks.length > 0 && (
               <div className="flex w-full justify-end">
                 <Button variant="outline" size="sm" onClick={() => createNew()}>
                   New Document
                 </Button>
               </div>
-            </div>
+            )}
 
             {data?.notebooks &&
               Object.entries(

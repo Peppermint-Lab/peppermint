@@ -6,23 +6,63 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function Roles() {
+export default function UpdateRole() {
   const [step, setStep] = useState(1);
-  const [selectedPermissions, setSelectedPermissions] = useState<Permission[]>(
-    []
-  );
+  const [selectedPermissions, setSelectedPermissions] = useState<Permission[]>([]);
   const [roleName, setRoleName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [users, setUsers] = useState<Array<{ id: string; email: string }>>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { id } = router.query;
 
-  const handleAddRole = async () => {
-    if (!roleName) return;
+  // New function to fetch role data
+  const fetchRoleData = async () => {
+    if (!id) return;
 
-    await fetch("/api/v1/role/create", {
-      method: "POST",
+    try {
+      const response = await fetch(`/api/v1/role/${id}`, {
+        headers: {
+          Authorization: `Bearer ${getCookie("session")}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setRoleName(data.role.name);
+        setSelectedPermissions(data.role.permissions);
+        setSelectedUsers(data.role.users.map((u: any) => u.id));
+      }
+    } catch (error) {
+      console.error("Error fetching role:", error);
+    }
+  };
+
+  // Add this function
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/v1/users/all', {
+        headers: {
+          Authorization: `Bearer ${getCookie("session")}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setUsers(data.users);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+    setIsLoading(false);
+  };
+
+  // Modified to handle role update instead of creation
+  const handleUpdateRole = async () => {
+    if (!roleName || !id) return;
+
+    await fetch(`/api/v1/role/${id}/update`, {
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${getCookie("session")}`,
         "Content-Type": "application/json",
@@ -41,6 +81,14 @@ export default function Roles() {
       });
   };
 
+  // Load role data when component mounts
+  useEffect(() => {
+    if (id) {
+      fetchRoleData();
+      fetchUsers();
+    }
+  }, [id]);
+
   const handleSelectCategory = (category: string, isSelected: boolean) => {
     const categoryPermissions =
       PERMISSIONS_CONFIG.find((group) => group.category === category)
@@ -57,7 +105,6 @@ export default function Roles() {
     } else {
       setSelectedPermissions(
         selectedPermissions.filter(
-          // @ts-ignore
           (p: Permission) => !categoryPermissions.includes(p)
         )
       );
@@ -71,77 +118,13 @@ export default function Roles() {
     return categoryPermissions.every((p) => selectedPermissions.includes(p));
   };
 
-  const fetchUsers = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/v1/users/all", {
-        headers: {
-          Authorization: `Bearer ${getCookie("session")}`,
-        },
-      });
-      const data = await response.json();
-      if (data.success) {
-        setUsers(data.users);
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    if (step === 2) {
-      fetchUsers();
-    }
-  }, [step]);
-
   const filteredUsers = users.filter((user) =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="p-4">
-      <div className="mb-6">
-        <div className="flex items-center">
-          <div
-            className={`flex items-center ${
-              step === 1 ? "text-blue-600" : "text-gray-500"
-            }`}
-          >
-            <div
-              className={`rounded-full h-8 w-8 flex items-center justify-center border-2 ${
-                step === 1
-                  ? "border-blue-600 bg-blue-600 text-white"
-                  : "border-gray-300"
-              }`}
-            >
-              1
-            </div>
-            <span className="ml-2">Configure Role</span>
-          </div>
-          <div
-            className={`flex-1 h-0.5 mx-4 ${
-              step === 2 ? "bg-blue-600" : "bg-gray-300"
-            }`}
-          ></div>
-          <div
-            className={`flex items-center ${
-              step === 2 ? "text-blue-600" : "text-gray-500"
-            }`}
-          >
-            <div
-              className={`rounded-full h-8 w-8 flex items-center justify-center border-2 ${
-                step === 2
-                  ? "border-blue-600 bg-blue-600 text-white"
-                  : "border-gray-300"
-              }`}
-            >
-              2
-            </div>
-            <span className="ml-2">Select Users</span>
-          </div>
-        </div>
-      </div>
+      {/* ... same stepper UI ... */}
 
       {step === 1 ? (
         <Card>
@@ -228,10 +211,10 @@ export default function Roles() {
                 </button>
                 <button
                   className="px-4 py-2 bg-green-500 text-white rounded"
-                  onClick={handleAddRole}
+                  onClick={handleUpdateRole}
                   disabled={isLoading}
                 >
-                  Create Role
+                  Update Role
                 </button>
               </div>
             </div>

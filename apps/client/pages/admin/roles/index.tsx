@@ -1,3 +1,4 @@
+import { hasAccess } from "@/shadcn/lib/hasAccess";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/ui/card";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
@@ -14,9 +15,13 @@ export default function Roles() {
         Authorization: `Bearer ${getCookie("session")}`,
       },
     });
-    const data = await response.json();
-    setRoles(data.roles);
-    setLoading(false);
+    hasAccess(response);
+
+    if (hasAccess(response)) {
+      const data = await response.json();
+      setRoles(data.roles);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -26,7 +31,7 @@ export default function Roles() {
   const handleDeleteRole = async (roleId) => {
     if (!confirm("Are you sure you want to delete this role?")) return;
 
-    await fetch(`/api/v1/data/roles/${roleId}`, {
+    await fetch(`/api/v1/role/${roleId}/delete`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${getCookie("session")}`,
@@ -70,12 +75,24 @@ export default function Roles() {
                         ID: {role.id}
                       </span>
                     </div>
+                    <div className="flex gap-2">
+                    <button
+                      className="px-3 py-1 bg-blue-500 text-white rounded text-sm"
+                      onClick={() => router.push(`/admin/roles/${role.id}`)}
+                    >
+                      Edit
+                    </button>
                     <button
                       className="px-3 py-1 bg-red-500 text-white rounded text-sm"
-                      onClick={() => handleDeleteRole(role.id)}
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to delete this role?")) {
+                          handleDeleteRole(role.id);
+                        }
+                      }}
                     >
                       Delete
                     </button>
+                    </div>
                   </div>
                 </li>
               ))}
