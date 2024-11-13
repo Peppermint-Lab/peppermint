@@ -9,7 +9,7 @@ export function webhookRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/webhook/create",
     {
-      preHandler: requirePermission(['webhook:create']),
+      preHandler: requirePermission(["webhook::create"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const user = await checkSession(request);
@@ -42,7 +42,7 @@ export function webhookRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/webhooks/all",
     {
-      preHandler: requirePermission(['webhook:read']),
+      preHandler: requirePermission(["webhook::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const webhooks = await prisma.webhooks.findMany({});
@@ -55,7 +55,7 @@ export function webhookRoutes(fastify: FastifyInstance) {
   fastify.delete(
     "/api/v1/admin/webhook/:id/delete",
     {
-      preHandler: requirePermission(['webhook:delete']),
+      preHandler: requirePermission(["webhook::delete"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;

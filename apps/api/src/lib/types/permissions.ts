@@ -1,70 +1,77 @@
 export type IssuePermission =
-  | 'issue:create'
-  | 'issue:read'
-  | 'issue:write'
-  | 'issue:update'
-  | 'issue:delete'
-  | 'issue:assign'
-  | 'issue:transfer'
-  | 'issue:comment';
+  | 'issue::create'
+  | 'issue::read'
+  | 'issue::write'
+  | 'issue::update'
+  | 'issue::delete'
+  | 'issue::assign'
+  | 'issue::transfer'
+  | 'issue::comment';
 
 export type UserPermission =
-  | 'user:create'
-  | 'user:read'
-  | 'user:update'
-  | 'user:delete'
-  | 'user:manage';
+  | 'user::create'
+  | 'user::read'
+  | 'user::update'
+  | 'user::delete'
+  | 'user::manage';
 
 export type RolePermission =
-  | 'role:create'
-  | 'role:read'
-  | 'role:update'
-  | 'role:delete'
-  | 'role:manage';
+  | 'role::create'
+  | 'role::read'
+  | 'role::update'
+  | 'role::delete'
+  | 'role::manage';
 
 export type TeamPermission =
-  | 'team:create'
-  | 'team:read'
-  | 'team:update'
-  | 'team:delete'
-  | 'team:manage';
+  | 'team::create'
+  | 'team::read'
+  | 'team::update'
+  | 'team::delete'
+  | 'team::manage';
 
 export type ClientPermission =
-  | 'client:create'
-  | 'client:read'
-  | 'client:update'
-  | 'client:delete'
-  | 'client:manage';
+  | 'client::create'
+  | 'client::read'
+  | 'client::update'
+  | 'client::delete'
+  | 'client::manage';
 
 export type KnowledgeBasePermission =
-  | 'kb:create'
-  | 'kb:read'
-  | 'kb:update'
-  | 'kb:delete'
-  | 'kb:manage';
+  | 'kb::create'
+  | 'kb::read'
+  | 'kb::update'
+  | 'kb::delete'
+  | 'kb::manage';
 
 export type SystemPermission =
-  | 'settings:view'
-  | 'settings:manage'
-  | 'webhook:manage'
-  | 'integration:manage'
-  | 'email_template:manage';
+  | 'settings::view'
+  | 'settings::manage'
+  | 'webhook::manage'
+  | 'integration::manage'
+  | 'email_template::manage';
 
 export type TimeTrackingPermission =
-  | 'time_entry:create'
-  | 'time_entry:read'
-  | 'time_entry:update'
-  | 'time_entry:delete';
+  | 'time_entry::create'
+  | 'time_entry::read'
+  | 'time_entry::update'
+  | 'time_entry::delete';
 
 export type ViewPermission =
-  | 'docs:manage'
-  | 'admin:panel';
+  | 'docs::manage'
+  | 'admin::panel';
 
 export type WebhookPermission =
-  | 'webhook:create'
-  | 'webhook:read'
-  | 'webhook:update'
-  | 'webhook:delete';
+  | 'webhook::create'
+  | 'webhook::read'
+  | 'webhook::update'
+  | 'webhook::delete';
+
+export type DocumentPermission =
+  | 'document::create'
+  | 'document::read'
+  | 'document::update'
+  | 'document::delete'
+  | 'document::manage';
 
 export type Permission =
   | IssuePermission
@@ -76,7 +83,8 @@ export type Permission =
   | SystemPermission
   | TimeTrackingPermission
   | ViewPermission
-  | WebhookPermission;
+  | WebhookPermission
+  | DocumentPermission;
 
 // Useful type for grouping permissions by category
 export const PermissionCategories = {
@@ -90,6 +98,7 @@ export const PermissionCategories = {
   TIME_TRACKING: 'Time Tracking',
   VIEW: 'Views',
   WEBHOOK: 'Webhook Management',
+  DOCUMENT: 'Document Management',
 } as const;
 
 export type PermissionCategory = typeof PermissionCategories[keyof typeof PermissionCategories];

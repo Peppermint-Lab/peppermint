@@ -36,7 +36,9 @@ export function hasPermission(
   // Add permissions from default role if it exists
   const defaultRole = user.roles.find((role) => role.isDefault);
   if (defaultRole) {
-    defaultRole.permissions.forEach((perm) => userPermissions.add(perm as Permission));
+    defaultRole.permissions.forEach((perm) =>
+      userPermissions.add(perm as Permission)
+    );
   }
 
   // Add permissions from additional roles
@@ -79,6 +81,11 @@ export function requirePermission(
             },
           })
         : null;
+
+      // Admins have all permissions
+      if (user?.isAdmin) {
+        next();
+      }
 
       if (!userWithRoles) {
         throw new Error("User not authenticated");
