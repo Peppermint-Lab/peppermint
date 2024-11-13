@@ -1,3 +1,4 @@
+import { toast } from "@/shadcn/hooks/use-toast";
 import { hasAccess } from "@/shadcn/lib/hasAccess";
 import { Switch } from "@headlessui/react";
 import { getCookie } from "cookies-next";
@@ -14,10 +15,6 @@ async function getHooks() {
   });
 
   hasAccess(res);
-
-  if (!res.ok) {
-    throw new Error("Network response was not ok");
-  }
 
   return res.json(); // Return the parsed JSON response
 }
@@ -53,7 +50,16 @@ export default function Notifications() {
     })
       .then((res) => res.json())
       .then((res) => {
-        refetch();
+        if (res.success) {
+          refetch();
+          setShow("main");
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error -> Unable to add",
+            description: res.message,
+          });
+        }
       });
   }
 
@@ -161,7 +167,7 @@ export default function Notifications() {
                           You currently have no web hooks added
                         </p>
                       )}
-                    </div>P
+                    </div>
                     </>
                   )}
                 </div>
@@ -263,7 +269,6 @@ export default function Notifications() {
                         <button
                           onClick={() => {
                             addHook();
-                            setShow("main");
                           }}
                           type="button"
                           className="mt-8 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
