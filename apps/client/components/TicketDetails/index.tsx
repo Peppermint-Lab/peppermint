@@ -189,7 +189,7 @@ export default function Ticket() {
     const res = await fetch(`/api/v1/ticket/status/update`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json", 
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
@@ -226,7 +226,7 @@ export default function Ticket() {
 
     if (!res.success) {
       toast({
-        variant: "destructive", 
+        variant: "destructive",
         title: "Error",
         description: res.message || "Failed to update visibility",
       });
@@ -251,7 +251,7 @@ export default function Ticket() {
     if (!res.success) {
       toast({
         variant: "destructive",
-        title: "Error", 
+        title: "Error",
         description: res.message || "Failed to update lock status",
       });
       return;
@@ -380,7 +380,7 @@ export default function Ticket() {
       });
       return;
     }
-    
+
     if (res.users) {
       setUsers(res.users);
     }
@@ -410,7 +410,7 @@ export default function Ticket() {
       });
       return;
     }
-    
+
     setAssignedEdit(false);
     refetch();
   }
@@ -504,7 +504,7 @@ export default function Ticket() {
 
   // Loads the previously stored editor contents.
   useEffect(() => {
-    if (status === "success") {
+    if (status === "success" && data && data.ticket) {
       loadFromStorage().then((content) => {
         if (typeof content === "object") {
           setInitialContent(content);
