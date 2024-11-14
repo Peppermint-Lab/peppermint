@@ -9,6 +9,7 @@ import { AuthorizationCode } from "simple-oauth2";
 import { getOAuthProvider, getOidcConfig } from "../lib/auth";
 import { track } from "../lib/hog";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
+import { requirePermission } from "../lib/roles";
 import { checkSession } from "../lib/session";
 import { getOAuthClient } from "../lib/utils/oauth_client";
 import { getOidcClient } from "../lib/utils/oidc_client";
@@ -325,16 +326,16 @@ export function authRoutes(fastify: FastifyInstance) {
       var secret = Buffer.from(process.env.SECRET!, "base64");
       const token = jwt.sign(
         {
-          data: { 
+          data: {
             id: user!.id,
             // Add a unique identifier for this session
-            sessionId: crypto.randomBytes(32).toString('hex')
-          }
+            sessionId: crypto.randomBytes(32).toString("hex"),
+          },
         },
         secret,
-        { 
+        {
           expiresIn: "8h",
-          algorithm: 'HS256'
+          algorithm: "HS256",
         }
       );
 
@@ -344,7 +345,7 @@ export function authRoutes(fastify: FastifyInstance) {
           userId: user!.id,
           sessionToken: token,
           expires: new Date(Date.now() + 8 * 60 * 60 * 1000), // 8 hours
-          userAgent: request.headers['user-agent'] || '',
+          userAgent: request.headers["user-agent"] || "",
           ipAddress: request.ip,
         },
       });
@@ -697,6 +698,9 @@ export function authRoutes(fastify: FastifyInstance) {
   // Delete a user
   fastify.delete(
     "/api/v1/auth/user/:id",
+    {
+      preHandler: requirePermission(["user::delete"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id } = request.params as { id: string };
 
@@ -793,6 +797,9 @@ export function authRoutes(fastify: FastifyInstance) {
   // Reset password by admin
   fastify.post(
     "/api/v1/auth/admin/reset-password",
+    {
+      preHandler: requirePermission(["user::manage"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       let { password, user } = request.body as {
         password: string;
@@ -834,6 +841,9 @@ export function authRoutes(fastify: FastifyInstance) {
   // Update a users profile/config
   fastify.put(
     "/api/v1/auth/profile",
+    {
+      preHandler: requirePermission(["user::update"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const session = await checkSession(request);
 
@@ -861,6 +871,9 @@ export function authRoutes(fastify: FastifyInstance) {
   // Update a users Email notification settings
   fastify.put(
     "/api/v1/auth/profile/notifcations/emails",
+    {
+      preHandler: requirePermission(["user::update"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const session = await checkSession(request);
 
@@ -904,12 +917,14 @@ export function authRoutes(fastify: FastifyInstance) {
   // Update a users role
   fastify.put(
     "/api/v1/auth/user/role",
+    {
+      preHandler: requirePermission(["user::manage"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const session = await checkSession(request);
 
       if (session?.isAdmin) {
         const { id, role } = request.body as { id: string; role: boolean };
-        // check for atleast one admin on role downgrade
         if (role === false) {
           const admins = await prisma.user.findMany({
             where: { isAdmin: true },
@@ -959,7 +974,8 @@ export function authRoutes(fastify: FastifyInstance) {
   );
 
   // Add a new endpoint to list and manage active sessions
-  fastify.get("/api/v1/auth/sessions",
+  fastify.get(
+    "/api/v1/auth/sessions",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const currentUser = await checkSession(request);
       if (!currentUser) {
@@ -973,8 +989,8 @@ export function authRoutes(fastify: FastifyInstance) {
           userAgent: true,
           ipAddress: true,
           createdAt: true,
-          expires: true
-        }
+          expires: true,
+        },
       });
 
       reply.send({ sessions });
@@ -982,7 +998,8 @@ export function authRoutes(fastify: FastifyInstance) {
   );
 
   // Add ability to revoke specific sessions
-  fastify.delete("/api/v1/auth/sessions/:sessionId",
+  fastify.delete(
+    "/api/v1/auth/sessions/:sessionId",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const currentUser = await checkSession(request);
       if (!currentUser) {
@@ -993,10 +1010,10 @@ export function authRoutes(fastify: FastifyInstance) {
 
       // Only allow users to delete their own sessions
       const session = await prisma.session.findFirst({
-        where: { 
+        where: {
           id: sessionId,
-          userId: currentUser.id
-        }
+          userId: currentUser.id,
+        },
       });
 
       if (!session) {
@@ -1004,7 +1021,7 @@ export function authRoutes(fastify: FastifyInstance) {
       }
 
       await prisma.session.delete({
-        where: { id: sessionId }
+        where: { id: sessionId },
       });
 
       reply.send({ success: true });
