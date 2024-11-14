@@ -384,4 +384,27 @@ export function configRoutes(fastify: FastifyInstance) {
       });
     }
   );
+
+  // Toggle all roles
+  fastify.patch(
+    "/api/v1/config/toggle-roles",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { isActive }: any = request.body;
+
+      const config = await prisma.config.findFirst();
+
+      await prisma.config.update({
+        where: { id: config!.id },
+        data: {
+          roles_active: isActive,
+        },
+      });
+
+      reply.send({
+        success: true,
+        message: "Roles updated!",
+      });
+    }
+  );
 }
