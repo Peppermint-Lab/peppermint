@@ -1,5 +1,6 @@
 import axios from "axios";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 import { LRUCache } from "lru-cache";
@@ -8,6 +9,7 @@ import { AuthorizationCode } from "simple-oauth2";
 import { getOAuthProvider, getOidcConfig } from "../lib/auth";
 import { track } from "../lib/hog";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
+import { requirePermission } from "../lib/roles";
 import { checkSession } from "../lib/session";
 import { getOAuthClient } from "../lib/utils/oauth_client";
 import { getOidcClient } from "../lib/utils/oidc_client";
@@ -320,22 +322,31 @@ export function authRoutes(fastify: FastifyInstance) {
         throw new Error("Password is not valid");
       }
 
-      var b64string = process.env.SECRET;
-      var buf = new Buffer(b64string!, "base64"); // Ta-da
-
-      let token = jwt.sign(
+      // Generate a secure session token
+      var secret = Buffer.from(process.env.SECRET!, "base64");
+      const token = jwt.sign(
         {
-          data: { id: user!.id },
+          data: {
+            id: user!.id,
+            // Add a unique identifier for this session
+            sessionId: crypto.randomBytes(32).toString("hex"),
+          },
         },
-        buf,
-        { expiresIn: "7d" }
+        secret,
+        {
+          expiresIn: "8h",
+          algorithm: "HS256",
+        }
       );
 
+      // Store session with additional security info
       await prisma.session.create({
         data: {
           userId: user!.id,
           sessionToken: token,
-          expires: new Date(Date.now() + 60 * 60 * 1000),
+          expires: new Date(Date.now() + 8 * 60 * 60 * 1000), // 8 hours
+          userAgent: request.headers["user-agent"] || "",
+          ipAddress: request.ip,
         },
       });
 
@@ -687,6 +698,9 @@ export function authRoutes(fastify: FastifyInstance) {
   // Delete a user
   fastify.delete(
     "/api/v1/auth/user/:id",
+    {
+      preHandler: requirePermission(["user::delete"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id } = request.params as { id: string };
 
@@ -763,18 +777,12 @@ export function authRoutes(fastify: FastifyInstance) {
         password: string;
       };
 
-      const bearer = request.headers.authorization!.split(" ")[1];
-
-      let session = await prisma.session.findUnique({
-        where: {
-          sessionToken: bearer,
-        },
-      });
+      const session = await checkSession(request);
 
       const hashedPass = await bcrypt.hash(password, 10);
 
       await prisma.user.update({
-        where: { id: session?.userId },
+        where: { id: session?.id },
         data: {
           password: hashedPass,
         },
@@ -789,6 +797,9 @@ export function authRoutes(fastify: FastifyInstance) {
   // Reset password by admin
   fastify.post(
     "/api/v1/auth/admin/reset-password",
+    {
+      preHandler: requirePermission(["user::manage"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       let { password, user } = request.body as {
         password: string;
@@ -830,14 +841,11 @@ export function authRoutes(fastify: FastifyInstance) {
   // Update a users profile/config
   fastify.put(
     "/api/v1/auth/profile",
+    {
+      preHandler: requirePermission(["user::update"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-
-      let session = await prisma.session.findUnique({
-        where: {
-          sessionToken: bearer,
-        },
-      });
+      const session = await checkSession(request);
 
       const { name, email, language } = request.body as {
         name: string;
@@ -846,7 +854,7 @@ export function authRoutes(fastify: FastifyInstance) {
       };
 
       let user = await prisma.user.update({
-        where: { id: session?.userId },
+        where: { id: session?.id },
         data: {
           name: name,
           email: email,
@@ -863,13 +871,11 @@ export function authRoutes(fastify: FastifyInstance) {
   // Update a users Email notification settings
   fastify.put(
     "/api/v1/auth/profile/notifcations/emails",
+    {
+      preHandler: requirePermission(["user::update"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      let session = await prisma.session.findUnique({
-        where: {
-          sessionToken: bearer,
-        },
-      });
+      const session = await checkSession(request);
 
       const {
         notify_ticket_created,
@@ -879,7 +885,7 @@ export function authRoutes(fastify: FastifyInstance) {
       } = request.body as any;
 
       let user = await prisma.user.update({
-        where: { id: session?.userId },
+        where: { id: session?.id },
         data: {
           notify_ticket_created: notify_ticket_created,
           notify_ticket_assigned: notify_ticket_assigned,
@@ -911,29 +917,40 @@ export function authRoutes(fastify: FastifyInstance) {
   // Update a users role
   fastify.put(
     "/api/v1/auth/user/role",
+    {
+      preHandler: requirePermission(["user::manage"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id, role } = request.body as { id: string; role: boolean };
-      // check for atleast one admin on role downgrade
-      if (role === false) {
-        const admins = await prisma.user.findMany({
-          where: { isAdmin: true },
-        });
-        if (admins.length === 1) {
-          reply.code(400).send({
-            message: "Atleast one admin is required",
-            success: false,
-          });
-          return;
-        }
-      }
-      await prisma.user.update({
-        where: { id },
-        data: {
-          isAdmin: role,
-        },
-      });
+      const session = await checkSession(request);
 
-      reply.send({ success: true });
+      if (session?.isAdmin) {
+        const { id, role } = request.body as { id: string; role: boolean };
+        if (role === false) {
+          const admins = await prisma.user.findMany({
+            where: { isAdmin: true },
+          });
+          if (admins.length === 1) {
+            reply.code(400).send({
+              message: "Atleast one admin is required",
+              success: false,
+            });
+            return;
+          }
+        }
+        await prisma.user.update({
+          where: { id },
+          data: {
+            isAdmin: role,
+          },
+        });
+
+        reply.send({ success: true });
+      } else {
+        reply.code(401).send({
+          message: "Unauthorized",
+          success: false,
+        });
+      }
     }
   );
 
@@ -951,6 +968,61 @@ export function authRoutes(fastify: FastifyInstance) {
       });
 
       await tracking("user_first_login", {});
+
+      reply.send({ success: true });
+    }
+  );
+
+  // Add a new endpoint to list and manage active sessions
+  fastify.get(
+    "/api/v1/auth/sessions",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const currentUser = await checkSession(request);
+      if (!currentUser) {
+        return reply.code(401).send({ message: "Unauthorized" });
+      }
+
+      const sessions = await prisma.session.findMany({
+        where: { userId: currentUser.id },
+        select: {
+          id: true,
+          userAgent: true,
+          ipAddress: true,
+          createdAt: true,
+          expires: true,
+        },
+      });
+
+      reply.send({ sessions });
+    }
+  );
+
+  // Add ability to revoke specific sessions
+  fastify.delete(
+    "/api/v1/auth/sessions/:sessionId",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const currentUser = await checkSession(request);
+      if (!currentUser) {
+        return reply.code(401).send({ message: "Unauthorized" });
+      }
+
+      const { sessionId } = request.params as { sessionId: string };
+
+      // Only allow users to delete their own sessions
+      const session = await prisma.session.findFirst({
+        where: {
+          id: sessionId,
+          userId: currentUser.id,
+        },
+      });
+
+      if (!session) {
+        return reply.code(404).send({ message: "Session not found" });
+      }
+
+      await prisma.session.delete({
+        where: { id: sessionId },
+      });
 
       reply.send({ success: true });
     }

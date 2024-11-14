@@ -118,16 +118,16 @@ export const PERMISSIONS_CONFIG = [
       "issue::comment",
     ],
   },
-  {
-    category: "User Management",
-    permissions: [
-      "user::create",
-      "user::read",
-      "user::update",
-      "user::delete",
-      "user::manage",
-    ],
-  },
+  // {
+  //   category: "User Management",
+  //   permissions: [
+  //     "user::create",
+  //     "user::read",
+  //     "user::update",
+  //     "user::delete",
+  //     "user::manage",
+  //   ],
+  // },
   {
     category: "Role Management",
     permissions: [
@@ -148,16 +148,16 @@ export const PERMISSIONS_CONFIG = [
   //     "team::manage"
   //   ]
   // },
-  {
-    category: "Client Management",
-    permissions: [
-      "client::create",
-      "client::read",
-      "client::update",
-      "client::delete",
-      "client::manage",
-    ],
-  },
+  // {
+  //   category: "Client Management",
+  //   permissions: [
+  //     "client::create",
+  //     "client::read",
+  //     "client::update",
+  //     "client::delete",
+  //     "client::manage",
+  //   ],
+  // },
   // {
   //   category: "Knowledge Base",
   //   permissions: [
@@ -168,16 +168,16 @@ export const PERMISSIONS_CONFIG = [
   //     "kb::manage"
   //   ]
   // },
-  {
-    category: "System Settings",
-    permissions: [
-      "settings::view",
-      "settings::manage",
-      "webhook::manage",
-      "integration::manage",
-      "email_template::manage",
-    ],
-  },
+  // {
+  //   category: "System Settings",
+  //   permissions: [
+  //     "settings::view",
+  //     "settings::manage",
+  //     "webhook::manage",
+  //     "integration::manage",
+  //     "email_template::manage",
+  //   ],
+  // },
   // {
   //   category: "Time Tracking",
   //   permissions: [

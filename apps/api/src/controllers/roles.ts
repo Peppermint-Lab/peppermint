@@ -9,7 +9,7 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/role/create",
     {
-      preHandler: requirePermission(['role::create']),
+      preHandler: requirePermission(["role::create"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const user = await checkSession(request);
@@ -20,9 +20,9 @@ export function roleRoutes(fastify: FastifyInstance) {
       });
 
       if (existingRole) {
-        return reply.status(400).send({ 
-          message: "Role already exists", 
-          success: false 
+        return reply.status(400).send({
+          message: "Role already exists",
+          success: false,
         });
       }
 
@@ -50,16 +50,22 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/roles/all",
     {
-      preHandler: requirePermission(['role::read']),
+      preHandler: requirePermission(["role::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const roles = await prisma.role.findMany({
         include: {
-          users: true,
+          users: false,
         },
       });
 
-      reply.status(200).send({ roles, success: true });
+      const active = await prisma.config.findFirst({
+        select: {
+          roles_active: true,
+        },
+      });
+
+      reply.status(200).send({ roles, success: true, roles_active: active });
     }
   );
 
@@ -67,11 +73,11 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/role/:id",
     {
-      preHandler: requirePermission(['role::read']),
+      preHandler: requirePermission(["role::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
-      
+
       const role = await prisma.role.findUnique({
         where: { id },
         include: {
@@ -80,9 +86,9 @@ export function roleRoutes(fastify: FastifyInstance) {
       });
 
       if (!role) {
-        return reply.status(404).send({ 
-          message: "Role not found", 
-          success: false 
+        return reply.status(404).send({
+          message: "Role not found",
+          success: false,
         });
       }
 
@@ -94,11 +100,12 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/role/:id/update",
     {
-      preHandler: requirePermission(['role::update']),
+      preHandler: requirePermission(["role::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
-      const { name, description, permissions, isDefault, users }: any = request.body;
+      const { name, description, permissions, isDefault, users }: any =
+        request.body;
 
       try {
         const updatedRole = await prisma.role.update({
@@ -110,17 +117,19 @@ export function roleRoutes(fastify: FastifyInstance) {
             isDefault,
             updatedAt: new Date(),
             users: {
-              set: Array.isArray(users) ? users.map(userId => ({ id: userId })) : [{ id: users }], // Ensure users is an array of objects with unique IDs when updating
+              set: Array.isArray(users)
+                ? users.map((userId) => ({ id: userId }))
+                : [{ id: users }], // Ensure users is an array of objects with unique IDs when updating
             },
           },
         });
 
         reply.status(200).send({ role: updatedRole, success: true });
       } catch (error: any) {
-        if (error.code === 'P2025') {
-          return reply.status(404).send({ 
-            message: "Role not found", 
-            success: false 
+        if (error.code === "P2025") {
+          return reply.status(404).send({
+            message: "Role not found",
+            success: false,
           });
         }
         throw error;
@@ -132,11 +141,11 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.delete(
     "/api/v1/role/:id/delete",
     {
-      preHandler: requirePermission(['role::delete']),
+      preHandler: requirePermission(["role::delete"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
-      
+
       try {
         await prisma.role.delete({
           where: { id },
@@ -144,10 +153,10 @@ export function roleRoutes(fastify: FastifyInstance) {
 
         reply.status(200).send({ success: true });
       } catch (error: any) {
-        if (error.code === 'P2025') {
-          return reply.status(404).send({ 
-            message: "Role not found", 
-            success: false 
+        if (error.code === "P2025") {
+          return reply.status(404).send({
+            message: "Role not found",
+            success: false,
           });
         }
         throw error;
@@ -159,7 +168,7 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/role/assign",
     {
-      preHandler: requirePermission(['role::update']),
+      preHandler: requirePermission(["role::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { userId, roleId }: any = request.body;
@@ -179,10 +188,10 @@ export function roleRoutes(fastify: FastifyInstance) {
 
         reply.status(200).send({ user: updatedUser, success: true });
       } catch (error: any) {
-        if (error.code === 'P2025') {
-          return reply.status(404).send({ 
-            message: "User or Role not found", 
-            success: false 
+        if (error.code === "P2025") {
+          return reply.status(404).send({
+            message: "User or Role not found",
+            success: false,
           });
         }
         throw error;
@@ -194,7 +203,7 @@ export function roleRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/role/remove",
     {
-    //   preHandler: requirePermission(['role::remove']),
+      //   preHandler: requirePermission(['role::remove']),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { userId, roleId }: any = request.body;
@@ -214,10 +223,10 @@ export function roleRoutes(fastify: FastifyInstance) {
 
         reply.status(200).send({ user: updatedUser, success: true });
       } catch (error: any) {
-        if (error.code === 'P2025') {
-          return reply.status(404).send({ 
-            message: "User or Role not found", 
-            success: false 
+        if (error.code === "P2025") {
+          return reply.status(404).send({
+            message: "User or Role not found",
+            success: false,
           });
         }
         throw error;
