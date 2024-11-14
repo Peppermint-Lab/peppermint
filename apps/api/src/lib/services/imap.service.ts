@@ -105,7 +105,7 @@ export class ImapService {
           name: from.value[0].name,
           title: imapEmail.subject || "-",
           isComplete: false,
-          priority: "Low",
+          priority: "low",
           fromImap: true,
           detail: html || textAsHtml,
         },

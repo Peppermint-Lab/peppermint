@@ -272,6 +272,29 @@ export default function Ticket() {
       .then(() => refetch());
   }
 
+  async function deleteComment(id: string) {
+    await fetch(`/api/v1/ticket/comment/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ id }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          refetch();
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to delete comment",
+          });
+        }
+      });
+  }
+
   async function addTime() {
     if (data && data.ticket && data.ticket.locked) return;
 
@@ -846,7 +869,7 @@ export default function Ticket() {
                             data.ticket.comments.map((comment: any) => (
                               <li
                                 key={comment.id}
-                                className="flex flex-col space-y-1 text-sm bg-secondary/50 dark:bg-secondary/50 px-4 py-2 rounded-lg "
+                                className="group flex flex-col space-y-1 text-sm bg-secondary/50 dark:bg-secondary/50 px-4 py-2 rounded-lg relative"
                               >
                                 <div className="flex flex-row space-x-2 items-center">
                                   <Avatar className="w-6 h-6">
@@ -869,6 +892,15 @@ export default function Ticket() {
                                   <span className="text-xs lowercase">
                                     {moment(comment.createdAt).format("LLL")}
                                   </span>
+                                  {comment.user &&
+                                    comment.userId === user.id && (
+                                      <Trash2
+                                        className="h-4 w-4 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-destructive"
+                                        onClick={() => {
+                                          deleteComment(comment.id);
+                                        }}
+                                      />
+                                    )}
                                 </div>
                                 <span className="ml-1">{comment.text}</span>
                               </li>
