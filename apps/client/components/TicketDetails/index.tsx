@@ -156,7 +156,7 @@ export default function Ticket() {
   async function update() {
     if (data && data.ticket && data.ticket.locked) return;
 
-    await fetch(`/api/v1/ticket/update`, {
+    const res = await fetch(`/api/v1/ticket/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -167,38 +167,52 @@ export default function Ticket() {
         detail: JSON.stringify(debouncedValue),
         note,
         title: debounceTitle,
-        priority: priority ? priority.value : undefined,
-        status: ticketStatus ? ticketStatus.value : undefined,
+        priority: priority?.value,
+        status: ticketStatus?.value,
       }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setEdit(false);
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to update ticket",
       });
+      return;
+    }
+    setEdit(false);
   }
 
   async function updateStatus() {
     if (data && data.ticket && data.ticket.locked) return;
 
-    await fetch(`/api/v1/ticket/status/update`, {
+    const res = await fetch(`/api/v1/ticket/status/update`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", 
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         status: !data.ticket.isComplete,
         id,
       }),
-    })
-      .then((res) => res.json())
-      .then(() => refetch());
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to update status",
+      });
+      return;
+    }
+    refetch();
   }
 
   async function hide(hidden) {
     if (data && data.ticket && data.ticket.locked) return;
 
-    await fetch(`/api/v1/ticket/status/hide`, {
+    const res = await fetch(`/api/v1/ticket/status/hide`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -208,13 +222,21 @@ export default function Ticket() {
         hidden,
         id,
       }),
-    })
-      .then((res) => res.json())
-      .then(() => refetch());
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive", 
+        title: "Error",
+        description: res.message || "Failed to update visibility",
+      });
+      return;
+    }
+    refetch();
   }
 
   async function lock(locked) {
-    await fetch(`/api/v1/ticket/status/lock`, {
+    const res = await fetch(`/api/v1/ticket/status/lock`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -224,9 +246,17 @@ export default function Ticket() {
         locked,
         id,
       }),
-    })
-      .then((res) => res.json())
-      .then(() => refetch());
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error", 
+        description: res.message || "Failed to update lock status",
+      });
+      return;
+    }
+    refetch();
   }
 
   async function deleteIssue(locked) {
@@ -256,7 +286,7 @@ export default function Ticket() {
   async function addComment() {
     if (data && data.ticket && data.ticket.locked) return;
 
-    await fetch(`/api/v1/ticket/comment`, {
+    const res = await fetch(`/api/v1/ticket/comment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -267,9 +297,17 @@ export default function Ticket() {
         id,
         public: publicComment,
       }),
-    })
-      .then((res) => res.json())
-      .then(() => refetch());
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to add comment",
+      });
+      return;
+    }
+    refetch();
   }
 
   async function deleteComment(id: string) {
@@ -326,44 +364,55 @@ export default function Ticket() {
   }
 
   async function fetchUsers() {
-    await fetch(`/api/v1/users/all`, {
+    const res = await fetch(`/api/v1/users/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setUsers(res.users);
-        }
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to fetch users",
       });
+      return;
+    }
+    
+    if (res.users) {
+      setUsers(res.users);
+    }
   }
 
   async function transferTicket() {
     if (data && data.ticket && data.ticket.locked) return;
+    if (n === undefined) return;
 
-    if (n !== undefined) {
-      await fetch(`/api/v1/ticket/transfer`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          user: n.id,
-          id,
-        }),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.success) {
-            setAssignedEdit(false);
-            refetch();
-          }
-        });
+    const res = await fetch(`/api/v1/ticket/transfer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user: n.id,
+        id,
+      }),
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to transfer ticket",
+      });
+      return;
     }
+    
+    setAssignedEdit(false);
+    refetch();
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

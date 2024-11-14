@@ -168,16 +168,16 @@ export const PERMISSIONS_CONFIG = [
   //     "kb::manage"
   //   ]
   // },
-  {
-    category: "System Settings",
-    permissions: [
-      "settings::view",
-      "settings::manage",
-      "webhook::manage",
-      "integration::manage",
-      "email_template::manage",
-    ],
-  },
+  // {
+  //   category: "System Settings",
+  //   permissions: [
+  //     "settings::view",
+  //     "settings::manage",
+  //     "webhook::manage",
+  //     "integration::manage",
+  //     "email_template::manage",
+  //   ],
+  // },
   // {
   //   category: "Time Tracking",
   //   permissions: [
