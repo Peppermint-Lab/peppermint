@@ -1,52 +1,64 @@
-import EmailReplyParser from 'email-reply-parser';
-import Imap from 'imap';
-import { simpleParser } from 'mailparser';
-import { prisma } from '../../prisma';
-import { EmailConfig, EmailQueue } from '../types/email';
-import { AuthService } from './auth.service';
+import EmailReplyParser from "email-reply-parser";
+import Imap from "imap";
+import { simpleParser } from "mailparser";
+import { prisma } from "../../prisma";
+import { EmailConfig, EmailQueue } from "../types/email";
+import { AuthService } from "./auth.service";
 
 function getReplyText(email: any): string {
-    const parsed = new EmailReplyParser().read(email.text);
-    let replyText = ''
+  const parsed = new EmailReplyParser().read(email.text);
+  const fragments = parsed.getFragments();
 
-    parsed.fragments.forEach(fragment => {
-      if (fragment.isHidden() && !fragment.isSignature() && !fragment.isQuoted()) return;
-      replyText += fragment.content;
-    });
+  let replyText = "";
 
-    return replyText;
-    
+  fragments.forEach((fragment: any) => {
+    console.log("FRAGMENT", fragment._content, fragment.content);
+    if (!fragment._isHidden && !fragment._isSignature && !fragment._isQuoted) {
+      replyText += fragment._content;
+    }
+  });
+
+  return replyText;
 }
 
 export class ImapService {
   private static async getImapConfig(queue: EmailQueue): Promise<EmailConfig> {
     switch (queue.serviceType) {
-      case 'gmail': {
-        const validatedAccessToken = await AuthService.getValidAccessToken(queue);
+      case "gmail": {
+        const validatedAccessToken = await AuthService.getValidAccessToken(
+          queue
+        );
+
         return {
           user: queue.username,
           host: queue.hostname,
           port: 993,
           tls: true,
-          xoauth2: AuthService.generateXOAuth2Token(queue.username, validatedAccessToken),
-          tlsOptions: { rejectUnauthorized: false, servername: queue.hostname }
+          xoauth2: AuthService.generateXOAuth2Token(
+            queue.username,
+            validatedAccessToken
+          ),
+          tlsOptions: { rejectUnauthorized: false, servername: queue.hostname },
         };
       }
-      case 'other':
+      case "other":
         return {
           user: queue.username,
           password: queue.password,
           host: queue.hostname,
           port: queue.tls ? 993 : 143,
           tls: queue.tls || false,
-          tlsOptions: { rejectUnauthorized: false, servername: queue.hostname }
+          tlsOptions: { rejectUnauthorized: false, servername: queue.hostname },
         };
       default:
-        throw new Error('Unsupported service type');
+        throw new Error("Unsupported service type");
     }
   }
 
-  private static async processEmail(parsed: any, isReply: boolean): Promise<void> {
+  private static async processEmail(
+    parsed: any,
+    isReply: boolean
+  ): Promise<void> {
     const { from, subject, text, html, textAsHtml } = parsed;
 
     if (isReply) {
@@ -57,7 +69,7 @@ export class ImapService {
 
       const ticketId = ticketIdMatch[1];
       const ticket = await prisma.ticket.findFirst({
-        where: { Number: Number(ticketId) }
+        where: { Number: Number(ticketId) },
       });
 
       if (!ticket) {
@@ -65,93 +77,96 @@ export class ImapService {
       }
 
       const replyText = getReplyText(parsed);
+
       await prisma.comment.create({
         data: {
-          text: text ? replyText : 'No Body',
+          text: text ? replyText : "No Body",
           userId: null,
           ticketId: ticket.id,
           reply: true,
           replyEmail: from.value[0].address,
-          public: true
-        }
+          public: true,
+        },
       });
     } else {
       const imapEmail = await prisma.imap_Email.create({
         data: {
           from: from.value[0].address,
-          subject: subject || 'No Subject',
-          body: text || 'No Body',
-          html: html || '',
-          text: textAsHtml
-        }
+          subject: subject || "No Subject",
+          body: text || "No Body",
+          html: html || "",
+          text: textAsHtml,
+        },
       });
 
       await prisma.ticket.create({
         data: {
           email: from.value[0].address,
           name: from.value[0].name,
-          title: imapEmail.subject || '-',
+          title: imapEmail.subject || "-",
           isComplete: false,
-          priority: 'Low',
+          priority: "Low",
           fromImap: true,
-          detail: html || textAsHtml
-        }
+          detail: html || textAsHtml,
+        },
       });
     }
   }
 
   static async fetchEmails(): Promise<void> {
-    const queues = (await prisma.emailQueue.findMany()) as unknown as EmailQueue[];
+    const queues =
+      (await prisma.emailQueue.findMany()) as unknown as EmailQueue[];
     const today = new Date();
 
     for (const queue of queues) {
       try {
         const imapConfig = await this.getImapConfig(queue);
-        if (!imapConfig.password) {
-          console.error('IMAP configuration is missing a password');
-          throw new Error('IMAP configuration is missing a password');
+
+        if (queue.serviceType === "other" && !imapConfig.password) {
+          console.error("IMAP configuration is missing a password");
+          throw new Error("IMAP configuration is missing a password");
         }
 
         // @ts-ignore
         const imap = new Imap(imapConfig);
 
         await new Promise((resolve, reject) => {
-          imap.once('ready', () => {
-            imap.openBox('INBOX', false, (err) => {
+          imap.once("ready", () => {
+            imap.openBox("INBOX", false, (err) => {
               if (err) {
                 reject(err);
                 return;
               }
-              imap.search(['UNSEEN', ['ON', today]], (err, results) => {
+              imap.search(["UNSEEN", ["ON", today]], (err, results) => {
                 if (err) reject(err);
                 if (!results?.length) {
-                  console.log('No new messages');
+                  console.log("No new messages");
                   imap.end();
                   resolve(null);
                   return;
                 }
 
-                const fetch = imap.fetch(results, { bodies: '' });
-                
-                fetch.on('message', (msg) => {
-                  msg.on('body', (stream) => {
+                const fetch = imap.fetch(results, { bodies: "" });
+
+                fetch.on("message", (msg) => {
+                  msg.on("body", (stream) => {
                     simpleParser(stream, async (err, parsed) => {
                       if (err) throw err;
-                      const isReply = parsed.subject?.includes('Re:');
+                      const isReply = parsed.subject?.includes("Re:");
                       await this.processEmail(parsed, isReply || false);
                     });
                   });
 
-                  msg.once('attributes', (attrs) => {
-                    imap.addFlags(attrs.uid, ['\\Seen'], () => {
-                      console.log('Marked as read!');
+                  msg.once("attributes", (attrs) => {
+                    imap.addFlags(attrs.uid, ["\\Seen"], () => {
+                      console.log("Marked as read!");
                     });
                   });
                 });
 
-                fetch.once('error', reject);
-                fetch.once('end', () => {
-                  console.log('Done fetching messages');
+                fetch.once("error", reject);
+                fetch.once("end", () => {
+                  console.log("Done fetching messages");
                   imap.end();
                   resolve(null);
                 });
@@ -159,9 +174,9 @@ export class ImapService {
             });
           });
 
-          imap.once('error', reject);
-          imap.once('end', () => {
-            console.log('Connection ended');
+          imap.once("error", reject);
+          imap.once("end", () => {
+            console.log("Connection ended");
             resolve(null);
           });
 
@@ -172,4 +187,4 @@ export class ImapService {
       }
     }
   }
-} 
+}
