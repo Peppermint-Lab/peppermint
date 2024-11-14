@@ -118,16 +118,16 @@ export const PERMISSIONS_CONFIG = [
       "issue::comment",
     ],
   },
-  {
-    category: "User Management",
-    permissions: [
-      "user::create",
-      "user::read",
-      "user::update",
-      "user::delete",
-      "user::manage",
-    ],
-  },
+  // {
+  //   category: "User Management",
+  //   permissions: [
+  //     "user::create",
+  //     "user::read",
+  //     "user::update",
+  //     "user::delete",
+  //     "user::manage",
+  //   ],
+  // },
   {
     category: "Role Management",
     permissions: [
