@@ -38,33 +38,39 @@ export function userRoutes(fastify: FastifyInstance) {
     "/api/v1/user/new",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { email, password, name, admin }: any = request.body;
+      const session = await checkSession(request);
 
-      const e = email.toLowerCase();
+      if (session!.isAdmin) {
+        const { email, password, name, admin }: any = request.body;
 
-      const hash = await bcrypt.hash(password, 10);
+        const e = email.toLowerCase();
 
-      await prisma.user.create({
-        data: {
-          name,
-          email: e,
-          password: hash,
-          isAdmin: admin,
-        },
-      });
+        const hash = await bcrypt.hash(password, 10);
 
-      const client = track();
+        await prisma.user.create({
+          data: {
+            name,
+            email: e,
+            password: hash,
+            isAdmin: admin,
+          },
+        });
 
-      client.capture({
-        event: "user_created",
-        distinctId: "uuid",
-      });
+        const client = track();
 
-      client.shutdownAsync();
+        client.capture({
+          event: "user_created",
+          distinctId: "uuid",
+        });
 
-      reply.send({
-        success: true,
-      });
+        client.shutdownAsync();
+
+        reply.send({
+          success: true,
+        });
+      } else {
+        reply.status(403).send({ message: "Unauthorized", failed: true });
+      }
     }
   );
 
