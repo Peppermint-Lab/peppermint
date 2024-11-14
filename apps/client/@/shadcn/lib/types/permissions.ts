@@ -148,16 +148,16 @@ export const PERMISSIONS_CONFIG = [
   //     "team::manage"
   //   ]
   // },
-  {
-    category: "Client Management",
-    permissions: [
-      "client::create",
-      "client::read",
-      "client::update",
-      "client::delete",
-      "client::manage",
-    ],
-  },
+  // {
+  //   category: "Client Management",
+  //   permissions: [
+  //     "client::create",
+  //     "client::read",
+  //     "client::update",
+  //     "client::delete",
+  //     "client::manage",
+  //   ],
+  // },
   // {
   //   category: "Knowledge Base",
   //   permissions: [
