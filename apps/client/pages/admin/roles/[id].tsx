@@ -105,6 +105,7 @@ export default function UpdateRole() {
     } else {
       setSelectedPermissions(
         selectedPermissions.filter(
+          //@ts-ignore
           (p: Permission) => !categoryPermissions.includes(p)
         )
       );
@@ -124,7 +125,6 @@ export default function UpdateRole() {
 
   return (
     <div className="p-4">
-      {/* ... same stepper UI ... */}
 
       {step === 1 ? (
         <Card>

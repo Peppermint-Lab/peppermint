@@ -26,9 +26,9 @@ export function hasPermission(
   requireAll: boolean = true
 ): boolean {
   // Admins have all permissions
-    if (user?.isAdmin) {
-      return true;
-    }
+  if (user?.isAdmin) {
+    return true;
+  }
 
   // Convert single permission to array for consistent handling
   const permissions = Array.isArray(requiredPermissions)
@@ -93,15 +93,16 @@ export function requirePermission(
 
         if (!hasPermission(userWithRoles, requiredPermissions, requireAll)) {
           return res.status(401).send({
-            message: "You do not have the required permission to access this resource.",
+            message:
+              "You do not have the required permission to access this resource.",
             success: false,
             status: 403,
           });
         }
 
-        next();
+        return;
       } else {
-        next();
+        return;
       }
     } catch (error) {
       next(error);

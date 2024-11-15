@@ -527,6 +527,26 @@ export function ticketRoutes(fastify: FastifyInstance) {
     }
   );
 
+  fastify.post(
+    "/api/v1/ticket/comment/delete",
+    {
+      preHandler: requirePermission(["issue::comment"]),
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id }: any = request.body;
+
+      await prisma.comment.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
   // Update status of a ticket
   fastify.put(
     "/api/v1/ticket/status/update",
