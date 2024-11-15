@@ -1009,15 +1009,16 @@ export default function Ticket() {
                                   <span className="text-xs lowercase">
                                     {moment(comment.createdAt).format("LLL")}
                                   </span>
-                                  {comment.user &&
-                                    comment.userId === user.id && (
-                                      <Trash2
-                                        className="h-4 w-4 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-destructive"
-                                        onClick={() => {
-                                          deleteComment(comment.id);
-                                        }}
-                                      />
-                                    )}
+                                  {(user.isAdmin ||
+                                    (comment.user &&
+                                      comment.userId === user.id)) && (
+                                    <Trash2
+                                      className="h-4 w-4 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-destructive"
+                                      onClick={() => {
+                                        deleteComment(comment.id);
+                                      }}
+                                    />
+                                  )}
                                 </div>
                                 <span className="ml-1">{comment.text}</span>
                               </li>
