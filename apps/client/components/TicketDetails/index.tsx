@@ -59,7 +59,7 @@ import {
   Unlock,
 } from "lucide-react";
 import { useUser } from "../../store/session";
-import { IconCombo, UserCombo } from "../Combo";
+import { ClientCombo, IconCombo, UserCombo } from "../Combo";
 
 const ticketStatusMap = [
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
@@ -135,6 +135,7 @@ export default function Ticket() {
   const [labelEdit, setLabelEdit] = useState(false);
 
   const [users, setUsers] = useState<any>();
+  const [clients, setClients] = useState<any>();
   const [n, setN] = useState<any>();
 
   const [note, setNote] = useState<any>();
@@ -148,6 +149,7 @@ export default function Ticket() {
   const [publicComment, setPublicComment] = useState<any>(false);
   const [timeReason, setTimeReason] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [assignedClient, setAssignedClient] = useState<any>();
 
   const history = useRouter();
 
@@ -259,7 +261,7 @@ export default function Ticket() {
     refetch();
   }
 
-  async function deleteIssue(locked) {
+  async function deleteIssue() {
     await fetch(`/api/v1/ticket/delete`, {
       method: "POST",
       headers: {
@@ -386,6 +388,31 @@ export default function Ticket() {
     }
   }
 
+  async function fetchClients() {
+    const res = await fetch(`/api/v1/clients/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to fetch clients",
+      });
+      return;
+    }
+
+    console.log(res);
+
+    if (res.clients) {
+      setClients(res.clients);
+    }
+  }
+
   async function transferTicket() {
     if (data && data.ticket && data.ticket.locked) return;
     if (n === undefined) return;
@@ -397,7 +424,7 @@ export default function Ticket() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        user: n.id,
+        user: n ? n.id : undefined,
         id,
       }),
     }).then((res) => res.json());
@@ -407,6 +434,35 @@ export default function Ticket() {
         variant: "destructive",
         title: "Error",
         description: res.message || "Failed to transfer ticket",
+      });
+      return;
+    }
+
+    setAssignedEdit(false);
+    refetch();
+  }
+
+  async function transferClient() {
+    if (data && data.ticket && data.ticket.locked) return;
+    if (assignedClient === undefined) return;
+
+    const res = await fetch(`/api/v1/ticket/transfer/client`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        client: assignedClient ? assignedClient.id : undefined,
+        id,
+      }),
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to transfer client",
       });
       return;
     }
@@ -461,11 +517,16 @@ export default function Ticket() {
 
   useEffect(() => {
     fetchUsers();
+    fetchClients();
   }, []);
 
   useEffect(() => {
     transferTicket();
   }, [n]);
+
+  useEffect(() => {
+    transferClient();
+  }, [assignedClient]);
 
   const [debouncedValue] = useDebounce(issue, 500);
   const [debounceTitle] = useDebounce(title, 500);
@@ -785,6 +846,9 @@ export default function Ticket() {
                                     : ""
                                 }
                                 disabled={data.ticket.locked}
+                                placeholder="Assign User..."
+                                hideInitial={false}
+                                showIcon={true}
                               />
                             )}
                           </div>
@@ -796,15 +860,19 @@ export default function Ticket() {
                               data.ticket.priority ? data.ticket.priority : ""
                             }
                             disabled={data.ticket.locked}
+                            hideInitial={false}
                           />
 
-                          <IconCombo
+                          <UserCombo
                             value={ticketStatusMap}
                             update={setTicketStatus}
                             defaultName={
                               data.ticket.status ? data.ticket.status : ""
                             }
                             disabled={data.ticket.locked}
+                            showIcon={true}
+                            placeholder="Change Client..."
+                            hideInitial={false}
                           />
                         </div>
                       </div>
@@ -1087,6 +1155,9 @@ export default function Ticket() {
                             : ""
                         }
                         disabled={data.ticket.locked}
+                        showIcon={true}
+                        placeholder="Change User..."
+                        hideInitial={false}
                       />
                     )}
 
@@ -1097,6 +1168,7 @@ export default function Ticket() {
                         data.ticket.priority ? data.ticket.priority : ""
                       }
                       disabled={data.ticket.locked}
+                      hideInitial={false}
                     />
 
                     <IconCombo
@@ -1104,7 +1176,23 @@ export default function Ticket() {
                       update={setTicketStatus}
                       defaultName={data.ticket.status ? data.ticket.status : ""}
                       disabled={data.ticket.locked}
+                      hideInitial={false}
                     />
+
+                    {clients && (
+                      <ClientCombo
+                        value={clients}
+                        update={setAssignedClient}
+                        defaultName={
+                          data.ticket.client
+                            ? data.ticket.client.name
+                            : "No Client Assigned"
+                        }
+                        disabled={data.ticket.locked}
+                        showIcon={true}
+                        hideInitial={false}
+                      />
+                    )}
 
                     {/* <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
@@ -1322,7 +1410,7 @@ export default function Ticket() {
             {user.isAdmin && (
               <ContextMenuItem
                 className="text-red-600"
-                onClick={(e) => deleteIssue(data.ticket.id)}
+                onClick={(e) => deleteIssue()}
               >
                 Delete Ticket
               </ContextMenuItem>

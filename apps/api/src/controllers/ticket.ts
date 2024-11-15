@@ -480,7 +480,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id, note, detail, title, priority, status }: any = request.body;
+      const { id, note, detail, title, priority, status, client }: any =
+        request.body;
 
       await prisma.ticket.update({
         where: { id: id },
@@ -528,6 +529,37 @@ export function ticketRoutes(fastify: FastifyInstance) {
           where: { id: id },
           data: {
             userId: null,
+          },
+        });
+      }
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
+  // Transfer an Issue to another client
+  fastify.post(
+    "/api/v1/ticket/transfer/client",
+    {
+      preHandler: requirePermission(["issue::transfer"]),
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { client, id }: any = request.body;
+
+      if (client) {
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            clientId: client,
+          },
+        });
+      } else {
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            clientId: null,
           },
         });
       }
