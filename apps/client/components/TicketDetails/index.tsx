@@ -1319,17 +1319,14 @@ export default function Ticket() {
 
             <ContextMenuSeparator />
 
-            <ContextMenuItem
-              className="text-red-600"
-              onClick={(e) => {
-                e.preventDefault();
-                if (confirm("Are you sure you want to delete this ticket?")) {
-                  deleteIssue(data.ticket.id);
-                }
-              }}
-            >
-              Delete Ticket
-            </ContextMenuItem>
+            {user.isAdmin && (
+              <ContextMenuItem
+                className="text-red-600"
+                onClick={(e) => deleteIssue(data.ticket.id)}
+              >
+                Delete Ticket
+              </ContextMenuItem>
+            )}
           </ContextMenuContent>
         </ContextMenu>
       )}

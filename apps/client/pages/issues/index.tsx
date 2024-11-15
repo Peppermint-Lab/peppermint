@@ -83,25 +83,34 @@ export default function Tickets() {
   const normal = "bg-green-100 text-green-800";
 
   const [selectedPriorities, setSelectedPriorities] = useState<string[]>(() => {
-    const saved = localStorage.getItem('all_selectedPriorities');
+    const saved = localStorage.getItem("all_selectedPriorities");
     return saved ? JSON.parse(saved) : [];
   });
-  
+
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(() => {
-    const saved = localStorage.getItem('all_selectedStatuses');
+    const saved = localStorage.getItem("all_selectedStatuses");
     return saved ? JSON.parse(saved) : [];
   });
-  
+
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>(() => {
-    const saved = localStorage.getItem('all_selectedAssignees');
+    const saved = localStorage.getItem("all_selectedAssignees");
     return saved ? JSON.parse(saved) : [];
   });
 
   // Update local storage when filters change
   useEffect(() => {
-    localStorage.setItem('all_selectedPriorities', JSON.stringify(selectedPriorities));
-    localStorage.setItem('all_selectedStatuses', JSON.stringify(selectedStatuses));
-    localStorage.setItem('all_selectedAssignees', JSON.stringify(selectedAssignees));
+    localStorage.setItem(
+      "all_selectedPriorities",
+      JSON.stringify(selectedPriorities)
+    );
+    localStorage.setItem(
+      "all_selectedStatuses",
+      JSON.stringify(selectedStatuses)
+    );
+    localStorage.setItem(
+      "all_selectedAssignees",
+      JSON.stringify(selectedAssignees)
+    );
   }, [selectedPriorities, selectedStatuses, selectedAssignees]);
 
   const [users, setUsers] = useState<any[]>([]);
@@ -712,32 +721,36 @@ export default function Tickets() {
                         Share Link
                       </ContextMenuItem>
 
-                      <ContextMenuSeparator />
+                      {user.isAdmin && (
+                        <>
+                          <ContextMenuSeparator />
 
-                      <ContextMenuItem
-                        className="text-red-600"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (
-                            confirm(
-                              "Are you sure you want to delete this ticket?"
-                            )
-                          ) {
-                            fetch(`/api/v1/ticket/delete`, {
-                              method: "POST",
-                              headers: {
-                                Authorization: `Bearer ${token}`,
-                                "Content-Type": "application/json",
-                              },
-                              body: JSON.stringify({ id: ticket.id }),
-                            }).then(() => {
-                              refetch();
-                            });
-                          }
-                        }}
-                      >
-                        Delete Ticket
-                      </ContextMenuItem>
+                          <ContextMenuItem
+                            className="text-red-600"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (
+                                confirm(
+                                  "Are you sure you want to delete this ticket?"
+                                )
+                              ) {
+                                fetch(`/api/v1/ticket/delete`, {
+                                  method: "POST",
+                                  headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({ id: ticket.id }),
+                                }).then(() => {
+                                  refetch();
+                                });
+                              }
+                            }}
+                          >
+                            Delete Ticket
+                          </ContextMenuItem>
+                        </>
+                      )}
                     </ContextMenuContent>
                   </ContextMenu>
                 );

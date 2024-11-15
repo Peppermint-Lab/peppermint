@@ -25,12 +25,115 @@ const validateEmail = (email: string) => {
 };
 
 export function ticketRoutes(fastify: FastifyInstance) {
-  // Create a new ticket - public endpoint, no preHandler needed
   fastify.post(
     "/api/v1/ticket/create",
     {
       preHandler: requirePermission(["issue::create"]),
     },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const {
+        name,
+        company,
+        detail,
+        title,
+        priority,
+        email,
+        engineer,
+        type,
+        createdBy,
+      }: any = request.body;
+
+      const ticket: any = await prisma.ticket.create({
+        data: {
+          name,
+          title,
+          detail: JSON.stringify(detail),
+          priority: priority ? priority : "low",
+          email,
+          type: type ? type.toLowerCase() : "support",
+          createdBy: createdBy
+            ? {
+                id: createdBy.id,
+                name: createdBy.name,
+                role: createdBy.role,
+                email: createdBy.email,
+              }
+            : undefined,
+          client:
+            company !== undefined
+              ? {
+                  connect: { id: company.id || company },
+                }
+              : undefined,
+          fromImap: false,
+          assignedTo:
+            engineer && engineer.name !== "Unassigned"
+              ? {
+                  connect: { id: engineer.id },
+                }
+              : undefined,
+          isComplete: Boolean(false),
+        },
+      });
+
+      if (!email && !validateEmail(email)) {
+        await sendTicketCreate(ticket);
+      }
+
+      if (engineer && engineer.name !== "Unassigned") {
+        const assgined = await prisma.user.findUnique({
+          where: {
+            id: ticket.userId,
+          },
+        });
+
+        await sendAssignedEmail(assgined!.email);
+
+        await assignedNotification(engineer.id, ticket);
+      }
+
+      const webhook = await prisma.webhooks.findMany({
+        where: {
+          type: "ticket_created",
+        },
+      });
+
+      for (let i = 0; i < webhook.length; i++) {
+        if (webhook[i].active === true) {
+          const message = {
+            event: "ticket_created",
+            id: ticket.id,
+            title: ticket.title,
+            priority: ticket.priority,
+            email: ticket.email,
+            name: ticket.name,
+            type: ticket.type,
+            createdBy: ticket.createdBy,
+            assignedTo: ticket.assignedTo,
+            client: ticket.client,
+          };
+
+          await sendWebhookNotification(webhook[i], message);
+        }
+      }
+
+      const hog = track();
+
+      hog.capture({
+        event: "ticket_created",
+        distinctId: ticket.id,
+      });
+
+      reply.status(200).send({
+        message: "Ticket created correctly",
+        success: true,
+        id: ticket.id,
+      });
+    }
+  );
+
+  fastify.post(
+    "/api/v1/ticket/public/create",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const {
         name,
