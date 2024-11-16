@@ -17,9 +17,7 @@ import {
 } from "@/shadcn/ui/context-menu";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
-import { Switch } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { Text, Tooltip } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import moment from "moment";
 import useTranslation from "next-translate/useTranslation";
@@ -33,6 +31,7 @@ import { toast } from "@/shadcn/hooks/use-toast";
 import { hasAccess } from "@/shadcn/lib/hasAccess";
 import { cn } from "@/shadcn/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shadcn/ui/avatar";
+import { Button } from "@/shadcn/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +40,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcn/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { Switch } from "@/shadcn/ui/switch";
 import {
   CheckIcon,
   CircleCheck,
@@ -52,6 +53,7 @@ import {
   Loader,
   LoaderCircle,
   Lock,
+  PanelTopClose,
   SignalHigh,
   SignalLow,
   SignalMedium,
@@ -62,6 +64,7 @@ import { useUser } from "../../store/session";
 import { ClientCombo, IconCombo, UserCombo } from "../Combo";
 
 const ticketStatusMap = [
+  { id: 0, value: "hold", name: "Hold", icon: CircleDotDashed },
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
   { id: 2, value: "in_progress", name: "In Progress", icon: CircleDotDashed },
   { id: 3, value: "in_review", name: "In Review", icon: Loader },
@@ -411,6 +414,39 @@ export default function Ticket() {
     if (res.clients) {
       setClients(res.clients);
     }
+  }
+
+  async function subscribe() {
+    if (data && data.ticket && data.ticket.locked) return;
+
+    const isFollowing = data.ticket.following?.includes(user.id);
+    const action = isFollowing ? "unsubscribe" : "subscribe";
+
+    const res = await fetch(`/api/v1/ticket/${action}/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || `Failed to ${action} to issue`,
+      });
+      return;
+    }
+
+    toast({
+      title: isFollowing ? "Unsubscribed" : "Subscribed",
+      description: isFollowing
+        ? "You will no longer receive updates"
+        : "You will now receive updates",
+      duration: 3000,
+    });
+
+    refetch();
   }
 
   async function transferTicket() {
@@ -907,13 +943,79 @@ export default function Ticket() {
                     className="border-t mt-4"
                   >
                     <div className="p-2 flex flex-col space-y-1">
-                      <div>
+                      <div className="flex flex-row items-center justify-between">
                         <span
                           id="activity-title"
                           className="text-base font-medium "
                         >
                           Activity
                         </span>
+
+                        <div className="flex flex-row items-center space-x-2">
+                          <Button
+                            variant={
+                              data.ticket.following?.includes(user.id)
+                                ? "ghost"
+                                : "ghost"
+                            }
+                            onClick={() => subscribe()}
+                            size="sm"
+                            className="flex items-center gap-1 group"
+                          >
+                            {data.ticket.following?.includes(user.id) ? (
+                              <>
+                                <span className="text-xs group-hover:hidden">
+                                  following
+                                </span>
+                                <span className="text-xs hidden group-hover:inline text-destructive">
+                                  unsubscribe
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-xs">follow</span>
+                            )}
+                          </Button>
+
+                          {data.ticket.following.length > 0 && (
+                            <div className="flex space-x-2">
+                              <Popover>
+                                <PopoverTrigger>
+                                  <PanelTopClose className="h-4 w-4" />
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                  <div className="flex flex-col space-y-1">
+                                    <span className="text-xs">Followers</span>
+                                    {data.ticket.following.map(
+                                      (follower: any) => {
+                                        const userMatch = users.find(
+                                          (user) =>
+                                            user.id === follower &&
+                                            user.id !==
+                                              data.ticket.assignedTo.id
+                                        );
+                                        console.log(userMatch);
+                                        return userMatch ? (
+                                          <div key={follower.id}>
+                                            <span>{userMatch.name}</span>
+                                          </div>
+                                        ) : null;
+                                      }
+                                    )}
+
+                                    {data.ticket.following.filter(
+                                      (follower: any) =>
+                                        follower !== data.ticket.assignedTo.id
+                                    ).length === 0 && (
+                                      <span className="text-xs">
+                                        This issue has no followers
+                                      </span>
+                                    )}
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div>
                         <div className="flex flex-row items-center text-sm space-x-1">
@@ -1049,33 +1151,15 @@ export default function Ticket() {
                                 />
                               </div>
                               <div className="mt-4 flex justify-end">
-                                <Text as="label" size="2">
+                                <div>
                                   <div className="flex flex-row items-center space-x-2">
                                     <Switch
                                       checked={publicComment}
-                                      onChange={setPublicComment}
-                                      className={`${
-                                        publicComment
-                                          ? "bg-blue-600"
-                                          : "bg-gray-200"
-                                      } relative inline-flex h-6 w-11 items-center rounded-full`}
-                                    >
-                                      <span className="sr-only">
-                                        Enable notifications
-                                      </span>
-                                      <span
-                                        className={`${
-                                          publicComment
-                                            ? "translate-x-6"
-                                            : "translate-x-1"
-                                        } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                      />
-                                    </Switch>
-                                    <Tooltip content="Enabling this will mean the email registered to the ticket will get a reply based on your comment.">
-                                      <Text> Public Reply</Text>
-                                    </Tooltip>
+                                      onCheckedChange={setPublicComment}
+                                    />
+                                    <span> Public Reply</span>
                                   </div>
-                                </Text>
+                                </div>
                               </div>
                               <div className="mt-4 flex items-center justify-end space-x-4">
                                 {data.ticket.isComplete ? (
@@ -1161,7 +1245,6 @@ export default function Ticket() {
                         hideInitial={false}
                       />
                     )}
-
                     <IconCombo
                       value={priorityOptions}
                       update={setPriority}
@@ -1171,7 +1254,6 @@ export default function Ticket() {
                       disabled={data.ticket.locked}
                       hideInitial={false}
                     />
-
                     <IconCombo
                       value={ticketStatusMap}
                       update={setTicketStatus}
@@ -1179,6 +1261,20 @@ export default function Ticket() {
                       disabled={data.ticket.locked}
                       hideInitial={false}
                     />
+                    {clients && (
+                      <ClientCombo
+                        value={clients}
+                        update={setAssignedClient}
+                        defaultName={
+                          data.ticket.client
+                            ? data.ticket.client.name
+                            : "No Client Assigned"
+                        }
+                        disabled={data.ticket.locked}
+                        showIcon={true}
+                        hideInitial={false}
+                      />
+                    )}
 
                     {clients && (
                       <ClientCombo
