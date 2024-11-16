@@ -417,6 +417,7 @@ enum Hook {
 }
 
 enum TicketStatus {
+  hold
   needs_support
   in_progress
   in_review

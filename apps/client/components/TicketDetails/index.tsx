@@ -64,6 +64,7 @@ import { useUser } from "../../store/session";
 import { ClientCombo, IconCombo, UserCombo } from "../Combo";
 
 const ticketStatusMap = [
+  { id: 0, value: "hold", name: "Hold", icon: CircleDotDashed },
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
   { id: 2, value: "in_progress", name: "In Progress", icon: CircleDotDashed },
   { id: 3, value: "in_review", name: "In Review", icon: Loader },
