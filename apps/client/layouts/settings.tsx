@@ -1,6 +1,6 @@
 import { classNames } from "@/shadcn/lib/utils";
 import { SidebarProvider } from "@/shadcn/ui/sidebar";
-import { Bell, Flag, KeyRound } from "lucide-react";
+import { Bell, Flag, KeyRound, SearchSlashIcon } from "lucide-react";
 import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -56,6 +56,19 @@ export default function Settings({ children }) {
                   >
                     <Flag className="flex-shrink-0  h-5 w-5 text-foreground" />
                     <span>Feature Flags</span>
+                  </Link>
+
+                  <Link
+                    href="/settings/sessions"
+                    className={classNames(
+                      router.pathname === "/settings/sessions"
+                        ? "bg-secondary dark:bg-primary"
+                        : "hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
+                      "group flex items-center gap-x-3 py-2 px-3 rounded-md text-sm font-semibold leading-6"
+                    )}
+                  >
+                    <SearchSlashIcon className="flex-shrink-0  h-5 w-5 text-foreground" />
+                    <span>Sessions</span>
                   </Link>
                 </nav>
               </aside>
