@@ -64,6 +64,7 @@ import { useUser } from "../../store/session";
 import { ClientCombo, IconCombo, UserCombo } from "../Combo";
 
 const ticketStatusMap = [
+  { id: 0, value: "hold", name: "Hold", icon: CircleDotDashed },
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
   { id: 2, value: "in_progress", name: "In Progress", icon: CircleDotDashed },
   { id: 3, value: "in_review", name: "In Review", icon: Loader },
@@ -975,45 +976,46 @@ export default function Ticket() {
                             )}
                           </Button>
 
-                          {data.ticket.following.length > 0 && (
-                            <div className="flex space-x-2">
-                              <Popover>
-                                <PopoverTrigger>
-                                  <PanelTopClose className="h-4 w-4" />
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <div className="flex flex-col space-y-1">
-                                    <span className="text-xs">Followers</span>
-                                    {data.ticket.following.map(
-                                      (follower: any) => {
-                                        const userMatch = users.find(
-                                          (user) =>
-                                            user.id === follower &&
-                                            user.id !==
-                                              data.ticket.assignedTo.id
-                                        );
-                                        console.log(userMatch);
-                                        return userMatch ? (
-                                          <div key={follower.id}>
-                                            <span>{userMatch.name}</span>
-                                          </div>
-                                        ) : null;
-                                      }
-                                    )}
+                          {data.ticket.following &&
+                            data.ticket.following.length > 0 && (
+                              <div className="flex space-x-2">
+                                <Popover>
+                                  <PopoverTrigger>
+                                    <PanelTopClose className="h-4 w-4" />
+                                  </PopoverTrigger>
+                                  <PopoverContent>
+                                    <div className="flex flex-col space-y-1">
+                                      <span className="text-xs">Followers</span>
+                                      {data.ticket.following.map(
+                                        (follower: any) => {
+                                          const userMatch = users.find(
+                                            (user) =>
+                                              user.id === follower &&
+                                              user.id !==
+                                                data.ticket.assignedTo.id
+                                          );
+                                          console.log(userMatch);
+                                          return userMatch ? (
+                                            <div key={follower.id}>
+                                              <span>{userMatch.name}</span>
+                                            </div>
+                                          ) : null;
+                                        }
+                                      )}
 
-                                    {data.ticket.following.filter(
-                                      (follower: any) =>
-                                        follower !== data.ticket.assignedTo.id
-                                    ).length === 0 && (
-                                      <span className="text-xs">
-                                        This issue has no followers
-                                      </span>
-                                    )}
-                                  </div>
-                                </PopoverContent>
-                              </Popover>
-                            </div>
-                          )}
+                                      {data.ticket.following.filter(
+                                        (follower: any) =>
+                                          follower !== data.ticket.assignedTo.id
+                                      ).length === 0 && (
+                                        <span className="text-xs">
+                                          This issue has no followers
+                                        </span>
+                                      )}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            )}
                         </div>
                       </div>
                       <div>
@@ -1110,15 +1112,16 @@ export default function Ticket() {
                                   <span className="text-xs lowercase">
                                     {moment(comment.createdAt).format("LLL")}
                                   </span>
-                                  {comment.user &&
-                                    comment.userId === user.id && (
-                                      <Trash2
-                                        className="h-4 w-4 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-destructive"
-                                        onClick={() => {
-                                          deleteComment(comment.id);
-                                        }}
-                                      />
-                                    )}
+                                  {(user.isAdmin ||
+                                    (comment.user &&
+                                      comment.userId === user.id)) && (
+                                    <Trash2
+                                      className="h-4 w-4 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-destructive"
+                                      onClick={() => {
+                                        deleteComment(comment.id);
+                                      }}
+                                    />
+                                  )}
                                 </div>
                                 <span className="ml-1">{comment.text}</span>
                               </li>
