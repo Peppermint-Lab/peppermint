@@ -40,6 +40,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcn/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
 import { Switch } from "@/shadcn/ui/switch";
 import {
   CheckIcon,
@@ -52,6 +53,7 @@ import {
   Loader,
   LoaderCircle,
   Lock,
+  PanelTopClose,
   SignalHigh,
   SignalLow,
   SignalMedium,
@@ -417,7 +419,7 @@ export default function Ticket() {
     if (data && data.ticket && data.ticket.locked) return;
 
     const isFollowing = data.ticket.following?.includes(user.id);
-    const action = isFollowing ? 'unsubscribe' : 'subscribe';
+    const action = isFollowing ? "unsubscribe" : "subscribe";
 
     const res = await fetch(`/api/v1/ticket/${action}/${id}`, {
       method: "GET",
@@ -437,7 +439,9 @@ export default function Ticket() {
 
     toast({
       title: isFollowing ? "Unsubscribed" : "Subscribed",
-      description: isFollowing ? "You will no longer receive updates" : "You will now receive updates",
+      description: isFollowing
+        ? "You will no longer receive updates"
+        : "You will now receive updates",
       duration: 3000,
     });
 
@@ -946,7 +950,7 @@ export default function Ticket() {
                           Activity
                         </span>
 
-                        <div className="flex flex-row space-x-2">
+                        <div className="flex flex-row items-center space-x-2">
                           <Button
                             variant={
                               data.ticket.following?.includes(user.id)
@@ -970,6 +974,46 @@ export default function Ticket() {
                               <span className="text-xs">follow</span>
                             )}
                           </Button>
+
+                          {data.ticket.following.length > 0 && (
+                            <div className="flex space-x-2">
+                              <Popover>
+                                <PopoverTrigger>
+                                  <PanelTopClose className="h-4 w-4" />
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                  <div className="flex flex-col space-y-1">
+                                    <span className="text-xs">Followers</span>
+                                    {data.ticket.following.map(
+                                      (follower: any) => {
+                                        const userMatch = users.find(
+                                          (user) =>
+                                            user.id === follower &&
+                                            user.id !==
+                                              data.ticket.assignedTo.id
+                                        );
+                                        console.log(userMatch);
+                                        return userMatch ? (
+                                          <div key={follower.id}>
+                                            <span>{userMatch.name}</span>
+                                          </div>
+                                        ) : null;
+                                      }
+                                    )}
+
+                                    {data.ticket.following.filter(
+                                      (follower: any) =>
+                                        follower !== data.ticket.assignedTo.id
+                                    ).length === 0 && (
+                                      <span className="text-xs">
+                                        This issue has no followers
+                                      </span>
+                                    )}
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div>
@@ -1199,7 +1243,6 @@ export default function Ticket() {
                         hideInitial={false}
                       />
                     )}
-
                     <IconCombo
                       value={priorityOptions}
                       update={setPriority}
@@ -1209,7 +1252,6 @@ export default function Ticket() {
                       disabled={data.ticket.locked}
                       hideInitial={false}
                     />
-
                     <IconCombo
                       value={ticketStatusMap}
                       update={setTicketStatus}
@@ -1217,7 +1259,6 @@ export default function Ticket() {
                       disabled={data.ticket.locked}
                       hideInitial={false}
                     />
-
                     {clients && (
                       <ClientCombo
                         value={clients}
