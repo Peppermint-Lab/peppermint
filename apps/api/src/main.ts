@@ -36,27 +36,37 @@ server.register(multer.contentParser);
 
 registerRoutes(server);
 
-server.get("/", {
-  schema: {
-    tags: ['health'],  // This groups the endpoint under a category
-    description: 'Health check endpoint',
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          healthy: { type: 'boolean' }
-        }
-      }
-    }
+server.get(
+  "/",
+  {
+    schema: {
+      tags: ["health"], // This groups the endpoint under a category
+      description: "Health check endpoint",
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            healthy: { type: "boolean" },
+          },
+        },
+      },
+    },
+  },
+  async function (request, response) {
+    response.send({ healthy: true });
   }
-}, async function (request, response) {
-  response.send({ healthy: true });
-});
+);
 
 // JWT authentication hook
 server.addHook("preHandler", async function (request: any, reply: any) {
   try {
     if (request.url === "/api/v1/auth/login" && request.method === "POST") {
+      return true;
+    }
+    if (
+      request.url === "/api/v1/ticket/public/create" &&
+      request.method === "POST"
+    ) {
       return true;
     }
     const bearer = request.headers.authorization!.split(" ")[1];

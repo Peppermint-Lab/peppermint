@@ -84,38 +84,47 @@ export default function Tickets() {
 
   const [filterSelected, setFilterSelected] = useState();
   const [selectedPriorities, setSelectedPriorities] = useState<string[]>(() => {
-    const saved = localStorage.getItem('open_selectedPriorities');
+    const saved = localStorage.getItem("open_selectedPriorities");
     return saved ? JSON.parse(saved) : [];
   });
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(() => {
-    const saved = localStorage.getItem('open_selectedStatuses');
+    const saved = localStorage.getItem("open_selectedStatuses");
     return saved ? JSON.parse(saved) : [];
   });
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>(() => {
-    const saved = localStorage.getItem('open_selectedAssignees');
+    const saved = localStorage.getItem("open_selectedAssignees");
     return saved ? JSON.parse(saved) : [];
   });
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    localStorage.setItem('open_selectedPriorities', JSON.stringify(selectedPriorities));
+    localStorage.setItem(
+      "open_selectedPriorities",
+      JSON.stringify(selectedPriorities)
+    );
   }, [selectedPriorities]);
 
   useEffect(() => {
-    localStorage.setItem('open_selectedStatuses', JSON.stringify(selectedStatuses));
+    localStorage.setItem(
+      "open_selectedStatuses",
+      JSON.stringify(selectedStatuses)
+    );
   }, [selectedStatuses]);
 
   useEffect(() => {
-    localStorage.setItem('open_selectedAssignees', JSON.stringify(selectedAssignees));
+    localStorage.setItem(
+      "open_selectedAssignees",
+      JSON.stringify(selectedAssignees)
+    );
   }, [selectedAssignees]);
 
   const clearAllFilters = () => {
     setSelectedPriorities([]);
     setSelectedStatuses([]);
     setSelectedAssignees([]);
-    localStorage.removeItem('open_selectedPriorities');
-    localStorage.removeItem('open_selectedStatuses');
-    localStorage.removeItem('open_selectedAssignees');
+    localStorage.removeItem("open_selectedPriorities");
+    localStorage.removeItem("open_selectedStatuses");
+    localStorage.removeItem("open_selectedAssignees");
   };
 
   const handlePriorityToggle = (priority: string) => {
@@ -722,28 +731,36 @@ export default function Tickets() {
 
                       <ContextMenuSeparator />
 
-                      <ContextMenuItem
-                        className="text-red-600"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (
-                            confirm(
-                              "Are you sure you want to delete this ticket?"
-                            )
-                          ) {
-                            fetch(`/api/v1/ticket/delete`, {
-                              method: "POST",
-                              headers: {
-                                Authorization: `Bearer ${token}`,
-                                "Content-Type": "application/json",
-                              },
-                              body: JSON.stringify({ id: ticket.id }),
-                            });
-                          }
-                        }}
-                      >
-                        Delete Ticket
-                      </ContextMenuItem>
+                      {user.isAdmin && (
+                        <>
+                          <ContextMenuSeparator />
+
+                          <ContextMenuItem
+                            className="text-red-600"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (
+                                confirm(
+                                  "Are you sure you want to delete this ticket?"
+                                )
+                              ) {
+                                fetch(`/api/v1/ticket/delete`, {
+                                  method: "POST",
+                                  headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({ id: ticket.id }),
+                                }).then(() => {
+                                  refetch();
+                                });
+                              }
+                            }}
+                          >
+                            Delete Ticket
+                          </ContextMenuItem>
+                        </>
+                      )}
                     </ContextMenuContent>
                   </ContextMenu>
                 );
@@ -754,7 +771,7 @@ export default function Tickets() {
                   type="button"
                   className="relative block w-[400px] rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   onClick={() => {
-                    const event = new KeyboardEvent('keydown', { key: 'c' });
+                    const event = new KeyboardEvent("keydown", { key: "c" });
                     document.dispatchEvent(event);
                   }}
                 >

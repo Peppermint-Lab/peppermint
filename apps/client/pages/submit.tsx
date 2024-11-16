@@ -50,7 +50,7 @@ export default function ClientTicketNew() {
 
   async function submitTicket() {
     setIsLoading(true);
-    await fetch(`/api/v1/ticket/create`, {
+    await fetch(`/api/v1/ticket/public/create`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

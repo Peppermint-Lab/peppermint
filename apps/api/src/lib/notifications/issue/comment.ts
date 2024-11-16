@@ -1,24 +1,35 @@
 import { prisma } from "../../../prisma";
 
 /**
- * Creates a new comment notification.
- * 
- * @param {string} userId - The ID of the user to notify.
+ * Creates comment notifications for all ticket followers.
+ *
  * @param {object} ticket - The ticket object related to the comment.
- * @param {string} comment - The content of the comment.
+ * @param {object} commenter - The user object who commented.
  * @returns {Promise<void>}
  */
-export async function commentNotification(userId: string, ticket: any, user: string) {
+export async function commentNotification(issue: any, commenter: any) {
   try {
-    const text = `New comment on #${ticket.Number} by ${user}`;
-    return await prisma.notifications.create({
-      data: {
-        text,
-        userId,
-        ticketId: ticket.id,
-      },
+    const text = `New comment on #${issue.Number} by ${commenter.name}`;
+
+    // Get all followers of the ticket, ensuring the creator is not already a follower
+    const followers = [
+      ...(issue.following || []),
+      ...(issue.following?.includes(issue.createdBy.id)
+        ? []
+        : [issue.createdBy.id]),
+    ];
+
+    // Create notifications for all followers (except the commenter)
+    await prisma.notifications.createMany({
+      data: followers
+        .filter((userId: string) => userId !== commenter.id)
+        .map((userId: string) => ({
+          text,
+          userId,
+          ticketId: issue.id,
+        })),
     });
   } catch (error) {
-    console.error("Error creating comment notification:", error);
+    console.error("Error creating comment notifications:", error);
   }
 }

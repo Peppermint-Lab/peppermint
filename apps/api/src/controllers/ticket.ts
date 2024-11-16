@@ -11,6 +11,11 @@ import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
 import { assignedNotification } from "../lib/notifications/issue/assigned";
 import { commentNotification } from "../lib/notifications/issue/comment";
+import { priorityNotification } from "../lib/notifications/issue/priority";
+import {
+  activeStatusNotification,
+  statusUpdateNotification,
+} from "../lib/notifications/issue/status";
 import { sendWebhookNotification } from "../lib/notifications/webhook";
 import { requirePermission } from "../lib/roles";
 import { checkSession } from "../lib/session";
@@ -25,12 +30,117 @@ const validateEmail = (email: string) => {
 };
 
 export function ticketRoutes(fastify: FastifyInstance) {
-  // Create a new ticket - public endpoint, no preHandler needed
   fastify.post(
     "/api/v1/ticket/create",
     {
       preHandler: requirePermission(["issue::create"]),
     },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const {
+        name,
+        company,
+        detail,
+        title,
+        priority,
+        email,
+        engineer,
+        type,
+        createdBy,
+      }: any = request.body;
+
+      const user = await checkSession(request);
+
+      const ticket: any = await prisma.ticket.create({
+        data: {
+          name,
+          title,
+          detail: JSON.stringify(detail),
+          priority: priority ? priority : "low",
+          email,
+          type: type ? type.toLowerCase() : "support",
+          createdBy: createdBy
+            ? {
+                id: createdBy.id,
+                name: createdBy.name,
+                role: createdBy.role,
+                email: createdBy.email,
+              }
+            : undefined,
+          client:
+            company !== undefined
+              ? {
+                  connect: { id: company.id || company },
+                }
+              : undefined,
+          fromImap: false,
+          assignedTo:
+            engineer && engineer.name !== "Unassigned"
+              ? {
+                  connect: { id: engineer.id },
+                }
+              : undefined,
+          isComplete: Boolean(false),
+        },
+      });
+
+      if (!email && !validateEmail(email)) {
+        await sendTicketCreate(ticket);
+      }
+
+      if (engineer && engineer.name !== "Unassigned") {
+        const assgined = await prisma.user.findUnique({
+          where: {
+            id: ticket.userId,
+          },
+        });
+
+        await sendAssignedEmail(assgined!.email);
+
+        await assignedNotification(engineer, ticket, user);
+      }
+
+      const webhook = await prisma.webhooks.findMany({
+        where: {
+          type: "ticket_created",
+        },
+      });
+
+      for (let i = 0; i < webhook.length; i++) {
+        if (webhook[i].active === true) {
+          const message = {
+            event: "ticket_created",
+            id: ticket.id,
+            title: ticket.title,
+            priority: ticket.priority,
+            email: ticket.email,
+            name: ticket.name,
+            type: ticket.type,
+            createdBy: ticket.createdBy,
+            assignedTo: ticket.assignedTo,
+            client: ticket.client,
+          };
+
+          await sendWebhookNotification(webhook[i], message);
+        }
+      }
+
+      const hog = track();
+
+      hog.capture({
+        event: "ticket_created",
+        distinctId: ticket.id,
+      });
+
+      reply.status(200).send({
+        message: "Ticket created correctly",
+        success: true,
+        id: ticket.id,
+      });
+    }
+  );
+
+  fastify.post(
+    "/api/v1/ticket/public/create",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const {
         name,
@@ -89,8 +199,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
         });
 
         await sendAssignedEmail(assgined!.email);
-
-        await assignedNotification(engineer.id, ticket);
       }
 
       const webhook = await prisma.webhooks.findMany({
@@ -377,7 +485,14 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id, note, detail, title, priority, status }: any = request.body;
+      const { id, note, detail, title, priority, status, client }: any =
+        request.body;
+
+      const user = await checkSession(request);
+
+      const issue = await prisma.ticket.findUnique({
+        where: { id: id },
+      });
 
       await prisma.ticket.update({
         where: { id: id },
@@ -389,6 +504,14 @@ export function ticketRoutes(fastify: FastifyInstance) {
           status,
         },
       });
+
+      if (priority && issue!.priority !== priority) {
+        await priorityNotification(issue, user, issue!.priority, priority);
+      }
+
+      if (status && issue!.status !== status) {
+        await statusUpdateNotification(issue, user, status);
+      }
 
       reply.send({
         success: true,
@@ -405,6 +528,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { user, id }: any = request.body;
 
+      const assigner = await checkSession(request);
+
       if (user) {
         const assigned = await prisma.user.update({
           where: { id: user },
@@ -419,12 +544,48 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         const { email } = assigned;
 
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: id },
+        });
+
         await sendAssignedEmail(email);
+        await assignedNotification(assigned, ticket, assigner);
       } else {
         await prisma.ticket.update({
           where: { id: id },
           data: {
             userId: null,
+          },
+        });
+      }
+
+      reply.send({
+        success: true,
+      });
+    }
+  );
+
+  // Transfer an Issue to another client
+  fastify.post(
+    "/api/v1/ticket/transfer/client",
+    {
+      preHandler: requirePermission(["issue::transfer"]),
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { client, id }: any = request.body;
+
+      if (client) {
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            clientId: client,
+          },
+        });
+      } else {
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            clientId: null,
           },
         });
       }
@@ -512,7 +673,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         sendComment(text, title, ticket!.id, email!);
       }
 
-      await commentNotification(user!.id, ticket, user!.name);
+      await commentNotification(ticket, user);
 
       const hog = track();
 
@@ -556,12 +717,18 @@ export function ticketRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { status, id }: any = request.body;
 
+      const user = await checkSession(request);
+
       const ticket: any = await prisma.ticket.update({
         where: { id: id },
         data: {
           isComplete: status,
         },
       });
+
+      await activeStatusNotification(ticket, user, status);
+
+      await sendTicketStatus(ticket);
 
       const webhook = await prisma.webhooks.findMany({
         where: {
@@ -602,8 +769,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
           }
         }
       }
-
-      sendTicketStatus(ticket);
 
       reply.send({
         success: true,
@@ -838,6 +1003,97 @@ export function ticketRoutes(fastify: FastifyInstance) {
         tickets: tickets,
         sucess: true,
       });
+    }
+  );
+
+  // Subscribe to a ticket
+  fastify.get(
+    "/api/v1/ticket/subscribe/:id",
+    {
+      preHandler: requirePermission(["issue::read"]),
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id }: any = request.params;
+
+      const user = await checkSession(request);
+
+      if (id) {
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: id },
+        });
+
+        const following = ticket?.following as string[];
+
+        if (following.includes(user!.id)) {
+          reply.send({
+            success: false,
+            message: "You are already following this issue",
+          });
+        }
+
+        if (ticket) {
+          await prisma.ticket.update({
+            where: { id: id },
+            data: {
+              following: [...following, user!.id],
+            },
+          });
+        } else {
+          reply.status(400).send({
+            success: false,
+            message: "No ticket ID provided",
+          });
+        }
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  // Unsubscribe from a ticket
+  fastify.get(
+    "/api/v1/ticket/unsubscribe/:id",
+    {
+      preHandler: requirePermission(["issue::read"]),
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id }: any = request.params;
+      const user = await checkSession(request);
+
+      if (id) {
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: id },
+        });
+
+        const following = ticket?.following as string[];
+
+        if (!following.includes(user!.id)) {
+          return reply.send({
+            success: false,
+            message: "You are not following this issue",
+          });
+        }
+
+        if (ticket) {
+          await prisma.ticket.update({
+            where: { id: id },
+            data: {
+              following: following.filter((userId) => userId !== user!.id),
+            },
+          });
+        } else {
+          return reply.status(400).send({
+            success: false,
+            message: "No ticket ID provided",
+          });
+        }
+
+        reply.send({
+          success: true,
+        });
+      }
     }
   );
 }
