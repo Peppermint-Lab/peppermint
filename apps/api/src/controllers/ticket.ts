@@ -11,6 +11,11 @@ import { sendTicketCreate } from "../lib/nodemailer/ticket/create";
 import { sendTicketStatus } from "../lib/nodemailer/ticket/status";
 import { assignedNotification } from "../lib/notifications/issue/assigned";
 import { commentNotification } from "../lib/notifications/issue/comment";
+import { priorityNotification } from "../lib/notifications/issue/priority";
+import {
+  activeStatusNotification,
+  statusUpdateNotification,
+} from "../lib/notifications/issue/status";
 import { sendWebhookNotification } from "../lib/notifications/webhook";
 import { requirePermission } from "../lib/roles";
 import { checkSession } from "../lib/session";
@@ -42,6 +47,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
         type,
         createdBy,
       }: any = request.body;
+
+      const user = await checkSession(request);
 
       const ticket: any = await prisma.ticket.create({
         data: {
@@ -89,7 +96,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         await sendAssignedEmail(assgined!.email);
 
-        await assignedNotification(engineer.id, ticket);
+        await assignedNotification(engineer, ticket, user);
       }
 
       const webhook = await prisma.webhooks.findMany({
@@ -192,8 +199,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
         });
 
         await sendAssignedEmail(assgined!.email);
-
-        await assignedNotification(engineer.id, ticket);
       }
 
       const webhook = await prisma.webhooks.findMany({
@@ -483,6 +488,12 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const { id, note, detail, title, priority, status, client }: any =
         request.body;
 
+      const user = await checkSession(request);
+
+      const issue = await prisma.ticket.findUnique({
+        where: { id: id },
+      });
+
       await prisma.ticket.update({
         where: { id: id },
         data: {
@@ -493,6 +504,14 @@ export function ticketRoutes(fastify: FastifyInstance) {
           status,
         },
       });
+
+      if (priority && issue!.priority !== priority) {
+        await priorityNotification(issue, user, issue!.priority, priority);
+      }
+
+      if (status && issue!.status !== status) {
+        await statusUpdateNotification(issue, user, status);
+      }
 
       reply.send({
         success: true,
@@ -509,6 +528,8 @@ export function ticketRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { user, id }: any = request.body;
 
+      const assigner = await checkSession(request);
+
       if (user) {
         const assigned = await prisma.user.update({
           where: { id: user },
@@ -523,7 +544,12 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         const { email } = assigned;
 
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: id },
+        });
+
         await sendAssignedEmail(email);
+        await assignedNotification(assigned, ticket, assigner);
       } else {
         await prisma.ticket.update({
           where: { id: id },
@@ -647,7 +673,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         sendComment(text, title, ticket!.id, email!);
       }
 
-      await commentNotification(user!.id, ticket, user!.name);
+      await commentNotification(ticket, user);
 
       const hog = track();
 
@@ -691,12 +717,18 @@ export function ticketRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { status, id }: any = request.body;
 
+      const user = await checkSession(request);
+
       const ticket: any = await prisma.ticket.update({
         where: { id: id },
         data: {
           isComplete: status,
         },
       });
+
+      await activeStatusNotification(ticket, user, status);
+
+      await sendTicketStatus(ticket);
 
       const webhook = await prisma.webhooks.findMany({
         where: {
@@ -737,8 +769,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
           }
         }
       }
-
-      sendTicketStatus(ticket);
 
       reply.send({
         success: true,
@@ -1050,7 +1080,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
           await prisma.ticket.update({
             where: { id: id },
             data: {
-              following: following.filter(userId => userId !== user!.id),
+              following: following.filter((userId) => userId !== user!.id),
             },
           });
         } else {
