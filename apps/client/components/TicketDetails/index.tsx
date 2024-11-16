@@ -976,45 +976,46 @@ export default function Ticket() {
                             )}
                           </Button>
 
-                          {data.ticket.following && data.ticket.following.length > 0 && (
-                            <div className="flex space-x-2">
-                              <Popover>
-                                <PopoverTrigger>
-                                  <PanelTopClose className="h-4 w-4" />
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <div className="flex flex-col space-y-1">
-                                    <span className="text-xs">Followers</span>
-                                    {data.ticket.following.map(
-                                      (follower: any) => {
-                                        const userMatch = users.find(
-                                          (user) =>
-                                            user.id === follower &&
-                                            user.id !==
-                                              data.ticket.assignedTo.id
-                                        );
-                                        console.log(userMatch);
-                                        return userMatch ? (
-                                          <div key={follower.id}>
-                                            <span>{userMatch.name}</span>
-                                          </div>
-                                        ) : null;
-                                      }
-                                    )}
+                          {data.ticket.following &&
+                            data.ticket.following.length > 0 && (
+                              <div className="flex space-x-2">
+                                <Popover>
+                                  <PopoverTrigger>
+                                    <PanelTopClose className="h-4 w-4" />
+                                  </PopoverTrigger>
+                                  <PopoverContent>
+                                    <div className="flex flex-col space-y-1">
+                                      <span className="text-xs">Followers</span>
+                                      {data.ticket.following.map(
+                                        (follower: any) => {
+                                          const userMatch = users.find(
+                                            (user) =>
+                                              user.id === follower &&
+                                              user.id !==
+                                                data.ticket.assignedTo.id
+                                          );
+                                          console.log(userMatch);
+                                          return userMatch ? (
+                                            <div key={follower.id}>
+                                              <span>{userMatch.name}</span>
+                                            </div>
+                                          ) : null;
+                                        }
+                                      )}
 
-                                    {data.ticket.following.filter(
-                                      (follower: any) =>
-                                        follower !== data.ticket.assignedTo.id
-                                    ).length === 0 && (
-                                      <span className="text-xs">
-                                        This issue has no followers
-                                      </span>
-                                    )}
-                                  </div>
-                                </PopoverContent>
-                              </Popover>
-                            </div>
-                          )}
+                                      {data.ticket.following.filter(
+                                        (follower: any) =>
+                                          follower !== data.ticket.assignedTo.id
+                                      ).length === 0 && (
+                                        <span className="text-xs">
+                                          This issue has no followers
+                                        </span>
+                                      )}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            )}
                         </div>
                       </div>
                       <div>
@@ -1261,21 +1262,6 @@ export default function Ticket() {
                       disabled={data.ticket.locked}
                       hideInitial={false}
                     />
-                    {clients && (
-                      <ClientCombo
-                        value={clients}
-                        update={setAssignedClient}
-                        defaultName={
-                          data.ticket.client
-                            ? data.ticket.client.name
-                            : "No Client Assigned"
-                        }
-                        disabled={data.ticket.locked}
-                        showIcon={true}
-                        hideInitial={false}
-                      />
-                    )}
-
                     {clients && (
                       <ClientCombo
                         value={clients}
