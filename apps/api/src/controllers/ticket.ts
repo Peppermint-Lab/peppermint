@@ -975,4 +975,95 @@ export function ticketRoutes(fastify: FastifyInstance) {
       });
     }
   );
+
+  // Subscribe to a ticket
+  fastify.get(
+    "/api/v1/ticket/subscribe/:id",
+    {
+      preHandler: requirePermission(["issue::read"]),
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id }: any = request.params;
+
+      const user = await checkSession(request);
+
+      if (id) {
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: id },
+        });
+
+        const following = ticket?.following as string[];
+
+        if (following.includes(user!.id)) {
+          reply.send({
+            success: false,
+            message: "You are already following this issue",
+          });
+        }
+
+        if (ticket) {
+          await prisma.ticket.update({
+            where: { id: id },
+            data: {
+              following: [...following, user!.id],
+            },
+          });
+        } else {
+          reply.status(400).send({
+            success: false,
+            message: "No ticket ID provided",
+          });
+        }
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
+
+  // Unsubscribe from a ticket
+  fastify.get(
+    "/api/v1/ticket/unsubscribe/:id",
+    {
+      preHandler: requirePermission(["issue::read"]),
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { id }: any = request.params;
+      const user = await checkSession(request);
+
+      if (id) {
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: id },
+        });
+
+        const following = ticket?.following as string[];
+
+        if (!following.includes(user!.id)) {
+          return reply.send({
+            success: false,
+            message: "You are not following this issue",
+          });
+        }
+
+        if (ticket) {
+          await prisma.ticket.update({
+            where: { id: id },
+            data: {
+              following: following.filter(userId => userId !== user!.id),
+            },
+          });
+        } else {
+          return reply.status(400).send({
+            success: false,
+            message: "No ticket ID provided",
+          });
+        }
+
+        reply.send({
+          success: true,
+        });
+      }
+    }
+  );
 }
