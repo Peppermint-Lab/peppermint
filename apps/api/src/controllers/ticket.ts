@@ -302,7 +302,9 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
         await sendAssignedEmail(assgined!.email);
 
-        await assignedNotification(engineer.id, ticket);
+        const user = await checkSession(request);
+
+        await assignedNotification(engineer, ticket, user);
       }
 
       const webhook = await prisma.webhooks.findMany({
