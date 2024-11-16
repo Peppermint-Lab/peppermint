@@ -138,6 +138,7 @@ model Ticket {
   hidden     Boolean      @default(false)
   createdBy  Json?
   locked     Boolean      @default(false)
+  following  Json?
 
   TicketFile   TicketFile[]
   Comment      Comment[]

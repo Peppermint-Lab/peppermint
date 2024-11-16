@@ -1,5 +1,3 @@
-import useTranslation from "next-translate/useTranslation";
-import { useRouter } from "next/router";
 
 import { getCookie } from "cookies-next";
 import moment from "moment";
@@ -7,8 +5,6 @@ import Link from "next/link";
 import { useUser } from "../store/session";
 
 export default function Tickets() {
-  const router = useRouter();
-  const { t } = useTranslation("peppermint");
 
   const token = getCookie("session");
 
@@ -23,6 +19,8 @@ export default function Tickets() {
     }).then((res) => res.json());
     await fetchUserProfile();
   }
+
+  
   return (
     <div>
       <div className="flex flex-col">
