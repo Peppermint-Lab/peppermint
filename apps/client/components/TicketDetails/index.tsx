@@ -976,7 +976,7 @@ export default function Ticket() {
                             )}
                           </Button>
 
-                          {data.ticket.following.length > 0 && (
+                          {data.ticket.following && data.ticket.following.length > 0 && (
                             <div className="flex space-x-2">
                               <Popover>
                                 <PopoverTrigger>
