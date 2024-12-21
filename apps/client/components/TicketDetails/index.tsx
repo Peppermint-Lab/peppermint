@@ -17,9 +17,7 @@ import {
 } from "@/shadcn/ui/context-menu";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
-import { Switch } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import { Text, Tooltip } from "@radix-ui/themes";
 import { getCookie } from "cookies-next";
 import moment from "moment";
 import useTranslation from "next-translate/useTranslation";
@@ -33,6 +31,7 @@ import { toast } from "@/shadcn/hooks/use-toast";
 import { hasAccess } from "@/shadcn/lib/hasAccess";
 import { cn } from "@/shadcn/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shadcn/ui/avatar";
+import { Button } from "@/shadcn/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +40,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcn/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { Switch } from "@/shadcn/ui/switch";
 import {
   CheckIcon,
   CircleCheck,
@@ -52,6 +53,7 @@ import {
   Loader,
   LoaderCircle,
   Lock,
+  PanelTopClose,
   SignalHigh,
   SignalLow,
   SignalMedium,
@@ -59,9 +61,10 @@ import {
   Unlock,
 } from "lucide-react";
 import { useUser } from "../../store/session";
-import { IconCombo, UserCombo } from "../Combo";
+import { ClientCombo, IconCombo, UserCombo } from "../Combo";
 
 const ticketStatusMap = [
+  { id: 0, value: "hold", name: "Hold", icon: CircleDotDashed },
   { id: 1, value: "needs_support", name: "Needs Support", icon: LifeBuoy },
   { id: 2, value: "in_progress", name: "In Progress", icon: CircleDotDashed },
   { id: 3, value: "in_review", name: "In Review", icon: Loader },
@@ -135,6 +138,7 @@ export default function Ticket() {
   const [labelEdit, setLabelEdit] = useState(false);
 
   const [users, setUsers] = useState<any>();
+  const [clients, setClients] = useState<any>();
   const [n, setN] = useState<any>();
 
   const [note, setNote] = useState<any>();
@@ -148,6 +152,7 @@ export default function Ticket() {
   const [publicComment, setPublicComment] = useState<any>(false);
   const [timeReason, setTimeReason] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [assignedClient, setAssignedClient] = useState<any>();
 
   const history = useRouter();
 
@@ -259,7 +264,7 @@ export default function Ticket() {
     refetch();
   }
 
-  async function deleteIssue(locked) {
+  async function deleteIssue() {
     await fetch(`/api/v1/ticket/delete`, {
       method: "POST",
       headers: {
@@ -386,6 +391,64 @@ export default function Ticket() {
     }
   }
 
+  async function fetchClients() {
+    const res = await fetch(`/api/v1/clients/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to fetch clients",
+      });
+      return;
+    }
+
+    console.log(res);
+
+    if (res.clients) {
+      setClients(res.clients);
+    }
+  }
+
+  async function subscribe() {
+    if (data && data.ticket && data.ticket.locked) return;
+
+    const isFollowing = data.ticket.following?.includes(user.id);
+    const action = isFollowing ? "unsubscribe" : "subscribe";
+
+    const res = await fetch(`/api/v1/ticket/${action}/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || `Failed to ${action} to issue`,
+      });
+      return;
+    }
+
+    toast({
+      title: isFollowing ? "Unsubscribed" : "Subscribed",
+      description: isFollowing
+        ? "You will no longer receive updates"
+        : "You will now receive updates",
+      duration: 3000,
+    });
+
+    refetch();
+  }
+
   async function transferTicket() {
     if (data && data.ticket && data.ticket.locked) return;
     if (n === undefined) return;
@@ -397,7 +460,7 @@ export default function Ticket() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        user: n.id,
+        user: n ? n.id : undefined,
         id,
       }),
     }).then((res) => res.json());
@@ -407,6 +470,35 @@ export default function Ticket() {
         variant: "destructive",
         title: "Error",
         description: res.message || "Failed to transfer ticket",
+      });
+      return;
+    }
+
+    setAssignedEdit(false);
+    refetch();
+  }
+
+  async function transferClient() {
+    if (data && data.ticket && data.ticket.locked) return;
+    if (assignedClient === undefined) return;
+
+    const res = await fetch(`/api/v1/ticket/transfer/client`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        client: assignedClient ? assignedClient.id : undefined,
+        id,
+      }),
+    }).then((res) => res.json());
+
+    if (!res.success) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: res.message || "Failed to transfer client",
       });
       return;
     }
@@ -461,11 +553,16 @@ export default function Ticket() {
 
   useEffect(() => {
     fetchUsers();
+    fetchClients();
   }, []);
 
   useEffect(() => {
     transferTicket();
   }, [n]);
+
+  useEffect(() => {
+    transferClient();
+  }, [assignedClient]);
 
   const [debouncedValue] = useDebounce(issue, 500);
   const [debounceTitle] = useDebounce(title, 500);
@@ -785,6 +882,9 @@ export default function Ticket() {
                                     : ""
                                 }
                                 disabled={data.ticket.locked}
+                                placeholder="Assign User..."
+                                hideInitial={false}
+                                showIcon={true}
                               />
                             )}
                           </div>
@@ -796,15 +896,19 @@ export default function Ticket() {
                               data.ticket.priority ? data.ticket.priority : ""
                             }
                             disabled={data.ticket.locked}
+                            hideInitial={false}
                           />
 
-                          <IconCombo
+                          <UserCombo
                             value={ticketStatusMap}
                             update={setTicketStatus}
                             defaultName={
                               data.ticket.status ? data.ticket.status : ""
                             }
                             disabled={data.ticket.locked}
+                            showIcon={true}
+                            placeholder="Change Client..."
+                            hideInitial={false}
                           />
                         </div>
                       </div>
@@ -839,13 +943,80 @@ export default function Ticket() {
                     className="border-t mt-4"
                   >
                     <div className="p-2 flex flex-col space-y-1">
-                      <div>
+                      <div className="flex flex-row items-center justify-between">
                         <span
                           id="activity-title"
                           className="text-base font-medium "
                         >
                           Activity
                         </span>
+
+                        <div className="flex flex-row items-center space-x-2">
+                          <Button
+                            variant={
+                              data.ticket.following?.includes(user.id)
+                                ? "ghost"
+                                : "ghost"
+                            }
+                            onClick={() => subscribe()}
+                            size="sm"
+                            className="flex items-center gap-1 group"
+                          >
+                            {data.ticket.following?.includes(user.id) ? (
+                              <>
+                                <span className="text-xs group-hover:hidden">
+                                  following
+                                </span>
+                                <span className="text-xs hidden group-hover:inline text-destructive">
+                                  unsubscribe
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-xs">follow</span>
+                            )}
+                          </Button>
+
+                          {data.ticket.following &&
+                            data.ticket.following.length > 0 && (
+                              <div className="flex space-x-2">
+                                <Popover>
+                                  <PopoverTrigger>
+                                    <PanelTopClose className="h-4 w-4" />
+                                  </PopoverTrigger>
+                                  <PopoverContent>
+                                    <div className="flex flex-col space-y-1">
+                                      <span className="text-xs">Followers</span>
+                                      {data.ticket.following.map(
+                                        (follower: any) => {
+                                          const userMatch = users.find(
+                                            (user) =>
+                                              user.id === follower &&
+                                              user.id !==
+                                                data.ticket.assignedTo.id
+                                          );
+                                          console.log(userMatch);
+                                          return userMatch ? (
+                                            <div key={follower.id}>
+                                              <span>{userMatch.name}</span>
+                                            </div>
+                                          ) : null;
+                                        }
+                                      )}
+
+                                      {data.ticket.following.filter(
+                                        (follower: any) =>
+                                          follower !== data.ticket.assignedTo.id
+                                      ).length === 0 && (
+                                        <span className="text-xs">
+                                          This issue has no followers
+                                        </span>
+                                      )}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            )}
+                        </div>
                       </div>
                       <div>
                         <div className="flex flex-row items-center text-sm space-x-1">
@@ -941,15 +1112,16 @@ export default function Ticket() {
                                   <span className="text-xs lowercase">
                                     {moment(comment.createdAt).format("LLL")}
                                   </span>
-                                  {comment.user &&
-                                    comment.userId === user.id && (
-                                      <Trash2
-                                        className="h-4 w-4 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-destructive"
-                                        onClick={() => {
-                                          deleteComment(comment.id);
-                                        }}
-                                      />
-                                    )}
+                                  {(user.isAdmin ||
+                                    (comment.user &&
+                                      comment.userId === user.id)) && (
+                                    <Trash2
+                                      className="h-4 w-4 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-destructive"
+                                      onClick={() => {
+                                        deleteComment(comment.id);
+                                      }}
+                                    />
+                                  )}
                                 </div>
                                 <span className="ml-1">{comment.text}</span>
                               </li>
@@ -980,33 +1152,15 @@ export default function Ticket() {
                                 />
                               </div>
                               <div className="mt-4 flex justify-end">
-                                <Text as="label" size="2">
+                                <div>
                                   <div className="flex flex-row items-center space-x-2">
                                     <Switch
                                       checked={publicComment}
-                                      onChange={setPublicComment}
-                                      className={`${
-                                        publicComment
-                                          ? "bg-blue-600"
-                                          : "bg-gray-200"
-                                      } relative inline-flex h-6 w-11 items-center rounded-full`}
-                                    >
-                                      <span className="sr-only">
-                                        Enable notifications
-                                      </span>
-                                      <span
-                                        className={`${
-                                          publicComment
-                                            ? "translate-x-6"
-                                            : "translate-x-1"
-                                        } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                                      />
-                                    </Switch>
-                                    <Tooltip content="Enabling this will mean the email registered to the ticket will get a reply based on your comment.">
-                                      <Text> Public Reply</Text>
-                                    </Tooltip>
+                                      onCheckedChange={setPublicComment}
+                                    />
+                                    <span> Public Reply</span>
                                   </div>
-                                </Text>
+                                </div>
                               </div>
                               <div className="mt-4 flex items-center justify-end space-x-4">
                                 {data.ticket.isComplete ? (
@@ -1087,9 +1241,11 @@ export default function Ticket() {
                             : ""
                         }
                         disabled={data.ticket.locked}
+                        showIcon={true}
+                        placeholder="Change User..."
+                        hideInitial={false}
                       />
                     )}
-
                     <IconCombo
                       value={priorityOptions}
                       update={setPriority}
@@ -1097,14 +1253,29 @@ export default function Ticket() {
                         data.ticket.priority ? data.ticket.priority : ""
                       }
                       disabled={data.ticket.locked}
+                      hideInitial={false}
                     />
-
                     <IconCombo
                       value={ticketStatusMap}
                       update={setTicketStatus}
                       defaultName={data.ticket.status ? data.ticket.status : ""}
                       disabled={data.ticket.locked}
+                      hideInitial={false}
                     />
+                    {clients && (
+                      <ClientCombo
+                        value={clients}
+                        update={setAssignedClient}
+                        defaultName={
+                          data.ticket.client
+                            ? data.ticket.client.name
+                            : "No Client Assigned"
+                        }
+                        disabled={data.ticket.locked}
+                        showIcon={true}
+                        hideInitial={false}
+                      />
+                    )}
 
                     {/* <div className="border-t border-gray-200">
                   <div className="flex flex-row items-center justify-between mt-2">
@@ -1319,17 +1490,14 @@ export default function Ticket() {
 
             <ContextMenuSeparator />
 
-            <ContextMenuItem
-              className="text-red-600"
-              onClick={(e) => {
-                e.preventDefault();
-                if (confirm("Are you sure you want to delete this ticket?")) {
-                  deleteIssue(data.ticket.id);
-                }
-              }}
-            >
-              Delete Ticket
-            </ContextMenuItem>
+            {user.isAdmin && (
+              <ContextMenuItem
+                className="text-red-600"
+                onClick={(e) => deleteIssue()}
+              >
+                Delete Ticket
+              </ContextMenuItem>
+            )}
           </ContextMenuContent>
         </ContextMenu>
       )}
