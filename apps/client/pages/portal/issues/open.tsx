@@ -50,7 +50,7 @@ export default function Tickets() {
             <div className="py-2 px-6 flex flex-row items-center justify-between bg-gray-200 dark:bg-[#0A090C] border-b-[1px]">
               <span className="text-sm font-bold">
                 You have {data.tickets.length} open ticket
-                {data.tickets.length > 1 ? "'s" : ""}
+                {data.tickets.length = 1 ? "'s" : ""}
               </span>
             </div>
             {data.tickets.length > 0 ? (
