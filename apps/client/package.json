@@ -64,6 +64,7 @@
     "react-table": "^7.7.0",
     "shadcn": "^2.1.6",
     "tailwind-merge": "^2.3.0",
+    "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.1"
   },

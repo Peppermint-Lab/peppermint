@@ -7627,6 +7627,7 @@ __metadata:
     react-table: "npm:^7.7.0"
     shadcn: "npm:^2.1.6"
     tailwind-merge: "npm:^2.3.0"
+    tailwind-scrollbar-hide: "npm:^2.0.0"
     tailwindcss: "npm:^3.0.7"
     tailwindcss-animate: "npm:^1.0.7"
     terser-webpack-plugin: "npm:^5.3.3"
@@ -21448,6 +21449,15 @@ __metadata:
   version: 2.5.4
   resolution: "tailwind-merge@npm:2.5.4"
   checksum: 10c0/6c3d2a1d44344f373859f005e6366f0dbd7f66131d330a51dbe823dab08f71c388b2efcbb2b6a2170ca469581d27079c25cd40c234ca1356c4893ae99c2febb3
+  languageName: node
+  linkType: hard
+
+"tailwind-scrollbar-hide@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "tailwind-scrollbar-hide@npm:2.0.0"
+  peerDependencies:
+    tailwindcss: ">=3.0.0 || >= 4.0.0 || >= 4.0.0-beta.8 || >= 4.0.0-alpha.20"
+  checksum: 10c0/eb320b8fbb4d558fb025420fb21f291201781599b36ef5ff7be500f44daa04e41ff161a484180a180c8a6e38ac863d4f05ecaa73c1c8a58668bcc821fc2725fe
   languageName: node
   linkType: hard
 

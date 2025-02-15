@@ -1,6 +1,5 @@
 import {
-  draggable,
-  dropTargetForElements
+  draggable
 } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
@@ -27,6 +26,37 @@ import moment from "moment";
 import Link from 'next/link';
 import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
+
+// Add these types near the top
+type Team = {
+  id: string;
+  name: string;
+};
+
+type User = {
+  id: string;
+  name: string;
+};
+
+type Ticket = {
+  id: string;
+  Number: number;
+  title: string;
+  priority: string;
+  type: string;
+  status: string;
+  createdAt: string;
+  team?: Team;
+  assignedTo?: User;
+  isComplete: boolean;
+};
+
+type KanbanColumn = {
+  id: string;
+  title: string;
+  color: string;
+  tickets: Ticket[];
+};
 
 async function getUserTickets(token: any) {
   const res = await fetch(`/api/v1/tickets/all`, {
@@ -59,7 +89,7 @@ const FilterBadge = ({
 );
 
 type ViewMode = 'list' | 'kanban';
-type KanbanGrouping = 'status' | 'priority' | 'type';
+type KanbanGrouping = 'status' | 'priority' | 'type' | 'team' | 'assignee';
 
 export default function Tickets() {
   const router = useRouter();
@@ -304,23 +334,94 @@ export default function Tickets() {
     localStorage.setItem("preferred_kanban_grouping", kanbanGrouping);
   }, [viewMode, kanbanGrouping]);
 
-  const getKanbanColumns = () => {
+  const getKanbanColumns = (): KanbanColumn[] => {
     switch (kanbanGrouping) {
       case 'status':
         return [
           {
-            id: 'open',
-            title: 'Open',
-            color: 'bg-green-500',
-            tickets: filteredTickets.filter(t => !t.isComplete),
+            id: 'needs_support',
+            title: 'Needs Support',
+            color: 'bg-yellow-500',
+            tickets: filteredTickets.filter(t => t.status === 'needs_support'),
           },
           {
-            id: 'closed',
-            title: 'Closed',
-            color: 'bg-red-500',
-            tickets: filteredTickets.filter(t => t.isComplete),
+            id: 'in_progress',
+            title: 'In Progress',
+            color: 'bg-blue-500',
+            tickets: filteredTickets.filter(t => t.status === 'in_progress'),
+          },
+          {
+            id: 'in_review',
+            title: 'In Review',
+            color: 'bg-purple-500',
+            tickets: filteredTickets.filter(t => t.status === 'in_review'),
+          },
+          {
+            id: 'hold',
+            title: 'On Hold',
+            color: 'bg-orange-500',
+            tickets: filteredTickets.filter(t => t.status === 'hold'),
+          },
+          {
+            id: 'done',
+            title: 'Done',
+            color: 'bg-green-500',
+            tickets: filteredTickets.filter(t => t.status === 'done'),
           },
         ];
+
+      case 'type':
+        return [
+          {
+            id: 'bug',
+            title: 'Bug',
+            color: 'bg-red-500',
+            tickets: filteredTickets.filter(t => t.type === 'bug'),
+          },
+          {
+            id: 'feature',
+            title: 'Feature',
+            color: 'bg-blue-500',
+            tickets: filteredTickets.filter(t => t.type === 'feature'),
+          },
+          {
+            id: 'support',
+            title: 'Support',
+            color: 'bg-green-500',
+            tickets: filteredTickets.filter(t => t.type === 'support'),
+          },
+          {
+            id: 'incident',
+            title: 'Incident',
+            color: 'bg-yellow-500',
+            tickets: filteredTickets.filter(t => t.type === 'incident'),
+          },
+          {
+            id: 'service',
+            title: 'Service',
+            color: 'bg-purple-500',
+            tickets: filteredTickets.filter(t => t.type === 'service'),
+          },
+          {
+            id: 'maintenance',
+            title: 'Maintenance',
+            color: 'bg-gray-500',
+            tickets: filteredTickets.filter(t => t.type === 'maintenance'),
+          },
+          {
+            id: 'access',
+            title: 'Access',
+            color: 'bg-indigo-500',
+            tickets: filteredTickets.filter(t => t.type === 'access'),
+          },
+          {
+            id: 'feedback',
+            title: 'Feedback',
+            color: 'bg-pink-500',
+            tickets: filteredTickets.filter(t => t.type === 'feedback'),
+          },
+        ];
+
       case 'priority':
         return [
           {
@@ -342,14 +443,25 @@ export default function Tickets() {
             tickets: filteredTickets.filter(t => t.priority.toLowerCase() === 'low'),
           },
         ];
-      case 'type':
-        const uniqueTypes = Array.from(new Set(filteredTickets.map(t => t.type)));
-        return uniqueTypes.map(type => ({
-          id: type.toLowerCase(),
-          title: type,
-          color: 'bg-orange-500',
-          tickets: filteredTickets.filter(t => t.type.toLowerCase() === type.toLowerCase()),
+
+      case 'team':
+        const teams = Array.from(new Set(filteredTickets.map(t => t.team?.name || 'Unassigned'))) as string[];
+        return teams.map(team => ({
+          id: team.toLowerCase(),
+          title: team,
+          color: 'bg-violet-500',
+          tickets: filteredTickets.filter(t => (t.team?.name || 'Unassigned') === team),
         }));
+
+      case 'assignee':
+        const assignees = Array.from(new Set(filteredTickets.map(t => t.assignedTo?.name || 'Unassigned'))) as string[];
+        return assignees.map(assignee => ({
+          id: assignee.toLowerCase(),
+          title: assignee,
+          color: 'bg-teal-500',
+          tickets: filteredTickets.filter(t => (t.assignedTo?.name || 'Unassigned') === assignee),
+        }));
+
       default:
         return [];
     }
@@ -647,6 +759,22 @@ export default function Tickets() {
                               >
                                 Type
                               </Button>
+                              <Button
+                                variant={kanbanGrouping === 'team' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setKanbanGrouping('team')}
+                                className="w-full justify-start"
+                              >
+                                Team
+                              </Button>
+                              <Button
+                                variant={kanbanGrouping === 'assignee' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setKanbanGrouping('assignee')}
+                                className="w-full justify-start"
+                              >
+                                Assignee
+                              </Button>
                             </div>
                           </div>
                         )}
@@ -928,42 +1056,23 @@ export default function Tickets() {
               </div>
             ) : (
               // Kanban View
-              <div className="flex-1 overflow-x-auto">
-                <div className="flex h-full gap-6 p-6">
+              <div className="flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="flex h-[calc(100vh-4rem)] gap-4 p-4">
                   {getKanbanColumns().map(column => (
                     <div
                       key={column.id}
-                      className="flex-1 min-w-[400px] bg-gray-50 dark:bg-gray-800/50 rounded-lg"
-                      ref={(element) => {
-                        if (!element) return;
-                        
-                        dropTargetForElements({
-                          element,
-                          onDrop: async ({ source }) => {
-                            const ticketId = source.data?.ticketId;
-                            const ticket = filteredTickets.find(t => t.id === ticketId);
-                            if (!ticket) return;
-                            
-                            if (kanbanGrouping === 'status') {
-                              await updateTicketStatus(null, { ...ticket, isComplete: column.id === 'closed' });
-                            } else if (kanbanGrouping === 'priority') {
-                              await updateTicketPriority(ticket, column.id);
-                            }
-                            // Note: Type changes might need a new API endpoint
-                          },
-                        });
-                      }}
+                      className="flex-shrink-0 w-[350px] bg-gray-50 dark:bg-gray-800/50 rounded-lg flex flex-col max-h-full"
                     >
-                      <div className="p-4 border-b dark:border-gray-700">
+                      <div className="p-3 border-b dark:border-gray-700 flex-shrink-0">
                         <div className="flex items-center gap-2">
                           <div className={`h-2 w-2 rounded-full ${column.color}`} />
-                          <span className="font-medium">{column.title}</span>
-                          <span className="text-gray-500 text-sm">
+                          <span className="font-medium text-sm">{column.title}</span>
+                          <span className="text-gray-500 text-xs">
                             ({column.tickets.length})
                           </span>
                         </div>
                       </div>
-                      <div className="p-4 space-y-3">
+                      <div className="p-2 space-y-2 overflow-y-auto flex-grow [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         {column.tickets.map((ticket) => (
                           <div
                             key={ticket.id}
@@ -973,50 +1082,52 @@ export default function Tickets() {
                               draggable({
                                 element,
                                 dragHandle: element,
-                                data: { ticketId: ticket.id },
+                                data: { ticketId: ticket.id } as const,
                               });
                             }}
-                            className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-700 p-4 cursor-move hover:shadow-md transition-shadow"
+                            className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-700 p-3 cursor-move hover:shadow-md transition-shadow"
                           >
-                            <div className="flex flex-row w-full justify-between">
-                              <div className="flex flex-row items-center space-x-4">
-                                <span className="text-xs font-semibold">
-                                  #{ticket.Number}
-                                </span>
-                                <span className="text-xs font-semibold">
+                            {/* Header: Number, Title and Priority */}
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex items-baseline gap-2">
+                                <span className="text-xs text-gray-500">#{ticket.Number}</span>
+                                <Link 
+                                  href={`/issue/${ticket.id}`}
+                                  className="text-sm font-medium hover:underline line-clamp-1"
+                                >
                                   {ticket.title}
+                                </Link>
+                              </div>
+                              <span
+                                className={`shrink-0 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
+                                  ticket.priority === "high" ? high :
+                                  ticket.priority === "normal" ? normal :
+                                  low
+                                }`}
+                              >
+                                {ticket.priority}
+                              </span>
+                            </div>
+
+                            {/* Footer: Type, Date, Assignee */}
+                            <div className="flex items-center justify-between mt-2 text-xs">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="inline-flex items-center rounded-md px-2 py-1 capitalize text-xs font-medium bg-orange-100 text-orange-800"
+                                >
+                                  {ticket.type}
+                                </span>
+                                <span className="text-gray-500">
+                                  {moment(ticket.createdAt).format("DD/MM/yyyy")}
                                 </span>
                               </div>
-                              <div className="flex flex-row space-x-3 items-center">
-                                <div>
-                                  <span className="text-xs">
-                                    {moment(ticket.createdAt).format("DD/MM/yyyy")}
-                                  </span>
-                                </div>
-                                <div>
-                                  <span
-                                    className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 bg-orange-400 text-white`}
-                                  >
-                                    {ticket.type}
-                                  </span>
-                                </div>
-                                <div>
-                                  <span
-                                    className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${
-                                      ticket.priority === "high" ? high :
-                                      ticket.priority === "normal" ? normal :
-                                      low
-                                    }`}
-                                  >
-                                    {ticket.priority}
-                                  </span>
-                                </div>
-                                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
-                                  <span className="text-[11px] font-medium leading-none text-white uppercase">
-                                    {ticket.assignedTo ? ticket.assignedTo.name[0] : ""}
+                              {ticket.assignedTo && (
+                                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500 text-white">
+                                  <span className="text-[11px] font-medium leading-none uppercase">
+                                    {ticket.assignedTo.name[0]}
                                   </span>
                                 </span>
-                              </div>
+                              )}
                             </div>
                           </div>
                         ))}
