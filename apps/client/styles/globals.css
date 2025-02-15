@@ -559,3 +559,23 @@
   background-color: var(--background) !important;
   color: var(--foreground) !important;
 }
+
+/* Add these styles to hide scrollbars site-wide */
+html {
+  overflow: hidden;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* Hide scrollbars but keep functionality */
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbars for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+  display: none;
+}

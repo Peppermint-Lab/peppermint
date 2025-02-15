@@ -124,7 +124,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
           toast({
             variant: "destructive",
             title: `Error`,
-            description: res.error,
+            description: res.message,
           });
         }
       });

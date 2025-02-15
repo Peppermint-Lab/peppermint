@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { AccountDropdown } from "../components/AccountDropdown";
 
 import { AppSidebar } from "@/shadcn/components/app-sidebar";
+import { CommandMenu } from "@/shadcn/components/command-menu";
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -52,6 +53,8 @@ export default function ShadLayout({ children }: any) {
                       </span>
                     </Link>
                   )}
+
+                  <CommandMenu />
                 </div>
 
                 <div className="flex w-full sticky right-0 justify-end items-center gap-x-2 lg:gap-x-2 ">
