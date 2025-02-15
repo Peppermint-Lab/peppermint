@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@atlaskit/pragmatic-drag-and-drop": "^1.5.0",
     "@blocknote/core": "^0.17.1",
     "@blocknote/mantine": "^0.17.1",
     "@blocknote/react": "^0.17.1",

@@ -1,3 +1,7 @@
+import {
+  draggable,
+  dropTargetForElements
+} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -15,21 +19,12 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/shadcn/ui/command";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-  ContextMenuTrigger,
-} from "@/shadcn/ui/context-menu";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from '@/shadcn/ui/context-menu';
 import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
 import { getCookie } from "cookies-next";
-import { CheckIcon, Filter, X } from "lucide-react";
+import { CheckIcon, Filter, Settings, X } from "lucide-react";
 import moment from "moment";
-import Link from "next/link";
+import Link from 'next/link';
 import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
 
@@ -62,6 +57,9 @@ const FilterBadge = ({
     </button>
   </div>
 );
+
+type ViewMode = 'list' | 'kanban';
+type KanbanGrouping = 'status' | 'priority' | 'type';
 
 export default function Tickets() {
   const router = useRouter();
@@ -291,6 +289,72 @@ export default function Tickets() {
     fetchUsers();
   }, []);
 
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    const saved = localStorage.getItem("preferred_view_mode");
+    return (saved as ViewMode) || 'list';
+  });
+
+  const [kanbanGrouping, setKanbanGrouping] = useState<KanbanGrouping>(() => {
+    const saved = localStorage.getItem("preferred_kanban_grouping");
+    return (saved as KanbanGrouping) || 'status';
+  });
+
+  useEffect(() => {
+    localStorage.setItem("preferred_view_mode", viewMode);
+    localStorage.setItem("preferred_kanban_grouping", kanbanGrouping);
+  }, [viewMode, kanbanGrouping]);
+
+  const getKanbanColumns = () => {
+    switch (kanbanGrouping) {
+      case 'status':
+        return [
+          {
+            id: 'open',
+            title: 'Open',
+            color: 'bg-green-500',
+            tickets: filteredTickets.filter(t => !t.isComplete),
+          },
+          {
+            id: 'closed',
+            title: 'Closed',
+            color: 'bg-red-500',
+            tickets: filteredTickets.filter(t => t.isComplete),
+          },
+        ];
+      case 'priority':
+        return [
+          {
+            id: 'high',
+            title: 'High',
+            color: 'bg-red-500',
+            tickets: filteredTickets.filter(t => t.priority.toLowerCase() === 'high'),
+          },
+          {
+            id: 'normal',
+            title: 'Normal',
+            color: 'bg-green-500',
+            tickets: filteredTickets.filter(t => t.priority.toLowerCase() === 'normal'),
+          },
+          {
+            id: 'low',
+            title: 'Low',
+            color: 'bg-blue-500',
+            tickets: filteredTickets.filter(t => t.priority.toLowerCase() === 'low'),
+          },
+        ];
+      case 'type':
+        const uniqueTypes = Array.from(new Set(filteredTickets.map(t => t.type)));
+        return uniqueTypes.map(type => ({
+          id: type.toLowerCase(),
+          title: type,
+          color: 'bg-orange-500',
+          tickets: filteredTickets.filter(t => t.type.toLowerCase() === type.toLowerCase()),
+        }));
+      default:
+        return [];
+    }
+  };
+
   return (
     <div>
       {status === "loading" && (
@@ -301,7 +365,7 @@ export default function Tickets() {
 
       {status === "success" && (
         <div>
-          <div className="flex flex-col">
+          <div className="flex flex-col h-screen">
             <div className="py-2 px-3 bg-background border-b-[1px] flex flex-row items-center justify-between">
               <div className="flex flex-row items-center gap-2">
                 <Popover>
@@ -517,11 +581,87 @@ export default function Tickets() {
                     </Button>
                   )}
                 </div>
+
+                {/* Add view toggle button */}
+                <div className="flex items-center gap-2">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8"
+                      >
+                        <Settings className="h-4 w-4 mr-2" />
+                        <span className="hidden sm:inline">Settings</span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-3" align="end">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">View Mode</h4>
+                          <div className="grid grid-cols-2 gap-2">
+                            <Button
+                              variant={viewMode === 'list' ? 'default' : 'outline'}
+                              size="sm"
+                              onClick={() => setViewMode('list')}
+                              className="w-full"
+                            >
+                              List
+                            </Button>
+                            <Button
+                              variant={viewMode === 'kanban' ? 'default' : 'outline'}
+                              size="sm"
+                              onClick={() => setViewMode('kanban')}
+                              className="w-full"
+                            >
+                              Kanban
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        {viewMode === 'kanban' && (
+                          <div>
+                            <h4 className="text-sm font-medium mb-2">Group By</h4>
+                            <div className="grid grid-cols-1 gap-2">
+                              <Button
+                                variant={kanbanGrouping === 'status' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setKanbanGrouping('status')}
+                                className="w-full justify-start"
+                              >
+                                Status
+                              </Button>
+                              <Button
+                                variant={kanbanGrouping === 'priority' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setKanbanGrouping('priority')}
+                                className="w-full justify-start"
+                              >
+                                Priority
+                              </Button>
+                              <Button
+                                variant={kanbanGrouping === 'type' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setKanbanGrouping('type')}
+                                className="w-full justify-start"
+                              >
+                                Type
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
               <div></div>
             </div>
-            {filteredTickets.length > 0 ? (
-              filteredTickets.map((ticket) => {
+
+            {viewMode === 'list' ? (
+              // List View
+              <div className="flex-1 overflow-y-auto">
+               {filteredTickets.map((ticket) => {
                 let p = ticket.priority;
                 let badge;
 
@@ -754,7 +894,7 @@ export default function Tickets() {
                     </ContextMenuContent>
                   </ContextMenu>
                 );
-              })
+              })}
             ) : (
               <div className="min-h-screen flex items-center justify-center">
                 <button
@@ -783,6 +923,107 @@ export default function Tickets() {
                     Create your first issue
                   </span>
                 </button>
+              </div>
+            )
+              </div>
+            ) : (
+              // Kanban View
+              <div className="flex-1 overflow-x-auto">
+                <div className="flex h-full gap-6 p-6">
+                  {getKanbanColumns().map(column => (
+                    <div
+                      key={column.id}
+                      className="flex-1 min-w-[400px] bg-gray-50 dark:bg-gray-800/50 rounded-lg"
+                      ref={(element) => {
+                        if (!element) return;
+                        
+                        dropTargetForElements({
+                          element,
+                          onDrop: async ({ source }) => {
+                            const ticketId = source.data?.ticketId;
+                            const ticket = filteredTickets.find(t => t.id === ticketId);
+                            if (!ticket) return;
+                            
+                            if (kanbanGrouping === 'status') {
+                              await updateTicketStatus(null, { ...ticket, isComplete: column.id === 'closed' });
+                            } else if (kanbanGrouping === 'priority') {
+                              await updateTicketPriority(ticket, column.id);
+                            }
+                            // Note: Type changes might need a new API endpoint
+                          },
+                        });
+                      }}
+                    >
+                      <div className="p-4 border-b dark:border-gray-700">
+                        <div className="flex items-center gap-2">
+                          <div className={`h-2 w-2 rounded-full ${column.color}`} />
+                          <span className="font-medium">{column.title}</span>
+                          <span className="text-gray-500 text-sm">
+                            ({column.tickets.length})
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-4 space-y-3">
+                        {column.tickets.map((ticket) => (
+                          <div
+                            key={ticket.id}
+                            ref={(element) => {
+                              if (!element) return;
+                              
+                              draggable({
+                                element,
+                                dragHandle: element,
+                                data: { ticketId: ticket.id },
+                              });
+                            }}
+                            className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-700 p-4 cursor-move hover:shadow-md transition-shadow"
+                          >
+                            <div className="flex flex-row w-full justify-between">
+                              <div className="flex flex-row items-center space-x-4">
+                                <span className="text-xs font-semibold">
+                                  #{ticket.Number}
+                                </span>
+                                <span className="text-xs font-semibold">
+                                  {ticket.title}
+                                </span>
+                              </div>
+                              <div className="flex flex-row space-x-3 items-center">
+                                <div>
+                                  <span className="text-xs">
+                                    {moment(ticket.createdAt).format("DD/MM/yyyy")}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span
+                                    className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 bg-orange-400 text-white`}
+                                  >
+                                    {ticket.type}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span
+                                    className={`inline-flex items-center rounded-md px-2 py-1 capitalize justify-center w-20 text-xs font-medium ring-1 ring-inset ring-gray-500/10 ${
+                                      ticket.priority === "high" ? high :
+                                      ticket.priority === "normal" ? normal :
+                                      low
+                                    }`}
+                                  >
+                                    {ticket.priority}
+                                  </span>
+                                </div>
+                                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
+                                  <span className="text-[11px] font-medium leading-none text-white uppercase">
+                                    {ticket.assignedTo ? ticket.assignedTo.name[0] : ""}
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
