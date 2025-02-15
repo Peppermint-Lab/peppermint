@@ -1,6 +1,6 @@
 import cors from "@fastify/cors";
 import "dotenv/config";
-import Fastify, { FastifyInstance } from "fastify";
+import Fastify, { FastifyInstance, FastifyServerOptions } from "fastify";
 import multer from "fastify-multer";
 import fs from "fs";
 
@@ -11,51 +11,14 @@ import { checkToken } from "./lib/jwt";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
-// Ensure the directory exists
-const logFilePath = "./logs.log"; // Update this path to a writable location
-
-// Create a writable stream
-const logStream = fs.createWriteStream(logFilePath, { flags: "a" });
-
 // Initialize Fastify with logger
 const server: FastifyInstance = Fastify({
-  logger: {
-    stream: logStream, // Use the writable stream
-  },
-  disableRequestLogging: true,
+  logger: true,
   trustProxy: true,
-});
-server.register(cors, {
-  origin: "*",
+} as FastifyServerOptions);
 
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-});
-
-server.register(multer.contentParser);
-
-registerRoutes(server);
-
-server.get(
-  "/",
-  {
-    schema: {
-      tags: ["health"], // This groups the endpoint under a category
-      description: "Health check endpoint",
-      response: {
-        200: {
-          type: "object",
-          properties: {
-            healthy: { type: "boolean" },
-          },
-        },
-      },
-    },
-  },
-  async function (request, response) {
-    response.send({ healthy: true });
-  }
-);
+// Configure multer
+const upload = multer({ dest: 'uploads/' });
 
 // JWT authentication hook
 server.addHook("preHandler", async function (request: any, reply: any) {
@@ -81,7 +44,39 @@ server.addHook("preHandler", async function (request: any, reply: any) {
 
 const start = async () => {
   try {
-    // Run prisma generate and migrate commands before starting the server
+    // Register plugins
+    await server.register(cors, {
+      origin: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "Accept",
+        "Origin",
+        "X-Requested-With",
+      ],
+      exposedHeaders: ["Content-Disposition"],
+      credentials: true,
+      maxAge: 86400,
+    });
+
+    // Add content type parser for multipart
+    server.addContentTypeParser('multipart/form-data', (request, payload, done) => {
+      done(null);
+    });
+
+    // Register multer
+    await server.register(multer.contentParser);
+
+    // Ensure uploads directory exists
+    if (!fs.existsSync('uploads')) {
+      fs.mkdirSync('uploads', { recursive: true });
+    }
+
+    // Register routes
+    registerRoutes(server);
+
+    // Run prisma commands
     await new Promise<void>((resolve, reject) => {
       exec("npx prisma migrate deploy", (err, stdout, stderr) => {
         if (err) {
@@ -90,60 +85,41 @@ const start = async () => {
         }
         console.log(stdout);
         console.error(stderr);
-
-        exec("npx prisma generate", (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          }
-          console.log(stdout);
-          console.error(stderr);
-        });
-
-        exec("npx prisma db seed", (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          }
-          console.log(stdout);
-          console.error(stderr);
-          resolve();
-        });
+        resolve();
       });
     });
 
     // connect to database
     await prisma.$connect();
-    server.log.info("Connected to Prisma");
+    console.log("Connected to Prisma");
 
     const port = 5003;
+    await server.listen({ port: Number(port), host: "0.0.0.0" });
+    console.log(`Server listening on port ${port}`);
 
-    server.listen(
-      { port: Number(port), host: "0.0.0.0" },
-      async (err, address) => {
-        if (err) {
-          console.error(err);
-          process.exit(1);
-        }
+    const client = track();
+    client.capture({
+      event: "server_started",
+      distinctId: "uuid",
+    });
+    await client.shutdownAsync();
 
-        const client = track();
-
-        client.capture({
-          event: "server_started",
-          distinctId: "uuid",
-        });
-
-        client.shutdownAsync();
-        console.info(`Server listening on ${address}`);
-      }
-    );
-
-    setInterval(() => getEmails(), 10000); // Call getEmails every minute
+    setInterval(() => getEmails(), 10000);
   } catch (err) {
-    server.log.error(err);
+    console.error('Server startup error:', err);
     await prisma.$disconnect();
     process.exit(1);
   }
 };
+
+// Make upload available globally
+declare module 'fastify' {
+  interface FastifyInstance {
+    upload: typeof upload;
+  }
+}
+
+// Decorate fastify with upload
+server.decorate('upload', upload);
 
 start();

@@ -46,11 +46,13 @@ import {
   CheckIcon,
   CircleCheck,
   CircleDotDashed,
+  DownloadIcon,
   Ellipsis,
   Eye,
   EyeOff,
   LifeBuoy,
   Loader,
+  Loader2,
   LoaderCircle,
   Lock,
   PanelTopClose,
@@ -514,41 +516,63 @@ export default function Ticket() {
   };
 
   const handleUpload = async () => {
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("user", user.id);
+    if (!file) return;
 
-      try {
-        // You can write the URL of your server or any other endpoint used for file upload
-        const result = await fetch(
-          `/api/v1/storage/ticket/${router.query.id}/upload/single`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("user", user.id);
 
-        const data = await result.json();
-
-        if (data.success) {
-          setFile(null);
-          refetch();
+    try {
+      const result = await fetch(
+        `/api/v1/storage/ticket/${router.query.id}/upload/single`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
         }
-      } catch (error) {
-        console.error(error);
+      );
+
+      if (!result.ok) {
+        throw new Error('Upload failed');
       }
+
+      const data = await result.json();
+
+      if (data.success) {
+        toast({
+          title: "Success",
+          description: "File uploaded successfully",
+        });
+        setFile(null);
+        refetch();
+      } else {
+        throw new Error(data.error || 'Upload failed');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to upload file",
+        variant: "destructive",
+      });
+      setFile(null);
     }
   };
 
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = () => {
-    fileInputRef.current.click();
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   useEffect(() => {
-    handleUpload();
+    if (file) {
+      handleUpload();
+    }
   }, [file]);
 
   useEffect(() => {
@@ -910,6 +934,133 @@ export default function Ticket() {
                             placeholder="Change Client..."
                             hideInitial={false}
                           />
+                        </div>
+                        
+                        <div className="mt-4 border-t border-gray-200 pt-4">
+                          <div className="flex flex-row items-center justify-between">
+                            <span className="text-sm font-medium text-foreground">
+                              Attachments
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-sm"
+                              onClick={handleButtonClick}
+                              disabled={data.ticket.locked}
+                            >
+                              Upload
+                              <input
+                                id="file-mobile"
+                                type="file"
+                                hidden
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                              />
+                            </Button>
+                          </div>
+
+                          <div className="mt-2 space-y-2">
+                            {data.ticket.files && data.ticket.files.length > 0 ? (
+                              data.ticket.files.map((file: any) => (
+                                <div
+                                  key={file.id}
+                                  className="group flex items-center justify-between p-2 rounded-md hover:bg-secondary/80"
+                                >
+                                  <div className="flex items-center space-x-2">
+                                    <div className="flex flex-col">
+                                      <span className="text-sm font-medium">{file.filename}</span>
+                                      <span className="text-xs text-muted-foreground">
+                                        {(file.size / 1024).toFixed(1)} KB • {moment(file.createdAt).fromNow()}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0"
+                                      onClick={async () => {
+                                        try {
+                                          const response = await fetch(`/api/v1/storage/download/${file.id}`, {
+                                            headers: {
+                                              Authorization: `Bearer ${token}`,
+                                            },
+                                          });
+                                          
+                                          if (!response.ok) {
+                                            throw new Error('Failed to download file');
+                                          }
+                                          
+                                          const blob = await response.blob();
+                                          const url = window.URL.createObjectURL(blob);
+                                          const a = document.createElement('a');
+                                          a.href = url;
+                                          a.download = file.filename;
+                                          document.body.appendChild(a);
+                                          a.click();
+                                          window.URL.revokeObjectURL(url);
+                                          document.body.removeChild(a);
+                                        } catch (error) {
+                                          toast({
+                                            title: "Error",
+                                            description: "Failed to download the file",
+                                            variant: "destructive",
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      <DownloadIcon className="h-4 w-4" />
+                                    </Button>
+                                    {(user.isAdmin || file.userId === user.id) && !data.ticket.locked && (
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 w-8 p-0 hover:text-destructive"
+                                        onClick={async () => {
+                                          try {
+                                            const response = await fetch(`/api/v1/storage/ticket/file/${file.id}`, {
+                                              method: 'DELETE',
+                                              headers: {
+                                                Authorization: `Bearer ${token}`,
+                                              },
+                                            });
+                                            
+                                            if (response.ok) {
+                                              toast({
+                                                title: "File deleted",
+                                                description: "The file has been removed from the ticket",
+                                              });
+                                              refetch();
+                                            } else {
+                                              throw new Error('Failed to delete file');
+                                            }
+                                          } catch (error) {
+                                            toast({
+                                              title: "Error",
+                                              description: "Failed to delete the file",
+                                              variant: "destructive",
+                                            });
+                                          }
+                                        }}
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    )}
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-sm text-muted-foreground text-center py-4">
+                                No attachments yet
+                              </div>
+                            )}
+                            {file && (
+                              <div className="flex items-center space-x-2 p-2 bg-secondary/50 rounded-md">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                <span className="text-sm">Uploading {file.name}...</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1277,105 +1428,132 @@ export default function Ticket() {
                       />
                     )}
 
-                    {/* <div className="border-t border-gray-200">
-                  <div className="flex flex-row items-center justify-between mt-2">
-                    <span className="text-sm font-medium text-gray-500 dark:text-white">
-                      Time Tracking
-                    </span>
-                    {!editTime ? (
-                      <button
-                        onClick={() => setTimeEdit(true)}
-                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
-                      >
-                        add
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          setTimeEdit(false);
-                          addTime();
-                        }}
-                        className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
-                      >
-                        save
-                      </button>
-                    )}
-                  </div>
-                  {data.ticket.TimeTracking.length > 0 ? (
-                    data.ticket.TimeTracking.map((i: any) => (
-                      <div key={i.id} className="text-xs">
-                        <div className="flex flex-row space-x-1.5 items-center dark:text-white">
-                          <span>{i.user.name} / </span>
-                          <span>{i.time} minutes</span>
-                        </div>
+                    <div className="border-t border-gray-200 pt-4">
+                      <div className="flex flex-row items-center justify-between">
+                        <span className="text-sm font-medium text-foreground">
+                          Attachments
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-sm"
+                          onClick={handleButtonClick}
+                          disabled={data.ticket.locked}
+                        >
+                          Upload
+                          <input
+                            id="file"
+                            type="file"
+                            hidden
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                          />
+                        </Button>
                       </div>
-                    ))
-                  ) : (
-                    <div>
-                      <span className="text-xs dark:text-white">
-                        No Time added
-                      </span>
-                    </div>
-                  )}
-                  {editTime && (
-                    <div>
-                      <div className="mt-2 flex flex-col space-y-2">
-                        <input
-                          type="text"
-                          name="text"
-                          id="timespent_text"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          placeholder="What did you do?"
-                          value={timeReason}
-                          onChange={(e) => setTimeReason(e.target.value)}
-                        />
-                        <input
-                          type="number"
-                          name="number"
-                          id="timespent"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          placeholder="Time in minutes"
-                          value={timeSpent}
-                          onChange={(e) => setTimeSpent(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div> */}
-                    {/* <div className="border-t border-gray-200">
-                  <div className="flex flex-row items-center justify-between mt-2">
-                    <span className="text-sm font-medium text-gray-500 dark:text-white">
-                      Attachments
-                    </span>
-                    <button
-                      className="text-sm font-medium text-gray-500 hover:underline dark:text-white"
-                      onClick={handleButtonClick}
-                    >
-                      upload
-                      <input
-                        id="file"
-                        type="file"
-                        hidden
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                      />
-                    </button>
-                  </div>
 
-                  <>
-                    {data.ticket.files.length > 0 &&
-                      data.ticket.files.map((file: any) => (
-                        <div className="p-1/2 px-1  hover:bg-gray-200 hover:cursor-pointer">
-                          <span className="text-xs">{file.filename}</span>
-                        </div>
-                      ))}
-                    {file && (
-                      <div className="p-1/2 px-1">
-                        <span className="text-xs">{file.name}</span>
+                      <div className="mt-2 space-y-2">
+                        {data.ticket.files && data.ticket.files.length > 0 ? (
+                          data.ticket.files.map((file: any) => (
+                            <div
+                              key={file.id}
+                              className="group flex items-center justify-between p-2 rounded-md hover:bg-secondary/80"
+                            >
+                              <div className="flex items-center space-x-2">
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-medium">{file.filename}</span>
+                                  <span className="text-xs text-muted-foreground">
+                                    {(file.size / 1024).toFixed(1)} KB • {moment(file.createdAt).fromNow()}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 w-8 p-0"
+                                  onClick={async () => {
+                                    try {
+                                      const response = await fetch(`/api/v1/storage/download/${file.id}`, {
+                                        headers: {
+                                          Authorization: `Bearer ${token}`,
+                                        },
+                                      });
+                                      
+                                      if (!response.ok) {
+                                        throw new Error('Failed to download file');
+                                      }
+                                      
+                                      const blob = await response.blob();
+                                      const url = window.URL.createObjectURL(blob);
+                                      const a = document.createElement('a');
+                                      a.href = url;
+                                      a.download = file.filename;
+                                      document.body.appendChild(a);
+                                      a.click();
+                                      window.URL.revokeObjectURL(url);
+                                      document.body.removeChild(a);
+                                    } catch (error) {
+                                      toast({
+                                        title: "Error",
+                                        description: "Failed to download the file",
+                                        variant: "destructive",
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <DownloadIcon className="h-4 w-4" />
+                                </Button>
+                                {(user.isAdmin || file.userId === user.id) && !data.ticket.locked && (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 w-8 p-0 hover:text-destructive"
+                                    onClick={async () => {
+                                      try {
+                                        const response = await fetch(`/api/v1/storage/ticket/file/${file.id}`, {
+                                          method: 'DELETE',
+                                          headers: {
+                                            Authorization: `Bearer ${token}`,
+                                          },
+                                        });
+                                        
+                                        if (response.ok) {
+                                          toast({
+                                            title: "File deleted",
+                                            description: "The file has been removed from the ticket",
+                                          });
+                                          refetch();
+                                        } else {
+                                          throw new Error('Failed to delete file');
+                                        }
+                                      } catch (error) {
+                                        toast({
+                                          title: "Error",
+                                          description: "Failed to delete the file",
+                                          variant: "destructive",
+                                        });
+                                      }
+                                    }}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-sm text-muted-foreground text-center py-4">
+                            No attachments yet
+                          </div>
+                        )}
+                        {file && (
+                          <div className="flex items-center space-x-2 p-2 bg-secondary/50 rounded-md">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="text-sm">Uploading {file.name}...</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </>
-                </div> */}
+                    </div>
                   </div>
                 </div>
               </div>

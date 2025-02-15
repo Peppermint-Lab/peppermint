@@ -411,6 +411,21 @@ model emailTemplate {
   type Template
 }
 
+model StorageConfig {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  provider     String  @default("local") // "local" or "s3"
+  bucket       String?
+  endpoint     String?
+  region       String?
+  accessKey    String?
+  secretKey    String?
+  basePath     String  @default("uploads")
+  active       Boolean @default(true)
+}
+
 enum Hook {
   ticket_created
   ticket_status_changed

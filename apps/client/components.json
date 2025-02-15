@@ -6,12 +6,16 @@
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "styles/globals.css",
-    "baseColor": "gray",
+    "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
-    "components": "@/shadcn/",
-    "utils": "@/shadcn/lib/utils"
-  }
+    "components": "@/shadcn/components",
+    "utils": "@/shadcn/lib/utils",
+    "ui": "@/shadcn/ui",
+    "lib": "@/shadcn/lib",
+    "hooks": "@/shadcn/hooks"
+  },
+  "iconLibrary": "lucide"
 }
