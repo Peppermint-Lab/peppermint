@@ -1,4 +1,4 @@
-import { draggable, DraggableArgs } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import moment from 'moment';
 import Link from 'next/link';
 import { KanbanColumn, UISettings } from '../../types/tickets';
@@ -35,7 +35,8 @@ export default function TicketKanban({ columns, uiSettings }: TicketKanbanProps)
                     draggable({
                       element,
                       dragHandle: element,
-                    } as DraggableArgs);
+                      data: { ticketId: ticket.id } as const,
+                    });
                   }}
                   className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-700 p-3 cursor-move hover:shadow-md transition-shadow"
                 >
