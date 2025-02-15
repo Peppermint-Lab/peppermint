@@ -1,4 +1,4 @@
-import { KanbanGrouping, SortOption, Ticket, ViewMode } from '@/shadcn/types/tickets';
+import { KanbanGrouping, SortOption, Ticket, UISettings, ViewMode } from '@/shadcn/types/tickets';
 import { useEffect, useState } from 'react';
 
 export function useTicketView(tickets: Ticket[] = []) {
@@ -17,11 +17,30 @@ export function useTicketView(tickets: Ticket[] = []) {
     return (saved as SortOption) || 'newest';
   });
 
+  const [uiSettings, setUISettings] = useState<UISettings>(() => {
+    const saved = localStorage.getItem("preferred_ui_settings");
+    return saved ? JSON.parse(saved) : {
+      showAvatars: true,
+      showDates: true,
+      showPriority: true,
+      showType: true,
+      showTicketNumbers: true,
+    };
+  });
+
   useEffect(() => {
     localStorage.setItem("preferred_view_mode", viewMode);
     localStorage.setItem("preferred_kanban_grouping", kanbanGrouping);
     localStorage.setItem("preferred_sort_by", sortBy);
-  }, [viewMode, kanbanGrouping, sortBy]);
+    localStorage.setItem("preferred_ui_settings", JSON.stringify(uiSettings));
+  }, [viewMode, kanbanGrouping, sortBy, uiSettings]);
+
+  const handleUISettingChange = (setting: keyof UISettings, value: boolean) => {
+    setUISettings(prev => ({
+      ...prev,
+      [setting]: value
+    }));
+  };
 
   const sortedTickets = [...tickets].sort((a, b) => {
     switch (sortBy) {
@@ -132,6 +151,8 @@ export function useTicketView(tickets: Ticket[] = []) {
     setKanbanGrouping,
     setSortBy,
     sortedTickets,
-    kanbanColumns
+    kanbanColumns,
+    uiSettings,
+    handleUISettingChange,
   };
 }

@@ -30,4 +30,12 @@ export type KanbanColumn = {
   title: string;
   color: string;
   tickets: Ticket[];
-}; 
+};
+
+export interface UISettings {
+  showAvatars: boolean;
+  showDates: boolean;
+  showPriority: boolean;
+  showType: boolean;
+  showTicketNumbers: boolean;
+} 

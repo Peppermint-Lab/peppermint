@@ -1,24 +1,30 @@
 import { Button } from "@/shadcn/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
+import { Separator } from "@/shadcn/ui/separator";
 import { Settings } from "lucide-react";
-import { KanbanGrouping, SortOption, ViewMode } from '../../types/tickets';
+import { KanbanGrouping, SortOption, UISettings, ViewMode } from '../../types/tickets';
+import DisplaySettings from "./DisplaySettings";
 
 interface ViewSettingsProps {
   viewMode: ViewMode;
   kanbanGrouping: KanbanGrouping;
   sortBy: SortOption;
+  uiSettings: UISettings;
   onViewModeChange: (mode: ViewMode) => void;
   onKanbanGroupingChange: (grouping: KanbanGrouping) => void;
   onSortChange: (sort: SortOption) => void;
+  onUISettingChange: (setting: keyof UISettings, value: boolean) => void;
 }
 
 export default function ViewSettings({
   viewMode,
   kanbanGrouping,
   sortBy,
+  uiSettings,
   onViewModeChange,
   onKanbanGroupingChange,
   onSortChange,
+  onUISettingChange,
 }: ViewSettingsProps) {
   return (
     <Popover>
@@ -28,7 +34,12 @@ export default function ViewSettings({
           <span className="hidden sm:inline">Settings</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-3" align="end">
+      <PopoverContent 
+        className="w-[240px] p-3" 
+        align="end" 
+        side={viewMode === 'kanban' ? 'left' : 'bottom'}
+        sideOffset={8}
+      >
         <div className="space-y-4">
           <div>
             <h4 className="text-sm font-medium mb-2">View Mode</h4>
@@ -131,6 +142,13 @@ export default function ViewSettings({
               </div>
             </div>
           )}
+          
+          <Separator />
+          
+          <DisplaySettings 
+            settings={uiSettings} 
+            onChange={onUISettingChange}
+          />
         </div>
       </PopoverContent>
     </Popover>

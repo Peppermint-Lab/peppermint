@@ -58,7 +58,9 @@ export default function Tickets() {
     setKanbanGrouping,
     setSortBy,
     sortedTickets,
-    kanbanColumns
+    kanbanColumns,
+    uiSettings,
+    handleUISettingChange,
   } = useTicketView(filteredTickets);
 
   const {
@@ -135,9 +137,11 @@ export default function Tickets() {
           viewMode={viewMode}
           kanbanGrouping={kanbanGrouping}
           sortBy={sortBy}
+          uiSettings={uiSettings}
           onViewModeChange={setViewMode}
           onKanbanGroupingChange={setKanbanGrouping}
           onSortChange={setSortBy}
+          onUISettingChange={handleUISettingChange}
         />
       </div>
 
@@ -150,9 +154,13 @@ export default function Tickets() {
           onDelete={user.isAdmin ? deleteTicket : undefined}
           users={users}
           currentUser={user}
+          uiSettings={uiSettings}
         />
       ) : (
-        <TicketKanban columns={kanbanColumns} />
+        <TicketKanban 
+          columns={kanbanColumns} 
+          uiSettings={uiSettings}
+        />
       )}
     </div>
   );
