@@ -17,7 +17,10 @@ import {
   RollerCoaster,
   UserRound,
   Webhook,
+  QrCode,
+  BarChart
 } from "lucide-react";
+
 import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { Fragment, useState } from "react";
@@ -94,6 +97,18 @@ export default function AdminLayout({ children }: any) {
       href: "/admin/logs",
       current: location.pathname === "/admin/logs",
       icon: FileText,
+    },
+    {
+      name: "Metrics",
+      href: "/admin/metrics",
+      current: location.pathname === "/admin/metrics",
+      icon: BarChart,
+    },
+    {
+      name: "Room QR generator",
+      href: "/admin/qr-generator",
+      current: location.pathname === "/admin/qr-generator",
+      icon: QrCode,
     },
   ];
 
