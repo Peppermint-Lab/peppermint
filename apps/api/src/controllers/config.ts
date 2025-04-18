@@ -10,6 +10,8 @@ const nodemailer = require("nodemailer");
 
 import { track } from "../lib/hog";
 import { createTransportProvider } from "../lib/nodemailer/transport";
+import { requirePermission } from "../lib/roles";
+import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
 
 async function tracking(event: string, properties: any) {
@@ -388,9 +390,20 @@ export function configRoutes(fastify: FastifyInstance) {
   // Toggle all roles
   fastify.patch(
     "/api/v1/config/toggle-roles",
-
+    {
+      preHandler: requirePermission(["settings::manage"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { isActive }: any = request.body;
+      const session = await checkSession(request);
+
+      // Double-check that user is admin
+      if (!session?.isAdmin) {
+        return reply.code(403).send({
+          message: "Unauthorized. Admin access required.",
+          success: false,
+        });
+      }
 
       const config = await prisma.config.findFirst();
 

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
 import { track } from "../lib/hog";
+import { requirePermission } from "../lib/roles";
 import { checkSession } from "../lib/session";
 import { prisma } from "../prisma";
 
@@ -9,7 +10,9 @@ export function userRoutes(fastify: FastifyInstance) {
   // All users
   fastify.get(
     "/api/v1/users/all",
-
+    {
+      preHandler: requirePermission(["user::read"]),
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const users = await prisma.user.findMany({
         where: {
@@ -102,9 +105,35 @@ export function userRoutes(fastify: FastifyInstance) {
   // Mark Notification as read
   fastify.get(
     "/api/v1/user/notifcation/:id",
-
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
+      const session = await checkSession(request);
+      
+      if (!session) {
+        return reply.code(401).send({
+          message: "Unauthorized",
+          success: false,
+        });
+      }
+
+      // Get the notification and verify it belongs to the user
+      const notification = await prisma.notifications.findUnique({
+        where: { id: id }
+      });
+      
+      if (!notification) {
+        return reply.code(404).send({
+          message: "Notification not found",
+          success: false,
+        });
+      }
+      
+      if (notification.userId !== session.id) {
+        return reply.code(403).send({
+          message: "Access denied. You can only manage your own notifications.",
+          success: false,
+        });
+      }
 
       await prisma.notifications.update({
         where: { id: id },
