@@ -26,6 +26,7 @@ services:
       DB_PASSWORD: "1234"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
+      DATABASE_URL: "postgres://peppermint:1234@peppermint_postgres:5432/peppermint"
       
 volumes: 
  pgdata:
