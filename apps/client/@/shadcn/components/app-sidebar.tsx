@@ -14,38 +14,21 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-  useSidebar,
 } from "@/shadcn/ui/sidebar";
 import useTranslation from "next-translate/useTranslation";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import CreateTicketModal from "../../../components/CreateTicketModal";
 import ThemeSettings from "../../../components/ThemeSettings";
-import { useUser } from "../../../store/session";
+import AuthService from "../../../services/AuthService"; // Import AuthService
+import { useKeyPress } from "../../../hooks/useKeyPress"; // Import custom hook
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const location = useRouter();
-
-  const { loading, user, fetchUserProfile } = useUser();
+  const { t } = useTranslation("peppermint");
+  const { user } = useUser();
   const locale = user ? user.language : "en";
+  const { keypressdown, setKeyPressDown } = useKeyPress();
 
-  const [keypressdown, setKeyPressDown] = useState(false);
-
-  const { t, lang } = useTranslation("peppermint");
-  const sidebar = useSidebar();
-
-  if (!user) {
-    location.push("/auth/login");
-  }
-
-  if (location.pathname.includes("/admin") && user.isAdmin === false) {
-    location.push("/");
-    alert("You do not have the correct perms for that action.");
-  }
-
-  if (user && user.external_user) {
-    location.push("/portal");
-  }
+  // Delegate authentication logic to AuthService
+  AuthService.checkUserAuthentication();
 
   const data = {
     teams: [
@@ -106,61 +89,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
   };
 
-  function handleKeyPress(event: any) {
-    const pathname = location.pathname;
-
-    // Check for Ctrl or Meta key to bypass the shortcut handler
-    if (event.ctrlKey || event.metaKey) {
-      return; // Don't override browser shortcuts
-    }
-
-    if (
-      document.activeElement!.tagName !== "INPUT" &&
-      document.activeElement!.tagName !== "TEXTAREA" &&
-      !document.activeElement!.className.includes("ProseMirror") &&
-      !pathname.includes("/new")
-    ) {
-      switch (event.key) {
-        case "c":
-          setKeyPressDown(true);
-          break;
-        case "h":
-          location.push("/");
-          break;
-        case "d":
-          location.push("/documents");
-          break;
-        case "t":
-          location.push("/issues");
-          break;
-        case "a":
-          location.push("/admin");
-          break;
-        case "o":
-          location.push("/issues/open");
-          break;
-        case "f":
-          location.push("/issues/closed");
-          break;
-        case "[":
-          sidebar.toggleSidebar();
-          break;
-
-        default:
-          break;
-      }
-    }
-  }
-
-  useEffect(() => {
-    // attach the event listener
-    document.addEventListener("keydown", handleKeyPress);
-
-    // remove the event listener
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [handleKeyPress, location]);
 
   return (
     <Sidebar collapsible="icon" {...props} >
