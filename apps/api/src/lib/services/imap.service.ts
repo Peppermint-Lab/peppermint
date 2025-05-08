@@ -1,6 +1,7 @@
 import EmailReplyParser from "email-reply-parser";
 import Imap from "imap";
 import { simpleParser } from "mailparser";
+import pLimit from "p-limit"; // Import p-limit for concurrency control
 import { prisma } from "../../prisma";
 import { EmailConfig, EmailQueue } from "../types/email";
 import { AuthService } from "./auth.service";
@@ -117,74 +118,80 @@ export class ImapService {
     const queues =
       (await prisma.emailQueue.findMany()) as unknown as EmailQueue[];
     const today = new Date();
+    const limit = pLimit(5); // Limit concurrency to 5 email queues at a time
 
-    for (const queue of queues) {
-      try {
-        const imapConfig = await this.getImapConfig(queue);
+    const tasks = queues.map((queue) =>
+      limit(async () => {
+        try {
+          const imapConfig = await this.getImapConfig(queue);
 
-        if (queue.serviceType === "other" && !imapConfig.password) {
-          console.error("IMAP configuration is missing a password");
-          throw new Error("IMAP configuration is missing a password");
-        }
+          if (queue.serviceType === "other" && !imapConfig.password) {
+            console.error("IMAP configuration is missing a password");
+            throw new Error("IMAP configuration is missing a password");
+          }
 
-        // @ts-ignore
-        const imap = new Imap(imapConfig);
+          // @ts-ignore
+          const imap = new Imap(imapConfig);
 
-        await new Promise((resolve, reject) => {
-          imap.once("ready", () => {
-            imap.openBox("INBOX", false, (err) => {
-              if (err) {
-                reject(err);
-                return;
-              }
-              imap.search(["UNSEEN", ["ON", today]], (err, results) => {
-                if (err) reject(err);
-                if (!results?.length) {
-                  console.log("No new messages");
-                  imap.end();
-                  resolve(null);
+          await new Promise((resolve, reject) => {
+            imap.once("ready", () => {
+              imap.openBox("INBOX", false, (err) => {
+                if (err) {
+                  reject(err);
                   return;
                 }
+                imap.search(["UNSEEN", ["ON", today]], (err, results) => {
+                  if (err) reject(err);
+                  if (!results?.length) {
+                    console.log("No new messages");
+                    imap.end();
+                    resolve(null);
+                    return;
+                  }
 
-                const fetch = imap.fetch(results, { bodies: "" });
+                  const fetch = imap.fetch(results, { bodies: "" });
 
-                fetch.on("message", (msg) => {
-                  msg.on("body", (stream) => {
-                    simpleParser(stream, async (err, parsed) => {
-                      if (err) throw err;
-                      const isReply = parsed.subject?.includes("Re:");
-                      await this.processEmail(parsed, isReply || false);
+                  fetch.on("message", (msg) => {
+                    msg.on("body", (stream) => {
+                      simpleParser(stream, async (err, parsed) => {
+                        if (err) throw err;
+                        const isReply = parsed.subject?.includes("Re:");
+                        await this.processEmail(parsed, isReply || false);
+                      });
+                    });
+
+                    msg.once("attributes", (attrs) => {
+                      imap.addFlags(attrs.uid, ["\\Seen"], () => {
+                        console.log("Marked as read!");
+                      });
                     });
                   });
 
-                  msg.once("attributes", (attrs) => {
-                    imap.addFlags(attrs.uid, ["\\Seen"], () => {
-                      console.log("Marked as read!");
-                    });
+                  fetch.once("error", reject);
+                  fetch.once("end", () => {
+                    console.log("Done fetching messages");
+                    imap.end();
+                    resolve(null);
                   });
-                });
-
-                fetch.once("error", reject);
-                fetch.once("end", () => {
-                  console.log("Done fetching messages");
-                  imap.end();
-                  resolve(null);
                 });
               });
             });
-          });
 
-          imap.once("error", reject);
-          imap.once("end", () => {
-            console.log("Connection ended");
-            resolve(null);
-          });
+            imap.once("error", reject);
+            imap.once("end", () => {
+              console.log("Connection ended");
+              resolve(null);
+            });
 
-          imap.connect();
-        });
-      } catch (error) {
-        console.error(`Error processing queue ${queue.id}:`, error);
-      }
-    }
+            imap.connect();
+          });
+        } catch (error) {
+          console.error(`Error processing queue ${queue.id}:`, error);
+        }
+      })
+    );
+
+    await Promise.all(tasks); // Wait for all email queue tasks to complete
+    console.log("All email queues processed");
   }
 }
