@@ -121,22 +121,6 @@ export function AccountDropdown() {
           </DropdownMenuItem>
         </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="hover:cursor-pointer"
-          onClick={() =>
-            router.push("https://github.com/Peppermint-Lab/peppermint")
-          }
-        >
-          <Github className="mr-2 h-4 w-4" />
-          <span>GitHub</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="hover:cursor-pointer"
-          onClick={() => router.push("https://discord.gg/XDxnWxCqnc")}
-        >
-          <LifeBuoy className="mr-2 h-4 w-4" />
-          <span>Support</span>
-        </DropdownMenuItem>
         <DropdownMenuItem disabled>
           <Cloud className="mr-2 h-4 w-4" />
           <span>API</span>
