@@ -671,7 +671,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         },
       });
 
-      //@ts-expect-error
+     
       const { email, title } = ticket;
       if (public_comment && email) {
         sendComment(text, title, ticket!.id, email!);
