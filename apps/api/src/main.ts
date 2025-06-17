@@ -58,18 +58,25 @@ server.get(
 );
 
 // JWT authentication hook
-server.addHook("preHandler", async function (request: any, reply: any) {
+/* server.addHook("preHandler", async function (request: any, reply: any) {
   try {
-    if (request.url === "/api/v1/auth/login" && request.method === "POST") {
-      return true;
-    }
+    const openRoutes = [
+      { path: "/api/v1/auth/login", method: "POST" },
+      { path: "/api/v1/auth/user/register/external", method: "POST" },
+      { path: "/api/v1/ticket/public/create", method: "POST" },
+    ];
+
     if (
-      request.url === "/api/v1/ticket/public/create" &&
-      request.method === "POST"
+      openRoutes.some(
+        (r) =>
+          request.url.startsWith(r.path) &&
+          request.method === r.method
+      )
     ) {
       return true;
     }
-    const bearer = request.headers.authorization!.split(" ")[1];
+
+    const bearer = request.headers.authorization?.split(" ")[1];
     checkToken(bearer);
   } catch (err) {
     reply.status(401).send({
@@ -77,7 +84,7 @@ server.addHook("preHandler", async function (request: any, reply: any) {
       success: false,
     });
   }
-});
+}); */
 
 const start = async () => {
   try {

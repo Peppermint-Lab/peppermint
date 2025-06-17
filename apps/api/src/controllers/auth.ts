@@ -58,74 +58,7 @@ async function tracking(event: string, properties: any) {
 }
 
 export function authRoutes(fastify: FastifyInstance) {
-  // Register a new user
-  fastify.post(
-    "/api/v1/auth/user/register",
-    {
-      schema: {
-        body: {
-          type: "object",
-          properties: {
-            email: { type: "string" },
-            password: { type: "string" },
-            admin: { type: "boolean" },
-            name: { type: "string" },
-          },
-          required: ["email", "password", "name", "admin"],
-        },
-      },
-    },
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      let { email, password, admin, name } = request.body as {
-        email: string;
-        password: string;
-        admin: boolean;
-        name: string;
-      };
-
-      const requester = await checkSession(request);
-
-      if (!requester?.isAdmin) {
-        return reply.code(401).send({
-          message: "Unauthorized",
-        });
-      }
-
-      // Checks if email already exists
-      let record = await prisma.user.findUnique({
-        where: { email },
-      });
-
-      // if exists, return 400
-      if (record) {
-        return reply.code(400).send({
-          message: "Email already exists",
-        });
-      }
-
-      const user = await prisma.user.create({
-        data: {
-          email,
-          password: await bcrypt.hash(password, 10),
-          name,
-          isAdmin: admin,
-        },
-      });
-
-      const hog = track();
-
-      hog.capture({
-        event: "user_registered",
-        distinctId: user.id,
-      });
-
-      reply.send({
-        success: true,
-      });
-    }
-  );
-
-  // Register a new external user
+  // Register a new external user (public registration)
   fastify.post(
     "/api/v1/auth/user/register/external",
     {
@@ -143,6 +76,7 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
+      console.log("Register endpoint hit"); // <-- Add this line
       let { email, password, name, language } = request.body as {
         email: string;
         password: string;

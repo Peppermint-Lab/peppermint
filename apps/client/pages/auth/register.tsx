@@ -16,13 +16,12 @@ export default function Login({}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+
   const [language, setLanguage] = useState("en");
   const [status, setStatus] = useState("idle");
 
   async function postData() {
-    if (password === passwordConfirm && validateEmail(email)) {
-      setStatus("loading");
+   
 
       const response = await fetch("/api/v1/auth/user/register/external", {
         method: "POST",
@@ -33,7 +32,7 @@ export default function Login({}) {
           name,
           email,
           password,
-          passwordConfirm,
+         
           language,
         }),
       }).then((res) => res.json());
@@ -49,13 +48,7 @@ export default function Login({}) {
           description: response.message,
         });
       }
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Passwords do not match or email is invalid",
-      });
-    }
+    
   }
 
   return (
@@ -108,24 +101,6 @@ export default function Login({}) {
                     required
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                  />
-                </div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Confirm Password
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="password"
-                    required
-                    value={passwordConfirm}
-                    onChange={(e) => setPasswordConfirm(e.target.value)}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   />
                 </div>

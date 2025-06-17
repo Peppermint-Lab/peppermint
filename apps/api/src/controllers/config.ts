@@ -32,7 +32,7 @@ export function configRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const config = await prisma.config.findFirst();
 
-      //@ts-expect-error
+    
       const { sso_active, sso_provider } = config;
 
       if (sso_active) {
@@ -296,7 +296,7 @@ export function configRoutes(fastify: FastifyInstance) {
         const email = await prisma.email.findFirst();
 
         const google = new OAuth2Client(
-          //@ts-expect-error
+        
           email?.clientId,
           email?.clientSecret,
           email?.redirectUri
@@ -332,7 +332,7 @@ export function configRoutes(fastify: FastifyInstance) {
       const email = await prisma.email.findFirst();
 
       const google = new OAuth2Client(
-        //@ts-expect-error
+      
         email?.clientId,
         email?.clientSecret,
         email?.redirectUri
