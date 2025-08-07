@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
+import { toast } from "@/shadcn/hooks/use-toast";
 
 export default function PasswordChange({ children }) {
   const token = getCookie("session");
@@ -24,27 +24,24 @@ export default function PasswordChange({ children }) {
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {
-            notifications.show({
+            toast({
+              variant: "default",
               title: "Success",
-              message: `Password updated :)`,
-              color: "green",
-              autoClose: 5000,
+              description: "Password updated successfully.",
             });
           } else {
-            notifications.show({
+            toast({
+              variant: "destructive",
               title: "Error",
-              message: `Error: Failed to update password`,
-              color: "red",
-              autoClose: 5000,
+              description: "Error: Failed to update password",
             });
           }
         });
     } else {
-      notifications.show({
+      toast({
+        variant: "destructive",
         title: "Error",
-        message: `Error: passwords do not match`,
-        color: "red",
-        autoClose: 5000,
+        description: "Error: passwords do not match",
       });
     }
   };

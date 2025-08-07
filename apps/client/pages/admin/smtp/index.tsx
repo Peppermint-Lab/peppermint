@@ -1,3 +1,4 @@
+import { toast } from "@/shadcn/hooks/use-toast";
 import { Button } from "@/shadcn/ui/button";
 import {
   Card,
@@ -17,7 +18,6 @@ import {
   SelectValue,
 } from "@/shadcn/ui/select";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
-import { notifications } from "@mantine/notifications";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -27,6 +27,9 @@ export default function Notifications() {
   const [enabled, setEnabled] = useState(false);
   const [provider, setProvider] = useState("");
   const [step, setStep] = useState(0);
+  const [config, setConfig] = useState();
+  const [error, setError]: any = useState();
+  const [templates, setTemplates] = useState([]);
 
   async function deleteEmailConfig() {
     setLoading(true);
@@ -42,35 +45,39 @@ export default function Notifications() {
       });
   }
 
-  async function testEmailConfig() {
-    // Send a test email to the reply address
-    await fetch(`/api/v1/config/email/verify`, {
+  async function fetchTemplates() {
+    await fetch("/api/v1/ticket/templates", {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getCookie("session")}`,
       },
     })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          notifications.show({
-            title: "Email Config Test",
-            message: "Email Config Test was successful",
-            color: "teal",
-          });
-        } else {
-          notifications.show({
-            title: "Email Config Test",
-            message: "Email Config Test failed",
-            color: "red",
-          });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          console.log(data.templates);
+          setTemplates(data.templates);
         }
+      });
+  }
+
+  async function resetSMTP() {
+    await fetch(`/api/v1/config/email`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${getCookie("session")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(() => {
+        fetchEmailConfig();
       });
   }
 
   async function fetchEmailConfig() {
     await fetch(`/api/v1/config/email`, {
-      method: "get",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getCookie("session")}`,
@@ -80,6 +87,13 @@ export default function Notifications() {
       .then((res) => {
         if (res.success && res.active) {
           setEnabled(res.email.active);
+          setConfig(res.email);
+
+          if (res.verification !== true) {
+            setError(res.verification);
+          } else {
+            fetchTemplates();
+          }
         } else {
           setEnabled(false);
         }
@@ -96,10 +110,14 @@ export default function Notifications() {
       <div className="relative max-w-4xl mx-auto md:px-8 xl:px-0">
         <div className="pt-10 pb-6">
           <div className="divide-y-2">
-            <div className="px-4 sm:px-6 md:px-0">
+            <div className="px-4 sm:px-6 md:px-0 flex flex-row justify-between">
               <h1 className="text-3xl font-extrabold text-foreground">
                 SMTP Email Settings
               </h1>
+
+              <button className="text-xs" onClick={() => resetSMTP()}>
+                Reset SMTP
+              </button>
             </div>
             <div className="px-4 sm:px-6 md:px-0">
               <div className="sm:flex sm:items-center mt-4">
@@ -114,36 +132,119 @@ export default function Notifications() {
           </div>
         </div>
 
-        {!loading && (
+        {!loading ? (
           <div className="px-4 sm:px-6 md:px-0">
             <div className="mb-6">
               {enabled ? (
-                <div className="rounded-md bg-green-50 p-4">
-                  <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center">
-                    <div className="flex">
-                      <div className="flex-shrink-0">
-                        <ExclamationTriangleIcon
-                          className="h-5 w-5 text-green-400"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <div className="ml-3">
-                        <h3 className="text-sm font-medium text-green-800">
-                          SMTP Config Found & working
-                        </h3>
-                        <div className="mt-2 text-sm text-green-700">
-                          <p>The config you supplied is working as intended.</p>
+                <div>
+                  {!error ? (
+                    <div>
+                      <div className="rounded-md bg-green-50 p-4">
+                        <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center">
+                          <div className="flex">
+                            <div className="flex-shrink-0">
+                              <ExclamationTriangleIcon
+                                className="h-5 w-5 text-green-400"
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <div className="ml-3">
+                              <h3 className="text-sm font-medium text-green-800">
+                                SMTP Config Found & working
+                              </h3>
+                              <div className="mt-2 text-sm text-green-700">
+                                <p>
+                                  The config you supplied is working as
+                                  intended.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => deleteEmailConfig()}
+                            type="button"
+                            className="rounded bg-red-500 text-white px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
+                          >
+                            Delete Settings
+                          </button>
                         </div>
                       </div>
+
+                      <div className="mt-4">
+                        <h1>Email Templates</h1>
+                        <table>
+                          <tbody>
+                            {templates.map((template) => (
+                              <tr key={template.id}>
+                                <td>{template.type}</td>
+                                <td>{template.subject}</td>
+                                <td>{template.html}</td>
+                                <td>
+                                  <a
+                                    href={`/admin/smtp/templates/${template.id}`}
+                                  >
+                                    Edit
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => deleteEmailConfig()}
-                      type="button"
-                      className="rounded bg-red-500 text-white px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
-                    >
-                      Delete Settings
-                    </button>
-                  </div>
+                  ) : (
+                    <div>
+                      <div className="rounded-md bg-red-50 p-4">
+                        <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center">
+                          <div className="flex">
+                            <div className="flex-shrink-0">
+                              <ExclamationTriangleIcon
+                                className="h-5 w-5 text-red-400"
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <div className="ml-3">
+                              <h3 className="text-sm font-medium text-red-800">
+                                Authentication Error
+                              </h3>
+                              <div className="mt-2 text-sm text-red-700">
+                                <p>
+                                  {error?.message ||
+                                    "An unknown error occurred."}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={() => deleteEmailConfig()}
+                            type="button"
+                            className="rounded bg-red-500 text-white px-4 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary"
+                          >
+                            Delete Settings
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="mt-2 ml-0.5 flex flex-col">
+                        <span className="text-sm font-semibold">
+                          Verification Status
+                        </span>
+                        <span className="text-xs font-semibold">
+                          Code: {error && error.code}
+                        </span>
+                        <span className="text-xs font-semibold">
+                          Code: {error && error.response}
+                        </span>
+                        <span className="text-xs font-semibold">
+                          Code: {error && error.responseCode}
+                        </span>
+                        <span className="text-xs font-semibold">
+                          Code: {error && error.command}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>
@@ -202,6 +303,8 @@ export default function Notifications() {
               )}
             </div>
           </div>
+        ) : (
+          <div>Loading...</div>
         )}
       </div>
     </main>
@@ -362,6 +465,8 @@ function SMTP({ setStep }: { setStep: (step: number) => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const router = useRouter();
+
   async function submitConfig() {
     await fetch(`/api/v1/config/email`, {
       method: "PUT",
@@ -379,7 +484,9 @@ function SMTP({ setStep }: { setStep: (step: number) => void }) {
       }),
     })
       .then((res) => res.json())
-      .then(() => {});
+      .then(() => {
+        router.reload();
+      });
   }
 
   return (

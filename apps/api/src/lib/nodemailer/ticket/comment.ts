@@ -1,11 +1,11 @@
 import handlebars from "handlebars";
-import nodeMailer from "nodemailer";
 import { prisma } from "../../../prisma";
 import { createTransportProvider } from "../transport";
 
 export async function sendComment(
   comment: string,
   title: string,
+  id: string,
   email: string
 ) {
   try {
@@ -31,8 +31,8 @@ export async function sendComment(
       .sendMail({
         from: provider?.reply,
         to: email,
-        subject: `New comment on a ticket`, // Subject line
-        text: `Hello there, Ticket: ${title}, has had an update with a comment of ${comment}`, // plain text body
+        subject: `New comment on Issue #${title} ref: #${id}`,
+        text: `Hello there, Issue #${title}, has had an update with a comment of ${comment}`,
         html: htmlToSend,
       })
       .then((info: any) => {

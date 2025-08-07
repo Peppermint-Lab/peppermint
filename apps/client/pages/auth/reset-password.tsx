@@ -1,4 +1,4 @@
-import { notifications } from "@mantine/notifications";
+import { toast } from "@/shadcn/hooks/use-toast";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -18,20 +18,18 @@ export default function Login({}) {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          notifications.show({
+          toast({
+            variant: "default",
             title: "Success",
-            message: "A password reset email is on its way.",
-            color: "green",
-            autoClose: 5000,
+            description: "A password reset email is on its way.",
           });
           setView("password");
         } else {
-          notifications.show({
+          toast({
+            variant: "destructive",
             title: "Error",
-            message:
+            description:
               "There was an error with this request, please try again. If this issue persists, please contact support via the discord.",
-            color: "red",
-            autoClose: 5000,
           });
         }
       });
@@ -39,11 +37,10 @@ export default function Login({}) {
 
   async function updatPassword() {
     if (password.length < 1) {
-      notifications.show({
+      toast({
+        variant: "destructive",
         title: "Error",
-        message: "Password cannot be empty.",
-        color: "red",
-        autoClose: 5000,
+        description: "Password cannot be empty.",
       });
     } else {
       await fetch(`/api/v1/auth/password-reset/password`, {
@@ -54,20 +51,18 @@ export default function Login({}) {
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {
-            notifications.show({
+            toast({
+              variant: "default",
               title: "Success",
-              message: "Password updated successfully.",
-              color: "green",
-              autoClose: 5000,
+              description: "Password updated successfully.",
             });
             router.push("/auth/login");
           } else {
-            notifications.show({
+            toast({
+              variant: "destructive",
               title: "Error",
-              message:
+              description:
                 "There was an error with this request, please try again. If this issue persists, please contact support via the discord.",
-              color: "red",
-              autoClose: 5000,
             });
           }
         });

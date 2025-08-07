@@ -48,13 +48,29 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  userAgent    String?
+  ipAddress    String?
+  apiKey       Boolean  @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PasswordResetToken {
   id     String @id @default(cuid())
   code   String @unique
   userId String
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  permissions Json[]
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  users       User[]
 }
 
 model User {
@@ -90,6 +106,7 @@ model User {
   TimeTracking  TimeTracking[]
   notifications notifications[]
   TicketFile    TicketFile[]
+  roles         Role[]
 }
 
 model Team {
@@ -120,6 +137,8 @@ model Ticket {
   type       TicketType   @default(support)
   hidden     Boolean      @default(false)
   createdBy  Json?
+  locked     Boolean      @default(false)
+  following  Json?
 
   TicketFile   TicketFile[]
   Comment      Comment[]
@@ -156,13 +175,18 @@ model Comment {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
-  text   String
-  public Boolean @default(false)
+  text       String
+  public     Boolean   @default(false)
+  reply      Boolean   @default(false)
+  replyEmail String?
+  edited     Boolean   @default(false)
+  editedAt   DateTime?
+  previous   String?
 
   userId   String?
   user     User?   @relation(fields: [userId], references: [id])
   ticketId String
-  ticket   Ticket  @relation(fields: [ticketId], references: [id])
+  ticket   Ticket  @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 }
 
 model Client {
@@ -291,6 +315,7 @@ model Config {
   gh_version       String?
   client_version   String?
   feature_previews Boolean @default(false)
+  roles_active     Boolean @default(false)
 
   encryption_key   Bytes?
   first_time_setup Boolean @default(true)
@@ -344,12 +369,21 @@ model EmailQueue {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  name     String
-  username String
-  password String
-  hostname String
-  tls      Boolean @default(true)
-  teams    Json?
+  name         String
+  username     String
+  password     String?
+  hostname     String
+  tls          Boolean @default(true)
+  active       Boolean @default(true)
+  teams        Json?
+  serviceType  String  @default("other")
+  clientId     String?
+  clientSecret String?
+  tenantId     String?
+  refreshToken String?
+  accessToken  String?
+  expiresIn    BigInt?
+  redirectUri  String?
 
   imap Imap_Email[]
 }
@@ -383,6 +417,7 @@ enum Hook {
 }
 
 enum TicketStatus {
+  hold
   needs_support
   in_progress
   in_review

@@ -1,4 +1,4 @@
-import { notifications } from "@mantine/notifications";
+import { toast } from "@/shadcn/hooks/use-toast";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -35,18 +35,17 @@ export default function CreateClientPage() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
-          notifications.show({
-            title: "User created sucessfully",
-            message: "The action was processed correctly! 💚",
-            color: "green",
+          toast({
+            variant: "default",
+            title: "Success",
+            description: "Client created succesfully",
           });
           router.push("/admin/clients");
         } else {
-          console.log("helo");
-          notifications.show({
-            title: "There has been an error ",
-            message: "Whoops! please wait and try again! 🤥",
-            color: "red",
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Whoops! please wait and try again! 🤥",
           });
         }
       });

@@ -18,6 +18,10 @@ services:
     ports:
       - 1000:3000
       - 1001:5003
+# If running via Docker on a hypervisor, enable DNS.
+#    dns:
+#      - 1.1.1.1
+#      - 8.8.8.8
     restart: always
     depends_on:
       - peppermint_postgres

@@ -1,50 +1,32 @@
 import {
-  Combobox,
   Dialog,
-  Disclosure,
-  Menu,
   Transition,
 } from "@headlessui/react";
 import {
   Bars3Icon,
   Cog6ToothIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxStackIcon,
-  MagnifyingGlassIcon,
   TicketIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { getCookie } from "cookies-next";
+import { Button } from "@radix-ui/themes";
+import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { Button } from "@radix-ui/themes";
-import useTranslation from "next-translate/useTranslation";
 
-import CreateTicketModal from "../components/CreateTicketModal";
 import { AccountDropdown } from "../components/AccountDropdown";
+import CreateTicketModal from "../components/CreateTicketModal";
 
-import { useUser } from "../store/session";
-import ThemeSettings from "../components/ThemeSettings";
+import { classNames } from "@/shadcn/lib/utils";
 import {
   Bell,
   Building,
+  FileText,
   Settings,
-  SquareActivity,
   SquareKanban,
 } from "lucide-react";
-
-const quickActions = [
-  // { name: "Add new file...", icon: DocumentPlusIcon, shortcut: "N", url: "#" },
-  // { name: "Add new folder...", icon: FolderPlusIcon, shortcut: "F", url: "#" },
-  // { name: "Add hashtag...", icon: HashtagIcon, shortcut: "H", url: "#" },
-  // { name: "Add label...", icon: TagIcon, shortcut: "L", url: "#" },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import ThemeSettings from "../components/ThemeSettings";
+import { useUser } from "../store/session";
 
 export default function NewLayout({ children }: any) {
   const location = useRouter();
@@ -52,7 +34,6 @@ export default function NewLayout({ children }: any) {
   const { loading, user, fetchUserProfile } = useUser();
   const locale = user ? user.language : "en";
 
-  const [queues, setQueues] = useState([]);
   const [keypressdown, setKeyPressDown] = useState(false);
 
   const { t, lang } = useTranslation("peppermint");
@@ -73,13 +54,6 @@ export default function NewLayout({ children }: any) {
   }
 
   const navigation = [
-    // {
-    //   name: t("create_ticket"),
-    //   href: `/${locale}/new`,
-    //   icon: PlusIcon,
-    //   current: location.pathname === "/new" ? true : false,
-    //   initial: "c",
-    // },
     {
       name: t("sl_dashboard"),
       href: `/${locale}/`,
@@ -87,25 +61,24 @@ export default function NewLayout({ children }: any) {
       current: location.pathname === "/" ? true : false,
       initial: "h",
     },
-    // {
-    //   name: t("sl_notebook"),
-    //   href: `/${locale}/notebook`,
-    //   icon: FolderIcon,
-    //   current: location.pathname === "/notebook" ? true : false,
-    //   initial: "n",
-    // },
-    // {
-    //   name: "Email Queues",
-    //   current: false,
-    //   icon: InboxStackIcon,
-    //   href: `/${locale}/tickets`,
-    //   children: queues,
-    //   inital: null,
-    // },
+    {
+      name: "Documents",
+      href: `/${locale}/documents`,
+      icon: FileText,
+      current: location.pathname === "/documents" ? true : false,
+      initial: "d",
+      internal: true,
+    },
   ];
 
   function handleKeyPress(event: any) {
     const pathname = location.pathname;
+
+    // Check for Ctrl or Meta key to bypass the shortcut handler
+    if (event.ctrlKey || event.metaKey) {
+      return; // Don't override browser shortcuts
+    }
+
     if (
       document.activeElement!.tagName !== "INPUT" &&
       document.activeElement!.tagName !== "TEXTAREA" &&
@@ -119,8 +92,8 @@ export default function NewLayout({ children }: any) {
         case "h":
           location.push("/");
           break;
-        case "n":
-          location.push("/notebook");
+        case "d":
+          location.push("/documents");
           break;
         case "t":
           location.push("/issues");
@@ -134,9 +107,6 @@ export default function NewLayout({ children }: any) {
         case "f":
           location.push("/issues/closed");
           break;
-        // case "Escape":
-        //   location.push("/tickets");
-        //   break;
         default:
           break;
       }
@@ -354,7 +324,12 @@ export default function NewLayout({ children }: any) {
                       setKeyPressDown={setKeyPressDown}
                     />
                     {navigation.map((item: any) => (
-                      <li key={item.name}>
+                      <li
+                        key={item.name}
+                        className={
+                          item.internal && !user.external_user ? "" : "hidden"
+                        }
+                      >
                         <Link
                           href={item.href}
                           className={classNames(
@@ -425,16 +400,16 @@ export default function NewLayout({ children }: any) {
                             location.pathname === "/issues/closed"
                               ? "bg-secondary dark:bg-primary"
                               : " hover:bg-[#F0F3F9] dark:hover:bg-white dark:hover:text-gray-900 ",
-                            "group -mx-2 flex gap-x-3 p-1 pl-3 rounded-md text-xs font-semibold leading-6"
+                            "group -mx-2 flex gap-x-3 p-1 pl-3 justify-between w-full rounded-md text-xs font-semibold leading-6"
                           )}
                         >
-                          <span className="whitespace-nowrap">
-                            {user.name}'s closed
-                          </span>
-                          <div className="flex w-full justify-end float-right">
-                            <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
-                              f
+                            <span className="whitespace-nowrap">
+                              {user.name}'s closed
                             </span>
+                            <div className="flex w-full justify-end float-right">
+                              <span className="flex h-6 w-6 shrink-0 items-center bg-transparent border-none justify-center text-md font-medium">
+                                f
+                              </span>
                           </div>
                         </Link>
                       </li>
@@ -489,7 +464,6 @@ export default function NewLayout({ children }: any) {
               />
             </button>
 
-            {/* Separator */}
             <div
               className="h-6 w-px bg-gray-400 lg:hidden"
               aria-hidden="true"
@@ -504,8 +478,6 @@ export default function NewLayout({ children }: any) {
                     </span>
                   </Link>
                 )}
-
-                {/* <CommandModal /> */}
               </div>
 
               <div className="flex w-full justify-end items-center gap-x-2 lg:gap-x-2 ">

@@ -1,5 +1,4 @@
 import handlebars from "handlebars";
-import nodeMailer from "nodemailer";
 import { prisma } from "../../../prisma";
 import { createTransportProvider } from "../transport";
 
@@ -24,14 +23,14 @@ export async function sendTicketStatus(ticket: any) {
 
     await transport
       .sendMail({
-        from: email?.reply, // sender address
+        from: email?.reply, 
         to: ticket.email,
-        subject: `Ticket ${ticket.Number} status is now ${
+        subject: `Issue #${ticket.Number} status is now ${
           ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
-        }`, // Subject line
-        text: `Hello there, Ticket ${ticket.Number}, now has a status of ${
+        }`, 
+        text: `Hello there, Issue #${ticket.Number}, now has a status of ${
           ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
-        }`, // plain text body
+        }`,
         html: htmlToSend,
       })
       .then((info: any) => {

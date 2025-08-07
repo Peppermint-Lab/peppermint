@@ -1,8 +1,8 @@
 //@ts-nocheck
-import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
+import * as React from "react"
 
 import { useIsMobile } from "@/shadcn/hooks/use-mobile"
 import { cn } from "@/shadcn/lib/utils"
@@ -18,12 +18,12 @@ import {
   TooltipTrigger,
 } from "@/shadcn/ui/tooltip"
 
-const SIDEBAR_COOKIE_NAME = "sidebar:state"
+const SIDEBAR_STORAGE_KEY = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
-const SIDEBAR_KEYBOARD_SHORTCUT = "b"
+const SIDEBAR_KEYBOARD_SHORTCUT = "[";
 
 type SidebarContext = {
   state: "expanded" | "collapsed"
@@ -69,10 +69,18 @@ const SidebarProvider = React.forwardRef<
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
-    // This is the internal state of the sidebar.
-    // We use openProp and setOpenProp for control from outside the component.
-    const [_open, _setOpen] = React.useState(defaultOpen)
+    // Initialize state from localStorage
+    const [_open, _setOpen] = React.useState(() => {
+      try {
+        const storedValue = localStorage.getItem(SIDEBAR_STORAGE_KEY)
+        return storedValue ? JSON.parse(storedValue) : defaultOpen
+      } catch (e) {
+        return defaultOpen
+      }
+    })
+    
     const open = openProp ?? _open
+
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
         if (setOpenProp) {
@@ -81,10 +89,15 @@ const SidebarProvider = React.forwardRef<
           )
         }
 
-        _setOpen(value)
+        const newValue = typeof value === "function" ? value(open) : value
+        _setOpen(newValue)
 
-        // This sets the cookie to keep the sidebar state.
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+        // Save to localStorage
+        try {
+          localStorage.setItem(SIDEBAR_STORAGE_KEY, JSON.stringify(newValue))
+        } catch (e) {
+          console.warn('Failed to save sidebar state to localStorage:', e)
+        }
       },
       [setOpenProp, open]
     )
@@ -100,7 +113,7 @@ const SidebarProvider = React.forwardRef<
     React.useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (
-          event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
+          (event.key === SIDEBAR_KEYBOARD_SHORTCUT || event.key === "[") &&
           (event.metaKey || event.ctrlKey)
         ) {
           event.preventDefault()
@@ -521,7 +534,7 @@ const sidebarMenuButtonVariants = cva(
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },
       size: {
-        default: "h-8 text-sm",
+        default: "h-8 text-xs text-foreground",
         sm: "h-7 text-xs",
         lg: "h-12 text-sm group-data-[collapsible=icon]:!p-0",
       },
@@ -690,7 +703,7 @@ const SidebarMenuSub = React.forwardRef<
     ref={ref}
     data-sidebar="menu-sub"
     className={cn(
-      "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5",
+      "flex min-w-0 ml-3.5 translate-x-px flex-col gap-1 border-l border-sidebar-border pl-2.5 pr-0 py-0.5",
       "group-data-[collapsible=icon]:hidden",
       className
     )}
@@ -759,5 +772,6 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  useSidebar,
+  useSidebar
 }
+

@@ -10,12 +10,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shadcn/ui/select";
+import { useSidebar } from "@/shadcn/ui/sidebar";
+import { Sun } from "lucide-react";
+import { Moon } from "lucide-react";
 
 export default function ThemeSettings() {
   const { user } = useUser();
   const token = getCookie("session");
 
   const [theme, setTheme] = useState("");
+
+  const { state } = useSidebar();
 
   useEffect(() => {
     // Retrieve the saved theme from localStorage or default to 'light'
@@ -37,11 +42,15 @@ export default function ThemeSettings() {
       <main className="relative">
         <div className="flex justify-center">
           <Select onValueChange={toggleTheme} value={theme}>
-            <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Select a theme" />
+            <SelectTrigger className={`${state === "expanded" ? "w-[280px]" : "hidden"}`}>
+              {state === "expanded" ? (
+                <SelectValue placeholder="Select a theme" />
+              ) : (
+                <Moon className="size-4" />
+              )}
             </SelectTrigger>
             <SelectContent>
-              <SelectGroup >
+              <SelectGroup>
                 <SelectLabel>Themes</SelectLabel>
                 <SelectItem value="light">Peppermint Light</SelectItem>
                 <SelectItem value="dark">Peppermint Dark</SelectItem>

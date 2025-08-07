@@ -5,13 +5,13 @@
 // Send Email to customer with ticket creation
 // Send Email to Engineers with ticket creation if email notifications are turned on
 
+import { toast } from "@/shadcn/hooks/use-toast";
 import { Listbox, Transition } from "@headlessui/react";
 import {
   CheckCircleIcon,
   CheckIcon,
   ChevronUpDownIcon,
 } from "@heroicons/react/20/solid";
-import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 
@@ -50,7 +50,7 @@ export default function ClientTicketNew() {
 
   async function submitTicket() {
     setIsLoading(true);
-    await fetch(`/api/v1/ticket/create`, {
+    await fetch(`/api/v1/ticket/public/create`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -68,20 +68,19 @@ export default function ClientTicketNew() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
-          notifications.show({
-            title: "Ticket Created",
-            message: "Ticket created succesfully",
-            color: "green",
-            autoClose: 5000,
+          toast({
+            variant: "default",
+            title: "Success",
+            description: "Ticket created succesfully",
           });
+
           setView("success");
           setTicketID(res.id);
         } else {
-          notifications.show({
+          toast({
+            variant: "destructive",
             title: "Error",
-            message: `Please fill out all information and try again`,
-            color: "red",
-            autoClose: 5000,
+            description: `Please fill out all information and try again`,
           });
         }
       });

@@ -11,6 +11,11 @@ export default {
     type: "separator",
     title: "Guides",
   },
+  installer: "Easy Installer with Spearmint",
+  "--- Guides": {
+    type: "separator",
+    title: "Guides",
+  },
   proxy: "Proxy",
   "--- Configuration": {
     type: "separator",

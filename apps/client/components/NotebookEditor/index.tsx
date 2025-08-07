@@ -1,11 +1,20 @@
 //@ts-nocheck
-import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
-import { getCookie } from "cookies-next";
-import moment from "moment";
-import { useDebounce } from "use-debounce";
+import { toast } from "@/shadcn/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shadcn/ui/dropdown-menu";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
+import { getCookie } from "cookies-next";
+import { Ellipsis } from "lucide-react";
+import moment from "moment";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
+import { useUser } from "../../store/session";
 
 function isHTML(str) {
   var a = document.createElement("div");
@@ -21,6 +30,8 @@ function isHTML(str) {
 export default function NotebookEditor() {
   const router = useRouter();
   const token = getCookie("session");
+
+  const user = useUser();
 
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | "loading"
@@ -40,7 +51,8 @@ export default function NotebookEditor() {
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState();
 
-  const [debouncedValue] = useDebounce(value, 2000);
+  const [debouncedValue] = useDebounce(value, 500);
+  const [debounceTitle] = useDebounce(title, 500);
 
   async function fetchNotebook() {
     setValue(undefined);
@@ -52,6 +64,9 @@ export default function NotebookEditor() {
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => res.json());
+    if (res.note.userId !== user.user.id) {
+      router.back();
+    }
     await loadFromStorage(res.note.note).then((content) => {
       setInitialContent(content);
     });
@@ -62,20 +77,52 @@ export default function NotebookEditor() {
 
   async function updateNoteBook() {
     setSaving(true);
-    await fetch(`/api/v1/notebooks/note/${router.query.id}/update`, {
+    const res = await fetch(`/api/v1/notebooks/note/${router.query.id}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        title: debounceTitle,
         content: JSON.stringify(debouncedValue),
       }),
     });
+    const data = await res.json();
     setSaving(false);
     let date = new Date();
     // @ts-ignore
     setLastSaved(new Date(date).getTime());
+    if(data.status) {
+      toast({
+        variant: "destructive",
+        title: "Error -> Unable to update",
+        description: data.message,
+      });
+    }
+  }
+
+  async function deleteNotebook(id) {
+    if (window.confirm("Do you really want to delete this notebook?")) {
+      await fetch(`/api/v1/notebooks/note/${router.query.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            router.push("/documents");
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Error -> Unable to delete",
+              description: res.message,
+            });
+          }
+        });
+    }
   }
 
   useEffect(() => {
@@ -83,10 +130,10 @@ export default function NotebookEditor() {
   }, [router]);
 
   useEffect(() => {
-    if (value !== undefined && !loading) {
+    if (debouncedValue || debounceTitle) {
       updateNoteBook();
     }
-  }, [debouncedValue]);
+  }, [debouncedValue, debounceTitle]);
 
   async function loadFromStorage(val) {
     const storageString = val;
@@ -122,24 +169,47 @@ export default function NotebookEditor() {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between border-b-[1px] py-1 px-4">
-        <h2 className="text-xl font-bold">{title}</h2>
+      <div className="flex flex-row items-center justify-end py-1 px-6 space-x-4 mt-2">
         {saving ? (
           <span className="text-xs">saving ....</span>
         ) : (
-          <span className="text-xs">
+          <span className="text-xs cursor-pointer">
             last saved: {moment(lastSaved).format("hh:mm:ss")}
           </span>
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Ellipsis />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="mr-6">
+            <DropdownMenuItem
+              className="hover:bg-red-600"
+              onClick={() => deleteNotebook()}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       {!loading && (
-        <div className="m-h-[90vh] p-2">
-          <BlockNoteView
-            editor={editor}
-            sideMenu={false}
-            className="m-0 p-0"
-            onChange={handleInputChange}
-          />
+        <div className="m-h-[90vh] p-2 w-full flex justify-center">
+          <div className="w-full max-w-2xl">
+            <div className="flex flex-row items-center justify-between">
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="text-3xl px-0 font-bold w-full border-none bg-transparent outline-none focus:ring-0 focus:outline-none"
+              />
+            </div>
+
+            <BlockNoteView
+              editor={editor}
+              sideMenu={false}
+              className="m-0 p-0"
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
       )}
     </>

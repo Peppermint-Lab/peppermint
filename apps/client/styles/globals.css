@@ -516,10 +516,21 @@
   }
 }
 
+.root::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.root {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
 .ProseMirror {
   overflow-y: auto;
   max-height: 70vh;
   min-height: 10vh;
+  font-size: 0.9rem !important;
 }
 
 .ProseMirror ol {
@@ -547,4 +558,24 @@
   padding-inline: 0px !important;
   background-color: var(--background) !important;
   color: var(--foreground) !important;
+}
+
+/* Add these styles to hide scrollbars site-wide */
+html {
+  overflow: hidden;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* Hide scrollbars but keep functionality */
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbars for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+  display: none;
 }

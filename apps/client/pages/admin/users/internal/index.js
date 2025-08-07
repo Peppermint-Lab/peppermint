@@ -8,7 +8,7 @@ import {
   usePagination,
   useTable,
 } from "react-table";
-import ResetPassword from "../../../../components/ResetPassword";
+import ResetPassword from "../../../../components//ResetPassword";
 import UpdateUserModal from "../../../../components/UpdateUserModal";
 
 const fetchUsers = async (token) => {
@@ -17,6 +17,7 @@ const fetchUsers = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  
   return res.json();
 };
 

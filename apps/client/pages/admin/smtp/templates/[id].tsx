@@ -1,4 +1,4 @@
-import { notifications } from "@mantine/notifications";
+import { toast } from "@/shadcn/hooks/use-toast";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { highlight, languages } from "prismjs";
@@ -43,11 +43,10 @@ export default function EmailTemplates() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          notifications.show({
+          toast({
+            variant: "default",
             title: "Success",
-            message: `Template updated`,
-            color: "Green",
-            autoClose: 5000,
+            description: `Template updated`,
           });
         }
       });

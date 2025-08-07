@@ -2,78 +2,81 @@ import cors from "@fastify/cors";
 import "dotenv/config";
 import Fastify, { FastifyInstance } from "fastify";
 import multer from "fastify-multer";
+import fs from "fs";
 
 import { exec } from "child_process";
 import { track } from "./lib/hog";
 import { getEmails } from "./lib/imap";
+import { checkToken } from "./lib/jwt";
 import { prisma } from "./prisma";
 import { registerRoutes } from "./routes";
 
-const server: FastifyInstance = Fastify({
-  logger: true,
-});
+// Ensure the directory exists
+const logFilePath = "./logs.log"; // Update this path to a writable location
 
+// Create a writable stream
+const logStream = fs.createWriteStream(logFilePath, { flags: "a" });
+
+// Initialize Fastify with logger
+const server: FastifyInstance = Fastify({
+  logger: {
+    stream: logStream, // Use the writable stream
+  },
+  disableRequestLogging: true,
+  trustProxy: true,
+});
 server.register(cors, {
   origin: "*",
+
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 });
 
-server.register(require("@fastify/swagger"), {
-  swagger: {
-    info: {
-      title: "Peppermint API DOCS",
-      description: "Peppermint swagger API",
-      version: "0.1.0",
-    },
-    externalDocs: {
-      url: "https://swagger.io",
-      description: "Find more info here",
-    },
-    mode: "static",
-    host: "localhost",
-    schemes: ["http"],
-    consumes: ["application/json"],
-    produces: ["application/json"],
-    tags: [
-      { name: "user", description: "User related end-points" },
-      { name: "code", description: "Code related end-points" },
-    ],
-    exposeRoute: true,
-    definitions: {
-      User: {
-        type: "object",
-        required: ["id", "email"],
-        properties: {
-          id: { type: "string", format: "uuid" },
-          firstName: { type: "string" },
-          lastName: { type: "string" },
-          email: { type: "string", format: "email" },
+server.register(multer.contentParser);
+
+registerRoutes(server);
+
+server.get(
+  "/",
+  {
+    schema: {
+      tags: ["health"], // This groups the endpoint under a category
+      description: "Health check endpoint",
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            healthy: { type: "boolean" },
+          },
         },
       },
     },
-    securityDefinitions: {
-      apiKey: {
-        type: "apiKey",
-        name: "apiKey",
-        in: "header",
-      },
-    },
   },
-});
+  async function (request, response) {
+    response.send({ healthy: true });
+  }
+);
 
-server.register(multer.contentParser);
-
-// server.register(import("@fastify/rate-limit"), {
-//   max: 20,
-//   timeWindow: "1 minute",
-// });
-
-// register all routes
-registerRoutes(server);
-
-server.get("/", async function (request, response) {
-  response.send({ healthy: true });
+// JWT authentication hook
+server.addHook("preHandler", async function (request: any, reply: any) {
+  try {
+    if (request.url === "/api/v1/auth/login" && request.method === "POST") {
+      return true;
+    }
+    if (
+      request.url === "/api/v1/ticket/public/create" &&
+      request.method === "POST"
+    ) {
+      return true;
+    }
+    const bearer = request.headers.authorization!.split(" ")[1];
+    checkToken(bearer);
+  } catch (err) {
+    reply.status(401).send({
+      message: "Unauthorized",
+      success: false,
+    });
+  }
 });
 
 const start = async () => {
@@ -135,7 +138,7 @@ const start = async () => {
       }
     );
 
-    setInterval(() => getEmails(), 60000); // Call getEmails every minute
+    setInterval(() => getEmails(), 10000); // Call getEmails every minute
   } catch (err) {
     server.log.error(err);
     await prisma.$disconnect();

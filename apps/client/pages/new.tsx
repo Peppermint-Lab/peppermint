@@ -1,20 +1,14 @@
-import { Link, RichTextEditor } from "@mantine/tiptap";
-import Highlight from "@tiptap/extension-highlight";
-import Placeholder from "@tiptap/extension-placeholder";
-import Underline from "@tiptap/extension-underline";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import useTranslation from "next-translate/useTranslation";
-import { Fragment, useEffect, useState } from "react";
-// import TextAlign from '@tiptap/extension-text-align';
+import { useState, useEffect, Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { notifications } from "@mantine/notifications";
-import SubScript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
-import { getCookie } from "cookies-next";
+import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useUser } from "../store/session";
+import { getCookie } from "cookies-next";
+import { toast } from "@/shadcn/hooks/use-toast";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("../components/BlockEditor"), { ssr: false });
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -31,13 +25,10 @@ const type = [
 ];
 
 export default function CreateTicket() {
-  const { t, lang } = useTranslation("peppermint");
-
+  const { t } = useTranslation("peppermint");
   const router = useRouter();
-
   const token = getCookie("session");
-
-  const { user } = useUser()
+  const { user } = useUser();
 
   const [name, setName] = useState("");
   const [company, setCompany] = useState<any>();
@@ -45,27 +36,10 @@ export default function CreateTicket() {
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState<any>("");
   const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("Normal");
+  const [priority, setPriority] = useState("medium");
   const [options, setOptions] = useState<any>();
   const [users, setUsers] = useState<any>();
   const [selected, setSelected] = useState<any>(type[3]);
-
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
-      Placeholder.configure({ placeholder: t("ticket_extra_details") }),
-      // TextAlign.configure({ types: ['heading', 'paragraph'] }),
-    ],
-    content: issue,
-    onUpdate({ editor }) {
-      setIssue(editor.getHTML());
-    },
-  });
 
   const fetchClients = async () => {
     await fetch(`/api/v1/clients/all`, {
@@ -95,8 +69,6 @@ export default function CreateTicket() {
         .then((res) => res.json())
         .then((res) => {
           if (res) {
-            // TODO: THINK ABOUT AUTO ASSIGN PREFERENCES
-            // setEngineer(user)
             setUsers(res.users);
           }
         });
@@ -125,26 +97,24 @@ export default function CreateTicket() {
           id: user.id,
           name: user.name,
           role: user.role,
-          email: user.email
-        }
+          email: user.email,
+        },
       }),
     })
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
-          notifications.show({
-            title: "Ticket Created",
-            message: "Ticket created succesfully",
-            color: "green",
-            autoClose: 5000,
+          toast({
+            variant: "default",
+            title: "Success",
+            description: "Ticket created successfully",
           });
           router.push("/tickets");
         } else {
-          notifications.show({
+          toast({
+            variant: "destructive",
             title: "Error",
-            message: `Error: ${res.error}`,
-            color: "red",
-            autoClose: 5000,
+            description: `Error: ${res.error}`,
           });
         }
       });
@@ -166,7 +136,9 @@ export default function CreateTicket() {
                   <Listbox.Button className="relative w-full min-w-[172px] cursor-default rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     <span className="block truncate">
                       {company === undefined
-                        ? t("select_a_client") : company === "" ? t("select_a_client")
+                        ? t("select_a_client")
+                        : company === ""
+                        ? t("select_a_client")
                         : company.name}
                     </span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -185,44 +157,44 @@ export default function CreateTicket() {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10  max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    <Listbox.Option
-                            className={({ active }) =>
-                              classNames(
-                                active
-                                  ? "bg-indigo-600 text-white"
-                                  : "text-gray-900 dark:text-white",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={undefined}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <span
-                                  className={classNames(
-                                    selected ? "font-semibold" : "font-normal",
-                                    "block truncate"
-                                  )}
-                                >
-                                  Unassigned
-                                </span>
+                      <Listbox.Option
+                        className={({ active }) =>
+                          classNames(
+                            active
+                              ? "bg-indigo-600 text-white"
+                              : "text-gray-900 dark:text-white",
+                            "relative cursor-default select-none py-2 pl-3 pr-9"
+                          )
+                        }
+                        value={undefined}
+                      >
+                        {({ selected, active }) => (
+                          <>
+                            <span
+                              className={classNames(
+                                selected ? "font-semibold" : "font-normal",
+                                "block truncate"
+                              )}
+                            >
+                              Unassigned
+                            </span>
 
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active ? "text-white" : "text-indigo-600",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
+                            {selected ? (
+                              <span
+                                className={classNames(
+                                  active ? "text-white" : "text-indigo-600",
+                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                )}
+                              >
+                                <CheckIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </Listbox.Option>
                       {options !== undefined &&
                         options.map((client: any) => (
                           <Listbox.Option
@@ -297,44 +269,44 @@ export default function CreateTicket() {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-[#0A090C] dark:text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    <Listbox.Option
-                            className={({ active }) =>
-                              classNames(
-                                active
-                                  ? "bg-indigo-600 text-white"
-                                  : "text-gray-900 dark:text-white",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={undefined}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <span
-                                  className={classNames(
-                                    selected ? "font-semibold" : "font-normal",
-                                    "block truncate"
-                                  )}
-                                >
-                                  Unassigned
-                                </span>
+                      <Listbox.Option
+                        className={({ active }) =>
+                          classNames(
+                            active
+                              ? "bg-indigo-600 text-white"
+                              : "text-gray-900 dark:text-white",
+                            "relative cursor-default select-none py-2 pl-3 pr-9"
+                          )
+                        }
+                        value={undefined}
+                      >
+                        {({ selected, active }) => (
+                          <>
+                            <span
+                              className={classNames(
+                                selected ? "font-semibold" : "font-normal",
+                                "block truncate"
+                              )}
+                            >
+                              Unassigned
+                            </span>
 
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active ? "text-white" : "text-indigo-600",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
+                            {selected ? (
+                              <span
+                                className={classNames(
+                                  active ? "text-white" : "text-indigo-600",
+                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                )}
+                              >
+                                <CheckIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </Listbox.Option>
                       {users !== undefined &&
                         users.map((user: any) => (
                           <Listbox.Option
@@ -464,7 +436,7 @@ export default function CreateTicket() {
         </div>
       </div>
       <div className="flex flex-col xl:flex-row h-full w-full">
-        <div className="w-full  order-2 xl:order-2">
+        <div className="w-full order-2 xl:order-2">
           <div className="px-4 border-b border-gray-700">
             <input
               type="text"
@@ -476,55 +448,9 @@ export default function CreateTicket() {
               className="w-full pl-0 pr-0 sm:text-xl border-none dark:bg-[#0A090C] dark:text-white focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
             />
           </div>
-          <RichTextEditor
-            editor={editor}
-            placeholder={t("ticket_extra_details")}
-            className="dark:bg-gray-900 dark:text-white rounded-none border-none"
-          >
-            <RichTextEditor.Toolbar className="rounded-none dark:bg-[#0A090C]">
-              <RichTextEditor.ControlsGroup className="dark:text-white">
-                <RichTextEditor.Bold className="dark:text-white" />
-                <RichTextEditor.Italic />
-                <RichTextEditor.Underline />
-                <RichTextEditor.Strikethrough />
-                <RichTextEditor.ClearFormatting />
-                <RichTextEditor.Highlight />
-                <RichTextEditor.Code />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Blockquote />
-                <RichTextEditor.Hr />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-                <RichTextEditor.Subscript />
-                <RichTextEditor.Superscript />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
-
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.AlignRight />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
-
-            <RichTextEditor.Content className="dark:bg-[#0A090C] dark:text-white min-h-[50vh] rounded-none" />
-          </RichTextEditor>
+          <Editor setIssue={setIssue} />
         </div>
-        <div className="w-full xl:w-1/6 p-3 flex flex-col dark:bg-[#0A090C] dark:text-white  border-b-[1px] xl:border-b-0 xl:border-r-[1px] order-1 xl:order-1">
+        <div className="w-full xl:w-1/6 p-3 flex flex-col dark:bg-[#0A090C] dark:text-white border-b-[1px] xl:border-b-0 xl:border-r-[1px] order-1 xl:order-1">
           <div className="flex flex-col">
             <div>
               <label>
@@ -539,7 +465,7 @@ export default function CreateTicket() {
                 name="name"
                 autoComplete="off"
                 onChange={(e) => setName(e.target.value)}
-                className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none dark:bg-[#0A090C] dark:text-white focus:shadow-none focus:ring-0 focus:border-none"
+                className="w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none dark:bg-[#0A090C] dark:text-white focus:shadow-none focus:ring-0 focus:border-none"
               />
             </div>
 
@@ -554,7 +480,7 @@ export default function CreateTicket() {
                 name="email"
                 placeholder={t("ticket_email_here")}
                 onChange={(e) => setEmail(e.target.value)}
-                className=" w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none dark:bg-[#0A090C] dark:text-white focus:shadow-none focus:ring-0 focus:border-none"
+                className="w-full pl-0 pr-0 sm:text-sm border-none focus:outline-none dark:bg-[#0A090C] dark:text-white focus:shadow-none focus:ring-0 focus:border-none"
               />
             </div>
           </div>
