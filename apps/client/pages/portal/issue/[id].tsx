@@ -422,7 +422,7 @@ export default function Ticket() {
                                           </div>
                                         </div>
                                         <div className="text-sm  text-gray-900 dark:text-white">
-                                          <span>{item.text}</span>
+                                          <span className="whitespace-pre-wrap">{item.text}</span>
                                         </div>
                                       </div>
                                     </div>
