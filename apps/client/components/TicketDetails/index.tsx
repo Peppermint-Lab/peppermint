@@ -1123,7 +1123,7 @@ export default function Ticket() {
                                     />
                                   )}
                                 </div>
-                                <span className="ml-1">{comment.text}</span>
+                                <span className="ml-1 whitespace-pre-wrap">{comment.text}</span>
                               </li>
                             ))}
                         </ul>
