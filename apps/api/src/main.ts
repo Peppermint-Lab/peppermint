@@ -1,4 +1,5 @@
 import cors from "@fastify/cors";
+import rateLimit from "@fastify/rate-limit";
 import "dotenv/config";
 import Fastify, { FastifyInstance } from "fastify";
 import multer from "fastify-multer";
@@ -25,11 +26,32 @@ const server: FastifyInstance = Fastify({
   disableRequestLogging: true,
   trustProxy: true,
 });
+// CORS configuration
 server.register(cors, {
-  origin: "*",
-
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: process.env.CORS_ORIGIN || process.env.NODE_ENV === "development" ? "*" : false,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+});
+
+// Rate limiting configuration
+server.register(rateLimit, {
+  max: 100, // Max 100 requests
+  timeWindow: "1 minute", // Per 1 minute
+  cache: 10000, // Cache up to 10000 rate limit checks
+  skipSuccessfulRequests: false,
+  keyGenerator: function(request) {
+    // Use IP + user ID for authenticated requests, just IP for public
+    const userId = request.user?.id || 'anonymous';
+    return request.ip + ':' + userId;
+  },
+  errorResponseBuilder: function(request, context) {
+    return {
+      success: false,
+      message: `Too many requests. You hit the rate limit of ${context.max} requests per ${context.after}.`,
+      retry: context.ttl
+    };
+  }
 });
 
 server.register(multer.contentParser);
@@ -59,22 +81,52 @@ server.get(
 
 // JWT authentication hook
 server.addHook("preHandler", async function (request: any, reply: any) {
+  // Skip authentication for public endpoints
+  const publicEndpoints = [
+    { url: "/", method: "GET" }, // Health check
+    { url: "/api/v1/auth/login", method: "POST" },
+    { url: "/api/v1/ticket/public/create", method: "POST" }
+  ];
+
+  const isPublicEndpoint = publicEndpoints.some(
+    endpoint => request.url === endpoint.url && request.method === endpoint.method
+  );
+
+  if (isPublicEndpoint) {
+    return true;
+  }
+
   try {
-    if (request.url === "/api/v1/auth/login" && request.method === "POST") {
-      return true;
+    // Check for Authorization header
+    if (!request.headers.authorization) {
+      return reply.status(401).send({
+        message: "Missing authorization header",
+        success: false,
+      });
     }
-    if (
-      request.url === "/api/v1/ticket/public/create" &&
-      request.method === "POST"
-    ) {
-      return true;
+
+    const authHeader = request.headers.authorization;
+    if (!authHeader.startsWith("Bearer ")) {
+      return reply.status(401).send({
+        message: "Invalid authorization format. Use Bearer token",
+        success: false,
+      });
     }
-    const bearer = request.headers.authorization!.split(" ")[1];
+
+    const bearer = authHeader.split(" ")[1];
+    if (!bearer) {
+      return reply.status(401).send({
+        message: "Missing token",
+        success: false,
+      });
+    }
+
     checkToken(bearer);
   } catch (err) {
     reply.status(401).send({
-      message: "Unauthorized",
+      message: "Invalid or expired token",
       success: false,
+      error: process.env.NODE_ENV === "development" ? err.message : undefined
     });
   }
 });

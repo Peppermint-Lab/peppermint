@@ -1,46 +1,373 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ===============================================
+# SECURITY & SENSITIVE FILES
+# ===============================================
 
-# dependencies
-node_modules
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.env
+secrets/
+credentials/
+config/secrets.json
+config/local.json
+.secrets
+*.key
+*.pem
+*.crt
+*.cer
+*.p12
+*.pfx
+
+# API Keys & Tokens
+api_keys/
+tokens/
+*.token
+.api_key
+.auth_token
+service-account*.json
+firebase-adminsdk*.json
+
+# SSH Keys
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+*.ppk
+known_hosts
+authorized_keys
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+data/
+database/
+pgdata/
+mysql_data/
+mongodb_data/
+redis_data/
+dump.rdb
+
+# ===============================================
+# APPLICATION SPECIFIC
+# ===============================================
+
+# Dependencies
+node_modules/
+bower_components/
+vendor/
 .pnp
 .pnp.js
-.yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 .pnp.cjs
 .pnp.loader.mjs
 
-# testing
-coverage
-
-# next.js
-.next/
+# Build outputs
+dist/
+build/
 out/
-build
+.next/
+.nuxt/
+.vuepress/dist
+.serverless/
+target/
+*.compiled
+bundle.js
+*.bundle.js
 
-# misc
-.DS_Store
-*.pem
-
-# debug
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.npm/
+pnpm-debug.log*
+logs.log
 
-# local env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Testing
+coverage/
+.nyc_output/
+test-results/
+junit.xml
+*.lcov
+.coverage
+htmlcov/
+.pytest_cache/
 
-# turbo
-.turbo
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+.parcel-cache/
 
-# vercel
-.vercel
+# Uploads & User Generated Content
+uploads/
+public/uploads/
+public/files/
+user_uploads/
+media/
+static/uploads/
 
-# Typescript build
-dist
+# Sessions
+sessions/
+session_store/
+.sessions/
 
-infra
+# ===============================================
+# IDE & EDITOR FILES
+# ===============================================
 
+# Visual Studio Code
+.vscode/
+*.code-workspace
+.history/
+
+# IntelliJ/WebStorm
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+.netrwhist
+tags
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Cursor
 .cursorrules
+.cursor/
+
+# ===============================================
+# OS SPECIFIC
+# ===============================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+# ===============================================
+# PACKAGE MANAGERS
+# ===============================================
+
+# NPM
+.npm/
+.npmrc
+!.npmrc.example
+
+# Yarn
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# PNPM
+.pnpm-store/
+.pnpm-debug.log
+
+# ===============================================
+# DOCKER
+# ===============================================
+
+docker-compose.override.yml
+docker-compose.local.yml
+volumes/
+.dockerignore.local
+
+# ===============================================
+# BACKUP FILES
+# ===============================================
+
+*.bak
+*.backup
+*.old
+backup/
+backups/
+*.orig
+*.save
+
+# ===============================================
+# MISCELLANEOUS
+# ===============================================
+
+# Certificates (duplicated for emphasis)
+ssl/
+certs/
+*.cert
+
+# Private files
+private/
+.private/
+
+# Config overrides
+config.local.*
+settings.local.*
+
+# Turbo
+.turbo/
+
+# Vercel
+.vercel/
+
+# Next.js
+.next/
+out/
+
+# Gatsby
+.cache/
+public/
+
+# Vite
+vite.config.js.timestamp-*
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Serverless
+.serverless/
+.sls/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# AWS
+.aws-sam/
+samconfig.toml
+
+# Azure
+.azure/
+local.settings.json
+
+# Google Cloud
+.gcloud/
+.google/
+
+# Monitoring
+.monitoring/
+.traces/
+
+# Documentation build
+docs/_build/
+site/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+ENV/
+env/
+
+# Ruby
+*.gem
+.bundle/
+
+# Java
+*.class
+*.jar
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Rust
+target/
+Cargo.lock
+
+# PHP
+composer.phar
+
+# Infrastructure
+infra/
+infrastructure/
+
+# Sensitive patterns
+*secret*
+*password*
+*passwd*
+*token*
+*apikey*
+*api_key*
+!*example*
+!*sample*
+!*template*
+
+# User-specific files
+local.*
+*.local
+!*.local.example

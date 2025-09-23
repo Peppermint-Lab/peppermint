@@ -8,9 +8,9 @@ services:
     volumes:
       - pgdata_live:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: peppermint
-      POSTGRES_PASSWORD: 12345
-      POSTGRES_DB: peppermint
+      POSTGRES_USER: ${DB_USERNAME:-peppermint}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-peppermint}
 
   peppermint:
     container_name: peppermint
@@ -26,10 +26,10 @@ services:
     depends_on:
       - peppermint_postgres
     environment:
-      DB_USERNAME: "peppermint"
-      DB_PASSWORD: "12345"
-      DB_HOST: "peppermint_postgres"
-      SECRET: 'peppermint4life'
+      DB_USERNAME: ${DB_USERNAME:-peppermint}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST:-peppermint_postgres}
+      SECRET: ${SECRET}
 
 volumes:
  pgdata_live:

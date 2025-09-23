@@ -10,6 +10,7 @@ import { getOAuthProvider, getOidcConfig } from "../lib/auth";
 import { track } from "../lib/hog";
 import { forgotPassword } from "../lib/nodemailer/auth/forgot-password";
 import { requirePermission } from "../lib/roles";
+import { sanitizeEmail, sanitizeInput } from "../lib/sanitize";
 import { checkSession } from "../lib/session";
 import { getOAuthClient } from "../lib/utils/oauth_client";
 import { getOidcClient } from "../lib/utils/oidc_client";
@@ -62,6 +63,12 @@ export function authRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/auth/user/register",
     {
+      config: {
+        rateLimit: {
+          max: 5,
+          timeWindow: "1 minute"
+        }
+      },
       schema: {
         body: {
           type: "object",
@@ -88,6 +95,16 @@ export function authRoutes(fastify: FastifyInstance) {
       if (!requester?.isAdmin) {
         return reply.code(401).send({
           message: "Unauthorized",
+        });
+      }
+
+      // Sanitize inputs
+      try {
+        email = sanitizeEmail(email);
+        name = sanitizeInput(name);
+      } catch (error) {
+        return reply.code(400).send({
+          message: error.message || "Invalid input",
         });
       }
 
