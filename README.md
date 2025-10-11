@@ -89,9 +89,9 @@ We have started working on creating documentation for peppermint which covers de
 ## Motivation
 
 - This was initially a project to tie together my react and nodeJS skills and show something for my portfolio
-- It looked terrible! But it worked and showed functionaility, which got me a job.
+- It looked terrible! But it worked and showed functionality, which got me a job.
 - Learn and deploy with docker
-- Redo the UI, completly from the ground up. Which has now been completed and for me looks great.
+- Redo the UI, completely from the ground up. Which has now been completed and for me looks great.
 - Build on this foundation and create a fully fledged product which offers what the big boys offer, but, at a much better ROI than signing up for zendesk etc.
 
 Give a ⭐️ if this project helped you!
