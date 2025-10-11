@@ -8,7 +8,7 @@ An example of this would be a helpdesk company running peppermint having it acce
 https://support.example.com
 ```
 
-Behind the scenes you'll most likely use nginx, trafik or haproxy to achieve this goal. In this example we will be using nginx on debian.
+Behind the scenes you'll most likely use nginx, traefik or haproxy to achieve this goal. In this example we will be using nginx on debian.
 
 In the end, you should have a setup like so:
 
@@ -21,7 +21,7 @@ I know two different subdomains may seem a bit overkill, but this is the only wa
 ## Setting up the box & nginx
 
 In this example, I'm going to be using a node provided by linode pre-installed with docker, but any vm should be able to achieve this provided they have a static i.p address.
-I wont be going into any detail regarding secuirty or best practices for setting up a linux machine, or we'll be here all day :)
+I won't be going into any detail regarding security or best practices for setting up a linux machine, or we'll be here all day :)
 This is going to be a straight forward, down to business guide.
 
 With docker pre installed, we need to get the second piece of the puzzle installed, which is nginx.
@@ -66,7 +66,7 @@ As you can see, there are three profiles available for Nginx:
 
 It is recommended that you enable the most restrictive profile that will still allow the traffic you’ve configured. Since we haven’t configured SSL for our server yet in this guide, we will only need to allow traffic for HTTP on port 80.
 
-Lets enable that now
+Let's enable that now
 
 ```
 sudo ufw allow 'Nginx HTTP'
@@ -159,7 +159,7 @@ volumes:
 
 You could also reverse proxy the backend as well if you really wanted too, but for this example we'll just be doing the frontend.
 
-Now for your base url: this is where your subdomain url is going to, if youre using nginx https with SSL, then make sure you change it accordingly.
+Now for your base url: this is where your subdomain url is going to, if you're using nginx https with SSL, then make sure you change it accordingly.
 
 After you enter the correct base url hit `ctrl + x` and then `y` to save. When this is complete run the command:
 
@@ -173,7 +173,7 @@ This will pull the peppermint image & postgres and start the process of both con
 
 Now that nginx is set up & both are containers are working, we can now implement the config file which is going to route our proxy to our subdomains.
 
-I like to save this in the conf.d folder of nginx, it works for me and i never run into issues.
+I like to save this in the conf.d folder of nginx, it works for me and I never run into issues.
 
 Start off by running:
 
@@ -206,7 +206,7 @@ server {
 }
 ```
 
-Replace the server name with your url of choice, including subdomain and procced to save the file as
+Replace the server name with your url of choice, including subdomain and proceed to save the file as
 
 ```
 peppermint-client.conf
@@ -251,7 +251,7 @@ This can be achieved by running:
 systemctl restart nginx
 ```
 
-You should now be able to see peppermint running on your choosen subdomain.
+You should now be able to see peppermint running on your chosen subdomain.
 
 I hope you found this guide usual :)
 
@@ -310,4 +310,4 @@ You should now be able to visit your site using https!
 
 ## Issues i discovered
 
-An issue i discovered was that the api was not able to serve requests if it wasnt HTTPS, just bear that in mind.
+An issue i discovered was that the api was not able to serve requests if it wasn't HTTPS, just bear that in mind.
