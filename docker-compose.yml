@@ -6,7 +6,7 @@ services:
     image: postgres:latest
     restart: always
     volumes:
-      - pgdata_live:/var/lib/postgresql/data
+      - pgdata_live:/var/lib/postgresql
     environment:
       POSTGRES_USER: peppermint
       POSTGRES_PASSWORD: 12345
