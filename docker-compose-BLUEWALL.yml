@@ -1,0 +1,10 @@
+services:
+  peppermint:
+    container_name: peppermint
+    image: pepperlabs/peppermint:latest
+    ports:
+      - 3000:3000
+      - 5003:5003
+    restart: always
+    env_file:
+      - .env
