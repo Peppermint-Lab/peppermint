@@ -32,40 +32,39 @@
 Check out the getting started guide if this is the first time you've used Peppermint:
 
 ```
-version: "3.1"
-
 services:
   peppermint_postgres:
     container_name: peppermint_postgres
     image: postgres:latest
     restart: always
+    volumes:
+      - pgdata_live:/var/lib/postgresql # Updated for Postgres 18+
+    environment:
+      POSTGRES_USER: peppermint_7g3x
+      POSTGRES_PASSWORD: P3pp3rM1nt!x9zQ
+      POSTGRES_DB: peppermint
     ports:
       - 5432:5432
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: peppermint
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: peppermint
-
   peppermint:
     container_name: peppermint
     image: pepperlabs/peppermint:latest
     ports:
       - 3000:3000
-      - 5003:5003
+      - 3001:5003
+    # If running via Docker on a hypervisor, enable DNS.
+    #    dns:
+    #      - 1.1.1.1
+    #      - 8.8.8.8
     restart: always
     depends_on:
       - peppermint_postgres
     environment:
-      DB_USERNAME: "peppermint"
-      DB_PASSWORD: "1234"
-      DB_HOST: "peppermint_postgres"
-      SECRET: 'peppermint4life'
-
+      DB_USERNAME: peppermint_7g3x
+      DB_PASSWORD: P3pp3rM1nt!x9zQ
+      DB_HOST: peppermint_postgres
+      SECRET: peppermint4life
 volumes:
- pgdata:
-
+  pgdata_live: null
 ```
 
 Once this is completed then you can go to your server-ip:3000 which was added to the compose file and login.
