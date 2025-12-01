@@ -20,7 +20,7 @@ jobs:
 
       # Install QEMU-based emulator
       - name: Install QEMU
-        run: apt-get update && apt-get install -y qemu-user-static
+        run: sudo apt update && sudo apt install -y qemu-user-static
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Get current time
         uses: 1466587594/get-current-time@v2
@@ -18,7 +18,7 @@ jobs:
 
       # Install QEMU-based emulator
       - name: Install QEMU
-        run: apt-get update && apt-get install -y qemu-user-static
+        run: sudo apt update && sudo apt install -y qemu-user-static
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
