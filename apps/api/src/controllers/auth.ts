@@ -452,9 +452,19 @@ export function authRoutes(fastify: FastifyInstance) {
             });
           }
 
-          const client = getOAuthClient({
-            ...oauthProvider,
-            name: oauthProvider.name,
+          const authUrlObj = new URL(oauthProvider.authorizationUrl);
+          const tokenUrlObj = new URL(oauthProvider.tokenUrl || oauthProvider.authorizationUrl);
+
+          const client = new AuthorizationCode({
+            client: {
+              id: oauthProvider.clientId,
+              secret: oauthProvider.clientSecret,
+            },
+            auth: {
+              tokenHost: authUrlObj.origin,
+              authorizePath: authUrlObj.pathname,
+              tokenPath: tokenUrlObj.pathname,
+            },
           });
 
           // Generate authorization URL
