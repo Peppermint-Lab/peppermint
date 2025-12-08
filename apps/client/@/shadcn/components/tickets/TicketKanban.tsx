@@ -35,6 +35,7 @@ export default function TicketKanban({ columns, uiSettings }: TicketKanbanProps)
                     draggable({
                       element,
                       dragHandle: element,
+                      // @ts-ignore
                       data: { ticketId: ticket.id } as const,
                     });
                   }}
