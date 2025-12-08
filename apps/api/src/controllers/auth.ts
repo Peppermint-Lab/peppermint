@@ -608,15 +608,24 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
+// --- FIX STARTS HERE ---
+      // We must parse the full URLs to extract the host and paths correctly
+      // Assuming oauthProvider has 'authorizationUrl' and 'tokenUrl' from your DB
+      const authUrlObj = new URL(oauthProvider.authorizationUrl);
+      const tokenUrlObj = new URL(oauthProvider.tokenUrl || oauthProvider.authorizationUrl); // Fallback if tokenUrl is missing
+
       const client = new AuthorizationCode({
         client: {
           id: oauthProvider.clientId,
           secret: oauthProvider.clientSecret,
         },
         auth: {
-          tokenHost: oauthProvider.authorizationUrl,
+          tokenHost: authUrlObj.origin,           // e.g. https://sso.example.com
+          authorizePath: authUrlObj.pathname,     // e.g. /application/o/authorize/
+          tokenPath: tokenUrlObj.pathname,        // e.g. /application/o/token/
         },
       });
+      // --- FIX ENDS HERE ---
 
       const tokenParams = {
         code,
