@@ -14,7 +14,9 @@ services:
 
   peppermint:
     container_name: peppermint
-    image: pepperlabs/peppermint:latest
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 1000:3000
       - 1001:5003
