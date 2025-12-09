@@ -1,3 +1,5 @@
+> Note: This project was originally authored by someone else. I’m temporarily maintaining it and focusing on integrating Authentik SSO. Please reach out if you have questions or need help!
+
 <h1 align="center">Welcome to Peppermint Ticket Management 🍵</h1>
 <p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.2-blue.svg?cacheSeconds=2592000" />
