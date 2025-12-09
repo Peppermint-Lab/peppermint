@@ -98,67 +98,81 @@ export function configRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // Update Oauth Provider
+// Update/Enable OAuth
   fastify.post(
-    "/api/v1/config/authentication/oauth/update",
-
+    "/api/v1/config/auth/oauth",
+    {
+      schema: {
+        body: {
+          type: "object",
+          required: ["name", "clientId", "clientSecret", "authorizationUrl", "tokenUrl", "userInfoUrl", "redirectUri"],
+          properties: {
+            name: { type: "string" },
+            clientId: { type: "string" },
+            clientSecret: { type: "string" },
+            authorizationUrl: { type: "string" },
+            tokenUrl: { type: "string" },
+            userInfoUrl: { type: "string" },
+            redirectUri: { type: "string" },
+            scope: { type: "string", default: "openid profile email" },
+          },
+        },
+      },
+    },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const {
-        name,
-        clientId,
-        clientSecret,
-        redirectUri,
-        tenantId,
-        issuer,
-        jwtSecret,
-      }: any = request.body;
+      const { 
+        name, 
+        clientId, 
+        clientSecret, 
+        authorizationUrl, 
+        tokenUrl, 
+        userInfoUrl, 
+        redirectUri, 
+        scope 
+      } = request.body as any;
 
-      const conf = await prisma.config.findFirst();
+      const requester = await checkSession(request);
+      if (!requester?.isAdmin) {
+        return reply.code(401).send({ message: "Unauthorized" });
+      }
 
-      // Update config to true
+      // 1. Save or Update the OAuth Provider details
+      await prisma.oAuthProvider.upsert({
+        where: { name: name },
+        update: {
+          clientId,
+          clientSecret,
+          authorizationUrl,
+          tokenUrl,
+          userInfoUrl,
+          redirectUri,
+          scope,
+        },
+        create: {
+          name,
+          clientId,
+          clientSecret,
+          authorizationUrl,
+          tokenUrl,
+          userInfoUrl,
+          redirectUri,
+          scope,
+        },
+      });
+
+      // 2. Update the Global Config to enable SSO with this provider
+      const config = await prisma.config.findFirst();
       await prisma.config.update({
-        where: { id: conf!.id },
+        where: { id: config?.id },
         data: {
           sso_active: true,
           sso_provider: "oauth",
         },
       });
 
-      // Check if the provider exists
-      const existingProvider = await prisma.oAuthProvider.findFirst();
-
-      if (existingProvider === null) {
-        await prisma.oAuthProvider.create({
-          data: {
-            name: name,
-            clientId: clientId,
-            clientSecret: clientSecret,
-            redirectUri: redirectUri,
-            scope: "", // Add appropriate scope if needed
-            authorizationUrl: "", // Add appropriate URL if needed
-            tokenUrl: "", // Add appropriate URL if needed
-            userInfoUrl: "", // Add appropriate URL if needed
-          },
-        });
-      } else {
-        await prisma.oAuthProvider.update({
-          where: { id: existingProvider.id },
-          data: {
-            clientId: clientId,
-            clientSecret: clientSecret,
-            redirectUri: redirectUri,
-          },
-        });
-      }
-
-      await tracking("oauth_provider_updated", {});
-
-      reply.send({
-        success: true,
-        message: "SSO Provider updated!",
-      });
+      reply.send({ success: true });
     }
-  );
+);  
 
   // Delete auth config
   fastify.delete(

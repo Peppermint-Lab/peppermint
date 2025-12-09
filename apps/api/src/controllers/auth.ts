@@ -605,7 +605,7 @@ export function authRoutes(fastify: FastifyInstance) {
     }
   );
 
-  // oauth api callback route
+// oauth api callback route
   fastify.get(
     "/api/v1/auth/oauth/callback",
     async (request: FastifyRequest, reply: FastifyReply) => {
@@ -618,11 +618,9 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-// --- FIX STARTS HERE ---
-      // We must parse the full URLs to extract the host and paths correctly
-      // Assuming oauthProvider has 'authorizationUrl' and 'tokenUrl' from your DB
+      // --- URL PARSING FIX (From before) ---
       const authUrlObj = new URL(oauthProvider.authorizationUrl);
-      const tokenUrlObj = new URL(oauthProvider.tokenUrl || oauthProvider.authorizationUrl); // Fallback if tokenUrl is missing
+      const tokenUrlObj = new URL(oauthProvider.tokenUrl || oauthProvider.authorizationUrl);
 
       const client = new AuthorizationCode({
         client: {
@@ -630,12 +628,12 @@ export function authRoutes(fastify: FastifyInstance) {
           secret: oauthProvider.clientSecret,
         },
         auth: {
-          tokenHost: authUrlObj.origin,           // e.g. https://sso.example.com
-          authorizePath: authUrlObj.pathname,     // e.g. /application/o/authorize/
-          tokenPath: tokenUrlObj.pathname,        // e.g. /application/o/token/
+          tokenHost: authUrlObj.origin,
+          authorizePath: authUrlObj.pathname,
+          tokenPath: tokenUrlObj.pathname,
         },
       });
-      // --- FIX ENDS HERE ---
+      // -------------------------------------
 
       const tokenParams = {
         code,
@@ -647,7 +645,7 @@ export function authRoutes(fastify: FastifyInstance) {
         const fetch_token = await client.getToken(tokenParams);
         const access_token = fetch_token.token.access_token;
 
-        // // Fetch user info from the provider
+        // Fetch user info from the provider
         const userInfoResponse: any = await axios.get(
           oauthProvider.userInfoUrl,
           {
@@ -657,25 +655,39 @@ export function authRoutes(fastify: FastifyInstance) {
           }
         );
 
-        const emails =
+        // --- BUG FIX: Read from .data.email ---
+        const email =
           oauthProvider.name === "github"
             ? await getUserEmails(access_token as string)
-            : userInfoResponse.email;
+            : userInfoResponse.data.email; 
+            
+        // Fallback for name if available
+        const name = userInfoResponse.data.name || userInfoResponse.data.given_name || "New User";
+        // --------------------------------------
 
-        // Issue JWT token
+        // Check if user exists
         let user = await prisma.user.findUnique({
-          where: { email: emails },
+          where: { email: email },
         });
 
+        // --- FEATURE ADD: Auto-Create User if missing ---
         if (!user) {
-          return reply.send({
-            success: false,
-            message: "Invalid email",
+           user = await prisma.user.create({
+            data: {
+              email: email,
+              password: await bcrypt.hash(generateRandomPassword(12), 10),
+              name: name,
+              isAdmin: false,
+              language: "en",
+              external_user: false, // Standard internal user
+              firstLogin: true,
+            },
           });
         }
+        // -----------------------------------------------
 
         var b64string = process.env.SECRET;
-        var secret = new Buffer(b64string!, "base64"); // Ta-da
+        var secret = new Buffer(b64string!, "base64");
 
         // Issue JWT token
         let signed_token = jwt.sign(

@@ -127,12 +127,13 @@ export default function Authentication() {
       });
   }
 
-  async function setUri() {
+async function setUri() {
     if (providerType === "oidc") {
-      setRedirectUri(`${window.location.origin}/api/v1/auth/oidc/callback`);
+      setRedirectUri(`${window.location.origin}/auth/oidc`); // Changed to frontend path
     } else {
-      // UPDATED: Correct callback path
-      setRedirectUri(`${window.location.origin}/api/v1/auth/oauth/callback`);
+      // WAS: .../api/v1/auth/oauth/callback
+      // NOW: Point to the frontend page so it handles the login cookie!
+      setRedirectUri(`${window.location.origin}/auth/oauth`);
     }
   }
 
@@ -360,7 +361,7 @@ export default function Authentication() {
                               type="text"
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               value={redirectUri}
-                              readOnly
+                              onChange={(e) => setRedirectUri(e.target.value)}
                             />
                             <p className="text-xs text-gray-500 mt-1">Copy this to your OAuth provider</p>
                           </div>

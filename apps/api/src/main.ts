@@ -60,6 +60,14 @@ server.get(
 // JWT authentication hook
 server.addHook("preHandler", async function (request: any, reply: any) {
   try {
+    // --- NEW: Allow Public SSO Routes ---
+    const url = request.url.split('?')[0]; // Ignore query parameters for matching
+    
+    if (url === "/api/v1/auth/check") return true;
+    if (url === "/api/v1/auth/oauth/callback") return true;
+    if (url === "/api/v1/auth/oidc/callback") return true;
+    // ------------------------------------
+
     if (request.url === "/api/v1/auth/login" && request.method === "POST") {
       return true;
     }
