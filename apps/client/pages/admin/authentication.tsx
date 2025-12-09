@@ -36,7 +36,12 @@ export default function Authentication() {
   const [issuer, setIssuer] = useState("");
   const [redirectUri, setRedirectUri] = useState("");
   const [providerType, setProviderType] = useState("");
-  const [jwtSecret, setJwtSecret] = useState("");
+  
+  // New state variables for OAuth
+  const [authorizationUrl, setAuthorizationUrl] = useState("");
+  const [tokenUrl, setTokenUrl] = useState("");
+  const [userInfoUrl, setUserInfoUrl] = useState("");
+  const [scope, setScope] = useState("openid profile email");
 
   async function postData() {
     if (providerType === "oidc") {
@@ -65,17 +70,24 @@ export default function Authentication() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${getCookie("session")}`,
         },
+        // UPDATED: Sending all the fields our backend needs
         body: JSON.stringify({
-          name: provider,
+          name: provider || "custom",
           redirectUri,
           clientId,
           clientSecret,
+          authorizationUrl,
+          tokenUrl,
+          userInfoUrl,
+          scope,
         }),
       })
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {
             router.reload();
+          } else {
+            alert("Error saving: " + (res.message || res.error || "Unknown error"));
           }
         });
     }
@@ -117,9 +129,10 @@ export default function Authentication() {
 
   async function setUri() {
     if (providerType === "oidc") {
-      setRedirectUri(`${window.location.origin}/auth/oidc`);
+      setRedirectUri(`${window.location.origin}/api/v1/auth/oidc/callback`);
     } else {
-      setRedirectUri(`${window.location.origin}/auth/oauth`);
+      // UPDATED: Correct callback path
+      setRedirectUri(`${window.location.origin}/api/v1/auth/oauth/callback`);
     }
   }
 
@@ -128,7 +141,9 @@ export default function Authentication() {
   }, []);
 
   useEffect(() => {
-    setUri();
+    if (providerType) {
+      setUri();
+    }
   }, [providerType]);
 
   return (
@@ -196,8 +211,9 @@ export default function Authentication() {
                       Please select a provider type
                     </option>
                     <option value="oidc">OIDC</option>
-                    <option value="oauth" disabled>
-                      OAuth
+                    {/* ENABLED OAUTH */}
+                    <option value="oauth">
+                      OAuth (Custom)
                     </option>
                     <option value="saml" disabled>
                       SAML - coming soon
@@ -261,67 +277,96 @@ export default function Authentication() {
                       <>
                         <div className="space-y-4 mt-2">
                           <div>
-                            <label
-                              htmlFor="clientId"
-                              className="block text-sm font-medium leading-6 text-gray-900"
-                            >
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              Provider Name
+                            </label>
+                            <input
+                              type="text"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="e.g. authentik"
+                              onChange={(e) => setProvider(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
                               Client Id
                             </label>
                             <input
                               type="text"
-                              id="clientId"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               onChange={(e) => setClientId(e.target.value)}
                             />
                           </div>
                           <div>
-                            <label
-                              htmlFor="clientId"
-                              className="block text-sm font-medium leading-6 text-gray-900"
-                            >
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
                               Client Secret
                             </label>
                             <input
                               type="text"
-                              id="clientId"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              onChange={(e) => setClientId(e.target.value)}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              onChange={(e) => setClientSecret(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              Authorization URL
+                            </label>
+                            <input
+                              type="text"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="https://sso.../authorize"
+                              onChange={(e) => setAuthorizationUrl(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              Token URL
+                            </label>
+                            <input
+                              type="text"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="https://sso.../token"
+                              onChange={(e) => setTokenUrl(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              User Info URL
+                            </label>
+                            <input
+                              type="text"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="https://sso.../userinfo"
+                              onChange={(e) => setUserInfoUrl(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              Scope
+                            </label>
+                            <input
+                              type="text"
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              value={scope}
+                              onChange={(e) => setScope(e.target.value)}
                             />
                           </div>
 
                           <div>
-                            <label
-                              htmlFor="clientId"
-                              className="block text-sm font-medium leading-6 text-gray-900"
-                            >
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
                               Redirect URI
                             </label>
                             <input
                               type="text"
-                              id="clientId"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              onChange={(e) => setClientId(e.target.value)}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              value={redirectUri}
+                              readOnly
                             />
+                            <p className="text-xs text-gray-500 mt-1">Copy this to your OAuth provider</p>
                           </div>
                         </div>
                       </>
                     )}
-                    {/* Example for SAML */}
-                    {/* {providerType === "saml" && (
-                  <>
-                    <div>
-                      <label htmlFor="samlField" className="block text-sm font-medium leading-6 text-gray-900">
-                        SAML Field
-                      </label>
-                      <input
-                        type="text"
-                        id="samlField"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        onChange={(e) => setSomeSamlField(e.target.value)} // Adjust as needed
-                      />
-                    </div>
-                  </>
-                )} */}
                     {/* Save button */}
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                       <button
