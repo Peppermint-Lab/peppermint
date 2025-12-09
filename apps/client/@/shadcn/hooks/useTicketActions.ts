@@ -74,6 +74,7 @@ export function useTicketActions(token: string, refetch: () => void) {
         },
         body: JSON.stringify({
           id: ticket.id,
+          // @ts-ignore
           detail: ticket.detail,
           note: ticket.note,
           title: ticket.title,

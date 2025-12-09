@@ -1,9 +1,7 @@
-version: "3.1"
-
 services:
   peppermint_postgres:
     container_name: peppermint_postgres
-    image: postgres:latest
+    image: postgres:16
     restart: always
     volumes:
       - pgdata_live:/var/lib/postgresql/data
@@ -18,8 +16,8 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 1000:3000
-      - 1001:5003
+      - 3000:3000
+      - 3001:5003
 # If running via Docker on a hypervisor, enable DNS.
 #    dns:
 #      - 1.1.1.1
@@ -32,6 +30,7 @@ services:
       DB_PASSWORD: "12345"
       DB_HOST: "peppermint_postgres"
       SECRET: 'peppermint4life'
+      DATABASE_URL: "postgresql://peppermint:12345@peppermint_postgres:5432/peppermint?schema=public"
 
 volumes:
  pgdata_live:
