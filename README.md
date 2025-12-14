@@ -27,6 +27,13 @@
 - **Multi-deployment**: Quickly deploy using docker & pm2
 - **Simple to Use**: Designed to be easy to use with a simple logical workflow
 
+
+## Deploy on Hostinger
+
+Quickly deploy using Hostinger with a 1-click installation
+
+[![Deploy on Hostinger](https://assets.hostinger.com/vps/deploy.svg)](https://www.hostinger.com/vps/docker-hosting?compose_url=https://github.com/Peppermint-Lab/peppermint/)
+
 ## 🐳 Installation with docker
 
 Check out the getting started guide if this is the first time you've used Peppermint:
