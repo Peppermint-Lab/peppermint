@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@atlaskit/pragmatic-drag-and-drop": "^1.5.0",
     "@blocknote/core": "^0.17.1",
     "@blocknote/mantine": "^0.17.1",
     "@blocknote/react": "^0.17.1",
@@ -63,6 +64,7 @@
     "react-table": "^7.7.0",
     "shadcn": "^2.1.6",
     "tailwind-merge": "^2.3.0",
+    "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.1"
   },

@@ -59,7 +59,7 @@
   "description": "Leírás",
   "comments": "Kommentek",
   "leave_comment": "Komment írása",
-  "close_issue": "Probléma lezárása",
+  "close_issue": "Jegy lezárása",
   "comment": "Komment",
   "save": "Mentés",
   "labels": "Címkék",
@@ -67,8 +67,8 @@
   "updated_at": "Frissítve ekkor",
   "hide_ticket": "Jegy elrejtése",
   "show_ticket": "Megjelenít",
-  "open_issue": "Nyitott problémák",
-  "closed_issue": "Lezárt problémák",
+  "open_issue": "Nyitott jegy",
+  "closed_issue": "Lezárt jegy",
   "recent_tickets": "Legutolsó jegyek",
   "notebook_title": "Jegyzet cím",
   "admin_settings": "Admin beállítások",
@@ -82,5 +82,11 @@
   "select_a_client": "Válassz egy ügyfelet",
   "select_an_engineer": "Válassz egy fejlesztőt",
   "ticket_create": "Jegy létrehozása",
-  "internallycommented_at": "Belső komment létrehozva"
+  "internallycommented_at": "Belső komment létrehozva",
+  "reopen_issue": "Jegy újranyitása",
+  "needs_support": "Támogatást igényel",
+  "in_progress": "Folyamatban",
+  "in_review": "Ellenőrzés alatt",
+  "done": "Kész",
+  "select_new_user": "Új felhasználó kiválasztása"
 }

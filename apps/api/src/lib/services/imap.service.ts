@@ -61,16 +61,30 @@ export class ImapService {
   ): Promise<void> {
     const { from, subject, text, html, textAsHtml } = parsed;
 
+    console.log("isReply", isReply);
+
     if (isReply) {
-      const ticketIdMatch = subject.match(/#(\d+)/);
-      if (!ticketIdMatch) {
+      // First try to match UUID format
+      const uuidMatch = subject.match(
+        /(?:ref:|#)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i
+      );
+      console.log("UUID MATCH", uuidMatch);
+
+      const ticketId = uuidMatch?.[1];
+
+      console.log("TICKET ID", ticketId);
+
+      if (!ticketId) {
         throw new Error(`Could not extract ticket ID from subject: ${subject}`);
       }
 
-      const ticketId = ticketIdMatch[1];
       const ticket = await prisma.ticket.findFirst({
-        where: { Number: Number(ticketId) },
+        where: {
+          id: ticketId,
+        },
       });
+
+      console.log("TICKET", ticket);
 
       if (!ticket) {
         throw new Error(`Ticket not found: ${ticketId}`);
@@ -152,7 +166,10 @@ export class ImapService {
                   msg.on("body", (stream) => {
                     simpleParser(stream, async (err, parsed) => {
                       if (err) throw err;
-                      const isReply = parsed.subject?.includes("Re:");
+                      const subjectLower = parsed.subject?.toLowerCase() || "";
+                      const isReply =
+                        subjectLower.includes("re:") ||
+                        subjectLower.includes("ref:");
                       await this.processEmail(parsed, isReply || false);
                     });
                   });

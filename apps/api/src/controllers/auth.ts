@@ -704,6 +704,32 @@ export function authRoutes(fastify: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id } = request.params as { id: string };
 
+      // Check if user exists
+      const userToDelete = await prisma.user.findUnique({
+        where: { id },
+      });
+
+      if (!userToDelete) {
+        return reply.code(404).send({
+          message: "User not found",
+          success: false,
+        });
+      }
+
+      // Prevent deletion of admin accounts if they're the last admin
+      if (userToDelete.isAdmin) {
+        const adminCount = await prisma.user.count({
+          where: { isAdmin: true },
+        });
+
+        if (adminCount <= 1) {
+          return reply.code(400).send({
+            message: "Cannot delete the last admin account",
+            success: false,
+          });
+        }
+      }
+
       await prisma.notes.deleteMany({ where: { userId: id } });
       await prisma.session.deleteMany({ where: { userId: id } });
       await prisma.notifications.deleteMany({ where: { userId: id } });
@@ -725,6 +751,8 @@ export function authRoutes(fastify: FastifyInstance) {
           sessionToken: request.headers.authorization!.split(" ")[1],
         },
       });
+
+      await checkSession(request);
 
       let user = await prisma.user.findUnique({
         where: { id: session!.userId },

@@ -1,13 +1,5 @@
 import { prisma } from "../../../prisma";
 
-/**
- * Creates status change notifications for all ticket followers.
- *
- * @param {object} ticket - The ticket object
- * @param {object} updater - The username of the person who updated the status
- * @param {string} newStatus - The new status of the ticket
- * @returns {Promise<void>}
- */
 export async function activeStatusNotification(
   ticket: any,
   updater: any,
@@ -41,14 +33,6 @@ export async function activeStatusNotification(
   }
 }
 
-/**
- * Creates status change notifications for all ticket followers.
- *
- * @param {object} ticket - The ticket object
- * @param {object} updater - The username of the person who updated the status
- * @param {string} newStatus - The new status of the ticket
- * @returns {Promise<void>}
- */
 export async function statusUpdateNotification(
   ticket: any,
   updater: any,
