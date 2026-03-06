@@ -18,8 +18,7 @@ import {
 } from "@/shadcn/ui/sidebar";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import CreateTicketModal from "../../../components/CreateTicketModal";
+import { useEffect } from "react";
 import ThemeSettings from "../../../components/ThemeSettings";
 import { useUser } from "../../../store/session";
 
@@ -28,8 +27,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const { loading, user, fetchUserProfile } = useUser();
   const locale = user ? user.language : "en";
-
-  const [keypressdown, setKeyPressDown] = useState(false);
 
   const { t, lang } = useTranslation("peppermint");
   const sidebar = useSidebar();
@@ -122,7 +119,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ) {
       switch (event.key) {
         case "c":
-          setKeyPressDown(true);
+          document.dispatchEvent(new CustomEvent("open-create-ticket"));
+          sidebar.setOpenMobile(false);
           break;
         case "h":
           location.push("/");
@@ -179,10 +177,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <CreateTicketModal
-          keypress={keypressdown}
-          setKeyPressDown={setKeyPressDown}
-        />
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>

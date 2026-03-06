@@ -2,8 +2,10 @@ import { Button } from "@radix-ui/themes";
 import useTranslation from "next-translate/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 import { AccountDropdown } from "../components/AccountDropdown";
+import CreateTicketModal from "../components/CreateTicketModal";
 
 import { AppSidebar } from "@/shadcn/components/app-sidebar";
 import { CommandMenu } from "@/shadcn/components/command-menu";
@@ -19,6 +21,13 @@ export default function ShadLayout({ children }: any) {
 
   const { loading, user, fetchUserProfile } = useUser();
 
+  const [keypressdown, setKeyPressDown] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setKeyPressDown(true);
+    document.addEventListener("open-create-ticket", handler);
+    return () => document.removeEventListener("open-create-ticket", handler);
+  }, []);
 
   const { t, lang } = useTranslation("peppermint");
 
@@ -40,6 +49,10 @@ export default function ShadLayout({ children }: any) {
     user && (
       <div className="min-h-screen overflow-hidden">
         <SidebarProvider>
+          <CreateTicketModal
+            keypress={keypressdown}
+            setKeyPressDown={setKeyPressDown}
+          />
           <AppSidebar />
           <div className="w-full">
             <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b bg-background px-4 sm:gap-x-6">
