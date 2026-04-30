@@ -32,7 +32,7 @@
 
 Quickly deploy using Hostinger with a 1-click installation
 
-[![Deploy on Hostinger](https://assets.hostinger.com/vps/deploy.svg)](https://www.hostinger.com/vps/docker-hosting?compose_url=https://github.com/Peppermint-Lab/peppermint/)
+[![Deploy on Hostinger](https://assets.hostinger.com/vps/deploy.svg)](https://www.hostinger.com/vps/docker-hosting?compose_url=https://github.com/Peppermint-Lab/peppermint/blob/main/docker-compose.yml)
 
 ## 🐳 Installation with docker
 
