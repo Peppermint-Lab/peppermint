@@ -35,7 +35,7 @@ export default function TicketKanban({ columns, uiSettings }: TicketKanbanProps)
                     draggable({
                       element,
                       dragHandle: element,
-                      data: { ticketId: ticket.id } as const,
+                      getInitialData: () => ({ ticketId: ticket.id }),
                     });
                   }}
                   className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-700 p-3 cursor-move hover:shadow-md transition-shadow"

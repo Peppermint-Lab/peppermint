@@ -515,6 +515,24 @@ export function ticketRoutes(fastify: FastifyInstance) {
 
       if (status && issue!.status !== status) {
         await statusUpdateNotification(issue, user, status);
+
+        // Notify Altair BFF so it can email the ticket submitter
+        const webhookUrl = process.env.ALTAIR_COMMENT_WEBHOOK_URL;
+        if (webhookUrl) {
+          const secret = process.env.ALTAIR_WEBHOOK_SECRET ?? "";
+          const payload = JSON.stringify({
+            event: "ticket.status_change",
+            data: { ticketId: id, newStatus: status, actorName: user?.name ?? "Altair Support" },
+          });
+          const signature = secret
+            ? require("crypto").createHmac("sha256", secret).update(payload).digest("hex")
+            : "";
+          (globalThis as any).fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-peppermint-signature": signature },
+            body: payload,
+          }).catch((err: any) => console.error("Status webhook failed:", err));
+        }
       }
 
       reply.send({
@@ -672,12 +690,34 @@ export function ticketRoutes(fastify: FastifyInstance) {
       });
 
       //@ts-expect-error
-      const { email, title } = ticket;
+      const { email, title, Number: ticketNumber } = ticket;
       if (public_comment && email) {
         sendComment(text, title, ticket!.id, email!);
       }
 
       await commentNotification(ticket, user);
+
+      // Notify Altair BFF so it can email the ticket submitter when support replies
+      const webhookUrl = process.env.ALTAIR_COMMENT_WEBHOOK_URL;
+      if (webhookUrl && ticket) {
+        const secret = process.env.ALTAIR_WEBHOOK_SECRET ?? "";
+        const payload = JSON.stringify({
+          event: "ticket.comment",
+          data: { ticketId: ticket.id, commentText: text },
+        });
+        const signature = secret
+          ? require("crypto").createHmac("sha256", secret).update(payload).digest("hex")
+          : "";
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (globalThis as any).fetch(webhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-peppermint-signature": signature,
+          },
+          body: payload,
+        }).catch((err: any) => console.error("Comment webhook failed:", err));
+      }
 
       const hog = track();
 
@@ -733,6 +773,25 @@ export function ticketRoutes(fastify: FastifyInstance) {
       await activeStatusNotification(ticket, user, status);
 
       await sendTicketStatus(ticket);
+
+      // Notify Altair BFF so it can email the ticket submitter
+      const webhookUrl = process.env.ALTAIR_COMMENT_WEBHOOK_URL;
+      if (webhookUrl) {
+        const secret = process.env.ALTAIR_WEBHOOK_SECRET ?? "";
+        const newStatus = status ? "done" : "needs_support";
+        const payload = JSON.stringify({
+          event: "ticket.status_change",
+          data: { ticketId: id, newStatus, actorName: user?.name ?? "Altair Support" },
+        });
+        const signature = secret
+          ? require("crypto").createHmac("sha256", secret).update(payload).digest("hex")
+          : "";
+        (globalThis as any).fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-peppermint-signature": signature },
+          body: payload,
+        }).catch((err: any) => console.error("Status webhook failed:", err));
+      }
 
       const webhook = await prisma.webhooks.findMany({
         where: {

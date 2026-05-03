@@ -1,0 +1,39 @@
+# CI — S7-Lab-Health/peppermint fork
+#
+# Runs on every PR and push to main.
+# Validates that the Fastify API TypeScript compiles cleanly.
+# (Client is Next.js; it builds inside Docker at deploy time.)
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-api:
+    name: TypeScript build (apps/api)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+
+      # postinstall runs `prisma generate` — generates TS types from schema,
+      # no real DB connection needed.
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: TypeScript compile
+        run: npm run build

@@ -95,6 +95,10 @@ export default function Tickets() {
     const saved = localStorage.getItem("open_selectedAssignees");
     return saved ? JSON.parse(saved) : [];
   });
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(() => {
+    const saved = localStorage.getItem("open_selectedTypes");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
@@ -118,13 +122,19 @@ export default function Tickets() {
     );
   }, [selectedAssignees]);
 
+  useEffect(() => {
+    localStorage.setItem("open_selectedTypes", JSON.stringify(selectedTypes));
+  }, [selectedTypes]);
+
   const clearAllFilters = () => {
     setSelectedPriorities([]);
     setSelectedStatuses([]);
     setSelectedAssignees([]);
+    setSelectedTypes([]);
     localStorage.removeItem("open_selectedPriorities");
     localStorage.removeItem("open_selectedStatuses");
     localStorage.removeItem("open_selectedAssignees");
+    localStorage.removeItem("open_selectedTypes");
   };
 
   const handlePriorityToggle = (priority: string) => {
@@ -151,6 +161,12 @@ export default function Tickets() {
     );
   };
 
+  const handleTypeToggle = (type: string) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
+
   const filteredTickets = data
     ? data.tickets.filter((ticket) => {
         const priorityMatch =
@@ -162,12 +178,15 @@ export default function Tickets() {
         const assigneeMatch =
           selectedAssignees.length === 0 ||
           selectedAssignees.includes(ticket.assignedTo?.name || "Unassigned");
+        const typeMatch =
+          selectedTypes.length === 0 ||
+          selectedTypes.includes(ticket.type);
 
-        return priorityMatch && statusMatch && assigneeMatch;
+        return priorityMatch && statusMatch && assigneeMatch && typeMatch;
       })
     : [];
 
-  type FilterType = "priority" | "status" | "assignee" | null;
+  type FilterType = "priority" | "status" | "assignee" | "type" | null;
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
   const [filterSearch, setFilterSearch] = useState("");
 
@@ -193,6 +212,13 @@ export default function Tickets() {
       assignee.toLowerCase().includes(filterSearch.toLowerCase())
     );
   }, [data?.tickets, filterSearch]);
+
+  const filteredTypes = useMemo(() => {
+    const types = ["bug", "feature", "support", "incident", "service", "maintenance", "access", "feedback"];
+    return types.filter((type) =>
+      type.toLowerCase().includes(filterSearch.toLowerCase())
+    );
+  }, [filterSearch]);
 
   async function fetchUsers() {
     await fetch(`/api/v1/users/all`, {
@@ -349,6 +375,11 @@ export default function Tickets() {
                             >
                               Assigned To
                             </CommandItem>
+                            <CommandItem
+                              onSelect={() => setActiveFilter("type")}
+                            >
+                              Type
+                            </CommandItem>
                           </CommandGroup>
                         </CommandList>
                       </Command>
@@ -481,6 +512,49 @@ export default function Tickets() {
                           </CommandGroup>
                         </CommandList>
                       </Command>
+                    ) : activeFilter === "type" ? (
+                      <Command>
+                        <CommandInput
+                          placeholder="Search type..."
+                          value={filterSearch}
+                          onValueChange={setFilterSearch}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No types found.</CommandEmpty>
+                          <CommandGroup heading="Type">
+                            {filteredTypes.map((type) => (
+                              <CommandItem
+                                key={type}
+                                onSelect={() => handleTypeToggle(type)}
+                              >
+                                <div
+                                  className={cn(
+                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                    selectedTypes.includes(type)
+                                      ? "bg-primary text-primary-foreground"
+                                      : "opacity-50 [&_svg]:invisible"
+                                  )}
+                                >
+                                  <CheckIcon className={cn("h-4 w-4")} />
+                                </div>
+                                <span className="capitalize">{type}</span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                          <CommandSeparator />
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => {
+                                setActiveFilter(null);
+                                setFilterSearch("");
+                              }}
+                              className="justify-center text-center"
+                            >
+                              Back to filters
+                            </CommandItem>
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
                     ) : null}
                   </PopoverContent>
                 </Popover>
@@ -511,10 +585,19 @@ export default function Tickets() {
                     />
                   ))}
 
+                  {selectedTypes.map((type) => (
+                    <FilterBadge
+                      key={`type-${type}`}
+                      text={`Type: ${type}`}
+                      onRemove={() => handleTypeToggle(type)}
+                    />
+                  ))}
+
                   {/* Clear all filters button - only show if there are filters */}
                   {(selectedPriorities.length > 0 ||
                     selectedStatuses.length > 0 ||
-                    selectedAssignees.length > 0) && (
+                    selectedAssignees.length > 0 ||
+                    selectedTypes.length > 0) && (
                     <Button
                       variant="ghost"
                       size="sm"

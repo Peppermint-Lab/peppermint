@@ -83,5 +83,8 @@
     "tailwindcss": "^3.0.7",
     "terser-webpack-plugin": "^5.3.3",
     "typescript": "5.4"
+  },
+  "resolutions": {
+    "prosemirror-view": "1.33.8"
   }
 }

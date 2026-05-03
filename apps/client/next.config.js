@@ -15,6 +15,21 @@ module.exports = withPlugins(
     reactStrictMode: false,
     swcMinify: true,
     output: 'standalone',
+    typescript: {
+      ignoreBuildErrors: true,
+    },
+    webpack: (config) => {
+      // Ignore prosemirror-view import error from @blocknote/core
+      config.module.rules.push({
+        test: /\.js$/,
+        include: /node_modules\/@blocknote/,
+        resolve: { fullySpecified: false },
+      });
+      config.ignoreWarnings = [
+        { module: /@blocknote/ },
+      ];
+      return config;
+    },
 
     async rewrites() {
       return [

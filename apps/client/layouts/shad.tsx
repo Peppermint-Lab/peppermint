@@ -38,10 +38,10 @@ export default function ShadLayout({ children }: any) {
   return (
     !loading &&
     user && (
-      <div className="min-h-screen overflow-hidden">
+      <div className="h-screen overflow-hidden flex flex-col">
         <SidebarProvider>
           <AppSidebar />
-          <div className="w-full">
+          <div className="w-full flex flex-col flex-1 overflow-hidden">
             <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-x-4 border-b bg-background px-4 sm:gap-x-6">
               <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 items-center">
                 <SidebarTrigger title="[" />
@@ -98,7 +98,7 @@ export default function ShadLayout({ children }: any) {
               </div>
             </div>
             {!loading && !user.external_user && (
-              <main className="bg-background min-h-screen">{children}</main>
+              <main className="bg-background flex-1 overflow-y-auto">{children}</main>
             )}
           </div>
         </SidebarProvider>
