@@ -139,6 +139,11 @@ model Ticket {
   createdBy  Json?
   locked     Boolean      @default(false)
   following  Json?
+  custom_field_1 String?
+  custom_field_2 String?
+  custom_field_3 String?
+  outcome       String?
+  customer_field String?
 
   TicketFile   TicketFile[]
   Comment      Comment[]
@@ -433,6 +438,7 @@ enum TicketType {
   maintenance
   access
   feedback
+  revflow
 }
 
 enum Template {

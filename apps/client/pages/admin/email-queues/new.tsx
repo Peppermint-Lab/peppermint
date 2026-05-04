@@ -20,6 +20,15 @@ import {
   SelectValue,
 } from "@/shadcn/ui/select";
 
+function getFrontendOrigin() {
+  if (typeof window === "undefined") {
+    return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  }
+
+  const origin = window.location.origin;
+  return origin.endsWith(":5003") ? origin.replace(":5003", ":3000") : origin;
+}
+
 export default function EmailQueues() {
   const [provider, setProvider] = useState("");
   const [step, setStep] = useState(0);
@@ -199,8 +208,8 @@ function PasswordProvider({ setStep }: any) {
 function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [redirectUri, setRedirectUri] = useState(
-    `${window.location.origin}/admin/email-queues/oauth`
+  const [redirectUri] = useState(
+    `${getFrontendOrigin()}/admin/email-queues/oauth`
   );
   const [user, setUser] = useState("");
 
@@ -214,15 +223,15 @@ function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
         Authorization: `Bearer ${getCookie("session")}`,
       },
       body: JSON.stringify({
-        name: user,
+        name: user.trim(),
         hostname: "imap.gmail.com",
         port: "993",
-        clientId,
-        clientSecret,
-        username: user,
-        reply: user,
+        clientId: clientId.trim(),
+        clientSecret: clientSecret.trim(),
+        username: user.trim(),
+        reply: user.trim(),
         serviceType: "gmail",
-        redirectUri: redirectUri,
+        redirectUri,
       }),
     })
       .then((res) => res.json())
@@ -317,7 +326,7 @@ function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
                   className="flex-1 text-foreground text-sm bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md"
                   placeholder="Your Redirect URI"
                   value={redirectUri}
-                  onChange={(e) => setRedirectUri(e.target.value)}
+                  readOnly
                 />
               </div>
             </div>

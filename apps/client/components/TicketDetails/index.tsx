@@ -153,6 +153,11 @@ export default function Ticket() {
   const [timeReason, setTimeReason] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [assignedClient, setAssignedClient] = useState<any>();
+  const [customField1, setCustomField1] = useState<any>();
+  const [customField2, setCustomField2] = useState<any>();
+  const [customField3, setCustomField3] = useState<any>();
+  const [outcome, setOutcome] = useState<any>();
+  const [customerField, setCustomerField] = useState<any>();
 
   const history = useRouter();
 
@@ -174,6 +179,11 @@ export default function Ticket() {
         title: debounceTitle,
         priority: priority?.value,
         status: ticketStatus?.value,
+        custom_field_1: customField1,
+        custom_field_2: customField2,
+        custom_field_3: customField3,
+        outcome,
+        customer_field: customerField,
       }),
     }).then((res) => res.json());
 
@@ -602,6 +612,11 @@ export default function Ticket() {
   // Loads the previously stored editor contents.
   useEffect(() => {
     if (status === "success" && data && data.ticket) {
+      setCustomField1(data.ticket.custom_field_1);
+      setCustomField2(data.ticket.custom_field_2);
+      setCustomField3(data.ticket.custom_field_3);
+      setOutcome(data.ticket.outcome);
+      setCustomerField(data.ticket.customer_field);
       loadFromStorage().then((content) => {
         if (typeof content === "object") {
           setInitialContent(content);
@@ -915,6 +930,50 @@ export default function Ticket() {
                     </div>
                   </aside>
                   <div className="py-3 xl:pb-0 xl:pt-2 ">
+                    {data.ticket.type === "revflow" && (
+                      <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <input
+                          type="text"
+                          className="rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                          value={customField1 ?? ""}
+                          onChange={(e) => setCustomField1(e.target.value)}
+                          placeholder="custom_field_1"
+                          disabled={data.ticket.locked}
+                        />
+                        <input
+                          type="text"
+                          className="rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                          value={customField2 ?? ""}
+                          onChange={(e) => setCustomField2(e.target.value)}
+                          placeholder="custom_field_2"
+                          disabled={data.ticket.locked}
+                        />
+                        <input
+                          type="text"
+                          className="rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                          value={customField3 ?? ""}
+                          onChange={(e) => setCustomField3(e.target.value)}
+                          placeholder="custom_field_3"
+                          disabled={data.ticket.locked}
+                        />
+                        <input
+                          type="text"
+                          className="rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                          value={outcome ?? ""}
+                          onChange={(e) => setOutcome(e.target.value)}
+                          placeholder="outcome"
+                          disabled={data.ticket.locked}
+                        />
+                        <input
+                          type="text"
+                          className="rounded-md border border-gray-300 bg-background px-3 py-2 text-sm md:col-span-2"
+                          value={customerField ?? ""}
+                          onChange={(e) => setCustomerField(e.target.value)}
+                          placeholder="customer_field"
+                          disabled={data.ticket.locked}
+                        />
+                      </div>
+                    )}
                     <div className="prose max-w-none mt-2">
                       {!data.ticket.fromImap ? (
                         <>

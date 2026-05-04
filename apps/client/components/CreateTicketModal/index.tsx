@@ -25,6 +25,7 @@ const type = [
   { id: 4, name: "Maintenance" },
   { id: 6, name: "Access" },
   { id: 8, name: "Feedback" },
+  { id: 9, name: "RevFlow" },
 ];
 
 export default function CreateTicketModal({ keypress, setKeyPressDown }) {
@@ -45,45 +46,56 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
   const [issue, setIssue] = useState<any>();
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("medium");
-  const [options, setOptions] = useState<any>();
-  const [users, setUsers] = useState<any>();
+  const [options, setOptions] = useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [selected, setSelected] = useState<any>(type[3]);
+  const [customField1, setCustomField1] = useState("");
+  const [customField2, setCustomField2] = useState("");
+  const [customField3, setCustomField3] = useState("");
+  const [outcome, setOutcome] = useState("");
+  const [customerField, setCustomerField] = useState("");
 
   const fetchClients = async () => {
-    await fetch(`/api/v1/clients/all`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setOptions(res.clients);
-        }
-      });
-  };
-
-  async function fetchUsers() {
     try {
-      await fetch(`/api/v1/users/all`, {
+      const response = await fetch(`/api/v1/clients/all`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res) {
-            // TODO: THINK ABOUT AUTO ASSIGN PREFERENCES
-            // setEngineer(user)
-            setUsers(res.users);
-          }
-        });
+      });
+
+      if (!response.ok) {
+        setOptions([]);
+        return;
+      }
+
+      const res = await response.json();
+      setOptions(Array.isArray(res.clients) ? res.clients : []);
     } catch (error) {
-      console.log(error);
+      setOptions([]);
+    }
+  };
+
+  async function fetchUsers() {
+    try {
+      const response = await fetch(`/api/v1/users/all`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        setUsers([]);
+        return;
+      }
+
+      const res = await response.json();
+      setUsers(Array.isArray(res.users) ? res.users : []);
+    } catch (error) {
+      setUsers([]);
     }
   }
 
@@ -103,6 +115,11 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
         priority,
         engineer,
         type: selected.name,
+        custom_field_1: customField1,
+        custom_field_2: customField2,
+        custom_field_3: customField3,
+        outcome,
+        customer_field: customerField,
         createdBy: {
           id: user.id,
           name: user.name,
@@ -138,9 +155,15 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
   }
 
   useEffect(() => {
+    if (!open) {
+      return;
+    }
+
     fetchClients();
     fetchUsers();
-  }, []);
+  }, [open]);
+
+  const isRevFlow = selected.name === "RevFlow";
 
   useEffect(() => checkPress(), [keypress]);
 
@@ -256,6 +279,45 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                   )}
 
                   <Editor setIssue={setIssue} />
+                  {isRevFlow && (
+                    <div className="grid grid-cols-1 gap-3 py-3 md:grid-cols-2">
+                      <input
+                        type="text"
+                        placeholder="custom_field_1"
+                        value={customField1}
+                        onChange={(e) => setCustomField1(e.target.value)}
+                        className="w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder="custom_field_2"
+                        value={customField2}
+                        onChange={(e) => setCustomField2(e.target.value)}
+                        className="w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder="custom_field_3"
+                        value={customField3}
+                        onChange={(e) => setCustomField3(e.target.value)}
+                        className="w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder="outcome"
+                        value={outcome}
+                        onChange={(e) => setOutcome(e.target.value)}
+                        className="w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder="customer_field"
+                        value={customerField}
+                        onChange={(e) => setCustomerField(e.target.value)}
+                        className="w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-sm md:col-span-2"
+                      />
+                    </div>
+                  )}
 
                   <div className="flex flex-row space-x-4 pb-2 mt-2">
                     {!user.external_user && (
@@ -330,8 +392,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                                         </>
                                       )}
                                     </Listbox.Option>
-                                    {options !== undefined &&
-                                      options.map((client: any) => (
+                                    {options.map((client: any) => (
                                         <Listbox.Option
                                           key={client.id}
                                           className={({ active }) =>
@@ -451,8 +512,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                                         </>
                                       )}
                                     </Listbox.Option>
-                                    {users !== undefined &&
-                                      users.map((user: any) => (
+                                    {users.map((user: any) => (
                                         <Listbox.Option
                                           key={user.id}
                                           className={({ active }) =>

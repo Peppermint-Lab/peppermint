@@ -46,6 +46,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
         engineer,
         type,
         createdBy,
+        custom_field_1,
+        custom_field_2,
+        custom_field_3,
+        outcome,
+        customer_field,
       }: any = request.body;
 
       const user = await checkSession(request);
@@ -73,6 +78,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
                 }
               : undefined,
           fromImap: false,
+          custom_field_1,
+          custom_field_2,
+          custom_field_3,
+          outcome,
+          customer_field,
           assignedTo:
             engineer && engineer.name !== "Unassigned"
               ? {
@@ -152,6 +162,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
         engineer,
         type,
         createdBy,
+        custom_field_1,
+        custom_field_2,
+        custom_field_3,
+        outcome,
+        customer_field,
       }: any = request.body;
 
       const ticket: any = await prisma.ticket.create({
@@ -177,6 +192,11 @@ export function ticketRoutes(fastify: FastifyInstance) {
                 }
               : undefined,
           fromImap: false,
+          custom_field_1,
+          custom_field_2,
+          custom_field_3,
+          outcome,
+          customer_field,
           assignedTo:
             engineer && engineer.name !== "Unassigned"
               ? {
@@ -376,33 +396,40 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/tickets/all",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const bearer = request.headers.authorization!.split(" ")[1];
-      const token = checkToken(bearer);
+      try {
+        const user = await checkSession(request);
+        
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      const tickets = await prisma.ticket.findMany({
-        where: { hidden: false },
-        orderBy: [
-          {
-            createdAt: "desc",
+        const tickets = await prisma.ticket.findMany({
+          where: { hidden: false },
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+          ],
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
           },
-        ],
-        include: {
-          client: {
-            select: { id: true, name: true, number: true },
-          },
-          assignedTo: {
-            select: { id: true, name: true },
-          },
-          team: {
-            select: { id: true, name: true },
-          },
-        },
-      });
+        });
 
-      reply.send({
-        tickets: tickets,
-        sucess: true,
-      });
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -411,27 +438,35 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/tickets/user/open",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
+      try {
+        const user = await checkSession(request);
 
-      const tickets = await prisma.ticket.findMany({
-        where: { isComplete: false, userId: user!.id, hidden: false },
-        include: {
-          client: {
-            select: { id: true, name: true, number: true },
-          },
-          assignedTo: {
-            select: { id: true, name: true },
-          },
-          team: {
-            select: { id: true, name: true },
-          },
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      reply.send({
-        tickets: tickets,
-        sucess: true,
-      });
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: false, userId: user.id, hidden: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -489,37 +524,62 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id, note, detail, title, priority, status, client }: any =
-        request.body;
-
-      const user = await checkSession(request);
-
-      const issue = await prisma.ticket.findUnique({
-        where: { id: id },
-      });
-
-      await prisma.ticket.update({
-        where: { id: id },
-        data: {
-          detail,
+      try {
+        const {
+          id,
           note,
+          detail,
           title,
           priority,
           status,
-        },
-      });
+          client,
+          custom_field_1,
+          custom_field_2,
+          custom_field_3,
+          outcome,
+          customer_field,
+        }: any = request.body;
 
-      if (priority && issue!.priority !== priority) {
-        await priorityNotification(issue, user, issue!.priority, priority);
+        const user = await checkSession(request);
+
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
+
+        const issue = await prisma.ticket.findUnique({
+          where: { id: id },
+        });
+
+        await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            detail,
+            note,
+            title,
+            priority,
+            status,
+            custom_field_1,
+            custom_field_2,
+            custom_field_3,
+            outcome,
+            customer_field,
+          },
+        });
+
+        if (priority && issue!.priority !== priority) {
+          await priorityNotification(issue, user, issue!.priority, priority);
+        }
+
+        if (status && issue!.status !== status) {
+          await statusUpdateNotification(issue, user, status);
+        }
+
+        reply.send({
+          success: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
       }
-
-      if (status && issue!.status !== status) {
-        await statusUpdateNotification(issue, user, status);
-      }
-
-      reply.send({
-        success: true,
-      });
     }
   );
 
@@ -530,42 +590,50 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::transfer"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { user, id }: any = request.body;
+      try {
+        const { user, id }: any = request.body;
 
-      const assigner = await checkSession(request);
+        const assigner = await checkSession(request);
 
-      if (user) {
-        const assigned = await prisma.user.update({
-          where: { id: user },
-          data: {
-            tickets: {
-              connect: {
-                id: id,
+        if (!assigner) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
+
+        if (user) {
+          const assigned = await prisma.user.update({
+            where: { id: user },
+            data: {
+              tickets: {
+                connect: {
+                  id: id,
+                },
               },
             },
-          },
-        });
+          });
 
-        const { email } = assigned;
+          const { email } = assigned;
 
-        const ticket = await prisma.ticket.findUnique({
-          where: { id: id },
-        });
+          const ticket = await prisma.ticket.findUnique({
+            where: { id: id },
+          });
 
-        await sendAssignedEmail(email);
-        await assignedNotification(assigned, ticket, assigner);
-      } else {
-        await prisma.ticket.update({
-          where: { id: id },
-          data: {
-            userId: null,
-          },
+          await sendAssignedEmail(email);
+          await assignedNotification(assigned, ticket, assigner);
+        } else {
+          await prisma.ticket.update({
+            where: { id: id },
+            data: {
+              userId: null,
+            },
+          });
+        }
+
+        reply.send({
+          success: true,
         });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
       }
-
-      reply.send({
-        success: true,
-      });
     }
   );
 
@@ -652,43 +720,51 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::comment"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { text, id, public: public_comment }: any = request.body;
+      try {
+        const { text, id, public: public_comment }: any = request.body;
 
-      const user = await checkSession(request);
+        const user = await checkSession(request);
 
-      await prisma.comment.create({
-        data: {
-          text: text,
-          public: public_comment,
-          ticketId: id,
-          userId: user!.id,
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      const ticket = await prisma.ticket.findUnique({
-        where: {
-          id: id,
-        },
-      });
+        await prisma.comment.create({
+          data: {
+            text: text,
+            public: public_comment,
+            ticketId: id,
+            userId: user.id,
+          },
+        });
 
-      //@ts-expect-error
-      const { email, title } = ticket;
-      if (public_comment && email) {
-        sendComment(text, title, ticket!.id, email!);
+        const ticket = await prisma.ticket.findUnique({
+          where: {
+            id: id,
+          },
+        });
+
+        //@ts-expect-error
+        const { email, title } = ticket;
+        if (public_comment && email) {
+          sendComment(text, title, ticket!.id, email!);
+        }
+
+        await commentNotification(ticket, user);
+
+        const hog = track();
+
+        hog.capture({
+          event: "ticket_comment",
+          distinctId: ticket!.id,
+        });
+
+        reply.send({
+          success: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
       }
-
-      await commentNotification(ticket, user);
-
-      const hog = track();
-
-      hog.capture({
-        event: "ticket_comment",
-        distinctId: ticket!.id,
-      });
-
-      reply.send({
-        success: true,
-      });
     }
   );
 
@@ -719,64 +795,72 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { status, id }: any = request.body;
+      try {
+        const { status, id }: any = request.body;
 
-      const user = await checkSession(request);
+        const user = await checkSession(request);
 
-      const ticket: any = await prisma.ticket.update({
-        where: { id: id },
-        data: {
-          isComplete: status,
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      await activeStatusNotification(ticket, user, status);
+        const ticket: any = await prisma.ticket.update({
+          where: { id: id },
+          data: {
+            isComplete: status,
+          },
+        });
 
-      await sendTicketStatus(ticket);
+        await activeStatusNotification(ticket, user, status);
 
-      const webhook = await prisma.webhooks.findMany({
-        where: {
-          type: "ticket_status_changed",
-        },
-      });
+        await sendTicketStatus(ticket);
 
-      for (let i = 0; i < webhook.length; i++) {
-        const url = webhook[i].url;
+        const webhook = await prisma.webhooks.findMany({
+          where: {
+            type: "ticket_status_changed",
+          },
+        });
 
-        if (webhook[i].active === true) {
-          const s = status ? "Completed" : "Outstanding";
-          if (url.includes("discord.com")) {
-            const message = {
-              content: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
-              avatar_url:
-                "https://avatars.githubusercontent.com/u/76014454?s=200&v=4",
-              username: "Peppermint.sh",
-            };
-            axios
-              .post(url, message)
-              .then((response) => {
-                console.log("Message sent successfully!");
-                console.log("Discord API response:", response.data);
-              })
-              .catch((error) => {
-                console.error("Error sending message:", error);
+        for (let i = 0; i < webhook.length; i++) {
+          const url = webhook[i].url;
+
+          if (webhook[i].active === true) {
+            const s = status ? "Completed" : "Outstanding";
+            if (url.includes("discord.com")) {
+              const message = {
+                content: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+                avatar_url:
+                  "https://avatars.githubusercontent.com/u/76014454?s=200&v=4",
+                username: "Peppermint.sh",
+              };
+              axios
+                .post(url, message)
+                .then((response) => {
+                  console.log("Message sent successfully!");
+                  console.log("Discord API response:", response.data);
+                })
+                .catch((error) => {
+                  console.error("Error sending message:", error);
+                });
+            } else {
+              await axios.post(`${webhook[i].url}`, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
+                }),
               });
-          } else {
-            await axios.post(`${webhook[i].url}`, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                data: `Ticket ${ticket.id} created by ${ticket.email}, has had it's status changed to ${s}`,
-              }),
-            });
+            }
           }
         }
-      }
 
-      reply.send({
-        success: true,
-      });
+        reply.send({
+          success: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -926,27 +1010,35 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/tickets/user/open/external",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
+      try {
+        const user = await checkSession(request);
 
-      const tickets = await prisma.ticket.findMany({
-        where: { isComplete: false, email: user!.email, hidden: false },
-        include: {
-          client: {
-            select: { id: true, name: true, number: true },
-          },
-          assignedTo: {
-            select: { id: true, name: true },
-          },
-          team: {
-            select: { id: true, name: true },
-          },
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      reply.send({
-        tickets: tickets,
-        sucess: true,
-      });
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: false, email: user.email, hidden: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -955,27 +1047,35 @@ export function ticketRoutes(fastify: FastifyInstance) {
     "/api/v1/tickets/user/closed/external",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
+      try {
+        const user = await checkSession(request);
 
-      const tickets = await prisma.ticket.findMany({
-        where: { isComplete: true, email: user!.email, hidden: false },
-        include: {
-          client: {
-            select: { id: true, name: true, number: true },
-          },
-          assignedTo: {
-            select: { id: true, name: true },
-          },
-          team: {
-            select: { id: true, name: true },
-          },
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      reply.send({
-        tickets: tickets,
-        sucess: true,
-      });
+        const tickets = await prisma.ticket.findMany({
+          where: { isComplete: true, email: user.email, hidden: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -986,27 +1086,35 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
+      try {
+        const user = await checkSession(request);
 
-      const tickets = await prisma.ticket.findMany({
-        where: { email: user!.email, hidden: false },
-        include: {
-          client: {
-            select: { id: true, name: true, number: true },
-          },
-          assignedTo: {
-            select: { id: true, name: true },
-          },
-          team: {
-            select: { id: true, name: true },
-          },
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      reply.send({
-        tickets: tickets,
-        sucess: true,
-      });
+        const tickets = await prisma.ticket.findMany({
+          where: { email: user.email, hidden: false },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+            team: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        reply.send({
+          tickets: tickets,
+          sucess: true,
+        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -1017,41 +1125,49 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id }: any = request.params;
+      try {
+        const { id }: any = request.params;
 
-      const user = await checkSession(request);
+        const user = await checkSession(request);
 
-      if (id) {
-        const ticket = await prisma.ticket.findUnique({
-          where: { id: id },
-        });
-
-        const following = ticket?.following as string[];
-
-        if (following.includes(user!.id)) {
-          reply.send({
-            success: false,
-            message: "You are already following this issue",
-          });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
         }
 
-        if (ticket) {
-          await prisma.ticket.update({
+        if (id) {
+          const ticket = await prisma.ticket.findUnique({
             where: { id: id },
-            data: {
-              following: [...following, user!.id],
-            },
           });
-        } else {
-          reply.status(400).send({
-            success: false,
-            message: "No ticket ID provided",
+
+          const following = ticket?.following as string[];
+
+          if (following.includes(user.id)) {
+            reply.send({
+              success: false,
+              message: "You are already following this issue",
+            });
+          }
+
+          if (ticket) {
+            await prisma.ticket.update({
+              where: { id: id },
+              data: {
+                following: [...following, user.id],
+              },
+            });
+          } else {
+            reply.status(400).send({
+              success: false,
+              message: "No ticket ID provided",
+            });
+          }
+
+          reply.send({
+            success: true,
           });
         }
-
-        reply.send({
-          success: true,
-        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
       }
     }
   );
@@ -1063,40 +1179,48 @@ export function ticketRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["issue::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { id }: any = request.params;
-      const user = await checkSession(request);
+      try {
+        const { id }: any = request.params;
+        const user = await checkSession(request);
 
-      if (id) {
-        const ticket = await prisma.ticket.findUnique({
-          where: { id: id },
-        });
-
-        const following = ticket?.following as string[];
-
-        if (!following.includes(user!.id)) {
-          return reply.send({
-            success: false,
-            message: "You are not following this issue",
-          });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
         }
 
-        if (ticket) {
-          await prisma.ticket.update({
+        if (id) {
+          const ticket = await prisma.ticket.findUnique({
             where: { id: id },
-            data: {
-              following: following.filter((userId) => userId !== user!.id),
-            },
           });
-        } else {
-          return reply.status(400).send({
-            success: false,
-            message: "No ticket ID provided",
+
+          const following = ticket?.following as string[];
+
+          if (!following.includes(user.id)) {
+            return reply.send({
+              success: false,
+              message: "You are not following this issue",
+            });
+          }
+
+          if (ticket) {
+            await prisma.ticket.update({
+              where: { id: id },
+              data: {
+                following: following.filter((userId) => userId !== user.id),
+              },
+            });
+          } else {
+            return reply.status(400).send({
+              success: false,
+              message: "No ticket ID provided",
+            });
+          }
+
+          reply.send({
+            success: true,
           });
         }
-
-        reply.send({
-          success: true,
-        });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
       }
     }
   );

@@ -38,11 +38,11 @@ export default function Login({}) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <a target="_blank" href="https://peppermint.sh/">
+        <a href="/">
           <img
-            className="mx-auto h-36 w-auto"
-            src="/login.svg"
-            alt="peppermint.sh logo"
+            className="mx-auto h-24 w-24 rounded-2xl object-cover"
+            src="/yottabyte-logo.png"
+            alt="YOTTABYTE logo"
           />
         </a>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -97,10 +97,7 @@ export default function Login({}) {
         </div>
 
         <div className="mt-8 text-center flex flex-col space-y-2">
-          <span className="font-bold">Built with 💚 by Peppermint Labs</span>
-          <a href="https://docs.peppermint.sh/" target="_blank">
-            Documentation
-          </a>
+          <span className="font-bold">YOTTABYTE Support Portal</span>
         </div>
       </div>
     </div>

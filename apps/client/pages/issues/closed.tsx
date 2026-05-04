@@ -77,46 +77,68 @@ export default function Tickets() {
   );
 
   const user = useUser();
+  const [isMounted, setIsMounted] = useState(false);
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
   const normal = "bg-green-100 text-green-800";
 
   const [filterSelected, setFilterSelected] = useState();
-  const [selectedPriorities, setSelectedPriorities] = useState<string[]>(() => {
-    const saved = localStorage.getItem("closed_selectedPriorities");
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(() => {
-    const saved = localStorage.getItem("closed_selectedStatuses");
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [selectedAssignees, setSelectedAssignees] = useState<string[]>(() => {
-    const saved = localStorage.getItem("closed_selectedAssignees");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    localStorage.setItem(
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || typeof window === "undefined") {
+      return;
+    }
+
+    const priorities = window.localStorage.getItem("closed_selectedPriorities");
+    const statuses = window.localStorage.getItem("closed_selectedStatuses");
+    const assignees = window.localStorage.getItem("closed_selectedAssignees");
+
+    setSelectedPriorities(priorities ? JSON.parse(priorities) : []);
+    setSelectedStatuses(statuses ? JSON.parse(statuses) : []);
+    setSelectedAssignees(assignees ? JSON.parse(assignees) : []);
+  }, [isMounted]);
+
+  useEffect(() => {
+    if (!isMounted || typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
       "closed_selectedPriorities",
       JSON.stringify(selectedPriorities)
     );
-  }, [selectedPriorities]);
+  }, [selectedPriorities, isMounted]);
 
   useEffect(() => {
-    localStorage.setItem(
+    if (!isMounted || typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
       "closed_selectedStatuses",
       JSON.stringify(selectedStatuses)
     );
-  }, [selectedStatuses]);
+  }, [selectedStatuses, isMounted]);
 
   useEffect(() => {
-    localStorage.setItem(
+    if (!isMounted || typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
       "closed_selectedAssignees",
       JSON.stringify(selectedAssignees)
     );
-  }, [selectedAssignees]);
+  }, [selectedAssignees, isMounted]);
 
   const handlePriorityToggle = (priority: string) => {
     setSelectedPriorities((prev) =>

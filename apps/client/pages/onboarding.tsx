@@ -29,14 +29,20 @@ export default function Home() {
       <div className="flex justify-center align-center h-screen items-center">
         <div className="bg-background shadow-xl rounded-lg lg:p-8 p-4 mx-4">
           <div className="flex justify-between items-center">
-            <div className="flex flex-col">
-              <h1 className="text-2xl text-foreground font-bold">
-                Peppermint{" "}
-              </h1>
-              <p className="text-foreground">
-                Welcome to Peppermint! A fully open sourced ticket management
-                system.
-              </p>
+            <div className="flex items-center gap-3">
+              <img
+                src="/yottabyte-logo.png"
+                className="h-12 w-12 rounded-xl object-cover"
+                alt="YOTTABYTE logo"
+              />
+              <div className="flex flex-col">
+                <h1 className="text-2xl text-foreground font-bold">
+                  YOTTABYTE
+                </h1>
+                <p className="text-foreground">
+                  Welcome to the YOTTABYTE support workspace.
+                </p>
+              </div>
             </div>
           </div>
           <div className="mt-4 ">
@@ -60,13 +66,16 @@ export default function Home() {
                 </Link>
               </div>
               <div className="border p-2 md:p-6 rounded-md border-dashed w-full flex flex-col md:flex-row space-x-4 items-center">
-                <img src="/logo.svg" className="h-10 w-10" />
+                <img
+                  src="/yottabyte-logo.png"
+                  className="h-10 w-10 rounded-lg object-cover"
+                  alt="YOTTABYTE logo"
+                />
                 <div className="flex flex-col align-center lg:w-[36em]">
                   <span className="font-bold text-lg">Docs</span>
                   <span className="max-w-lg text-xs md:text-md">
-                    Documentation for Peppermint can be found here. If you find
-                    something that isnt documented, feel free to open a PR or an
-                    Issue. We'll get straight on it.
+                    Internal guides and support resources for YOTTABYTE can be
+                    linked here for your team.
                   </span>
                 </div>
                 <Link

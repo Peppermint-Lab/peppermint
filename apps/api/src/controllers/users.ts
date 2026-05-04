@@ -41,9 +41,13 @@ export function userRoutes(fastify: FastifyInstance) {
     "/api/v1/user/new",
 
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const session = await checkSession(request);
+      try {
+        const session = await checkSession(request);
 
-      if (session!.isAdmin) {
+        if (!session || !session.isAdmin) {
+          return reply.status(403).send({ message: "Unauthorized", failed: true });
+        }
+
         const { email, password, name, admin }: any = request.body;
 
         const e = email.toLowerCase();
@@ -71,7 +75,7 @@ export function userRoutes(fastify: FastifyInstance) {
         reply.send({
           success: true,
         });
-      } else {
+      } catch (error) {
         reply.status(403).send({ message: "Unauthorized", failed: true });
       }
     }
@@ -81,11 +85,15 @@ export function userRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/user/reset-password",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { password, id }: any = request.body;
+      try {
+        const { password, id }: any = request.body;
 
-      const session = await checkSession(request);
+        const session = await checkSession(request);
 
-      if (session!.isAdmin) {
+        if (!session || !session.isAdmin) {
+          return reply.status(403).send({ message: "Unauthorized", failed: true });
+        }
+
         const hashedPass = await bcrypt.hash(password, 10);
         await prisma.user.update({
           where: { id: id },
@@ -96,7 +104,7 @@ export function userRoutes(fastify: FastifyInstance) {
         reply
           .status(201)
           .send({ message: "password updated success", failed: false });
-      } else {
+      } catch (error) {
         reply.status(403).send({ message: "Unauthorized", failed: true });
       }
     }
