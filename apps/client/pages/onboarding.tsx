@@ -31,7 +31,7 @@ export default function Home() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <img
-                src="/yottabyte-logo.png"
+                src="/yottabyte-mark.svg"
                 className="h-12 w-12 rounded-xl object-cover"
                 alt="YOTTABYTE logo"
               />
@@ -67,7 +67,7 @@ export default function Home() {
               </div>
               <div className="border p-2 md:p-6 rounded-md border-dashed w-full flex flex-col md:flex-row space-x-4 items-center">
                 <img
-                  src="/yottabyte-logo.png"
+                  src="/yottabyte-mark.svg"
                   className="h-10 w-10 rounded-lg object-cover"
                   alt="YOTTABYTE logo"
                 />

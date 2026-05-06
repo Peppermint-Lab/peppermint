@@ -1,0 +1,277 @@
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+@keyframes spin { from{transform-origin:340px 240px; transform:rotate(0deg)} to{transform-origin:340px 240px; transform:rotate(360deg)} }
+@keyframes spinSlow { from{transform-origin:340px 240px; transform:rotate(0deg)} to{transform-origin:340px 240px; transform:rotate(-360deg)} }
+@keyframes dash { to { stroke-dashoffset: -600; } }
+@keyframes dashRev { to { stroke-dashoffset: 600; } }
+@keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+@keyframes barGrow { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+@keyframes scanV { 0%{transform:translateX(-100%)} 100%{transform:translateX(800%)} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+@keyframes ringPulse { 0%{r:52;opacity:.7} 100%{r:90;opacity:0} }
+</style>
+
+<div style="width:100vw;height:100vh;background:#020c18;position:relative;overflow:hidden;font-family:'IBM Plex Mono',monospace">
+
+<svg width="100%" height="100%" viewBox="0 0 680 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0">
+  <defs>
+    <pattern id="gr" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="rgba(0,200,255,0.06)" stroke-width="0.7"/>
+    </pattern>
+    <radialGradient id="globeGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#003a5c" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#010e1c" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="globeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00e5ff" stop-opacity="0"/>
+      <stop offset="70%" stop-color="#00e5ff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.18"/>
+    </radialGradient>
+    <clipPath id="globeClip">
+      <circle cx="340" cy="220" r="92"/>
+    </clipPath>
+    <linearGradient id="barG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="barG2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00ff88" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#00ff88" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="lineArea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- GRID BG -->
+  <rect width="680" height="420" fill="url(#gr)"/>
+
+  <!-- ── GLOBE CENTER ── -->
+  <!-- Outer glow rings -->
+  <circle cx="340" cy="220" r="115" fill="none" stroke="#00e5ff" stroke-opacity="0.07" stroke-width="1" style="animation:pulse 3s ease-in-out infinite"/>
+  <circle cx="340" cy="220" r="105" fill="none" stroke="#00e5ff" stroke-opacity="0.12" stroke-width="0.8"/>
+  <circle cx="340" cy="220" r="96" fill="none" stroke="#00e5ff" stroke-opacity="0.2" stroke-width="1"/>
+  <!-- Expanding ring -->
+  <circle cx="340" cy="220" r="70" fill="none" stroke="#00e5ff" stroke-opacity="0.4" stroke-width="0.8" style="animation:ringPulse 3s ease-out infinite"/>
+
+  <!-- Globe body -->
+  <circle cx="340" cy="220" r="92" fill="url(#globeGrad)"/>
+
+  <!-- Globe latitude lines -->
+  <g clip-path="url(#globeClip)" stroke="#00e5ff" stroke-opacity="0.25" stroke-width="0.7" fill="none">
+    <ellipse cx="340" cy="220" rx="92" ry="18"/>
+    <ellipse cx="340" cy="220" rx="92" ry="38"/>
+    <ellipse cx="340" cy="220" rx="92" ry="60"/>
+    <ellipse cx="340" cy="220" rx="92" ry="78"/>
+    <line x1="248" y1="220" x2="432" y2="220"/>
+    <line x1="255" y1="190" x2="425" y2="190"/>
+    <line x1="255" y1="250" x2="425" y2="250"/>
+    <line x1="265" y1="160" x2="415" y2="160"/>
+    <line x1="265" y1="280" x2="415" y2="280"/>
+    <line x1="285" y1="135" x2="395" y2="135"/>
+    <line x1="285" y1="305" x2="395" y2="305"/>
+  </g>
+
+  <!-- Globe longitude lines (spinning) -->
+  <g clip-path="url(#globeClip)" stroke="#00e5ff" stroke-opacity="0.2" stroke-width="0.7" fill="none"
+     style="transform-origin:340px 220px; animation:spin 18s linear infinite">
+    <ellipse cx="340" cy="220" rx="20" ry="92"/>
+    <ellipse cx="340" cy="220" rx="46" ry="92"/>
+    <ellipse cx="340" cy="220" rx="70" ry="92"/>
+    <ellipse cx="340" cy="220" rx="88" ry="92"/>
+  </g>
+
+  <!-- Globe continent blobs -->
+  <g clip-path="url(#globeClip)" fill="#00e5ff" fill-opacity="0.12">
+    <ellipse cx="310" cy="200" rx="22" ry="14"/>
+    <ellipse cx="355" cy="195" rx="18" ry="12"/>
+    <ellipse cx="295" cy="230" rx="16" ry="10"/>
+    <ellipse cx="370" cy="225" rx="14" ry="8"/>
+    <ellipse cx="325" cy="245" rx="12" ry="7"/>
+    <ellipse cx="360" cy="240" rx="10" ry="6"/>
+    <ellipse cx="340" cy="175" rx="20" ry="8"/>
+    <ellipse cx="380" cy="210" rx="10" ry="6"/>
+  </g>
+
+  <!-- Globe overlay glow -->
+  <circle cx="340" cy="220" r="92" fill="url(#globeGlow)"/>
+  <circle cx="340" cy="220" r="92" fill="none" stroke="#00e5ff" stroke-opacity="0.5" stroke-width="1.2"/>
+
+  <!-- Globe hot dots (cities) -->
+  <circle cx="310" cy="200" r="3" fill="#00ff88" opacity="0.9" style="animation:blink 2s ease-in-out infinite 0s"/>
+  <circle cx="358" cy="196" r="2.5" fill="#00ff88" opacity="0.85" style="animation:blink 2.3s ease-in-out infinite 0.4s"/>
+  <circle cx="295" cy="230" r="2" fill="#00e5ff" opacity="0.8" style="animation:blink 1.8s ease-in-out infinite 0.8s"/>
+  <circle cx="372" cy="228" r="2.5" fill="#00ff88" opacity="0.9" style="animation:blink 2.6s ease-in-out infinite 0.2s"/>
+  <circle cx="326" cy="245" r="2" fill="#00e5ff" opacity="0.7" style="animation:blink 2.1s ease-in-out infinite 1.2s"/>
+  <circle cx="350" cy="175" r="2.5" fill="#00ff88" opacity="0.8" style="animation:blink 2.4s ease-in-out infinite 0.6s"/>
+  <circle cx="385" cy="210" r="2" fill="#00e5ff" opacity="0.75" style="animation:blink 1.9s ease-in-out infinite 1s"/>
+
+  <!-- Globe connection lines -->
+  <line x1="310" y1="200" x2="358" y2="196" stroke="#00ff88" stroke-opacity="0.5" stroke-width="0.8" stroke-dasharray="4 4" style="animation:dash 3s linear infinite"/>
+  <line x1="310" y1="200" x2="295" y2="230" stroke="#00e5ff" stroke-opacity="0.4" stroke-width="0.8" stroke-dasharray="4 4" style="animation:dashRev 4s linear infinite"/>
+  <line x1="358" y1="196" x2="372" y2="228" stroke="#00ff88" stroke-opacity="0.5" stroke-width="0.8" stroke-dasharray="4 4" style="animation:dash 5s linear infinite"/>
+  <line x1="350" y1="175" x2="310" y2="200" stroke="#00e5ff" stroke-opacity="0.35" stroke-width="0.8" stroke-dasharray="3 5" style="animation:dashRev 6s linear infinite"/>
+
+  <!-- Outer orbit ring -->
+  <ellipse cx="340" cy="220" rx="130" ry="28" fill="none" stroke="#00e5ff" stroke-opacity="0.18" stroke-width="1" stroke-dasharray="8 6"
+     style="transform-origin:340px 220px; animation:spinSlow 20s linear infinite"/>
+  <circle cx="340" cy="192" r="5" fill="#00ff88" opacity="0.8" style="transform-origin:340px 220px; animation:spinSlow 20s linear infinite"/>
+
+  <!-- ── TOP-LEFT: DONUT CHARTS ── -->
+  <!-- Donut 1 -->
+  <g transform="translate(60,42)">
+    <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(0,229,255,0.1)" stroke-width="8"/>
+    <circle cx="36" cy="36" r="30" fill="none" stroke="#00e5ff" stroke-width="8" stroke-dasharray="128 60" stroke-dashoffset="-30" stroke-linecap="butt" style="animation:pulse 2.5s ease-in-out infinite"/>
+    <circle cx="36" cy="36" r="30" fill="none" stroke="#00ff88" stroke-width="8" stroke-dasharray="40 148" stroke-dashoffset="-158" stroke-linecap="butt"/>
+    <circle cx="36" cy="36" r="22" fill="#020c18"/>
+    <text x="36" y="33" text-anchor="middle" fill="#00e5ff" font-size="11" font-family="'IBM Plex Mono',monospace" font-weight="600">68%</text>
+    <text x="36" y="45" text-anchor="middle" fill="rgba(0,229,255,0.5)" font-size="8" font-family="'IBM Plex Mono',monospace">CPU</text>
+    <text x="36" y="78" text-anchor="middle" fill="rgba(0,229,255,0.45)" font-size="9" font-family="'IBM Plex Mono',monospace">USAGE</text>
+  </g>
+
+  <!-- Donut 2 -->
+  <g transform="translate(148,42)">
+    <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(0,229,255,0.1)" stroke-width="8"/>
+    <circle cx="36" cy="36" r="30" fill="none" stroke="#00ff88" stroke-width="8" stroke-dasharray="170 18" stroke-dashoffset="-20" stroke-linecap="butt" style="animation:pulse 3s ease-in-out infinite 0.5s"/>
+    <circle cx="36" cy="36" r="22" fill="#020c18"/>
+    <text x="36" y="33" text-anchor="middle" fill="#00ff88" font-size="11" font-family="'IBM Plex Mono',monospace" font-weight="600">98%</text>
+    <text x="36" y="45" text-anchor="middle" fill="rgba(0,255,136,0.5)" font-size="8" font-family="'IBM Plex Mono',monospace">UP</text>
+    <text x="36" y="78" text-anchor="middle" fill="rgba(0,229,255,0.45)" font-size="9" font-family="'IBM Plex Mono',monospace">UPTIME</text>
+  </g>
+
+  <!-- Donut 3 -->
+  <g transform="translate(60,145)">
+    <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(0,229,255,0.1)" stroke-width="8"/>
+    <circle cx="36" cy="36" r="30" fill="none" stroke="#00e5ff" stroke-width="8" stroke-dasharray="100 88" stroke-dashoffset="-40" stroke-linecap="butt" style="animation:pulse 2.8s ease-in-out infinite 1s"/>
+    <circle cx="36" cy="36" r="22" fill="#020c18"/>
+    <text x="36" y="33" text-anchor="middle" fill="#00e5ff" font-size="11" font-family="'IBM Plex Mono',monospace" font-weight="600">52%</text>
+    <text x="36" y="45" text-anchor="middle" fill="rgba(0,229,255,0.5)" font-size="8" font-family="'IBM Plex Mono',monospace">MEM</text>
+    <text x="36" y="78" text-anchor="middle" fill="rgba(0,229,255,0.45)" font-size="9" font-family="'IBM Plex Mono',monospace">MEMORY</text>
+  </g>
+
+  <!-- Donut 4 -->
+  <g transform="translate(148,145)">
+    <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(0,229,255,0.1)" stroke-width="8"/>
+    <circle cx="36" cy="36" r="30" fill="none" stroke="#00ff88" stroke-width="8" stroke-dasharray="75 113" stroke-dashoffset="-60" stroke-linecap="butt" style="animation:pulse 2.2s ease-in-out infinite 0.3s"/>
+    <circle cx="36" cy="36" r="22" fill="#020c18"/>
+    <text x="36" y="33" text-anchor="middle" fill="#00ff88" font-size="11" font-family="'IBM Plex Mono',monospace" font-weight="600">39%</text>
+    <text x="36" y="45" text-anchor="middle" fill="rgba(0,255,136,0.5)" font-size="8" font-family="'IBM Plex Mono',monospace">NET</text>
+    <text x="36" y="78" text-anchor="middle" fill="rgba(0,229,255,0.45)" font-size="9" font-family="'IBM Plex Mono',monospace">NETWORK</text>
+  </g>
+
+  <!-- ── TOP-RIGHT: VERTICAL BAR CHART ── -->
+  <g transform="translate(490,28)">
+    <text x="85" y="12" text-anchor="middle" fill="rgba(0,229,255,0.55)" font-size="9" font-family="'IBM Plex Mono',monospace" letter-spacing="2">THROUGHPUT GB/s</text>
+    <!-- bars -->
+    <g style="transform-origin:bottom;transform:scaleY(1)">
+      <rect x="8"   y="105" width="14" height="55" fill="url(#barG)" opacity="0.7"/>
+      <rect x="26"  y="85"  width="14" height="75" fill="url(#barG)" opacity="0.8"/>
+      <rect x="44"  y="60"  width="14" height="100" fill="url(#barG)" opacity="0.9"/>
+      <rect x="62"  y="75"  width="14" height="85" fill="url(#barG2)" opacity="0.9" style="animation:pulse 2s ease-in-out infinite"/>
+      <rect x="80"  y="50"  width="14" height="110" fill="url(#barG2)" opacity="1" style="animation:pulse 2.4s ease-in-out infinite"/>
+      <rect x="98"  y="80"  width="14" height="80" fill="url(#barG)" opacity="0.8"/>
+      <rect x="116" y="95"  width="14" height="65" fill="url(#barG)" opacity="0.7"/>
+      <rect x="134" y="70"  width="14" height="90" fill="url(#barG2)" opacity="0.85"/>
+      <rect x="152" y="55"  width="14" height="105" fill="url(#barG)" opacity="0.9"/>
+    </g>
+    <!-- baseline -->
+    <line x1="4" y1="161" x2="170" y2="161" stroke="rgba(0,229,255,0.3)" stroke-width="0.8"/>
+    <!-- y-axis labels -->
+    <text x="2" y="115" text-anchor="end" fill="rgba(0,229,255,0.35)" font-size="8" font-family="'IBM Plex Mono',monospace">2</text>
+    <text x="2" y="85"  text-anchor="end" fill="rgba(0,229,255,0.35)" font-size="8" font-family="'IBM Plex Mono',monospace">3</text>
+    <text x="2" y="55"  text-anchor="end" fill="rgba(0,229,255,0.35)" font-size="8" font-family="'IBM Plex Mono',monospace">4</text>
+  </g>
+
+  <!-- ── BOTTOM-LEFT: LINE CHART ── -->
+  <g transform="translate(28,290)">
+    <text x="80" y="0" text-anchor="middle" fill="rgba(0,229,255,0.5)" font-size="9" font-family="'IBM Plex Mono',monospace" letter-spacing="2">LATENCY ms</text>
+    <path d="M0 80 L20 65 L40 75 L60 50 L80 55 L100 35 L120 42 L140 28 L160 38" fill="none" stroke="#00e5ff" stroke-width="1.5" style="animation:dash 8s linear infinite"/>
+    <path d="M0 80 L20 65 L40 75 L60 50 L80 55 L100 35 L120 42 L140 28 L160 38 L160 90 L0 90Z" fill="url(#lineArea)"/>
+    <line x1="0" y1="90" x2="165" y2="90" stroke="rgba(0,229,255,0.25)" stroke-width="0.7"/>
+    <!-- data dots -->
+    <circle cx="100" cy="35" r="3" fill="#00ff88" style="animation:blink 1.5s ease-in-out infinite"/>
+    <circle cx="140" cy="28" r="3" fill="#00ff88" style="animation:blink 1.8s ease-in-out infinite 0.4s"/>
+    <!-- y labels -->
+    <text x="-2" y="35" text-anchor="end" fill="rgba(0,229,255,0.3)" font-size="8" font-family="'IBM Plex Mono',monospace">50</text>
+    <text x="-2" y="62" text-anchor="end" fill="rgba(0,229,255,0.3)" font-size="8" font-family="'IBM Plex Mono',monospace">25</text>
+    <text x="-2" y="88" text-anchor="end" fill="rgba(0,229,255,0.3)" font-size="8" font-family="'IBM Plex Mono',monospace">0</text>
+  </g>
+
+  <!-- ── BOTTOM-RIGHT: HORIZONTAL BARS (KPIs) ── -->
+  <g transform="translate(490,270)">
+    <text x="85" y="0" text-anchor="middle" fill="rgba(0,229,255,0.5)" font-size="9" font-family="'IBM Plex Mono',monospace" letter-spacing="2">NODE STATUS</text>
+    <!-- rows -->
+    <text x="0"   y="22" fill="rgba(0,229,255,0.55)" font-size="9" font-family="'IBM Plex Mono',monospace">SLA</text>
+    <rect x="28" y="13" width="130" height="8" rx="1" fill="rgba(0,229,255,0.1)"/>
+    <rect x="28" y="13" width="120" height="8" rx="1" fill="#00ff88" fill-opacity="0.7" style="animation:pulse 2.5s ease-in-out infinite"/>
+    <text x="162" y="22" fill="#00ff88" font-size="9" font-family="'IBM Plex Mono',monospace">98.6%</text>
+
+    <text x="0"   y="42" fill="rgba(0,229,255,0.55)" font-size="9" font-family="'IBM Plex Mono',monospace">CPU</text>
+    <rect x="28" y="33" width="130" height="8" rx="1" fill="rgba(0,229,255,0.1)"/>
+    <rect x="28" y="33" width="88" height="8" rx="1" fill="#00e5ff" fill-opacity="0.65" style="animation:pulse 3s ease-in-out infinite 0.3s"/>
+    <text x="162" y="42" fill="#00e5ff" font-size="9" font-family="'IBM Plex Mono',monospace">67%</text>
+
+    <text x="0"   y="62" fill="rgba(0,229,255,0.55)" font-size="9" font-family="'IBM Plex Mono',monospace">MEM</text>
+    <rect x="28" y="53" width="130" height="8" rx="1" fill="rgba(0,229,255,0.1)"/>
+    <rect x="28" y="53" width="68" height="8" rx="1" fill="#00ff88" fill-opacity="0.5" style="animation:pulse 2.2s ease-in-out infinite 0.6s"/>
+    <text x="162" y="62" fill="#00ff88" font-size="9" font-family="'IBM Plex Mono',monospace">52%</text>
+
+    <text x="0"   y="82" fill="rgba(0,229,255,0.55)" font-size="9" font-family="'IBM Plex Mono',monospace">NET</text>
+    <rect x="28" y="73" width="130" height="8" rx="1" fill="rgba(0,229,255,0.1)"/>
+    <rect x="28" y="73" width="45" height="8" rx="1" fill="#00e5ff" fill-opacity="0.5" style="animation:pulse 2.8s ease-in-out infinite 1s"/>
+    <text x="162" y="82" fill="#00e5ff" font-size="9" font-family="'IBM Plex Mono',monospace">35%</text>
+
+    <text x="0"   y="102" fill="rgba(0,229,255,0.55)" font-size="9" font-family="'IBM Plex Mono',monospace">I/O</text>
+    <rect x="28" y="93" width="130" height="8" rx="1" fill="rgba(0,229,255,0.1)"/>
+    <rect x="28" y="93" width="105" height="8" rx="1" fill="#00ff88" fill-opacity="0.6" style="animation:pulse 1.9s ease-in-out infinite 0.2s"/>
+    <text x="162" y="102" fill="#00ff88" font-size="9" font-family="'IBM Plex Mono',monospace">81%</text>
+  </g>
+
+  <!-- ── DATA READOUTS scattered ── -->
+  <!-- Top center strip -->
+  <text x="290" y="20" text-anchor="middle" fill="#00e5ff" font-size="9" font-family="'IBM Plex Mono',monospace" fill-opacity="0.6" letter-spacing="2">YOTTABYTE NOC v4.2</text>
+  <text x="290" y="34" text-anchor="middle" fill="#00ff88" font-size="9" font-family="'IBM Plex Mono',monospace" fill-opacity="0.5">SYSTEMS OPERATIONAL</text>
+
+  <!-- Number clusters -->
+  <text x="245" y="320" fill="rgba(0,229,255,0.4)" font-size="9" font-family="'IBM Plex Mono',monospace">9078037981</text>
+  <text x="245" y="332" fill="rgba(0,229,255,0.3)" font-size="9" font-family="'IBM Plex Mono',monospace">98332229</text>
+  <text x="245" y="344" fill="rgba(0,255,136,0.4)" font-size="9" font-family="'IBM Plex Mono',monospace">50875</text>
+  <text x="245" y="356" fill="rgba(0,229,255,0.3)" font-size="9" font-family="'IBM Plex Mono',monospace">19488</text>
+  <text x="245" y="368" fill="rgba(0,229,255,0.25)" font-size="9" font-family="'IBM Plex Mono',monospace">30</text>
+
+  <!-- Right side numbers -->
+  <text x="472" y="50" text-anchor="end" fill="rgba(0,229,255,0.4)" font-size="9" font-family="'IBM Plex Mono',monospace">07:15:32</text>
+  <text x="472" y="62" text-anchor="end" fill="rgba(0,255,136,0.35)" font-size="9" font-family="'IBM Plex Mono',monospace">21 NODES</text>
+  <text x="472" y="74" text-anchor="end" fill="rgba(0,229,255,0.35)" font-size="9" font-family="'IBM Plex Mono',monospace">AF 54:V21:00</text>
+  <text x="472" y="86" text-anchor="end" fill="rgba(0,229,255,0.3)" font-size="9" font-family="'IBM Plex Mono',monospace">9B7</text>
+
+  <!-- Left side numbers -->
+  <text x="56" y="280" fill="rgba(0,229,255,0.35)" font-size="9" font-family="'IBM Plex Mono',monospace">124 TICKETS</text>
+  <text x="56" y="292" fill="rgba(0,255,136,0.35)" font-size="9" font-family="'IBM Plex Mono',monospace">42 ONLINE</text>
+
+  <!-- ── CONNECTING LINES from globe to panels ── -->
+  <path d="M248,220 L218,220 L218,85 L240,85" fill="none" stroke="#00e5ff" stroke-opacity="0.25" stroke-width="0.8" stroke-dasharray="6 5" style="animation:dash 8s linear infinite"/>
+  <path d="M432,220 L470,220 L470,70 L492,70" fill="none" stroke="#00e5ff" stroke-opacity="0.2" stroke-width="0.8" stroke-dasharray="6 5" style="animation:dashRev 10s linear infinite"/>
+  <path d="M340,312 L340,340 L260,340" fill="none" stroke="#00e5ff" stroke-opacity="0.2" stroke-width="0.8" stroke-dasharray="5 6" style="animation:dash 7s linear infinite"/>
+  <path d="M432,220 L470,280 L492,280" fill="none" stroke="#00ff88" stroke-opacity="0.2" stroke-width="0.8" stroke-dasharray="5 6" style="animation:dashRev 9s linear infinite"/>
+
+  <!-- ── SCAN LINE ── -->
+  <rect x="0" y="0" width="40" height="420" fill="rgba(0,229,255,0.025)" style="animation:scanV 6s ease-in-out infinite"/>
+
+  <!-- ── CORNER BRACKETS ── -->
+  <path d="M8,8 L8,24 M8,8 L24,8" fill="none" stroke="#00e5ff" stroke-opacity="0.5" stroke-width="1.5"/>
+  <path d="M672,8 L672,24 M672,8 L656,8" fill="none" stroke="#00e5ff" stroke-opacity="0.5" stroke-width="1.5"/>
+  <path d="M8,412 L8,396 M8,412 L24,412" fill="none" stroke="#00e5ff" stroke-opacity="0.5" stroke-width="1.5"/>
+  <path d="M672,412 L672,396 M672,412 L656,412" fill="none" stroke="#00e5ff" stroke-opacity="0.5" stroke-width="1.5"/>
+
+  <!-- ── OUTER FRAME ── -->
+  <rect x="1" y="1" width="678" height="418" fill="none" stroke="#00e5ff" stroke-opacity="0.15" stroke-width="0.8"/>
+
+  <!-- LIVE dot -->
+  <circle cx="662" cy="24" r="4" fill="#00ff88" style="animation:blink 1.5s ease-in-out infinite"/>
+  <text x="654" y="38" text-anchor="middle" fill="rgba(0,255,136,0.6)" font-size="8" font-family="'IBM Plex Mono',monospace">LIVE</text>
+</svg>
+
+</div>

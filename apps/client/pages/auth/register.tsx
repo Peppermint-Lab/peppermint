@@ -62,7 +62,7 @@ export default function Login({}) {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
-          src="/yottabyte-logo.png"
+          src="/yottabyte-mark.svg"
           alt="YOTTABYTE logo"
           className="mx-auto h-20 w-20 rounded-2xl object-cover"
         />

@@ -172,7 +172,7 @@ export default function PortalLayout({ children }: any) {
                       <Link href="/" className="flex items-center gap-3">
                         <img
                           className="h-9 w-9 rounded-lg object-cover"
-                          src="/yottabyte-logo.png"
+                          src="/yottabyte-mark.svg"
                           alt="YOTTABYTE logo"
                         />
                         <span className="text-2xl font-bold tracking-wide">
@@ -242,7 +242,7 @@ export default function PortalLayout({ children }: any) {
               <Link href="/" className="flex items-center gap-3">
                 <img
                   className="h-9 w-9 rounded-lg object-cover"
-                  src="/yottabyte-logo.png"
+                  src="/yottabyte-mark.svg"
                   alt="YOTTABYTE logo"
                 />
                 <span className="text-2xl font-bold tracking-wide">

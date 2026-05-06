@@ -41,7 +41,7 @@ export default function Login({}) {
         <a href="/">
           <img
             className="mx-auto h-24 w-24 rounded-2xl object-cover"
-            src="/yottabyte-logo.png"
+            src="/yottabyte-mark.svg"
             alt="YOTTABYTE logo"
           />
         </a>

@@ -2,7 +2,7 @@ export default function customError() {
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <img
-        src="/yottabyte-logo.png"
+        src="/yottabyte-mark.svg"
         width="180"
         className="rounded-3xl"
         alt="YOTTABYTE logo"

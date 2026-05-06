@@ -95,35 +95,37 @@ server.addHook("preHandler", async function (request: any, reply: any) {
 const start = async () => {
   try {
     // Run prisma generate and migrate commands before starting the server
-    await new Promise<void>((resolve, reject) => {
-      exec("npx prisma migrate deploy", (err, stdout, stderr) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        }
-        console.log(stdout);
-        console.error(stderr);
-
-        exec("npx prisma generate", (err, stdout, stderr) => {
+    if (process.env.SKIP_DB_SETUP !== "1") {
+      await new Promise<void>((resolve, reject) => {
+        exec("npx prisma migrate deploy", (err, stdout, stderr) => {
           if (err) {
             console.error(err);
             reject(err);
           }
           console.log(stdout);
           console.error(stderr);
-        });
 
-        exec("npx prisma db seed", (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          }
-          console.log(stdout);
-          console.error(stderr);
-          resolve();
+          exec("npx prisma generate", (err, stdout, stderr) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            }
+            console.log(stdout);
+            console.error(stderr);
+          });
+
+          exec("npx prisma db seed", (err, stdout, stderr) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            }
+            console.log(stdout);
+            console.error(stderr);
+            resolve();
+          });
         });
       });
-    });
+    }
 
     // connect to database
     await prisma.$connect();

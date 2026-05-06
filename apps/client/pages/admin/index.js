@@ -4,7 +4,7 @@ export default function BlankPage() {
       <div className="flex align-middle flex-row justify-center">
         <img
           className="h-12 w-12 rounded-xl object-cover"
-          src="/yottabyte-logo.png"
+          src="/yottabyte-mark.svg"
           alt="YOTTABYTE logo"
         />
         <h1 className="text-2xl ml-2 mt-3 font-extrabold text-green-600">
