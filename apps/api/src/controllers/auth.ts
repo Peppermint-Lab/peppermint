@@ -76,11 +76,12 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      let { email, password, admin, name } = request.body as {
+      let { email, password, admin, name, language } = request.body as {
         email: string;
         password: string;
         admin: boolean;
         name: string;
+        language?: string;
       };
 
       const requester = await checkSession(request);
@@ -88,27 +89,32 @@ export function authRoutes(fastify: FastifyInstance) {
       if (!requester?.isAdmin) {
         return reply.code(401).send({
           message: "Unauthorized",
+          success: false,
         });
       }
 
+      const normalizedEmail = email.toLowerCase().trim();
+
       // Checks if email already exists
       let record = await prisma.user.findUnique({
-        where: { email },
+        where: { email: normalizedEmail },
       });
 
       // if exists, return 400
       if (record) {
         return reply.code(400).send({
           message: "Email already exists",
+          success: false,
         });
       }
 
       const user = await prisma.user.create({
         data: {
-          email,
+          email: normalizedEmail,
           password: await bcrypt.hash(password, 10),
           name,
           isAdmin: admin,
+          language,
         },
       });
 

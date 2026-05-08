@@ -2,40 +2,62 @@ import handlebars from "handlebars";
 import { prisma } from "../../../prisma";
 import { createTransportProvider } from "../transport";
 
+function getStatusLabel(ticket: any) {
+  return ticket.isComplete ? "Closed" : "Open";
+}
+
 export async function sendTicketStatus(ticket: any) {
-  const email = await prisma.email.findFirst();
+  try {
+    const email = await prisma.email.findFirst();
 
-  if (email) {
-    const transport = await createTransportProvider();
+    if (email) {
+      const transport = await createTransportProvider();
 
-    const testhtml = await prisma.emailTemplate.findFirst({
-      where: {
-        type: "ticket_status_changed",
-      },
-    });
+      const recipients = [
+        ticket.email,
+        ticket.assignedTo?.email,
+      ].filter(Boolean);
 
-    var template = handlebars.compile(testhtml?.html);
-    var replacements = {
-      title: ticket.title,
-      status: ticket.isComplete ? "COMPLETED" : "OUTSTANDING",
-    };
-    var htmlToSend = template(replacements);
+      const uniqueRecipients = [...new Set(recipients)];
 
-    await transport
-      .sendMail({
-        from: email?.reply, 
-        to: ticket.email,
-        subject: `Issue #${ticket.Number} status is now ${
-          ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
-        }`, 
-        text: `Hello there, Issue #${ticket.Number}, now has a status of ${
-          ticket.isComplete ? "COMPLETED" : "OUTSTANDING"
-        }`,
-        html: htmlToSend,
-      })
-      .then((info: any) => {
-        console.log("Message sent: %s", info.messageId);
-      })
-      .catch((err: any) => console.log(err));
+      if (uniqueRecipients.length === 0) {
+        console.log("No recipients found for ticket status email.");
+        return;
+      }
+
+      const status = getStatusLabel(ticket);
+      const testhtml = await prisma.emailTemplate.findFirst({
+        where: {
+          type: "ticket_status_changed",
+        },
+      });
+
+      const fallbackHtml = `<p>Hello there, ticket #${ticket.Number} (${ticket.title}) is now ${status}.</p>`;
+      const template = handlebars.compile(testhtml?.html || fallbackHtml);
+      const replacements = {
+        id: ticket.id,
+        number: ticket.Number,
+        title: ticket.title,
+        status,
+      };
+      const htmlToSend = template(replacements);
+
+      await transport
+        .sendMail({
+          from: email?.reply,
+          to: uniqueRecipients,
+          subject: `Ticket #${ticket.Number} is now ${status}`,
+          text: `Hello there, ticket #${ticket.Number} (${ticket.title}) is now ${status}.`,
+          html: htmlToSend,
+        })
+        .then((info: any) => {
+          console.log("Message sent: %s", info.messageId);
+        })
+        .catch((err: any) =>
+          console.error("Failed to send ticket status email:", err)
+        );
+    }
+  } catch (error) {
+    console.error("Failed to prepare ticket status email:", error);
   }
 }

@@ -48,7 +48,7 @@ export default function CreateUser() {
           toast({
             variant: "destructive",
             title: "There has been an error ",
-            description: "Whoops! please wait and try again!",
+            description: res.message || "Whoops! please wait and try again!",
           });
         }
       });

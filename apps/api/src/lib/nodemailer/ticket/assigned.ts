@@ -2,9 +2,8 @@ import handlebars from "handlebars";
 import { prisma } from "../../../prisma";
 import { createTransportProvider } from "../transport";
 
-export async function sendAssignedEmail(email: any) {
+export async function sendAssignedEmail(email: string, ticket?: any) {
   try {
-
     const provider = await prisma.email.findFirst();
 
     if (provider) {
@@ -18,23 +17,36 @@ export async function sendAssignedEmail(email: any) {
         },
       });
 
-      var template = handlebars.compile(testhtml?.html);
-      var htmlToSend = template({}); // Pass an empty object as the argument to the template function
+      const ticketNumber = ticket?.Number ? `#${ticket.Number}` : "";
+      const ticketTitle = ticket?.title || "a ticket";
+      const fallbackHtml = `<p>Hello there, ticket ${ticketNumber} ${ticketTitle} has been assigned to you.</p>`;
+      const template = handlebars.compile(testhtml?.html || fallbackHtml);
+      const htmlToSend = template({
+        id: ticket?.id,
+        number: ticket?.Number,
+        title: ticket?.title,
+      });
 
       await mail
         .sendMail({
-          from: provider?.reply, 
-          to: email, 
-          subject: `A new ticket has been assigned to you`, 
-          text: `Hello there, a ticket has been assigned to you`, 
+          from: provider?.reply,
+          to: email,
+          subject: ticket?.Number
+            ? `Ticket #${ticket.Number} has been assigned to you`
+            : `A new ticket has been assigned to you`,
+          text: ticket?.Number
+            ? `Hello there, ticket #${ticket.Number} (${ticketTitle}) has been assigned to you.`
+            : `Hello there, a ticket has been assigned to you.`,
           html: htmlToSend,
         })
         .then((info: any) => {
           console.log("Message sent: %s", info.messageId);
         })
-        .catch((err: any) => console.log(err));
+        .catch((err: any) =>
+          console.error("Failed to send assigned ticket email:", err)
+        );
     }
   } catch (error) {
-    console.log(error);
+    console.error("Failed to prepare assigned ticket email:", error);
   }
 }

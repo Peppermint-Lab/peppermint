@@ -29,19 +29,33 @@ export default function Ticket() {
 
   const fetchTicketById = async () => {
     const id = router.query.id;
-    const res = await fetch(`/api/v1/ticket/${id}`, {
+    const res = await fetch(`/api/v1/tickets/user/external/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return res.json();
+    const json = await res.json();
+
+    if (!res.ok || !json.ticket) {
+      throw new Error(json.message || "Unable to fetch ticket");
+    }
+
+    return json;
   };
 
-  const { data, status, refetch } = useQuery("fetchTickets", fetchTicketById);
+  const { data, status, error, refetch } = useQuery(
+    ["fetchTicket", router.query.id],
+    fetchTicketById,
+    {
+      enabled: Boolean(router.query.id),
+    }
+  );
 
   useEffect(() => {
-    refetch();
-  }, [router]);
+    if (router.query.id) {
+      refetch();
+    }
+  }, [router.query.id, refetch]);
 
   const [users, setUsers] = useState<any>();
   const [n, setN] = useState<any>();
@@ -103,6 +117,9 @@ export default function Ticket() {
       {status === "error" && (
         <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold"> Error fetching data ... </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            {(error as Error)?.message || "Please try again."}
+          </p>
           {/* <img src={server} className="h-96 w-96" alt="error" /> */}
         </div>
       )}

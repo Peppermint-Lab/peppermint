@@ -93,7 +93,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         },
       });
 
-      if (!email && !validateEmail(email)) {
+      if (email && validateEmail(email)) {
         await sendTicketCreate(ticket);
       }
 
@@ -104,7 +104,9 @@ export function ticketRoutes(fastify: FastifyInstance) {
           },
         });
 
-        await sendAssignedEmail(assgined!.email);
+        if (assgined?.email) {
+          await sendAssignedEmail(assgined.email, ticket);
+        }
 
         await assignedNotification(engineer, ticket, user);
       }
@@ -207,7 +209,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
         },
       });
 
-      if (!email && !validateEmail(email)) {
+      if (email && validateEmail(email)) {
         await sendTicketCreate(ticket);
       }
 
@@ -218,7 +220,9 @@ export function ticketRoutes(fastify: FastifyInstance) {
           },
         });
 
-        await sendAssignedEmail(assgined!.email);
+        if (assgined?.email) {
+          await sendAssignedEmail(assgined.email, ticket);
+        }
 
         const user = await checkSession(request);
 
@@ -617,7 +621,9 @@ export function ticketRoutes(fastify: FastifyInstance) {
             where: { id: id },
           });
 
-          await sendAssignedEmail(email);
+          if (email) {
+            await sendAssignedEmail(email, ticket);
+          }
           await assignedNotification(assigned, ticket, assigner);
         } else {
           await prisma.ticket.update({
@@ -804,16 +810,32 @@ export function ticketRoutes(fastify: FastifyInstance) {
           return reply.code(401).send({ error: "Unauthorized" });
         }
 
+        const previousTicket = await prisma.ticket.findUnique({
+          where: { id: id },
+          select: { isComplete: true },
+        });
+
         const ticket: any = await prisma.ticket.update({
           where: { id: id },
           data: {
             isComplete: status,
           },
+          include: {
+            assignedTo: {
+              select: {
+                email: true,
+              },
+            },
+          },
         });
 
-        await activeStatusNotification(ticket, user, status);
+        const statusChanged = previousTicket?.isComplete !== ticket.isComplete;
 
-        await sendTicketStatus(ticket);
+        if (statusChanged) {
+          await activeStatusNotification(ticket, user, status);
+
+          await sendTicketStatus(ticket);
+        }
 
         const webhook = await prisma.webhooks.findMany({
           where: {
@@ -1005,6 +1027,95 @@ export function ticketRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Get a ticket by id for an external user
+  fastify.get(
+    "/api/v1/tickets/user/external/:id",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      try {
+        const user = await checkSession(request);
+        const { id }: any = request.params;
+
+        if (!user) {
+          return reply.code(401).send({
+            message: "Unauthorized",
+            success: false,
+          });
+        }
+
+        const ticket = await prisma.ticket.findFirst({
+          where: {
+            id,
+            email: user.email,
+            hidden: false,
+          },
+          include: {
+            client: {
+              select: { id: true, name: true, number: true, notes: true },
+            },
+            assignedTo: {
+              select: { id: true, name: true },
+            },
+          },
+        });
+
+        if (!ticket) {
+          return reply.code(404).send({
+            message: "Ticket not found",
+            success: false,
+          });
+        }
+
+        const timeTracking = await prisma.timeTracking.findMany({
+          where: {
+            ticketId: id,
+          },
+          include: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        });
+
+        const comments = await prisma.comment.findMany({
+          where: {
+            ticketId: ticket.id,
+            public: true,
+          },
+          include: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        });
+
+        const files = await prisma.ticketFile.findMany({
+          where: {
+            ticketId: id,
+          },
+        });
+
+        reply.send({
+          ticket: {
+            ...ticket,
+            comments,
+            TimeTracking: timeTracking,
+            files,
+          },
+          success: true,
+        });
+      } catch (error) {
+        reply.code(500).send({
+          message: "Unable to fetch ticket",
+          success: false,
+        });
+      }
+    }
+  );
+
   // Get all open tickets for an external user
   fastify.get(
     "/api/v1/tickets/user/open/external",
@@ -1082,9 +1193,6 @@ export function ticketRoutes(fastify: FastifyInstance) {
   // Get all tickets for an external user
   fastify.get(
     "/api/v1/tickets/user/external",
-    {
-      preHandler: requirePermission(["issue::read"]),
-    },
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const user = await checkSession(request);
