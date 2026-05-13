@@ -24,22 +24,30 @@ export function notebookRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["document::create"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const { content, title }: any = request.body;
-      const user = await checkSession(request);
+      try {
+        const { content, title }: any = request.body;
+        const user = await checkSession(request);
 
-      const data = await prisma.notes.create({
-        data: {
-          title,
-          note: content,
-          userId: user!.id,
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      await tracking("note_created", {});
+        const data = await prisma.notes.create({
+          data: {
+            title,
+            note: content,
+            userId: user.id,
+          },
+        });
 
-      const { id } = data;
+        await tracking("note_created", {});
 
-      reply.status(200).send({ success: true, id });
+        const { id } = data;
+
+        reply.status(200).send({ success: true, id });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -50,13 +58,21 @@ export function notebookRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["document::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
+      try {
+        const user = await checkSession(request);
 
-      const notebooks = await prisma.notes.findMany({
-        where: { userId: user!.id },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      reply.status(200).send({ success: true, notebooks: notebooks });
+        const notebooks = await prisma.notes.findMany({
+          where: { userId: user.id },
+        });
+
+        reply.status(200).send({ success: true, notebooks: notebooks });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -67,15 +83,23 @@ export function notebookRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["document::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
+      try {
+        const user = await checkSession(request);
 
-      const { id }: any = request.params;
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      const note = await prisma.notes.findUnique({
-        where: { userId: user!.id, id: id },
-      });
+        const { id }: any = request.params;
 
-      reply.status(200).send({ success: true, note });
+        const note = await prisma.notes.findUnique({
+          where: { userId: user.id, id: id },
+        });
+
+        reply.status(200).send({ success: true, note });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -86,19 +110,28 @@ export function notebookRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["document::delete"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
-      const { id }: any = request.params;
+      try {
+        const user = await checkSession(request);
 
-      await prisma.notes.delete({
-        where: {
-          id: id,
-          userId: user!.id,
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      await tracking("note_deleted", {});
+        const { id }: any = request.params;
 
-      reply.status(200).send({ success: true });
+        await prisma.notes.delete({
+          where: {
+            id: id,
+            userId: user.id,
+          },
+        });
+
+        await tracking("note_deleted", {});
+
+        reply.status(200).send({ success: true });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 
@@ -109,24 +142,33 @@ export function notebookRoutes(fastify: FastifyInstance) {
       preHandler: requirePermission(["document::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = await checkSession(request);
-      const { id }: any = request.params;
-      const { content, title }: any = request.body;
+      try {
+        const user = await checkSession(request);
 
-      await prisma.notes.update({
-        where: {
-          id: id,
-          userId: user!.id,
-        },
-        data: {
-          title: title,
-          note: content,
-        },
-      });
+        if (!user) {
+          return reply.code(401).send({ error: "Unauthorized" });
+        }
 
-      await tracking("note_updated", {});
+        const { id }: any = request.params;
+        const { content, title }: any = request.body;
 
-      reply.status(200).send({ success: true });
+        await prisma.notes.update({
+          where: {
+            id: id,
+            userId: user.id,
+          },
+          data: {
+            title: title,
+            note: content,
+          },
+        });
+
+        await tracking("note_updated", {});
+
+        reply.status(200).send({ success: true });
+      } catch (error) {
+        reply.code(401).send({ error: "Unauthorized" });
+      }
     }
   );
 }

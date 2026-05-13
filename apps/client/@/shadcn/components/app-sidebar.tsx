@@ -50,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
     teams: [
       {
-        name: "Peppermint",
+        name: "YOTTABYTE",
         plan: `version: ${process.env.NEXT_PUBLIC_CLIENT_VERSION}`,
       },
     ],
@@ -167,11 +167,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         {/* <TeamSwitcher teams={data.teams} /> */}
         <div className="flex items-center gap-2 ">
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
-            <img src="/favicon/favicon-32x32.png" className="size-4" />
+          <div className="flex aspect-square size-8 items-center justify-center overflow-hidden rounded-lg bg-white text-sidebar-primary-foreground">
+            <img src="/yottabyte-mark.svg" className="size-8 object-contain p-1" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold text-xl">Peppermint</span>
+            <span className="truncate font-semibold text-xl">YOTTABYTE</span>
             <span className="truncate text-xs">
               version: {process.env.NEXT_PUBLIC_CLIENT_VERSION}
             </span>

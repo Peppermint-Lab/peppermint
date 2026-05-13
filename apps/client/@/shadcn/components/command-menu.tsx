@@ -62,8 +62,11 @@ export function CommandMenu() {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (!response.ok) {
+        return [];
+      }
       const data = await response.json();
-      return data.tickets;
+      return Array.isArray(data.tickets) ? data.tickets : [];
     },
     {
       enabled: open, // Only fetch when command menu is open
@@ -78,8 +81,11 @@ export function CommandMenu() {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (!response.ok) {
+        return [];
+      }
       const data = await response.json();
-      return data.users;
+      return Array.isArray(data.users) ? data.users : [];
     },
     {
       enabled: open, // Only fetch when command menu is open

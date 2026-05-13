@@ -76,11 +76,12 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      let { email, password, admin, name } = request.body as {
+      let { email, password, admin, name, language } = request.body as {
         email: string;
         password: string;
         admin: boolean;
         name: string;
+        language?: string;
       };
 
       const requester = await checkSession(request);
@@ -88,27 +89,32 @@ export function authRoutes(fastify: FastifyInstance) {
       if (!requester?.isAdmin) {
         return reply.code(401).send({
           message: "Unauthorized",
+          success: false,
         });
       }
 
+      const normalizedEmail = email.toLowerCase().trim();
+
       // Checks if email already exists
       let record = await prisma.user.findUnique({
-        where: { email },
+        where: { email: normalizedEmail },
       });
 
       // if exists, return 400
       if (record) {
         return reply.code(400).send({
           message: "Email already exists",
+          success: false,
         });
       }
 
       const user = await prisma.user.create({
         data: {
-          email,
+          email: normalizedEmail,
           password: await bcrypt.hash(password, 10),
           name,
           isAdmin: admin,
+          language,
         },
       });
 
@@ -402,76 +408,88 @@ export function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      // Find out which config type it is, then action accordinly
-      switch (provider) {
-        case "oidc":
-          const config = await getOidcConfig();
-          if (!config) {
-            return reply
-              .code(500)
-              .send({ error: "OIDC configuration not found" });
-          }
+      try {
+        // Find out which config type it is, then action accordinly
+        switch (provider) {
+          case "oidc":
+            const config = await getOidcConfig();
+            if (!config) {
+              return reply
+                .code(500)
+                .send({ error: "OIDC configuration not found" });
+            }
 
-          const oidcClient = await getOidcClient(config);
+            const oidcClient = await getOidcClient(config);
 
-          // Generate codeVerifier and codeChallenge
-          const codeVerifier = generators.codeVerifier();
-          const codeChallenge = generators.codeChallenge(codeVerifier);
+            // Generate codeVerifier and codeChallenge
+            const codeVerifier = generators.codeVerifier();
+            const codeChallenge = generators.codeChallenge(codeVerifier);
 
-          // Generate a random state parameter
-          const state = generators.state();
+            // Generate a random state parameter
+            const state = generators.state();
 
-          // Store codeVerifier in cache with s
-          cache.set(state, {
-            codeVerifier: codeVerifier,
-          });
-
-          // Generate authorization URL
-          const url = oidcClient.authorizationUrl({
-            scope: "openid email profile",
-            response_type: "code",
-            redirect_uri: config.redirectUri,
-            code_challenge: codeChallenge,
-            code_challenge_method: "S256", // Use 'plain' if 'S256' is not supported
-            state: state,
-          });
-
-          reply.send({
-            type: "oidc",
-            success: true,
-            url: url,
-          });
-
-          break;
-        case "oauth":
-          const oauthProvider = await getOAuthProvider();
-
-          if (!oauthProvider) {
-            return reply.code(500).send({
-              error: `OAuth provider ${provider} configuration not found`,
+            // Store codeVerifier in cache with s
+            cache.set(state, {
+              codeVerifier: codeVerifier,
             });
-          }
 
-          const client = getOAuthClient({
-            ...oauthProvider,
-            name: oauthProvider.name,
-          });
+            // Generate authorization URL
+            const url = oidcClient.authorizationUrl({
+              scope: "openid email profile",
+              response_type: "code",
+              redirect_uri: config.redirectUri,
+              code_challenge: codeChallenge,
+              code_challenge_method: "S256", // Use 'plain' if 'S256' is not supported
+              state: state,
+            });
 
-          // Generate authorization URL
-          const uri = client.authorizeURL({
-            redirect_uri: oauthProvider.redirectUri,
-            scope: oauthProvider.scope,
-          });
+            reply.send({
+              type: "oidc",
+              success: true,
+              url: url,
+            });
 
-          reply.send({
-            type: "oauth",
-            success: true,
-            url: uri,
-          });
+            break;
+          case "oauth":
+            const oauthProvider = await getOAuthProvider();
 
-          break;
-        default:
-          break;
+            if (!oauthProvider) {
+              return reply.code(500).send({
+                error: `OAuth provider ${provider} configuration not found`,
+              });
+            }
+
+            const client = getOAuthClient({
+              ...oauthProvider,
+              name: oauthProvider.name,
+            });
+
+            // Generate authorization URL
+            const uri = client.authorizeURL({
+              redirect_uri: oauthProvider.redirectUri,
+              scope: oauthProvider.scope,
+            });
+
+            reply.send({
+              type: "oauth",
+              success: true,
+              url: uri,
+            });
+
+            break;
+          default:
+            return reply.code(200).send({
+              success: true,
+              message: "SSO not enabled",
+              oauth: false,
+            });
+        }
+      } catch (err) {
+        return reply.code(200).send({
+          success: false,
+          message: "SSO configuration invalid",
+          oauth: false,
+        });
       }
     }
   );

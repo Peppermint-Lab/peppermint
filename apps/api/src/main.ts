@@ -60,15 +60,28 @@ server.get(
 // JWT authentication hook
 server.addHook("preHandler", async function (request: any, reply: any) {
   try {
-    if (request.url === "/api/v1/auth/login" && request.method === "POST") {
-      return true;
-    }
+    const publicRoutes = [
+      { method: "POST", url: "/api/v1/auth/login" },
+      { method: "GET", url: "/api/v1/auth/check" },
+      { method: "POST", url: "/api/v1/auth/user/register/external" },
+      { method: "POST", url: "/api/v1/auth/password-reset" },
+      { method: "POST", url: "/api/v1/auth/password-reset/code" },
+      { method: "POST", url: "/api/v1/auth/password-reset/password" },
+      { method: "GET", url: "/api/v1/auth/oidc/callback" },
+      { method: "GET", url: "/api/v1/auth/oauth/callback" },
+      { method: "POST", url: "/api/v1/ticket/public/create" },
+    ];
+
+    const requestPath = request.url.split("?")[0];
+
     if (
-      request.url === "/api/v1/ticket/public/create" &&
-      request.method === "POST"
+      publicRoutes.some(
+        (route) => route.method === request.method && route.url === requestPath
+      )
     ) {
       return true;
     }
+
     const bearer = request.headers.authorization!.split(" ")[1];
     checkToken(bearer);
   } catch (err) {
@@ -82,35 +95,37 @@ server.addHook("preHandler", async function (request: any, reply: any) {
 const start = async () => {
   try {
     // Run prisma generate and migrate commands before starting the server
-    await new Promise<void>((resolve, reject) => {
-      exec("npx prisma migrate deploy", (err, stdout, stderr) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        }
-        console.log(stdout);
-        console.error(stderr);
-
-        exec("npx prisma generate", (err, stdout, stderr) => {
+    if (process.env.SKIP_DB_SETUP !== "1") {
+      await new Promise<void>((resolve, reject) => {
+        exec("npx prisma migrate deploy", (err, stdout, stderr) => {
           if (err) {
             console.error(err);
             reject(err);
           }
           console.log(stdout);
           console.error(stderr);
-        });
 
-        exec("npx prisma db seed", (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          }
-          console.log(stdout);
-          console.error(stderr);
-          resolve();
+          exec("npx prisma generate", (err, stdout, stderr) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            }
+            console.log(stdout);
+            console.error(stderr);
+          });
+
+          exec("npx prisma db seed", (err, stdout, stderr) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            }
+            console.log(stdout);
+            console.error(stderr);
+            resolve();
+          });
         });
       });
-    });
+    }
 
     // connect to database
     await prisma.$connect();

@@ -72,7 +72,7 @@ export default function Home() {
   }
 
   async function fetchTickets() {
-    await fetch(`/api/v1/tickets/open`, {
+    await fetch(`/api/v1/tickets/user/open`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -100,13 +100,13 @@ export default function Home() {
   ];
 
   async function datafetch() {
-    Promise.all([
+    await Promise.all([
       fetchTickets(),
       getOpenTickets(),
       getCompletedTickets(),
       getUnassginedTickets(),
     ]);
-    await setLoading(false);
+    setLoading(false);
   }
 
   useEffect(() => {

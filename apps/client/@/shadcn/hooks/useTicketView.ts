@@ -1,38 +1,59 @@
 import { KanbanGrouping, SortOption, Ticket, UISettings, ViewMode } from '@/shadcn/types/tickets';
 import { useEffect, useState } from 'react';
 
+function readStoredValue<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") {
+    return fallback;
+  }
+
+  const saved = window.localStorage.getItem(key);
+  if (!saved) {
+    return fallback;
+  }
+
+  if (typeof fallback === "string") {
+    return saved as T;
+  }
+
+  try {
+    return JSON.parse(saved);
+  } catch (error) {
+    return fallback;
+  }
+}
+
 export function useTicketView(tickets: Ticket[] = []) {
-  const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    const saved = localStorage.getItem("preferred_view_mode");
-    return (saved as ViewMode) || 'list';
-  });
+  const [viewMode, setViewMode] = useState<ViewMode>(() =>
+    readStoredValue<ViewMode>("preferred_view_mode", "list")
+  );
 
-  const [kanbanGrouping, setKanbanGrouping] = useState<KanbanGrouping>(() => {
-    const saved = localStorage.getItem("preferred_kanban_grouping");
-    return (saved as KanbanGrouping) || 'status';
-  });
+  const [kanbanGrouping, setKanbanGrouping] = useState<KanbanGrouping>(() =>
+    readStoredValue<KanbanGrouping>("preferred_kanban_grouping", "status")
+  );
 
-  const [sortBy, setSortBy] = useState<SortOption>(() => {
-    const saved = localStorage.getItem("preferred_sort_by");
-    return (saved as SortOption) || 'newest';
-  });
+  const [sortBy, setSortBy] = useState<SortOption>(() =>
+    readStoredValue<SortOption>("preferred_sort_by", "newest")
+  );
 
-  const [uiSettings, setUISettings] = useState<UISettings>(() => {
-    const saved = localStorage.getItem("preferred_ui_settings");
-    return saved ? JSON.parse(saved) : {
+  const [uiSettings, setUISettings] = useState<UISettings>(() =>
+    readStoredValue<UISettings>("preferred_ui_settings", {
       showAvatars: true,
       showDates: true,
       showPriority: true,
       showType: true,
       showTicketNumbers: true,
-    };
-  });
+    })
+  );
 
   useEffect(() => {
-    localStorage.setItem("preferred_view_mode", viewMode);
-    localStorage.setItem("preferred_kanban_grouping", kanbanGrouping);
-    localStorage.setItem("preferred_sort_by", sortBy);
-    localStorage.setItem("preferred_ui_settings", JSON.stringify(uiSettings));
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem("preferred_view_mode", viewMode);
+    window.localStorage.setItem("preferred_kanban_grouping", kanbanGrouping);
+    window.localStorage.setItem("preferred_sort_by", sortBy);
+    window.localStorage.setItem("preferred_ui_settings", JSON.stringify(uiSettings));
   }, [viewMode, kanbanGrouping, sortBy, uiSettings]);
 
   const handleUISettingChange = (setting: keyof UISettings, value: boolean) => {

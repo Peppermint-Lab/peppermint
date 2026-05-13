@@ -22,6 +22,7 @@ const type = [
   { id: 4, name: "Maintenance" },
   { id: 6, name: "Access" },
   { id: 8, name: "Feedback" },
+  { id: 9, name: "RevFlow" },
 ];
 
 export default function CreateTicket() {
@@ -40,6 +41,11 @@ export default function CreateTicket() {
   const [options, setOptions] = useState<any>();
   const [users, setUsers] = useState<any>();
   const [selected, setSelected] = useState<any>(type[3]);
+  const [customField1, setCustomField1] = useState("");
+  const [customField2, setCustomField2] = useState("");
+  const [customField3, setCustomField3] = useState("");
+  const [outcome, setOutcome] = useState("");
+  const [customerField, setCustomerField] = useState("");
 
   const fetchClients = async () => {
     await fetch(`/api/v1/clients/all`, {
@@ -93,6 +99,11 @@ export default function CreateTicket() {
         priority,
         engineer,
         type: selected.name,
+        custom_field_1: customField1,
+        custom_field_2: customField2,
+        custom_field_3: customField3,
+        outcome,
+        customer_field: customerField,
         createdBy: {
           id: user.id,
           name: user.name,
@@ -124,6 +135,8 @@ export default function CreateTicket() {
     fetchClients();
     fetchUsers();
   }, []);
+
+  const isRevFlow = selected.name === "RevFlow";
 
   return (
     <div className="h-full bg-white dark:bg-[#0A090C]">
@@ -448,6 +461,45 @@ export default function CreateTicket() {
               className="w-full pl-0 pr-0 sm:text-xl border-none dark:bg-[#0A090C] dark:text-white focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"
             />
           </div>
+          {isRevFlow && (
+            <div className="grid grid-cols-1 gap-3 px-4 py-4 md:grid-cols-2 border-b border-gray-700">
+              <input
+                type="text"
+                placeholder="custom_field_1"
+                value={customField1}
+                onChange={(e) => setCustomField1(e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:bg-[#0A090C] dark:text-white"
+              />
+              <input
+                type="text"
+                placeholder="custom_field_2"
+                value={customField2}
+                onChange={(e) => setCustomField2(e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:bg-[#0A090C] dark:text-white"
+              />
+              <input
+                type="text"
+                placeholder="custom_field_3"
+                value={customField3}
+                onChange={(e) => setCustomField3(e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:bg-[#0A090C] dark:text-white"
+              />
+              <input
+                type="text"
+                placeholder="outcome"
+                value={outcome}
+                onChange={(e) => setOutcome(e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:bg-[#0A090C] dark:text-white"
+              />
+              <input
+                type="text"
+                placeholder="customer_field"
+                value={customerField}
+                onChange={(e) => setCustomerField(e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:bg-[#0A090C] dark:text-white md:col-span-2"
+              />
+            </div>
+          )}
           <Editor setIssue={setIssue} />
         </div>
         <div className="w-full xl:w-1/6 p-3 flex flex-col dark:bg-[#0A090C] dark:text-white border-b-[1px] xl:border-b-0 xl:border-r-[1px] order-1 xl:order-1">

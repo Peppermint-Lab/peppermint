@@ -16,25 +16,25 @@ export default function Document() {
         />
         <meta name="keywords" content="Keywords" />
 
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#030b14" />
         <link rel="manifest" href="/manifest.json" />
 
-        <title>Peppermint</title>
+        <title>Yottabyte Digital Operations Centre</title>
 
-        <link href="/favicon/favicon.ico" rel="icon" />
+        <link href="/yottabyte-mark.svg" rel="icon" type="image/svg+xml" />
         <link
-          href="/favicon/favicon-16x16.png"
+          href="/yottabyte-mark.svg"
           rel="icon"
-          type="image/png"
+          type="image/svg+xml"
           sizes="16x16"
         />
         <link
-          href="/favicon/favicon-32x32.png"
+          href="/yottabyte-mark.svg"
           rel="icon"
-          type="image/png"
+          type="image/svg+xml"
           sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+        <link rel="apple-touch-icon" href="/yottabyte-mark.svg"></link>
       </Head>
       <body>
         <Main />

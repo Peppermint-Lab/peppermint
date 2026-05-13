@@ -28,6 +28,7 @@ export default function Tickets() {
 
   const token = getCookie("session");
   const user = useUser();
+  const [isMounted, setIsMounted] = useState(false);
   
   // Fetch tickets data
   const { data, status, refetch } = useQuery(
@@ -72,15 +73,23 @@ export default function Tickets() {
 
   // Update local storage when filters change
   useEffect(() => {
-    localStorage.setItem(
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
       "all_selectedPriorities",
       JSON.stringify(selectedPriorities)
     );
-    localStorage.setItem(
+    window.localStorage.setItem(
       "all_selectedStatuses",
       JSON.stringify(selectedStatuses)
     );
-    localStorage.setItem(
+    window.localStorage.setItem(
       "all_selectedAssignees",
       JSON.stringify(selectedAssignees)
     );
@@ -89,19 +98,27 @@ export default function Tickets() {
   const [users, setUsers] = useState<any[]>([]);
 
   async function fetchUsers() {
-    await fetch(`/api/v1/users/all`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res) {
-          setUsers(res.users);
-        }
+    try {
+      const response = await fetch(`/api/v1/users/all`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      if (!response.ok) {
+        console.error("Failed to fetch users:", response.status);
+        return;
+      }
+
+      const res = await response.json();
+      if (res && res.users) {
+        setUsers(res.users);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   }
 
   useEffect(() => {
@@ -110,13 +127,25 @@ export default function Tickets() {
 
   // Add this to the useEffect that saves preferences
   useEffect(() => {
-    localStorage.setItem("preferred_view_mode", viewMode);
-    localStorage.setItem("preferred_kanban_grouping", kanbanGrouping);
-    localStorage.setItem("preferred_sort_by", sortBy);
+    if (!isMounted || typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem("preferred_view_mode", viewMode);
+    window.localStorage.setItem("preferred_kanban_grouping", kanbanGrouping);
+    window.localStorage.setItem("preferred_sort_by", sortBy);
   }, [viewMode, kanbanGrouping, sortBy]);
 
   if (status === "loading") {
     return <Loader className="animate-spin" />;
+  }
+
+  if (status === "error") {
+    return (
+      <div className="flex flex-col h-screen items-center justify-center">
+        <p className="text-red-500">Error loading tickets. Please try refreshing the page.</p>
+      </div>
+    );
   }
 
   return (
@@ -151,7 +180,7 @@ export default function Tickets() {
           onStatusChange={updateTicketStatus}
           onAssigneeChange={updateTicketAssignee}
           onPriorityChange={updateTicketPriority}
-          onDelete={user.isAdmin ? deleteTicket : undefined}
+          onDelete={user?.isAdmin ? deleteTicket : undefined}
           users={users}
           currentUser={user}
           uiSettings={uiSettings}

@@ -1,20 +1,20 @@
 {
-  "name": "Peppermint",
-  "short_name": "Peppermint",
+  "name": "YOTTABYTE",
+  "short_name": "YOTTABYTE",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "description": "An offline-first Next.js app",
   "icons": [
     {
-      "src": "./favicon/android-chrome-192x192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "/yottabyte-mark.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
     },
     {
-      "src": "./favicon/android-chrome-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/yottabyte-mark.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
     }
   ]
 }

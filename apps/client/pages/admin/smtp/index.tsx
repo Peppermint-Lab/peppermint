@@ -22,6 +22,15 @@ import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+function getFrontendOrigin() {
+  if (typeof window === "undefined") {
+    return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  }
+
+  const origin = window.location.origin;
+  return origin.endsWith(":5003") ? origin.replace(":5003", ":3000") : origin;
+}
+
 export default function Notifications() {
   const [loading, setLoading] = useState(true);
   const [enabled, setEnabled] = useState(false);
@@ -318,8 +327,8 @@ function MicrosoftSettings() {
 function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [redirectUri, setRedirectUri] = useState(
-    `${window.location.origin}/admin/smtp/oauth`
+  const [redirectUri] = useState(
+    `${getFrontendOrigin()}/admin/smtp/oauth`
   );
   const [user, setUser] = useState("");
 
@@ -335,12 +344,12 @@ function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
       body: JSON.stringify({
         host: "smtp.gmail.com",
         port: "465",
-        clientId,
-        clientSecret,
-        username: user,
-        reply: user,
+        clientId: clientId.trim(),
+        clientSecret: clientSecret.trim(),
+        username: user.trim(),
+        reply: user.trim(),
         serviceType: "gmail",
-        redirectUri: redirectUri,
+        redirectUri,
       }),
     })
       .then((res) => res.json())
@@ -435,7 +444,7 @@ function GmailSettings({ setStep }: { setStep: (step: number) => void }) {
                   className="flex-1 text-foreground text-sm bg-transparent focus:ring-green-500 focus:border-green-500 block w-full min-w-0 rounded-md"
                   placeholder="Your Redirect URI"
                   value={redirectUri}
-                  onChange={(e) => setRedirectUri(e.target.value)}
+                  readOnly
                 />
               </div>
             </div>

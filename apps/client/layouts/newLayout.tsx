@@ -181,10 +181,15 @@ export default function NewLayout({ children }: any) {
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background px-6 pb-4">
-                    <div className="flex align-middle flex-row h-14 items-center border-b-[1px]">
-                      <Link href="https://peppermint.sh">
-                        <span className="text-3xl ml-2 text-green-500  hover:text-green-600 font-bold ">
-                          Peppermint
+                    <div className="flex align-middle flex-row h-14 items-center gap-3 border-b-[1px]">
+                      <Link href="/" className="flex items-center gap-3">
+                        <img
+                          className="h-9 w-9 rounded-lg object-cover"
+                          src="/yottabyte-mark.svg"
+                          alt="YOTTABYTE logo"
+                        />
+                        <span className="text-2xl font-bold tracking-wide text-green-600">
+                          YOTTABYTE
                         </span>
                       </Link>
                     </div>
@@ -308,10 +313,15 @@ export default function NewLayout({ children }: any) {
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 2xl:w-72 lg:flex-col border-r-[1px]">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-background pb-4">
-            <div className="flex align-middle flex-row h-14 items-center border-b-[1px] px-6">
-              <Link href="https://peppermint.sh" target="_blank">
-                <span className="text-3xl ml-2 text-green-500 hover:text-green-600 font-bold">
-                  Peppermint
+            <div className="flex align-middle flex-row h-14 items-center gap-3 border-b-[1px] px-6">
+              <Link href="/" className="flex items-center gap-3">
+                <img
+                  className="h-9 w-9 rounded-lg object-cover"
+                  src="/yottabyte-mark.svg"
+                  alt="YOTTABYTE logo"
+                />
+                <span className="text-2xl font-bold tracking-wide text-green-600">
+                  YOTTABYTE
                 </span>
               </Link>
             </div>

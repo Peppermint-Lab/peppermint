@@ -18,6 +18,7 @@ export async function sendTicketCreate(ticket: any) {
       var template = handlebars.compile(testhtml?.html);
       var replacements = {
         id: ticket.id,
+        title: ticket.title,
       };
       var htmlToSend = template(replacements);
 
@@ -25,8 +26,8 @@ export async function sendTicketCreate(ticket: any) {
         .sendMail({
           from: email?.reply,
           to: ticket.email,
-          subject: `Issue #${ticket.id} has just been created & logged`,
-          text: `Hello there, Issue #${ticket.id}, which you reported on ${ticket.createdAt}, has now been created and logged`,
+          subject: `${ticket.title} has been created and logged`,
+          text: `Hello there, ${ticket.title}, which you reported on ${ticket.createdAt}, has now been created and logged`,
           html: htmlToSend,
         })
         .then((info: any) => {

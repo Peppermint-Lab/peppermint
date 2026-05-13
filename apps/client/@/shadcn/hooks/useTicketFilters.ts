@@ -1,26 +1,51 @@
 import { Ticket } from '@/shadcn/types/tickets';
 import { useEffect, useState } from 'react';
 
+function readStoredList(key: string) {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  const saved = window.localStorage.getItem(key);
+  if (!saved) {
+    return [];
+  }
+
+  try {
+    return JSON.parse(saved);
+  } catch (error) {
+    return [];
+  }
+}
+
 export function useTicketFilters(tickets: Ticket[] = []) {
-  const [selectedPriorities, setSelectedPriorities] = useState<string[]>(() => {
-    const saved = localStorage.getItem("all_selectedPriorities");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(() => {
-    const saved = localStorage.getItem("all_selectedStatuses");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [selectedAssignees, setSelectedAssignees] = useState<string[]>(() => {
-    const saved = localStorage.getItem("all_selectedAssignees");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
 
   useEffect(() => {
-    localStorage.setItem("all_selectedPriorities", JSON.stringify(selectedPriorities));
-    localStorage.setItem("all_selectedStatuses", JSON.stringify(selectedStatuses));
-    localStorage.setItem("all_selectedAssignees", JSON.stringify(selectedAssignees));
+    setSelectedPriorities(readStoredList("all_selectedPriorities"));
+    setSelectedStatuses(readStoredList("all_selectedStatuses"));
+    setSelectedAssignees(readStoredList("all_selectedAssignees"));
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem(
+      "all_selectedPriorities",
+      JSON.stringify(selectedPriorities)
+    );
+    window.localStorage.setItem(
+      "all_selectedStatuses",
+      JSON.stringify(selectedStatuses)
+    );
+    window.localStorage.setItem(
+      "all_selectedAssignees",
+      JSON.stringify(selectedAssignees)
+    );
   }, [selectedPriorities, selectedStatuses, selectedAssignees]);
 
   const handlePriorityToggle = (priority: string) => {

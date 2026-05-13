@@ -24,6 +24,7 @@ const type = [
   { id: 4, name: "Maintenance" },
   { id: 6, name: "Access" },
   { id: 8, name: "Feedback" },
+  { id: 9, name: "RevFlow" },
 ];
 
 const pri = [
@@ -48,48 +49,76 @@ export default function ClientTicketNew() {
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState(pri[0]);
+  const [customField1, setCustomField1] = useState("");
+  const [customField2, setCustomField2] = useState("");
+  const [customField3, setCustomField3] = useState("");
+  const [outcome, setOutcome] = useState("");
+  const [customerField, setCustomerField] = useState("");
 
   async function submitTicket() {
-    setIsLoading(true);
-    await fetch(`/api/v1/ticket/create`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        name: user.name,
-        title: subject,
-        email: user.email,
-        detail: description,
-        priority: priority.name,
-        type: selected.name,
-        createdBy: {
-          id: user.id,
-          name: user.name,
-          role: user.role,
-          email: user.email,
-        },
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          toast({
-            variant: "default",
-            title: "Ticket Created",
-            description: "Ticket created successfully",
-          });
-          setView("success");
-          setTicketID(res.id);
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Please fill out all information and try again",
-          });
-        }
+    if (!subject.trim() || !description.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill out all information and try again",
       });
-    setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`/api/v1/ticket/public/create`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: user.name,
+          title: subject,
+          email: user.email,
+          detail: description,
+          priority: priority.name,
+          type: selected.name,
+          custom_field_1: customField1,
+          custom_field_2: customField2,
+          custom_field_3: customField3,
+          outcome,
+          customer_field: customerField,
+          createdBy: {
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            email: user.email,
+          },
+        }),
+      });
+
+      const res = await response.json();
+
+      if (!response.ok || !res.success) {
+        throw new Error(res.message || res.error || "Unable to create ticket");
+      }
+
+      toast({
+        variant: "default",
+        title: "Ticket Created",
+        description: "Ticket created successfully",
+      });
+      setView("success");
+      setTicketID(res.id);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Unable to create ticket. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -264,6 +293,45 @@ export default function ClientTicketNew() {
                 </>
               )}
             </Listbox>
+            {selected.name === "RevFlow" && (
+              <>
+                <input
+                  type="text"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                  placeholder="custom_field_1"
+                  value={customField1}
+                  onChange={(e) => setCustomField1(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                  placeholder="custom_field_2"
+                  value={customField2}
+                  onChange={(e) => setCustomField2(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                  placeholder="custom_field_3"
+                  value={customField3}
+                  onChange={(e) => setCustomField3(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                  placeholder="outcome"
+                  value={outcome}
+                  onChange={(e) => setOutcome(e.target.value)}
+                />
+                <input
+                  type="text"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                  placeholder="customer_field"
+                  value={customerField}
+                  onChange={(e) => setCustomerField(e.target.value)}
+                />
+              </>
+            )}
 
             <div>
               <label

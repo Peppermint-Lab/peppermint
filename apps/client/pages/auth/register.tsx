@@ -61,6 +61,11 @@ export default function Login({}) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <img
+          src="/yottabyte-mark.svg"
+          alt="YOTTABYTE logo"
+          className="mx-auto h-20 w-20 rounded-2xl object-cover"
+        />
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Create your new account
         </h2>
@@ -178,10 +183,7 @@ export default function Login({}) {
         )}
 
         <div className="mt-8 text-center flex flex-col space-y-2">
-          <span className="font-bold">Built with 💚 by Peppermint Labs</span>
-          <a href="https://docs.peppermint.sh/" target="_blank">
-            Documentation
-          </a>
+          <span className="font-bold">YOTTABYTE Support Portal</span>
         </div>
       </div>
     </div>

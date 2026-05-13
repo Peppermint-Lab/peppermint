@@ -13,7 +13,13 @@ async function getUserTickets(token: any) {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res.json();
+  const data = await res.json();
+
+  if (!res.ok || !data.tickets) {
+    throw new Error(data.error || data.message || "Unable to load tickets");
+  }
+
+  return data;
 }
 
 export default function Tickets() {
@@ -38,6 +44,14 @@ export default function Tickets() {
         </div>
       )}
 
+      {status === "error" && (
+        <div className="min-h-screen flex items-center justify-center">
+          <span className="text-sm text-red-700">
+            {error instanceof Error ? error.message : "Unable to load tickets"}
+          </span>
+        </div>
+      )}
+
       {status === "success" && (
         <div>
           <div className="flex flex-col">
@@ -47,7 +61,7 @@ export default function Tickets() {
             {data.tickets.length > 0 ? (
               data.tickets.map((ticket) => {
                 let p = ticket.priority;
-                let badge;
+                let badge = normal;
 
                 if (p === "Low") {
                   badge = low;
@@ -60,7 +74,7 @@ export default function Tickets() {
                 }
 
                 return (
-                  <Link href={`/portal/issue/${ticket.id}`}>
+                  <Link href={`/portal/issue/${ticket.id}`} key={ticket.id}>
                     <div className="flex flex-row w-full bg-white dark:bg-[#0A090C] dark:hover:bg-green-600 border-b-[1px] p-1.5 justify-between px-6 hover:bg-gray-100">
                       <div className="flex flex-row items-center space-x-4">
                         <span className="text-xs font-semibold">
@@ -114,7 +128,7 @@ export default function Tickets() {
                         </div>
                         <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-500">
                           <span className="text-[11px] font-medium leading-none text-white uppercase">
-                            {ticket.assignedTo ? ticket.assignedTo.name[0] : ""}
+                            {ticket.assignedTo?.name?.[0] || ""}
                           </span>
                         </span>
                       </div>
