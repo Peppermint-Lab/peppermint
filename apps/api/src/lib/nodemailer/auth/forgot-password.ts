@@ -50,8 +50,8 @@ export async function forgotPassword(
                       <tr>
                         <td>
                           <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://slackhq.com" rel="noopener noreferrer">Our blog</a>   |   <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://slack.com/legal" rel="noopener noreferrer">Documentation</a>   |   <a target="_blank" style="color:#b7b7b7;text-decoration:underline" href="https://slack.com/help" rel="noopener noreferrer">Discord</a> </a>
-                          <p style="font-size:12px;line-height:15px;margin:16px 0;color:#b7b7b7;text-align:left">This was an automated message sent by peppermint.sh -> An open source helpdesk solution</p>
-                          <p style="font-size:12px;line-height:15px;margin:16px 0;color:#b7b7b7;text-align:left;margin-bottom:50px">©2022 Peppermint Ticket Management, a Peppermint Labs product.<br />All rights reserved.</p>
+                          <p style="font-size:12px;line-height:15px;margin:16px 0;color:#b7b7b7;text-align:left">This was an automated message sent by Yottabyte.</p>
+                          <p style="font-size:12px;line-height:15px;margin:16px 0;color:#b7b7b7;text-align:left;margin-bottom:50px">©2022 Yottabyte Ticket Management.<br />All rights reserved.</p>
                         </td>
                       </tr>
                     </tbody>

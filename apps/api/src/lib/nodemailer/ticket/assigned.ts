@@ -31,9 +31,7 @@ export async function sendAssignedEmail(email: string, ticket?: any) {
         .sendMail({
           from: provider?.reply,
           to: email,
-          subject: ticket?.Number
-            ? `Ticket #${ticket.Number} has been assigned to you`
-            : `A new ticket has been assigned to you`,
+          subject: ticketTitle,
           text: ticket?.Number
             ? `Hello there, ticket #${ticket.Number} (${ticketTitle}) has been assigned to you.`
             : `Hello there, a ticket has been assigned to you.`,

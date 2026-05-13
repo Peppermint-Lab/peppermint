@@ -46,7 +46,7 @@ export async function sendTicketStatus(ticket: any) {
         .sendMail({
           from: email?.reply,
           to: uniqueRecipients,
-          subject: `Ticket #${ticket.Number} is now ${status}`,
+          subject: ticket.title,
           text: `Hello there, ticket #${ticket.Number} (${ticket.title}) is now ${status}.`,
           html: htmlToSend,
         })
