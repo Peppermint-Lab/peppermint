@@ -64,7 +64,7 @@ export default function Authentication() {
           }
         });
     } else {
-      await fetch(`/api/v1/config/auth/oauth`, {
+      await fetch(`/api/v1/config/authentication/oauth/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

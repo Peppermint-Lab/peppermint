@@ -11,6 +11,7 @@ export default function Login({}) {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("idle");
   const [auth, setAuth] = useState("oauth");
+  const [ssoType, setSsoType] = useState("");
   const [url, setUrl] = useState("");
 
   async function postData() {
@@ -61,6 +62,7 @@ export default function Login({}) {
       .then((res) => res.json())
       .then((res) => {
         if (res.success && res.url) {
+          setSsoType(res.type || "oidc");
           setUrl(res.url);
         }
       });
@@ -171,7 +173,7 @@ export default function Login({}) {
                     onClick={() => router.push(url)}
                     className="w-full flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
-                    Sign in with OIDC
+                    {ssoType === "oauth" ? "Sign in with OAuth" : "Sign in with OIDC"}
                   </button>
                 )}
               </div>
